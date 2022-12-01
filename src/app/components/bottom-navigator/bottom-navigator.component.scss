@@ -1,0 +1,12 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .bottom-navbar {
+    background-color: map.get(variables.$light-theme, "secondary-background");
+    display: flex;
+    padding-top: 0;
+    .mat-list-item {
+      width: 100%;
+    }
+  }
+}

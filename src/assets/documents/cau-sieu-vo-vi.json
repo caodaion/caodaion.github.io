@@ -1,0 +1,571 @@
+{
+  "data": {
+    "_id": "",
+    "key": "cau-sieu-vo-vi",
+    "documentKey": "cau-sieu-vo-vi",
+    "content": [
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center",
+          "fontWeight": "bold"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "ĐẠI ĐẠO TAM KỲ PHỔ ĐỘ"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Đệ "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "nam-dao",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " niên"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Tam-giáo Qui-nguyên Ngũ-Chi Hiệp-Nhứt"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "\nTHỜI DUY"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\tThiên vận "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "nam-am-lich",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " niên, "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "thang-am-lich",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " ngoạt, "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "ngay-am-lich",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " nhựt, "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "gio-am-lich",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " thời. "
+          },
+          {
+            "type": "text",
+            "text": "Hiện tại "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "dia-chi-cau-sieu",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": "cư trụ "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "noi-cau-sieu",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " chi trung."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\tKim vì đệ tử "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "ten-nguoi-dai-dien-dang-so",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " niên canh ư "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "tuoi-nguoi-dai-dien-dang-so",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " tuế quì tại "
+          },
+          {
+            "type": "formControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "dia-diem",
+            "targetFormGroupKey": "thong-tin-chung",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " thành tâm trình tấu."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "\nHUỲNH-KIM-KHUYẾT NỘI:"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Huyền-Khung Cao-Thượng-Đế Ngọc-Hoàng Đại-Thiên-Tôn."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\tViết\t: \t Cao-Đài Tiên-Ông Đại-Bồ-Tát Ma-Ha-Tát"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "TAM-KỲ PHỔ-ĐỘ TAM-TRẤN OAI-NGHI"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\t\tThường-Cư Nam-Hãi Quan-Âm Như-Lai."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\t\tLý Đại Tiên-Trưởng Thái-Bạch Kim-Tinh."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\t\tHiệp-Thiên-Đại-Đế Quan-Thánh Đế-Quân."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\t\t\tChư Phật, Tiên, Thánh, Thần liên đài chị hạ."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\n\t\tĐệ tử cầu xin Đức Chí Tôn, Đức Mẹ Diêu Trì Kim Mẫu, chư Phật, Tiên, Thánh, Thần, Đức Lý Giáo Tông mở lòng từ bi ban đại ân xá cứu vớt các linh hồn có tên sau đây được sáng suốt, minh mẫn, tỉnh táo bước vào cõi âm quang tịnh tâm tu học hầu hưởng được ân điển của Đức Chí Tôn để trở về ngôi xưa vị cũ."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\n\t\t"
+          },
+          {
+            "type": "formControl",
+            "targetFormControlKey": "linh-hon",
+            "targetFormGroupKey": "thong-tin-cau-sieu",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\n\t\tTổng cộng "
+          },
+          {
+            "type": "triggerFormControl",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "targetFormControlKey": "linh-hon",
+            "targetFormGroupKey": "thong-tin-cau-sieu",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "text": " linh hồn."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "\n\t\tĐệ tử cúi đầu khẩn nguyện Đức Chí Tôn, Đức Mẹ Diêu Trì Kim Mẫu ban ân điển cho các linh hồn được nêu trên."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "\nNAM-MÔ CAO-ĐÀI TIÊN-ÔNG ĐẠI-BỒ-TÁT MA-HA-TÁT"
+          }
+        ]
+      }
+    ],
+    "formGroup": [
+      {
+        "key": "thong-tin-chung",
+        "title": "Thông tin Chung",
+        "hint": "Thông tin liên quan đến đàn cúng cầu siêu sắp tới",
+        "type": "formGroup",
+        "expaned": false,
+        "control": [
+          {
+            "key": "nam-dao",
+            "type": "shortText",
+            "value": "cửu thập thất",
+            "label": "Năm Đạo",
+            "required": true,
+            "disabled": false,
+            "requiredErrorMessage": "Năm Đạo không được để trống",
+            "autocomplete": "off",
+            "placeholder": "Nhập năm Đạo theo chữ Nôm"
+          },
+          {
+            "key": "nam-am-lich",
+            "type": "shortText",
+            "value": "",
+            "label": "Năm",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Năm không được để trống",
+            "placeholder": "Nhập năm cầu siêu theo chữ Nôm"
+          },
+          {
+            "key": "thang-am-lich",
+            "type": "shortText",
+            "value": "",
+            "label": "Tháng",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Tháng không được để trống",
+            "placeholder": "Nhập tháng cầu siêu theo chữ Nôm"
+          },
+          {
+            "key": "ngay-am-lich",
+            "type": "shortText",
+            "value": "",
+            "label": "Ngày",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Ngày không được để trống",
+            "placeholder": "Nhập ngày cầu siêu theo chữ Nôm"
+          },
+          {
+            "key": "gio-am-lich",
+            "type": "shortText",
+            "value": "tý",
+            "label": "Thời",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Thời không được để trống",
+            "placeholder": "Nhập thời cầu siêu"
+          },
+          {
+            "key": "dia-chi-cau-sieu",
+            "type": "addressGroup",
+            "value": {
+              "country": {
+                "type": "shortText",
+                "label": "Quốc gia",
+                "value": "Việt Nam",
+                "prevText": "",
+                "nextText": "quốc",
+                "required": true,
+                "requiredErrorMessage": "Quốc gia không được để trống",
+                "placeholder": "Quốc gia sẽ diễn ra lễ cầu siêu"
+              },
+              "province": {
+                "type": "shortText",
+                "label": "Tỉnh/Thành phố",
+                "value": "Lâm Đồng",
+                "prevText": "",
+                "nextText": "tỉnh",
+                "placeholder": "Tỉnh/Thành phố sẽ diễn ra lễ cầu siêu"
+              },
+              "district": {
+                "type": "shortText",
+                "label": "Quận/Huyện",
+                "value": "Đà Lạt",
+                "prevText": "",
+                "nextText": "thành phố",
+                "placeholder": "Quận/Huyện sẽ diễn ra lễ cầu siêu"
+              },
+              "ward": {
+                "type": "shortText",
+                "label": "Phường/Xã",
+                "value": "đệ thất",
+                "prevText": "",
+                "nextText": "phường",
+                "placeholder": "Phường/Xã sẽ diễn ra lễ cầu siêu"
+              },
+              "village": {
+                "type": "shortText",
+                "label": "Thôn/Xóm",
+                "value": "Đa Thành",
+                "prevText": "",
+                "nextText": "thôn",
+                "placeholder": "Thôn/Xóm sẽ diễn ra lễ cầu siêu"
+              },
+              "address": {
+                "type": "shortText",
+                "label": "Địa chỉ",
+                "value": "",
+                "prevText": "",
+                "nextText": "",
+                "placeholder": "Địa chỉ sẽ diễn ra lễ cầu siêu"
+              }
+            },
+            "label": "Địa chỉ cầu siêu",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Địa chỉ cầu siêu không được để trống",
+            "placeholder": "Nhập địa chỉ cầu siêu"
+          },
+          {
+            "key": "noi-cau-sieu",
+            "type": "shortText",
+            "value": "Thánh Thất",
+            "label": "Nơi Cầu Siêu",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Nơi cầu siêu không được để trống",
+            "placeholder": "Nhập nơi cầu siêu"
+          },
+          {
+            "key": "ten-nguoi-dai-dien-dang-so",
+            "type": "shortText",
+            "value": "Nguyễn Trung Nhựt",
+            "label": "Tên người đại diện dâng sớ",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Tên người đại diện dâng sớ không được để trống",
+            "placeholder": "Nhập tên người đại diện dâng sớ"
+          },
+          {
+            "key": "tuoi-nguoi-dai-dien-dang-so",
+            "type": "shortText",
+            "value": "ngũ thập cửu",
+            "label": "Tuổi người đại diện dâng sớ",
+            "autocomplete": "off",
+            "required": true,
+            "requiredErrorMessage": "Tuổi người đại diện dâng sớ không được để trống",
+            "placeholder": "Nhập tuổi người đại diện dâng sớ"
+          },
+          {
+            "key": "dia-diem",
+            "type": "radiobox",
+            "value": "Điện tiền",
+            "label": "Địa điểm cầu siêu",
+            "autocomplete": "off",
+            "data": [
+              "Điện tiền",
+              "Thiên bàn"
+            ],
+            "layout": "column",
+            "required": true,
+            "requiredErrorMessage": "Địa điểm cầu siêu không được để trống",
+            "placeholder": "Chọn địa điểm cầu siêu"
+          }
+        ]
+      },
+      {
+        "key": "thong-tin-cau-sieu",
+        "title": "Thông tin cầu siêu",
+        "hint": "Hãy cập nhật danh sách các linh hồn vô vi sẽ được cầu siêu vào đàn cúng cầu siêu sắp tới",
+        "type": "formGroup",
+        "expaned": true,
+        "control": [
+          {
+            "targetFormControlKey": "linh-hon",
+            "targetFormGroupKey": "thong-tin-cau-sieu",
+            "type": "formArrayTrigerLongString",
+            "label": "Dach sách các linh hồn",
+            "value": "",
+            "autocomplete": "off",
+            "rows": 10,
+            "placeholder": "Nhập danh sách các linh hồn theo dạng chuỗi"
+          },
+          {
+            "key": "linh-hon",
+            "type": "formArray",
+            "label": "Dach sách các linh hồn",
+            "itemLabel": "Linh hồn thứ: ",
+            "addTemplate": [
+              {
+                "type": "shortText",
+                "value": "",
+                "label": "Tên linh hồn",
+                "autocomplete": "off",
+                "required": true,
+                "placeholder": "Nhập tên của linh hồn được cầu siêu"
+              },
+              {
+                "type": "number",
+                "value": "",
+                "label": "Tuổi linh hồn",
+                "autocomplete": "off",
+                "required": true,
+                "placeholder": "Nhập tuổi của linh hồn được cầu siêu",
+                "suffix": "tuổi"
+              }
+            ],
+            "value": []
+          }
+        ]
+      }
+    ]
+  }
+}

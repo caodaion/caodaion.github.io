@@ -1,0 +1,88 @@
+{
+  "data": {
+    "version": "1",
+    "key": "TEST-MERGE",
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "attrs": {
+          "color": "orange"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "START OF QUERIED DOCUMENT"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "color": "green"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "SECOND LINE OF QUERIED DOCUMENT"
+          }
+        ]
+      },
+      {
+        "type": "sourceContent",
+        "targetDocumentKey": "TEST-DOCUMENT",
+        "targetContentKey": "MERGE-AREA",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "fontSize": "50px",
+              "textIndent": "50px"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "This is merged content"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "right"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "This is The right align content"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "END OF QUERIED "
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "fontStyle": "italic"
+            },
+            "text": "DOCUMENT"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "color": "red"
+            },
+            "text": "WITH RED COLOR"
+          }
+        ]
+      }
+    ]
+  }
+}

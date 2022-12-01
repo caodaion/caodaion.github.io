@@ -1,0 +1,9 @@
+::ng-deep {
+  app-header-sub-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 18px;
+  }
+}

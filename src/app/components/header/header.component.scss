@@ -1,0 +1,11 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  app-header {
+    .mat-toolbar {
+      justify-content: space-between;
+      background-color: map.get(variables.$light-theme, "secondary-background");
+      height: auto;
+    }
+  }
+}

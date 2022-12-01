@@ -1,0 +1,18 @@
+<div class="creator-block-title position-relative">
+  <div class="d-flex align-items-center justify-content-between">
+    <h2 class="w-100" [contentEditable]="authService.contentEditable" (blur)="changeValue($event)">{{data.name}}</h2>
+    <button mat-icon-button class="redirectButton"  (click)="getLink(data, true)" matTooltip="Đọc riêng bài này">
+      <mat-icon>local_library</mat-icon>
+    </button>
+  </div>
+  <button mat-icon-button class="targetButton" (click)="getLink(data)" matTooltip="Sao chép liên kết">
+    <mat-icon>link</mat-icon>
+  </button>
+</div>
+<ng-container *ngFor="let block of data.content">
+  <cp-creator-content
+    *ngIf="block.type == 'contentBlock'" [data]="block"
+    [id]="getId(block)"
+    [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
+</ng-container>
+<cp-creator-block-toolbar *ngIf="data.focused" [data]="data"></cp-creator-block-toolbar>

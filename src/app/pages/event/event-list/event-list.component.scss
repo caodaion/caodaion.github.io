@@ -1,0 +1,86 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+
+::ng-deep {
+  .event-list-container {
+    .mat-grid-tile-content {
+      padding: 0.5rem !important;
+    }
+
+    .mat-card {
+      cursor: pointer;
+    }
+
+    .mat-tab-body-content {
+      padding: 0.5rem;
+    }
+
+    .mat-tab-body-wrapper {
+      flex: 1;
+    }
+
+    .mat-tab-group {
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      background-color: map.get(variables.$light-theme, "on-primary");
+    }
+
+    .main-event-list {
+      .event-group {
+        padding-bottom: 2rem;
+
+        .event-group-header {
+          margin: 1rem 0;
+          color: rgba(0, 0, 0, 0.87);
+
+          .event-group-title {
+          }
+
+          .event-group-action {
+            text-decoration: underline;
+          }
+        }
+
+        .event-group-list {
+          position: relative;
+
+          .event-card {
+            border-radius: 1rem;
+            padding: 1rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            width: 100%;
+            position: relative;
+            transition: all 1s;
+            cursor: pointer;
+
+            &.position-absolute {
+              position: absolute;
+              top: 0;
+            }
+
+            .notification-subscribe-btn {
+              background: rgba(255, 255, 255, 0.5);
+              margin-bottom: .5rem;
+            }
+
+            .event-name {
+              margin-bottom: .5rem;
+            }
+
+            .event-time {
+              font-size: 30px;
+              font-weight: bold;
+              margin-bottom: .5rem;
+            }
+
+            .event-location {
+              font-weight: 300;
+            }
+          }
+        }
+      }
+    }
+  }
+}

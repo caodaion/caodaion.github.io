@@ -1,0 +1,38 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .kinh-list-container {
+    .description-text {
+      color: red;
+      &.filtered {
+        color: green;
+        font-weight: bold;
+      }
+    }
+    .mat-grid-tile-content {
+      padding: 0.5rem !important;
+    }
+    .mat-card {
+      display: flex !important;
+      cursor: pointer;
+    }
+    .mat-tab-body-content {
+      padding: 0.5rem;
+    }
+    .mat-tab-body-wrapper {
+      flex: 1;
+    }
+    .mat-tab-group {
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      background-color: map.get(variables.$light-theme, "on-primary");
+    }
+    .kinh-list-pannel {
+      .mat-expansion-panel-header-title {
+        color: rgba(0, 0, 0, 0.87);
+        font-weight: bold;
+      }
+    }
+  }
+}

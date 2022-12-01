@@ -1,0 +1,40 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .editor-toolbar {
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .dropdown-font-size {
+      width: 350px;
+    }
+  }
+  .horizontal-menu {
+    .mat-menu-content:not(:empty) {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .color-menu {
+    .mat-icon-button {
+      box-sizing: border-box;
+      line-height: 1;
+      height: 30px;
+      width: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .mat-icon {
+        border-radius: 50%;
+        border: solid 1px map.get(variables.$light-theme, "inverse-on-surface");
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

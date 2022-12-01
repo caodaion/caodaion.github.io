@@ -1,0 +1,19 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-grid-list [cols]="cols" rowHeight="2:1" class="w-100">
+  <mat-grid-tile
+    *ngFor="let item of cauSieuVoViList"
+    [routerLink]="item?.key"
+    class="csvv-item w-100"
+  >
+    <mat-card class="w-100 h-100" matRipple>
+      <mat-card-title>{{ getCardDetails(item).title }}</mat-card-title>
+      <mat-card-subtitle
+        >Đã ghi nhận: {{ getCardDetails(item).count }} linh
+        hồn</mat-card-subtitle
+      >
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile class="csvv-item w-100" [routerLink]="'them-moi'">
+    <mat-card class="w-100 h-100"></mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

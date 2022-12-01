@@ -1,0 +1,297 @@
+<div class="wrapper-container lunar-calendar-container">
+  <mat-toolbar class="lunar-calendar-toolbar justify-content-between">
+    <div class="d-flex align-items-center w-100">
+      <div
+        class="d-flex align-items-center justify-content-between"
+        [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''"
+      >
+        <div *ngIf="viewPortMode === 'mobile'">
+          <mat-form-field>
+            <mat-select
+              [(ngModel)]="monthSelectValue"
+              (selectionChange)="
+                onChangeSelectedCalendar(calendarMode, monthSelectValue)
+              "
+            >
+              <mat-option
+                *ngFor="let item of commonDateTimeValue.month"
+                [value]="item?.key"
+                >{{ item?.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <button
+          mat-stroked-button
+          (click)="onChangeSelectedCalendar('current')"
+          [matTooltip]="
+            currentDate.solar.getDate() +
+            ' tháng ' +
+            currentDate.solar.getMonth() +
+            ' năm ' +
+            currentDate.solar.getFullYear()
+          "
+        >
+          Hôm nay
+        </button>
+      </div>
+      <button
+        *ngIf="viewPortMode === 'desktop'"
+        mat-icon-button
+        (click)="onChangeSelectedCalendar('before')"
+        [matTooltip]="calendarMode === 'day' ? 'ngày trước' : 'tháng trước'"
+      >
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <button
+        *ngIf="viewPortMode === 'desktop'"
+        mat-icon-button
+        (click)="onChangeSelectedCalendar('next')"
+        [matTooltip]="calendarMode === 'day' ? 'ngày sau' : 'tháng sau'"
+      >
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+      <span class="selected-date" *ngIf="viewPortMode === 'desktop'">
+        {{
+          calendarMode === "day" || calendarMode === "month"
+            ? "tháng " + (selectedDate.solar?.getMonth() + 1)
+            : ""
+        }}
+        {{ selectedDate.solar.getFullYear() }}</span
+      >
+    </div>
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+  <div
+    class="flex-1 h-100 wrapper-container selected-month-calendar"
+    *ngIf="calendarMode === 'month'"
+    (touchstart)="swipe($event, 'start')"
+    (touchend)="swipe($event, 'end')"
+  >
+    <div class="days">
+      <div class="day text-center">T2</div>
+      <div class="day text-center">T3</div>
+      <div class="day text-center">T4</div>
+      <div class="day text-center">T5</div>
+      <div class="day text-center">T6</div>
+      <div class="day text-center">T7</div>
+      <div class="day text-center">CN</div>
+    </div>
+    <div class="flex-1 dates h-100">
+      <mat-card
+        class="date wrapper-container align-items-center"
+        *ngFor="let date of selectedMonth"
+        [ngStyle]="{
+          height:
+            selectedMonth.length % 6 === 0
+              ? 'calc(100%/' + 6 + ')'
+              : 'calc(100%/' + 5 + ')',
+          maxHeight:
+            selectedMonth.length % 6 === 0
+              ? 'calc(100%/' + 6 + ')'
+              : 'calc(100%/' + 5 + ')'
+        }"
+      >
+        <button
+          mat-flat-button
+          [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
+          (click)="onChangeCalendarMode('day', date)"
+        >
+          <div class="solar-date">{{ date?.solar?.getDate() }}</div>
+          <div class="lunar-date">
+            {{ date?.lunar?.convertSolar2Lunar?.lunarDay }}/{{
+              date?.lunar?.convertSolar2Lunar?.lunarMonth
+            }}
+          </div>
+        </button>
+        <div class="flex-1 date-event w-100">
+          <mat-list>
+            <mat-list-item
+              class="date-event-item"
+              matRipple
+              *ngFor="let event of date.event"
+              [ngClass]="
+                event.event.date === 'yearly-monthly-daily'
+                  ? 'yearly-monthly-daily'
+                  : event.event.date !== 'yearly-monthly-daily' &&
+                    event.event.date.includes('yearly-monthly-')
+                  ? 'yearly-monthly-special'
+                  : event.event.date !== 'yearly-monthly-daily' &&
+                    !event.event.date.includes('yearly-monthly-') &&
+                    event.event.date.includes('yearly-')
+                  ? 'yearly-special-special'
+                  : ''
+              "
+              (click)="openEventSummaryDialog(date, event, eventSummayDialog)"
+            >
+              {{ event.event.name }}
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <div
+    class="flex-1 h-100 wrapper-container selected-date-calendar"
+    *ngIf="calendarMode === 'day'"
+    (touchstart)="swipe($event, 'start')"
+    (touchend)="swipe($event, 'end')"
+  >
+    <div class="current-selected-date">
+      <div class="date-wraper">
+        <div class="date text-center">
+          <div class="date-solar">
+            {{ selectedDate.solar.getDate() }}
+          </div>
+          <div class="date-lunar">
+            {{ selectedDate.lunar.convertSolar2Lunar.lunarDay }}/{{
+              selectedDate.lunar.convertSolar2Lunar.lunarMonth
+            }}
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="date-hours" id="dateRange">
+      <div
+        class="munite d-flex"
+        *ngFor="let timeRange of dateRange"
+        [id]="
+          'h' +
+          (timeRange.hour | number: '2.0') +
+          'm' +
+          (timeRange.munite | number: '2.0')
+        "
+        [matTooltip]="
+          viewPortMode === 'desktop'
+            ? (timeRange.hour | number: '2.0') +
+              ':' +
+              (timeRange.munite | number: '2.0')
+            : ''
+        "
+      >
+        <div
+          *ngIf="
+            timeRange.munite === 0 ||
+            (timeRange.hour !== 23 && timeRange.munite === 0)
+          "
+          class="start-time-hour"
+        >
+          {{ timeRange.hour < 10 ? "0" + timeRange.hour : timeRange.hour }}:{{
+            timeRange.munite < 10 ? "0" + timeRange.munite : timeRange.munite
+          }}
+        </div>
+        <mat-divider
+          class="w-100"
+          *ngIf="
+            timeRange.munite === 0 ||
+            (timeRange.hour !== 23 && timeRange.munite === 0)
+          "
+        ></mat-divider>
+      </div>
+      <div
+        class="now-time"
+        id="now"
+        [ngStyle]="{
+          top: getPosition(time.time | async)
+            ? getPosition(time.time | async) + 'px'
+            : ''
+        }"
+      >
+        <div class="time-now">{{ time.time | async | date: "HH:mm:ss" }}</div>
+        <div class="clock"></div>
+      </div>
+      <div
+        class="tu-thoi-zone"
+        *ngFor="let zone of tuThoiZone"
+        [ngStyle]="{ height: zone?.height + 'px', top: zone?.position + 'px' }"
+      ></div>
+      <div
+        class="selected-date-events"
+        *ngFor="let zone of dateEvents"
+        [ngStyle]="{ top: getPosition(zone.timeZone.start) + 'px' }"
+      >
+        <div
+          class="selected-date-event"
+          *ngFor="let event of zone.event"
+          [ngClass]="
+            event.event.date === 'yearly-monthly-daily'
+              ? 'yearly-monthly-daily'
+              : event.event.date !== 'yearly-monthly-daily' &&
+                event.event.date.includes('yearly-monthly-')
+              ? 'yearly-monthly-special'
+              : event.event.date !== 'yearly-monthly-daily' &&
+                !event.event.date.includes('yearly-monthly-') &&
+                event.event.date.includes('yearly-')
+              ? 'yearly-special-special'
+              : ''
+          "
+          (click)="
+            openEventSummaryDialog(selectedDate, event, eventSummayDialog)
+          "
+        >
+          {{ event.event.name }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #eventSummayDialog>
+  <div class="event-summary-dialog">
+    <h2 mat-dialog-title>{{ shownDate?.event?.event?.name }}</h2>
+    <div class="d-flex details-item">
+      <mat-icon>event</mat-icon>
+      {{
+        shownDate?.event?.event?.date === "yearly-monthly-daily"
+          ? "Mỗi ngày"
+          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+            shownDate?.event?.event?.date.includes("yearly-monthly-")
+          ? "Ngày " + shownDate?.event?.event?.date.split("-")[2] + " mỗi tháng"
+          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+            !shownDate?.event?.event?.date.includes("yearly-monthly-") &&
+            shownDate?.event?.event?.date.includes("yearly-")
+          ? "Ngày " +
+            shownDate?.event?.event?.date.split("-")[2] +
+            " tháng " +
+            shownDate?.event?.event?.date.split("-")[1] +
+            " mỗi năm"
+          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+            !shownDate?.event?.event?.date.includes("yearly-monthly-") &&
+            shownDate?.event?.event?.date.includes("yearly-")
+          ? "Ngày " +
+            shownDate?.event?.event?.date.split("-")[2] +
+            " tháng " +
+            shownDate?.event?.event?.date.split("-")[1] +
+            " năm" +
+            shownDate?.event?.event?.date.split("-")[0]
+          : ""
+      }}
+    </div>
+    <div class="d-flex details-item">
+      <mat-icon>schedule</mat-icon>
+      <span *ngFor="let time of getTimes(shownDate?.event?.event?.time)">{{
+        time?.name
+      }}</span>
+    </div>
+    <div class="d-flex details-item">
+      <mat-icon>location_pin</mat-icon>
+      <span
+        *ngFor="
+          let time of getLocationTypes(shownDate?.event?.event?.locationType)
+        "
+        >{{ time?.name }}</span
+      >
+    </div>
+    <mat-dialog-actions>
+      <button mat-button mat-dialog-close>Đóng</button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        (click)="onGetKinhFromSummaryEvent()"
+        [mat-dialog-close]="true"
+      >
+        Xem kinh
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

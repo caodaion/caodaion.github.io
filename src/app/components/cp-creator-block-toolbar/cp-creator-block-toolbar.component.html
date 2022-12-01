@@ -1,0 +1,48 @@
+<div class="d-flex">
+  <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
+    <button mat-icon-button (click)="formatContent({fontWeight: 'bold'})">
+      <mat-icon>format_bold</mat-icon>
+    </button>
+    <mat-divider [vertical]="true"></mat-divider>
+  </div>
+  <!--  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" *ngIf="data.type == 'contentBlock'">-->
+  <!--    <mat-button-toggle value="left"><mat-icon>format_align_left</mat-icon></mat-button-toggle>-->
+  <!--    <mat-button-toggle value="center"><mat-icon>format_align_center</mat-icon></mat-button-toggle>-->
+  <!--    <mat-button-toggle value="right"><mat-icon>format_align_right</mat-icon></mat-button-toggle>-->
+  <!--    <mat-button-toggle value="justify"><mat-icon>format_align_justify</mat-icon></mat-button-toggle>-->
+  <!--  </mat-button-toggle-group>-->
+  <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
+    <button mat-icon-button [matMenuTriggerFor]="alignContentMenu">
+      <mat-icon>format_align_{{textAlign}}</mat-icon>
+    </button>
+    <mat-menu #alignContentMenu="matMenu">
+      <button (click)="formatContent({textAlign:'left'})" mat-menu-item [disabled]="textAlign == 'left'">
+        <mat-icon>format_align_left</mat-icon>
+      </button>
+      <button (click)="formatContent({textAlign:'center'})" mat-menu-item [disabled]="textAlign == 'center'">
+        <mat-icon>format_align_center</mat-icon>
+      </button>
+      <button (click)="formatContent({textAlign:'right'})" mat-menu-item [disabled]="textAlign == 'right'">
+        <mat-icon>format_align_right</mat-icon>
+      </button>
+      <button (click)="formatContent({textAlign:'justify'})" mat-menu-item [disabled]="textAlign == 'justify'">
+        <mat-icon>format_align_justify</mat-icon>
+      </button>
+    </mat-menu>
+    <mat-divider [vertical]="true"></mat-divider>
+  </div>
+  <!--  <mat-divider [vertical]="true"></mat-divider>-->
+  <button mat-icon-button (click)="isShowSetting = !isShowSetting">
+    <mat-icon>settings</mat-icon>
+  </button>
+  <div class="d-flex" *ngIf="isShowSetting">
+    <mat-form-field appearance="fill" class="setting-form-field">
+      <mat-label>Mã định danh</mat-label>
+      <input matInput [value]="data.key" (blur)="changeKey($event)">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="setting-form-field">
+      <mat-label>Liên kết định danh</mat-label>
+      <input matInput [value]="data.attrs.hash" (blur)="changeHash($event)">
+    </mat-form-field>
+  </div>
+</div>

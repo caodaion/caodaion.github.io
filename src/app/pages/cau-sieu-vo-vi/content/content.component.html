@@ -1,0 +1,15 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<caodaion-editor
+  [formControlLabel]="'SỚ'"
+  [renderDocument]="so"
+  [contentEditable]="contentEditable"
+  (onSaveContent)="onSaveCauSieuVoVi($event, errorMessageDialog)"
+  (changeTrigerFormArray)="onChangeTrigerFormArray($event)"
+  ><caodaion-editor> </caodaion-editor
+></caodaion-editor>
+<ng-template #errorMessageDialog>
+  <div class="error-message-dialog">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <p>Hãy hoàn thành toàn tất cả thông tin bắt buộc trước khi lưu</p>
+  </div>
+</ng-template>

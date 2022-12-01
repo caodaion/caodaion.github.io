@@ -1,0 +1,34 @@
+<mat-sidenav-container class="w-100" tosize>
+  <mat-sidenav
+    class="sub-sidenav"
+    mode="side"
+    [opened]="viewMissionService.isDrawerOpened"
+    [mode]="drawerMode"
+  >
+    <mat-nav-list class="mat-list-sub-sidenav">
+      <a
+        mat-list-item
+        disableRipple
+        class="icon-hover"
+        [ngClass]="calendarService.calendarViewMode === 'day' ? 'active' : ''"
+        (click)="onChangeCalendarViewMode('day')"
+      >
+        <mat-icon class="sub-sidenav-icon">calendar_view_day</mat-icon
+        ><span class="label-large">Ngày</span></a
+      >
+      <a
+        mat-list-item
+        disableRipple
+        class="icon-hover"
+        [ngClass]="calendarService.calendarViewMode === 'month' ? 'active' : ''"
+        (click)="onChangeCalendarViewMode('month')"
+      >
+        <mat-icon class="sub-sidenav-icon">calendar_view_month</mat-icon
+        ><span class="label-large">Tháng</span></a
+      >
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="sub-sidenav-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

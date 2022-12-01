@@ -1,0 +1,10 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .csvv-item {
+    cursor: pointer;
+    .mat-grid-tile-content {
+      padding: 1rem;
+    }
+  }
+}

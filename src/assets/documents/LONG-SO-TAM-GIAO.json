@@ -1,0 +1,467 @@
+{
+  "data": {
+    "id": "",
+    "key": "LONG-SO-TAM-GIAO",
+    "name": "LÒNG SỚ TAM GIÁO",
+    "expandName": "LÒNG SỚ TAM GIÁO",
+    "blocks": [
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "ĐẠI-ĐẠO TAM-KỲ PHỔ-ĐỘ"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "Đệ "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "cửu thập thất"
+          },
+          {
+            "type": "paragraph",
+            "insert": " niên"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "Tam-Giáo Quy-Nguyên Ngũ-Chi Hiệp-Nhứt"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "THỜI DUY"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\tThiên vận "
+          },
+          {
+            "type": "control",
+            "controltype": "year",
+            "attributes": {
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "type": "paragraph",
+            "insert": " niên, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "chánh"
+          },
+          {
+            "type": "paragraph",
+            "insert": " ngoạt, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "sơ cửu"
+          },
+          {
+            "type": "paragraph",
+            "insert": " nhựt, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Ngọ"
+          },
+          {
+            "type": "paragraph",
+            "insert": " thời.  "
+          },
+          {
+            "type": "paragraph",
+            "insert": "Hiện tại "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Việt Nam"
+          },
+          {
+            "type": "paragraph",
+            "insert": " quốc, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Lâm Đồng"
+          },
+          {
+            "type": "paragraph",
+            "insert": " tỉnh, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Đà Lạt"
+          },
+          {
+            "type": "paragraph",
+            "insert": " thành phố, "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "đệ thất"
+          },
+          {
+            "type": "paragraph",
+            "insert": " phường, "
+          },
+          {
+            "type": "control",
+            "controltype": "input",
+            "attributes": {
+              "minWidth": "50px",
+              "fontWeight": "bold"
+            },
+            "key": "thon",
+            "label": "thôn",
+            "value": "đa thành thôn",
+            "placeholder": "nhập thôn"
+          },
+          {
+            "type": "paragraph",
+            "insert": " cư trụ "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Thánh-thất"
+          },
+          {
+            "type": "paragraph",
+            "insert": " chi trung."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\tKim hữu "
+          },
+          {
+            "type": "paragraph",
+            "insert": "đệ tử "
+          },
+          {
+            "type": "paragraph",
+            "insert": "thọ thiên ân "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Lễ Sanh Thái Lương Thanh"
+          },
+          {
+            "type": "paragraph",
+            "insert": " công đồng chư Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng quì tại "
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "fontWeight": "bold"
+            },
+            "insert": "Điện tiền"
+          },
+          {
+            "type": "paragraph",
+            "insert": " thành tâm trình tấu."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "HUỲNH-KIM-KHUYẾT NỘI:"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "Huyền-Khung Cao-Thượng-Đế Ngọc-Hoàng Đại-Thiên-Tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\tViết: \tCao-Đài Tiên-Ông Đại-Bồ-Tát Ma-Ha-Tát."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tDiêu-Trì Kim-Mẫu vô cực Đại-Từ-Tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "TAM TÔNG CHƠN-GIÁO"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tTây-Phương Giáo-Chủ Thích-Ca Mâu-Ni thế tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tThái-Thượng Đạo-Tổ Tam-Thanh ứng hóa Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tKhổng-Thánh Tiên-Sư Hưng-Nho thạnh thế Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "TAM-KỲ PHỔ-ĐỘ TAM-TRẤN OAI-NGHI"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tThường-Cư Nam-Hãi Quan-Âm Như-Lai."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tLý-Đại Tiên-Trưởng Thái-Bạch Kim-Tinh."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tHiệp-Thiên-Đại-Đế Quan-Thánh Đế-Quân."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tGia-Tô Giáo-Chủ cứu thế Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tThái-Công Tướng-Phụ quãng-pháp Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tĐại-Đạo Tam-Kỳ Phổ-Độ Lý-Giáo-Tông từ-bi cứu thế Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tTam-Châu bác-bộ Hộ-Pháp Thiên-tôn."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\t\t\tChư Phật, Tiên, Thánh, Thần liên đài chi hạ."
+          }
+        ]
+      },
+      {
+        "type": "targetBlock",
+        "key": "noi-dung-so"
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\tThiên-phong giữ thiện tín đẳng."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "align": "center"
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "THIỆT-TRIÊM"
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "insert": "\tThiên-ân bất thăng khẩn khất chi chí cẩn biểu khấu bái."
+          }
+        ]
+      },
+      {
+        "type": "block",
+        "attributes": {
+          "cols": 3
+        },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "attributes": {
+              "align": "right"
+            },
+            "insert": "THƯỢNG-TẤU"
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "align": "center"
+            },
+            "insert": "-"
+          },
+          {
+            "type": "paragraph",
+            "attributes": {
+              "align": "left"
+            },
+            "insert": "DĨ-VĂN"
+          }
+        ]
+      }
+    ]
+  }
+}

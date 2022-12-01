@@ -1,0 +1,41 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+
+::ng-deep {
+  cp-creator-block {
+    padding: 0 3rem 2rem 3rem;
+    display: block;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      padding: 0;
+    }
+
+    .creator-block-title {
+      .targetButton {
+        position: absolute;
+        right: calc(100% - 20px);
+        top: calc(0% - 10px);
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s;
+      }
+
+      .redirectButton {
+        position: absolute;
+        left: calc(100% - 20px);
+        top: calc(0% - 10px);
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s;
+      }
+
+      &:hover {
+        .targetButton, .redirectButton {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

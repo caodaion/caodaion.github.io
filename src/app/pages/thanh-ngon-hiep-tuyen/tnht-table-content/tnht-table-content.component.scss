@@ -1,0 +1,32 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+
+::ng-deep {
+  .tnht-table-content {
+    .tnht-title {
+      margin: 2rem 0;
+    }
+
+    .mat-expansion-panel-header[aria-disabled=true] {
+      color: unset;
+    }
+
+    .mat-expansion-panel-header {
+      height: auto;
+      .mat-expansion-panel-header-title, .mat-expansion-panel-header .mat-expansion-panel-header-description, .content-name {
+        white-space: normal;
+        margin-right: 1rem;
+      }
+    }
+    .content-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    a {
+      color: unset;
+      text-decoration: none;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+::ng-deep {
+  .cp-creator-toolbar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .toolbar-content {
+      flex: 1;
+
+      .form-group {
+        padding: 1rem;
+      }
+    }
+
+  }
+}

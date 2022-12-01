@@ -1,0 +1,140 @@
+<ng-container *ngIf="renderDocument?.formGroup">
+  <ng-container *ngFor="let formGroup of renderDocument.formGroup">
+    <mat-expansion-panel
+      [expanded]="!!!formGroup?.expaned ? formGroup?.expaned : true"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ formGroup?.title }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="form-group">
+        <mat-panel-description>{{ formGroup?.hint }}</mat-panel-description>
+        <ng-container *ngFor="let formControl of formGroup?.control">
+          <ng-container *ngIf="formControl?.type?.includes('Text')">
+            <cp-input-form-field
+              [inputFormControl]="formControl"
+            ></cp-input-form-field>
+          </ng-container>
+          <mat-radio-group
+            *ngIf="formControl?.type === 'radiobox'"
+            [(ngModel)]="formControl.value"
+            [ngClass]="'layout-' + formControl?.layout"
+          >
+            <mat-label>{{ formControl?.label }}</mat-label>
+            <mat-radio-button
+              *ngFor="let radio of formControl?.data"
+              [value]="radio"
+              [disabled]="!contentEditable"
+              >{{ radio }}</mat-radio-button
+            >
+          </mat-radio-group>
+          <div
+            *ngIf="formControl?.type === 'formArrayTrigerLongString'"
+            class="triger-form-array"
+          >
+            <mat-form-field
+              appearance="fill"
+              *ngIf="formControl?.type === 'formArrayTrigerLongString'"
+              class="w-100"
+              [hintLabel]="
+                (formControl?.hintLabel?.text
+                  ? formControl?.hintLabel?.text
+                  : '') + getOptionalLabel(formControl)
+              "
+            >
+              <mat-label>{{ formControl?.label }}</mat-label>
+              <textarea
+                *ngIf="formControl?.type === 'formArrayTrigerLongString'"
+                [rows]="formControl?.rows"
+                matInput
+                [disabled]="!contentEditable"
+                [placeholder]="formControl?.placeholder"
+                [(ngModel)]="formControl.value"
+                [required]="formControl?.required"
+                [autocomplete]="
+                  formControl?.autocomplete ? formControl?.autocomplete : 'off'
+                "
+                [maxlength]="formControl?.maxLength"
+                [minlength]="formControl?.minLength"
+                [disabled]="formControl?.disabled"
+              ></textarea>
+            </mat-form-field>
+            <button
+              mat-flat-button
+              class="w-100"
+              [color]="'accent'"
+              [disabled]="!contentEditable"
+              (click)="onChangeTrigerFormArray(formControl)"
+            >
+              <mat-icon>sync_alt</mat-icon> Nhập
+            </button>
+            <mat-divider></mat-divider>
+          </div>
+          <div *ngIf="formControl?.type === 'formArray'" class="form-array">
+            <ng-container *ngIf="formControl?.value.length > 0">
+              <div
+                *ngFor="let item of formControl?.value; let itemIndex = index"
+              >
+                <div class="d-flex justify-content-between">
+                  <p>{{ formControl?.itemLabel }}({{ itemIndex + 1 }})</p>
+                  <button
+                    mat-icon-button
+                    [disabled]="!contentEditable"
+                    (click)="onDeleteItem(formControl, itemIndex)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <ng-container *ngFor="let control of item?.control">
+                  <ng-container *ngIf="control?.type?.includes('Text')">
+                    <cp-input-form-field
+                      [inputFormControl]="control"
+                    ></cp-input-form-field>
+                  </ng-container>
+                  <ng-container *ngIf="control?.type?.includes('number')">
+                    <cp-number-form-field
+                      [inputFormControl]="control"
+                    ></cp-number-form-field>
+                  </ng-container>
+                </ng-container>
+                <mat-divider></mat-divider>
+              </div>
+            </ng-container>
+            <button
+              mat-flat-button
+              class="w-100"
+              [color]="'primary'"
+              (click)="onAddNewItem(formControl, errorMessageDialog)"
+              [disabled]="!contentEditable"
+            >
+              <mat-icon>add</mat-icon>Thêm
+            </button>
+          </div>
+          <div
+            *ngIf="formControl?.type === 'addressGroup'"
+            class="address-group"
+          >
+            <div class="d-flex" *ngFor="let group of addressGroup">
+              <cp-input-form-field
+                [inputFormControl]="formControl?.value[group]"
+                [modifierAt]="'prevText'"
+              ></cp-input-form-field>
+              <cp-input-form-field
+                [inputFormControl]="formControl?.value[group]"
+              ></cp-input-form-field>
+              <cp-input-form-field
+                [inputFormControl]="formControl?.value[group]"
+                [modifierAt]="'nextText'"
+              ></cp-input-form-field>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </mat-expansion-panel>
+  </ng-container>
+</ng-container>
+<ng-template #errorMessageDialog>
+  <div class="error-message-dialog">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <p>{{ errorMessage }}</p>
+  </div>
+</ng-template>

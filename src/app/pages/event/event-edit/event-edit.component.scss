@@ -1,0 +1,29 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .event-content-container {
+    background-color: map.get(variables.$light-theme, "on-primary");
+    .top-pannel-content {
+      button {
+        margin-left: 1rem;
+      }
+    }
+    .form-group {
+      padding: 1rem;
+      mat-card {
+        margin-bottom: 1rem;
+        .kinh-list {
+          overflow: auto;
+        }
+      }
+    }
+    .kinh-list-wrapper {
+      .mat-grid-tile-content {
+        padding: 0.5rem;
+      }
+    }
+    .event-content-form {
+      overflow: auto;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<div class="w-100 h-100">
+  <div class="w-100 h-100 d-flex flex-column align-items-center">
+    <div class="login-form-container d-flex flex-column align-items-center">
+      <h1>Đăng nhập</h1>
+      <div class="backad" (click)="countDebugAdmin()" *ngIf="devAdministratorAction"></div>
+      <mat-form-field appearance="fill" class="form-control">
+        <mat-label>Tên đăng nhập</mat-label>
+        <input matInput [(ngModel)]="loginUser.userName" type="text" autocomplete="new-password"
+               (input)="enterLoginInformation()"
+               (keyup.enter)="login()">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="form-control">
+        <mat-label>Mật khẩu</mat-label>
+        <input matInput [(ngModel)]="loginUser.password" type="password" autocomplete="new-password"
+               (input)="enterLoginInformation()"
+               (keyup.enter)="login()">
+      </mat-form-field>
+      <div class="w-100 d-flex justify-content-between button-group">
+        <button mat-button color="primary">Chưa có tài khoản? Đăng ký.</button>
+        <button mat-raised-button color="primary" [disabled]="!loginUser.userName || !loginUser.password"
+                *ngIf="!debugDevAdminCount || (debugDevAdminCount >= 12 && debugDevAdminCount % 2 === 0)"
+                (click)="login()">
+          ĐĂNG NHẬP
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

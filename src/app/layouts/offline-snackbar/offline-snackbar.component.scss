@@ -1,0 +1,18 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .offline-panel {
+    .title-medium {
+      color: map.get(variables.$light-theme, "error");
+      &.online {
+        color: map.get(variables.$light-theme, "success");
+      }
+    }
+    .label-medium {
+      color: map.get(variables.$light-theme, "outline");
+    }
+  }
+  .mat-snack-bar-container {
+    background: white;
+  }
+}

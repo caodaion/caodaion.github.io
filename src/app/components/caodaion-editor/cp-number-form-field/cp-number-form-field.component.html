@@ -1,0 +1,55 @@
+<mat-form-field
+  appearance="fill"
+  *ngIf="inputFormControl?.type?.includes('number')"
+  class="w-100"
+  [hintLabel]="
+    (inputFormControl?.hintLabel?.text
+      ? inputFormControl?.hintLabel?.text
+      : '') + getOptionalLabel(inputFormControl)
+  "
+>
+  <mat-label>{{
+    modifierAt === "prevText"
+      ? "Từ đứng trước"
+      : modifierAt === "nextText"
+      ? "Từ đứng sau"
+      : inputFormControl?.label
+  }}</mat-label>
+  <input
+    matInput
+    [type]="'number'"
+    [placeholder]="
+      modifierAt === 'prevText'
+        ? 'Từ đứng trước'
+        : modifierAt === 'nextText'
+        ? 'Từ đứng sau'
+        : inputFormControl?.placeholder
+    "
+    [(ngModel)]="
+      modifierAt === 'prevText'
+        ? inputFormControl.prevText
+        : modifierAt === 'nextText'
+        ? inputFormControl.nextText
+        : inputFormControl.value
+    "
+    [required]="inputFormControl?.required"
+    [autocomplete]="
+      inputFormControl?.autocomplete ? inputFormControl?.autocomplete : 'off'
+    "
+    [maxlength]="inputFormControl?.maxLength"
+    [minlength]="inputFormControl?.minLength"
+    [disabled]="inputFormControl?.disabled"
+  />
+  <mat-error *ngIf="!!getErrorMessage(inputFormControl)">{{
+    getErrorMessage(inputFormControl)
+  }}</mat-error>
+  <mat-hint
+    class="hint-max-lenght"
+    *ngIf="inputFormControl?.maxLength"
+    [align]="'end'"
+    >{{ inputFormControl?.value?.length || 0 }} /
+    {{ inputFormControl?.maxLength }}</mat-hint
+  >
+  <span matPrefix>{{ inputFormControl?.prefix }}</span>
+  <span matSuffix>{{ inputFormControl?.suffix }}</span>
+</mat-form-field>

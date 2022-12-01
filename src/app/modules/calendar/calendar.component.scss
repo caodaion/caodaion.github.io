@@ -1,0 +1,39 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .sub-sidenav {
+    display: flex;
+    height: 100%;
+    width: 298px;
+    align-items: center;
+    justify-content: center;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      // width: 100%;
+    }
+    .mat-list-sub-sidenav {
+      padding: 12px;
+    }
+
+    .mat-list-item {
+      border-radius: 48px;
+      transition: 0.3s;
+      &:hover {
+        background-color: transparent;
+      }
+      &.active {
+        background: map.get(
+          variables.$light-theme,
+          "secondary-container"
+        ) !important;
+      }
+    }
+    .sub-sidenav-item {
+      height: 56px;
+      margin: 0 12px;
+    }
+
+    .sub-sidenav-icon {
+      margin: 16px;
+    }
+  }
+}

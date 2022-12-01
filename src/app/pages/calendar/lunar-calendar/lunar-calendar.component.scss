@@ -1,0 +1,28 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .lunar-calendar-container {
+    .lunar-calendar-toolbar {
+      background-color: map.get(variables.$light-theme, "on-primary");
+    }
+    .yearly-monthly-daily {
+      background-color: #dadce0;
+    }
+    .yearly-monthly-special {
+      background-color: #4086f4;
+      color: map.get(variables.$light-theme, "on-primary");
+    }
+    .yearly-special-special {
+      background-color: #eb4132;
+      color: map.get(variables.$light-theme, "on-primary");
+    }
+  }
+  .event-summary-dialog {
+    .details-item {
+      margin-bottom: 0.5rem;
+      mat-icon {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

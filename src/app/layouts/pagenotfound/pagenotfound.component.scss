@@ -1,0 +1,22 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .offline-notification {
+    visibility: visible;
+    padding: 10px;
+    .mat-icon {
+      height: 175px;
+      width: 175px;
+      font-size: 175px;
+      color: map.get(variables.$light-theme, "error");
+    }
+    .display-large {
+      color: map.get(variables.$light-theme, "error");
+      margin-top: 40px;
+    }
+    .headline-small {
+      color: map.get(variables.$light-theme, "error");
+      margin-top: 48px;
+    }
+  }
+}

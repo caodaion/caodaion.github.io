@@ -1,0 +1,23 @@
+@use "../../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .lunar-calendar-container {
+    .selected-month-calendar {
+      background-color: map.get(variables.$light-theme, "on-primary");
+      overflow: hidden;
+      .days {
+        display: flex;
+        .day {
+          width: calc(100% / 7);
+          border-right: #dadce0 1px solid;
+          border-bottom: #dadce0 1px solid;
+          padding: 0.25rem;
+        }
+      }
+      mat-card {
+        padding: 0;
+        border-radius: 0;
+      }
+    }
+  }
+}

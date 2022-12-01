@@ -1,0 +1,28 @@
+@use "../sass/variables.scss";
+@use "sass:map";
+.loader-logo {
+  background-color: map.get(variables.$light-theme, "main-background");
+}
+.logo-loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, -50%);
+  animation: logo-animation ease-in-out infinite 2s;
+  .logo-name {
+    margin-top: 20px;
+  }
+}
+
+@keyframes logo-animation {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

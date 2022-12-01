@@ -1,0 +1,142 @@
+<mat-drawer-container class="main-mat-drawer-container" autosize>
+  <mat-drawer mode="side" class="main-drawer mat-drawer" opened>
+    <button class="menu-icon" mat-icon-button (click)="onToggleDrawer()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-nav-list class="main-nav-list">
+      <a
+        *ngFor="let item of mainMenu"
+        mat-list-item
+        disableRipple
+        [routerLink]="item?.url"
+        [routerLinkActive]="'active'"
+      >
+        <div
+          class="icon-hover w-100 d-flex justify-content-center align-items-center"
+        >
+          <mat-icon>{{item?.icon}}</mat-icon>
+        </div>
+        <span class="label-small main-drawer-label-text">{{item?.label}}</span>
+      </a>
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content
+    class="full-layout-drawer-content"
+    [ngClass]="isHideToolbar ? 'hide-bottom-navbar' : ''"
+  >
+    <div class="main-drawer-content d-flex flex-column w-100 h-100">
+      <mat-toolbar
+        class="main-toolbar justify-content-between"
+        *ngIf="!isHideToolbar"
+      >
+        <button
+          class="menu-icon-mobile"
+          mat-icon-button
+          (click)="onToggleDrawer()"
+        >
+          <mat-icon>menu</mat-icon></button
+        ><a
+          [routerLink]="'trang-chu'"
+          class="d-flex align-items-center caodaion-logo"
+        >
+          <svg width="36px" height="36px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)" fill="#4285F4"/>
+            <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z" fill="#FBBC05"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z" fill="#EA4335"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z" fill="#FBBC05"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z" fill="#4285F4"/>
+            <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4"/>
+            <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05"/>
+            <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05"/>
+            <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4"/>
+            <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335"/>
+            <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4"/>
+            <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335"/>
+            <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4"/>
+          </svg>
+          <span class="title-large">CaoDaiON</span></a
+        >
+        <div class="text-center" *ngIf="viewPortMode === 'desktop'">
+          Thời {{ time.commonTime.kanji
+          }}<span class="number-time">
+            ({{ time.time | async | date: "hh:mm:ssaa" }})</span
+          >
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <a
+            mat-list-item
+            disableRipple
+            (click)="openSnackBar()"
+            *ngIf="isOffline"
+          >
+            <div
+              class="icon-hover wifi-logo d-flex justify-content-center align-items-center"
+            >
+              <mat-icon>wifi_off</mat-icon>
+            </div>
+          </a>
+          <a mat-list-item disableRipple>
+            <button
+              *ngIf="isShowButtonInstall"
+              mat-icon-button
+              class="icon-hover account-logo d-flex justify-content-center align-items-center"
+              (click)="installPWA()"
+            >
+              <mat-icon>{{
+                viewPortMode === "desktop"
+                  ? "install_desktop"
+                  : "install_mobile"
+              }}</mat-icon>
+            </button>
+          </a>
+          <a mat-list-item disableRipple>
+<!--            <button-->
+<!--              mat-icon-button-->
+<!--              [matMenuTriggerFor]="profileMenu"-->
+<!--              class="icon-hover account-logo d-flex justify-content-center align-items-center"-->
+<!--            >-->
+<!--              <mat-icon>account_circle</mat-icon>-->
+<!--            </button>-->
+<!--            <mat-menu #profileMenu="matMenu">-->
+<!--              <button mat-menu-item (click)="clearUnread()">-->
+<!--                <mat-icon [matBadge]="unreadCount ? unreadCount : ''">notifications</mat-icon-->
+<!--                >Thông báo-->
+<!--              </button>-->
+<!--              <button mat-menu-item (click)="checkForUpdate()">-->
+<!--                <mat-icon>system_update</mat-icon>Cập nhật phiên bản-->
+<!--              </button>-->
+<!--              <button mat-menu-item-->
+<!--                      [routerLink]="'auth/dang-nhap'" *ngIf="!currentUser">-->
+<!--                <mat-icon>login</mat-icon>Đăng nhập-->
+<!--              </button>-->
+<!--              <button mat-menu-item *ngIf="currentUser" (click)="logout()">-->
+<!--                <mat-icon>logout</mat-icon>Đăng xuất-->
+<!--              </button>-->
+<!--            </mat-menu>-->
+          </a>
+        </div>
+      </mat-toolbar>
+      <div class="w-100 sub-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<div class="w-100 d-flex side-nav-mobile-wrapper" *ngIf="!isHideBottomNavBar">
+  <mat-nav-list class="side-nav-mobile d-flex">
+    <a
+      *ngFor="let item of mainMenu"
+      mat-list-item
+      disableRipple
+      [routerLink]="item?.url"
+      [routerLinkActive]="'active'"
+    >
+      <div
+        class="icon-hover w-100 d-flex justify-content-center align-items-center"
+      >
+        <mat-icon>{{item?.icon}}</mat-icon>
+      </div>
+      <span class="label-small main-drawer-label-text">{{item?.label}}</span>
+    </a>
+  </mat-nav-list>
+</div>

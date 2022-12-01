@@ -1,0 +1,164 @@
+@use "sass:map";
+
+$primary-0: #000000;
+$primary-10: #001d35;
+$primary-20: #381e72;
+$primary-30: #4f378b;
+$primary-40: #6750a4;
+$primary-50: #7f67be;
+$primary-60: #9a82db;
+$primary-70: #b69df8;
+$primary-80: #d0bcff;
+$primary-90: #eaddff;
+$primary-95: #f6edff;
+$primary-99: #fffbfe;
+$primary-100: #ffffff;
+$main-background: #eaf1fb;
+$secondary-background: #f6f8fc;
+
+$secondary-0: #000000;
+$secondary-10: #1d192b;
+$secondary-20: #332d41;
+$secondary-30: #4a4458;
+$secondary-40: #625b71;
+$secondary-50: #7a7289;
+$secondary-60: #958da5;
+$secondary-70: #b0a7c0;
+$secondary-80: #ccc2dc;
+$secondary-90: #d3e3fd;
+$secondary-95: #f6edff;
+$secondary-99: #fffbfe;
+$secondary-100: #ffffff;
+
+$tertiary-0: #000000;
+$tertiary-10: #31111d;
+$tertiary-20: #492532;
+$tertiary-30: #633b48;
+$tertiary-40: #7d5260;
+$tertiary-50: #986977;
+$tertiary-60: #b58392;
+$tertiary-70: #d29dac;
+$tertiary-80: #efb8c8;
+$tertiary-90: #ffd8e4;
+$tertiary-95: #ffecf1;
+$tertiary-99: #fffbfa;
+$tertiary-100: #ffffff;
+
+$error-0: #000000;
+$error-10: #410e0b;
+$error-20: #601410;
+$error-30: #8c1d18;
+$error-40: #b3261e;
+$error-50: #dc362e;
+$error-60: #e46962;
+$error-70: #ec928e;
+$error-80: #f2b8b5;
+$error-90: #f9dedc;
+$error-95: #fceeee;
+$error-99: #fffbf9;
+$error-100: #ffffff;
+
+$neutral-0: #000000;
+$neutral-10: #1c1b1f;
+$neutral-20: #313033;
+$neutral-30: #484649;
+$neutral-40: #605d62;
+$neutral-50: #787579;
+$neutral-60: #939094;
+$neutral-70: #aeaaae;
+$neutral-80: #c9c5ca;
+$neutral-90: #e6e1e5;
+$neutral-95: #f4eff4;
+$neutral-99: #fffbfe;
+$neutral-100: #ffffff;
+
+$neutral-variant-0: #000000;
+$neutral-variant-10: #1d1a22;
+$neutral-variant-20: #322f37;
+$neutral-variant-30: #49454f;
+$neutral-variant-40: #605d66;
+$neutral-variant-50: #79747e;
+$neutral-variant-60: #938f99;
+$neutral-variant-70: #aea9b4;
+$neutral-variant-80: #cac4d0;
+$neutral-variant-90: #e7e0ec;
+$neutral-variant-95: #f5eefa;
+$neutral-variant-99: #fffbfe;
+$neutral-variant-100: #ffffff;
+
+$light-theme: (
+  "primary": $primary-40,
+  "on-primary": $primary-100,
+  "primary-container": $primary-90,
+  "on-primary-container": $primary-10,
+  "secondary": $secondary-40,
+  "on-secondary": $secondary-100,
+  "secondary-container": $secondary-90,
+  "on-secondary-container": $secondary-10,
+  "tertiary": $tertiary-40,
+  "on-tertiary": $tertiary-100,
+  "tertiary-container": $tertiary-90,
+  "on-tertiary-container": $tertiary-10,
+  "error": $error-40,
+  "on-error": $error-100,
+  "error-container": $error-90,
+  "on-error-container": $error-10,
+  "background": $neutral-99,
+  "on-background": $neutral-10,
+  "surface": $neutral-99,
+  "main-background": $main-background,
+  "secondary-background": $secondary-background,
+  "on-surface": $neutral-10,
+  "surface-variant": $neutral-variant-90,
+  "on-surface-variant": $neutral-variant-30,
+  "outline": $neutral-variant-50,
+  "hover-background": rgba(0, 0, 0, 0.04),
+  "inverse-on-surface": $neutral-95,
+  "success": #34a853,
+);
+$dark-theme: (
+  "primary": $primary-80,
+  "on-primary": $primary-20,
+  "primary-container": $primary-30,
+  "on-primary-container": $primary-90,
+  "secondary": $secondary-80,
+  "on-secondary": $secondary-20,
+  "secondary-container": $secondary-30,
+  "on-secondary-container": $secondary-90,
+  "tertiary": $tertiary-80,
+  "on-tertiary": $tertiary-20,
+  "tertiary-container": $tertiary-30,
+  "on-tertiary-container": $primary-90,
+  "error": $error-80,
+  "on-error": $error-20,
+  "error-container": $error-30,
+  "on-error-container": $error-90,
+  "background": $neutral-10,
+  "on-background": $neutral-90,
+  "surface": $neutral-10,
+  "on-surface": $neutral-80,
+  "surface-variant": $neutral-variant-30,
+  "on-surface-variant": $neutral-variant-80,
+  "outline": $neutral-variant-60,
+);
+
+$large-1281-1441: (
+  "layout-region-on": 1280px,
+  "layout-region-off": 1441px,
+);
+$medium-906-1280: (
+  "layout-region-on": 906px,
+  "layout-region-off": 1280px,
+);
+$medium-601-905: (
+  "layout-region-on": 601px,
+  "layout-region-off": 905px,
+);
+$small-361-600: (
+  "layout-region-on": 361px,
+  "layout-region-off": 600px,
+);
+$extra-small-0-360: (
+  "layout-region-on": 0px,
+  "layout-region-off": 360px,
+);

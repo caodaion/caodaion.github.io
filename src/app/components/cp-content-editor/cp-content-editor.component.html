@@ -1,0 +1,236 @@
+<div class="editor-wrapper h-100" *ngIf="!nested">
+  <div
+    [id]="renderedDocument?.key + '-CONTENT'"
+    class="page"
+    style="
+      box-sizing: border-box;
+      cursor: text;
+      line-height: 1.42;
+      outline: none;
+      overflow-y: auto;
+      tab-size: 6;
+      -moz-tab-size: 6;
+      white-space: pre-wrap;
+      text-align: jutify;
+      word-wrap: break-word;
+      font-size: 17.5px;
+      overflow: hidden;
+      background: #ffff;
+      text-align: justify;
+      user-select: text;
+    "
+    [ngStyle]="{
+      paddingTop: pagePadding?.paddingTop,
+      paddingRight: pagePadding?.paddingRight,
+      paddingBottom: pagePadding?.paddingBottom,
+      paddingLeft: pagePadding?.paddingLeft,
+      width: pageSize?.width,
+      height: pageSize?.height
+    }"
+    contenteditable
+    aria-multiline="true"
+    role="textbox"
+    (keyup)="onChangeContent($event)"
+    (keydown.tab)="onTab($event)"
+    (keydown.backspace)="onDeleteContent($event)"
+    *ngIf="contentEditable"
+  >
+    <cp-content-editor
+      [nested]="true"
+      [renderDocument]="renderedDocument"
+    ></cp-content-editor>
+  </div>
+  <div
+    [id]="renderedDocument?.key + '-CONTENT'"
+    class="page"
+    style="
+      box-sizing: border-box;
+      cursor: text;
+      line-height: 1.42;
+      outline: none;
+      overflow-y: auto;
+      tab-size: 6;
+      -moz-tab-size: 6;
+      white-space: pre-wrap;
+      text-align: jutify;
+      word-wrap: break-word;
+      font-size: 17.5px;
+      overflow: hidden;
+      background: #ffff;
+      text-align: justify;
+      user-select: text;
+    "
+    [ngStyle]="{
+      paddingTop: pagePadding?.paddingTop,
+      paddingRight: pagePadding?.paddingRight,
+      paddingBottom: pagePadding?.paddingBottom,
+      paddingLeft: pagePadding?.paddingLeft,
+      width: pageSize?.width,
+      height: pageSize?.height
+    }"
+    *ngIf="!contentEditable"
+  >
+    <cp-content-editor
+      [nested]="true"
+      [renderDocument]="renderedDocument"
+    ></cp-content-editor>
+  </div>
+</div>
+<ng-container *ngIf="nested">
+  <p *ngIf="!renderedDocument?.content || renderedDocument?.content?.length === 0"><br /></p>
+  <ng-container *ngFor="let content of renderedDocument?.content">
+    <p
+      *ngIf="content.type === 'paragraph'"
+      [ngStyle]="{
+        textAlign: content?.attrs?.textAlign
+          ? content?.attrs?.textAlign
+          : 'jusify',
+        color: content?.attrs?.color,
+        fontWeight: content?.attrs?.fontWeight,
+        fontStyle: content?.attrs?.fontStyle,
+        fontSize: content?.attrs?.fontSize,
+        textDecoration: content?.attrs?.textDecoration,
+        textIndent: content?.attrs?.textIndent,
+        margin: 0
+      }"
+      [id]="content?.attrs?.hash && content?.attrs?.pathname ? (content?.attrs?.pathname.replaceAll('/','').replaceAll('-','') + content?.attrs?.hash) : ''"
+      [ngClass]="{'targetLink': content?.attrs?.hash && content?.attrs?.pathname}"
+      (click)="clickTargetLink(content)"
+    >
+      <button (click)="clickTargetLink(content, true)" mat-icon-button *ngIf="content?.attrs?.hash && content?.attrs?.pathname" class="targetLinkButton"><mat-icon>link</mat-icon></button>
+      <ng-container *ngFor="let insert of content.content">
+        <ng-container *ngIf="insert?.type === 'text'"
+          ><span
+            *ngIf="!!insert?.attrs"
+            [ngStyle]="{
+              color: insert?.attrs?.color,
+              fontWeight: insert?.attrs?.fontWeight,
+              fontStyle: insert?.attrs?.fontStyle,
+              fontSize: insert.attrs?.fontSize,
+              textDecoration: insert?.attrs?.textDecoration
+            }"
+            >{{ insert.text }}</span
+          ><ng-container *ngIf="!insert?.attrs">{{ insert.text }}</ng-container>
+        </ng-container>
+        <span
+          *ngIf="
+            insert?.type === 'formControl' &&
+            insertFormControlValue(insert)?.type === 'shortText' ||
+            insertFormControlValue(insert)?.type === 'radiobox'
+          "
+          [ngStyle]="{
+            color: insert?.attrs?.color,
+            fontWeight: insert?.attrs?.fontWeight,
+            fontStyle: insert?.attrs?.fontStyle,
+            fontSize: insert.attrs?.fontSize,
+            textDecoration: insert?.attrs?.textDecoration
+          }"
+          >{{ insertFormControlValue(insert)?.value }}</span
+        >
+        <span
+          *ngIf="insert?.type === 'triggerFormControl'"
+          [ngStyle]="{
+            color: insert?.attrs?.color,
+            fontWeight: insert?.attrs?.fontWeight,
+            fontStyle: insert?.attrs?.fontStyle,
+            fontSize: insert.attrs?.fontSize,
+            textDecoration: insert?.attrs?.textDecoration
+          }"
+          >{{ insertFormControlValue(insert)?.value }}</span
+        >
+        <ng-container
+          *ngIf="
+            insert?.type === 'formControl' &&
+            insertFormControlValue(insert)?.type === 'addressGroup'
+          "
+        >
+          <ng-container
+            *ngFor="
+              let addressValue of getObjectArray(
+                insertFormControlValue(insert)?.value
+              );
+              let addressIndex = index
+            "
+          >
+            <span *ngIf="addressValue[1]?.prevText">{{
+              addressValue[1]?.prevText + " "
+            }}</span>
+            <span
+              *ngIf="addressValue[1]?.value"
+              [ngStyle]="{
+                color: insert?.attrs?.color,
+                fontWeight: insert?.attrs?.fontWeight,
+                fontStyle: insert?.attrs?.fontStyle,
+                fontSize: insert.attrs?.fontSize,
+                textDecoration: insert?.attrs?.textDecoration
+              }"
+              >{{ addressValue[1]?.value }}</span
+            >
+            <span *ngIf="addressValue[1]?.nextText">{{
+              " " +
+                addressValue[1]?.nextText +
+                (addressIndex ===
+                getObjectArray(insertFormControlValue(insert)?.value).length - 1
+                  ? ""
+                  : ", ")
+            }}</span>
+          </ng-container>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            insert?.type === 'formControl' &&
+            insertFormControlValue(insert)?.type === 'formArray'
+          "
+        >
+          <ng-container
+            *ngFor="
+              let arrayItem of insertFormControlValue(insert)?.value;
+              let arrayIndex = index
+            "
+          >
+            <ng-container *ngFor="let controlItem of arrayItem?.control">
+              <span>{{ controlItem?.value }} </span>
+              <ng-container *ngIf="controlItem?.value && controlItem.suffix"
+                >{{ controlItem.suffix
+                }}{{
+                  arrayIndex ===
+                  insertFormControlValue(insert)?.value.length - 1
+                    ? "."
+                    : ","
+                }}
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </p>
+    <div
+      *ngIf="content?.type === 'sourceContent'"
+      class="targetContent"
+      [id]="
+        content?.targetDocumentKey + '-CONTENT_' + content?.targetContentKey
+      "
+    >
+      <cp-content-editor
+        [renderDocument]="content"
+        [nestedId]="renderedDocument?.key"
+        [nested]="true"
+      ></cp-content-editor>
+    </div>
+    <div
+      *ngIf="
+        content?.type === 'targetContent' &&
+        renderedDocument?.key === sourceContent?.targetDocumentKey &&
+        content?.key === sourceContent?.targetContentKey
+      "
+      class="sourceContent"
+      [id]="nestedId + '-CONTENT'"
+    >
+      <cp-content-editor
+        [renderDocument]="sourceContent"
+        [isSourceContent]="true"
+        [nested]="true"
+      ></cp-content-editor>
+    </div>
+  </ng-container>
+</ng-container>

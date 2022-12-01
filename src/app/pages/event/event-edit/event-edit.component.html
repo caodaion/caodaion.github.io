@@ -1,0 +1,251 @@
+<div class="wrapper-container event-content-container">
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  <div class="wrapper-container event-container-wrapper" *ngIf="currentEvent">
+    <div class="flex-1 wrapper-container event-container">
+      <div class="top-pannel">
+        <div class="top-pannel-content d-flex justify-content-between">
+          <div>
+            <h1>Sự kiện - {{ currentEvent.name }}</h1>
+          </div>
+          <div>
+            <button
+              mat-flat-button
+              [color]="'primary'"
+              (click)="onSave()"
+              *ngIf="contentEditable"
+            >
+              Lưu
+            </button>
+            <button mat-stroked-button (click)="onBack()">Thoát</button>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+      <div class="flex-1 event-content-form">
+        <div class="form-group">
+          <div class="d-flex">
+            <mat-form-field [appearance]="'fill'" class="w-100">
+              <mat-label>Tên sự kiện</mat-label>
+              <input
+                type="text"
+                matInput
+                [(ngModel)]="currentEvent.name"
+                (change)="onChangeName()"
+              />
+            </mat-form-field>
+            <mat-form-field [appearance]="'fill'" class="w-100">
+              <mat-label>Key/Slug</mat-label>
+              <input
+                type="text"
+                matInput
+                [(ngModel)]="currentEvent.key"
+                [disabled]="eventKey !== 'them-moi'"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-group">
+          <mat-form-field [appearance]="'fill'" class="w-100">
+            <mat-label>Mô tả</mat-label>
+            <textarea
+              rows="3"
+              [(ngModel)]="currentEvent.description"
+              matInput
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="form-group event-form-group">
+          <mat-card
+            *ngFor="let event of currentEvent.event; let eventIndex = index"
+            class="event-details"
+          >
+            <mat-card-header>
+              <mat-card-title
+                >Sự kiện {{ event.name }} ({{ event.key }})</mat-card-title
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <div class="form-group">
+                <div class="d-flex">
+                  <mat-form-field [appearance]="'fill'" class="w-100">
+                    <mat-label>Tên sự kiện</mat-label>
+                    <input
+                      type="text"
+                      matInput
+                      [(ngModel)]="event.name"
+                      required
+                      (input)="onChangeEventName(event)"
+                    />
+                  </mat-form-field>
+                  <div class="w-100 d-flex">
+                    <mat-radio-group [(ngModel)]="event.dateType">
+                      <mat-radio-button [value]="'lunar'"
+                        ><mat-label>Âm lịch</mat-label></mat-radio-button
+                      >
+                      <mat-radio-button [value]="'solar'"
+                        ><mat-label>Dương lịch</mat-label></mat-radio-button
+                      >
+                    </mat-radio-group>
+                    <mat-form-field [appearance]="'fill'" class="w-100">
+                      <mat-label>Năm</mat-label>
+                      <input
+                        matInput
+                        [(ngModel)]="event.year"
+                        [autocomplete]="'off'"
+                      />
+                      <mat-select
+                        required
+                        [multiple]="true"
+                        [(ngModel)]="event.year"
+                      >
+                        <mat-option
+                          *ngFor="let year of commonDates?.year"
+                          [value]="year?.key"
+                        >
+                          {{ year.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field [appearance]="'fill'" class="w-100">
+                      <mat-label>Tháng</mat-label>
+                      <mat-select required [(ngModel)]="event.month">
+                        <mat-option
+                          *ngFor="let month of commonDates?.month"
+                          [value]="month?.key"
+                        >
+                          {{ month.name }}
+                        </mat-option>
+                      </mat-select> </mat-form-field
+                    ><mat-form-field [appearance]="'fill'" class="w-100">
+                      <mat-label>Ngày</mat-label>
+                      <mat-select required [(ngModel)]="event.selectedDate">
+                        <mat-option
+                          *ngFor="let date of commonDates?.date"
+                          [value]="date?.key"
+                        >
+                          {{ date.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <mat-form-field [appearance]="'fill'" class="w-100">
+                    <mat-label>Thời gian</mat-label>
+                    <mat-select
+                      [(ngModel)]="event.time"
+                      required
+                      [multiple]="true"
+                      (selectionChange)="onChangeCommonTime(event)"
+                    >
+                      <mat-option
+                        *ngFor="let time of commonTimes"
+                        [value]="time?.key"
+                      >
+                        {{ time.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field [appearance]="'fill'" class="w-100">
+                    <mat-label>Địa điểm</mat-label>
+                    <mat-select
+                      [(ngModel)]="event.locationType"
+                      required
+                      [multiple]="true"
+                      (selectionChange)="onChangeCommonLocationTypeValue(event)"
+                    >
+                      <mat-option
+                        *ngFor="let location of commonLocationTypes"
+                        [value]="location?.key"
+                      >
+                        {{ location.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="form-group">
+                <mat-grid-list [cols]="2" [rowHeight]="'2:1'">
+                  <mat-grid-tile class="kinh-list-wrapper">
+                    <mat-card class="w-100 h-100 wrapper-container">
+                      <mat-card-header>
+                        <mat-card-title>NGUỒN</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content class="flex-1 kinh-list w-100 h-100">
+                        <mat-divider></mat-divider>
+                        <mat-selection-list
+                          #stock
+                          [(ngModel)]="event.kinh"
+                          (selectionChange)="
+                            onChangeSelectedKinhOption(
+                              'stock',
+                              event,
+                              stock,
+                              filter
+                            )
+                          "
+                        >
+                          <mat-list-option
+                            *ngFor="let kinh of kinhList"
+                            [value]="kinh?.key"
+                          >
+                            {{ kinh?.name }}
+                            <mat-divider></mat-divider>
+                          </mat-list-option>
+                        </mat-selection-list>
+                      </mat-card-content>
+                    </mat-card>
+                  </mat-grid-tile>
+                  <mat-grid-tile class="kinh-list-wrapper">
+                    <mat-card class="w-100 h-100 wrapper-container">
+                      <mat-card-header>
+                        <mat-card-title
+                          >Danh sách kinh: {{ event?.name }}</mat-card-title
+                        >
+                      </mat-card-header>
+                      <mat-card-content class="flex-1 kinh-list w-100 h-100">
+                        <mat-divider></mat-divider>
+                        <mat-selection-list
+                          #filter
+                          [(ngModel)]="event.kinh"
+                          (selectionChange)="
+                            onChangeSelectedKinhOption(
+                              'filter',
+                              event,
+                              stock,
+                              filter
+                            )
+                          "
+                        >
+                          <mat-list-option
+                            *ngFor="let kinh of event.kinhList"
+                            [value]="kinh?.key"
+                          >
+                            {{ kinh?.name }}
+                            <mat-divider></mat-divider>
+                          </mat-list-option>
+                        </mat-selection-list>
+                      </mat-card-content>
+                    </mat-card>
+                  </mat-grid-tile>
+                </mat-grid-list>
+              </div>
+            </mat-card-content>
+            <mat-card-actions [align]="'end'">
+              <button mat-button [color]="'warn'">
+                <mat-icon>delete</mat-icon> Xóa
+              </button>
+              <button
+                mat-flat-button
+                [color]="'primary'"
+                (click)="onAddNewEvent(event)"
+              >
+                <mat-icon>add</mat-icon> THÊM SỰ KIỆN MỚI
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

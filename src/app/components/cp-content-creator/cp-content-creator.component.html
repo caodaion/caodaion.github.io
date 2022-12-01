@@ -1,0 +1,21 @@
+<mat-drawer-container autosize class="cp-content-creator-mat-drawer">
+  <mat-drawer-content id="contentCreatorWrapper">
+    <div class="cp-creator-block-group" [ngClass]="{'contentEditable': isShowController}">
+      <ng-container *ngFor="let block of data.content">
+        <cp-creator-block
+          *ngIf="block?.type == 'block'" [data]="block"
+          [id]="getId(block)"
+          (focusedBlock)="focusedBlock = $event"
+        ></cp-creator-block>
+        <cp-creator-content
+          *ngIf="block?.type == 'contentBlock'" [data]="block"
+          [id]="getId(block)"
+          (focusedBlock)="focusedBlock = $event"
+          [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
+      </ng-container>
+    </div>
+  </mat-drawer-content>
+  <mat-drawer mode="side" opened [position]="'end'" [opened]="isShowController">
+    <cp-content-creator-toolbar [focusedBlock]="focusedBlock" [data]="data" (save)="saveData()"></cp-content-creator-toolbar>
+  </mat-drawer>
+</mat-drawer-container>
