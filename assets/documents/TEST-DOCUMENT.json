@@ -1,0 +1,99 @@
+{
+  "data": {
+    "version": "1",
+    "key": "TEST-DOCUMENT",
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "this is a normal text."
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "color": "red"
+            },
+            "text": "this text have red color"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "color": "red",
+              "fontSize": "30px"
+            },
+            "text": "this text have red color and 30px"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "fontWeight": "bold"
+            },
+            "text": "this is a bold text"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "fontStyle": "italic"
+            },
+            "text": "this is an italic text"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "textDecoration": "underline line-through"
+            },
+            "text": "this is an underline and line though text"
+          }
+        ]
+      },
+      {
+        "type": "targetContent",
+        "key": "MERGE-AREA"
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "color": "blue"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "All of this line has blue color but"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "color": "red",
+              "fontWeight": "bold"
+            },
+            "text": " this text is red and bold"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "color": "purple",
+          "textAlign": "center"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "All of this line has purple color and aligned to center but"
+          },
+          {
+            "type": "text",
+            "attrs": {
+              "color": "green",
+              "textDecoration": "underline"
+            },
+            "text": " this text is green and underline"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "data": {
+    "id": "",
+    "key": "SO-LE-VIA-DUC-CHI-TON",
+    "name": "SỚ LỄ VÍA ĐỨC CHÍ TÔN",
+    "expandName": "SỚ LỄ VÍA ĐỨC CHÍ TÔN",
+    "blocks": [
+      {
+        "type": "sourceBlock",
+        "targetDocumentKey": "LONG-SO-TAM-GIAO",
+        "targetBlockKey": "noi-dung-so",
+        "blocks": [
+          {
+            "type": "block",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "insert": "\tKim vì thời tế Ngọc-Hoàng Thánh-Đán giai kỳ, chư Thiên-phong Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng nghiêm thiết Đàn tràn hương, đăng, hoa, trà, quả thanh chước vi nghi chí tâm triều lễ. Khẩn cầu tứ điều:"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "attributes": {
+                  "fontWeight": "bold"
+                },
+                "insert": "\tĐệ-nhứt: "
+              },
+              {
+                "type": "paragraph",
+                "insert": "Thành tâm triều hạ. Thánh-Đán Ngọc-Hoàng. xưng tụng ân thâm, vô biên công đức, Đại-từ-bi ư Bắc-đẩu kinh cung."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "attributes": {
+                  "fontWeight": "bold"
+                },
+                "insert": "\tĐệ-nhị: "
+              },
+              {
+                "type": "paragraph",
+                "insert": "Cung duy bái tạ, cảm đoái thâm ân, vô-trung Từ-Phụ ký xiểu khai Đạo-Giáo chi cơ, viện lê thứ trầm luân khổ hãi."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "attributes": {
+                  "fontWeight": "bold"
+                },
+                "insert": "\tĐệ-tam: "
+              },
+              {
+                "type": "paragraph",
+                "insert": "Cung duy bái tạ, thâm ân Từ-Phụ bố hóa chư đệ tử, hiện thời hỉ đắc giai thành Đạo chi nhơn, thánh minh cảnh nhi-hóa độ chúng sanh đạo-đức, nhi thừa hành Luật Pháp, lực thông quốc mạch."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "attributes": {
+                  "fontWeight": "bold"
+                },
+                "insert": "\tĐệ-tứ: "
+              },
+              {
+                "type": "paragraph",
+                "insert": "Đại-bái khẩn cầu Từ-Phụ, ban phước tân niên, chư chúng sanh tấn hóa cập thời, bố đức khai minh nhơn loại giác tỉnh hồi tâm hướng thiện, nạn giải tai tiêu, giải pháp hưu chinh. hầu hưởng thái bình đường Ngu thạnh trị."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

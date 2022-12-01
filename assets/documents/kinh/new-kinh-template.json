@@ -1,0 +1,71 @@
+{
+  "data": {
+    "key": "newKinhTemplate",
+    "formGroup": [
+      {
+        "key": "thong-tin-co-ban",
+        "title": "Thông tin cơ bản",
+        "hint": "Thông tin cơ bản của một bài kinh, ví dụ: Tên, Tên chữ Nôm, ...",
+        "type": "formGroup",
+        "expaned": true,
+        "control": [
+          {
+            "key": "ten",
+            "type": "shortText",
+            "value": "",
+            "label": "Tên",
+            "required": true,
+            "requiredErrorMessage": "Tên của bài kinh không được để trống",
+            "autocomplete": "off",
+            "placeholder": "Nhập tên của bài kinh"
+          },
+          {
+            "key": "ten-chu-nom",
+            "type": "shortText",
+            "value": "",
+            "label": "Tên chữ Nôm",
+            "hintlabel": {
+              "text": "Hãy nhập tên của bài kinh được viết bằng chữ Nôm thời xưa"
+            },
+            "placeholder": "Nhập tên chữ Nôm của bài kinh"
+          },
+          {
+            "key": "giong-doc",
+            "type": "radiobox",
+            "value": "",
+            "label": "Giọng đọc",
+            "layout": "column",
+            "data": ["Giọng Giọng Nam Ai", "Giọng Giọng Nam Xuân"]
+          },
+          {
+            "key": "cach-lay",
+            "type": "longText",
+            "value": "",
+            "label": "Cách lạy",
+            "rows": 5,
+            "maxLength": 255,
+            "placeholder": "Nhập cách lạy và cách niệm của bài kinh"
+          },
+          {
+            "key": "cau-niem",
+            "type": "longText",
+            "value": "",
+            "label": "Câu niệm",
+            "rows": 5,
+            "maxLength": 255,
+            "placeholder": "Nhập cách niệm của bài kinh"
+          },
+          {
+            "key": "goi-nho",
+            "type": "longText",
+            "value": "",
+            "label": "Gợi nhớ",
+            "rows": 3,
+            "maxLength": 255,
+            "placeholder": "Nhập những từ khóa gợi nhớ của bài kinh"
+          }
+        ]
+      }
+    ]
+  }
+}
