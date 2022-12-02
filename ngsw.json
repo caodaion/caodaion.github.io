@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1669954247134,
+  "timestamp": 1669955732078,
   "index": "https://www.caodaion.com/index.html",
   "assetGroups": [
     {
@@ -367,7 +367,7 @@
     "https://www.caodaion.com/assets/documents/master-data/date.json": "550c19efc42ca66bd9f23e78314f01b41a95c638",
     "https://www.caodaion.com/assets/documents/master-data/location-type.json": "83d9386ffb8f6e3dbd458ab494b8519dd100f232",
     "https://www.caodaion.com/assets/documents/master-data/time.json": "c79164d35958869cdd14b5afca4d24e488c1a7e6",
-    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "6d0da4697302eb81d7c72fc7415d7261c1e7cd6c",
+    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "a1757679a771e104d5f07e14d9cd3699f41b3417",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-144-144.png": "dd0ba2406cbe5cf49a20618f8fee0d9b0d2472f0",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-192-192.png": "bc281e23984f6a5cc8e262a7aec2f5b08416d7f8",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-48-48.png": "535e1c2320e63b801b3b0b2e2f4d8145ee1bf288",
