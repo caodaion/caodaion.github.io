@@ -36,7 +36,7 @@
       </mat-tab>
       <mat-tab label="Chèn">
         <div class="w-100 form-group">
-          <button mat-icon-button (click)="addNewBlock()" [disabled]="focusedBlock?.type == 'contentBlock'">
+          <button mat-icon-button (click)="addNewBlock()" [disabled]="!focusedBlock || focusedBlock?.type == 'contentBlock'">
             <mat-icon>add</mat-icon>
           </button>
           <button mat-icon-button (click)="addNewContentBlock()">

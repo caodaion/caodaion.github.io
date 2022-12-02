@@ -59,8 +59,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
     if (!this.data.content || this.data.content.length == 0) {
       this.data.content = []
     }
-    if (this.focusedBlock.type == 'block') {
-
+    if (this.focusedBlock?.type == 'block') {
       this.data.content.push({
         // @ts-ignore
         key: `${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}b${this.data.content.length || 0}`,
