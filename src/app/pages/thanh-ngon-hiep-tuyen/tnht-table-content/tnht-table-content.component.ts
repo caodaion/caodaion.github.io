@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TnhtService} from "../../../shared/services/tnht/tnht.service";
 import {FlatTreeControl} from "@angular/cdk/tree";
+import { Router } from '@angular/router';
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
@@ -16,7 +17,7 @@ interface ExampleFlatNode {
 })
 export class TnhtTableContentComponent implements OnInit {
   tableContent: Array<any> = [];
-  constructor(private tnhtService: TnhtService) { }
+  constructor(private tnhtService: TnhtService, private router: Router) { }
 
   ngOnInit(): void {
     this.getTableContent()
@@ -31,14 +32,11 @@ export class TnhtTableContentComponent implements OnInit {
   }
 
   readTNHTContent(item: any) {
-    let href = `${location.origin}`
-    if (item?.attrs?.pathname) {
-      href += item?.attrs?.pathname
+    if (item?.attrs?.hash?.includes('#')) {
+      this.router.navigate([item?.attrs?.pathname], {fragment: item?.attrs?.hash.replace('#', '')})
+    } else {
+      this.router.navigate([`${item?.attrs?.pathname}${item?.attrs?.hash || ''}`])
     }
-    if (item?.attrs?.hash) {
-      href += item?.attrs?.hash
-    }
-    location.href = href
   }
 
   getContentName(item: any) {
