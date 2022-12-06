@@ -11,7 +11,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   @Output() save = new EventEmitter();
 
   ngOnInit(): void {
-    console.log(this.data)
+    // console.log(this.data)
     // @ts-ignore
     if (this.data == {}) {
       this.data = {

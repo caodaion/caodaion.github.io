@@ -25,7 +25,7 @@ export class AuthService {
       default:
         break;
     }
-    this.contentEditable = true;
+    // this.contentEditable = true;
     return this.currentUser;
   }
 
