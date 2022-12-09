@@ -87,6 +87,13 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         type: 'contentBlock',
         focused: true
       })
+      setTimeout(() => {
+        // @ts-ignore
+        const newEl = document.getElementById(`${(location.pathname + this.focusedBlock.attrs.hash).slice(1, (location.pathname + this.focusedBlock.attrs.hash).length).split('/').slice(1).join('-').replaceAll('-', '')}${this.focusedBlock.content.length - 1 || 0}p0`)
+        if (newEl?.parentElement) {
+          newEl?.parentElement.focus()
+        }
+      }, 0)
     }
   }
 
