@@ -2,10 +2,14 @@
   <app-header
     class="header"
     [prevPage]="{
-      name: content?.name,
       navigate: { link: '/trang-chu/thanh-ngon-hiep-tuyen' }
     }"
-  ></app-header>
+  >
+  <div class="kinh-header">
+    <app-header-title>{{content?.name}}</app-header-title
+    >
+  </div>
+</app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="tnht-container-wrapper">
     <div *ngIf="content" class="h-100">

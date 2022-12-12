@@ -36,6 +36,17 @@ export class CpCreatorContentComponent implements OnChanges {
     }
   }
 
+  @HostListener('document:keydown.control.s', ['$event'])
+  onKeyControlS(event: any) {
+    event.preventDefault()
+    this.onBlur(event)
+  }
+
+  @HostListener('document:keydown.control.enter')
+  onKeyControlEnterDown() {
+    this.data.focused = false
+  }
+
   constructor(private _snackBar: MatSnackBar, private eRef: ElementRef, public authService: AuthService) {
   }
 

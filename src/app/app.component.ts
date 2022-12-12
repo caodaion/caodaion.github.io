@@ -65,6 +65,9 @@ export class AppComponent implements OnInit {
                   .subscribe((res: any) => {
                     if (res) {
                       this.kinhService.kinhList = res.data;
+                      this.kinhService.kinhList.forEach((item: any) => {
+                        this.kinhService.getKinhContent(item.key).subscribe()
+                      })
                       this.eventService.getEventList().subscribe((res: any) => {
                         if (res) {
                           this.eventService.eventList = res.data;

@@ -4,6 +4,7 @@ import {
   MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
   MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition
 } from "@angular/material/legacy-snack-bar";
+import { Router } from '@angular/router';
 import {AuthService} from "../../shared/services/auth/auth.service";
 
 @Component({
@@ -28,7 +29,12 @@ export class CpCreatorBlockComponent implements OnChanges {
     }
   }
 
-  constructor(private _snackBar: MatSnackBar, private eRef: ElementRef, public authService: AuthService) {
+  constructor(
+    private _snackBar: MatSnackBar,
+    private eRef: ElementRef,
+    public authService: AuthService,
+    private router: Router
+    ) {
   }
 
   ngOnChanges() {
@@ -40,7 +46,11 @@ export class CpCreatorBlockComponent implements OnChanges {
 
   getLink(data: any, redirect: boolean = false) {
     if (redirect) {
-      location.href = `${location.origin}${data?.attrs?.pathname}${data?.attrs?.hash}`
+      if (data?.attrs?.hash?.includes('#')) {
+        this.router.navigate([data?.attrs?.pathname], {fragment: data?.attrs?.hash.replace('#', '')})
+      } else {
+        this.router.navigate([`${data?.attrs?.pathname}${data?.attrs?.hash || ''}`])
+      }
     } else {
       navigator.clipboard.writeText(`${location.origin}${data?.attrs?.pathname}${data?.attrs?.hash}`)
       this._snackBar.open('Đã sao chép liên kết đến đoạn kinh này', 'Đóng', {
