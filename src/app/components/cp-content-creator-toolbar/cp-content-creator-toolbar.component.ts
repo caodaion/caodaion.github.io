@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 
 @Component({
   selector: 'cp-content-creator-toolbar',
@@ -9,6 +9,17 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;
   @Input() focusedBlock: any;
   @Output() save = new EventEmitter();
+
+  @HostListener('document:keydown.control.enter')
+  onKeyControlEnterDown() {
+    this.addNewContentBlock()
+  }
+
+  @HostListener('document:keydown.control.s', ['$event'])
+  onKeyControlS(event: any) {
+    event.preventDefault()
+    this.saveData()
+  }
 
   ngOnInit(): void {
     // console.log(this.data)
@@ -22,7 +33,22 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   }
 
   saveData() {
-    this.save.emit()
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.focused === key ? o : find(o.content || [], key));
+      return result;
+    }
+    const replaceFocused = () => {
+      if (find(this.data.content, true)) {
+        find(this.data.content, true).focused = false
+        replaceFocused()
+      } else {
+        this.save.emit()
+      }
+    }
+    setTimeout(() => {
+      replaceFocused()
+    }, 0)
   }
 
   addNewContentBlock() {
@@ -39,8 +65,16 @@ export class CpContentCreatorToolbarComponent implements OnInit {
             pathname: location.pathname,
             hash: `#${this.data.content.length}`
           },
-          type: 'contentBlock'
+          type: 'contentBlock',
+          focused: true
         })
+      setTimeout(() => {
+        // @ts-ignore
+        const newEl = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length - 1 || 0}p0`)
+        if (newEl?.parentElement) {
+          newEl?.parentElement.focus()
+        }
+      }, 0)
     }
     if (this.focusedBlock?.type == 'block') {
       this.focusedBlock.content.push({
@@ -50,8 +84,16 @@ export class CpContentCreatorToolbarComponent implements OnInit {
           pathname: location.pathname + this.focusedBlock.attrs.hash,
           hash: `#${this.focusedBlock.content.length || 0}`
         },
-        type: 'contentBlock'
+        type: 'contentBlock',
+        focused: true
       })
+      setTimeout(() => {
+        // @ts-ignore
+        const newEl = document.getElementById(`${(location.pathname + this.focusedBlock.attrs.hash).slice(1, (location.pathname + this.focusedBlock.attrs.hash).length).split('/').slice(1).join('-').replaceAll('-', '')}${this.focusedBlock.content.length - 1 || 0}p0`)
+        if (newEl?.parentElement) {
+          newEl?.parentElement.focus()
+        }
+      }, 0)
     }
   }
 
@@ -75,11 +117,14 @@ export class CpContentCreatorToolbarComponent implements OnInit {
               pathname: `${location.pathname}/b${this.data.content.length}`,
               hash: `#0`
             },
-            type: 'contentBlock'
+            type: 'contentBlock',
+            focused: true
           }
         ],
-        type: 'block'
+        type: 'block',
+        focused: true
       })
     }
   }
 }
+
