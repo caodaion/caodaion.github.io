@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1670320626663,
+  "timestamp": 1670818945445,
   "index": "https://www.caodaion.com/index.html",
   "assetGroups": [
     {
@@ -17,7 +17,7 @@
         "https://www.caodaion.com/274.90a68c5ba6ac684c.js",
         "https://www.caodaion.com/280.4e44a37becff1da6.js",
         "https://www.caodaion.com/488.de82fc3ba628eec2.js",
-        "https://www.caodaion.com/520.e7b29b23e3fbfdb2.js",
+        "https://www.caodaion.com/520.17e118a732375cbe.js",
         "https://www.caodaion.com/578.360a7660c378ae18.js",
         "https://www.caodaion.com/588.ab2dfdd11bb691ff.js",
         "https://www.caodaion.com/638.a32a92bd758f9880.js",
@@ -30,7 +30,7 @@
         "https://www.caodaion.com/main.b53c00b159c52423.js",
         "https://www.caodaion.com/manifest.webmanifest",
         "https://www.caodaion.com/polyfills.f387b9af6a19c04e.js",
-        "https://www.caodaion.com/runtime.7939d4f7cbe2f0e2.js",
+        "https://www.caodaion.com/runtime.5dbf072405104534.js",
         "https://www.caodaion.com/styles.decef6ddde076c00.css"
       ],
       "patterns": []
@@ -265,7 +265,7 @@
     "https://www.caodaion.com/274.90a68c5ba6ac684c.js": "3592465d5c27a745fe0c3d8bf50145fd568dcf8b",
     "https://www.caodaion.com/280.4e44a37becff1da6.js": "bc898cf2f2f2255e34b0b5903baac94a6c43bee0",
     "https://www.caodaion.com/488.de82fc3ba628eec2.js": "7d524cda33e4681cb5f3c2b427f4f215992f739a",
-    "https://www.caodaion.com/520.e7b29b23e3fbfdb2.js": "63aa6098a79487d19407d87710c7c65212a962b5",
+    "https://www.caodaion.com/520.17e118a732375cbe.js": "4578508dd208849ec1724a0365afa91424b51ff0",
     "https://www.caodaion.com/578.360a7660c378ae18.js": "0de0de8b3309ee95e01400b12cd34f31802d472f",
     "https://www.caodaion.com/588.ab2dfdd11bb691ff.js": "1c3b2debf03dcc083bde1e323398a4e39097658d",
     "https://www.caodaion.com/638.a32a92bd758f9880.js": "041d99e75bd0bf2200992342535b313d8857d2d1",
@@ -367,7 +367,7 @@
     "https://www.caodaion.com/assets/documents/master-data/date.json": "550c19efc42ca66bd9f23e78314f01b41a95c638",
     "https://www.caodaion.com/assets/documents/master-data/location-type.json": "83d9386ffb8f6e3dbd458ab494b8519dd100f232",
     "https://www.caodaion.com/assets/documents/master-data/time.json": "c79164d35958869cdd14b5afca4d24e488c1a7e6",
-    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "74fadcd27bff06a5195da066d3130fd6cde0b770",
+    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "1148fb9fe5948a8f685ce516e5ea91af8ad3c199",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-144-144.png": "dd0ba2406cbe5cf49a20618f8fee0d9b0d2472f0",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-192-192.png": "bc281e23984f6a5cc8e262a7aec2f5b08416d7f8",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-48-48.png": "535e1c2320e63b801b3b0b2e2f4d8145ee1bf288",
@@ -484,11 +484,11 @@
     "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-200.png": "b5c9d0d460fbc0348204bda1b99985d9f7a93214",
     "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-400.png": "3597c6c2f69ade8ca50c8c3f2c6511d9c8a2b6db",
     "https://www.caodaion.com/favicon.ico": "484ad830541e882d812075318a1b55a46e894e7f",
-    "https://www.caodaion.com/index.html": "5c9aad536827221f78291ceb96380bf46d3a8c02",
+    "https://www.caodaion.com/index.html": "e1c2694b251728f66d10b1ee482a7d69bf34a938",
     "https://www.caodaion.com/main.b53c00b159c52423.js": "eda051d146549912a28ea76111158555cb5d3026",
     "https://www.caodaion.com/manifest.webmanifest": "9ad1ce67711fd27e9a7aead16908a9767ec7982c",
     "https://www.caodaion.com/polyfills.f387b9af6a19c04e.js": "c95f415202452fa9a7c73efc43bfa79854d87a5a",
-    "https://www.caodaion.com/runtime.7939d4f7cbe2f0e2.js": "724bb4425c2deb90eb292c916bc4ba2d8225ad00",
+    "https://www.caodaion.com/runtime.5dbf072405104534.js": "00e8f8f8ebe9db14da46d35b69cf750605cca77e",
     "https://www.caodaion.com/styles.decef6ddde076c00.css": "b742bf67953af5b8c52489a5b87f130ec4166fc5"
   },
   "navigationUrls": [
