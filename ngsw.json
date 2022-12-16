@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1671178606267,
+  "timestamp": 1671182134378,
   "index": "https://www.caodaion.com/index.html",
   "assetGroups": [
     {
@@ -492,7 +492,7 @@
     "https://www.caodaion.com/favicon.ico": "484ad830541e882d812075318a1b55a46e894e7f",
     "https://www.caodaion.com/index.html": "8a39c7bc8f28f70422815bc39cc0a5f4b26cb147",
     "https://www.caodaion.com/main.f3579fa44846f313.js": "1527a735d49cc89271cc0befbc7968af0f7cf9ed",
-    "https://www.caodaion.com/manifest.webmanifest": "cdb1216d7c641b70c8f86b45886c597322fefab4",
+    "https://www.caodaion.com/manifest.webmanifest": "9d42a4df7cfcac216be3e6231cacc41a15af121b",
     "https://www.caodaion.com/polyfills.f387b9af6a19c04e.js": "c95f415202452fa9a7c73efc43bfa79854d87a5a",
     "https://www.caodaion.com/robots.txt": "39f928e70e2d0377f86f8f9de95846491d8c08b6",
     "https://www.caodaion.com/runtime.b7fe8ec23fa2e1bb.js": "1dc336143b13324611e36e6945b288d06874348c",
