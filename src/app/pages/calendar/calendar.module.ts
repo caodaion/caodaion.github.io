@@ -15,9 +15,12 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { FormsModule } from '@angular/forms';
+import { TinhTuanCuuComponent } from './tinh-tuan-cuu/tinh-tuan-cuu.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
-  declarations: [LunarCalendarComponent],
+  declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
   imports: [
     CommonModule,
     CalendarRoutingModule,
@@ -35,6 +38,8 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     MatDialogModule,
     FormsModule,
+    MatTabsModule,
+    MatTableModule
   ],
   providers: [DatePipe],
 })

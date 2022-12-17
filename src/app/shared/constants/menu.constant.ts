@@ -73,6 +73,16 @@ export const MENU = [
     icon: 'today',
     fullAssess: true,
     released: true,
+    children: [
+      {
+        key: 'lich.tinh-tuan-cuu',
+        url: 'tinh-tuan-cuu',
+        label: 'Tính Tuần Cửu',
+        icon: 'calculate',
+        fullAssess: true,
+        released: true,
+      },
+    ]
   },
   {
     key: 'tac-vu',

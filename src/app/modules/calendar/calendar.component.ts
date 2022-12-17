@@ -5,6 +5,8 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 import {CONSTANT} from "../../shared/constants/constants.constant";
 import {Title} from "@angular/platform-browser";
+import { MENU } from 'src/app/shared/constants/menu.constant';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-calendar',
@@ -14,6 +16,7 @@ import {Title} from "@angular/platform-browser";
 export class CalendarComponent implements OnInit {
   public drawerMode: any;
   @ViewChild('drawer') drawer!: ElementRef;
+  menu = <any>[]
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -21,6 +24,7 @@ export class CalendarComponent implements OnInit {
     public viewMissionService: ViewMissionService,
     private router: Router,
     private titleSerVice: Title,
+    public authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
@@ -37,6 +41,7 @@ export class CalendarComponent implements OnInit {
         }
       });
     this.titleSerVice.setTitle(`Lịch | ${CONSTANT.page.name}`)
+    this.menu = this.authService.getMenu(MENU.find((item: any) => item.key === 'lich')?.children)
   }
 
   onToggleDrawer() {
@@ -48,7 +53,7 @@ export class CalendarComponent implements OnInit {
   onChangeCalendarViewMode(mode: any) {
     this.onToggleDrawer()
     this.calendarService.calendarViewMode = mode;
-    this.router.navigate([], {
+    this.router.navigate(['./'], {
       relativeTo: this.route,
       queryParams: { m: mode },
       queryParamsHandling: 'merge',
