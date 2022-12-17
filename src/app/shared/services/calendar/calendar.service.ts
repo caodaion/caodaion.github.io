@@ -386,7 +386,7 @@ export class CalendarService {
 
   getTuanCuuEvents(date: any): Observable<any> {
     let events = <any>[]
-    const eventCount = 11
+    const eventCount = 9
     const convertedToSolar = this.getConvertedFullDate(date).convertLunar2Solar
     const startDate = new Date(`${convertedToSolar[2]}-${convertedToSolar[1] > 9 ? convertedToSolar[1] : '0' + convertedToSolar[1]}-${convertedToSolar[0] > 9 ? convertedToSolar[0] : '0' + convertedToSolar[0]}`)
     for (let i = 1; i <= eventCount; i++) {
@@ -398,28 +398,6 @@ export class CalendarService {
               solar: calDate,
               lunar: this.getConvertedFullDate(calDate).convertSolar2Lunar,
               eventName: `Khai Cửu`
-            }
-          )
-          break;
-        }
-        case 10: {
-          const calDate = new Date(startDate.setDate(startDate.getDate() + 200))
-          events.push(
-            {
-              solar: calDate,
-              lunar: this.getConvertedFullDate(calDate).convertSolar2Lunar,
-              eventName: `Tiểu Tường`
-            }
-          )
-          break;
-        }
-        case 11: {
-          const calDate = new Date(startDate.setDate(startDate.getDate() + 300))
-          events.push(
-            {
-              solar: calDate,
-              lunar: this.getConvertedFullDate(calDate).convertSolar2Lunar,
-              eventName: `Đại Tường`
             }
           )
           break;
