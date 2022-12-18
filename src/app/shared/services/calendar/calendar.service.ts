@@ -3,6 +3,7 @@ import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
 import { CommonService } from '../common/common.service';
+import { DecimalPipe } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
@@ -389,7 +390,8 @@ export class CalendarService {
     const eventCount = 9
     const convertedToSolar = this.getConvertedFullDate(date).convertLunar2Solar
     const startDate = new Date(`${convertedToSolar[2]}-${convertedToSolar[1] > 9 ? convertedToSolar[1] : '0' + convertedToSolar[1]}-${convertedToSolar[0] > 9 ? convertedToSolar[0] : '0' + convertedToSolar[0]}`)
-    for (let i = 1; i <= eventCount; i++) {
+    Array.from({length: eventCount}, (x, i) => {
+      i++
       switch (i) {
         case 1: {
           const calDate = new Date(startDate.setDate(startDate.getDate() + 8))
@@ -402,6 +404,34 @@ export class CalendarService {
           )
           break;
         }
+        // case 10: {
+        //   const calcDate = this.getConvertedFullDate({
+        //     lunarDay: date.lunarDay,
+        //     lunarMonth: date.lunarMonth,
+        //     lunarYear: date.lunarYear + 1
+        //   }).convertLunar2Solar
+        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
+        //   events.push({
+        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
+        //       solar: solar,
+        //       eventName: `Tiểu Tường`
+        //     })
+        //   break;
+        // }
+        // case 11: {
+        //   const calcDate = this.getConvertedFullDate({
+        //     lunarDay: date.lunarDay,
+        //     lunarMonth: date.lunarMonth,
+        //     lunarYear: date.lunarYear + 2
+        //   }).convertLunar2Solar
+        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
+        //   events.push({
+        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
+        //       solar: solar,
+        //       eventName: `Đại Tường`
+        //     })
+        //   break;
+        // }
         default: {
           const calDate = new Date(startDate.setDate(startDate.getDate() + 9))
           events.push(
@@ -414,7 +444,7 @@ export class CalendarService {
           break;
         }
       }
-    }
+    })
     return new Observable((observer) => {
       observer.next(events)
     });

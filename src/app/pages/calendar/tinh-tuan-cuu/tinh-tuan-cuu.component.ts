@@ -30,13 +30,13 @@ export class TinhTuanCuuComponent implements OnInit {
     this.getYearOptions()
     this.route.queryParams.subscribe((param: any) => {
       if (param['y']) {
-        this.selectedDate.lunarYear = param['y'];
+        this.selectedDate.lunarYear = parseInt(param['y']);
       }
       if (param['m']) {
-        this.selectedDate.lunarMonth = param['m'];
+        this.selectedDate.lunarMonth = parseInt(param['m']);
       }
       if (param['d']) {
-        this.selectedDate.lunarDay = param['d'];
+        this.selectedDate.lunarDay = parseInt(param['d']);
       }
       if (param['y'] && param['m'] && param['d']) {
         this.calculateTuanCuu()
@@ -61,10 +61,7 @@ export class TinhTuanCuuComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           res.forEach((item: any) => {
-            item.day = this.commonService.convertDay(this.datePipe.transform(item.solar, 'EEE'))
-          })
-          res.push({
-            lunar: `${this.selectedDate.lunarDay}-${this.selectedDate.lunarMonth} ${this.calendarService.getConvertedFullDate(new Date(this.selectedDate.lunarYear + 1, this.selectedDate.lunarMonth, this.selectedDate.lunarDay)).convertSolar2Lunar.lunarYearName}`,
+            item.day = this.commonService.convertDay(this.datePipe?.transform(item.solar, 'EEE'))
           })
           this.tuanCuuEvents = res
         }

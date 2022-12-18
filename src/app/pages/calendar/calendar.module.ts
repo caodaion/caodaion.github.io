@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LunarCalendarComponent } from './lunar-calendar/lunar-calendar.component';
@@ -41,6 +41,6 @@ import {MatTableModule} from '@angular/material/table';
     MatTabsModule,
     MatTableModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, DecimalPipe],
 })
 export class CalendarModule {}
