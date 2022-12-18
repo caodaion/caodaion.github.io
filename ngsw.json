@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1671182134378,
+  "timestamp": 1671323380334,
   "index": "https://www.caodaion.com/index.html",
   "assetGroups": [
     {
@@ -13,25 +13,26 @@
       "urls": [
         "https://www.caodaion.com/196.fa0ec96f3c922f1d.js",
         "https://www.caodaion.com/249.d1a4649151bc7fbb.js",
-        "https://www.caodaion.com/262.fbfd437317d36ecd.js",
-        "https://www.caodaion.com/274.90a68c5ba6ac684c.js",
-        "https://www.caodaion.com/280.4e44a37becff1da6.js",
+        "https://www.caodaion.com/262.36642c822391f26e.js",
+        "https://www.caodaion.com/274.9232b20db8f257e9.js",
         "https://www.caodaion.com/488.de82fc3ba628eec2.js",
-        "https://www.caodaion.com/520.d051db1094f3ac3f.js",
+        "https://www.caodaion.com/520.17e118a732375cbe.js",
         "https://www.caodaion.com/578.360a7660c378ae18.js",
-        "https://www.caodaion.com/588.ab2dfdd11bb691ff.js",
+        "https://www.caodaion.com/588.6776dad04ed491ec.js",
         "https://www.caodaion.com/638.a32a92bd758f9880.js",
-        "https://www.caodaion.com/903.2b6defe8b9673e91.js",
-        "https://www.caodaion.com/954.23192a87ed2acf45.js",
+        "https://www.caodaion.com/855.1efd1b163c543f2e.js",
+        "https://www.caodaion.com/897.7b0d84805f0368a5.js",
+        "https://www.caodaion.com/903.49a4b1be96b401be.js",
         "https://www.caodaion.com/977.81038c61ac40fa9c.js",
-        "https://www.caodaion.com/987.86a7114ce4aac9e9.js",
+        "https://www.caodaion.com/987.0137001c6706c0d7.js",
+        "https://www.caodaion.com/common.36256614eaba60cd.js",
         "https://www.caodaion.com/favicon.ico",
         "https://www.caodaion.com/index.html",
-        "https://www.caodaion.com/main.f3579fa44846f313.js",
+        "https://www.caodaion.com/main.0cd2dc8b8fbf768c.js",
         "https://www.caodaion.com/manifest.webmanifest",
         "https://www.caodaion.com/polyfills.f387b9af6a19c04e.js",
-        "https://www.caodaion.com/runtime.b7fe8ec23fa2e1bb.js",
-        "https://www.caodaion.com/styles.decef6ddde076c00.css"
+        "https://www.caodaion.com/runtime.d4d9582fd3100a43.js",
+        "https://www.caodaion.com/styles.11ebb243a6e6e5a4.css"
       ],
       "patterns": []
     },
@@ -43,8 +44,6 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://www.caodaion.com/3rdpartylicenses.txt",
-        "https://www.caodaion.com/CNAME",
         "https://www.caodaion.com/assets/documents/LONG-SO-TAM-GIAO.json",
         "https://www.caodaion.com/assets/documents/LONG-SO-TAM-TRAN.json",
         "https://www.caodaion.com/assets/documents/SO-CAU-SIEU.json",
@@ -254,9 +253,7 @@
         "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-125.png",
         "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-150.png",
         "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-200.png",
-        "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-400.png",
-        "https://www.caodaion.com/robots.txt",
-        "https://www.caodaion.com/sitemap.xml"
+        "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-400.png"
       ],
       "patterns": []
     }
@@ -265,20 +262,18 @@
   "hashTable": {
     "https://www.caodaion.com/196.fa0ec96f3c922f1d.js": "9b8d206847185e16e31b65c34a8da9c54888ba47",
     "https://www.caodaion.com/249.d1a4649151bc7fbb.js": "ca7a53c2e932544fc8e2acada4d183c6b45ec10b",
-    "https://www.caodaion.com/262.fbfd437317d36ecd.js": "0f9a02ef531b27a7300fdbfb4b89a1221775c942",
-    "https://www.caodaion.com/274.90a68c5ba6ac684c.js": "3592465d5c27a745fe0c3d8bf50145fd568dcf8b",
-    "https://www.caodaion.com/280.4e44a37becff1da6.js": "bc898cf2f2f2255e34b0b5903baac94a6c43bee0",
-    "https://www.caodaion.com/3rdpartylicenses.txt": "250924275663c4d940f0ef94b2edc0110c1dafe1",
+    "https://www.caodaion.com/262.36642c822391f26e.js": "4d268758ffb700aaf8d8de00b5c8002be6feac38",
+    "https://www.caodaion.com/274.9232b20db8f257e9.js": "af57f30becdfec9e60942efd0e5cefd9eca9c666",
     "https://www.caodaion.com/488.de82fc3ba628eec2.js": "7d524cda33e4681cb5f3c2b427f4f215992f739a",
-    "https://www.caodaion.com/520.d051db1094f3ac3f.js": "6ca89d2613ca2e5d07843690421361abb9e1aaed",
+    "https://www.caodaion.com/520.17e118a732375cbe.js": "4578508dd208849ec1724a0365afa91424b51ff0",
     "https://www.caodaion.com/578.360a7660c378ae18.js": "0de0de8b3309ee95e01400b12cd34f31802d472f",
-    "https://www.caodaion.com/588.ab2dfdd11bb691ff.js": "1c3b2debf03dcc083bde1e323398a4e39097658d",
+    "https://www.caodaion.com/588.6776dad04ed491ec.js": "ddb43ebc4fb4ebac8aed8454b58bebd41c809146",
     "https://www.caodaion.com/638.a32a92bd758f9880.js": "041d99e75bd0bf2200992342535b313d8857d2d1",
-    "https://www.caodaion.com/903.2b6defe8b9673e91.js": "b1ef8968a3174e53ef8b043cd0ec018fbcd96f70",
-    "https://www.caodaion.com/954.23192a87ed2acf45.js": "2a10188a883e8e26805ca060db2580c803ea20fd",
+    "https://www.caodaion.com/855.1efd1b163c543f2e.js": "edcb3dbe2d78731377c2203cf4e175b987653dad",
+    "https://www.caodaion.com/897.7b0d84805f0368a5.js": "d95ca0d869cdfa5a03617e2abffb079a480f646c",
+    "https://www.caodaion.com/903.49a4b1be96b401be.js": "27ec96ef53636524ef89b3bd8bed8bf4232cfe1d",
     "https://www.caodaion.com/977.81038c61ac40fa9c.js": "de7a645ff04489fcb5211f6a5696c5afb11a2fbd",
-    "https://www.caodaion.com/987.86a7114ce4aac9e9.js": "52b2e92c2bc7e9f4a858ec943078d8c7fdd86a47",
-    "https://www.caodaion.com/CNAME": "3bf784556f972181e6faf73616ec7a280fa63fb0",
+    "https://www.caodaion.com/987.0137001c6706c0d7.js": "0e7c1d4433576229f161a1a0e401ca26ed1bb118",
     "https://www.caodaion.com/assets/documents/LONG-SO-TAM-GIAO.json": "920cb4a02018d82ab152ef70b4738c17d7a56b5c",
     "https://www.caodaion.com/assets/documents/LONG-SO-TAM-TRAN.json": "1e54df41d57a7590acd16ff6548c9576872f73ce",
     "https://www.caodaion.com/assets/documents/SO-CAU-SIEU.json": "0a4e5b6bd96ffdd65a4803f6fd9972842dedb8a8",
@@ -373,7 +368,7 @@
     "https://www.caodaion.com/assets/documents/master-data/date.json": "550c19efc42ca66bd9f23e78314f01b41a95c638",
     "https://www.caodaion.com/assets/documents/master-data/location-type.json": "83d9386ffb8f6e3dbd458ab494b8519dd100f232",
     "https://www.caodaion.com/assets/documents/master-data/time.json": "c79164d35958869cdd14b5afca4d24e488c1a7e6",
-    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "16b45be701d07f29f90e2112e20abaa6598e2f2c",
+    "https://www.caodaion.com/assets/documents/thanh-ngon-hiep-tuyen/quyen-1.json": "21ba8f638a0981bfac2e94a1846a483be8f9b87b",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-144-144.png": "dd0ba2406cbe5cf49a20618f8fee0d9b0d2472f0",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-192-192.png": "bc281e23984f6a5cc8e262a7aec2f5b08416d7f8",
     "https://www.caodaion.com/assets/icons/android/android-launchericon-48-48.png": "535e1c2320e63b801b3b0b2e2f4d8145ee1bf288",
@@ -489,15 +484,14 @@
     "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-150.png": "c7e4830c648e4215849376eafcd5cc2c99fdfc99",
     "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-200.png": "b5c9d0d460fbc0348204bda1b99985d9f7a93214",
     "https://www.caodaion.com/assets/icons/windows11/Wide310x150Logo.scale-400.png": "3597c6c2f69ade8ca50c8c3f2c6511d9c8a2b6db",
+    "https://www.caodaion.com/common.36256614eaba60cd.js": "050a453985c3173e1359887496d04b1f02975375",
     "https://www.caodaion.com/favicon.ico": "484ad830541e882d812075318a1b55a46e894e7f",
-    "https://www.caodaion.com/index.html": "8a39c7bc8f28f70422815bc39cc0a5f4b26cb147",
-    "https://www.caodaion.com/main.f3579fa44846f313.js": "1527a735d49cc89271cc0befbc7968af0f7cf9ed",
-    "https://www.caodaion.com/manifest.webmanifest": "9d42a4df7cfcac216be3e6231cacc41a15af121b",
+    "https://www.caodaion.com/index.html": "2201a0ec2803733aa5f28e6d3ffd1675cd9851b3",
+    "https://www.caodaion.com/main.0cd2dc8b8fbf768c.js": "e442220cf7979e312c03f3a1a626890048048c18",
+    "https://www.caodaion.com/manifest.webmanifest": "9ad1ce67711fd27e9a7aead16908a9767ec7982c",
     "https://www.caodaion.com/polyfills.f387b9af6a19c04e.js": "c95f415202452fa9a7c73efc43bfa79854d87a5a",
-    "https://www.caodaion.com/robots.txt": "39f928e70e2d0377f86f8f9de95846491d8c08b6",
-    "https://www.caodaion.com/runtime.b7fe8ec23fa2e1bb.js": "1dc336143b13324611e36e6945b288d06874348c",
-    "https://www.caodaion.com/sitemap.xml": "04568b83b1b94b89628dd9f65c47fc3abc80d82c",
-    "https://www.caodaion.com/styles.decef6ddde076c00.css": "b742bf67953af5b8c52489a5b87f130ec4166fc5"
+    "https://www.caodaion.com/runtime.d4d9582fd3100a43.js": "5c604c85d6b606b178b34102e38b29253819d955",
+    "https://www.caodaion.com/styles.11ebb243a6e6e5a4.css": "0048a7c9743fdb94ff45e2dfccdd3f579b08b587"
   },
   "navigationUrls": [
     {
