@@ -17,6 +17,7 @@ export class CpCreatorBlockComponent implements OnChanges {
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  playerIcon = 'play_circle'
   @Output() focusedBlock = new EventEmitter()
 
   @HostListener('document:click', ['$event'])
@@ -64,5 +65,17 @@ export class CpCreatorBlockComponent implements OnChanges {
   changeValue(event: any) {
     this.data.name = event.target.innerText
     event.target.innerText = event.target.innerHTML
+  }
+
+  toggleAudioPlayer(player?: any) {
+    if (player.paused) {
+      player.play()
+      player.controls = true
+      this.playerIcon = 'pause_circle'
+    } else {
+      player.pause()
+      player.controls = false
+      this.playerIcon = 'play_circle'
+    }
   }
 }
