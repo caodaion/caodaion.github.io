@@ -6,7 +6,9 @@ import {
   OnInit,
 } from '@angular/core';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import { Title } from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
+import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import {CalendarService} from 'src/app/shared/services/calendar/calendar.service';
 import {CommonService} from 'src/app/shared/services/common/common.service';
 import {EventService} from 'src/app/shared/services/event/event.service';
@@ -47,11 +49,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private breakpointObserver: BreakpointObserver,
+    private titleService: Title,
     private changeDetector: ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle(`Lịch | ${CONSTANT.page.name}`)
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
