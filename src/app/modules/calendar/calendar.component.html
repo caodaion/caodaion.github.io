@@ -26,6 +26,18 @@
         <mat-icon class="sub-sidenav-icon">calendar_view_month</mat-icon
         ><span class="label-large">Tháng</span></a
       >
+      <a
+        mat-list-item
+        disableRipple
+        *ngFor="let item of menu"
+        class="icon-hover"
+        [routerLink]="item?.url"
+        [routerLinkActive]="'active'"
+        (click)="calendarService.calendarViewMode = ''; onToggleDrawer()"
+      >
+      <mat-icon class="sub-sidenav-icon">{{item?.icon}}</mat-icon
+        ><span class="label-large">{{item?.label}}</span></a
+      >
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="sub-sidenav-content">
