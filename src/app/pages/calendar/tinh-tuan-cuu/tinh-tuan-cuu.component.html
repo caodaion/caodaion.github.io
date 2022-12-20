@@ -1,0 +1,72 @@
+<div class="wrapper-container tuan-cuu-container">
+  <h1 class="text-center tuan-cuu-title">Tính tuần cửu</h1>
+  <mat-tab-group>
+    <mat-tab label="Tính Tuần Cửu mới">
+      <div class="form-group">
+        <h3>Hãy chọn ngày từ trần</h3>
+      </div>
+      <div class="d-flex flex-wrap">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Năm (Âm lịch)</mat-label>
+            <mat-select [(ngModel)]="selectedDate.lunarYear">
+              <mat-option *ngFor="let item of yearOptions" [value]="item?.solar"
+                >{{ item?.lunar }} - {{ item?.solar }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Tháng (Âm lịch)</mat-label>
+            <mat-select [(ngModel)]="selectedDate.lunarMonth">
+              <mat-option *ngFor="let item of monthOptions" [value]="item">{{
+                item
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Ngày (Âm lịch)</mat-label>
+            <mat-select [(ngModel)]="selectedDate.lunarDay">
+              <mat-option *ngFor="let item of dayOptions" [value]="item">{{
+                item
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group d-flex justify-content-end button-calc">
+        <button mat-raised-button (click)="calculateTuanCuu()" [color]="'primary'">Tính toán</button>
+      </div>
+      <div *ngIf="tuanCuuEvents.length > 0">
+        <table mat-table [dataSource]="tuanCuuEvents">
+          <!-- eventName Column -->
+          <ng-container matColumnDef="eventName">
+            <th mat-header-cell *matHeaderCellDef> Tuần </th>
+            <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+          </ng-container>
+          <!-- day Column -->
+          <ng-container matColumnDef="day">
+            <th mat-header-cell *matHeaderCellDef> Thứ </th>
+            <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+          </ng-container>
+          <!-- lunar Column -->
+          <ng-container matColumnDef="lunar">
+            <th mat-header-cell *matHeaderCellDef> Ngày âm lịch </th>
+            <td mat-cell *matCellDef="let element"> {{element.lunar.lunarDay | number: '2.0-0'}}-{{element.lunar.lunarMonth | number: '2.0-0'}} {{element.lunar.lunarYearName}} </td>
+          </ng-container>
+          <!-- solar Column -->
+          <ng-container matColumnDef="solar">
+            <th mat-header-cell *matHeaderCellDef> Ngày dương lịch </th>
+            <td mat-cell *matCellDef="let element"> {{element.solar | date: 'dd-MM-yyyy'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+    <!-- <mat-tab label="Tuần Cửu của Nguyễn Văn A"> Content 2 </mat-tab> -->
+  </mat-tab-group>
+</div>
