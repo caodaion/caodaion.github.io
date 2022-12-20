@@ -40,6 +40,10 @@ body {
   display: flex;
   flex-direction: column;
 }
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 .d-inflex-col {
   display: inline-flex;

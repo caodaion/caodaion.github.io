@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LunarCalendarComponent } from './lunar-calendar/lunar-calendar.component';
@@ -15,9 +15,12 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { FormsModule } from '@angular/forms';
+import { TinhTuanCuuComponent } from './tinh-tuan-cuu/tinh-tuan-cuu.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
-  declarations: [LunarCalendarComponent],
+  declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
   imports: [
     CommonModule,
     CalendarRoutingModule,
@@ -35,7 +38,9 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     MatDialogModule,
     FormsModule,
+    MatTabsModule,
+    MatTableModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, DecimalPipe],
 })
 export class CalendarModule {}

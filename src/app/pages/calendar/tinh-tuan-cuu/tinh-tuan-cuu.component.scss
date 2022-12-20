@@ -1,0 +1,19 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+::ng-deep {
+  .tuan-cuu-container {
+    .tuan-cuu-title {
+      margin: 2rem 0;
+    }
+    .mat-tab-body-content, .mat-mdc-tab-body-content {
+      padding: 1rem 0.5rem;
+    }
+    .form-group {
+      padding: 0 1rem;
+      width: 100%;
+    }
+    .button-calc {
+      margin-bottom: 2rem;
+    }
+  }
+}

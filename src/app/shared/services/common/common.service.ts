@@ -10,7 +10,7 @@ export class CommonService {
   commonLocationTypes: any[] = [];
   commonDates: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTimeList(): Observable<any> {
     return this.http
@@ -25,23 +25,23 @@ export class CommonService {
   getDateList(): Observable<any> {
     return this.http
       .get(`assets/documents/master-data/date.json`);
-      // .subscribe((res: any) => {
-      //   if (res) {
-      //     this.commonDates = res.data;
-      //     for (let i = 1; i <= 31; i++) {
-      //       if (i <= 12) {
-      //         this.commonDates.month.push({
-      //           key: i < 10 ? `0${i}` : i.toString(),
-      //           name: `tháng ${i}`,
-      //         });
-      //       }
-      //       this.commonDates.date.push({
-      //         key: i < 10 ? `0${i}` : i.toString(),
-      //         name: i,
-      //       });
-      //     }
-      //   }
-      // });
+    // .subscribe((res: any) => {
+    //   if (res) {
+    //     this.commonDates = res.data;
+    //     for (let i = 1; i <= 31; i++) {
+    //       if (i <= 12) {
+    //         this.commonDates.month.push({
+    //           key: i < 10 ? `0${i}` : i.toString(),
+    //           name: `tháng ${i}`,
+    //         });
+    //       }
+    //       this.commonDates.date.push({
+    //         key: i < 10 ? `0${i}` : i.toString(),
+    //         name: i,
+    //       });
+    //     }
+    //   }
+    // });
   }
 
   getCommonTimeValue(time: any): any {
@@ -117,16 +117,16 @@ export class CommonService {
             )
           ) &&
           currentDate <=
+          new Date(
             new Date(
               new Date(
-                new Date(
-                  `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${item.name
-                    .split('|')[1]
-                    .split('-')[1]
-                    .trim()}`
-                )
-              ).setSeconds(-1)
-            )
+                `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${item.name
+                  .split('|')[1]
+                  .split('-')[1]
+                  .trim()}`
+              )
+            ).setSeconds(-1)
+          )
         );
       });
     let currentTimeIndex = this.commonTimes.findIndex(
@@ -163,5 +163,71 @@ export class CommonService {
       kanji: currentFoundTime?.name.split('|')[0].trim(),
       tuThoiUpcoming: getUpcomingTime(),
     };
+  }
+
+  convertNumberToText(n: any) {
+    const convertNumberGeaterThanTen = (n: any) => {
+      return ''
+    }
+    let lunar = ''
+    switch (n) {
+      case 1:
+        lunar = 'Nhất'
+        break;
+      case 2:
+        lunar = 'Nhị'
+        break;
+      case 3:
+        lunar = 'Tam'
+        break;
+      case 4:
+        lunar = 'Tứ'
+        break;
+      case 5:
+        lunar = 'Ngũ'
+        break;
+      case 6:
+        lunar = 'Lục'
+        break;
+      case 7:
+        lunar = 'Thất'
+        break;
+      case 8:
+        lunar = 'Bát'
+        break;
+      case 9:
+        lunar = 'Cửu'
+        break;
+      case 10:
+        lunar = 'Thập'
+        break;
+      default:
+        convertNumberGeaterThanTen(n)
+        break;
+    }
+    return {
+      lunar: lunar
+    }
+  }
+
+  convertDay(day: any): any {
+    switch (day.toLowerCase()) {
+      case 'sun':
+        return 'Chủ Nhật'
+      case 'mon':
+        return 'Thứ Hai'
+      case 'tue':
+        return 'Thứ Ba'
+      case 'wed':
+        return 'Thứ Tư'
+      case 'thu':
+        return 'Thứ Năm'
+      case 'fri':
+        return 'Thứ Sáu'
+      case 'sat':
+        return 'Thứ Bảy'
+      default:
+        return day
+    }
   }
 }
