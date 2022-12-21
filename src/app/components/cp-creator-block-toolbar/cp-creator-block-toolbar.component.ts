@@ -7,7 +7,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class CpCreatorBlockToolbarComponent implements OnInit {
   @Input() data: any;
-  isShowSetting: boolean | undefined;
+  isShowSetting: boolean = false;
+  isShowAudioTimeStamp: boolean = false
   textAlign: any = 'justify'
 
   ngOnInit() {
@@ -119,5 +120,23 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
 
   changeHash(event: any) {
     this.data.attrs.hash = event.target.value
+  }
+
+  showAudioTimeStamp() {
+    if (!this.data.audio) {
+      this.data.audio = {
+        start: '',
+        end: ''
+      }
+    }
+    this.isShowAudioTimeStamp = !this.isShowAudioTimeStamp
+  }
+
+  changetime(event: any, field: any) {
+    console.log(event);
+    console.log(field);
+
+    console.log(this.data.audio);
+
   }
 }

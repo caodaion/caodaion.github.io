@@ -8,6 +8,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatMenuModule} from "@angular/material/menu";
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {MatMenuModule} from "@angular/material/menu";
     MatInputModule,
     MatButtonToggleModule,
     MatDividerModule,
-    MatMenuModule
+    MatMenuModule,
+    FormsModule
   ],
   exports: [
     CpCreatorBlockToolbarComponent

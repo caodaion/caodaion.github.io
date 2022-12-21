@@ -1,6 +1,6 @@
 <div class="d-flex">
   <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
-    <button mat-icon-button (click)="formatContent({fontWeight: 'bold'})">
+    <button mat-icon-button (click)="formatContent({ fontWeight: 'bold' })">
       <mat-icon>format_bold</mat-icon>
     </button>
     <mat-divider [vertical]="true"></mat-divider>
@@ -13,19 +13,35 @@
   <!--  </mat-button-toggle-group>-->
   <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
     <button mat-icon-button [matMenuTriggerFor]="alignContentMenu">
-      <mat-icon>format_align_{{textAlign}}</mat-icon>
+      <mat-icon>format_align_{{ textAlign }}</mat-icon>
     </button>
     <mat-menu #alignContentMenu="matMenu">
-      <button (click)="formatContent({textAlign:'left'})" mat-menu-item [disabled]="textAlign == 'left'">
+      <button
+        (click)="formatContent({ textAlign: 'left' })"
+        mat-menu-item
+        [disabled]="textAlign == 'left'"
+      >
         <mat-icon>format_align_left</mat-icon>
       </button>
-      <button (click)="formatContent({textAlign:'center'})" mat-menu-item [disabled]="textAlign == 'center'">
+      <button
+        (click)="formatContent({ textAlign: 'center' })"
+        mat-menu-item
+        [disabled]="textAlign == 'center'"
+      >
         <mat-icon>format_align_center</mat-icon>
       </button>
-      <button (click)="formatContent({textAlign:'right'})" mat-menu-item [disabled]="textAlign == 'right'">
+      <button
+        (click)="formatContent({ textAlign: 'right' })"
+        mat-menu-item
+        [disabled]="textAlign == 'right'"
+      >
         <mat-icon>format_align_right</mat-icon>
       </button>
-      <button (click)="formatContent({textAlign:'justify'})" mat-menu-item [disabled]="textAlign == 'justify'">
+      <button
+        (click)="formatContent({ textAlign: 'justify' })"
+        mat-menu-item
+        [disabled]="textAlign == 'justify'"
+      >
         <mat-icon>format_align_justify</mat-icon>
       </button>
     </mat-menu>
@@ -38,11 +54,28 @@
   <div class="d-flex" *ngIf="isShowSetting">
     <mat-form-field appearance="fill" class="setting-form-field">
       <mat-label>Mã định danh</mat-label>
-      <input matInput [value]="data.key" (blur)="changeKey($event)">
+      <input matInput [value]="data.key" (blur)="changeKey($event)" />
     </mat-form-field>
     <mat-form-field appearance="fill" class="setting-form-field">
       <mat-label>Liên kết định danh</mat-label>
-      <input matInput [value]="data.attrs.hash" (blur)="changeHash($event)">
+      <input matInput [value]="data.attrs.hash" (blur)="changeHash($event)" />
+    </mat-form-field>
+  </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button
+    mat-icon-button
+    (click)="showAudioTimeStamp()"
+  >
+    <mat-icon>music_note</mat-icon>
+  </button>
+  <div class="d-flex" *ngIf="isShowAudioTimeStamp">
+    <mat-form-field appearance="fill" class="setting-form-field">
+      <mat-label>Bắt đầu</mat-label>
+      <input matInput [(ngModel)]="data.audio.start" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="setting-form-field">
+      <mat-label>Kết thúc</mat-label>
+      <input matInput [(ngModel)]="data.audio.end" />
     </mat-form-field>
   </div>
 </div>
