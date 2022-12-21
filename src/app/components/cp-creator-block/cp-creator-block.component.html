@@ -1,9 +1,15 @@
 <div class="creator-block-title position-relative">
   <div class="d-flex align-items-center justify-content-between">
     <h2 class="w-100" [contentEditable]="authService.contentEditable" (blur)="changeValue($event)">{{data.name}}</h2>
-    <button mat-icon-button class="redirectButton"  (click)="getLink(data, true)" matTooltip="Đọc riêng bài này">
-      <mat-icon>local_library</mat-icon>
-    </button>
+    <audio class="w-100" #audioPlayer [src]="data?.audio?.src"></audio>
+    <div class="d-flex redirectButton">
+      <button *ngIf="data?.audio?.src" mat-icon-button matTooltip="Nghe riêng bài này" (click)="toggleAudioPlayer(audioPlayer)">
+        <mat-icon>{{playerIcon}}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="getLink(data, true)" matTooltip="Đọc riêng bài này">
+        <mat-icon>local_library</mat-icon>
+      </button>
+    </div>
   </div>
   <button mat-icon-button class="targetButton" (click)="getLink(data)" matTooltip="Sao chép liên kết">
     <mat-icon>link</mat-icon>

@@ -23,7 +23,7 @@
 
       .redirectButton {
         position: absolute;
-        left: calc(100% - 20px);
+        right: -20px;
         top: calc(0% - 10px);
         visibility: hidden;
         opacity: 0;

@@ -8,6 +8,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -23,7 +24,8 @@ import {MatRadioModule} from "@angular/material/radio";
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDialogModule
   ],
   exports: [
     CpContentCreatorToolbarComponent

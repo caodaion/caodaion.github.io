@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'cp-content-creator-toolbar',
@@ -19,6 +20,12 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   onKeyControlS(event: any) {
     event.preventDefault()
     this.saveData()
+  }
+
+  @ViewChild('audioDialog') audioDialog!: ElementRef;
+
+  constructor(public dialog: MatDialog) {
+
   }
 
   ngOnInit(): void {
@@ -125,6 +132,17 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         focused: true
       })
     }
+  }
+
+  addContentAudio() {
+    console.log(this.data);
+  }
+
+  openAudioDialog(audioDialog?: any) {
+    if (!this.data.audio) {
+      this.data.audio = {src: ''}
+    }
+    const dialogRef = this.dialog.open(audioDialog)
   }
 }
 

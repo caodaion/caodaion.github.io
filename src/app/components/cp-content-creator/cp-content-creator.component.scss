@@ -21,6 +21,10 @@
     .mat-drawer-content {
       overflow-y: auto;
       overflow-x: hidden;
+      .block-audio-player {
+        position: sticky;
+        top: 0;
+      }
     }
 
     .cp-creator-block-group {

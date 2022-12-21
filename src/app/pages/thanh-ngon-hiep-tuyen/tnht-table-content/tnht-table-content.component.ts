@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TnhtService} from "../../../shared/services/tnht/tnht.service";
 import {FlatTreeControl} from "@angular/cdk/tree";
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
@@ -17,9 +18,10 @@ interface ExampleFlatNode {
 })
 export class TnhtTableContentComponent implements OnInit {
   tableContent: Array<any> = [];
-  constructor(private tnhtService: TnhtService, private router: Router) { }
+  constructor(private tnhtService: TnhtService, private router: Router, private titleService: Title) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle(`Thánh-Ngôn Hiệp-Tuyển`)
     this.getTableContent()
   }
   getTableContent() {

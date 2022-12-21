@@ -17,6 +17,7 @@ export class CpCreatorContentComponent implements OnChanges {
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   @Output() focusedBlock = new EventEmitter()
+  @Output() contentToContent = new EventEmitter()
   updated: boolean = false
 
   @HostListener('document:click', ['$event'])
@@ -27,6 +28,7 @@ export class CpCreatorContentComponent implements OnChanges {
       } else {
         if (this.data.attrs.pathname && this.data.attrs.hash) {
           this.eRef.nativeElement.style.color = '#4285f4';
+          this.contentToContent.emit(this.data)
         }
       }
     } else {

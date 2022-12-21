@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
@@ -21,7 +23,8 @@ export class TinhTuanCuuComponent implements OnInit {
     private calendarService: CalendarService,
     private datePipe: DatePipe,
     private commonService: CommonService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private titleService: Title
   ) {
 
   }
@@ -42,6 +45,7 @@ export class TinhTuanCuuComponent implements OnInit {
         this.calculateTuanCuu()
       }
     })
+    this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
   }
 
   getYearOptions() {

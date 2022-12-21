@@ -1,5 +1,6 @@
 <mat-drawer-container autosize class="cp-content-creator-mat-drawer">
   <mat-drawer-content id="contentCreatorWrapper">
+    <audio #audioPlayer class="w-100 block-audio-player" *ngIf="data?.type === 'block' && data?.audio?.src" [src]="data?.audio?.src" controls></audio>
     <div class="cp-creator-block-group" [ngClass]="{'contentEditable': isShowController}">
       <ng-container *ngFor="let block of data.content">
         <cp-creator-block
@@ -11,6 +12,7 @@
           *ngIf="block?.type == 'contentBlock'" [data]="block"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
+          (contentToContent)="contentToContent($event)"
           [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
       </ng-container>
     </div>

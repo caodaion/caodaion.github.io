@@ -42,8 +42,31 @@
           <button mat-icon-button (click)="addNewContentBlock()">
             <mat-icon>text_fields</mat-icon>
           </button>
+          <button mat-icon-button (click)="openAudioDialog(audioDialog)">
+            <mat-icon>music_note</mat-icon>
+          </button>
         </div>
       </mat-tab>
     </mat-tab-group>
   </div>
 </div>
+<ng-template #audioDialog>
+  <div mat-dialog-title>Chỉnh sửa âm thanh</div>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Nguồn</mat-label>
+      <input type="text" matInput [(ngModel)]="data.audio.src">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Đóng</button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      (click)="addContentAudio()"
+      [mat-dialog-close]="true"
+    >
+      Lưu
+    </button>
+  </mat-dialog-actions>
+</ng-template>
