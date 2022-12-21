@@ -69,8 +69,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   contentToContent(event: any) {
     if (event?.audio?.start) {
       this.audioPlayer.nativeElement.currentTime = event.audio.start
+      const currentTime = this.audioPlayer.nativeElement.currentTime
+      navigator.clipboard.writeText(currentTime)
+      localStorage.setItem('audio', JSON.stringify({
+        content: this.data.key,
+        currentTime: currentTime
+      }))
     } else {
-      this.audioPlayer.nativeElement.pause()
+      // this.audioPlayer.nativeElement.pause()
     }
   }
 
@@ -91,15 +97,29 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
                   creatorContentEditable[i].setAttribute('style', 'color: unset')
                 })
                 targetAudioContent.style.color = '#4285f4'
+                localStorage.setItem('audio', JSON.stringify({
+                  content: this.data.key,
+                  currentTime: currentTime
+                }))
               }
             }
           }
         })
+        this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
+          const currentTime = this.audioPlayer.nativeElement.currentTime
+          localStorage.setItem('audio', JSON.stringify({
+            content: this.data.key,
+            currentTime: currentTime
+          }))
+        })
       } else {
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
           const currentTime = this.audioPlayer.nativeElement.currentTime
-          console.log(currentTime);
           navigator.clipboard.writeText(currentTime)
+          localStorage.setItem('audio', JSON.stringify({
+            content: this.data.key,
+            currentTime: currentTime
+          }))
         })
       }
     }

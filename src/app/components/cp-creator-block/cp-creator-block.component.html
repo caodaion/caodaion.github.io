@@ -19,6 +19,7 @@
   <cp-creator-content
     *ngIf="block.type == 'contentBlock'" [data]="block"
     [id]="getId(block)"
+    (contentToContent)="contentToContent($event)"
     [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
 </ng-container>
 <cp-creator-block-toolbar *ngIf="data.focused" [data]="data"></cp-creator-block-toolbar>
