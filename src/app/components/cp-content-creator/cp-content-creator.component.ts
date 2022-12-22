@@ -81,7 +81,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   audioTracking() {
-    if (this.data.type == 'block') {
+    if (this.data.type == 'block' && this.audioPlayer) {
       if (!this.authService.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
           const currentTime = this.audioPlayer.nativeElement.currentTime
