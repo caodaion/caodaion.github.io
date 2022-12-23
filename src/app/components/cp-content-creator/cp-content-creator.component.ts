@@ -89,7 +89,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   audioTracking() {
     if (this.data.type == 'block' && !!this.audioPlayer) {
       this.route.queryParams.subscribe((query) => {
-        if (query['isAutoPlayAudio']) {
+        if (query['autoplay']) {
           this.audioPlayer.nativeElement.autoplay = true
         }
       })

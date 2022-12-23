@@ -124,7 +124,7 @@ export class TnhtContentComponent implements OnInit {
     this.router
       .navigate([this.navigate.next.link], {
         queryParams: {
-          isAutoPlayAudio: true
+          autoplay: true
         },
       })
       .then(() => {
