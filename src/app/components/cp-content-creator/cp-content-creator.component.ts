@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { AuthService } from "../../shared/services/auth/auth.service";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'cp-content-creator',
@@ -10,12 +11,17 @@ import { AuthService } from "../../shared/services/auth/auth.service";
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
   @Output() save = new EventEmitter();
+  @Output() nextContent = new EventEmitter();
   isShowController: boolean = false;
+  isAutoPlay: boolean = false;
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
   constructor(
-    private breakpointObserver: BreakpointObserver, private authService: AuthService) {
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private route: ActivatedRoute
+    ) {
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
@@ -82,6 +88,11 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
 
   audioTracking() {
     if (this.data.type == 'block' && !!this.audioPlayer) {
+      this.route.queryParams.subscribe((query) => {
+        if (query['isAutoPlayAudio']) {
+          this.audioPlayer.nativeElement.autoplay = true
+        }
+      })
       if (!this.authService.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
           const currentTime = this.audioPlayer.nativeElement.currentTime
@@ -111,6 +122,9 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
             content: this.data.key,
             currentTime: currentTime
           }))
+          if (JSON.parse(localStorage.getItem('audio') || '').currentTime == this.data.content[this.data.content.length - 1].audio.end) {
+            this.nextContent.emit()
+          }
         })
       } else {
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
