@@ -13,6 +13,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/calendar/calendar.module').then((m) => m.CalendarModule),
       },
+      {
+        path: 'su-kien',
+        loadChildren: () =>
+          import('../../pages/event/event.module').then((m) => m.EventModule),
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },

@@ -112,9 +112,9 @@ export class KinhListComponent implements OnInit {
     };
     this.nowKinh.eventList = eventList?.filter((item: any) => {
       return (
-        item.event.time?.filter((time: any) => filter.time.includes(time))
+        item?.event?.time?.filter((time: any) => filter.time.includes(time))
           .length > 0 &&
-        item.event.locationType.filter((locationType: any) =>
+        item?.event?.locationType?.filter((locationType: any) =>
           filter.locationType.includes(locationType)
         ).length > 0
       );

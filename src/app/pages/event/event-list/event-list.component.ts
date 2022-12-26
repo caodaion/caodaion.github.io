@@ -77,7 +77,6 @@ export class EventListComponent implements OnInit {
   }
 
   getEvents() {
-    console.log(this.time)
     this.getHappeningTuThoiEvents()
     this.getTodayTuThoiEvents()
   }
@@ -145,7 +144,9 @@ export class EventListComponent implements OnInit {
     if (!this.todayEvents.showFullList && ((!event && !index) || (event && index !== 0))) {
       this.todayEvents.showFullList = !this.todayEvents.showFullList
     } else {
-      console.log(event)
+      this.router.navigate([event.key], {
+        relativeTo: this.route
+      })
     }
   }
 }

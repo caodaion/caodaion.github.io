@@ -27,10 +27,10 @@
                  opacity: !todayEvents.showFullList ? ((100 - (index * 5)) < 100 ? '0.' + ((100 - (index * 5)) - 30) : 1) : ''}">
               <div class="event-information">
                 <div class="notification-subscribe">
-                  <button class="notification-subscribe-btn" mat-icon-button aria-label="Bật/Tắt thông báo">
+                  <!-- <button class="notification-subscribe-btn" mat-icon-button aria-label="Bật/Tắt thông báo">
                     <mat-icon>notifications</mat-icon>
                   </button>
-                  Nhận thông báo
+                  Nhận thông báo -->
                 </div>
                 <div class="event-name">{{item?.name}}</div>
                 <div class="event-time">{{item?.startTime}}-{{item?.endTime}}</div>
@@ -50,7 +50,7 @@
           </mat-expansion-panel-header>
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let event of eventList">
-              <mat-card class="h-100 w-100" matRipple [routerLink]="event?.key">
+              <mat-card class="h-100 w-100" matRipple [routerLink]="'chinh-sua/' + event?.key">
                 <mat-card-header>
                   <mat-card-title>{{ event?.name }}</mat-card-title>
                   <mat-card-subtitle>{{ event?.key }}</mat-card-subtitle>

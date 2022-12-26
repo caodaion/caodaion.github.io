@@ -19,9 +19,10 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { EventEditComponent } from './event-edit/event-edit.component';
 import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
+import { EventDetailsComponent } from './event-details/event-details.component';
 
 @NgModule({
-  declarations: [EventListComponent, EventEditComponent],
+  declarations: [EventListComponent, EventEditComponent, EventDetailsComponent],
   imports: [
     CommonModule,
     EventRoutingModule,
