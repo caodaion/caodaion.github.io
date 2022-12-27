@@ -2,6 +2,9 @@
 @use "sass:map";
 ::ng-deep {
   .lunar-calendar-container {
+    .date-event-item {
+      background-color: #fbbc05;
+    }
     .lunar-calendar-toolbar {
       background-color: map.get(variables.$light-theme, "on-primary");
     }
