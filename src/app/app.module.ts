@@ -13,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './modules/auth/auth.component';
 import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from "@angular/material/legacy-progress-spinner";
 import { LoginComponent } from './pages/auth/login/login.component';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import {FormsModule} from "@angular/forms";
 import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';

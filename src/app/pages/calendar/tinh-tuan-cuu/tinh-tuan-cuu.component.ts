@@ -18,7 +18,19 @@ export class TinhTuanCuuComponent implements OnInit {
   monthOptions = <any>[];
   dayOptions = <any>[];
   tuanCuuEvents = <any>[];
+  tuanCuuList = <any>[];
   displayedColumns: string[] = ['eventName', 'day', 'lunar', 'solar'];
+  calculatedTuanCuu = {
+    key: '',
+    event: <any>[],
+    date: <any>Object,
+    details: {
+      name: '',
+      age: null,
+      sex: null
+    }
+  }
+
   constructor(
     private calendarService: CalendarService,
     private datePipe: DatePipe,
@@ -31,6 +43,7 @@ export class TinhTuanCuuComponent implements OnInit {
 
   ngOnInit(): void {
     this.getYearOptions()
+    this.getLocalStorageTuanCuu()
     this.route.queryParams.subscribe((param: any) => {
       if (param['y']) {
         this.selectedDate.lunarYear = parseInt(param['y']);
@@ -46,6 +59,13 @@ export class TinhTuanCuuComponent implements OnInit {
       }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
+  }
+
+  getLocalStorageTuanCuu() {
+    this.tuanCuuList = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    this.tuanCuuList?.forEach((item: any) => {
+      item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
+    })
   }
 
   getYearOptions() {
@@ -70,5 +90,28 @@ export class TinhTuanCuuComponent implements OnInit {
           this.tuanCuuEvents = res
         }
       })
+  }
+
+  saveTuanCuu() {
+    this.calculatedTuanCuu.key = this.commonService.generatedSlug(`tuancuu-${this.selectedDate.lunarYear}${this.selectedDate.lunarMonth}${this.selectedDate.lunarDay}-${this.calculatedTuanCuu.details.name}`)
+    this.calculatedTuanCuu.event = this.tuanCuuEvents
+    this.calculatedTuanCuu.date = this.selectedDate
+    this.tuanCuuList.push(this.calculatedTuanCuu)
+    this.storeTuanCuu()
+  }
+
+  storeTuanCuu() {
+    localStorage.setItem('tuanCuu', JSON.stringify(this.tuanCuuList))
+    this.getLocalStorageTuanCuu()
+  }
+
+  deleteTuanCuu(item: any) {
+    if (this.tuanCuuList?.length == 1) {
+      this.tuanCuuList = []
+    } else {
+      let index = this.tuanCuuList.indexOf(this.tuanCuuList.find((e: any) => e.key == item.key))
+      this.tuanCuuList.splice(index, 1)
+    }
+    this.storeTuanCuu()
   }
 }
