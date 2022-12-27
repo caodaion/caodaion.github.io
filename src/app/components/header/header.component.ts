@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,15 +9,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input() prevPage: any = '..';
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+    ) {}
 
   ngOnInit(): void {}
 
   onClickBackButton() {
-    this.router
-      .navigate([this.prevPage?.navigate?.link], {
-        relativeTo: this.route,
-        queryParams: this.prevPage?.navigate?.queryParams,
-      });
+    if (this.prevPage?.navigate?.link) {
+      this.router
+        .navigate([this.prevPage?.navigate?.link], {
+          relativeTo: this.route,
+          queryParams: this.prevPage?.navigate?.queryParams,
+        });
+    } else {
+      this.location.back()
+    }
   }
 }

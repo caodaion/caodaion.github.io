@@ -14,8 +14,8 @@ export class EventDetailsComponent implements OnInit {
 
   event: any;
   eventKey: any;
-  eventList = this.eventService.eventList;
-  kinhList = this.kinhService.kinhList;
+  eventList = <any>[];
+  kinhList = <any>[];
   currentKinhList = <any>[]
   cols: number = 0;
 
@@ -30,10 +30,10 @@ export class EventDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getEvents()
     this.route.params.subscribe((query) => {
       if (query['eventKey']) {
         this.eventKey = query['eventKey']
-        this.getEventDetails()
       }
     })
     this.breakpointObserver
@@ -47,6 +47,24 @@ export class EventDetailsComponent implements OnInit {
       });
   }
 
+  getEvents() {
+    this.eventService.getEventList().subscribe((res: any) => {
+      if (res) {
+        this.eventList = res.data
+        this.getKinhs()
+      }
+    })
+  }
+
+  getKinhs() {
+    this.kinhService.getKinhList().subscribe((res: any) => {
+      if (res) {
+        this.kinhList = res.data
+        this.getEventDetails()
+      }
+    })
+  }
+
   getEventDetails() {
     const find = (array: any, key: any) => {
       let result: any;
@@ -54,9 +72,9 @@ export class EventDetailsComponent implements OnInit {
       return result;
     }
     this.event = find(this.eventList, this.eventKey)
-    console.log(this.event);
-
-    this.event.time = this.commonService.commonTimes.find((time: any) => time.key === this.event.time[0])?.name
+    if (this.event.time) {
+      this.event.time = this.commonService.commonTimes.find((time: any) => time.key === this.event.time[0])?.name
+    }
     this.event.kinh.forEach((item: any) => {
       let currentKinh = this.kinhList.find((kinh: any) => kinh.key === item);
       if (currentKinh) {

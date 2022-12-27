@@ -86,9 +86,9 @@ export class KinhListComponent implements OnInit {
         kinh: this.getKinhListByKey(kinhQuanHonTangTe),
       }
     );
-    this.getNowKinh();
+    // this.getNowKinh();
     if (!this.nowKinh.filter.me && !this.nowKinh.filter.e) {
-      this.getDefaultNowKinh();
+      // this.getDefaultNowKinh();
     }
   }
 

@@ -9,7 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthComponent implements OnInit {
   jwtHelper = new JwtHelperService();
-  token = '';
+  token: any = null;
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {

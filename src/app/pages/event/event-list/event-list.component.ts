@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 import {CommonService} from "../../../shared/services/common/common.service";
 import {CONSTANT} from "../../../shared/constants/constants.constant";
-import {Title} from "@angular/platform-browser";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event-list',
@@ -17,7 +17,7 @@ export class EventListComponent implements OnInit {
   contentEditable: any;
   isLoading: boolean = false;
   cols: number = 1;
-  eventList = this.eventService.eventList;
+  eventList = <any>[];
   happeningEvents = {
     event: <any>[],
     showFullList: false
@@ -43,6 +43,7 @@ export class EventListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getEvents()
     this.route.queryParams.subscribe((params) => {
       if (params['t']) {
         this.selectedIndex = parseInt(params['t']);
@@ -65,7 +66,6 @@ export class EventListComponent implements OnInit {
         }
       });
     this.contentEditable = this.authService.contentEditable;
-    this.getEvents()
   }
 
   selectedTabChange(event: any) {
@@ -77,8 +77,13 @@ export class EventListComponent implements OnInit {
   }
 
   getEvents() {
-    this.getHappeningTuThoiEvents()
-    this.getTodayTuThoiEvents()
+    this.eventService.getEventList().subscribe((res: any) => {
+      if (res) {
+        this.eventList = res.data
+        this.getHappeningTuThoiEvents()
+        this.getTodayTuThoiEvents()
+      }
+    })
   }
 
   getHappeningTuThoiEvents () {
@@ -93,8 +98,10 @@ export class EventListComponent implements OnInit {
         })?.event?.find((item: any) => {
           return item?.time?.length == 1 && item?.time.find((time: any) => time === this.time?.commonTime?.current?.key)
         })]
-        this.happeningEvents.event[0].startTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(0,2)}:00`
-        this.happeningEvents.event[0].endTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(2,4)}:00`
+        if (this.happeningEvents.event[0]) {
+          this.happeningEvents.event[0].startTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(0,2)}:00`
+          this.happeningEvents.event[0].endTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(2,4)}:00`
+        }
         break;
       default:
         break;
@@ -107,28 +114,30 @@ export class EventListComponent implements OnInit {
       return item.key === 'cung-tu-thoi'
     })?.event?.filter((item: any) => item.key !== 'cung-tu-thoi')
     this.todayEvents.event.forEach((item: any) => {
-      item.startTime = `${item?.time[0].split('-')[1]?.slice(0,2)}:00`
-      item.endTime = `${item?.time[0].split('-')[1]?.slice(2,4)}:00`
       item.location = item?.locationType[0] === 'all' ? 'Điện thờ Đức Chí Tôn' : ''
-      switch (item?.time[0]) {
-        case 'ty-2301':
-          item.color = `#ffffff`
-          item.backgroundColor = `linear-gradient(#221f23, #19386d)`
-          break;
-        case 'meo-0507':
-          item.backgroundColor = `linear-gradient(#f1a2c4, #f9f2ec)`
-          break;
-        case 'ngo-1113':
-          item.backgroundColor = `linear-gradient(#daf4d7, #07b4ff)`
-          break;
-        case 'dau-1719':
-          item.color = `#ffffff`
-          item.backgroundColor = `linear-gradient(#b87059, #7a019e)`
-          break;
-        default:
-          item.backgroundColor = 'black'
-          item.color = 'white'
-          break;
+      if (item?.time) {
+        item.startTime = `${item?.time[0].split('-')[1]?.slice(0,2)}:00`
+        item.endTime = `${item?.time[0].split('-')[1]?.slice(2,4)}:00`
+        switch (item?.time[0]) {
+          case 'ty-2301':
+            item.color = `#ffffff`
+            item.backgroundColor = `linear-gradient(#221f23, #19386d)`
+            break;
+          case 'meo-0507':
+            item.backgroundColor = `linear-gradient(#f1a2c4, #f9f2ec)`
+            break;
+          case 'ngo-1113':
+            item.backgroundColor = `linear-gradient(#daf4d7, #07b4ff)`
+            break;
+          case 'dau-1719':
+            item.color = `#ffffff`
+            item.backgroundColor = `linear-gradient(#b87059, #7a019e)`
+            break;
+          default:
+            item.backgroundColor = 'black'
+            item.color = 'white'
+            break;
+        }
       }
     })
     // console.log(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} 07:00:00`))
