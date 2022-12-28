@@ -10,7 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatListModule } from '@angular/material/list';
 import { MatRippleModule } from '@angular/material/core';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
