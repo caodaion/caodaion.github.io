@@ -3,6 +3,8 @@
 
 ::ng-deep {
   .event-list-container {
+    height: 100%;
+    overflow: hidden;
     .mat-grid-tile-content {
       padding: 0.5rem !important;
     }
@@ -66,13 +68,13 @@
             }
 
             .event-name {
-              margin-bottom: .5rem;
+              padding-bottom: .5rem;
             }
 
             .event-time {
               font-size: 30px;
               font-weight: bold;
-              margin-bottom: .5rem;
+              padding-bottom: .5rem;
             }
 
             .event-location {

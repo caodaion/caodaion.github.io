@@ -13,7 +13,7 @@
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="tnht-container-wrapper">
     <div *ngIf="content" class="h-100">
-      <cp-content-creator [data]="content" (save)="onSaveContent()"></cp-content-creator>
+      <cp-content-creator [data]="content" (save)="onSaveContent()" (nextContent)="onNextContent()"></cp-content-creator>
     </div>
   </div>
   <app-bottom-navigator *ngIf="content?.type == 'block'"

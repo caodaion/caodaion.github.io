@@ -111,20 +111,20 @@
               matRipple
               *ngFor="let event of date.event"
               [ngClass]="
-                event.event.date === 'yearly-monthly-daily'
+                event?.event?.date === 'yearly-monthly-daily'
                   ? 'yearly-monthly-daily'
-                  : event.event.date !== 'yearly-monthly-daily' &&
-                    event.event.date.includes('yearly-monthly-')
+                  : event?.event?.date !== 'yearly-monthly-daily' &&
+                    event?.event?.date?.includes('yearly-monthly-')
                   ? 'yearly-monthly-special'
-                  : event.event.date !== 'yearly-monthly-daily' &&
-                    !event.event.date.includes('yearly-monthly-') &&
-                    event.event.date.includes('yearly-')
+                  : event?.event?.date !== 'yearly-monthly-daily' &&
+                    !event?.event?.date?.includes('yearly-monthly-') &&
+                    event?.event?.date?.includes('yearly-')
                   ? 'yearly-special-special'
                   : ''
               "
               (click)="openEventSummaryDialog(date, event, eventSummayDialog)"
             >
-              {{ event.event.name }}
+              {{ event?.event?.name || event?.event?.eventName }}
             </mat-list-item>
           </mat-list>
         </div>
@@ -209,20 +209,20 @@
       <div
         class="selected-date-events"
         *ngFor="let zone of dateEvents"
-        [ngStyle]="{ top: getPosition(zone.timeZone.start) + 'px' }"
+        [ngStyle]="{ top: getPosition(zone?.timeZone?.start) + 'px' }"
       >
         <div
           class="selected-date-event"
           *ngFor="let event of zone.event"
           [ngClass]="
-            event.event.date === 'yearly-monthly-daily'
+            event?.event?.date === 'yearly-monthly-daily'
               ? 'yearly-monthly-daily'
-              : event.event.date !== 'yearly-monthly-daily' &&
-                event.event.date.includes('yearly-monthly-')
+              : event?.event?.date !== 'yearly-monthly-daily' &&
+                event?.event?.date?.includes('yearly-monthly-')
               ? 'yearly-monthly-special'
-              : event.event.date !== 'yearly-monthly-daily' &&
-                !event.event.date.includes('yearly-monthly-') &&
-                event.event.date.includes('yearly-')
+              : event?.event?.date !== 'yearly-monthly-daily' &&
+                !event?.event?.date?.includes('yearly-monthly-') &&
+                event?.event?.date?.includes('yearly-')
               ? 'yearly-special-special'
               : ''
           "
@@ -230,7 +230,7 @@
             openEventSummaryDialog(selectedDate, event, eventSummayDialog)
           "
         >
-          {{ event.event.name }}
+          {{ event?.event?.name || event?.event?.eventName }}
         </div>
       </div>
     </div>
@@ -239,49 +239,51 @@
 <ng-template #eventSummayDialog>
   <div class="event-summary-dialog">
     <h2 mat-dialog-title>{{ shownDate?.event?.event?.name }}</h2>
-    <div class="d-flex details-item">
-      <mat-icon>event</mat-icon>
-      {{
-        shownDate?.event?.event?.date === "yearly-monthly-daily"
-          ? "Mỗi ngày"
-          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-            shownDate?.event?.event?.date.includes("yearly-monthly-")
-          ? "Ngày " + shownDate?.event?.event?.date.split("-")[2] + " mỗi tháng"
-          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-            !shownDate?.event?.event?.date.includes("yearly-monthly-") &&
-            shownDate?.event?.event?.date.includes("yearly-")
-          ? "Ngày " +
-            shownDate?.event?.event?.date.split("-")[2] +
-            " tháng " +
-            shownDate?.event?.event?.date.split("-")[1] +
-            " mỗi năm"
-          : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-            !shownDate?.event?.event?.date.includes("yearly-monthly-") &&
-            shownDate?.event?.event?.date.includes("yearly-")
-          ? "Ngày " +
-            shownDate?.event?.event?.date.split("-")[2] +
-            " tháng " +
-            shownDate?.event?.event?.date.split("-")[1] +
-            " năm" +
-            shownDate?.event?.event?.date.split("-")[0]
-          : ""
-      }}
-    </div>
-    <div class="d-flex details-item">
-      <mat-icon>schedule</mat-icon>
-      <span *ngFor="let time of getTimes(shownDate?.event?.event?.time)">{{
-        time?.name
-      }}</span>
-    </div>
-    <div class="d-flex details-item">
-      <mat-icon>location_pin</mat-icon>
-      <span
-        *ngFor="
-          let time of getLocationTypes(shownDate?.event?.event?.locationType)
-        "
-        >{{ time?.name }}</span
-      >
-    </div>
+    <mat-dialog-content>
+      <div class="d-flex details-item">
+        <mat-icon>event</mat-icon>
+        {{
+          shownDate?.event?.event?.date === "yearly-monthly-daily"
+            ? "Mỗi ngày"
+            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+              shownDate?.event?.event?.date?.includes("yearly-monthly-")
+            ? "Ngày " + shownDate?.event?.event?.date.split("-")[2] + " mỗi tháng"
+            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+              !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
+              shownDate?.event?.event?.date?.includes("yearly-")
+            ? "Ngày " +
+              shownDate?.event?.event?.date?.split("-")[2] +
+              " tháng " +
+              shownDate?.event?.event?.date?.split("-")[1] +
+              " mỗi năm"
+            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+              !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
+              shownDate?.event?.event?.date?.includes("yearly-")
+            ? "Ngày " +
+              shownDate?.event?.event?.date?.split("-")[2] +
+              " tháng " +
+              shownDate?.event?.event?.date?.split("-")[1] +
+              " năm" +
+              shownDate?.event?.event?.date?.split("-")[0]
+            : shownDate?.event?.event?.date
+        }}
+      </div>
+      <div class="d-flex details-item" *ngIf="shownDate?.event?.event?.time?.length > 0">
+        <mat-icon>schedule</mat-icon>
+        <span *ngFor="let time of getTimes(shownDate?.event?.event?.time)">{{
+          time?.name
+        }}</span>
+      </div>
+      <div class="d-flex details-item" *ngIf="shownDate?.event?.event?.locationType?.length > 0">
+        <mat-icon>location_pin</mat-icon>
+        <span
+          *ngFor="
+            let time of getLocationTypes(shownDate?.event?.event?.locationType)
+          "
+          >{{ time?.name }}</span
+        >
+      </div>
+    </mat-dialog-content>
     <mat-dialog-actions>
       <button mat-button mat-dialog-close>Đóng</button>
       <button

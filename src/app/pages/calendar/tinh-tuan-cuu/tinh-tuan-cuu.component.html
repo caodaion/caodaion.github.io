@@ -1,6 +1,6 @@
 <div class="wrapper-container tuan-cuu-container">
   <h1 class="text-center tuan-cuu-title">Tính tuần cửu</h1>
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab label="Tính Tuần Cửu mới">
       <div class="form-group">
         <h3>Hãy chọn ngày từ trần</h3>
@@ -37,36 +37,190 @@
           </mat-form-field>
         </div>
       </div>
+      <mat-accordion multi class="event-accordion">
+        <mat-expansion-panel [expanded]="false">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Thông tin bổ sung</mat-panel-title>
+          </mat-expansion-panel-header>
+          <h3>Thông tin người vừa từ trần</h3>
+          <div class="d-flex flex-wrap">
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Họ và tên</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  required
+                  [(ngModel)]="calculatedTuanCuu.details.name"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Tuổi</mat-label>
+                <input
+                  type="number"
+                  matInput
+                  [(ngModel)]="calculatedTuanCuu.details.age"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-label>Giới tính</mat-label>
+              <div>
+                <mat-radio-group [(ngModel)]="calculatedTuanCuu.details.sex">
+                  <mat-radio-button [value]="'Nam'">Nam</mat-radio-button>
+                  <mat-radio-button [value]="'Nữ'">Nữ</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
       <div class="form-group d-flex justify-content-end button-calc">
-        <button mat-raised-button (click)="calculateTuanCuu()" [color]="'primary'">Tính toán</button>
+        <button
+          mat-raised-button
+          (click)="saveTuanCuu()"
+          *ngIf="tuanCuuEvents.length > 0"
+          [disabled]="!calculatedTuanCuu.details.name"
+          [color]="'primary'"
+        >
+          Lưu
+        </button>
+        <button
+          mat-raised-button
+          (click)="calculateTuanCuu()"
+          [color]="'primary'"
+        >
+          Tính toán
+        </button>
       </div>
       <div *ngIf="tuanCuuEvents.length > 0">
         <table mat-table [dataSource]="tuanCuuEvents">
           <!-- eventName Column -->
           <ng-container matColumnDef="eventName">
-            <th mat-header-cell *matHeaderCellDef> Tuần </th>
-            <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+            <th mat-header-cell *matHeaderCellDef>Tuần</th>
+            <td mat-cell *matCellDef="let element">{{ element.eventName }}</td>
           </ng-container>
           <!-- day Column -->
           <ng-container matColumnDef="day">
-            <th mat-header-cell *matHeaderCellDef> Thứ </th>
-            <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+            <th mat-header-cell *matHeaderCellDef>Thứ</th>
+            <td mat-cell *matCellDef="let element">{{ element.day }}</td>
           </ng-container>
           <!-- lunar Column -->
           <ng-container matColumnDef="lunar">
-            <th mat-header-cell *matHeaderCellDef> Ngày âm lịch </th>
-            <td mat-cell *matCellDef="let element"> {{element.lunar.lunarDay | number: '2.0-0'}}-{{element.lunar.lunarMonth | number: '2.0-0'}} {{element.lunar.lunarYearName}} </td>
+            <th mat-header-cell *matHeaderCellDef>Ngày âm lịch</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.lunar.lunarDay | number : "2.0-0" }}-{{
+                element.lunar.lunarMonth | number : "2.0-0"
+              }}
+              {{ element.lunar.lunarYearName }}
+            </td>
           </ng-container>
           <!-- solar Column -->
           <ng-container matColumnDef="solar">
-            <th mat-header-cell *matHeaderCellDef> Ngày dương lịch </th>
-            <td mat-cell *matCellDef="let element"> {{element.solar | date: 'dd-MM-yyyy'}} </td>
+            <th mat-header-cell *matHeaderCellDef>Ngày dương lịch</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.solar | date : "dd-MM-yyyy" }}
+            </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
     </mat-tab>
-    <!-- <mat-tab label="Tuần Cửu của Nguyễn Văn A"> Content 2 </mat-tab> -->
+    <mat-tab
+      *ngFor="let item of tuanCuuList; let index = index"
+      [label]="item?.name"
+    >
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3>Lịch cúng cửu cho {{ item?.name }}</h3>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              (click)="shareTuanCuu(item, shareBottomSheet)"
+            >
+              <mat-icon>share</mat-icon>Chia sẻ
+            </button>
+            <button mat-menu-item (click)="deleteTuanCuu(item)">
+              <mat-icon>delete</mat-icon>Xóa
+            </button>
+          </mat-menu>
+        </div>
+        <p>
+          Từ trần: ngày {{ item?.date?.lunarDay }} tháng
+          {{ item?.date?.lunarMonth }} năm {{ item?.date?.lunarYearName }}
+        </p>
+        <div *ngIf="item?.event?.length > 0">
+          <table mat-table [dataSource]="item?.event">
+            <!-- eventName Column -->
+            <ng-container matColumnDef="eventName">
+              <th mat-header-cell *matHeaderCellDef>Tuần</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.eventName }}
+              </td>
+            </ng-container>
+            <!-- day Column -->
+            <ng-container matColumnDef="day">
+              <th mat-header-cell *matHeaderCellDef>Thứ</th>
+              <td mat-cell *matCellDef="let element">{{ element.day }}</td>
+            </ng-container>
+            <!-- lunar Column -->
+            <ng-container matColumnDef="lunar">
+              <th mat-header-cell *matHeaderCellDef>Ngày âm lịch</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.lunar.lunarDay | number : "2.0-0" }}-{{
+                  element.lunar.lunarMonth | number : "2.0-0"
+                }}
+                {{ element.lunar.lunarYearName }}
+              </td>
+            </ng-container>
+            <!-- solar Column -->
+            <ng-container matColumnDef="solar">
+              <th mat-header-cell *matHeaderCellDef>Ngày dương lịch</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.solar | date : "dd-MM-yyyy" }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
+<ng-template #shareBottomSheet>
+  <h3>Chia sẻ lịch cúng Cửu của {{ sharedData?.data?.name }}</h3>
+  <div class="container-fluid">
+    <h4>Sao chép liên kết chia sẻ</h4>
+    <mat-form-field class="w-100">
+      <mat-label>Liên kết</mat-label>
+      <input
+        type="text"
+        matInput
+        [value]="sharedData?.location"
+        [disabled]="true"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        [matTooltip]="'Sao chép liên kết'"
+        (click)="copyLink()"
+      >
+        <mat-icon>link</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-nav-list>
+      <a mat-list-item (click)="shareTo('facebook')">
+        <span matListItemTitle>Chia sẻ lên Facebook</span>
+        <span matLine>Chia sẻ lịch cúng cửu này lên Facebook</span>
+      </a>
+    </mat-nav-list>
+  </div>
+</ng-template>

@@ -1,17 +1,18 @@
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DatePipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
-import {CalendarService} from 'src/app/shared/services/calendar/calendar.service';
-import {CommonService} from 'src/app/shared/services/common/common.service';
-import {EventService} from 'src/app/shared/services/event/event.service';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { EventService } from 'src/app/shared/services/event/event.service';
 
 @Component({
   selector: 'app-lunar-calendar',
@@ -22,7 +23,7 @@ import {EventService} from 'src/app/shared/services/event/event.service';
     './styles/date-hours.date-calendar.lunar-calendar.component.scss',
     './styles/selected-month.lunar-calendar.component.scss',
     './styles/dates.selected-month.lunar-calendar.component.scss',
-  ],
+  ]
 })
 export class LunarCalendarComponent implements OnInit, AfterViewInit {
   selectedDate = new DateFormatModel();
@@ -50,7 +51,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private breakpointObserver: BreakpointObserver,
     private titleService: Title,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private datePipe: DatePipe
   ) {
   }
 
@@ -195,7 +197,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     );
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {s: this.selectedDate.solar.toDateString()},
+      queryParams: { s: this.selectedDate.solar.toDateString() },
       queryParamsHandling: 'merge',
     });
     this.getCalendarEvent();
@@ -209,32 +211,32 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     let yearlySpecialSpecial: any[] = [];
 
     this.eventList.forEach((item: any) => {
-        item.event.forEach((event: any) => {
-            // yearly-monthly-daily
-            if (
-              event.date === 'yearly-monthly-daily' &&
-              event.key.includes('cung-thoi')
-            ) {
-              tuthoi.push({mainEventKey: item.key, event});
-            }
-            // yearly-monthly-special
-            if (
-              event.date !== 'yearly-monthly-daily' &&
-              event.date?.includes('yearly-monthly-')
-            ) {
-              yearlyMonthlySpecial.push({mainEventKey: item.key, event});
-            }
-            // yearly-special-special
-            if (
-              event.date !== 'yearly-monthly-daily' &&
-              !event.date?.includes('yearly-monthly-') &&
-              event.date?.includes('yearly-')
-            ) {
-              yearlySpecialSpecial.push({mainEventKey: item.key, event});
-            }
-          }
-        )
+      item.event.forEach((event: any) => {
+        // yearly-monthly-daily
+        if (
+          event.date === 'yearly-monthly-daily' &&
+          event.key.includes('cung-thoi')
+        ) {
+          tuthoi.push({ mainEventKey: item.key, event });
+        }
+        // yearly-monthly-special
+        if (
+          event.date !== 'yearly-monthly-daily' &&
+          event.date?.includes('yearly-monthly-')
+        ) {
+          yearlyMonthlySpecial.push({ mainEventKey: item.key, event });
+        }
+        // yearly-special-special
+        if (
+          event.date !== 'yearly-monthly-daily' &&
+          !event.date?.includes('yearly-monthly-') &&
+          event.date?.includes('yearly-')
+        ) {
+          yearlySpecialSpecial.push({ mainEventKey: item.key, event });
+        }
       }
+      )
+    }
     );
 
     let comparedTime = new Date();
@@ -366,25 +368,54 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         }
       });
     }
+    this.mergeLocalStorageEvents()
     console.log(this.dateEvents);
   }
 
+  mergeLocalStorageEvents() {
+    const tuanCuuEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    tuanCuuEvents?.forEach((tuanCuu: any) => {
+      if (this.calendarMode === 'month') {
+        this.selectedMonth.forEach((date: any) => {
+          const foundEvent = tuanCuu?.event.find((item: any) => {
+            return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
+              new Date(item?.solar).getMonth() == new Date(date?.solar).getMonth() &&
+              new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
+          })
+          if (foundEvent) {
+            foundEvent.eventName = `Cầu siêu ${foundEvent.eventName} cho ${tuanCuu?.details?.name}`
+            if (!date.event || date.event?.length == 0) {
+              date.event = []
+            }
+            date.event.push({ event: foundEvent })
+          }
+        })
+      }
+    })
+  }
+
   openEventSummaryDialog(date: any, event: any, eventSummayDialog: any) {
-    this.shownDate = {date, event};
+    if (!event?.event?.name) {
+      event.event.name = event?.event?.eventName
+    }
+    if (!event?.event?.date) {
+      event.event.date = `${event?.event?.day} ngày ${event?.event?.lunar?.lunarDay} tháng ${event?.event?.lunar?.lunarMonth} năm ${event?.event?.lunar?.lunarYearName} (${this.datePipe.transform(event?.event?.solar, 'dd/MM/YYYY')})`
+    }
+    this.shownDate = { date, event };
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
   }
 
   getTimes(time: any): Array<any> {
-    return time.map((item: any) =>
+    return time?.map((item: any) =>
       this.commonService.commonTimes.find((time: any) => time.key === item)
     );
   }
 
   getLocationTypes(locationType: any): Array<any> {
-    if (locationType.includes('all')) {
+    if (locationType?.includes('all')) {
       locationType = ['all'];
     }
-    return locationType.map((item: any) =>
+    return locationType?.map((item: any) =>
       this.commonService.commonLocationTypes.find(
         (locationType: any) => locationType.key === item
       )
@@ -448,7 +479,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {m: mode, s: this.selectedDate.solar.toDateString()},
+      queryParams: { m: mode, s: this.selectedDate.solar.toDateString() },
       queryParamsHandling: 'merge',
     });
   }
@@ -493,17 +524,18 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   getPosition(time: any) {
-    const currentTimeId = `h${
-      time?.getHours() < 10 ? '0' + time?.getHours() : time?.getHours()
-    }m${
-      time?.getMinutes() < 10 ? '0' + time?.getMinutes() : time?.getMinutes()
-    }`;
-    const dateRange = document.getElementById('dateRange');
-    const dateRangeOffset: any = dateRange?.getBoundingClientRect();
-    const currentTimeMinute = document.getElementById(currentTimeId);
-    const currentTimeMinuteOffset: any =
-      currentTimeMinute?.getBoundingClientRect().top;
-    return currentTimeMinuteOffset - dateRangeOffset?.top;
+    if (time) {
+      const currentTimeId = `h${time?.getHours() < 10 ? '0' + time?.getHours() : time?.getHours()
+        }m${time?.getMinutes() < 10 ? '0' + time?.getMinutes() : time?.getMinutes()
+        }`;
+      const dateRange = document.getElementById('dateRange');
+      const dateRangeOffset: any = dateRange?.getBoundingClientRect();
+      const currentTimeMinute = document.getElementById(currentTimeId);
+      const currentTimeMinuteOffset: any =
+        currentTimeMinute?.getBoundingClientRect().top;
+        return currentTimeMinuteOffset - dateRangeOffset?.top;
+    }
+    return 0
   }
 }
 

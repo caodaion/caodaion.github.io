@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TnhtService} from "../../../shared/services/tnht/tnht.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../shared/services/auth/auth.service";
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {Title} from "@angular/platform-browser";
@@ -27,6 +27,7 @@ export class TnhtContentComponent implements OnInit {
   constructor(
     private tnhtService: TnhtService,
     private route: ActivatedRoute,
+    private router: Router,
     public authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private titleService: Title
@@ -117,5 +118,23 @@ export class TnhtContentComponent implements OnInit {
     }
     this.navigate.prev.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.hash) || '/'
     this.navigate.next.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.hash) || '/'
+  }
+
+  onNextContent() {
+    this.router
+      .navigate([this.navigate.next.link], {
+        queryParams: {
+          autoplay: true
+        },
+      })
+      .then(() => {
+          localStorage.setItem(
+            'currentLayout',
+            JSON.stringify({
+              isHideToolbar: true,
+              isHideBottomNavBar: true,
+            })
+          );
+      });
   }
 }

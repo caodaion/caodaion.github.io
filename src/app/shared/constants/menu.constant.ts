@@ -16,14 +16,6 @@ export const MENU = [
         released: false,
       },
       {
-        key: 'trang-chu.su-kien',
-        url: 'su-kien',
-        label: 'Sự kiện',
-        icon: 'bookmark_border',
-        fullAssess: true,
-        released: false,
-      },
-      {
         key: 'trang-chu.kinh',
         url: 'kinh',
         label: 'Kinh',
@@ -37,16 +29,7 @@ export const MENU = [
         label: 'Thánh Ngôn Hiệp Tuyển',
         icon: 'auto_stories',
         fullAssess: true,
-        released: true,
-        children: [
-          {
-            key: 'trang-chu.thanh-ngon-hiep-tuyen.quyen-1',
-            url: 'quyen-1',
-            label: 'Quyển 1',
-            fullAssess: true,
-            released: true,
-          }
-        ]
+        released: true
       },
       {
         key: 'trang-chu.thu-vien',
@@ -75,13 +58,21 @@ export const MENU = [
     released: true,
     children: [
       {
+        key: 'lich.su-kien',
+        url: 'su-kien',
+        label: 'Sự kiện',
+        icon: 'bookmark_border',
+        fullAssess: true,
+        released: true,
+      },
+      {
         key: 'lich.tinh-tuan-cuu',
         url: 'tinh-tuan-cuu',
         label: 'Tính Tuần Cửu',
         icon: 'calculate',
         fullAssess: true,
         released: true,
-      },
+      }
     ]
   },
   {

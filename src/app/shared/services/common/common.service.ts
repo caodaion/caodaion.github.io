@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
+import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,7 +11,10 @@ export class CommonService {
   commonLocationTypes: any[] = [];
   commonDates: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe
+    ) { }
 
   getTimeList(): Observable<any> {
     return this.http
@@ -228,6 +232,74 @@ export class CommonService {
         return 'Thứ Bảy'
       default:
         return day
+    }
+  }
+
+  public generatedSlug(text: any) {
+    let slug;
+    slug = text?.toLowerCase();
+
+    //Đổi ký tự có dấu thành không dấu
+    slug = slug?.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+    slug = slug?.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+    slug = slug?.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+    slug = slug?.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+    slug = slug?.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+    slug = slug?.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+    slug = slug?.replace(/đ/gi, 'd');
+    //Xóa các ký tự đặt biệt
+    slug = slug?.replace(
+      /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
+      ''
+    );
+    //Đổi khoảng trắng thành ký tự gạch ngang
+    slug = slug?.replace(/ /gi, '-');
+    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+    slug = slug?.replace(/\-\-\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-/gi, '-');
+    //Xóa các ký tự gạch ngang ở đầu và cuối
+    slug = '@' + slug + '@';
+    slug = slug?.replace(/\@\-|\-\@|\@/gi, '');
+    return slug
+  }
+
+  pushNotification(title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
+    // remove outdated notification
+    if (notificationAt < new Date()) {
+      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+      pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'))), 1)
+      localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
+    } else {
+      Notification.requestPermission((result) => {
+        if (result === "granted") {
+          if (isforcePush) {
+            navigator.serviceWorker.ready.then((registration) => {
+              registration.showNotification(title, payload);
+            });
+          } else {
+            const notificationTimeout = notificationAt.getTime() - new Date().getTime()
+            setTimeout(() => {
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification(title, payload);
+              });
+            }, notificationTimeout)
+            let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+            const pushKey = this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')
+            if (!pushNotification?.find((p: any) => p?.key == pushKey)) {
+              pushNotification.push({
+                key: pushKey,
+                title: title,
+                payload: payload,
+                notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+              })
+            }
+            localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
+          }
+        }
+      });
     }
   }
 }

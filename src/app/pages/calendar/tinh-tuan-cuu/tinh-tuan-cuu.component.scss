@@ -10,10 +10,15 @@
     }
     .form-group {
       padding: 0 1rem;
-      width: 100%;
+      @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+        width: 100%;
+      }
     }
     .button-calc {
-      margin-bottom: 2rem;
+      margin: 2rem 0;
+      button {
+        margin-left: 1rem;
+      }
     }
   }
 }
