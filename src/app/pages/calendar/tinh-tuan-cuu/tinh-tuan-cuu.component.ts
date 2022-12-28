@@ -139,36 +139,23 @@ export class TinhTuanCuuComponent implements OnInit {
   }
 
   shareTuanCuu(item: any, shareBottomSheet: any) {
-
     const base64url = (source: any) => {
-      // Encode in classical base64
       let encodedSource = CryptoJS.enc.Base64.stringify(source);
-
-      // Remove padding equal characters
       encodedSource = encodedSource.replace(/=+$/, '');
-
-      // Replace characters according to base64url specifications
       encodedSource = encodedSource.replace(/\+/g, '-');
       encodedSource = encodedSource.replace(/\//g, '_');
-
       return encodedSource;
     }
     const header = {
       "alg": "HS256",
       "typ": "JWT"
     };
-
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-
     const data = item;
-
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
-
     const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
-    console.log(signature);
-
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     this.sharedData = {
@@ -187,5 +174,16 @@ export class TinhTuanCuuComponent implements OnInit {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
+  }
+
+  shareTo(to: any) {
+    switch (to) {
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.sharedData.location)}`)
+        break;
+      default:
+        this.copyLink()
+        break;
+    }
   }
 }
