@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
+import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,7 +11,10 @@ export class CommonService {
   commonLocationTypes: any[] = [];
   commonDates: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe
+    ) { }
 
   getTimeList(): Observable<any> {
     return this.http
@@ -260,5 +264,42 @@ export class CommonService {
     slug = '@' + slug + '@';
     slug = slug?.replace(/\@\-|\-\@|\@/gi, '');
     return slug
+  }
+
+  pushNotification(title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
+    // remove outdated notification
+    if (notificationAt < new Date()) {
+      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+      pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'))), 1)
+      localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
+    } else {
+      Notification.requestPermission((result) => {
+        if (result === "granted") {
+          if (isforcePush) {
+            navigator.serviceWorker.ready.then((registration) => {
+              registration.showNotification(title, payload);
+            });
+          } else {
+            const notificationTimeout = notificationAt.getTime() - new Date().getTime()
+            setTimeout(() => {
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification(title, payload);
+              });
+            }, notificationTimeout)
+            let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+            const pushKey = this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')
+            if (!pushNotification?.find((p: any) => p?.key == pushKey)) {
+              pushNotification.push({
+                key: pushKey,
+                title: title,
+                payload: payload,
+                notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+              })
+            }
+            localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
+          }
+        }
+      });
+    }
   }
 }

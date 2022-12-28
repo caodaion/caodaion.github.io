@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { EventRoutingModule } from './event-routing.module';
 import { EventListComponent } from './event-list/event-list.component';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
@@ -43,5 +43,6 @@ import { EventDetailsComponent } from './event-details/event-details.component';
     MatSelectModule,
     MatRadioModule
   ],
+  providers: [DatePipe],
 })
 export class EventModule {}

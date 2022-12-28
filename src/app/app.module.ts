@@ -19,6 +19,7 @@ import {FormsModule} from "@angular/forms";
 import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {ReleasedGuard} from "./shared/guards/released.guard";
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent],
@@ -40,7 +41,7 @@ import {ReleasedGuard} from "./shared/guards/released.guard";
     MatButtonModule,
     HttpClientModule
   ],
-  providers: [AuthGuard, ReleasedGuard],
+  providers: [AuthGuard, ReleasedGuard, DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

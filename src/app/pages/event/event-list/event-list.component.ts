@@ -6,6 +6,7 @@ import { EventService } from 'src/app/shared/services/event/event.service';
 import { CommonService } from "../../../shared/services/common/common.service";
 import { CONSTANT } from "../../../shared/constants/constants.constant";
 import { Title } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-event-list',
@@ -39,7 +40,8 @@ export class EventListComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private eventService: EventService,
     private titleSerVice: Title,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -80,7 +82,6 @@ export class EventListComponent implements OnInit {
     this.eventService.getEventList().subscribe((res: any) => {
       if (res) {
         this.eventList = res.data
-        this.getHappeningTuThoiEvents()
         this.getTodayTuThoiEvents()
         this.getLocalStorageEvents()
       }
@@ -105,27 +106,16 @@ export class EventListComponent implements OnInit {
 
   getHappeningTuThoiEvents() {
     this.happeningEvents.event = []
-    switch (this.time?.commonTime?.current?.key) {
-      case 'ty-2301':
-      case 'meo-0507':
-      case 'ngo-1113':
-      case 'dau-1719':
-        this.happeningEvents.event = [this.eventList.find((item: any) => {
-          return item.key === 'cung-tu-thoi'
-        })?.event?.find((item: any) => {
-          return item?.time?.length == 1 && item?.time.find((time: any) => time === this.time?.commonTime?.current?.key)
-        })]
-        if (this.happeningEvents.event[0]) {
-          this.happeningEvents.event[0].startTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(0, 2)}:00`
-          this.happeningEvents.event[0].endTime = `${this.happeningEvents.event[0]?.time[0].split('-')[1]?.slice(2, 4)}:00`
-        }
-        break;
-      default:
-        break;
-    }
+    console.log(this.upcomingEvents?.event);
+
+    this.happeningEvents.event = this.upcomingEvents?.event?.filter((item: any) => {
+      const currentTime = new Date()
+      return currentTime >= item?.startTime && currentTime <= item?.endTime
+    })
   }
 
   getTodayTuThoiEvents() {
+    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
     this.upcomingEvents.event = []
     this.upcomingEvents.event = this.eventList.find((item: any) => {
       return item.key === 'cung-tu-thoi'
@@ -133,8 +123,16 @@ export class EventListComponent implements OnInit {
     this.upcomingEvents.event.forEach((item: any) => {
       item.location = item?.locationType[0] === 'all' ? 'Điện thờ Đức Chí Tôn' : ''
       if (item?.time) {
-        item.startTime = `${item?.time[0].split('-')[1]?.slice(0, 2)}:00`
-        item.endTime = `${item?.time[0].split('-')[1]?.slice(2, 4)}:00`
+        const nowTime = new Date()
+        item.startTime = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        item.endTime = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(2, 4)}:00:00`)
+        const currentDate = new Date()
+        currentDate.setDate(currentDate.getDate())
+        currentDate.setHours(parseInt(item?.time[0].split('-')[1]?.slice(0, 2)))
+        currentDate.setMinutes(0)
+        currentDate.setSeconds(0)
+        currentDate.setMinutes(currentDate.getMinutes() - 10)
+        item.isActiveNotification = !!pushNotification?.find((p: any) => p.key == this.datePipe.transform(currentDate, 'yyyyMMddHHmmss')?.toString())
         switch (item?.time[0]) {
           case 'ty-2301':
             item.color = `#ffffff`
@@ -162,8 +160,25 @@ export class EventListComponent implements OnInit {
     //   return new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${item.endTime}:00`) > new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} 00:00:00`)
     // })
     this.upcomingEvents.event = this.upcomingEvents?.event?.filter((item: any) => {
-      return new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${item.endTime}:00`) > new Date()
+      return item.endTime > new Date()
     })
+    if (this.upcomingEvents?.event?.length == 1) {
+      if (this.upcomingEvents?.event[0]?.key === 'cung-thoi-dau') {
+        const find = (array: any, key: any) => {
+          let result: any;
+          array.some((o: any) => result = o.key === key ? o : find(o.event || [], key));
+          return result;
+        }
+        const nextEvent = find(this.eventList, 'cung-thoi-ty')
+        if (nextEvent) {
+          nextEvent.color = `#ffffff`
+          nextEvent.backgroundColor = `linear-gradient(#221f23, #19386d)`
+          nextEvent.endTime.setDate(nextEvent.endTime.getDate() + 1)
+          this.upcomingEvents?.event.push(find(this.eventList, 'cung-thoi-ty'))
+        }
+      }
+    }
+    this.getHappeningTuThoiEvents()
   }
 
   viewEvent(event?: any, index?: any) {
@@ -175,6 +190,46 @@ export class EventListComponent implements OnInit {
           relativeTo: this.route
         })
       }
+    }
+  }
+
+  clickEvent(event?: any, index?: any) {
+    if (event?.key) {
+      if (!this.upcomingEvents.showFullList && ((!event && !index) || (event && index !== 0))) {
+        this.upcomingEvents.showFullList = !this.upcomingEvents.showFullList
+      }
+    }
+  }
+
+  toggleNotificationSubscription(item: any, index: any) {
+    item.isActiveNotification = !item.isActiveNotification
+    if (item?.isActiveNotification == true && item?.startTime) {
+      const notificationAt = item?.startTime
+      notificationAt.setMinutes(item?.startTime?.getMinutes() - 10)
+      notificationAt.setSeconds(0)
+      // TODO: only use to test
+      // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
+      let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
+      let payload = {}
+      payload = {
+        body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
+        data: {
+          url: `${location.href}`,
+        },
+        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+      }
+      this.commonService.pushNotification(title, payload, notificationAt)
+      title = `Thông báo ${item?.name}`
+      payload = {
+        body: `Hãy ${item?.name} vào lúc ${item?.startTime}`,
+        data: {
+          url: `${location.href}/${item?.key}`,
+        },
+        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+      }
+      this.commonService.pushNotification(title, payload, notificationAt, false)
     }
   }
 }

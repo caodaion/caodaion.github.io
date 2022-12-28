@@ -63,7 +63,7 @@ export const MENU = [
         label: 'Sự kiện',
         icon: 'bookmark_border',
         fullAssess: true,
-        released: false,
+        released: true,
       },
       {
         key: 'lich.tinh-tuan-cuu',
