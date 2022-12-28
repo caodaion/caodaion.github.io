@@ -267,7 +267,7 @@ export class CommonService {
   }
 
   pushNotification(title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
-    if (notificationAt < new Date()) {
+    if (new Date(notificationAt) < new Date()) {
       // remove outdated notification
       let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
       pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'))), 1)

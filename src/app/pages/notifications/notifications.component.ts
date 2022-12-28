@@ -37,8 +37,8 @@ export class NotificationsComponent implements OnInit {
     tuThoiEvents?.filter((item: any) => {
       return this.pushNotificationsSettings?.tuThoi?.includes(item?.key)
     })?.forEach((item: any) => {
-      const title = `Thông báo ${item?.name}`
       const nowTime = new Date()
+      const title = `Thông báo ${item?.name}`
       const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
       notificationAt.setMinutes(notificationAt.getMinutes() - 10)
       const payload = {
@@ -50,11 +50,12 @@ export class NotificationsComponent implements OnInit {
         image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
       }
       Array.from(({ length: 7 }), (x, i) => {
+        notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
         pushNotification.push({
-          key: this.datePipe.transform(notificationAt.setDate(notificationAt.getDate() + i), 'yyyMMddHHmmss'),
+          key: this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'),
           title: title,
           payload: payload,
-          notificationAt: this.datePipe.transform(new Date(notificationAt.setDate(notificationAt.getDate() + i)), 'yyyy-MM-dd HH:mm:ss')
+          notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
         })
       })
     })

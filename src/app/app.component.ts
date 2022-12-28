@@ -122,11 +122,12 @@ export class AppComponent implements OnInit {
         image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
       }
       Array.from(({ length: 7 }), (x, i) => {
+        notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
         pushNotification.push({
-          key: this.datePipe.transform(notificationAt.setDate(notificationAt.getDate() + i), 'yyyMMddHHmmss'),
+          key: this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'),
           title: title,
           payload: payload,
-          notificationAt: this.datePipe.transform(new Date(notificationAt.setDate(notificationAt.getDate() + i)), 'yyyy-MM-dd HH:mm:ss')
+          notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
         })
       })
     })
