@@ -106,8 +106,6 @@ export class EventListComponent implements OnInit {
 
   getHappeningTuThoiEvents() {
     this.happeningEvents.event = []
-    console.log(this.upcomingEvents?.event);
-
     this.happeningEvents.event = this.upcomingEvents?.event?.filter((item: any) => {
       const currentTime = new Date()
       return currentTime >= item?.startTime && currentTime <= item?.endTime
@@ -162,20 +160,18 @@ export class EventListComponent implements OnInit {
     this.upcomingEvents.event = this.upcomingEvents?.event?.filter((item: any) => {
       return item.endTime > new Date()
     })
-    if (this.upcomingEvents?.event?.length == 1) {
-      if (this.upcomingEvents?.event[0]?.key === 'cung-thoi-dau') {
-        const find = (array: any, key: any) => {
-          let result: any;
-          array.some((o: any) => result = o.key === key ? o : find(o.event || [], key));
-          return result;
-        }
-        const nextEvent = find(this.eventList, 'cung-thoi-ty')
-        if (nextEvent) {
-          nextEvent.color = `#ffffff`
-          nextEvent.backgroundColor = `linear-gradient(#221f23, #19386d)`
-          nextEvent.endTime.setDate(nextEvent.endTime.getDate() + 1)
-          this.upcomingEvents?.event.push(find(this.eventList, 'cung-thoi-ty'))
-        }
+    if (this.upcomingEvents?.event?.length < 2) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key ? o : find(o.event || [], key));
+        return result;
+      }
+      const nextEvent = find(this.eventList, 'cung-thoi-ty')
+      if (nextEvent) {
+        nextEvent.color = `#ffffff`
+        nextEvent.backgroundColor = `linear-gradient(#221f23, #19386d)`
+        nextEvent.endTime.setDate(nextEvent.endTime.getDate() + 1)
+        this.upcomingEvents?.event.push(find(this.eventList, 'cung-thoi-ty'))
       }
     }
     this.getHappeningTuThoiEvents()
@@ -223,7 +219,7 @@ export class EventListComponent implements OnInit {
       this.commonService.pushNotification(title, payload, notificationAt)
       title = `Thông báo ${item?.name}`
       payload = {
-        body: `Hãy ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
+        body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
         data: {
           url: `${location.href}/${item?.key}`,
         },

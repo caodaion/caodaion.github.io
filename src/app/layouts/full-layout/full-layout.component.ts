@@ -18,6 +18,7 @@ import {ViewMissionService} from 'src/app/shared/services/view-mission/view-miss
 import {OfflineSnackbarComponent} from '../offline-snackbar/offline-snackbar.component';
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {MENU} from "../../shared/constants/menu.constant";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'full-layout',
@@ -59,7 +60,8 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     private swPush: SwPush,
     private appRef: ApplicationRef,
     private authService: AuthService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
   }
 
@@ -266,5 +268,9 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   logout() {
     localStorage.removeItem('token')
     location.reload()
+  }
+
+  goToScreen(path: any) {
+    this.router.navigate([path])
   }
 }
