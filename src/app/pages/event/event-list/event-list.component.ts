@@ -208,6 +208,7 @@ export class EventListComponent implements OnInit {
       notificationAt.setMinutes(item?.startTime?.getMinutes() - 10)
       notificationAt.setSeconds(0)
       // TODO: only use to test
+      // const notificationAt = new Date()
       // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
       let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
       let payload = {}
@@ -222,7 +223,7 @@ export class EventListComponent implements OnInit {
       this.commonService.pushNotification(title, payload, notificationAt)
       title = `Thông báo ${item?.name}`
       payload = {
-        body: `Hãy ${item?.name} vào lúc ${item?.startTime}`,
+        body: `Hãy ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
         data: {
           url: `${location.href}/${item?.key}`,
         },

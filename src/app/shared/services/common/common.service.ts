@@ -14,7 +14,7 @@ export class CommonService {
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe
-    ) { }
+  ) { }
 
   getTimeList(): Observable<any> {
     return this.http
@@ -267,8 +267,8 @@ export class CommonService {
   }
 
   pushNotification(title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
-    // remove outdated notification
     if (notificationAt < new Date()) {
+      // remove outdated notification
       let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
       pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'))), 1)
       localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
