@@ -13,7 +13,7 @@ import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-c
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 import { MatRippleModule } from '@angular/material/core';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { TinhTuanCuuComponent } from './tinh-tuan-cuu/tinh-tuan-cuu.component';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -21,6 +21,9 @@ import {MatTableModule} from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
@@ -45,7 +48,10 @@ import { MatRadioModule } from '@angular/material/radio';
     MatTableModule,
     MatInputModule,
     MatExpansionModule,
-    MatRadioModule
+    MatRadioModule,
+    MatMenuModule,
+    MatBottomSheetModule,
+    MatSnackBarModule
   ],
   providers: [DatePipe, DecimalPipe],
 })

@@ -1,6 +1,6 @@
 <div class="wrapper-container tuan-cuu-container">
   <h1 class="text-center tuan-cuu-title">Tính tuần cửu</h1>
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab label="Tính Tuần Cửu mới">
       <div class="form-group">
         <h3>Hãy chọn ngày từ trần</h3>
@@ -129,19 +129,40 @@
         </table>
       </div>
     </mat-tab>
-    <mat-tab *ngFor="let item of tuanCuuList; let index = index" [label]="item?.name">
+    <mat-tab
+      *ngFor="let item of tuanCuuList; let index = index"
+      [label]="item?.name"
+    >
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
           <h3>Lịch cúng cửu cho {{ item?.name }}</h3>
-          <button mat-icon-button (click)="deleteTuanCuu(item)"><mat-icon>delete</mat-icon></button>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              (click)="shareTuanCuu(item, shareBottomSheet)"
+            >
+              <mat-icon>share</mat-icon>Chia sẻ
+            </button>
+            <button mat-menu-item (click)="deleteTuanCuu(item)">
+              <mat-icon>delete</mat-icon>Xóa
+            </button>
+          </mat-menu>
         </div>
-        <p>Từ trần: ngày {{item?.date?.lunarDay}} tháng {{item?.date?.lunarMonth}} năm {{item?.date?.lunarYearName}}</p>
+        <p>
+          Từ trần: ngày {{ item?.date?.lunarDay }} tháng
+          {{ item?.date?.lunarMonth }} năm {{ item?.date?.lunarYearName }}
+        </p>
         <div *ngIf="item?.event?.length > 0">
           <table mat-table [dataSource]="item?.event">
             <!-- eventName Column -->
             <ng-container matColumnDef="eventName">
               <th mat-header-cell *matHeaderCellDef>Tuần</th>
-              <td mat-cell *matCellDef="let element">{{ element.eventName }}</td>
+              <td mat-cell *matCellDef="let element">
+                {{ element.eventName }}
+              </td>
             </ng-container>
             <!-- day Column -->
             <ng-container matColumnDef="day">
@@ -173,3 +194,26 @@
     </mat-tab>
   </mat-tab-group>
 </div>
+<ng-template #shareBottomSheet>
+  <h3>Chia sẻ lịch cúng Cửu của {{ sharedData?.data?.name }}</h3>
+  <div class="container-fluid">
+    <h4>Sao chép liên kết chia sẻ</h4>
+    <mat-form-field class="w-100">
+      <mat-label>Liên kết</mat-label>
+      <input
+        type="text"
+        matInput
+        [value]="sharedData?.location"
+        [disabled]="true"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        [matTooltip]="'Sao chép liên kết'"
+        (click)="copyLink()"
+      >
+        <mat-icon>link</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</ng-template>

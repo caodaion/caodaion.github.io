@@ -101,9 +101,6 @@ export class EventListComponent implements OnInit {
         this.todayEvents.event.push(foundEvent)
       }
     })
-    console.log(this.upcomingEvents);
-    console.log(this.todayEvents);
-
   }
 
   getHappeningTuThoiEvents() {

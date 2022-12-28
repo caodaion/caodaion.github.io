@@ -9,6 +9,7 @@ const routes: Routes = [
     children: [
       { path: '', component: LunarCalendarComponent },
       { path: 'tinh-tuan-cuu', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:token', component: TinhTuanCuuComponent },
     ],
   },
 ];

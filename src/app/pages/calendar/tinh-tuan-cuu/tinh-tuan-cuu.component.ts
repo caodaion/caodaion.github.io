@@ -5,6 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import * as CryptoJS from 'crypto-js';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -30,13 +34,21 @@ export class TinhTuanCuuComponent implements OnInit {
       sex: null
     }
   }
+  shareBottomSheetRef: any;
+  sharedData: any;
+  durationInSeconds = 3;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  selectedIndex = 0
 
   constructor(
     private calendarService: CalendarService,
     private datePipe: DatePipe,
     private commonService: CommonService,
     private route: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private matBottomSheet: MatBottomSheet,
+    private _snackBar: MatSnackBar
   ) {
 
   }
@@ -57,8 +69,19 @@ export class TinhTuanCuuComponent implements OnInit {
       if (param['y'] && param['m'] && param['d']) {
         this.calculateTuanCuu()
       }
+      if (param['share']) {
+        const jwtHelper = new JwtHelperService()
+        const decodedToken = jwtHelper.decodeToken(param['share'])
+        this.saveSharedEvent(decodedToken)
+      }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
+  }
+
+  saveSharedEvent(data: any) {
+    this.tuanCuuList.push(data)
+    this.storeTuanCuu()
+    this.selectedIndex = this.tuanCuuList.length
   }
 
   getLocalStorageTuanCuu() {
@@ -113,5 +136,56 @@ export class TinhTuanCuuComponent implements OnInit {
       this.tuanCuuList.splice(index, 1)
     }
     this.storeTuanCuu()
+  }
+
+  shareTuanCuu(item: any, shareBottomSheet: any) {
+
+    const base64url = (source: any) => {
+      // Encode in classical base64
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+
+      // Remove padding equal characters
+      encodedSource = encodedSource.replace(/=+$/, '');
+
+      // Replace characters according to base64url specifications
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+
+    const data = item;
+
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+
+    const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
+    console.log(signature);
+
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    this.sharedData = {
+      data: item,
+      token: token,
+      location: `${location.href}?share=${token}`
+    }
+    this.shareBottomSheetRef = this.matBottomSheet.open(shareBottomSheet);
+  }
+
+  copyLink() {
+    navigator.clipboard.writeText(this.sharedData.location);
+    this.shareBottomSheetRef.dismiss()
+    this._snackBar.open('Đã sao chép liên kết', 'Đóng', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 }

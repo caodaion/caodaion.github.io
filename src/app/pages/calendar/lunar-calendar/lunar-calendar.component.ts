@@ -6,7 +6,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
@@ -23,7 +23,7 @@ import { EventService } from 'src/app/shared/services/event/event.service';
     './styles/date-hours.date-calendar.lunar-calendar.component.scss',
     './styles/selected-month.lunar-calendar.component.scss',
     './styles/dates.selected-month.lunar-calendar.component.scss',
-  ],
+  ]
 })
 export class LunarCalendarComponent implements OnInit, AfterViewInit {
   selectedDate = new DateFormatModel();
