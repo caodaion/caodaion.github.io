@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {AuthService} from './shared/services/auth/auth.service';
-import {CommonService} from './shared/services/common/common.service';
-import {EventService} from './shared/services/event/event.service';
-import {KinhService} from './shared/services/kinh/kinh.service';
-import {Meta, Title} from "@angular/platform-browser";
-import {CONSTANT} from "./shared/constants/constants.constant";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from './shared/services/auth/auth.service';
+import { CommonService } from './shared/services/common/common.service';
+import { EventService } from './shared/services/event/event.service';
+import { KinhService } from './shared/services/kinh/kinh.service';
+import { Meta, Title } from "@angular/platform-browser";
+import { CONSTANT } from "./shared/constants/constants.constant";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import {CONSTANT} from "./shared/constants/constants.constant";
 })
 export class AppComponent implements OnInit {
   gettingCommonData: boolean = true
+  eventList = <any>[]
 
   constructor(
     private router: Router,
@@ -23,7 +25,8 @@ export class AppComponent implements OnInit {
     private eventService: EventService,
     private meta: Meta,
     private route: ActivatedRoute,
-    private title: Title
+    private title: Title,
+    private datePipe: DatePipe
   ) {
     router.events.subscribe((val: any) => {
       localStorage.setItem(
@@ -71,7 +74,9 @@ export class AppComponent implements OnInit {
                       this.eventService.getEventList().subscribe((res: any) => {
                         if (res) {
                           this.eventService.eventList = res.data;
+                          this.eventList = res.data;
                           this.gettingCommonData = false
+                          this.checkPushNotification()
                         }
                       });
                     }
@@ -82,25 +87,88 @@ export class AppComponent implements OnInit {
         })
       }
     });
-    this.checkPushNotification()
   }
 
   private addTag() {
-    this.meta.addTag({name: 'description', content: CONSTANT.page.description})
-    this.meta.addTag({name: 'title', content: CONSTANT.page.name})
-    this.meta.addTag({name: 'og:title', content: CONSTANT.page.name})
-    this.meta.addTag({name: 'og:url', content: location.origin})
-    this.meta.addTag({name: 'og:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png`})
-    this.meta.addTag({name: 'og:image:secure_url', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png`})
-    this.meta.addTag({name: 'image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png`})
-    this.meta.addTag({name: 'twitter:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png`})
+    this.meta.addTag({ name: 'description', content: CONSTANT.page.description })
+    this.meta.addTag({ name: 'title', content: CONSTANT.page.name })
+    this.meta.addTag({ name: 'og:title', content: CONSTANT.page.name })
+    this.meta.addTag({ name: 'og:url', content: location.origin })
+    this.meta.addTag({ name: 'og:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'og:image:secure_url', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'twitter:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
   }
 
   checkPushNotification() {
-    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-    pushNotification?.forEach((item: any) => {
-      console.log('Pushed Notification For: ', item);
-      this.commonService.pushNotification(item?.title, item?.payload, new Date(item?.notificationAt), false)
+    const pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}');
+    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]');
+    if (!pushNotificationsSettings.tuThoiDuration) {
+      pushNotificationsSettings.tuThoiDuration = 10
+    }
+    const tuThoiEvents = this.eventList.find((item: any) => {
+      return item.key === 'cung-tu-thoi'
+    })?.event?.filter((item: any) => item.key !== 'cung-tu-thoi')
+    tuThoiEvents?.filter((item: any) => {
+      return pushNotificationsSettings?.tuThoi?.includes(item?.key)
+    })?.forEach((item: any) => {
+      const nowTime = new Date()
+      const title = `Thông báo ${item?.name}`
+      const correctPush = () => {
+        const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        Array.from(({ length: 7 }), (x, i) => {
+          if (!pushNotification) {
+            pushNotification = []
+          }
+          const payload = {
+            body: `Đã đến ${this.datePipe.transform(notificationAt, 'HH:mm')}, là giờ ${item?.name}`,
+            data: {
+              url: `${location.origin}/lich/su-kien/cung-thoi-ty`
+            },
+            icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+            image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+          }
+          notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
+          pushNotification.push({
+            key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+            title: title,
+            payload: payload,
+            notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+          })
+        })
+      }
+      correctPush()
+      const awaitPush = () => {
+        const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
+        Array.from(({ length: 7 }), (x, i) => {
+          if (!pushNotification) {
+            pushNotification = []
+          }
+          const payload = {
+            body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
+            data: {
+              url: `${location.origin}/lich/su-kien/cung-thoi-ty`
+            },
+            icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+            image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+          }
+          notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
+          pushNotification?.push({
+            key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+            title: title,
+            payload: payload,
+            notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+          })
+        })
+      }
+      awaitPush()
     })
+    localStorage.setItem('pushNotification', JSON.stringify(''))
+    if (pushNotification?.length > 0) {
+      pushNotification?.forEach((item: any) => {
+        this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
+      })
+    }
   }
 }

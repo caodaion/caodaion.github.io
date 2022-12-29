@@ -24,6 +24,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
@@ -51,7 +52,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatRadioModule,
     MatMenuModule,
     MatBottomSheetModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    QRCodeModule
   ],
   providers: [DatePipe, DecimalPipe],
 })

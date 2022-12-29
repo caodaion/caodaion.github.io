@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <h1>Cài đặt thông báo</h1>
+  <mat-accordion multi>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title> Cúng tứ thời </mat-panel-title>
+        <mat-panel-description>
+          Chỉnh sửa thông báo cúng tứ thời
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="container-fluid">
+        <mat-form-field appearance="fill" class="form-control">
+          <mat-label>Báo trước (phút)</mat-label>
+          <input
+            type="number"
+            matInput
+            [(ngModel)]="pushNotificationsSettings.tuThoiDuration"
+            (change)="changeDuration()"
+          />
+        </mat-form-field>
+      </div>
+      <mat-selection-list
+        #tuThoi
+        [(ngModel)]="pushNotificationsSettings.tuThoi"
+        (selectionChange)="selectionChange()"
+      >
+        <mat-list-option *ngFor="let item of tuthoiEvents" [value]="item?.key">
+          <span matListItemTitle>{{ item?.name }}</span>
+          <span matListItemLine
+            >{{ item?.startTime }} - {{ item?.endTime }}</span
+          >
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

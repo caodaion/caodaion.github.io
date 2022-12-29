@@ -24,6 +24,11 @@ const routes: Routes = [
           import('../../modules/auth/auth.module').then((m) => m.AuthModule),
       },
       {
+        path: 'cai-dat',
+        loadChildren: () =>
+          import('../../modules/settings/settings.module').then((m) => m.SettingsModule),
+      },
+      {
         path: 'lich',
         loadChildren: () =>
           import('../../modules/calendar/calendar.module').then(
