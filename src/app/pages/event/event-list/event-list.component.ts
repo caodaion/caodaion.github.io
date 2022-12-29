@@ -130,7 +130,7 @@ export class EventListComponent implements OnInit {
         currentDate.setMinutes(0)
         currentDate.setSeconds(0)
         currentDate.setMinutes(currentDate.getMinutes() - 10)
-        item.isActiveNotification = !!pushNotification?.find((p: any) => p.key == this.datePipe.transform(currentDate, 'yyyyMMddHHmmss')?.toString())
+        item.isActiveNotification = !!pushNotification?.find((p: any) => p.key == `${item?.key}.${this.datePipe.transform(currentDate, 'yyyyMMddHHmmss')?.toString()}`)
         switch (item?.time[0]) {
           case 'ty-2301':
             item.color = `#ffffff`
@@ -216,7 +216,9 @@ export class EventListComponent implements OnInit {
         icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
         image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
       }
-      this.commonService.pushNotification(title, payload, notificationAt)
+      let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
+      this.commonService.pushNotification(key, title, payload, notificationAt)
+      key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
       title = `Thông báo ${item?.name}`
       payload = {
         body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
@@ -226,7 +228,7 @@ export class EventListComponent implements OnInit {
         icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
         image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
       }
-      this.commonService.pushNotification(title, payload, notificationAt, false)
+      this.commonService.pushNotification(key, title, payload, notificationAt, false)
     }
   }
 }

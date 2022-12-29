@@ -266,11 +266,14 @@ export class CommonService {
     return slug
   }
 
-  pushNotification(title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
+  pushNotification(key: any, title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
     if (new Date(notificationAt) < new Date()) {
       // remove outdated notification
-      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-      pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'))), 1)
+      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '')
+      if (!pushNotification) {
+        pushNotification = []
+      }
+      pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == key)), 1)
       localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
     } else {
       Notification.requestPermission((result) => {
@@ -287,10 +290,12 @@ export class CommonService {
               });
             }, notificationTimeout)
             let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-            const pushKey = this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')
-            if (!pushNotification?.find((p: any) => p?.key == pushKey)) {
+            if (!pushNotification) {
+              pushNotification = []
+            }
+            if (!pushNotification?.find((p: any) => p?.key == key)) {
               pushNotification.push({
-                key: pushKey,
+                key: key,
                 title: title,
                 payload: payload,
                 notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')

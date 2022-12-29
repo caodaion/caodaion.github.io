@@ -101,39 +101,82 @@ export class AppComponent implements OnInit {
   }
 
   checkPushNotification() {
-    const pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-    const pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}')
+    const pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}');
+    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]');
+    if (!pushNotificationsSettings.tuThoiDuration) {
+      pushNotificationsSettings.tuThoiDuration = 10
+    }
     const tuThoiEvents = this.eventList.find((item: any) => {
       return item.key === 'cung-tu-thoi'
     })?.event?.filter((item: any) => item.key !== 'cung-tu-thoi')
     tuThoiEvents?.filter((item: any) => {
       return pushNotificationsSettings?.tuThoi?.includes(item?.key)
     })?.forEach((item: any) => {
-      const title = `Thông báo ${item?.name}`
       const nowTime = new Date()
-      const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
-      notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings.tuThoiDuration || 10))
-      const payload = {
-        body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
-        data: {
-          url: `${location.origin}/lich/su-kien/cung-thoi-ty`
-        },
-        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-      }
-      Array.from(({ length: 7 }), (x, i) => {
-        notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
-        pushNotification.push({
-          key: this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss'),
-          title: title,
-          payload: payload,
-          notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+      const title = `Thông báo ${item?.name}`
+      const correctPush = () => {
+        const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        Array.from(({ length: 7 }), (x, i) => {
+          if (!pushNotification) {
+            pushNotification = []
+          }
+          const payload = {
+            body: `Đã đến ${this.datePipe.transform(notificationAt, 'HH:mm')}, là giờ ${item?.name}`,
+            data: {
+              url: `${location.origin}/lich/su-kien/cung-thoi-ty`
+            },
+            icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+            image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+          }
+          notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
+          pushNotification.push({
+            key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+            title: title,
+            payload: payload,
+            notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+          })
         })
+      }
+      correctPush()
+      const awaitPush = () => {
+        const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        Array.from(({ length: 7 }), (x, i) => {
+          if (!pushNotification) {
+            pushNotification = []
+          }
+          const payload = {
+            body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
+            data: {
+              url: `${location.origin}/lich/su-kien/cung-thoi-ty`
+            },
+            icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+            image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+          }
+          notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
+          notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
+          pushNotification?.push({
+            key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+            title: title,
+            payload: payload,
+            notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
+          })
+        })
+      }
+      awaitPush()
+    })
+    localStorage.setItem('pushNotification', JSON.stringify(''))
+    if (pushNotification?.length > 0) {
+      pushNotification?.forEach((item: any) => {
+        if (item?.key?.includes('cung-thoi')) {
+          if (pushNotificationsSettings.tuThoi.includes((item?.key?.split('.')[0]))) {
+            // console.log('Pushed Notification For: ', item);
+            this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
+          }
+        } else {
+          // console.log('Pushed Notification For: ', item);
+          this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
+        }
       })
-    })
-    pushNotification?.forEach((item: any) => {
-      console.log('Pushed Notification For: ', item);
-      this.commonService.pushNotification(item?.title, item?.payload, new Date(item?.notificationAt), false)
-    })
+    }
   }
 }
