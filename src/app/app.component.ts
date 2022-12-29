@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
       const title = `Thông báo ${item?.name}`
       const nowTime = new Date()
       const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
-      notificationAt.setMinutes(notificationAt.getMinutes() - 10)
+      notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings.tuThoiDuration || 10))
       const payload = {
         body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
         data: {

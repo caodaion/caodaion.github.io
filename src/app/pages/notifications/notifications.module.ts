@@ -5,6 +5,8 @@ import { NotificationsRoutingModule } from './notifications-routing.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -17,7 +19,9 @@ import { FormsModule } from '@angular/forms';
     NotificationsRoutingModule,
     MatExpansionModule,
     MatListModule,
-    FormsModule
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class NotificationsModule { }

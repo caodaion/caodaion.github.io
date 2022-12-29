@@ -8,6 +8,17 @@
           Chỉnh sửa thông báo cúng tứ thời
         </mat-panel-description>
       </mat-expansion-panel-header>
+      <div class="container-fluid">
+        <mat-form-field appearance="fill">
+          <mat-label>Báo trước (phút)</mat-label>
+          <input
+            type="number"
+            matInput
+            [(ngModel)]="pushNotificationsSettings.tuThoiDuration"
+            (change)="selectionChange()"
+          />
+        </mat-form-field>
+      </div>
       <mat-selection-list
         #tuThoi
         [(ngModel)]="pushNotificationsSettings.tuThoi"

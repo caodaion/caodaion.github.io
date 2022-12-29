@@ -9,6 +9,11 @@ const routes: Routes = [
     component: SettingsComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'thong-bao',
+        pathMatch: 'full'
+      },
+      {
         path: 'thong-bao',
         loadChildren: () => import('../../pages/notifications/notifications.module').then((m) => m.NotificationsModule),
       },

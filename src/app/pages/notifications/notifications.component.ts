@@ -13,7 +13,8 @@ export class NotificationsComponent implements OnInit {
   eventList = <any>[]
   tuthoiEvents = <any>[]
   pushNotificationsSettings = {
-    tuThoi: <any>[]
+    tuThoi: <any>[],
+    tuThoiDuration: 10
   }
 
   constructor(
@@ -31,6 +32,9 @@ export class NotificationsComponent implements OnInit {
   getNotificationSettings() {
     const pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
     this.pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}')
+    if (!this.pushNotificationsSettings.tuThoiDuration) {
+      this.pushNotificationsSettings.tuThoiDuration = 10
+    }
     const tuThoiEvents = this.eventList.find((item: any) => {
       return item.key === 'cung-tu-thoi'
     })?.event?.filter((item: any) => item.key !== 'cung-tu-thoi')
@@ -40,7 +44,7 @@ export class NotificationsComponent implements OnInit {
       const nowTime = new Date()
       const title = `Thông báo ${item?.name}`
       const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
-      notificationAt.setMinutes(notificationAt.getMinutes() - 10)
+      notificationAt.setMinutes(notificationAt.getMinutes() - (this.pushNotificationsSettings?.tuThoiDuration || 10))
       const payload = {
         body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
         data: {
