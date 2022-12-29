@@ -269,7 +269,7 @@ export class CommonService {
   pushNotification(key: any, title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
     if (new Date(notificationAt) < new Date()) {
       // remove outdated notification
-      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '')
+      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
       if (!pushNotification) {
         pushNotification = []
       }

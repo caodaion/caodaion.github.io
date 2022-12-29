@@ -97,6 +97,7 @@ export class NotificationsComponent implements OnInit {
       correctPush()
       const awaitPush = () => {
         const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        notificationAt.setMinutes(notificationAt.getMinutes() - (this.pushNotificationsSettings?.tuThoiDuration || 10))
         Array.from(({ length: 7 }), (x, i) => {
           if (!pushNotification) {
             pushNotification = []
@@ -109,7 +110,6 @@ export class NotificationsComponent implements OnInit {
             icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
             image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
           }
-          notificationAt.setMinutes(notificationAt.getMinutes() - (this.pushNotificationsSettings?.tuThoiDuration || 10))
           notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
           pushNotification?.push({
             key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
@@ -125,7 +125,7 @@ export class NotificationsComponent implements OnInit {
     if (pushNotification?.length > 0) {
       pushNotification?.forEach((item: any) => {
         if (item?.key?.includes('cung-thoi')) {
-          if (this.pushNotificationsSettings.tuThoi.includes((item?.key?.split('.')[0]))) {
+          if (this.pushNotificationsSettings.tuThoi?.includes((item?.key?.split('.')[0]))) {
             // console.log('Pushed Notification For: ', item);
             this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
           }
@@ -144,6 +144,6 @@ export class NotificationsComponent implements OnInit {
   }
 
   changeDuration() {
-
+    this.selectionChange()
   }
 }

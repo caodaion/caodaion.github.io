@@ -114,6 +114,9 @@ export class EventListComponent implements OnInit {
 
   getTodayTuThoiEvents() {
     let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+    if (!pushNotification) {
+      pushNotification = []
+    }
     this.upcomingEvents.event = []
     this.upcomingEvents.event = this.eventList.find((item: any) => {
       return item.key === 'cung-tu-thoi'
@@ -198,37 +201,72 @@ export class EventListComponent implements OnInit {
   }
 
   toggleNotificationSubscription(item: any, index: any) {
+    const pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}');
     item.isActiveNotification = !item.isActiveNotification
     if (item?.isActiveNotification == true && item?.startTime) {
-      const notificationAt = item?.startTime
-      notificationAt.setMinutes(item?.startTime?.getMinutes() - 10)
-      notificationAt.setSeconds(0)
-      // TODO: only use to test
-      // const notificationAt = new Date()
-      // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
-      let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
-      let payload = {}
-      payload = {
-        body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
-        data: {
-          url: `${location.href}`,
-        },
-        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+      const prevNotification = () => {
+        const notificationAt = item?.startTime
+        notificationAt.setMinutes(item?.startTime?.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
+        notificationAt.setSeconds(0)
+        // TODO: only use to test
+        // const notificationAt = new Date()
+        // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
+        let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
+        let payload = {}
+        payload = {
+          body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
+          data: {
+            url: `${location.href}`,
+          },
+          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+        }
+        let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
+        this.commonService.pushNotification(key, title, payload, notificationAt)
+        key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
+        title = `Thông báo ${item?.name}`
+        payload = {
+          body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
+          data: {
+            url: `${location.href}/${item?.key}`,
+          },
+          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+        }
+        this.commonService.pushNotification(key, title, payload, notificationAt, false)
       }
-      let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-      this.commonService.pushNotification(key, title, payload, notificationAt)
-      key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-      title = `Thông báo ${item?.name}`
-      payload = {
-        body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
-        data: {
-          url: `${location.href}/${item?.key}`,
-        },
-        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+      prevNotification()
+      const correntNotification = () => {
+        const notificationAt = new Date(`${this.datePipe.transform(new Date(), 'yyyy-MM-dd')} ${this.datePipe.transform(item?.startTime, 'HH:mm')}:00`)
+        notificationAt.setMinutes(item?.startTime?.getMinutes() + (pushNotificationsSettings?.tuThoiDuration || 10))
+        notificationAt.setSeconds(0)
+        // TODO: only use to test
+        // const notificationAt = new Date()
+        // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
+        let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
+        let payload = {}
+        payload = {
+          body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
+          data: {
+            url: `${location.href}`,
+          },
+          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+        }
+        let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
+        key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
+        title = `Thông báo ${item?.name}`
+        payload = {
+          body: `Đã đến ${this.datePipe.transform(notificationAt, 'HH:mm')}, là giờ ${item?.name}`,
+          data: {
+            url: `${location.href}/${item?.key}`,
+          },
+          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+        }
+        this.commonService.pushNotification(key, title, payload, notificationAt, false)
       }
-      this.commonService.pushNotification(key, title, payload, notificationAt, false)
+      correntNotification()
     }
   }
 }

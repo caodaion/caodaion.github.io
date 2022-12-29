@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonService } from './shared/services/common/common.service';
 import { EventService } from './shared/services/event/event.service';
@@ -140,6 +140,7 @@ export class AppComponent implements OnInit {
       correctPush()
       const awaitPush = () => {
         const notificationAt = new Date(`${this.datePipe.transform(nowTime, 'yyyy-MM-dd')} ${item?.time[0].split('-')[1]?.slice(0, 2)}:00:00`)
+        notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
         Array.from(({ length: 7 }), (x, i) => {
           if (!pushNotification) {
             pushNotification = []
@@ -152,7 +153,6 @@ export class AppComponent implements OnInit {
             icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
             image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
           }
-          notificationAt.setMinutes(notificationAt.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
           notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
           pushNotification?.push({
             key: `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
@@ -167,15 +167,7 @@ export class AppComponent implements OnInit {
     localStorage.setItem('pushNotification', JSON.stringify(''))
     if (pushNotification?.length > 0) {
       pushNotification?.forEach((item: any) => {
-        if (item?.key?.includes('cung-thoi')) {
-          if (pushNotificationsSettings.tuThoi.includes((item?.key?.split('.')[0]))) {
-            // console.log('Pushed Notification For: ', item);
-            this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
-          }
-        } else {
-          // console.log('Pushed Notification For: ', item);
-          this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
-        }
+        this.commonService.pushNotification(item?.key, item?.title, item?.payload, new Date(item?.notificationAt), false)
       })
     }
   }
