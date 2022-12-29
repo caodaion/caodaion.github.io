@@ -68,19 +68,30 @@ export class TinhTuanCuuComponent implements OnInit {
       }
       if (param['y'] && param['m'] && param['d']) {
         this.calculateTuanCuu()
-      }
-      if (param['share']) {
-        const jwtHelper = new JwtHelperService()
-        const decodedToken = jwtHelper.decodeToken(param['share'])
-        this.saveSharedEvent(decodedToken)
+        if (param['details']) {
+          const jwtHelper = new JwtHelperService()
+          const decodedToken = jwtHelper.decodeToken(param['details'])?.split('+')
+          this.selectedDate = {
+            lunarDay: parseInt(param['d']),
+            lunarMonth: parseInt(param['m']),
+            lunarYear: parseInt(param['y']),
+            lunarLeap: 0,
+            lunarYearName: this.yearOptions?.find((item: any) => item?.solar == parseInt(param['y']))?.lunar
+          }
+          this.calculatedTuanCuu.details = {
+            name: decodedToken[0],
+            age: decodedToken[1],
+            sex: decodedToken[2]
+          }
+          this.saveSharedEvent()
+        }
       }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
   }
 
-  saveSharedEvent(data: any) {
-    this.tuanCuuList.push(data)
-    this.storeTuanCuu()
+  saveSharedEvent() {
+    this.saveTuanCuu()
     this.selectedIndex = this.tuanCuuList.length
   }
 
@@ -125,6 +136,17 @@ export class TinhTuanCuuComponent implements OnInit {
 
   storeTuanCuu() {
     localStorage.setItem('tuanCuu', JSON.stringify(this.tuanCuuList))
+    this.selectedDate = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+    this.calculatedTuanCuu = {
+      key: '',
+      event: <any>[],
+      date: <any>Object,
+      details: {
+        name: '',
+        age: null,
+        sex: null
+      }
+    }
     this.getLocalStorageTuanCuu()
   }
 
@@ -152,7 +174,7 @@ export class TinhTuanCuuComponent implements OnInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = item;
+    const data = `${item?.details?.name}+${item?.details?.age}+${item?.details?.sex}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
@@ -161,8 +183,9 @@ export class TinhTuanCuuComponent implements OnInit {
     this.sharedData = {
       data: item,
       token: token,
-      location: `${location.href}?share=${token}`
+      location: `${location.href}?y=${item?.date?.lunarYear}&m=${item?.date?.lunarMonth}&d=${item?.date?.lunarDay}&details=${token}`
     }
+
     this.shareBottomSheetRef = this.matBottomSheet.open(shareBottomSheet);
   }
 
@@ -184,6 +207,42 @@ export class TinhTuanCuuComponent implements OnInit {
       default:
         this.copyLink()
         break;
+    }
+  }
+
+  private convertBase64ToBlob(Base64Image: string) {
+    // split into two parts
+    const parts = Base64Image.split(";base64,")
+    // hold the content type
+    const imageType = parts[0].split(":")[1]
+    // decode base64 string
+    const decodedData = window.atob(parts[1])
+    // create unit8array of size same as row data length
+    const uInt8Array = new Uint8Array(decodedData.length)
+    // insert all character code into uint8array
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
+    }
+    // return blob image after conversion
+    return new Blob([uInt8Array], { type: imageType })
+  }
+
+  saveAsImage(parent: any) {
+    let parentElement = null
+    parentElement = parent.qrcElement.nativeElement
+      .querySelector("canvas")
+      .toDataURL("image/png")
+    if (parentElement) {
+      // converts base 64 encoded image to blobData
+      let blobData = this.convertBase64ToBlob(parentElement)
+      // saves as image
+      const blob = new Blob([blobData], { type: "image/png" })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      // name of the file
+      link.download = 'lich-cung-cuu'
+      link.click()
     }
   }
 }

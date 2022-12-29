@@ -215,6 +215,28 @@
         <mat-icon>link</mat-icon>
       </button>
     </mat-form-field>
+    <div class="qr-area">
+      <qrcode
+        #parent
+        [qrdata]="sharedData?.location"
+        [width]="300"
+        [imageHeight]="75"
+        [imageWidth]="75"
+        [cssClass]="'text-center'"
+        [errorCorrectionLevel]="'M'"
+        [colorDark]="'#000000ff'"
+        [colorLight]="'#ffffffff'"
+        [elementType]="'canvas'"
+        [margin]="4"
+        [scale]="1"
+        [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+      ></qrcode>
+      <div class="text-center">
+        <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
+          <mat-icon>download</mat-icon> Tải Mã QR chia sẻ
+        </button>
+      </div>
+    </div>
     <mat-divider></mat-divider>
     <mat-nav-list>
       <a mat-list-item (click)="shareTo('facebook')">
