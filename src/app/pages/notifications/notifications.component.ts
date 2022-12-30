@@ -14,7 +14,8 @@ export class NotificationsComponent implements OnInit {
   tuthoiEvents = <any>[]
   pushNotificationsSettings = {
     tuThoi: <any>[],
-    tuThoiDuration: 10
+    tuThoiDuration: 10,
+    studyDuration: 10
   }
 
   constructor(
@@ -33,6 +34,7 @@ export class NotificationsComponent implements OnInit {
     const pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
     this.pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}')
     this.tuThoiUpdate()
+    this.studyUpdate()
   }
 
   getEvents() {
@@ -145,5 +147,14 @@ export class NotificationsComponent implements OnInit {
 
   changeDuration() {
     this.selectionChange()
+  }
+
+
+
+  studyUpdate = () => {
+    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+    if (!this.pushNotificationsSettings.studyDuration) {
+      this.pushNotificationsSettings.studyDuration = 10
+    }
   }
 }

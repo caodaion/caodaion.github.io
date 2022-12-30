@@ -32,5 +32,25 @@
         </mat-list-option>
       </mat-selection-list>
     </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title> Học đạo </mat-panel-title>
+        <mat-panel-description>
+          Học giáo lý, đọc Thánh Ngôn hiệp tuyển, Tân Luật, Pháp Chánh Truyền,
+          ...
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="container-fluid">
+        <mat-form-field appearance="fill" class="form-control">
+          <mat-label>Báo trước (phút)</mat-label>
+          <input
+            type="number"
+            matInput
+            [(ngModel)]="pushNotificationsSettings.studyDuration"
+            (change)="changeDuration()"
+          />
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
   </mat-accordion>
 </div>

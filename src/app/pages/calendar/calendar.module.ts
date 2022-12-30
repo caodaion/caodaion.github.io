@@ -22,9 +22,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { QRCodeModule } from 'angularx-qrcode';
+import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
 
 @NgModule({
   declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
@@ -51,9 +50,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatExpansionModule,
     MatRadioModule,
     MatMenuModule,
-    MatBottomSheetModule,
     MatSnackBarModule,
-    QRCodeModule
+    ButtonShareModule
   ],
   providers: [DatePipe, DecimalPipe],
 })

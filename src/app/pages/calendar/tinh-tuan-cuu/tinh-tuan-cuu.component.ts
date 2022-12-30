@@ -36,9 +36,6 @@ export class TinhTuanCuuComponent implements OnInit {
   }
   shareBottomSheetRef: any;
   sharedData: any;
-  durationInSeconds = 3;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   selectedIndex = 0
 
   constructor(
@@ -99,7 +96,11 @@ export class TinhTuanCuuComponent implements OnInit {
     this.tuanCuuList = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
     this.tuanCuuList?.forEach((item: any) => {
       item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
+      this.generateShareInformation(item)
+      item.title = `Chia sẻ lịch cúng cửu của ${item.name}`
     })
+    console.log(this.tuanCuuList);
+
   }
 
   getYearOptions() {
@@ -160,7 +161,7 @@ export class TinhTuanCuuComponent implements OnInit {
     this.storeTuanCuu()
   }
 
-  shareTuanCuu(item: any, shareBottomSheet: any) {
+  generateShareInformation(item: any) {
     const base64url = (source: any) => {
       let encodedSource = CryptoJS.enc.Base64.stringify(source);
       encodedSource = encodedSource.replace(/=+$/, '');
@@ -180,69 +181,7 @@ export class TinhTuanCuuComponent implements OnInit {
     const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
-    this.sharedData = {
-      data: item,
-      token: token,
-      location: `${location.href}?y=${item?.date?.lunarYear}&m=${item?.date?.lunarMonth}&d=${item?.date?.lunarDay}&details=${token}`
-    }
-
-    this.shareBottomSheetRef = this.matBottomSheet.open(shareBottomSheet);
-  }
-
-  copyLink() {
-    navigator.clipboard.writeText(this.sharedData.location);
-    this.shareBottomSheetRef.dismiss()
-    this._snackBar.open('Đã sao chép liên kết', 'Đóng', {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-  }
-
-  shareTo(to: any) {
-    switch (to) {
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.sharedData.location)}`)
-        break;
-      default:
-        this.copyLink()
-        break;
-    }
-  }
-
-  private convertBase64ToBlob(Base64Image: string) {
-    // split into two parts
-    const parts = Base64Image.split(";base64,")
-    // hold the content type
-    const imageType = parts[0].split(":")[1]
-    // decode base64 string
-    const decodedData = window.atob(parts[1])
-    // create unit8array of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length)
-    // insert all character code into uint8array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i)
-    }
-    // return blob image after conversion
-    return new Blob([uInt8Array], { type: imageType })
-  }
-
-  saveAsImage(parent: any) {
-    let parentElement = null
-    parentElement = parent.qrcElement.nativeElement
-      .querySelector("canvas")
-      .toDataURL("image/png")
-    if (parentElement) {
-      // converts base 64 encoded image to blobData
-      let blobData = this.convertBase64ToBlob(parentElement)
-      // saves as image
-      const blob = new Blob([blobData], { type: "image/png" })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      // name of the file
-      link.download = 'lich-cung-cuu'
-      link.click()
-    }
+    item.token = token
+    item.location = `${location.href}?y=${item?.date?.lunarYear}&m=${item?.date?.lunarMonth}&d=${item?.date?.lunarDay}&details=${token}`
   }
 }
