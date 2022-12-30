@@ -73,7 +73,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   contentToContent(event: any) {
-    if (event?.audio?.start) {
+    if (this.audioPlayer && event?.audio?.start) {
       this.audioPlayer.nativeElement.currentTime = event.audio.start
       const currentTime = this.audioPlayer.nativeElement.currentTime
       navigator.clipboard.writeText(currentTime)

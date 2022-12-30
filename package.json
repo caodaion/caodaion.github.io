@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start-pwa": "ng build && http-server -p 8080 -c-1 dist/pwa",
-    "gh-pages-build": "ng deploy --dry-run"
+    "gh-pages-build": "ng deploy --dry-run",
+    "deploy-to-firebase": "ng deploy --dry-run && cd dist/pwa && copy index.html 404.html && firebase deploy"
   },
   "private": true,
   "dependencies": {

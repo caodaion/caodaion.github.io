@@ -19,8 +19,10 @@ export class ButtonShareComponent {
 
   @HostListener('document:click', ['$event'])
   onClick(event: any) {
-    if (this.eRef.nativeElement.contains(event.target)) {
-      this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
+    if (this.eRef) {
+      if (this.eRef.nativeElement.contains(event.target)) {
+        this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
+      }
     }
   }
 
