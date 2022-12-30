@@ -119,7 +119,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://caodaion-5f560.web.app"
+            "baseHref": "https://caodaion.github.io"
           }
         }
       }

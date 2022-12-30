@@ -4,8 +4,8 @@
   "theme_color": "#eaf1fb",
   "background_color": "#eaf1fb",
   "display": "standalone",
-  "scope": "https://caodaion-5f560.web.app/",
-  "start_url": "https://caodaion-5f560.web.app",
+  "scope": "https://caodaion.com/",
+  "start_url": "https://caodaion.com",
   "icons": [
     {
       "src": "assets/icons/windows11/SmallTile.scale-100.png",
