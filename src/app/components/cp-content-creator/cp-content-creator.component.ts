@@ -82,10 +82,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         content: this.data.key,
         currentTime: currentTime
       }))
-      localStorage.setItem('study', JSON.stringify({
-        content: this.data.key,
-        location: location.href
-      }))
     } else {
       // this.audioPlayer.nativeElement.pause()
     }
@@ -146,10 +142,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
                   content: this.data.key,
                   currentTime: currentTime
                 }))
-                localStorage.setItem('study', JSON.stringify({
-                  content: this.data.key,
-                  location: location.href
-                }))
               }
             }
           }
@@ -159,10 +151,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           localStorage.setItem('audio', JSON.stringify({
             content: this.data.key,
             currentTime: currentTime
-          }))
-          localStorage.setItem('study', JSON.stringify({
-            content: this.data.key,
-            location: location.href
           }))
           if (JSON.parse(localStorage.getItem('audio') || '').currentTime == this.data.content[this.data.content.length - 1].audio.end) {
             this.nextContent.emit()
@@ -175,10 +163,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           localStorage.setItem('audio', JSON.stringify({
             content: this.data.key,
             currentTime: currentTime
-          }))
-          localStorage.setItem('study', JSON.stringify({
-            content: this.data.key,
-            location: location.href
           }))
         })
       }
