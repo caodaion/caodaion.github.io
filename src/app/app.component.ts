@@ -8,6 +8,7 @@ import { Meta, Title } from "@angular/platform-browser";
 import { CONSTANT } from "./shared/constants/constants.constant";
 import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
+import { TnhtService } from './shared/services/tnht/tnht.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,8 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private title: Title,
     private datePipe: DatePipe,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private tnhtService: TnhtService,
   ) {
     router.events.subscribe((val: any) => {
       localStorage.setItem(
@@ -78,7 +80,12 @@ export class AppComponent implements OnInit {
                           this.eventService.eventList = res.data;
                           this.eventList = res.data;
                           this.gettingCommonData = false
-                          this.checkPushNotification()
+                          this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
+                            if (res.data) {
+                              this.tnhtService.tableContent = res.data
+                              this.checkPushNotification()
+                            }
+                          })
                         }
                       });
                     }

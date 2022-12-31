@@ -6,6 +6,7 @@ import { API_PATH } from '../../constants/api.constant';
   providedIn: 'root',
 })
 export class TnhtService {
+  tableContent: any;
   constructor(private http: HttpClient) {}
 
   getTNHTByPath(path: any): Observable<any> {

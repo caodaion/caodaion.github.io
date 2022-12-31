@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import {
   MatLegacySnackBar as MatSnackBar,
   MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
   MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition
 } from "@angular/material/legacy-snack-bar";
 import { Router } from '@angular/router';
-import {AuthService} from "../../shared/services/auth/auth.service";
+import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'cp-creator-block',
@@ -40,7 +40,7 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
     private eRef: ElementRef,
     public authService: AuthService,
     private router: Router
-    ) {
+  ) {
   }
 
   ngOnChanges() {
@@ -53,7 +53,7 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
   getLink(data: any, redirect: boolean = false) {
     if (redirect) {
       if (data?.attrs?.hash?.includes('#')) {
-        this.router.navigate([data?.attrs?.pathname], {fragment: data?.attrs?.hash.replace('#', '')})
+        this.router.navigate([data?.attrs?.pathname], { fragment: data?.attrs?.hash.replace('#', '') })
       } else {
         this.router.navigate([`${data?.attrs?.pathname}${data?.attrs?.hash || ''}`])
       }
@@ -82,6 +82,10 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
         content: this.data.key,
         currentTime: currentTime
       }))
+      localStorage.setItem('study', JSON.stringify({
+        content: this.data.key,
+        location: location.href
+      }))
     } else {
       player.pause()
       player.controls = false
@@ -90,6 +94,10 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
       localStorage.setItem('audio', JSON.stringify({
         content: this.data.key,
         currentTime: currentTime
+      }))
+      localStorage.setItem('study', JSON.stringify({
+        content: this.data.key,
+        location: location.href
       }))
     }
   }
@@ -128,6 +136,10 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
           localStorage.setItem('audio', JSON.stringify({
             content: this.data.key,
             currentTime: currentTime
+          }))
+          localStorage.setItem('study', JSON.stringify({
+            content: this.data.key,
+            location: location.href
           }))
         })
       } else {

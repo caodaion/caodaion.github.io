@@ -30,7 +30,6 @@ export class NotificationsComponent implements OnInit {
 
   changeSetting() {
     const settings = this.pushNotificationsSettings;
-
     this.notificationsService.updatePushSettings(settings)
   }
 }
