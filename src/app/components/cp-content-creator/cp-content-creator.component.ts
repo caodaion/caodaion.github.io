@@ -14,6 +14,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Output() nextContent = new EventEmitter();
   isShowController: boolean = false;
   isAutoPlay: boolean = false;
+  audioReadyToPlay: boolean = false;
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
@@ -21,7 +22,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private route: ActivatedRoute
-    ) {
+  ) {
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
@@ -92,6 +93,27 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         if (query['autoplay']) {
           this.audioPlayer.nativeElement.autoplay = true
         }
+      })
+      this.audioPlayer.nativeElement.addEventListener('loadstart', (event: any) => {
+        this.audioReadyToPlay = false
+      })
+      this.audioPlayer.nativeElement.addEventListener('loadeddata', (event: any) => {
+        this.audioReadyToPlay = true
+        this.audioPlayer.nativeElement.controls = true
+        this.route.queryParams.subscribe((query) => {
+          if (query['autoplay']) {
+            this.audioPlayer.nativeElement.autoplay = true
+          }
+        })
+      })
+      this.audioPlayer.nativeElement.addEventListener('canplay', (event: any) => {
+        this.audioReadyToPlay = true
+        this.audioPlayer.nativeElement.controls = true
+        this.route.queryParams.subscribe((query) => {
+          if (query['autoplay']) {
+            this.audioPlayer.nativeElement.autoplay = true
+          }
+        })
       })
       if (!this.authService.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {

@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TnhtService} from "../../../shared/services/tnht/tnht.service";
-import {FlatTreeControl} from "@angular/cdk/tree";
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
 
 @Component({
   selector: 'app-tnht-table-content',
@@ -17,7 +9,10 @@ interface ExampleFlatNode {
   styleUrls: ['./tnht-table-content.component.scss']
 })
 export class TnhtTableContentComponent implements OnInit {
+
   tableContent: Array<any> = [];
+  isLoading: boolean = false
+
   constructor(private tnhtService: TnhtService, private router: Router, private titleService: Title) { }
 
   ngOnInit(): void {
@@ -25,10 +20,11 @@ export class TnhtTableContentComponent implements OnInit {
     this.getTableContent()
   }
   getTableContent() {
+    this.isLoading = true
     this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
       if (res.data) {
+        this.isLoading = false
         this.tableContent.push(res.data)
-        console.log(this.tableContent)
       }
     })
   }

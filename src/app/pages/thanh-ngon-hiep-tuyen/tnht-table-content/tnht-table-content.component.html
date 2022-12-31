@@ -1,5 +1,6 @@
 <div class="tnht-table-content">
   <h1 class="text-center tnht-title">Thánh-Ngôn Hiệp-Tuyển</h1>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="table-content-wrapper">
     <mat-accordion multi>
       <mat-expansion-panel *ngFor="let q of tableContent" [expanded]="true" disabled hideToggle>

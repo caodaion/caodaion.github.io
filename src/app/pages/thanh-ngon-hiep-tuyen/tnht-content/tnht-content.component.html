@@ -6,18 +6,22 @@
     }"
   >
     <div class="tnht-header">
-      <app-header-title>{{content?.name}}</app-header-title
-      >
+      <app-header-title>{{ content?.name }}</app-header-title>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="tnht-container-wrapper">
     <div *ngIf="content" class="h-100">
-      <cp-content-creator [data]="content" (save)="onSaveContent()" (nextContent)="onNextContent()"></cp-content-creator>
+      <cp-content-creator
+        [data]="content"
+        (save)="onSaveContent()"
+        (nextContent)="onNextContent()"
+      ></cp-content-creator>
     </div>
   </div>
-  <app-bottom-navigator *ngIf="content?.type == 'block'"
-    [prev]="{ text: 'Trước đó', navigate: {link: navigate.prev.link} }"
-    [next]="{ text: 'Tiếp theo', navigate: {link: navigate.next.link} }"
+  <app-bottom-navigator
+    *ngIf="content?.type == 'block'"
+    [prev]="{ text: 'Trước đó', navigate: { link: navigate.prev.link } }"
+    [next]="{ text: 'Tiếp theo', navigate: { link: navigate.next.link } }"
   ></app-bottom-navigator>
 </div>

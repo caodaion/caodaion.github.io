@@ -7,6 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {CpContentCreatorToolbarModule} from "../cp-content-creator-toolbar/cp-content-creator-toolbar.module";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -22,6 +23,7 @@ import {CpContentCreatorToolbarModule} from "../cp-content-creator-toolbar/cp-co
     MatSidenavModule,
     MatToolbarModule,
     CpContentCreatorToolbarModule,
+    MatProgressBarModule
   ],
   exports: [
     CpContentCreatorComponent
