@@ -101,6 +101,10 @@ export class TnhtContentComponent implements OnInit {
             }, 0)
           }
         }
+        localStorage.setItem('study', JSON.stringify({
+          content: this.content.key,
+          location: location.href
+        }))
       }
     })
   }

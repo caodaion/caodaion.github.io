@@ -140,19 +140,14 @@ export class NotificationsService {
         const notificationAt = new Date(`${this.datePipe.transform(new Date(), 'yyyy-MM-dd')} ${this.pushNotificationsSettings.study.time}:00`)
         if (notificationAt) {
           for (let i = 0; i < 7; i++) {
-            notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
-            const pushedData = {
-              key: `tu-hoc.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
-              title: `Thông báo tự học`,
-              notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss'),
-              payload: {
-                body: "Đã đến giờ học hỏi thêm kiến thức mới",
-                data: {
-                  url: `${location.origin}`
-                },
-                icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-                image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-              }
+            notificationAt.setDate(notificationAt.getDate() + (i === 0 ? 0 : 1))
+            let payload = {
+              body: "Đã đến giờ học hỏi thêm kiến thức mới",
+              data: {
+                url: `${location.origin}`
+              },
+              icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+              image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
             }
             if (isStudying?.content && isStudying?.location) {
               if (isStudying?.location.includes('thanh-ngon-hiep-tuyen')) {
@@ -162,8 +157,21 @@ export class NotificationsService {
                   return result;
                 }
                 const foundContent = find(this.tnhtService.tableContent.content, isStudying?.content)
-                pushedData.payload.body = `Đã đến giờ tiếp tục học\n bạn đang học Thánh Ngôn Hiệp Tuyển > ${foundContent?.name}`
+                payload = {
+                  body: `Đã đến giờ tiếp tục học\nBạn đang học Thánh Ngôn Hiệp Tuyển > ${foundContent?.name}`,
+                  data: {
+                    url: isStudying?.location
+                  },
+                  icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+                  image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+                }
               }
+            }
+            let pushedData = {
+              key: `tu-hoc.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+              title: `Thông báo tự học`,
+              notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss'),
+              payload: payload
             }
             newPushed.push(pushedData)
           }
@@ -175,19 +183,14 @@ export class NotificationsService {
         notificationAt.setMinutes(notificationAt.getMinutes() - this.pushNotificationsSettings.study.duration || 10)
         if (notificationAt) {
           for (let i = 0; i < 7; i++) {
-            notificationAt.setDate(notificationAt.getDate() + (i == 0 ? 0 : 1))
-            const pushedData = {
-              key: `tu-hoc.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
-              title: `Thông báo tự học`,
-              notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss'),
-              payload: {
-                body: `Hãy tự học hỏi thêm kiến thức mới sau ${this.pushNotificationsSettings.study.duration || 10} phút nữa`,
-                data: {
-                  url: `${location.origin}`
-                },
-                icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-                image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-              }
+            notificationAt.setDate(notificationAt.getDate() + (i === 0 ? 0 : 1))
+            let payload = {
+              body: `Hãy tự học hỏi thêm kiến thức mới sau ${this.pushNotificationsSettings.study.duration || 10} phút nữa`,
+              data: {
+                url: `${location.origin}`
+              },
+              icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+              image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
             }
             if (isStudying?.content && isStudying?.location) {
               if (isStudying?.location.includes('thanh-ngon-hiep-tuyen')) {
@@ -197,8 +200,22 @@ export class NotificationsService {
                   return result;
                 }
                 const foundContent = find(this.tnhtService.tableContent.content, isStudying?.content)
-                pushedData.payload.body = `${this.pushNotificationsSettings.study.duration || 10} phút nữa là đến giờ tiếp tục tự học\n bạn đang học Thánh Ngôn Hiệp Tuyển > ${foundContent?.name}`
+                payload = {
+                  body: `${this.pushNotificationsSettings.study.duration || 10} phút nữa là đến giờ tiếp tục tự học\nBạn đang học Thánh Ngôn Hiệp Tuyển > ${foundContent?.name}`,
+                  data: {
+                    url: isStudying?.location
+                  },
+                  icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+                  image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
+                }
               }
+            }
+
+            let pushedData = {
+              key: `tu-hoc.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`,
+              title: `Thông báo tự học`,
+              notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss'),
+              payload: payload
             }
             newPushed.push(pushedData)
           }

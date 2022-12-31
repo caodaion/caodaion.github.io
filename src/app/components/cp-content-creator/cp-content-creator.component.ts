@@ -98,6 +98,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           this.audioPlayer.nativeElement.autoplay = true
         }
       })
+
+      const storedAudio = JSON.parse(localStorage.getItem('audio') || '{}')
+      if (storedAudio?.content === this.data?.key && storedAudio?.currentTime) {
+        let timeStampContent = this.data.content.find((item: any) => {
+          return storedAudio?.currentTime > item?.audio?.start && storedAudio?.currentTime < item?.audio?.end
+        })
+        this.audioPlayer.nativeElement.currentTime = timeStampContent?.audio?.start || storedAudio?.currentTime
+      }
       this.audioPlayer.nativeElement.addEventListener('loadstart', (event: any) => {
         this.audioReadyToPlay = false
       })
