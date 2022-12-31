@@ -34,8 +34,7 @@
               "src/assets",
               "src/manifest.webmanifest",
               "src/sitemap.xml",
-              "src/robots.txt",
-              "src/CNAME"
+              "src/robots.txt"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
