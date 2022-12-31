@@ -212,7 +212,7 @@ body {
   display: flex !important;
   flex-direction: column !important;
   .flex-1 {
-    flex: 1;
+    flex: 1 0 0;
   }
 }
 .top-pannel {

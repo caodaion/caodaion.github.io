@@ -36,8 +36,9 @@
           mat-icon-button
           (click)="onToggleDrawer()"
         >
-          <mat-icon>menu</mat-icon></button
-        ><a
+          <mat-icon>menu</mat-icon>
+        </button>
+        <a
           [routerLink]="'trang-chu'"
           class="d-flex align-items-center caodaion-logo"
         >
@@ -130,7 +131,7 @@
             <button
               *ngIf="isShowButtonInstall"
               mat-icon-button
-              class="icon-hover account-logo d-flex justify-content-center align-items-center"
+              class="account-logo d-flex justify-content-center align-items-center"
               (click)="installPWA()"
             >
               <mat-icon>{{
@@ -140,25 +141,27 @@
               }}</mat-icon>
             </button>
           </a>
-          <a mat-list-item disableRipple>
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="profileMenu"
-              class="icon-hover account-logo d-flex justify-content-center align-items-center"
-            >
-              <mat-icon>account_circle</mat-icon>
-            </button>
-            <mat-menu #profileMenu="matMenu">
-              <!-- <button mat-menu-item (click)="clearUnread()">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="profileMenu"
+            class="account-logo"
+            mat-icon-button
+          >
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #profileMenu="matMenu">
+            <!-- <button mat-menu-item (click)="clearUnread()">
                 <mat-icon [matBadge]="unreadCount ? unreadCount : ''"
                   >notifications</mat-icon
                 >Thông báo
               </button> -->
-              <button mat-menu-item (click)="goToScreen('/cai-dat')"><mat-icon>settings</mat-icon>Cài đặt</button>
-              <!-- <button mat-menu-item (click)="checkForUpdate()">
+            <button mat-menu-item (click)="goToScreen('/cai-dat')">
+              <mat-icon>settings</mat-icon>Cài đặt
+            </button>
+            <!-- <button mat-menu-item (click)="checkForUpdate()">
                 <mat-icon>system_update</mat-icon>Cập nhật phiên bản
               </button> -->
-              <!-- <button
+            <!-- <button
                 mat-menu-item
                 [routerLink]="'auth/dang-nhap'"
                 *ngIf="!currentUser"
@@ -168,8 +171,7 @@
               <button mat-menu-item *ngIf="currentUser" (click)="logout()">
                 <mat-icon>logout</mat-icon>Đăng xuất
               </button> -->
-            </mat-menu>
-          </a>
+          </mat-menu>
         </div>
       </mat-toolbar>
       <div class="w-100 sub-container">

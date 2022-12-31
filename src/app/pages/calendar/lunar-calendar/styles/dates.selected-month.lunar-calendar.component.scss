@@ -5,6 +5,7 @@
     .selected-month-calendar {
       .dates {
         display: flex;
+        height: 100%;
         flex-wrap: wrap;
         .date {
           width: calc(100% / 7);
