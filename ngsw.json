@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1672456687796,
+  "timestamp": 1672456974082,
   "index": "https://caodaion.github.io/index.html",
   "assetGroups": [
     {
@@ -46,7 +46,6 @@
       },
       "urls": [
         "https://caodaion.github.io/3rdpartylicenses.txt",
-        "https://caodaion.github.io/CNAME",
         "https://caodaion.github.io/assets/documents/LONG-SO-TAM-GIAO.json",
         "https://caodaion.github.io/assets/documents/LONG-SO-TAM-TRAN.json",
         "https://caodaion.github.io/assets/documents/SO-CAU-SIEU.json",
@@ -295,7 +294,6 @@
     "https://caodaion.github.io/903.8467dd6338204e2b.js": "0159e3db048bcfd144955a8f24504c5fb85019d7",
     "https://caodaion.github.io/965.f9af3744d33ce2b1.js": "57f8faf5bf9650dc450bd7bb807753669cd4bafa",
     "https://caodaion.github.io/987.30a970233411696b.js": "93261d5bc1db7c611a868898f9775db404d68c13",
-    "https://caodaion.github.io/CNAME": "3bf784556f972181e6faf73616ec7a280fa63fb0",
     "https://caodaion.github.io/assets/documents/LONG-SO-TAM-GIAO.json": "920cb4a02018d82ab152ef70b4738c17d7a56b5c",
     "https://caodaion.github.io/assets/documents/LONG-SO-TAM-TRAN.json": "1e54df41d57a7590acd16ff6548c9576872f73ce",
     "https://caodaion.github.io/assets/documents/SO-CAU-SIEU.json": "0a4e5b6bd96ffdd65a4803f6fd9972842dedb8a8",
