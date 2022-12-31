@@ -265,46 +265,4 @@ export class CommonService {
     slug = slug?.replace(/\@\-|\-\@|\@/gi, '');
     return slug
   }
-
-  pushNotification(key: any, title: any, payload: any, notificationAt: Date, isforcePush: boolean = true) {
-    if (new Date(notificationAt) < new Date()) {
-      // remove outdated notification
-      let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-      if (!pushNotification) {
-        pushNotification = []
-      }
-      pushNotification.splice(pushNotification.indexOf(pushNotification.find((item: any) => item.key == key)), 1)
-      localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
-    } else {
-      Notification.requestPermission((result) => {
-        if (result === "granted") {
-          if (isforcePush) {
-            navigator.serviceWorker.ready.then((registration) => {
-              registration.showNotification(title, payload);
-            });
-          } else {
-            const notificationTimeout = notificationAt.getTime() - new Date().getTime()
-            setTimeout(() => {
-              navigator.serviceWorker.ready.then((registration) => {
-                registration.showNotification(title, payload);
-              });
-            }, notificationTimeout)
-            let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
-            if (!pushNotification) {
-              pushNotification = []
-            }
-            if (!pushNotification?.find((p: any) => p?.key == key)) {
-              pushNotification.push({
-                key: key,
-                title: title,
-                payload: payload,
-                notificationAt: this.datePipe.transform(notificationAt, 'yyyy-MM-dd HH:mm:ss')
-              })
-            }
-            localStorage.setItem('pushNotification', JSON.stringify(pushNotification))
-          }
-        }
-      });
-    }
-  }
 }

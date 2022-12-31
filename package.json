@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "start-pwa": "ng build && http-server -p 8080 -c-1 dist/pwa",
+    "start-pwa": "ng build && cd dist/pwa && copy index.html 404.html && http-server -p 8080 -c-1 dist/pwa",
     "gh-pages-build": "ng deploy --dry-run",
     "deploy-to-firebase": "ng deploy --dry-run --base-href=https://www.caodaion.com && cd dist/pwa && copy index.html 404.html && firebase deploy"
   },

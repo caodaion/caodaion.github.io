@@ -7,6 +7,7 @@ import { CommonService } from "../../../shared/services/common/common.service";
 import { CONSTANT } from "../../../shared/constants/constants.constant";
 import { Title } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
+import { NotificationsService } from 'src/app/shared/services/notifications/notifications.service';
 
 @Component({
   selector: 'app-event-list',
@@ -41,7 +42,8 @@ export class EventListComponent implements OnInit {
     private eventService: EventService,
     private titleSerVice: Title,
     private commonService: CommonService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private notificationsService: NotificationsService
   ) { }
 
   ngOnInit(): void {
@@ -113,7 +115,7 @@ export class EventListComponent implements OnInit {
   }
 
   getTodayTuThoiEvents() {
-    let pushNotification = JSON.parse(localStorage.getItem('pushNotification') || '[]')
+    let pushNotification = JSON.parse(localStorage.getItem('pushedNotification') || '[]')
     if (!pushNotification) {
       pushNotification = []
     }
@@ -201,73 +203,35 @@ export class EventListComponent implements OnInit {
   }
 
   toggleNotificationSubscription(item: any, index: any) {
-    const pushNotificationsSettings = JSON.parse(localStorage.getItem('pushNotificationsSettings') || '{}');
     item.isActiveNotification = !item.isActiveNotification
-    if (item?.isActiveNotification == true && item?.startTime) {
-      const prevNotification = () => {
-        const notificationAt = item?.startTime
-        notificationAt.setMinutes(item?.startTime?.getMinutes() - (pushNotificationsSettings?.tuThoiDuration || 10))
-        notificationAt.setSeconds(0)
-        // TODO: only use to test
-        // const notificationAt = new Date()
-        // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
-        let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
-        let payload = {}
-        payload = {
-          body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
-          data: {
-            url: `${location.href}`,
-          },
-          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-        }
-        let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-        this.commonService.pushNotification(key, title, payload, notificationAt)
-        key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-        title = `Thông báo ${item?.name}`
-        payload = {
-          body: `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item?.startTime, 'HH:mm')}`,
-          data: {
-            url: `${location.href}/${item?.key}`,
-          },
-          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-        }
-        this.commonService.pushNotification(key, title, payload, notificationAt, false)
+    const pushNotification = <any>[]
+    Array.from({ length: 3 }, (x, i) => {
+      let time = item.startTime
+      let payload = {
+        body: `Đã đến ${this.datePipe.transform(time, 'HH:mm')}, là giờ ${item?.name}`,
+        data: {
+          url: `${location.href}/${item?.key}`
+        },
+        icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
+        image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
       }
-      prevNotification()
-      const correntNotification = () => {
-        const notificationAt = new Date(`${this.datePipe.transform(new Date(), 'yyyy-MM-dd')} ${this.datePipe.transform(item?.startTime, 'HH:mm')}:00`)
-        notificationAt.setMinutes(item?.startTime?.getMinutes() + (pushNotificationsSettings?.tuThoiDuration || 10))
-        notificationAt.setSeconds(0)
-        // TODO: only use to test
-        // const notificationAt = new Date()
-        // notificationAt.setMinutes(notificationAt.getMinutes() + (index + 1))
-        let title = `Đã đặt thông báo vào lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`
-        let payload = {}
-        payload = {
-          body: `Thông báo ${item?.name} sẽ được gửi lúc ${this.datePipe.transform(notificationAt, 'HH:mm')}`,
-          data: {
-            url: `${location.href}`,
-          },
-          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-        }
-        let key = `${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-        key = `${item?.key}.${this.datePipe.transform(notificationAt, 'yyyyMMddHHmmss')}`
-        title = `Thông báo ${item?.name}`
-        payload = {
-          body: `Đã đến ${this.datePipe.transform(notificationAt, 'HH:mm')}, là giờ ${item?.name}`,
-          data: {
-            url: `${location.href}/${item?.key}`,
-          },
-          icon: "assets/icons/windows11/Square150x150Logo.scale-400.png",
-          image: "assets/icons/windows11/Wide310x150Logo.scale-400.png"
-        }
-        this.commonService.pushNotification(key, title, payload, notificationAt, false)
+      if (i > 1) {
+        payload.body = `Hãy chuẩn bị ${item?.name} vào lúc ${this.datePipe.transform(item.startTime, 'HH:mm')}`
+        time.setMinutes(time.getMinutes() - (this.notificationsService.pushNotificationsSettings?.tuThoi?.duration || 10))
       }
-      correntNotification()
-    }
+      if (i == 0) {
+        payload.body = `Đã đặt thông báo trước ${item?.name} ${this.notificationsService.pushNotificationsSettings?.tuThoi?.duration || 10} phút.`
+        time = new Date()
+      }
+      pushNotification.push({
+        key: `${item.key}.${this.datePipe.transform(time, 'yyyyMMddHHmmss')}`,
+        title: `Thông báo ${item?.name}`,
+        isforcePush: i == 0,
+        payload: payload,
+        notificationAt: this.datePipe.transform(time, 'yyyy-MM-dd HH:mm:ss'),
+      })
+    })
+    this.notificationsService.addNewPush(pushNotification)
   }
 }
 

@@ -21,11 +21,8 @@ export class HeaderComponent implements OnInit {
     if (this.prevPage?.navigate?.link) {
       this.router
         .navigate([this.prevPage?.navigate?.link], {
-          relativeTo: this.route,
           queryParams: this.prevPage?.navigate?.queryParams,
         });
-    } else {
-      this.location.back()
     }
   }
 }
