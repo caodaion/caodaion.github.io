@@ -82,10 +82,6 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
         content: this.data.key,
         currentTime: currentTime
       }))
-      localStorage.setItem('study', JSON.stringify({
-        content: this.data.key,
-        location: location.href
-      }))
     } else {
       player.pause()
       player.controls = false
@@ -94,10 +90,6 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
       localStorage.setItem('audio', JSON.stringify({
         content: this.data.key,
         currentTime: currentTime
-      }))
-      localStorage.setItem('study', JSON.stringify({
-        content: this.data.key,
-        location: location.href
       }))
     }
   }
@@ -136,10 +128,6 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
           localStorage.setItem('audio', JSON.stringify({
             content: this.data.key,
             currentTime: currentTime
-          }))
-          localStorage.setItem('study', JSON.stringify({
-            content: this.data.key,
-            location: location.href
           }))
         })
       } else {
