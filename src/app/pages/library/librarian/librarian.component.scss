@@ -1,0 +1,44 @@
+.librarian-container {
+  background-color: white;
+  mat-drawer {
+    min-width: 300px;
+    width: 100%;
+    max-width: 400px;
+    background-color: #d3e3fd;
+    border-left-color: #d3e3fd;
+    border-top-left-radius: 1rem;
+    .preview-close {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    .preview-area {
+      padding: 1rem;
+      h3 {
+        margin: 0;
+      }
+      .preview-image-wrapper {
+        width: 200px;
+        height: 300px;
+        border-radius: 1rem;
+        margin: 1rem 0;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+  .read-now-button {
+    width: 100%;
+    position: sticky;
+    background-color: #d3e3fd;
+    padding: 1rem;
+    bottom: 0;
+    button {
+      width: 100%;
+      border-radius: 50px;
+    }
+  }
+}

@@ -1,0 +1,142 @@
+<div class="container-fluid">
+  <div class="for-your-books">
+    <h2>Dành cho bạn</h2>
+    <mat-grid-list
+      [cols]="gridForYouCols"
+      [rowHeight]="gridForYouCols === 2 ? '5:2' : '4:5'"
+      gutterSize="30"
+      ><mat-grid-tile>
+        <mat-card
+          class="card-grid"
+          [ngClass]="{ focused: true }"
+          (click)="
+            onCardClick({
+              name: 'Thánh Ngôn Hiệp Tuyển',
+              image:
+                'https://material.angular.io/assets/img/examples/shiba2.jpg',
+              subtitle: 'quyển 1',
+              description:
+                'Lời tựa Bài 01: Thánh giáo của Đức Ngọc Hoàng Thượng Đế đến xưng danh hiệu lần đầu và chỉ tên 12 người môn đệ trước hết.',
+              reading: {
+                key: '',
+                path: '',
+                name: ''
+              }
+            })
+          "
+        >
+          <mat-grid-list
+            [cols]="gridForYouCols === 2 ? 4 : 1"
+            [gutterSize]="gridForYouCols === 2 ? '16' : '0'"
+            [rowHeight]="gridForYouCols === 2 ? '100%' : '2:1'"
+          >
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+              <div [ngClass]="{ 'card-image-wrapper': gridForYouCols == 2 }">
+                <img
+                  mat-card-image
+                  src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+                  alt="Photo of a Shiba Inu"
+                />
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile
+              [colspan]="gridForYouCols === 2 ? 3 : 1"
+              [rowspan]="1"
+              *ngIf="gridForYouCols === 2"
+            >
+              <div class="h-100 w-100">
+                <mat-card-header>
+                  <mat-card-title>Tháng Ngôn Hiệp Tuyển</mat-card-title>
+                  <mat-card-subtitle>Quyển nhứt</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p>
+                    Lời tựa Bài 01: Thánh giáo của Đức Ngọc Hoàng Thượng Đế đến
+                    xưng danh hiệu lần đầu và chỉ tên 12 người môn đệ trước hết.
+                  </p>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-flat-button [color]="'primary'">
+                    <mat-icon style="margin: 0">chevron_right</mat-icon>
+                  </button>
+                </mat-card-actions>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+          <mat-card-header *ngIf="gridForYouCols == 1">
+            <mat-card-title>Tháng Ngôn Hiệp Tuyển</mat-card-title>
+            <mat-card-subtitle>Quyển nhứt</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content *ngIf="gridForYouCols == 1">
+            <p>
+              Lời tựa Bài 01: Thánh giáo của Đức Ngọc Hoàng Thượng Đế đến xưng
+              danh hiệu lần đầu và chỉ tên 12 người môn đệ trước hết.
+            </p>
+          </mat-card-content>
+          <mat-card-actions *ngIf="gridForYouCols == 1">
+            <button mat-flat-button [color]="'primary'">
+              <mat-icon style="margin: 0">chevron_right</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-card class="card-grid">
+          <mat-grid-list
+            [cols]="gridForYouCols === 2 ? 4 : 1"
+            [gutterSize]="gridForYouCols === 2 ? '16' : '0'"
+            [rowHeight]="gridForYouCols === 2 ? '100%' : '2:1'"
+          >
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+              <div [ngClass]="{ 'card-image-wrapper': gridForYouCols == 2 }">
+                <img
+                  mat-card-image
+                  src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+                  alt="Photo of a Shiba Inu"
+                />
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile
+              [colspan]="gridForYouCols === 2 ? 3 : 1"
+              [rowspan]="1"
+              *ngIf="gridForYouCols === 2"
+            >
+              <div class="h-100 w-100">
+                <mat-card-header>
+                  <mat-card-title>Tháng Ngôn Hiệp Tuyển</mat-card-title>
+                  <mat-card-subtitle>Quyển nhứt</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p>
+                    Lời tựa Bài 01: Thánh giáo của Đức Ngọc Hoàng Thượng Đế đến
+                    xưng danh hiệu lần đầu và chỉ tên 12 người môn đệ trước hết.
+                  </p>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-flat-button [color]="'primary'">
+                    <mat-icon style="margin: 0">chevron_right</mat-icon>
+                  </button>
+                </mat-card-actions>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+          <mat-card-header *ngIf="gridForYouCols == 1">
+            <mat-card-title>Tháng Ngôn Hiệp Tuyển</mat-card-title>
+            <mat-card-subtitle>Quyển nhứt</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content *ngIf="gridForYouCols == 1">
+            <p>
+              Lời tựa Bài 01: Thánh giáo của Đức Ngọc Hoàng Thượng Đế đến xưng
+              danh hiệu lần đầu và chỉ tên 12 người môn đệ trước hết.
+            </p>
+          </mat-card-content>
+          <mat-card-actions *ngIf="gridForYouCols == 1">
+            <button mat-flat-button [color]="'primary'">
+              <mat-icon style="margin: 0">chevron_right</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>

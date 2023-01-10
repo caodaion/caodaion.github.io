@@ -14,6 +14,11 @@ const routes: Routes = [
           import('../../pages/kinh/kinh.module').then((m) => m.KinhModule),
       },
       {
+        path: 'thu-vien',
+        loadChildren: () =>
+          import('../../pages/library/library.module').then((m) => m.LibraryModule),
+      },
+      {
         path: 'thanh-ngon-hiep-tuyen',
         loadChildren: () =>
           import('../../pages/thanh-ngon-hiep-tuyen/thanh-ngon-hiep-tuyen.module').then((m) => m.ThanhNgonHiepTuyenModule),

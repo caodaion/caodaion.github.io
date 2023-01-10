@@ -1,0 +1,49 @@
+<mat-drawer-container class="librarian-container">
+  <mat-drawer-content>
+    <mat-tab-group>
+      <mat-tab label="Sách">
+        <librarian-books
+          (onItemFocus)="libradianDrawer.toggle(); previewingItem = $event"
+        ></librarian-books>
+      </mat-tab>
+      <mat-tab label="Audio"></mat-tab>
+    </mat-tab-group>
+  </mat-drawer-content>
+  <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
+    <div class="container-fluid">
+      <div class="preview-area">
+        <button
+          mat-icon-button
+          class="preview-close"
+          (click)="libradianDrawer.close()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <div class="d-flex align-items-center flex-column">
+          <h2 class="text-center">Tóm tắt</h2>
+          <div class="preview-image-wrapper">
+            <img
+              mat-card-image
+              [src]="previewingItem?.image"
+              [alt]="previewingItem?.name"
+            />
+          </div>
+          <h3 class="text-center">{{ previewingItem?.name }}</h3>
+          <p class="text-center">{{previewingItem?.subtitle}}</p>
+          <div class="w-100" *ngIf="!!previewingItem?.description">
+            <h4>Mô tả:</h4>
+            <p>{{ previewingItem?.description }}</p>
+          </div>
+          <div class="w-100" *ngIf="!!previewingItem?.reading?.key">
+            <h4>Đang đọc:</h4>
+            <p>{{ previewingItem?.reading?.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="read-now-button">
+      <button mat-flat-button [color]="'primary'" *ngIf="!!previewingItem?.reading?.key">ĐỌC TIẾP</button>
+      <button mat-flat-button [color]="'primary'" *ngIf="!previewingItem?.reading?.key">ĐỌC</button>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>
