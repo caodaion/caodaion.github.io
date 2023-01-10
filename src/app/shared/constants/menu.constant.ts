@@ -37,7 +37,7 @@ export const MENU = [
         label: 'Thư viện',
         icon: 'library_books',
         fullAssess: true,
-        released: false,
+        released: true,
       },
       {
         key: 'trang-chu.thanh-that',
