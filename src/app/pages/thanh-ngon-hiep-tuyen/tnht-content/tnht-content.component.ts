@@ -97,7 +97,7 @@ export class TnhtContentComponent implements OnInit {
               targetedContent.style.color = '#4285f4';
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               // @ts-ignore
-              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop })
+              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
             }, 0)
           }
         }let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')

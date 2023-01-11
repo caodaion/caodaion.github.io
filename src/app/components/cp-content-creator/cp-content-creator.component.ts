@@ -78,7 +78,9 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     if (this.audioPlayer && event?.audio?.start) {
       this.audioPlayer.nativeElement.currentTime = event.audio.start
       const currentTime = this.audioPlayer.nativeElement.currentTime
-      navigator.clipboard.writeText(currentTime)
+      if (this.authService.contentEditable) {
+        navigator.clipboard.writeText(currentTime)
+      }
     } else {
       // this.audioPlayer.nativeElement.pause()
     }

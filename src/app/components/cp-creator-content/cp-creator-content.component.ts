@@ -1,10 +1,10 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output } from '@angular/core';
 import {
   MatLegacySnackBar as MatSnackBar,
   MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
   MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition
 } from "@angular/material/legacy-snack-bar";
-import {AuthService} from "../../shared/services/auth/auth.service";
+import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'cp-creator-content',
@@ -107,7 +107,7 @@ export class CpCreatorContentComponent implements OnChanges {
   }
 
   onBlur(event: any) {
-    if(this.updated) {
+    if (this.updated) {
       [...event?.target?.children]?.forEach((item: any) => {
         const find = (array: any, key: any) => {
           let result: any;
