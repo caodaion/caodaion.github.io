@@ -134,7 +134,7 @@ export class NotificationsService {
 
   private syncStudyPush() {
     const newPushed = <any>[]
-    const isStudying = JSON.parse(localStorage.getItem('study') || '{}')
+    const isStudying = JSON.parse(localStorage.getItem('reading') || '[]')
     if (this.pushNotificationsSettings.study.active) {
       const correntPush = () => {
         const notificationAt = new Date(`${this.datePipe.transform(new Date(), 'yyyy-MM-dd')} ${this.pushNotificationsSettings.study.time}:00`)

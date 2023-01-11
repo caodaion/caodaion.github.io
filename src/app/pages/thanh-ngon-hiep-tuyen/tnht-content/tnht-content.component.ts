@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {TnhtService} from "../../../shared/services/tnht/tnht.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../../shared/services/auth/auth.service";
-import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { TnhtService } from "../../../shared/services/tnht/tnht.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "../../../shared/services/auth/auth.service";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-tnht-content',
@@ -97,21 +97,22 @@ export class TnhtContentComponent implements OnInit {
               targetedContent.style.color = '#4285f4';
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               // @ts-ignore
-              contentCreatorWrapper.scroll({top: targetedContent.offsetTop})
+              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop })
             }, 0)
           }
+        }let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
+        if (!studyStorage) {
+          studyStorage = []
         }
-        localStorage.setItem('study', JSON.stringify({
-          content: this.content.key,
-          location: location.href
-        }))
+
+        localStorage.setItem('reading', JSON.stringify(studyStorage))
       }
     })
   }
 
   onSaveContent() {
     console.log(this.rootContent)
-    navigator.clipboard.writeText(JSON.stringify({data: this.rootContent}));
+    navigator.clipboard.writeText(JSON.stringify({ data: this.rootContent }));
   }
 
   getNavigateLink() {
@@ -132,13 +133,13 @@ export class TnhtContentComponent implements OnInit {
         },
       })
       .then(() => {
-          localStorage.setItem(
-            'currentLayout',
-            JSON.stringify({
-              isHideToolbar: true,
-              isHideBottomNavBar: true,
-            })
-          );
+        localStorage.setItem(
+          'currentLayout',
+          JSON.stringify({
+            isHideToolbar: true,
+            isHideBottomNavBar: true,
+          })
+        );
       });
   }
 }

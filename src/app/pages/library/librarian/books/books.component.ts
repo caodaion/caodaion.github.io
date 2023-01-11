@@ -1,15 +1,17 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'librarian-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss']
 })
-export class BooksComponent implements OnInit {
+export class BooksComponent implements OnInit, OnChanges {
 
   gridForYouCols: number = 2
+  forYouBooks = <any>[]
   @Output() onItemFocus = new EventEmitter()
+  @Input() books: any;
 
   constructor(private breakpointObserver: BreakpointObserver) {
 
@@ -27,7 +29,15 @@ export class BooksComponent implements OnInit {
       });
   }
 
+  ngOnChanges() {
+    this.getForYouBooks()
+  }
+
   onCardClick(item: any) {
     this.onItemFocus.emit(item)
+  }
+
+  getForYouBooks() {
+    this.forYouBooks = this.books
   }
 }

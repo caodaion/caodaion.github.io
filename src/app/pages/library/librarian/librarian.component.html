@@ -3,10 +3,74 @@
     <mat-tab-group>
       <mat-tab label="Sách">
         <librarian-books
+          [books]="staticBooks"
           (onItemFocus)="libradianDrawer.toggle(); previewingItem = $event"
         ></librarian-books>
       </mat-tab>
-      <mat-tab label="Audio"></mat-tab>
+      <!-- <mat-tab label="Audio"></mat-tab> -->
+      <mat-tab label="Settings" *ngIf="contentEditable">
+        <div class="container-fluid">
+          <div class="w-100 d-flex align-items-center justify-content-between">
+            <h2>Settings</h2>
+            <button
+              mat-flat-button
+              [color]="'primary'"
+              (click)="saveSettings()"
+            >
+              Save
+            </button>
+          </div>
+          <div *ngFor="let item of staticBooks">
+            <div class="d-flex flex-wrap">
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Key</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.key" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Tên</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.name" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Subtitle</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.subtitle" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Path</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.path" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Mô tả</mat-label>
+                  <textarea
+                    [(ngModel)]="item.description"
+                    matInput
+                    [rows]="10"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <div class="d-flex">
+                  <img [src]="item.image" [alt]="item.name" width="150px" />
+                  <div>
+                    <mat-form-field [appearance]="'outline'">
+                      <mat-label>Hình ảnh</mat-label>
+                      <input type="text" matInput [(ngModel)]="item.image" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
     </mat-tab-group>
   </mat-drawer-content>
   <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
@@ -29,21 +93,41 @@
             />
           </div>
           <h3 class="text-center">{{ previewingItem?.name }}</h3>
-          <p class="text-center">{{previewingItem?.subtitle}}</p>
+          <p class="text-center">{{ previewingItem?.subtitle }}</p>
           <div class="w-100" *ngIf="!!previewingItem?.description">
             <h4>Mô tả:</h4>
             <p>{{ previewingItem?.description }}</p>
+            <mat-divider></mat-divider>
           </div>
           <div class="w-100" *ngIf="!!previewingItem?.reading?.key">
             <h4>Đang đọc:</h4>
-            <p>{{ previewingItem?.reading?.name }}</p>
+            <p>
+              <strong>{{ previewingItem?.reading?.name }}</strong>
+              <span *ngIf="previewingItem?.reading?.stopAt">
+                đến đoạn: <br />
+                {{ previewingItem?.reading?.stopAt }}
+              </span>
+            </p>
           </div>
         </div>
       </div>
     </div>
     <div class="read-now-button">
-      <button mat-flat-button [color]="'primary'" *ngIf="!!previewingItem?.reading?.key">ĐỌC TIẾP</button>
-      <button mat-flat-button [color]="'primary'" *ngIf="!previewingItem?.reading?.key">ĐỌC</button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        *ngIf="!!previewingItem?.reading?.key"
+        (click)="onRead(previewingItem?.reading?.location)"
+      >
+        ĐỌC TIẾP
+      </button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        *ngIf="!previewingItem?.reading?.key"
+      >
+        ĐỌC
+      </button>
     </div>
   </mat-drawer>
 </mat-drawer-container>
