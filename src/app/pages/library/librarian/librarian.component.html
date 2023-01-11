@@ -23,6 +23,10 @@
           <div *ngFor="let item of staticBooks">
             <div class="d-flex flex-wrap">
               <div class="form-group">
+                <mat-label>Published</mat-label>
+                <mat-checkbox [(ngModel)]="item.published"></mat-checkbox>
+              </div>
+              <div class="form-group">
                 <mat-form-field [appearance]="'outline'">
                   <mat-label>Key</mat-label>
                   <input type="text" matInput [(ngModel)]="item.key" />
@@ -47,16 +51,6 @@
                 </mat-form-field>
               </div>
               <div class="form-group">
-                <mat-form-field [appearance]="'outline'">
-                  <mat-label>Mô tả</mat-label>
-                  <textarea
-                    [(ngModel)]="item.description"
-                    matInput
-                    [rows]="10"
-                  ></textarea>
-                </mat-form-field>
-              </div>
-              <div class="form-group">
                 <div class="d-flex">
                   <img [src]="item.image" [alt]="item.name" width="150px" />
                   <div>
@@ -67,8 +61,20 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group w-100" style="margin-top: 1rem">
+                <mat-form-field [appearance]="'outline'" class="w-100">
+                  <mat-label>Mô tả</mat-label>
+                  <textarea
+                    [(ngModel)]="item.description"
+                    matInput
+                    resize
+                  ></textarea>
+                </mat-form-field>
+              </div>
             </div>
+            <mat-divider></mat-divider>
           </div>
+          <button mat-flat-button (click)="addNewSettings()">+ Add new</button>
         </div>
       </mat-tab>
     </mat-tab-group>
@@ -125,6 +131,7 @@
         mat-flat-button
         [color]="'primary'"
         *ngIf="!previewingItem?.reading?.key"
+        (click)="onRead(previewingItem?.path)"
       >
         ĐỌC
       </button>

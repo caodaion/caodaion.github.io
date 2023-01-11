@@ -2,18 +2,15 @@
   <div class="for-your-books">
     <h2>Dành cho bạn</h2>
     <mat-grid-list
-    *ngFor="let item of forYouBooks"
       [cols]="gridForYouCols"
       [rowHeight]="gridForYouCols === 2 ? '5:2' : '4:5'"
       gutterSize="30"
-      >
-      <mat-grid-tile>
+    >
+      <mat-grid-tile *ngFor="let item of forYouBooks">
         <mat-card
           class="card-grid"
           [ngClass]="{ focused: true }"
-          (click)="
-            onCardClick(item)
-          "
+          (click)="onCardClick(item)"
         >
           <mat-grid-list
             [cols]="gridForYouCols === 2 ? 4 : 1"
@@ -22,11 +19,7 @@
           >
             <mat-grid-tile [colspan]="1" [rowspan]="1">
               <div [ngClass]="{ 'card-image-wrapper': gridForYouCols == 2 }">
-                <img
-                  mat-card-image
-                  [src]="item?.image"
-                  [alt]="item?.name"
-                />
+                <img mat-card-image [src]="item?.image" [alt]="item?.name" />
               </div>
             </mat-grid-tile>
             <mat-grid-tile
@@ -36,21 +29,21 @@
             >
               <div class="h-100 w-100">
                 <mat-card-header>
-                  <mat-card-title>{{item?.name}}</mat-card-title>
-                  <mat-card-subtitle>{{item?.subtitle}}</mat-card-subtitle>
+                  <mat-card-title>{{ item?.name }}</mat-card-title>
+                  <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <p>{{item?.description}}</p>
+                  <div class="card-description">{{ item?.description }}...</div>
                 </mat-card-content>
               </div>
             </mat-grid-tile>
           </mat-grid-list>
           <mat-card-header *ngIf="gridForYouCols == 1">
-            <mat-card-title>{{item?.name}}</mat-card-title>
-            <mat-card-subtitle>{{item?.subtitle}}</mat-card-subtitle>
+            <mat-card-title>{{ item?.name }}</mat-card-title>
+            <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content *ngIf="gridForYouCols == 1">
-            <p>{{item?.description}}</p>
+            <div class="card-description">{{ item?.description }}...</div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

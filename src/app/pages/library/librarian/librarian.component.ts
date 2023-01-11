@@ -57,7 +57,6 @@ export class LibrarianComponent implements OnInit {
     this.staticBooks.forEach((item: any) => {
       const foundReading = readingBooks.find((rb: any) => rb?.key === item?.key)
       if (foundReading) {
-        console.log(foundReading);
         item.reading = foundReading
       }
     })
@@ -73,16 +72,19 @@ export class LibrarianComponent implements OnInit {
           key: item?.key,
           subtitle: item?.subtitle,
           path: item?.path,
+          published: item?.published,
         }
       })
     }
-    console.log(data);
-
     navigator.clipboard.writeText(JSON.stringify(data))
   }
 
 
   onRead(path: any) {
     this.router.navigateByUrl(path.replace(location.origin, ''))
+  }
+
+  addNewSettings() {
+    this.staticBooks.push({})
   }
 }
