@@ -14,27 +14,37 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { BookComponent } from './book/book.component';
+import { HeaderModule } from "../../components/header/header.module";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CpContentCreatorModule } from "../../components/cp-content-creator/cp-content-creator.module";
+import { BottomNavigatorModule } from "../../components/bottom-navigator/bottom-navigator.module";
 
 
 @NgModule({
-  declarations: [
-    LibrarianComponent,
-    BooksComponent
-  ],
-  imports: [
-    CommonModule,
-    LibraryRoutingModule,
-    MatTabsModule,
-    MatGridListModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatDividerModule,
-    MatCheckboxModule
-  ]
+    declarations: [
+        LibrarianComponent,
+        BooksComponent,
+        BookComponent
+    ],
+    imports: [
+        CommonModule,
+        LibraryRoutingModule,
+        MatTabsModule,
+        MatGridListModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatDividerModule,
+        MatCheckboxModule,
+        HeaderModule,
+        MatProgressBarModule,
+        CpContentCreatorModule,
+        BottomNavigatorModule
+    ]
 })
 export class LibraryModule { }

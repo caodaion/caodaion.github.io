@@ -1,0 +1,28 @@
+<div class="wrapper-container book-content-container">
+  <app-header
+    class="header"
+    [prevPage]="{
+      navigate: { link: '/trang-chu/thu-vien' }
+    }"
+  >
+    <div class="book-header">
+      <app-header-title>{{ content?.name }}</app-header-title>
+    </div>
+  </app-header>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  <div class="book-container-wrapper">
+    <div *ngIf="content" class="h-100">
+      <cp-content-creator
+        [data]="content"
+        [rootContent]="rootContent"
+        (save)="onSaveContent()"
+        (nextContent)="onNextContent()"
+      ></cp-content-creator>
+    </div>
+  </div>
+  <app-bottom-navigator
+    *ngIf="content?.type == 'block'"
+    [prev]="{ text: 'Trước đó', navigate: { link: navigate.prev.link } }"
+    [next]="{ text: 'Tiếp theo', navigate: { link: navigate.next.link } }"
+  ></app-bottom-navigator>
+</div>

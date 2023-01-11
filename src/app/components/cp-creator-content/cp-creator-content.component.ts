@@ -13,6 +13,7 @@ import { AuthService } from "../../shared/services/auth/auth.service";
 })
 export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
+  @Input() rootContent: any;
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -28,13 +29,33 @@ export class CpCreatorContentComponent implements OnChanges {
       } else {
         if (this.data.attrs.pathname && this.data.attrs.hash) {
           this.eRef.nativeElement.style.color = '#4285f4';
-          this.contentToContent.emit(this.data)
+          let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
+          if (!studyStorage) {
+            studyStorage = []
+          }
+          let foundItem = studyStorage.find((item: any) => item.key == this.rootContent.key)
+          if (foundItem) {
+            foundItem.stopAt = this.data.content[0].content[0]?.text
+            foundItem.content = this.data.key
+            foundItem.location = `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`
+          } else {
+            studyStorage.push({
+              content: this.data.key,
+              stopAt: this.data.content[0]?.text,
+              key: this.rootContent.key,
+              location: `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`,
+            })
+          }
+          localStorage.setItem('reading', JSON.stringify(studyStorage))
         }
+        this.contentToContent.emit(this.data)
       }
     } else {
       this.eRef.nativeElement.style.color = 'unset';
       this.data.focused = false
-      this.focusedBlock.emit(this.data)
+      if (this.data?.audio?.start) {
+        this.focusedBlock.emit(this.data)
+      }
     }
   }
 

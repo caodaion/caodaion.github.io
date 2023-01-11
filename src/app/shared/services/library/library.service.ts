@@ -12,4 +12,8 @@ export class LibraryService {
   getStaticBooks(): Observable<any> {
     return this.http.get(`assets/documents/library/static-library.json`);
   }
+
+  getBookByKey(key: any) {
+    return this.http.get(`assets/documents/library/${key}.json`);
+  }
 }
