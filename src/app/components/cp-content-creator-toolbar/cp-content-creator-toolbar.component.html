@@ -1,8 +1,6 @@
 <div class="cp-creator-toolbar">
   <div>
-    <button (click)="saveData()" mat-raised-button color="primary">
-      Lưu
-    </button>
+    <button (click)="saveData()" mat-raised-button color="primary">Lưu</button>
   </div>
   <div class="toolbar-content">
     <mat-tab-group>
@@ -10,25 +8,33 @@
         <div class="w-100 form-group">
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>Mã định danh</mat-label>
-            <input matInput [(ngModel)]="data.key" disabled>
+            <input matInput [(ngModel)]="data.key" disabled />
           </mat-form-field>
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>Tên</mat-label>
-            <input matInput [(ngModel)]="data.name">
+            <input matInput [(ngModel)]="data.name" />
           </mat-form-field>
+          <div class="w-100">
+            <mat-label>Công bố</mat-label>
+            <mat-checkbox [(ngModel)]="data.published"></mat-checkbox>
+          </div>
           <ng-container *ngFor="let form of data?.formGroup">
             <ng-container *ngIf="form?.type == 'radio'">
               <div class="w-100">
-                <mat-label>{{form?.label}}</mat-label>
+                <mat-label>{{ form?.label }}</mat-label>
               </div>
               <mat-radio-group [(ngModel)]="form.value">
-                <mat-radio-button *ngFor="let choose of form?.data" [value]="choose">{{choose}}</mat-radio-button>
+                <mat-radio-button
+                  *ngFor="let choose of form?.data"
+                  [value]="choose"
+                  >{{ choose }}</mat-radio-button
+                >
               </mat-radio-group>
             </ng-container>
             <ng-container *ngIf="form?.type == 'shortText'">
               <mat-form-field appearance="fill" class="w-100">
-                <mat-label>{{form?.label}}</mat-label>
-                <input matInput [(ngModel)]="form.value">
+                <mat-label>{{ form?.label }}</mat-label>
+                <input matInput [(ngModel)]="form.value" />
               </mat-form-field>
             </ng-container>
           </ng-container>
@@ -36,7 +42,11 @@
       </mat-tab>
       <mat-tab label="Chèn">
         <div class="w-100 form-group">
-          <button mat-icon-button (click)="addNewBlock()" [disabled]="!focusedBlock || focusedBlock?.type == 'contentBlock'">
+          <button
+            mat-icon-button
+            (click)="addNewBlock()"
+            [disabled]="!focusedBlock || focusedBlock?.type == 'contentBlock'"
+          >
             <mat-icon>add</mat-icon>
           </button>
           <button mat-icon-button (click)="addNewContentBlock()">
@@ -55,7 +65,7 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Nguồn</mat-label>
-      <input type="text" matInput [(ngModel)]="data.audio.src">
+      <input type="text" matInput [(ngModel)]="data.audio.src" />
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
