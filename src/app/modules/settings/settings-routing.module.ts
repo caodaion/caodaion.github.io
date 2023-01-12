@@ -15,7 +15,7 @@ const routes: Routes = [
       },
       {
         path: 'thong-bao',
-        loadChildren: () => import('../../pages/notifications/notifications.module').then((m) => m.NotificationsModule),
+        loadChildren: () => import('../../pages/settings/notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
