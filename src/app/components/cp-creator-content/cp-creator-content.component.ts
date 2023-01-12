@@ -53,9 +53,7 @@ export class CpCreatorContentComponent implements OnChanges {
     } else {
       this.eRef.nativeElement.style.color = 'unset';
       this.data.focused = false
-      if (this.data?.audio?.start) {
-        this.focusedBlock.emit(this.data)
-      }
+      this.focusedBlock.emit(this.data)
     }
   }
 
