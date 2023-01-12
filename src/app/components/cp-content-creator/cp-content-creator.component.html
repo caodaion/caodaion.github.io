@@ -6,6 +6,7 @@
       <ng-container *ngFor="let block of data.content">
         <cp-creator-block
           *ngIf="block?.type == 'block'" [data]="block"
+          [rootContent]="rootContent"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
         ></cp-creator-block>

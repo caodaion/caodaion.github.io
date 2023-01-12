@@ -18,6 +18,7 @@
 <ng-container *ngFor="let block of data.content">
   <cp-creator-content
     *ngIf="block.type == 'contentBlock'" [data]="block"
+    [rootContent]="rootContent"
     [id]="getId(block)"
     (contentToContent)="contentToContent($event)"
     [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>

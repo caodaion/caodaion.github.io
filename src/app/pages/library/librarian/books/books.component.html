@@ -33,7 +33,7 @@
                   <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <div class="card-description">{{ item?.description }}...</div>
+                  <div class="card-description">{{ item?.description?.length > 312 ? (item?.description?.substring(0, 312) + '...') : item?.description }}</div>
                 </mat-card-content>
               </div>
             </mat-grid-tile>
@@ -43,7 +43,7 @@
             <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content *ngIf="gridForYouCols == 1">
-            <div class="card-description">{{ item?.description }}...</div>
+            <div class="card-description">{{ item?.description?.length > 312 ? (item?.description?.substring(0, 312) + '...') : item?.description }}</div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

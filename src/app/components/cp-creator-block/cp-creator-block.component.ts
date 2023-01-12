@@ -14,6 +14,7 @@ import { AuthService } from "../../shared/services/auth/auth.service";
 })
 export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
+  @Input() rootContent: any;
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
