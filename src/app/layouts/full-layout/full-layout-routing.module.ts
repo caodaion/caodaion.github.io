@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
 import { FullLayoutComponent } from './full-layout.component';
-import {AuthGuard} from "../../shared/guards/auth.guard";
-import {ReleasedGuard} from "../../shared/guards/released.guard";
+import { AuthGuard } from "../../shared/guards/auth.guard";
+import { ReleasedGuard } from "../../shared/guards/released.guard";
 
 
 const routes: Routes = [
@@ -44,6 +44,13 @@ const routes: Routes = [
           ),
         canActivate: [ReleasedGuard, AuthGuard]
       },
+      {
+        path: 'thong-bao',
+        loadChildren: () =>
+          import('../../pages/notifications/notifications.module').then(
+            (m) => m.NotificationsModule
+          )
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },
@@ -53,4 +60,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FullLayoutRoutingModule {}
+export class FullLayoutRoutingModule { }

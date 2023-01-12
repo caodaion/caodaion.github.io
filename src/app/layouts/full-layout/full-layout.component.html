@@ -150,11 +150,14 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <mat-menu #profileMenu="matMenu">
-            <!-- <button mat-menu-item (click)="clearUnread()">
-                <mat-icon [matBadge]="unreadCount ? unreadCount : ''"
-                  >notifications</mat-icon
-                >Thông báo
-              </button> -->
+            <!-- <button
+              mat-menu-item
+              (click)="goToScreen('/thong-bao')"
+            >
+              <mat-icon [matBadge]="unreadCount ? unreadCount : ''"
+                >notifications</mat-icon
+              >Thông báo
+            </button> -->
             <button mat-menu-item (click)="goToScreen('/cai-dat')">
               <mat-icon>settings</mat-icon>Cài đặt
             </button>
