@@ -87,4 +87,13 @@ export class LibrarianComponent implements OnInit {
   addNewSettings() {
     this.staticBooks.push({})
   }
+
+  onItemFocus(event: any, libradianDrawer: any) {
+    if (this.previewingItem?.key === event.key) {
+      libradianDrawer.toggle()
+    } else {
+      this.previewingItem = event
+      libradianDrawer.open()
+    }
+  }
 }

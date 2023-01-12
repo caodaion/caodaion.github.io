@@ -4,7 +4,7 @@
       <mat-tab label="Sách">
         <librarian-books
           [books]="staticBooks"
-          (onItemFocus)="libradianDrawer.toggle(); previewingItem = $event"
+          (onItemFocus)="onItemFocus($event, libradianDrawer)"
         ></librarian-books>
       </mat-tab>
       <!-- <mat-tab label="Audio"></mat-tab> -->

@@ -34,8 +34,6 @@ export class BooksComponent implements OnInit, OnChanges {
   }
 
   onCardClick(item: any) {
-    console.log(item);
-
     this.onItemFocus.emit(item)
   }
 
