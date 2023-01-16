@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1673861483566,
+  "timestamp": 1673861840356,
   "index": "https://caodaion.github.io/index.html",
   "assetGroups": [
     {
@@ -397,8 +397,8 @@
     "https://caodaion.github.io/assets/documents/kinh/vu-qui.json": "019c3067f6308bf69272dbd841c998bbad360b6c",
     "https://caodaion.github.io/assets/documents/library/20230111_093301.jpg": "b6c99335130446b6d077c47f3f62ca60660cd49d",
     "https://caodaion.github.io/assets/documents/library/20230111_153208.jpg": "6007563cf485b89fe2cd39f85405f20bd1747ef3",
-    "https://caodaion.github.io/assets/documents/library/static-library.json": "d12ea854f8ad9fc133882eb8daaf3859e0c645e7",
-    "https://caodaion.github.io/assets/documents/library/tai-lieu-thuyet-dao.json": "78156a7e9afe424441f9e62173f5435b8f95dce2",
+    "https://caodaion.github.io/assets/documents/library/static-library.json": "337b9449d14580b973a12548678e1d30fc9b4764",
+    "https://caodaion.github.io/assets/documents/library/tai-lieu-thuyet-dao.json": "a2573200bd20dc10d3d288281a9edea6abfc4a7f",
     "https://caodaion.github.io/assets/documents/master-data/date.json": "550c19efc42ca66bd9f23e78314f01b41a95c638",
     "https://caodaion.github.io/assets/documents/master-data/location-type.json": "83d9386ffb8f6e3dbd458ab494b8519dd100f232",
     "https://caodaion.github.io/assets/documents/master-data/time.json": "c79164d35958869cdd14b5afca4d24e488c1a7e6",
