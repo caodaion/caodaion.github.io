@@ -234,10 +234,15 @@
                   Nhận thông báo -->
                 </div>
                 <div class="event-name">
-                  {{ item?.name || item?.eventName }}
+                  <ng-container *ngIf="!item?.startTime && !item?.endTime">
+                    <h2>{{ item?.name || item?.eventName }}</h2>
+                  </ng-container>
+                  <ng-container *ngIf="item?.startTime && item?.endTime">
+                    {{ item?.name || item?.eventName }}
+                  </ng-container>
                 </div>
                 <div class="event-time">
-                  {{ item?.startTime }}-{{ item?.endTime }}
+                  {{ item?.startTime }} {{ item?.endTime ? '-' + item?.endTime : '' }}
                 </div>
                 <div class="event-location">{{ item?.location }}</div>
               </div>

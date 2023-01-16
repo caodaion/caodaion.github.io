@@ -101,6 +101,7 @@ export class EventListComponent implements OnInit {
       })
       if (foundEvent) {
         foundEvent.eventName = `Cầu siêu ${foundEvent.eventName} cho ${tuanCuu?.details?.name}`
+        foundEvent.backgroundColor = `#fbbc05`
         this.todayEvents.event.push(foundEvent)
       }
     })
