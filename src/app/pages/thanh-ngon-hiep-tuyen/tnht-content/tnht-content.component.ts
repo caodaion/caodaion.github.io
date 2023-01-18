@@ -43,6 +43,10 @@ export class TnhtContentComponent implements OnInit {
         this.getContent(query['key'], query['level'])
       }
     })
+    this.router.navigate(
+      ['.'],
+      { relativeTo: this.route, fragment: location.hash.replace('#', '') }
+    );
   }
 
   getContent(key?: any, level?: any) {
