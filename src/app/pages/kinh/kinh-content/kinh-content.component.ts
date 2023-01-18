@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../../shared/services/auth/auth.service";
-import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {KinhService} from "../../../shared/services/kinh/kinh.service";
-import {EventService} from "../../../shared/services/event/event.service";
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "../../../shared/services/auth/auth.service";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { KinhService } from "../../../shared/services/kinh/kinh.service";
+import { EventService } from "../../../shared/services/event/event.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-kinh-content',
@@ -36,7 +36,8 @@ export class KinhContentComponent implements OnInit {
     private route: ActivatedRoute,
     public authService: AuthService,
     private breakpointObserver: BreakpointObserver,
-    private titleService: Title
+    private titleService: Title,
+    private router: Router
   ) {
   }
 
@@ -52,6 +53,17 @@ export class KinhContentComponent implements OnInit {
         this.queryParams.me = query['me']
         this.queryParams.e = query['e']
       }
+      this.router.navigate(
+        ['.'],
+        {
+          relativeTo: this.route,
+          fragment: location.hash.replace('#', ''),
+          queryParams: {
+            me: this.queryParams.me,
+            e: this.queryParams.e
+          }
+        }
+      );
     })
   }
 
@@ -99,7 +111,7 @@ export class KinhContentComponent implements OnInit {
               targetedContent.style.color = '#4285f4';
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               // @ts-ignore
-              contentCreatorWrapper.scroll({top: targetedContent.offsetTop})
+              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop })
             }, 0)
           }
         }
@@ -113,8 +125,8 @@ export class KinhContentComponent implements OnInit {
       this.rootContent.type = 'block'
     }
     this.rootContent.event = 'quan-hon-tang-te'
-    console.log({data: this.rootContent})
-    navigator.clipboard.writeText(JSON.stringify({data: this.rootContent}));
+    console.log({ data: this.rootContent })
+    navigator.clipboard.writeText(JSON.stringify({ data: this.rootContent }));
   }
 
   private getEventList() {
