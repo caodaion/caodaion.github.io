@@ -86,7 +86,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       if (!studyStorage) {
         studyStorage = []
       }
-      let foundItem = studyStorage.find((item: any) => item.key == this.rootContent.key)
+      let foundItem = studyStorage.find((item: any) => item.key == this.rootContent?.key)
       if (foundItem) {
         foundItem.name = this.data.name
       }
