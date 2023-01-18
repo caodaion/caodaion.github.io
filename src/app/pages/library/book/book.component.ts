@@ -40,6 +40,10 @@ export class BookComponent implements OnInit {
       }
       if (query['key'] && query['level']) {
         this.getContent(query['key'], query['level'])
+        this.router.navigate(
+          ['.'],
+          { relativeTo: this.route, fragment: location.hash.replace('#', '') }
+        );
       }
     })
   }
@@ -102,11 +106,15 @@ export class BookComponent implements OnInit {
           setTimeout(() => {
             // @ts-ignore
             const targetedContent = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${location.hash.replace('#', '')}`)
-            // @ts-ignore
-            targetedContent.style.color = '#4285f4';
             const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
-            // @ts-ignore
-            contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
+            if (targetedContent) {
+              // @ts-ignore
+              targetedContent.style.color = '#4285f4';
+              if (contentCreatorWrapper && targetedContent) {
+                // @ts-ignore
+                contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
+              }
+            }
           }, 0)
         } let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
         if (!studyStorage) {
