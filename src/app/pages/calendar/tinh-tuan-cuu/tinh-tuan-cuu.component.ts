@@ -7,7 +7,7 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from 'crypto-js';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
