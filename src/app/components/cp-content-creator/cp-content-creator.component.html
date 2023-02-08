@@ -1,7 +1,9 @@
 <mat-drawer-container autosize class="cp-content-creator-mat-drawer">
   <mat-drawer-content id="contentCreatorWrapper">
-    <mat-progress-bar mode="indeterminate" *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"></mat-progress-bar>
-    <audio #audioPlayer class="w-100 block-audio-player" *ngIf="data?.type === 'block' && data?.audio?.src" [src]="data?.audio?.src"></audio>
+    <div class="block-audio-player">
+      <mat-progress-bar mode="indeterminate" *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"></mat-progress-bar>
+      <audio #audioPlayer class="w-100" *ngIf="data?.type === 'block' && data?.audio?.src" [src]="data?.audio?.src"></audio>
+    </div>
     <div class="cp-creator-block-group" [ngClass]="{'contentEditable': isShowController}">
       <ng-container *ngFor="let block of data.content">
         <cp-creator-block
