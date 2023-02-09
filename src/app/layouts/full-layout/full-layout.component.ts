@@ -59,7 +59,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     private swUpdate: SwUpdate,
     private swPush: SwPush,
     private appRef: ApplicationRef,
-    public authService: AuthService,
+    private authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {
@@ -272,9 +272,5 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
 
   goToScreen(path: any) {
     this.router.navigate([path])
-  }
-
-  isShowEditToggle(): boolean {
-    return location.origin.includes('localhost')
   }
 }
