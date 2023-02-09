@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { ActivatedRoute } from '@angular/router';
@@ -22,7 +22,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
@@ -36,6 +37,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
+    this.audioTracking()
+    this.cd.detectChanges()
     if (!this.data.content || this.data.content.length == 0) {
       if (this.data.type == 'block') {
         this.data.content = [
@@ -95,6 +98,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   audioTracking() {
+    this.cd.detectChanges()
     if (this.data.type == 'block' && !!this.audioPlayer) {
       this.route.queryParams.subscribe((query) => {
         if (query['autoplay']) {
@@ -114,6 +118,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       })
       this.audioPlayer.nativeElement.addEventListener('loadeddata', (event: any) => {
         this.audioReadyToPlay = true
+        this.cd.detectChanges()
         this.audioPlayer.nativeElement.controls = true
         this.route.queryParams.subscribe((query) => {
           if (query['autoplay']) {
@@ -123,6 +128,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       })
       this.audioPlayer.nativeElement.addEventListener('canplay', (event: any) => {
         this.audioReadyToPlay = true
+        this.cd.detectChanges()
         this.audioPlayer.nativeElement.controls = true
         this.route.queryParams.subscribe((query) => {
           if (query['autoplay']) {
@@ -132,7 +138,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       })
       if (!this.authService.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
-          const currentTime = this.audioPlayer.nativeElement.currentTime
+          const currentTime = this.audioPlayer?.nativeElement.currentTime
           let timeStampContent = this.data.content.find((item: any) => {
             return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
           })
@@ -183,6 +189,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         })
       }
     }
+    this.cd.detectChanges()
   }
 
   updateStudy(timeStampContent: any, currentTime: any) {
