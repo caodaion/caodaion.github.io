@@ -158,7 +158,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           }
         })
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
-          const currentTime = this.audioPlayer.nativeElement.currentTime
+          const currentTime = this.audioPlayer?.nativeElement.currentTime
           let timeStampContent = this.data.content.find((item: any) => {
             return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
           })
@@ -167,7 +167,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           }
         })
         this.audioPlayer.nativeElement.addEventListener('ended', (event: any) => {
-          const currentTime = this.audioPlayer.nativeElement.currentTime
+          const currentTime = this.audioPlayer?.nativeElement.currentTime
           let timeStampContent = this.data.content.find((item: any) => {
             return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
           })
@@ -178,7 +178,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         })
       } else {
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
-          const currentTime = this.audioPlayer.nativeElement.currentTime
+          const currentTime = this.audioPlayer?.nativeElement.currentTime
           navigator.clipboard.writeText(currentTime)
           let timeStampContent = this.data.content.find((item: any) => {
             return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
