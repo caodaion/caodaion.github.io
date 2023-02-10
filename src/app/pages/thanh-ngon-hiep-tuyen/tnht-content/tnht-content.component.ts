@@ -144,6 +144,10 @@ export class TnhtContentComponent implements OnInit {
             isHideBottomNavBar: true,
           })
         );
+        const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
+        contentCreatorWrapper?.scrollTo({
+          top: 0
+        })
       });
   }
 }
