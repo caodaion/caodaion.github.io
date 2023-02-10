@@ -9,6 +9,8 @@
   </button>
   <ng-content></ng-content>
   <button-share [title]="current?.title" [url]="current?.location">
-    <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'"><mat-icon>share</mat-icon></button>
+    <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'">
+      <mat-icon>share</mat-icon>
+    </button>
   </button-share>
 </mat-toolbar>
