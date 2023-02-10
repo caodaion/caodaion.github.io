@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -27,7 +28,8 @@ import { MatListModule } from '@angular/material/list';
     MatButtonModule,
     QRCodeModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatSnackBarModule
   ],
   exports: [
     ButtonShareComponent
