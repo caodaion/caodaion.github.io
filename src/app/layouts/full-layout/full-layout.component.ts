@@ -46,7 +46,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   isStandalone: any;
   unreadCount: any = 1;
   protected readonly publicKey =
-    'BE-1JnTrLs1MUZiCWrdO3cWxKmmXxhqAQmkdVV5jpGFuQGomyHtrNlNhKOUGRJQIWlPF954ObMrI0RuiNdYJF1U';
+    'BOVH41pe57AnjbYpRvEOrJvyo9eGeOkfyCVPvBnvS8KF4IG9Wo6NsEubLzrXbeEz1ihntSxRWh0qOxrdhaWo_I4';
 
   mainMenu = <any>[]
   currentUser: any

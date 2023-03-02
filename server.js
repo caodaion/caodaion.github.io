@@ -3,6 +3,8 @@ const path = require("path");
 const service = require("./api/service")
 const push = require("./api/push")
 const app = express();
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
 app.use(express.static(__dirname + "/dist/pwa"));
 app.use("/service", service);
 app.use("/push", push);
