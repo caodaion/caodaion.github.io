@@ -97,6 +97,8 @@
         >
           <div class="solar-date">{{ date?.solar?.getDate() }}</div>
           <div class="lunar-date">
+            <span *ngIf="!!date?.lunar?.convertSolar2Lunar?.lunarLeap"
+            [matTooltip]="'Nhuận tháng ' + date?.lunar?.convertSolar2Lunar?.lunarMonth">NH</span>
             {{ date?.lunar?.convertSolar2Lunar?.lunarDay }}/{{
               date?.lunar?.convertSolar2Lunar?.lunarMonth
             }}
