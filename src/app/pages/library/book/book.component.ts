@@ -143,7 +143,9 @@ export class BookComponent implements OnInit {
             foundItem.location = location.href
           }
         }
-        localStorage.setItem('reading', JSON.stringify(studyStorage))
+        if (this.level) {
+          localStorage.setItem('reading', JSON.stringify(studyStorage))
+        }
       }
     })
   }

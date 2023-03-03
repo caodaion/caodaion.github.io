@@ -80,8 +80,16 @@ export class LibrarianComponent implements OnInit {
   }
 
 
-  onRead(path: any) {
-    this.router.navigateByUrl(path.replace(location.origin, ''))
+  onRead(path: any, isTableContent: boolean = false) {
+    if (isTableContent) {
+      this.router.navigate([path.replace(location.origin, '')], {
+        queryParams: {
+          tableContent: true
+        }
+      })
+    } else {
+      this.router.navigateByUrl(path.replace(location.origin, ''))
+    }
   }
 
   addNewSettings() {

@@ -104,12 +104,14 @@ export class TnhtContentComponent implements OnInit {
               contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
             }, 0)
           }
-        }let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
+        }
+        let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
         if (!studyStorage) {
           studyStorage = []
         }
-
-        localStorage.setItem('reading', JSON.stringify(studyStorage))
+        if (level) {
+          localStorage.setItem('reading', JSON.stringify(studyStorage))
+        }
       }
     })
   }
