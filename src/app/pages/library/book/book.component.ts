@@ -13,13 +13,17 @@ export class BookComponent implements OnInit {
   rootContent: any;
   content: any;
   isLoading: boolean = false;
+  isShowTableContent: boolean = false;
   nowContent: any;
+  level: any;
   navigate = {
     prev: {
       link: undefined,
+      queryParams: {}
     },
     next: {
       link: undefined,
+      queryParams: {}
     }
   };
 
@@ -34,12 +38,16 @@ export class BookComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe((query: any) => {
+      this.isShowTableContent = query.params['tableContent']
+    })
     this.route.params.subscribe((query) => {
       if (query['key'] && !query['level']) {
         this.getContent(query['key'], query['level'])
       }
       if (query['key'] && query['level']) {
         this.getContent(query['key'], query['level'])
+        this.level = query['level']
         this.router.navigate(
           ['.'],
           { relativeTo: this.route, fragment: location.hash.replace('#', '') }
@@ -169,7 +177,66 @@ export class BookComponent implements OnInit {
       array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
       return result;
     }
-    this.navigate.prev.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) - 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.hash) || '/'
-    this.navigate.next.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) + 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.hash) || '/'
+    if (!this.isShowTableContent) {
+      this.navigate.prev.queryParams = {
+        tableContent: !this.isShowTableContent
+      }
+      this.navigate.prev.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) - 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.hash) || '/'
+      this.navigate.next.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) + 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.hash) || '/'
+    } else {
+      this.navigate.prev.queryParams = {}
+    }
+  }
+
+  getContentName(item: any) {
+    if (!item?.name) {
+      let name = ''
+      item?.content[0]?.content.forEach((text: any) => {
+        if (text.type == 'text') {
+          name += text?.text
+        }
+      })
+      return name
+    }
+    return item?.name
+  }
+
+  readContent(item: any) {
+    if (item?.attrs?.hash?.includes('#')) {
+      this.router.navigate([item?.attrs?.pathname], { fragment: item?.attrs?.hash.replace('#', '') })
+    } else {
+      this.router.navigate([`${item?.attrs?.pathname}${item?.attrs?.hash || ''}`])
+    }
+  }
+
+  onReadNow() {
+    this.isLoading = true
+    setTimeout(() => {
+      this.router.navigate([], {
+        queryParams: {
+          'tableContent': null,
+        },
+        queryParamsHandling: 'merge'
+      }).then(() => {
+        this.isLoading = false
+      })
+    }, 0)
+  }
+
+  getBackLink() {
+    if (!this.level && !this.isShowTableContent) {
+      this.navigate.prev.queryParams = {
+        tableContent: !this.isShowTableContent
+      }
+      return location.pathname
+    }
+    if (this.level && !this.isShowTableContent) {
+      this.navigate.prev.queryParams = {
+        tableContent: !this.isShowTableContent
+      }
+      return ''
+    }
+    this.navigate.prev.queryParams = {}
+    return ''
   }
 }

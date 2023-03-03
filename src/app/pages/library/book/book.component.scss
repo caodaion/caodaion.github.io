@@ -17,10 +17,21 @@
         overflow: hidden;
       }
     }
+    .book-table-content-container {
+      &-wrapper {
+        flex: 1;
+        overflow: auto;
+      }
+    }
     .book-header {
       white-space: normal;
       overflow: hidden;
       width: 100%;
+    }
+    .content-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

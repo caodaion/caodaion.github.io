@@ -2,7 +2,10 @@
   <app-header
     class="header"
     [prevPage]="{
-      navigate: { link: '/trang-chu/thu-vien' }
+      navigate: {
+        link: getBackLink(),
+        queryParams: navigate.prev.queryParams
+      }
     }"
   >
     <div class="book-header">
@@ -10,7 +13,7 @@
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-  <div class="book-container-wrapper">
+  <div class="book-container-wrapper" *ngIf="!isShowTableContent">
     <div *ngIf="content" class="h-100">
       <cp-content-creator
         [data]="content"
@@ -19,6 +22,42 @@
         (nextContent)="onNextContent()"
       ></cp-content-creator>
     </div>
+  </div>
+  <div class="book-table-content-container-wrapper" *ngIf="isShowTableContent">
+    <mat-accordion multi>
+      <mat-expansion-panel disabled hideToggle [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title><h2 class="content-name">{{ content?.name }}</h2></mat-panel-title>
+          <div class="d-flex align-items-center">
+            <button mat-stroked-button (click)="onReadNow()">Đọc</button>
+          </div>
+        </mat-expansion-panel-header>
+        <div>
+          <mat-accordion multi>
+            <mat-expansion-panel *ngFor="let q of content?.content" hideToggle [expanded]="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title><h3 class="content-name">{{getContentName(q)}}</h3></mat-panel-title>
+                <div class="d-flex align-items-center">
+                  <button mat-stroked-button (click)="readContent(q)">Đọc</button>
+                </div>
+              </mat-expansion-panel-header>
+              <div>
+                <mat-list>
+                  <mat-list-item *ngFor="let p of q?.content">
+                    <div class="w-100 d-flex justify-content-between align-items-center">
+                      <div class="content-name">{{getContentName(p)}}</div>
+                      <div class="d-flex align-items-center">
+                        <button mat-stroked-button (click)="readContent(p)">Đọc</button>
+                      </div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
   <app-bottom-navigator
     *ngIf="content?.type == 'block'"

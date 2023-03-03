@@ -29,6 +29,13 @@ export class HeaderComponent implements OnInit {
         .navigate([this.prevPage?.navigate?.link], {
           queryParams: this.prevPage?.navigate?.queryParams,
         });
+    } else {
+      const path = location.pathname.split('/')
+      path.pop()
+      this.router
+        .navigate([path.join('/')], {
+          queryParams: this.prevPage?.navigate?.queryParams,
+        });
     }
   }
 
