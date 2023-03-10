@@ -11,6 +11,7 @@ import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { CaodaionEditorModule } from 'src/app/components/caodaion-editor/caodaion-editor.module';
 import { MatBadgeModule } from '@angular/material/badge';
+import { KnollModule } from 'src/app/components/knoll/knoll.module';
 
 @NgModule({
   declarations: [FullLayoutComponent],
@@ -26,6 +27,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatMenuModule,
     MatBadgeModule,
     CaodaionEditorModule,
+    KnollModule
   ],
   exports: [FullLayoutComponent],
 })

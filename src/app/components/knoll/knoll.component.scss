@@ -1,0 +1,17 @@
+::ng-deep {
+  .knoll-flat {
+    position: fixed !important;
+    z-index: 9;
+    bottom: 1rem;
+    right: 1rem;
+    button {
+      background: #ffffff;
+    }
+    .mat-button-wrapper {
+      padding: 0 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

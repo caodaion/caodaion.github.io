@@ -81,27 +81,29 @@ export class KinhContentComponent implements OnInit {
         this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
         this.isLoading = false
         this.getEventList()
-        this.breakpointObserver
-          .observe(['(max-width: 600px)'])
-          .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: true,
-                  isHideBottomNavBar: true,
-                })
-              );
-            } else {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: false,
-                  isHideBottomNavBar: false,
-                })
-              );
-            }
-          });
+        setTimeout(() => {
+          this.breakpointObserver
+            .observe(['(max-width: 600px)'])
+            .subscribe((state: BreakpointState) => {
+              if (state.matches) {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: true,
+                    isHideBottomNavBar: true,
+                  })
+                );
+              } else {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: false,
+                    isHideBottomNavBar: false,
+                  })
+                );
+              }
+            });
+        }, 0)
         if (location.hash) {
           if (location.pathname.includes('kinh')) {
             setTimeout(() => {
