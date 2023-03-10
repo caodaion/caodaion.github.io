@@ -50,6 +50,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
 
   mainMenu = <any>[]
   currentUser: any
+  location = window.location.origin
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -118,6 +119,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // });
     this.mainMenu = this.authService.getMenu(MENU)
     this.currentUser = this.authService.getCurrentUser()
+
   }
 
   clearUnread() {

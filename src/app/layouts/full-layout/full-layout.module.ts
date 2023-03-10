@@ -12,6 +12,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CaodaionEditorModule } from 'src/app/components/caodaion-editor/caodaion-editor.module';
 import { MatBadgeModule } from '@angular/material/badge';
 import { KnollModule } from 'src/app/components/knoll/knoll.module';
+import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [FullLayoutComponent],
@@ -27,7 +29,9 @@ import { KnollModule } from 'src/app/components/knoll/knoll.module';
     MatMenuModule,
     MatBadgeModule,
     CaodaionEditorModule,
-    KnollModule
+    KnollModule,
+    ButtonShareModule,
+    MatTooltipModule
   ],
   exports: [FullLayoutComponent],
 })
