@@ -54,27 +54,29 @@ export class TnhtContentComponent implements OnInit {
     this.tnhtService.getTNHTByPath(key).subscribe((res: any) => {
       if (res.data) {
         this.rootContent = res.data
-        this.breakpointObserver
-          .observe(['(max-width: 600px)'])
-          .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: true,
-                  isHideBottomNavBar: true,
-                })
-              );
-            } else {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: false,
-                  isHideBottomNavBar: false,
-                })
-              );
-            }
-          });
+        setTimeout(() => {
+          this.breakpointObserver
+            .observe(['(max-width: 600px)'])
+            .subscribe((state: BreakpointState) => {
+              if (state.matches) {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: true,
+                    isHideBottomNavBar: true,
+                  })
+                );
+              } else {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: false,
+                    isHideBottomNavBar: false,
+                  })
+                );
+              }
+            });
+        }, 0)
         if (!level) {
           this.content = res.data
           this.titleService.setTitle(`${this.content.name} | ${this.rootContent.name} | CaoDaiON`)
