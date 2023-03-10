@@ -50,7 +50,6 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
 
   mainMenu = <any>[]
   currentUser: any
-  location = window.location.origin
 
   constructor(
     private _snackBar: MatSnackBar,

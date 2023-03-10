@@ -10,7 +10,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 })
 export class ButtonShareComponent {
   @Input() title?: any
-  @Input() url?: any
+  @Input() url?: any = `${window.location.href}`
   shareBottomSheetRef: any;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
