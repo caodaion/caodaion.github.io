@@ -8,6 +8,7 @@
     >
       <mat-grid-tile *ngFor="let item of forYouBooks">
         <mat-card
+          appearance="outlined"
           class="card-grid"
           [ngClass]="{ focused: true }"
           (click)="onCardClick(item)"

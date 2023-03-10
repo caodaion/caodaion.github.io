@@ -5,7 +5,7 @@
     background-color: map.get(variables.$light-theme, "secondary-background");
     display: flex;
     padding-top: 0;
-    .mat-list-item {
+    .mat-mdc-list-item {
       width: 100%;
     }
   }

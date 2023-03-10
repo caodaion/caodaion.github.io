@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output } from '@angular/core';
 import {
-  MatLegacySnackBar as MatSnackBar,
-  MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
-  MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition
-} from "@angular/material/legacy-snack-bar";
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition
+} from "@angular/material/snack-bar";
 import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({

@@ -7,7 +7,8 @@
   }
 }
 ::ng-deep {
-  .mat-list-base .mat-list-item .mat-list-item-content {
+  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+  .mat-mdc-list-base .mat-mdc-list-item .mat-list-item-content {
     padding: 0 !important;
   }
   .sub-container {
@@ -47,7 +48,7 @@
     margin-top: 5px;
     color: map.get(variables.$light-theme, "on-surface-variant");
   }
-  .mat-list-item {
+  .mat-mdc-list-item {
     &.active {
       color: map.get(variables.$light-theme, "on-primary-container") !important;
       .main-drawer-label-text {
@@ -67,7 +68,7 @@
       display: block !important;
     }
   }
-  .mat-list-base {
+  .mat-mdc-list-base {
     &.side-nav-mobile {
       display: flex !important;
       width: 100%;
@@ -77,6 +78,7 @@
         map.get(variables.$light-theme, "inverse-on-surface");
       justify-content: space-between;
       background-color: map.get(variables.$light-theme, "main-background");
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
       .mat-list-item-content {
         display: flex !important;
         flex-direction: column !important;
@@ -99,7 +101,7 @@
     @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
       display: block !important;
     }
-    .mat-nav-list .mat-list-item {
+    .mat-nav-list .mat-mdc-list-item {
       &:focus {
         background: transparent;
       }

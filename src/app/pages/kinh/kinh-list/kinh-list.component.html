@@ -110,6 +110,7 @@
       <mat-grid-list [cols]="cols" rowHeight="1:1">
         <mat-grid-tile *ngFor="let kinh of filter?.kinh">
           <mat-card
+            appearance="outlined"
             (click)="nowKinh.filter.me = filter?.key; nowKinh.filter.e = filter?.key; onOpenKinhContent(kinh)"
             class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
             matRipple
@@ -133,6 +134,7 @@
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let kinh of kinhList">
               <mat-card
+                appearance="outlined"
                 [routerLink]="kinh?.key"
                 class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
                 matRipple
@@ -150,6 +152,7 @@
             </mat-grid-tile>
             <mat-grid-tile *ngIf="contentEditable">
               <mat-card
+                appearance="outlined"
                 [routerLink]="'them-moi'"
                 class="w-100 h-100 d-flex align-items-center justify-content-center"
                 matRipple

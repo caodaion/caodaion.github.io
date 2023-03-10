@@ -7,7 +7,7 @@
       <a
         *ngFor="let item of mainMenu"
         mat-list-item
-        disableRipple
+        [disableRipple]="true"
         [routerLink]="item?.url"
         [routerLinkActive]="'active'"
       >
@@ -117,7 +117,7 @@
         <div class="d-flex justify-content-center align-items-center">
           <a
             mat-list-item
-            disableRipple
+            [disableRipple]="true"
             (click)="openSnackBar()"
             *ngIf="isOffline"
           >
@@ -127,7 +127,7 @@
               <mat-icon>wifi_off</mat-icon>
             </div>
           </a>
-          <a mat-list-item disableRipple>
+          <a mat-list-item [disableRipple]="true">
             <button
               *ngIf="isShowButtonInstall"
               mat-icon-button
@@ -188,7 +188,7 @@
     <a
       *ngFor="let item of mainMenu"
       mat-list-item
-      disableRipple
+      [disableRipple]="true"
       [routerLink]="item?.url"
       [routerLinkActive]="'active'"
     >
