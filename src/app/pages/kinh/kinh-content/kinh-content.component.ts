@@ -171,4 +171,46 @@ export class KinhContentComponent implements OnInit {
   getFormValue(key: string) {
     return this.content?.formGroup?.find((item: any) => item.key === key)?.value || ''
   }
+  swipeCoord: any;
+  swipeTime: any;
+  swipe(e: any, when: any) {
+    const coord: [number, number] = [
+      e.changedTouches[0].clientX,
+      e.changedTouches[0].clientY,
+    ];
+    const time = new Date().getTime();
+
+    if (when === 'start') {
+      this.swipeCoord = coord;
+      this.swipeTime = time;
+    } else if (when === 'end') {
+      let direction: any[] = [];
+      if (this.swipeCoord) {
+        direction = [
+          coord[0] - this.swipeCoord[0],
+          coord[1] - this.swipeCoord[1],
+        ];
+      }
+      let duration: any;
+      if (this.swipeTime) {
+        duration = time - this.swipeTime;
+      }
+
+      if (
+        duration < 1000 && //
+        Math.abs(direction[0]) > 30 && // Long enough
+        Math.abs(direction[0]) > Math.abs(direction[1] * 3)
+      ) {
+        // Horizontal enough
+        const link = direction[0] < 0 ? this.navigate.next.link : this.navigate.prev.link;
+        if (link !== '/') {
+          // Do whatever you want with swipe
+          this.router
+          .navigate([link], {
+            queryParams: this.queryParams,
+          })
+        }
+      }
+    }
+  }
 }
