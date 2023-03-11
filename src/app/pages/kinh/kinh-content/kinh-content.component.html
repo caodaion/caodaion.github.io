@@ -14,7 +14,9 @@
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-  <div class="kinh-container-wrapper">
+  <div class="kinh-container-wrapper"
+  (touchstart)="swipe($event, 'start')"
+  (touchend)="swipe($event, 'end')">
     <div *ngIf="content" class="h-100">
       <cp-content-creator [data]="content" (save)="onSaveContent()"></cp-content-creator>
     </div>
