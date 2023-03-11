@@ -4,6 +4,8 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  HostListener,
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -536,6 +538,21 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         return currentTimeMinuteOffset - dateRangeOffset?.top;
     }
     return 0
+  }
+
+  onMouseWheel(event: any) {
+    if (event?.srcElement?.nodeName !== 'MAT-LIST-ITEM' && event?.srcElement?.nodeName !== 'MAT-LIST' && event?.srcElement?.nodeName !== 'SPAN') {
+      if (event.wheelDelta > 0) {
+        if (this.calendarMode === 'month') {
+          this.onChangeSelectedCalendar('before')
+        }
+      }
+      if (event.wheelDelta < 0) {
+        if (this.calendarMode === 'month') {
+          this.onChangeSelectedCalendar('next')
+        }
+      }
+    }
   }
 }
 

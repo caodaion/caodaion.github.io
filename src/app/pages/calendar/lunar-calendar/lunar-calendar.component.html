@@ -75,9 +75,8 @@
       <div class="day text-center">T7</div>
       <div class="day text-center">CN</div>
     </div>
-    <div class="flex-1 dates h-100">
+    <div class="flex-1 dates h-100" (mousewheel)="onMouseWheel($event)">
       <mat-card
-        appearance="outlined"
         class="date wrapper-container align-items-center"
         *ngFor="let date of selectedMonth"
         [ngStyle]="{
