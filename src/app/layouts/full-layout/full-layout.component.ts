@@ -7,10 +7,10 @@ import {
   OnInit,
 } from '@angular/core';
 import {
-  MatLegacySnackBar as MatSnackBar,
-  MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
-  MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition,
-} from '@angular/material/legacy-snack-bar';
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import {SwPush, SwUpdate} from '@angular/service-worker';
 import {fromEvent, interval, Observable, Subscription} from 'rxjs';
 import {CommonService} from 'src/app/shared/services/common/common.service';
@@ -118,6 +118,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // });
     this.mainMenu = this.authService.getMenu(MENU)
     this.currentUser = this.authService.getCurrentUser()
+
   }
 
   clearUnread() {

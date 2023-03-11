@@ -2,10 +2,10 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
-  MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition,
-  MatLegacySnackBar as MatSnackBar,
-} from '@angular/material/legacy-snack-bar';
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+  MatSnackBar,
+} from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CaodaionEditorService } from 'src/app/shared/services/caodaion-editor/caodaion-editor.service';

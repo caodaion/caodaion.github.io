@@ -8,7 +8,6 @@
     <mat-nav-list class="mat-list-sub-sidenav">
       <a
         mat-list-item
-        disableRipple
         class="icon-hover"
         [ngClass]="calendarService.calendarViewMode === 'day' ? 'active' : ''"
         (click)="onChangeCalendarViewMode('day')"
@@ -18,7 +17,6 @@
       >
       <a
         mat-list-item
-        disableRipple
         class="icon-hover"
         [ngClass]="calendarService.calendarViewMode === 'month' ? 'active' : ''"
         (click)="onChangeCalendarViewMode('month')"
@@ -28,7 +26,6 @@
       >
       <a
         mat-list-item
-        disableRipple
         *ngFor="let item of menu"
         class="icon-hover"
         [routerLink]="item?.url"

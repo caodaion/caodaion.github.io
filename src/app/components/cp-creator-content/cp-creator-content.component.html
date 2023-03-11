@@ -60,13 +60,13 @@
           }"
         >
         <ng-container *ngIf="text?.attrs?.knoll">
-          <span class="knoll" style="color: rgb(255, 153, 43); position: relative; text-decoration: underline;"><span class="stading-bell-icon" style="position: absolute; height: 15px; right: 100%; bottom: 100%; transform: translate(5px, 5px);"><svg width="15px" height="15px" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 10C3 8.89543 3.89543 8 5 8H51C52.1046 8 53 8.89543 53 10V23C53 36.8071 41.8071 48 28 48V48C14.1929 48 3 36.8071 3 23V10Z" fill="#FF992B"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1182 8H14.8819L46.5937 39.7118C46.0001 40.3719 45.3719 41.0001 44.7119 41.5937L11.1182 8ZM9.37695 8H10.1485L44.1947 42.0462C44.0556 42.1645 43.9153 42.2814 43.7737 42.3967L9.37695 8ZM47.0462 39.1947L15.8516 8H28.3848L51.614 31.2292C50.5879 34.1741 49.0264 36.8681 47.0462 39.1947Z" fill="#B87333"></path>
-            <rect x="27" y="53" width="2" height="16" rx="1" transform="rotate(-90 27 53)" fill="#A82300"></rect>
-            <rect x="26" y="55" width="6" height="6" rx="3" transform="rotate(-90 26 55)" fill="#A82300"></rect>
-            <rect x="13" y="56" width="8" height="16" rx="1" transform="rotate(-90 13 56)" fill="#FFD700"></rect>
-            <rect x="41" y="54" width="4" height="2" rx="1" transform="rotate(-90 41 54)" fill="#A82300"></rect>
+          <span class="knoll" style="color: rgb(255, 153, 43); position: relative; text-decoration: underline;"><span class="stading-bell-icon" style="position: absolute; height: 15px; right: 100%; bottom: 100%; transform: translate(5px, 5px);"><svg width="15" height="15" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 10C7 8.89543 7.89543 8 9 8H55C56.1046 8 57 8.89543 57 10V23C57 36.8071 45.8071 48 32 48C18.1929 48 7 36.8071 7 23V10Z" fill="#FF992B"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1182 8H18.8819L50.5937 39.7118C50.0001 40.3719 49.3719 41.0001 48.7119 41.5937L15.1182 8ZM13.377 8H14.1485L48.1947 42.0462C48.0556 42.1645 47.9153 42.2814 47.7737 42.3967L13.377 8ZM51.0462 39.1947L19.8516 8H32.3848L55.614 31.2292C54.5879 34.1741 53.0264 36.8681 51.0462 39.1947Z" fill="#B87333"/>
+            <rect x="31" y="53" width="2" height="16" rx="1" transform="rotate(-90 31 53)" fill="#A82300"/>
+            <rect x="30" y="55" width="6" height="6" rx="3" transform="rotate(-90 30 55)" fill="#A82300"/>
+            <rect x="17" y="56" width="8" height="16" rx="1" transform="rotate(-90 17 56)" fill="#FFD700"/>
+            <rect x="45" y="54" width="4" height="2" rx="1" transform="rotate(-90 45 54)" fill="#A82300"/>
             </svg></span><span class="knoll-content">{{ text.text }}</span></span>
         </ng-container>
         <ng-container *ngIf="!text?.attrs?.knoll">{{ text.text }}</ng-container>

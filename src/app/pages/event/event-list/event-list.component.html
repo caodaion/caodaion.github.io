@@ -263,6 +263,7 @@
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let event of eventList">
               <mat-card
+                appearance="outlined"
                 class="h-100 w-100"
                 matRipple
                 [routerLink]="'chinh-sua/' + event?.key"
@@ -277,7 +278,7 @@
               </mat-card>
             </mat-grid-tile>
             <mat-grid-tile *ngIf="contentEditable">
-              <mat-card class="h-100 w-100" matRipple [routerLink]="'them-moi'">
+              <mat-card appearance="outlined" class="h-100 w-100" matRipple [routerLink]="'them-moi'">
                 <mat-card-header>
                   <mat-card-title>+ Thêm mới</mat-card-title>
                   <mat-card-subtitle>Thêm mới sự kiện</mat-card-subtitle>

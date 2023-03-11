@@ -54,6 +54,7 @@
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let item of currentKinhList">
               <mat-card
+                appearance="outlined"
                 class="h-100 w-100"
                 matRipple
                 [routerLink]="'/trang-chu/kinh/' + item?.key"

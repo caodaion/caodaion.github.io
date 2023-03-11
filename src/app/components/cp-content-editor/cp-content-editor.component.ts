@@ -1,7 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { CaodaionEditorService } from 'src/app/shared/services/caodaion-editor/caodaion-editor.service';
-import {MatLegacySnackBar as MatSnackBar, MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition} from "@angular/material/legacy-snack-bar";
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
 import {OfflineSnackbarComponent} from "../../layouts/offline-snackbar/offline-snackbar.component";
 
 @Component({
