@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1678701562109,
+  "timestamp": 1678701818168,
   "index": "https://caodaion.github.io/index.html",
   "assetGroups": [
     {
@@ -544,9 +544,9 @@
     "https://caodaion.github.io/assets/icons/windows11/Wide310x150Logo.scale-400.png": "3597c6c2f69ade8ca50c8c3f2c6511d9c8a2b6db",
     "https://caodaion.github.io/common.97ac7c2c19188453.js": "e5e4e624833e7d684e61e7f942d67885e77a0c47",
     "https://caodaion.github.io/favicon.ico": "484ad830541e882d812075318a1b55a46e894e7f",
-    "https://caodaion.github.io/index.html": "b8c869275456a17abad3121721a4471a3c7333b9",
+    "https://caodaion.github.io/index.html": "b9c52d0ed44ac280ccff9657eada4c7908bb3d7d",
     "https://caodaion.github.io/main.de5306976ef1e433.js": "38bc8ce024e2df468fcb5dac25eb96e9120d2c84",
-    "https://caodaion.github.io/manifest.webmanifest": "19f9fcdf64770aaa79e4af2dd0e9420c87ba3c4c",
+    "https://caodaion.github.io/manifest.webmanifest": "4969d99eaad7209c1d4194336ec5cd454473e32d",
     "https://caodaion.github.io/polyfills.b03664eaf6aa5c3c.js": "6472caac0053ad5ebb84cc34a0b0830edc9e56d0",
     "https://caodaion.github.io/robots.txt": "39f928e70e2d0377f86f8f9de95846491d8c08b6",
     "https://caodaion.github.io/runtime.ecb7168c6100d56d.js": "3e9ec48d47ba4d56a290a8bcef5b709ca81155d6",
