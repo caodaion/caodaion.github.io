@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
       );
       this.authService.getCurrentUser();
     });
-    this.addTag()
   }
 
   ngOnInit(): void {
@@ -96,17 +95,6 @@ export class AppComponent implements OnInit {
         })
       }
     });
-  }
-
-  private addTag() {
-    this.meta.addTag({ name: 'description', content: CONSTANT.page.description })
-    this.meta.addTag({ name: 'title', content: CONSTANT.page.name })
-    this.meta.addTag({ name: 'og:title', content: CONSTANT.page.name })
-    this.meta.addTag({ name: 'og:url', content: location.origin })
-    this.meta.addTag({ name: 'og:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
-    this.meta.addTag({ name: 'og:image:secure_url', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
-    this.meta.addTag({ name: 'image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
-    this.meta.addTag({ name: 'twitter:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
   }
 
   checkPushNotification() {
