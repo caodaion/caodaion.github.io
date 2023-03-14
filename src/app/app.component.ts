@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonService } from './shared/services/common/common.service';
 import { EventService } from './shared/services/event/event.service';
 import { KinhService } from './shared/services/kinh/kinh.service';
-import { Meta, Title } from "@angular/platform-browser";
+import { Meta } from "@angular/platform-browser";
 import { CONSTANT } from "./shared/constants/constants.constant";
-import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
 import { TnhtService } from './shared/services/tnht/tnht.service';
 
@@ -26,13 +25,10 @@ export class AppComponent implements OnInit {
     private kinhService: KinhService,
     private eventService: EventService,
     private meta: Meta,
-    private route: ActivatedRoute,
-    private title: Title,
-    private datePipe: DatePipe,
     private notificationsService: NotificationsService,
     private tnhtService: TnhtService,
   ) {
-    router.events.subscribe((val: any) => {
+    this.router.events.subscribe((val: any) => {
       localStorage.setItem(
         'currentLayout',
         JSON.stringify({
@@ -95,9 +91,21 @@ export class AppComponent implements OnInit {
         })
       }
     });
+    this.addTag()
   }
 
   checkPushNotification() {
     this.notificationsService.syncPush()
+  }
+
+  private addTag() {
+    this.meta.addTag({ name: 'description', content: CONSTANT.page.description })
+    this.meta.addTag({ name: 'title', content: CONSTANT.page.name })
+    this.meta.addTag({ name: 'og:title', content: CONSTANT.page.name })
+    this.meta.addTag({ name: 'og:url', content: location.origin })
+    this.meta.addTag({ name: 'og:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'og:image:secure_url', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+    this.meta.addTag({ name: 'twitter:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
   }
 }
