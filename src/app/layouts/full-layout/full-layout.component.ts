@@ -81,7 +81,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
           this.viewPortMode = 'desktop';
         }
       });
-
+      this.isShowButtonInstall = true;
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -249,7 +249,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // Show the install prompt
     this.deferredPrompt?.prompt();
     // Wait for the user to respond to the prompt
-    const {outcome} = await this.deferredPrompt.userChoice;
+    const {outcome} = await this.deferredPrompt?.userChoice;
     // Optionally, send analytics event with outcome of user choice
     console.log(`User response to the install prompt: ${outcome}`);
     // We've used the prompt, and can't use it again, throw it away

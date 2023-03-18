@@ -138,20 +138,18 @@
               <mat-icon>wifi_off</mat-icon>
             </div>
           </a>
-          <a mat-list-item [disableRipple]="true">
-            <button
-              *ngIf="isShowButtonInstall"
-              mat-icon-button
-              class="account-logo d-flex justify-content-center align-items-center"
-              (click)="installPWA()"
-            >
-              <mat-icon>{{
-                viewPortMode === "desktop"
-                  ? "install_desktop"
-                  : "install_mobile"
-              }}</mat-icon>
-            </button>
-          </a>
+          <button
+            *ngIf="isShowButtonInstall"
+            mat-icon-button
+            class="account-logo d-flex justify-content-center align-items-center"
+            (click)="installPWA()"
+          >
+            <mat-icon>{{
+              viewPortMode === "desktop"
+                ? "install_desktop"
+                : "install_mobile"
+            }}</mat-icon>
+          </button>
           <button
             mat-icon-button
             [matMenuTriggerFor]="profileMenu"
