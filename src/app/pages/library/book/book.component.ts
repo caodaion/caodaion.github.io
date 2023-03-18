@@ -73,7 +73,7 @@ export class BookComponent implements OnInit {
             }
           })
         }
-        this.reading = JSON.parse(localStorage.getItem('reading') || '[]')?.find((item: any) => item.key == 'thanhngonhieptuyenquyen1')
+        this.reading = JSON.parse(localStorage.getItem('reading') || '[]')?.find((item: any) => item.key == this.rootContent?.key)
         this.breakpointObserver
           .observe(['(max-width: 600px)'])
           .subscribe((state: BreakpointState) => {
