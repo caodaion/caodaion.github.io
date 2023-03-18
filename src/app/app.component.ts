@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonService } from './shared/services/common/common.service';
 import { EventService } from './shared/services/event/event.service';
 import { KinhService } from './shared/services/kinh/kinh.service';
-import { Meta } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { CONSTANT } from "./shared/constants/constants.constant";
+import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
 import { TnhtService } from './shared/services/tnht/tnht.service';
 
@@ -25,10 +26,13 @@ export class AppComponent implements OnInit {
     private kinhService: KinhService,
     private eventService: EventService,
     private meta: Meta,
+    private route: ActivatedRoute,
+    private title: Title,
+    private datePipe: DatePipe,
     private notificationsService: NotificationsService,
     private tnhtService: TnhtService,
   ) {
-    this.router.events.subscribe((val: any) => {
+    router.events.subscribe((val: any) => {
       localStorage.setItem(
         'currentLayout',
         JSON.stringify({
@@ -38,6 +42,7 @@ export class AppComponent implements OnInit {
       );
       this.authService.getCurrentUser();
     });
+    this.addTag()
   }
 
   ngOnInit(): void {
@@ -67,7 +72,7 @@ export class AppComponent implements OnInit {
                   .subscribe((res: any) => {
                     if (res) {
                       this.kinhService.kinhList = res.data;
-                      fetch(`src/assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
+                      fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
                       this.kinhService.kinhList.forEach((item: any) => {
                         this.kinhService.getKinhContent(item.key).subscribe()
                       })
@@ -79,11 +84,6 @@ export class AppComponent implements OnInit {
                           this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
                             if (res.data) {
                               this.tnhtService.tableContent = res.data
-                              this.tnhtService.tableContent?.content?.forEach((item: any) => {
-                                if (item?.audio?.src) {
-                                  fetch(item?.audio?.src)
-                                }
-                              })
                               this.checkPushNotification()
                             }
                           })
@@ -97,11 +97,6 @@ export class AppComponent implements OnInit {
         })
       }
     });
-    this.addTag()
-  }
-
-  checkPushNotification() {
-    this.notificationsService.syncPush()
   }
 
   private addTag() {
@@ -113,5 +108,9 @@ export class AppComponent implements OnInit {
     this.meta.addTag({ name: 'og:image:secure_url', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
     this.meta.addTag({ name: 'image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
     this.meta.addTag({ name: 'twitter:image', content: `https://www.caodaion.com/assets/icons/windows11/Square150x150Logo.scale-400.png` })
+  }
+
+  checkPushNotification() {
+    this.notificationsService.syncPush()
   }
 }

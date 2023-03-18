@@ -26,6 +26,7 @@ export class BookComponent implements OnInit {
       queryParams: {}
     }
   };
+  reading: any;
 
   constructor(
     private router: Router,
@@ -72,6 +73,7 @@ export class BookComponent implements OnInit {
             }
           })
         }
+        this.reading = JSON.parse(localStorage.getItem('reading') || '[]')?.find((item: any) => item.key == this.rootContent?.key)
         this.breakpointObserver
           .observe(['(max-width: 600px)'])
           .subscribe((state: BreakpointState) => {
@@ -240,5 +242,15 @@ export class BookComponent implements OnInit {
     }
     this.navigate.prev.queryParams = {}
     return ''
+  }
+
+  continueReading(isAutoPlay: boolean = false) {
+    if (isAutoPlay) {
+      this.router.navigateByUrl(`${this.reading.location.replace(location.origin, '')}`, {
+        state: {autoplay: true}
+      })
+    } else {
+      this.router.navigateByUrl(this.reading.location.replace(location.origin, ''))
+    }
   }
 }

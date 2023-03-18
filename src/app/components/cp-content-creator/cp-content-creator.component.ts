@@ -103,6 +103,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       this.route.queryParams.subscribe((query) => {
         if (query['autoplay']) {
           this.audioPlayer.nativeElement.autoplay = true
+        } else {
+          this.audioPlayer.nativeElement.autoplay = history.state.autoplay
         }
       })
       const storedAudio = JSON.parse(localStorage.getItem('reading') || '[]')
@@ -123,6 +125,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.route.queryParams.subscribe((query) => {
           if (query['autoplay']) {
             this.audioPlayer.nativeElement.autoplay = true
+          } else {
+            this.audioPlayer.nativeElement.autoplay = history.state.autoplay
           }
         })
       })
@@ -133,6 +137,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.route.queryParams.subscribe((query) => {
           if (query['autoplay']) {
             this.audioPlayer.nativeElement.autoplay = true
+          } else {
+            this.audioPlayer.nativeElement.autoplay = history.state.autoplay
           }
         })
       })
