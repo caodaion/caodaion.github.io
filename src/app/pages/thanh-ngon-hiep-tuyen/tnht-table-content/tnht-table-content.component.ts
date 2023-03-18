@@ -12,6 +12,7 @@ export class TnhtTableContentComponent implements OnInit {
 
   tableContent: Array<any> = [];
   isLoading: boolean = false
+  reading: any;
 
   constructor(private tnhtService: TnhtService, private router: Router, private titleService: Title) { }
 
@@ -19,12 +20,14 @@ export class TnhtTableContentComponent implements OnInit {
     this.titleService.setTitle(`Thánh-Ngôn Hiệp-Tuyển`)
     this.getTableContent()
   }
+
   getTableContent() {
     this.isLoading = true
     this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
       if (res.data) {
         this.isLoading = false
         this.tableContent.push(res.data)
+        this.reading = JSON.parse(localStorage.getItem('reading') || '[]')?.find((item: any) => item.key == 'thanhngonhieptuyenquyen1')
       }
     })
   }
@@ -48,5 +51,15 @@ export class TnhtTableContentComponent implements OnInit {
       return name
     }
     return item?.name
+  }
+
+  continueReading(isAutoPlay: boolean = false) {
+    if (isAutoPlay) {
+      this.router.navigateByUrl(`${this.reading.location.replace(location.origin, '')}`, {
+        state: {autoplay: true}
+      })
+    } else {
+      this.router.navigateByUrl(this.reading.location.replace(location.origin, ''))
+    }
   }
 }

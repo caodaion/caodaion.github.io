@@ -24,6 +24,31 @@
     </div>
   </div>
   <div class="book-table-content-container-wrapper" *ngIf="isShowTableContent">
+    <div class="container-fluid">
+      <div class="reading-section" *ngIf="reading?.name">
+        <h2>Bạn đang đọc: <span style="font-weight: 400;">{{ reading?.name }}</span></h2>
+        <p *ngIf="reading?.stopAt">
+          <strong>Đoạn: </strong>{{ reading?.stopAt }}
+        </p>
+        <button
+          mat-flat-button
+          [color]="'primary'"
+          class="w-100"
+          (click)="continueReading()"
+        >
+          ĐỌC TIẾP
+        </button>
+        <button
+          mat-flat-button
+          [color]="'primary'"
+          class="w-100"
+          (click)="continueReading(true)"
+          *ngIf="reading?.currentTime"
+        >
+          ĐỌC TIẾP VÀ NGHE
+        </button>
+      </div>
+    </div>
     <mat-accordion multi>
       <mat-expansion-panel disabled hideToggle [expanded]="true">
         <mat-expansion-panel-header>

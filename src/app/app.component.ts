@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
                   .subscribe((res: any) => {
                     if (res) {
                       this.kinhService.kinhList = res.data;
+                      fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
                       this.kinhService.kinhList.forEach((item: any) => {
                         this.kinhService.getKinhContent(item.key).subscribe()
                       })

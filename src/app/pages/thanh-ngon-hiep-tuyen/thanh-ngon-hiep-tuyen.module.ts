@@ -11,6 +11,7 @@ import {CpCreatorContentModule} from "../../components/cp-creator-content/cp-cre
 import {HeaderModule} from "../../components/header/header.module";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BottomNavigatorModule} from "../../components/bottom-navigator/bottom-navigator.module";
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {BottomNavigatorModule} from "../../components/bottom-navigator/bottom-na
     CpCreatorContentModule,
     HeaderModule,
     MatProgressBarModule,
-    BottomNavigatorModule
+    BottomNavigatorModule,
+    MatIconModule
   ]
 })
 export class ThanhNgonHiepTuyenModule {

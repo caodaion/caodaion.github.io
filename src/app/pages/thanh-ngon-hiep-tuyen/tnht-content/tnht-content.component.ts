@@ -99,11 +99,12 @@ export class TnhtContentComponent implements OnInit {
             setTimeout(() => {
               // @ts-ignore
               const targetedContent = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${location.hash.replace('#', '')}`)
-              // @ts-ignore
-              targetedContent.style.color = '#4285f4';
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
+              if (targetedContent) {
+                targetedContent.style.color = '#4285f4';
               // @ts-ignore
               contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
+              }
             }, 0)
           }
         }

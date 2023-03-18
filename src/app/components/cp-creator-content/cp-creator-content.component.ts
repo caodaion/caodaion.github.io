@@ -35,14 +35,20 @@ export class CpCreatorContentComponent implements OnChanges {
           }
           let foundItem = studyStorage.find((item: any) => item.key == this.rootContent.key)
           if (foundItem) {
+            const parentNodeContent = this.rootContent?.content?.find((item: any) => this.data.key.includes(item?.key))
             foundItem.stopAt = this.data.content[0].content[0]?.text
             foundItem.content = this.data.key
+            foundItem.name = parentNodeContent ? parentNodeContent?.name : this.rootContent.name
             foundItem.location = `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`
+            if (!this.data.audio) {
+              foundItem.currentTime = null
+            }
           } else {
             studyStorage.push({
               content: this.data.key,
               stopAt: this.data.content[0]?.text,
               key: this.rootContent.key,
+              name: this.rootContent.name,
               location: `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`,
             })
           }
