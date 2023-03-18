@@ -81,7 +81,6 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
           this.viewPortMode = 'desktop';
         }
       });
-      this.isShowButtonInstall = true;
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
