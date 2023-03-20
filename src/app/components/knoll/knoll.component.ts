@@ -1,12 +1,12 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, HostListener, ElementRef, ViewChild, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-knoll',
   templateUrl: './knoll.component.html',
   styleUrls: ['./knoll.component.scss']
 })
-export class KnollComponent {
+export class KnollComponent implements OnInit {
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
   @HostListener('document:click', ['$event'])
   onClick(event: any) {
@@ -20,14 +20,17 @@ export class KnollComponent {
   isShowTool: boolean = false;
   koll = {
     dropPoint: {
-      x: '',
-      y: ''
+      x: `calc(${window.innerWidth}px - 56px - 16px)`,
+      y: `calc(${window.innerHeight}px - 56px - 150px)`
     }
   };
 
   constructor(private eRef: ElementRef,
     private breakpointObserver: BreakpointObserver
     ) {
+  }
+
+  ngOnInit(): void {
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
@@ -40,25 +43,30 @@ export class KnollComponent {
           }
         } else {
           this.koll = JSON.parse(localStorage.getItem('koll') || '{}')
+          console.log(this.koll);
+
+          this.koll.dropPoint.x = `${this.koll.dropPoint.x}px`
+          this.koll.dropPoint.y = `${this.koll.dropPoint.y}px`
         }
-        if (state.matches) {
-          this.isPhone = true;
-          if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
-            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 150px)`
-          }
-          if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
-            this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
-          }
-        } else {
-          this.isPhone = false;
-          if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
-            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 16px)`
-          }
-          if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
-            this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
-          }
-        }
+        // if (state.matches) {
+        //   this.isPhone = true;
+        //   if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
+        //     this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 150px)`
+        //   }
+        //   if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
+        //     this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
+        //   }
+        // } else {
+        //   this.isPhone = false;
+        //   if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
+        //     this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 16px)`
+        //   }
+        //   if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
+        //     this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
+        //   }
+        // }
       });
+
   }
 
   play() {
