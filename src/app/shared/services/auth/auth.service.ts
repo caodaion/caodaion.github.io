@@ -60,7 +60,9 @@ export class AuthService {
       }
     })?.filter((item: any) => item !== undefined)
     if (location.pathname.split('/').length <= 2) {
-      this.router.navigate([result[0]?.key?.replaceAll('.', '/')])
+      if (!location.pathname.includes('trang-chu')) {
+        this.router.navigate([result[0]?.key?.replaceAll('.', '/')])
+      }
     }
     return result
   }

@@ -8,14 +8,6 @@ export const MENU = [
     released: true,
     children: [
       {
-        key: 'trang-chu.trang-chinh',
-        url: 'trang-chinh',
-        label: 'Trang chính',
-        icon: 'fiber_manual_record',
-        fullAssess: true,
-        released: false,
-      },
-      {
         key: 'trang-chu.kinh',
         url: 'kinh',
         label: 'Kinh',

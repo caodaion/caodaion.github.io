@@ -7,7 +7,7 @@
     <mat-tab [label]="'SỰ KIỆN'" #tabGroup>
       <div class="main-event-list">
         <div
-          class="event-group happenning-event"
+          class="container-fluid event-group happenning-event"
           *ngIf="happeningEvents.event.length > 0"
         >
           <div
@@ -96,7 +96,7 @@
           ></mat-divider>
         </div>
         <div
-          class="event-group happenning-event"
+          class="container-fluid event-group happenning-event"
           *ngIf="upcomingEvents.event.length > 0"
         >
           <div

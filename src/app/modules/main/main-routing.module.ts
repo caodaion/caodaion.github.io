@@ -9,6 +9,11 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: '',
+        loadChildren: () =>
+          import('../../pages/home/home.module').then((m) => m.HomeModule),
+      },
+      {
         path: 'kinh',
         loadChildren: () =>
           import('../../pages/kinh/kinh.module').then((m) => m.KinhModule),
