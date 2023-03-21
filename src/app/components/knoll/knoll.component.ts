@@ -57,7 +57,7 @@ export class KnollComponent implements OnInit {
         } else {
           this.isPhone = false;
           if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
-            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 16px)`
+            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 60px - 16px)`
           }
           if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
             this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 32px)`
