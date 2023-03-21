@@ -135,24 +135,26 @@ export class TnhtContentComponent implements OnInit {
   }
 
   onNextContent() {
-    this.router
-      .navigate([this.navigate.next.link], {
-        queryParams: {
-          autoplay: true
-        },
-      })
-      .then(() => {
-        localStorage.setItem(
-          'currentLayout',
-          JSON.stringify({
-            isHideToolbar: true,
-            isHideBottomNavBar: true,
-          })
-        );
-        const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
-        contentCreatorWrapper?.scrollTo({
-          top: 0
+    if (this.rootContent?.content?.findIndex((item: any) => item?.key == this.content?.key) < this.rootContent?.content?.length - 1) {
+      this.router
+        .navigate([this.navigate.next.link], {
+          queryParams: {
+            autoplay: true
+          },
         })
-      });
+        .then(() => {
+          localStorage.setItem(
+            'currentLayout',
+            JSON.stringify({
+              isHideToolbar: true,
+              isHideBottomNavBar: true,
+            })
+          );
+          const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
+          contentCreatorWrapper?.scrollTo({
+            top: 0
+          })
+        });
+    }
   }
 }
