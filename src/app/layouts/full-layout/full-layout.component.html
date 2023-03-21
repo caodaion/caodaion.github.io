@@ -1,6 +1,8 @@
 <mat-drawer-container class="main-mat-drawer-container" autosize>
   <mat-drawer mode="side" class="main-drawer mat-drawer" opened>
-    <div class="h-100 d-flex justify-content-between align-items-center flex-column">
+    <div
+      class="h-100 d-flex justify-content-between align-items-center flex-column"
+    >
       <div>
         <button class="menu-icon" mat-icon-button (click)="onToggleDrawer()">
           <mat-icon>menu</mat-icon>
@@ -26,7 +28,11 @@
       </div>
       <div>
         <button-share [title]="'Chia sẻ CaoDaiON'">
-          <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ CaoDaiON'">
+          <button
+            mat-icon-button
+            [color]="'primary'"
+            [matTooltip]="'Chia sẻ CaoDaiON'"
+          >
             <mat-icon>share</mat-icon>
           </button>
         </button-share>
@@ -145,9 +151,7 @@
             (click)="installPWA()"
           >
             <mat-icon>{{
-              viewPortMode === "desktop"
-                ? "install_desktop"
-                : "install_mobile"
+              viewPortMode === "desktop" ? "install_desktop" : "install_mobile"
             }}</mat-icon>
           </button>
           <button

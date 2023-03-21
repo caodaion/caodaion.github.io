@@ -11,8 +11,8 @@ export class KnollComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onClick(event: any) {
     if (this.eRef) {
-      if (this.eRef.nativeElement.contains(event.target)) {
-        // this.play()
+      if (!this.eRef.nativeElement.contains(event.target)) {
+        this.isShowTool = false
       }
     }
   }
@@ -27,7 +27,7 @@ export class KnollComponent implements OnInit {
 
   constructor(private eRef: ElementRef,
     private breakpointObserver: BreakpointObserver
-    ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -43,30 +43,27 @@ export class KnollComponent implements OnInit {
           }
         } else {
           this.koll = JSON.parse(localStorage.getItem('koll') || '{}')
-          console.log(this.koll);
-
           this.koll.dropPoint.x = `${this.koll.dropPoint.x}px`
           this.koll.dropPoint.y = `${this.koll.dropPoint.y}px`
         }
-        // if (state.matches) {
-        //   this.isPhone = true;
-        //   if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
-        //     this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 150px)`
-        //   }
-        //   if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
-        //     this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
-        //   }
-        // } else {
-        //   this.isPhone = false;
-        //   if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
-        //     this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 16px)`
-        //   }
-        //   if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
-        //     this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
-        //   }
-        // }
+        if (state.matches) {
+          this.isPhone = true;
+          if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
+            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 80px - 16px)`
+          }
+          if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
+            this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 16px)`
+          }
+        } else {
+          this.isPhone = false;
+          if (!this.koll?.dropPoint?.y || parseInt(this.koll?.dropPoint?.y) > window.innerHeight) {
+            this.koll.dropPoint.y = `calc(${window.innerHeight}px - 56px - 16px)`
+          }
+          if (!this.koll?.dropPoint?.x || parseInt(this.koll?.dropPoint?.x) > window.innerWidth) {
+            this.koll.dropPoint.x = `calc(${window.innerWidth}px - 56px - 32px)`
+          }
+        }
       });
-
   }
 
   play() {
@@ -77,7 +74,6 @@ export class KnollComponent implements OnInit {
   }
 
   onDragEnded(event: any) {
-    localStorage.setItem('koll', JSON.stringify({dropPoint: event.dropPoint}))
-    this.isShowTool = false
+    localStorage.setItem('koll', JSON.stringify({ dropPoint: event.dropPoint }))
   }
 }

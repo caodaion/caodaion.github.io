@@ -1,4 +1,6 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-welcome',
@@ -19,6 +21,23 @@ export class WelcomeComponent implements OnInit {
   ]
   rememberPlease: any = ''
   greating: any = ''
+  isPhone: boolean = false;
+  time = this.commonService.time;
+
+  constructor (
+    private breakpointObserver: BreakpointObserver,
+    private commonService: CommonService,
+    ) {
+      this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.isPhone = true;
+        } else {
+          this.isPhone = false;
+        }
+      });
+  }
 
   ngOnInit(): void {
     const getRandomIntInclusive = (min: any, max: any) => {

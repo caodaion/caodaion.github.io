@@ -1,6 +1,20 @@
 <div class="container-fluid">
-  <div class="welcome-container">
-    <h1>{{greating}}</h1>
-    <div [innerHTML]="rememberPlease"></div>
+  <div
+    class="welcome-container"
+    [ngStyle]="{
+      background: !isPhone
+        ? 'url(assets/images/caodaion-logo.png)'
+        : ''
+    }"
+  >
+    <div class="d-flex">
+      <div>
+        <h1>{{ greating }}</h1>
+        <div [innerHTML]="rememberPlease"></div>
+      </div>
+    </div>
+    <div>
+      Thời {{time.commonTime.kanji}} - {{ time.time | async | date : "hh:mm:ssaa" }}
+    </div>
   </div>
 </div>

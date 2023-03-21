@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-action',
@@ -17,7 +18,7 @@ export class ActionComponent {
     {
       link: '/trang-chu/thanh-ngon-hiep-tuyen',
       icon: 'auto_stories',
-      label: 'Đọc Thánh Ngôn Hiệp Tuyển'
+      label: 'Thánh Ngôn Hiệp Tuyển'
     },
     {
       link: '/trang-chu/thu-vien',
@@ -35,8 +36,10 @@ export class ActionComponent {
       label: 'Tính tuần cửu'
     },
   ]
+
   constructor (
-    private breakpointObserver: BreakpointObserver) {
+    private breakpointObserver: BreakpointObserver
+    ) {
       this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
