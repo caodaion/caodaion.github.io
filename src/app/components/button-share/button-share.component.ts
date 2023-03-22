@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 })
 export class ButtonShareComponent {
   @Input() title?: any
-  @Input() url?: any = `${window.location.href}`
+  @Input() url?: any = ``
   shareBottomSheetRef: any;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -30,8 +31,12 @@ export class ButtonShareComponent {
     private _snackBar: MatSnackBar,
     private matBottomSheet: MatBottomSheet,
     private eRef: ElementRef,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private router: Router
   ) {
+    router.events.subscribe((val: any) => {
+      this.url = `${window.location.href}`
+    })
   }
 
   copyLink() {

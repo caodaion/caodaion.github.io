@@ -75,6 +75,20 @@
         />
       </svg>
     </button>
+    <button-share
+      [title]="'Chia sẻ CaoDaiON'"
+      [ngStyle]="{
+        top: isShowTool ? '-' + 50 * 2 + 'px' : '0'
+      }"
+    >
+      <button
+        mat-icon-button
+        [color]="'primary'"
+        [matTooltip]="'Chia sẻ CaoDaiON'"
+      >
+        <mat-icon>share</mat-icon>
+      </button>
+    </button-share>
     <button mat-fab (click)="isShowTool = !isShowTool">
       <svg
         width="36px"
