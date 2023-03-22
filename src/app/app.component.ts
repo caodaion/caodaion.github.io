@@ -84,6 +84,11 @@ export class AppComponent implements OnInit {
                           this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
                             if (res.data) {
                               this.tnhtService.tableContent = res.data
+                              this.tnhtService.tableContent?.content?.forEach((item: any) => {
+                                if (item?.audio && item?.audio?.src) {
+                                  fetch(item.audio.src)
+                                }
+                              })
                               this.checkPushNotification()
                             }
                           })
