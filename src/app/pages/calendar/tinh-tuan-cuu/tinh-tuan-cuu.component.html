@@ -113,6 +113,8 @@
             <td mat-cell *matCellDef="let element">
               {{ element.lunar.lunarDay | number : "2.0-0" }}-{{
                 element.lunar.lunarMonth | number : "2.0-0"
+              }} {{
+                element.lunar.lunarLeap ? 'nhuận' : ''
               }}
               {{ element.lunar.lunarYearName }}
             </td>
@@ -172,7 +174,7 @@
               <td mat-cell *matCellDef="let element">
                 {{ element.lunar.lunarDay | number : "2.0-0" }}-{{
                   element.lunar.lunarMonth | number : "2.0-0"
-                }}
+                }} {{element.lunar.lunarLeap ? 'nhuận' : ''}}
                 {{ element.lunar.lunarYearName }}
               </td>
             </ng-container>
