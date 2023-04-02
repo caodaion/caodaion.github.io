@@ -10,7 +10,7 @@
     "test": "ng test",
     "start-pwa": "ng deploy --dry-run --base-href=/ && http-server -p 8080 -c-1 dist/pwa",
     "gh-pages-build": "ng deploy --dry-run",
-    "firebase-deploy": "ng deploy --dry-run --base-href=https://www.caodaion.com && cd dist/pwa && copy index.html 404.html && firebase deploy && cd .. && cd .. && git add . && git commit -m 'deploy' && git push"
+    "firebase-deploy": "ng deploy --dry-run --base-href=https://www.caodaion.com && cd dist/pwa && copy index.html 404.html && firebase deploy && cd .. && cd .. && git add . && git commit -m deploy && git push"
   },
   "private": true,
   "dependencies": {
