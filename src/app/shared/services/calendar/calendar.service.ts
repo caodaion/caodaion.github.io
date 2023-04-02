@@ -388,8 +388,7 @@ export class CalendarService {
   getTuanCuuEvents(date: any): Observable<any> {
     let events = <any>[]
     const eventCount = 9
-    const convertedToSolar = this.getConvertedFullDate(date).convertLunar2Solar
-    const startDate = new Date(`${convertedToSolar[2]}-${convertedToSolar[1] > 9 ? convertedToSolar[1] : '0' + convertedToSolar[1]}-${convertedToSolar[0] > 9 ? convertedToSolar[0] : '0' + convertedToSolar[0]}`)
+    const startDate = date
     Array.from({length: eventCount}, (x, i) => {
       i++
       switch (i) {

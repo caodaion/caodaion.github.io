@@ -8,18 +8,18 @@
       <div class="d-flex flex-wrap">
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Chọn Năm (Âm lịch)</mat-label>
-            <mat-select [(ngModel)]="selectedDate.lunarYear">
+            <mat-label>Chọn Năm</mat-label>
+            <mat-select [(ngModel)]="selectedDate.year">
               <mat-option *ngFor="let item of yearOptions" [value]="item?.solar"
-                >{{ item?.lunar }} - {{ item?.solar }}</mat-option
+                >{{ item?.solar }}</mat-option
               >
             </mat-select>
           </mat-form-field>
         </div>
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Chọn Tháng (Âm lịch)</mat-label>
-            <mat-select [(ngModel)]="selectedDate.lunarMonth">
+            <mat-label>Chọn Tháng</mat-label>
+            <mat-select [(ngModel)]="selectedDate.month">
               <mat-option *ngFor="let item of monthOptions" [value]="item">{{
                 item
               }}</mat-option>
@@ -28,8 +28,8 @@
         </div>
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Chọn Ngày (Âm lịch)</mat-label>
-            <mat-select [(ngModel)]="selectedDate.lunarDay">
+            <mat-label>Chọn Ngày</mat-label>
+            <mat-select [(ngModel)]="selectedDate.date">
               <mat-option *ngFor="let item of dayOptions" [value]="item">{{
                 item
               }}</mat-option>

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
@@ -17,7 +17,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class TinhTuanCuuComponent implements OnInit {
 
-  selectedDate = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+  selectedDate = {
+    year: 0,
+    month: 0,
+    date: 0,
+  };
   yearOptions = <any>[];
   monthOptions = <any>[];
   dayOptions = <any>[];
@@ -45,23 +49,28 @@ export class TinhTuanCuuComponent implements OnInit {
     private route: ActivatedRoute,
     private titleService: Title,
     private matBottomSheet: MatBottomSheet,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) {
 
   }
 
   ngOnInit(): void {
     this.getYearOptions()
+    const now = new Date()
+    this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
+    this.selectedDate.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
+    this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
     this.getLocalStorageTuanCuu()
     this.route.queryParams.subscribe((param: any) => {
       if (param['y']) {
-        this.selectedDate.lunarYear = parseInt(param['y']);
+        this.selectedDate.year = parseInt(param['y']);
       }
       if (param['m']) {
-        this.selectedDate.lunarMonth = parseInt(param['m']);
+        this.selectedDate.month = parseInt(param['m']);
       }
       if (param['d']) {
-        this.selectedDate.lunarDay = parseInt(param['d']);
+        this.selectedDate.date = parseInt(param['d']);
       }
       if (param['y'] && param['m'] && param['d']) {
         this.calculateTuanCuu()
@@ -69,11 +78,9 @@ export class TinhTuanCuuComponent implements OnInit {
           const jwtHelper = new JwtHelperService()
           const decodedToken = jwtHelper.decodeToken(param['details'])?.split('+')
           this.selectedDate = {
-            lunarDay: parseInt(param['d']),
-            lunarMonth: parseInt(param['m']),
-            lunarYear: parseInt(param['y']),
-            lunarLeap: 0,
-            lunarYearName: this.yearOptions?.find((item: any) => item?.solar == parseInt(param['y']))?.lunar
+            date: parseInt(param['d']),
+            month: parseInt(param['m']),
+            year: parseInt(param['y'])
           }
           this.calculatedTuanCuu.details = {
             name: decodedToken[0],
@@ -107,7 +114,6 @@ export class TinhTuanCuuComponent implements OnInit {
     for (let i = new Date().getFullYear(); i > new Date().getFullYear() - 5; i--) {
       const convertedDate = this.calendarService.getConvertedFullDate(new Date(new Date().setFullYear(i)))
       this.yearOptions.push({
-        lunar: convertedDate.convertSolar2Lunar.lunarYearName,
         solar: convertedDate.convertSolar2Lunar.lunarYear,
       })
     }
@@ -116,7 +122,7 @@ export class TinhTuanCuuComponent implements OnInit {
   }
 
   calculateTuanCuu() {
-    this.calendarService.getTuanCuuEvents(this.selectedDate)
+    this.calendarService.getTuanCuuEvents(new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date}`))
       .subscribe((res: any) => {
         if (res) {
           res.forEach((item: any) => {
@@ -128,7 +134,7 @@ export class TinhTuanCuuComponent implements OnInit {
   }
 
   saveTuanCuu() {
-    this.calculatedTuanCuu.key = this.commonService.generatedSlug(`tuancuu-${this.selectedDate.lunarYear}${this.selectedDate.lunarMonth}${this.selectedDate.lunarDay}-${this.calculatedTuanCuu.details.name}`)
+    this.calculatedTuanCuu.key = this.commonService.generatedSlug(`tuancuu-${this.selectedDate.year}${this.selectedDate.month}${this.selectedDate.date}-${this.calculatedTuanCuu.details.name}`)
     this.calculatedTuanCuu.event = this.tuanCuuEvents
     this.calculatedTuanCuu.date = this.selectedDate
     this.tuanCuuList.push(this.calculatedTuanCuu)
@@ -137,7 +143,11 @@ export class TinhTuanCuuComponent implements OnInit {
 
   storeTuanCuu() {
     localStorage.setItem('tuanCuu', JSON.stringify(this.tuanCuuList))
-    this.selectedDate = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+    this.selectedDate = {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth(),
+      date: new Date().getDate()
+    }
     this.calculatedTuanCuu = {
       key: '',
       event: <any>[],
@@ -182,6 +192,7 @@ export class TinhTuanCuuComponent implements OnInit {
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     item.token = token
-    item.location = `${location.href}?y=${item?.date?.lunarYear}&m=${item?.date?.lunarMonth}&d=${item?.date?.lunarDay}&details=${token}`
+    item.location = `${location.href}?y=${item?.date?.year}&m=${item?.date?.month}&d=${item?.date?.date}&details=${token}`
+    this.cd.detectChanges()
   }
 }

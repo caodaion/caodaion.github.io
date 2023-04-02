@@ -35,7 +35,9 @@ export class ButtonShareComponent {
     private router: Router
   ) {
     router.events.subscribe((val: any) => {
-      this.url = `${window.location.href}`
+      if (!this.url) {
+        this.url = `${window.location.href}`
+      }
     })
   }
 
