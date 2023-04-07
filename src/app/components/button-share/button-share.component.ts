@@ -17,6 +17,7 @@ export class ButtonShareComponent {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
   @ViewChild('shareBottomSheet') shareBottomSheet!: any;
+  sharedUrl: any = ''
 
   @HostListener('document:click', ['$event'])
   onClick(event: any) {
@@ -35,14 +36,15 @@ export class ButtonShareComponent {
     private router: Router
   ) {
     router.events.subscribe((val: any) => {
-      if (!this.url) {
-        this.url = `${window.location.href}`
+      this.sharedUrl = `${window.location.href}`
+      if (this.url) {
+        this.sharedUrl = this.url
       }
     })
   }
 
   copyLink() {
-    navigator.clipboard.writeText(this.url);
+    navigator.clipboard.writeText(this.sharedUrl);
     this.shareBottomSheetRef.dismiss()
     this._snackBar.open('Đã sao chép liên kết', 'Đóng', {
       duration: this.durationInSeconds * 1000,
@@ -54,7 +56,7 @@ export class ButtonShareComponent {
   shareTo(to: any) {
     switch (to) {
       case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.url)}`)
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.sharedUrl)}`)
         break;
       default:
         this.copyLink()

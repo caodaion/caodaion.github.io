@@ -8,7 +8,7 @@
       <input
         type="text"
         matInput
-        [value]="url"
+        [value]="sharedUrl"
         [disabled]="true"
       />
       <button
@@ -23,7 +23,7 @@
     <div class="qr-area">
       <qrcode
         #parent
-        [qrdata]="url"
+        [qrdata]="sharedUrl"
         [width]="300"
         [imageHeight]="75"
         [imageWidth]="75"
