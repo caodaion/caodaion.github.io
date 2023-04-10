@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
@@ -23,10 +24,12 @@ export class WelcomeComponent implements OnInit {
   greating: any = ''
   isPhone: boolean = false;
   time = this.commonService.time;
+  nowDate: any;
 
   constructor (
     private breakpointObserver: BreakpointObserver,
     private commonService: CommonService,
+    private calendarService: CalendarService
     ) {
       this.breakpointObserver
       .observe(['(max-width: 600px)'])
@@ -37,6 +40,7 @@ export class WelcomeComponent implements OnInit {
           this.isPhone = false;
         }
       });
+      this.nowDate = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
   }
 
   ngOnInit(): void {

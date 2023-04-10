@@ -1,13 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from 'crypto-js';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
@@ -48,9 +46,8 @@ export class TinhTuanCuuComponent implements OnInit {
     private commonService: CommonService,
     private route: ActivatedRoute,
     private titleService: Title,
-    private matBottomSheet: MatBottomSheet,
-    private _snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router
   ) {
 
   }
@@ -97,6 +94,11 @@ export class TinhTuanCuuComponent implements OnInit {
   saveSharedEvent() {
     this.saveTuanCuu()
     this.selectedIndex = this.tuanCuuList.length
+    if (!!location.search) {
+      this.router.navigate([], {
+
+      })
+    }
   }
 
   getLocalStorageTuanCuu() {
@@ -143,8 +145,10 @@ export class TinhTuanCuuComponent implements OnInit {
     this.calculatedTuanCuu.key = this.commonService.generatedSlug(`tuancuu-${this.selectedDate.year}${this.selectedDate.month}${this.selectedDate.date}-${this.calculatedTuanCuu.details.name}`)
     this.calculatedTuanCuu.event = this.tuanCuuEvents
     this.calculatedTuanCuu.date = this.selectedDate
-    this.tuanCuuList.push(this.calculatedTuanCuu)
-    this.storeTuanCuu()
+    if (!this.tuanCuuList?.find((item: any) => item?.key == this.calculatedTuanCuu.key)) {
+      this.tuanCuuList.push(this.calculatedTuanCuu)
+      this.storeTuanCuu()
+    }
   }
 
   storeTuanCuu() {

@@ -14,6 +14,7 @@
       </div>
     </div>
     <div>
+      Ngày {{nowDate?.lunarDay}} tháng {{nowDate?.lunarMonth}} {{nowDate?.lunarLeap ? ' nhuận' : ''}} năm {{nowDate?.lunarYearName}} <br>
       Thời {{time.commonTime.kanji}} - {{ time.time | async | date : "hh:mm:ssaa" }}
     </div>
   </div>
