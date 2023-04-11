@@ -107,15 +107,11 @@ export class TinhTuanCuuComponent implements OnInit {
       item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
       item.title = `Chia sẻ lịch cúng cửu của ${item.name}`
-      const date = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date}`)).convertSolar2Lunar
-      console.log(date);
-
+      const date = this.calendarService.getConvertedFullDate(new Date(`${item?.date?.year}-${item?.date?.month < 10 ? '0' + item?.date?.month : item?.date?.month}-${item?.date?.date < 10 ? '0' + item?.date?.date : item?.date?.date}`)).convertSolar2Lunar
       item.date.lunarMonth = `${date.lunarMonth} ${date.lunarLeap ? 'nhuận' : ''}`
       item.date.lunarDay = date.lunarDay
       item.date.lunarYearName = date.lunarYearName
     })
-    console.log(this.tuanCuuList);
-
   }
 
   getYearOptions() {
