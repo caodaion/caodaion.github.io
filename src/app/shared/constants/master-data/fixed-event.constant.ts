@@ -1,4 +1,4 @@
-{
+export const FIXED_EVENT = {
   "data": [
     {
       "name": "CÚNG TỨ-THỜI",

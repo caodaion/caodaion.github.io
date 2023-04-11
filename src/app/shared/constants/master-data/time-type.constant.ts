@@ -1,4 +1,4 @@
-{
+export const TIME_TYPE = {
   "data": [
     {
       "key": "all",

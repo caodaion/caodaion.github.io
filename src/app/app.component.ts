@@ -47,61 +47,30 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.gettingCommonData = true
-    this.commonService.getTimeList().subscribe((res: any) => {
-      if (res) {
-        this.commonService.commonTimes = res.data;
-        this.commonService.getLocationTypeList().subscribe((res: any) => {
-          if (res) {
-            this.commonService.commonLocationTypes = res.data;
-            this.commonService.getDateList().subscribe((res: any) => {
-              if (res) {
-                this.commonService.commonDates = res.data;
-                for (let i = 1; i <= 31; i++) {
-                  if (i <= 12) {
-                    this.commonService.commonDates.month.push({
-                      key: i < 10 ? `0${i}` : i.toString(),
-                      name: `tháng ${i}`,
-                    });
-                  }
-                  this.commonService.commonDates.date.push({
-                    key: i < 10 ? `0${i}` : i.toString(),
-                    name: i,
-                  });
+    this.kinhService.getKinhList()
+      .subscribe((res: any) => {
+        if (res) {
+          this.kinhService.kinhList = res.data;
+          fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
+          this.kinhService.kinhList.forEach((item: any) => {
+            this.kinhService.getKinhContent(item.key).subscribe()
+          })
+          this.eventService.getEventList()
+          this.gettingCommonData = false
+          this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
+            if (res.data) {
+              this.tnhtService.tableContent = res.data
+              this.tnhtService.tableContent?.content?.forEach((item: any) => {
+                if (item?.audio && item?.audio?.src) {
+                  fetch(item.audio.src)
                 }
-                this.kinhService.getKinhList()
-                  .subscribe((res: any) => {
-                    if (res) {
-                      this.kinhService.kinhList = res.data;
-                      fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
-                      this.kinhService.kinhList.forEach((item: any) => {
-                        this.kinhService.getKinhContent(item.key).subscribe()
-                      })
-                      this.eventService.getEventList().subscribe((res: any) => {
-                        if (res) {
-                          this.eventService.eventList = res.data;
-                          this.eventList = res.data;
-                          this.gettingCommonData = false
-                          this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
-                            if (res.data) {
-                              this.tnhtService.tableContent = res.data
-                              this.tnhtService.tableContent?.content?.forEach((item: any) => {
-                                if (item?.audio && item?.audio?.src) {
-                                  fetch(item.audio.src)
-                                }
-                              })
-                              this.checkPushNotification()
-                            }
-                          })
-                        }
-                      });
-                    }
-                  });
-              }
-            })
-          }
-        })
-      }
-    });
+              })
+              this.checkPushNotification()
+            }
+          })
+
+        }
+      });
   }
 
   private addTag() {

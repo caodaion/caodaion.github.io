@@ -3,6 +3,10 @@ import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
 import { DatePipe } from '@angular/common';
+import { TIME_TYPE } from '../../constants/master-data/time-type.constant'
+import { LOCATION_TYPE } from '../../constants/master-data/location-type.constant';
+import { DATE_TYPE } from '../../constants/master-data/date-type.constant';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +18,23 @@ export class CommonService {
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe
-  ) { }
+  ) {
+    this.commonTimes = TIME_TYPE.data
+    this.commonLocationTypes = LOCATION_TYPE.data
+    this.commonDates = DATE_TYPE.data
+    for (let i = 1; i <= 31; i++) {
+      if (i <= 12) {
+        this.commonDates.month.push({
+          key: i < 10 ? `0${i}` : i.toString(),
+          name: `tháng ${i}`,
+        });
+      }
+      this.commonDates.date.push({
+        key: i < 10 ? `0${i}` : i.toString(),
+        name: i,
+      });
+    }
+  }
 
   getTimeList(): Observable<any> {
     return this.http

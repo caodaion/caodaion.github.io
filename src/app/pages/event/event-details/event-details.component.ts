@@ -25,7 +25,7 @@ export class EventDetailsComponent implements OnInit {
     private kinhService: KinhService,
     private commonService: CommonService,
     private breakpointObserver: BreakpointObserver
-    ) {
+  ) {
 
   }
 
@@ -48,12 +48,8 @@ export class EventDetailsComponent implements OnInit {
   }
 
   getEvents() {
-    this.eventService.getEventList().subscribe((res: any) => {
-      if (res) {
-        this.eventList = res.data
-        this.getKinhs()
-      }
-    })
+    this.eventList = this.eventService.eventList
+    this.getKinhs()
   }
 
   getKinhs() {

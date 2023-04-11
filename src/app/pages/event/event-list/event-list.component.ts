@@ -81,13 +81,7 @@ export class EventListComponent implements OnInit {
   }
 
   getEvents() {
-    this.eventService.getEventList().subscribe((res: any) => {
-      if (res) {
-        this.eventList = res.data
-        this.getTodayTuThoiEvents()
-        this.getLocalStorageEvents()
-      }
-    })
+    this.eventList = this.eventService.eventList
   }
 
   getLocalStorageEvents() {

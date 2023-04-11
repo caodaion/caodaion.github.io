@@ -1,4 +1,4 @@
-{
+export const DATE_TYPE = {
   "data": {
     "year": [
       {

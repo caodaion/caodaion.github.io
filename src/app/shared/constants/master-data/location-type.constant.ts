@@ -1,4 +1,4 @@
-{
+export const LOCATION_TYPE = {
   "data": [
     {
       "key": "all",
