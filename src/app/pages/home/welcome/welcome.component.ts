@@ -40,7 +40,10 @@ export class WelcomeComponent implements OnInit {
           this.isPhone = false;
         }
       });
-      this.nowDate = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+      this.nowDate = {
+        lunar: this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar,
+        solar: new Date()
+      }
   }
 
   ngOnInit(): void {
