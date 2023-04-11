@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
@@ -7,13 +7,14 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from 'crypto-js';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
   templateUrl: './tinh-tuan-cuu.component.html',
   styleUrls: ['./tinh-tuan-cuu.component.scss']
 })
-export class TinhTuanCuuComponent implements OnInit {
+export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   selectedDate = {
     year: 0,
@@ -39,6 +40,7 @@ export class TinhTuanCuuComponent implements OnInit {
   shareBottomSheetRef: any;
   sharedData: any;
   selectedIndex = 0
+  @ViewChild('expiriedEventDialog') expiriedEventDialog!: any;
 
   constructor(
     private calendarService: CalendarService,
@@ -47,7 +49,8 @@ export class TinhTuanCuuComponent implements OnInit {
     private route: ActivatedRoute,
     private titleService: Title,
     private cd: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {
 
   }
@@ -58,7 +61,6 @@ export class TinhTuanCuuComponent implements OnInit {
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.selectedDate.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
     this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
-    this.getLocalStorageTuanCuu()
     this.route.queryParams.subscribe((param: any) => {
       if (param['y']) {
         this.selectedDate.year = parseInt(param['y']);
@@ -91,6 +93,10 @@ export class TinhTuanCuuComponent implements OnInit {
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
   }
 
+  ngAfterViewInit(): void {
+    this.getLocalStorageTuanCuu()
+  }
+
   saveSharedEvent() {
     this.saveTuanCuu()
     this.selectedIndex = this.tuanCuuList.length
@@ -101,8 +107,15 @@ export class TinhTuanCuuComponent implements OnInit {
     }
   }
 
+  expiriedEvent = <any>[];
+  dialogRef: any;
   getLocalStorageTuanCuu() {
     this.tuanCuuList = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    this.expiriedEvent = this.tuanCuuList.filter((item: any) => new Date(item?.event[item?.event?.length - 1].solar) < new Date())
+    if (this.expiriedEvent?.length > 0) {
+      // @ts-ignore
+      this.dialogRef = this.dialog.open(this.expiriedEventDialog)
+    }
     this.tuanCuuList?.forEach((item: any) => {
       item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
@@ -200,5 +213,12 @@ export class TinhTuanCuuComponent implements OnInit {
     item.token = token
     item.location = `${location.href}?y=${item?.date?.year}&m=${item?.date?.month}&d=${item?.date?.date}&details=${token}`
     this.cd.detectChanges()
+  }
+
+  deleteAllExpiriedEvent() {
+    this.expiriedEvent.forEach((item: any) => {
+      this.deleteTuanCuu(item)
+      this.dialogRef.close()
+    })
   }
 }

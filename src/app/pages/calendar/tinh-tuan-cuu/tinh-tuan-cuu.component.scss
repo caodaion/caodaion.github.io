@@ -6,7 +6,8 @@
       margin: 2rem 0;
     }
     /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-    .mat-tab-body-content, .mat-mdc-tab-body-content {
+    .mat-tab-body-content,
+    .mat-mdc-tab-body-content {
       padding: 1rem 0.5rem;
     }
     .form-group {
@@ -24,5 +25,19 @@
   }
   .qr-area {
     margin-bottom: 1rem;
+  }
+  .tuan-cuu {
+    .mdc-list-item.mdc-list-item--with-one-line {
+      height: auto;
+    }
+    &-e {
+      padding-bottom: 1rem;
+      button {
+        margin-left: 1rem;
+      }
+      mat-divider {
+        margin-top: 1rem;
+      }
+    }
   }
 }
