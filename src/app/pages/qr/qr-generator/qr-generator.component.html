@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <h1>Tạo mã QR</h1>
+  <mat-form-field class="w-100">
+    <mat-label>Nội dung mã</mat-label>
+    <input type="text" matInput [(ngModel)]="qrData" disabled/>
+    <button
+      mat-icon-button
+      matSuffix
+      [matTooltip]="'Sao chép liên kết'"
+      *ngIf="qrData"
+      (click)="copyLink()"
+    >
+      <mat-icon>link</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <mat-label>Nội dung tạo mã</mat-label>
+    <input type="text" matInput [(ngModel)]="data" (change)="onChangeData()"/>
+  </mat-form-field>
+  <p class="text-center" *ngIf="error">{{error}}</p>
+  <div *ngIf="!error && !qrData" class="w-100 d-flex justify-content-center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!error && qrData">
+    <qrcode
+      #parent
+      [qrdata]="qrData"
+      [width]="300"
+      [imageHeight]="75"
+      [imageWidth]="75"
+      [cssClass]="'text-center'"
+      [errorCorrectionLevel]="'M'"
+      [colorDark]="'#000000ff'"
+      [colorLight]="'#ffffffff'"
+      [elementType]="'canvas'"
+      [margin]="4"
+      [scale]="128"
+      [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+    ></qrcode>
+    <div class="text-center">
+      <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
+        <mat-icon>download</mat-icon>
+        Tải Mã QR
+      </button>
+    </div>
+  </div>
+</div>

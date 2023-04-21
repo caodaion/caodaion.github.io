@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -20,12 +19,16 @@ import {MatButtonModule} from '@angular/material/button';
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {ReleasedGuard} from "./shared/guards/released.guard";
 import { DatePipe } from '@angular/common';
-import { QrScannerComponent } from './pages/qr/qr/qr-scanner/qr-scanner.component';
+import { QrScannerComponent } from './pages/qr/qr-scanner/qr-scanner.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MatSelectModule } from '@angular/material/select';
+import { QrGeneratorComponent } from './pages/qr/qr-generator/qr-generator.component';
+import {QRCodeModule} from "angularx-qrcode";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {NgTinyUrlModule} from "ng-tiny-url";
 
 @NgModule({
-  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, QrScannerComponent],
+  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, QrScannerComponent, QrGeneratorComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,12 +43,14 @@ import { MatSelectModule } from '@angular/material/select';
     MatProgressSpinnerModule,
     MatInputModule,
     FormsModule,
-    MatFormFieldModule,
     MatButtonModule,
     HttpClientModule,
     ZXingScannerModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    QRCodeModule,
+    MatTooltipModule,
+    NgTinyUrlModule
   ],
   providers: [AuthGuard, ReleasedGuard, DatePipe],
   bootstrap: [AppComponent],
