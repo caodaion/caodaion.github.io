@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-qr-scanner',
@@ -30,6 +30,9 @@ export class QrScannerComponent {
   torchEnabled = false;
   torchAvailable$ = new BehaviorSubject<boolean>(false);
   tryHarder = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
 
   constructor(
     private router: Router,
@@ -102,7 +105,11 @@ export class QrScannerComponent {
     console.log(this.qrResultString);
 
     if (this.qrResultString) {
-      this._snackBar.open(`Đã quét được: ${this.qrResultString}`)
+      this._snackBar.open(`Đã quét được: ${this.qrResultString}`, 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      })
 
       if (isValidUrl(this.qrResultString)) {
         location.href = this.qrResultString
