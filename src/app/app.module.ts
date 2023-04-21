@@ -20,9 +20,12 @@ import {MatButtonModule} from '@angular/material/button';
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {ReleasedGuard} from "./shared/guards/released.guard";
 import { DatePipe } from '@angular/common';
+import { QrScannerComponent } from './pages/qr/qr/qr-scanner/qr-scanner.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
-  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent],
+  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, QrScannerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -39,7 +42,10 @@ import { DatePipe } from '@angular/common';
     FormsModule,
     MatFormFieldModule,
     MatButtonModule,
-    HttpClientModule
+    HttpClientModule,
+    ZXingScannerModule,
+    MatSelectModule,
+    MatFormFieldModule
   ],
   providers: [AuthGuard, ReleasedGuard, DatePipe],
   bootstrap: [AppComponent],

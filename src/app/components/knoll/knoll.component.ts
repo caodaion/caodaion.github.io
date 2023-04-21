@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, HostListener, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-knoll',
@@ -26,7 +27,8 @@ export class KnollComponent implements OnInit {
   };
 
   constructor(private eRef: ElementRef,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
   }
 
@@ -75,5 +77,9 @@ export class KnollComponent implements OnInit {
 
   onDragEnded(event: any) {
     localStorage.setItem('koll', JSON.stringify({ dropPoint: event.dropPoint }))
+  }
+
+  goToQr() {
+    this.router.navigate(['/qr'])
   }
 }

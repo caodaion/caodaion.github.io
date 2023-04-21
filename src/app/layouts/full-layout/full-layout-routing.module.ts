@@ -45,11 +45,9 @@ const routes: Routes = [
         canActivate: [ReleasedGuard, AuthGuard]
       },
       {
-        path: 'thong-bao',
+        path: 'qr',
         loadChildren: () =>
-          import('../../pages/notifications/notifications.module').then(
-            (m) => m.NotificationsModule
-          )
+          import('../../modules/qr/qr.module').then((m) => m.QrModule),
       },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],

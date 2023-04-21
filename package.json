@@ -27,6 +27,8 @@
     "@angular/service-worker": "~15.2.2",
     "@auth0/angular-jwt": "^5.1.2",
     "@types/crypto-js": "^4.1.1",
+    "@zxing/library": "^0.20.0",
+    "@zxing/ngx-scanner": "^3.9.0",
     "angularx-qrcode": "^15.0.1",
     "body-parser": "^1.20.2",
     "crypto-js": "^4.1.1",
