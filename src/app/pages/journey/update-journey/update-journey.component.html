@@ -24,16 +24,19 @@
         >
       </mat-select>
     </mat-form-field>
-    <zxing-scanner
-      [torch]="torchEnabled"
-      [(device)]="currentDevice"
-      (scanSuccess)="onCodeResult($event)"
-      [formats]="formatsEnabled"
-      [tryHarder]="tryHarder"
-      (permissionResponse)="onHasPermission($event)"
-      (camerasFound)="onCamerasFound($event)"
-      (torchCompatible)="onTorchCompatible($event)"
-    ></zxing-scanner>
+    <div>
+      <zxing-scanner
+        [autofocusEnabled]="true"
+        [torch]="torchEnabled"
+        [(device)]="currentDevice"
+        (scanSuccess)="onCodeResult($event)"
+        [formats]="formatsEnabled"
+        [tryHarder]="tryHarder"
+        (permissionResponse)="onHasPermission($event)"
+        (camerasFound)="onCamerasFound($event)"
+        (torchCompatible)="onTorchCompatible($event)"
+      ></zxing-scanner>
+    </div>
   </div>
   <div *ngIf="isContinueLog">
     <p class="confirm-log">

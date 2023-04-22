@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -13,13 +13,13 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UpdateJourneyComponent {
   isShowQRScanner: boolean = false
-
   availableDevices: any;
   currentDevice: any;
   journeyLog = {
     type: '',
     timestamp: 0
   }
+  journeyUser: any = null;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -35,6 +35,7 @@ export class UpdateJourneyComponent {
   duplicateDialogRef: any;
   isContinueLog: boolean = false;
   @ViewChild('duplicateDialog') duplicateDialog!: any;
+  @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
   torchEnabled = false;
   torchAvailable$ = new BehaviorSubject<boolean>(false);
@@ -71,7 +72,6 @@ export class UpdateJourneyComponent {
       this.currentDevice = device?.scanner
     }
     console.log(this.currentDevice);
-
   }
 
   onCodeResult(resultString: string) {
@@ -137,22 +137,33 @@ export class UpdateJourneyComponent {
 
           if (getParameterByName('t', this.qrResultString) == 'tuGia') {
             this.journeyLog.type = 'tuGia'
-            this.checktuGiaJourney()
+            this.checkTuGiaJourney()
           }
         }
+      } else {
+        if (this.qrResultString?.split('|')?.length > 1) {
+          const userData = this.qrResultString?.split('|')
+          this.journeyUser = {
+            id: userData[0],
+            na: userData?.find((item: any) => item.includes('na='))?.replace('na=', ''),
+            nm: userData?.find((item: any) => item.includes('nm='))?.replace('nm=', ''),
+            ch: userData?.find((item: any) => item.includes('ch='))?.replace('ch=', ''),
+            or: userData?.find((item: any) => item.includes('or='))?.replace('or=', ''),
+            ti: userData?.find((item: any) => item.includes('ti='))?.replace('ti=', ''),
+          }
+          console.log(this.journeyUser);
+        }
       }
-
     }
   }
 
   tokenAction(decodedToken: any) {
     if (decodedToken) {
       console.log(decodedToken);
-
     }
   }
 
-  checktuGiaJourney() {
+  checkTuGiaJourney() {
     let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
     const startTy = new Date(new Date().setHours(23, 0, 0));
     const endTy = new Date(new Date().setHours(0, 59, 59));

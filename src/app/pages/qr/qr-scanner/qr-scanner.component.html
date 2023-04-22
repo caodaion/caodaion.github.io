@@ -3,7 +3,10 @@
     <h1>Quét mã QR</h1>
     <mat-form-field class="w-100">
       <mat-label>Chọn thiết bị quét</mat-label>
-      <mat-select [(ngModel)]="currentDevice" (ngModelChange)="onDeviceSelectChange()">
+      <mat-select
+        [(ngModel)]="currentDevice"
+        (ngModelChange)="onDeviceSelectChange()"
+      >
         <mat-option
           *ngFor="let item of availableDevices"
           [value]="item?.deviceId"
@@ -13,6 +16,7 @@
     </mat-form-field>
   </div>
   <zxing-scanner
+    [autofocusEnabled]="true"
     [torch]="torchEnabled"
     [(device)]="currentDevice"
     (scanSuccess)="onCodeResult($event)"
