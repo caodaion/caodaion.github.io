@@ -11,11 +11,11 @@ const routes: Routes = [
     children: [
       {
         path: 'quet-ma',
-        component: QrScannerComponent
+        loadChildren: () => import('../../pages/qr/qr-scanner/qr-scanner.module').then((m) => m.QrScannerModule),
       },
       {
         path: 'tao-ma',
-        component: QrGeneratorComponent
+        loadChildren: () => import('../../pages/qr/qr-generator/qr-generator.module').then((m) => m.QrGeneratorModule),
       },
       {
         path: '',

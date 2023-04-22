@@ -80,6 +80,7 @@ export class KnollComponent implements OnInit {
   }
 
   goToQr() {
+    this.isShowTool = false
     this.router.navigate(['/qr'])
   }
 }

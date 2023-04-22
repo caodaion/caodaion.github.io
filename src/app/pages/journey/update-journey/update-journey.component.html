@@ -1,0 +1,67 @@
+<div mat-dialog-title>Ghi dấu hành trình</div>
+<mat-dialog-content>
+  <button
+    mat-flat-button
+    [color]="isShowQRScanner ? 'warn' : 'primary'"
+    class="w-100"
+    [matTooltip]="'Quét mã QR'"
+    (click)="isShowQRScanner = !isShowQRScanner"
+  >
+    <mat-icon>{{ isShowQRScanner ? "close" : "qr_code_scanner" }}</mat-icon>
+    {{ isShowQRScanner ? "Đóng" : "Quét mã QR" }}
+  </button>
+  <div *ngIf="isShowQRScanner">
+    <mat-form-field class="w-100">
+      <mat-label>Chọn thiết bị quét</mat-label>
+      <mat-select
+        [(ngModel)]="currentDevice"
+        (ngModelChange)="onDeviceSelectChange()"
+      >
+        <mat-option
+          *ngFor="let item of availableDevices"
+          [value]="item?.deviceId"
+          >{{ item?.label }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <zxing-scanner
+      [torch]="torchEnabled"
+      [(device)]="currentDevice"
+      (scanSuccess)="onCodeResult($event)"
+      [formats]="formatsEnabled"
+      [tryHarder]="tryHarder"
+      (permissionResponse)="onHasPermission($event)"
+      (camerasFound)="onCamerasFound($event)"
+      (torchCompatible)="onTorchCompatible($event)"
+    ></zxing-scanner>
+  </div>
+  <div *ngIf="isContinueLog">
+    <p class="confirm-log">
+      Ghi dấu hành trình
+      <strong *ngIf="journeyLog.type">
+        tại
+        {{ journeyLog.type == "tuGia" ? "Tư gia" : "" }}
+      </strong>
+      <strong *ngIf="journeyLog.timestamp">
+        lúc
+        {{ journeyLog.timestamp | date : "HH:mm:ss" }} ngày
+        {{ journeyLog.timestamp | date : "dd/MM/YYYY" }}
+      </strong>
+    </p>
+  </div>
+</mat-dialog-content>
+<ng-template #dupplicateDialog>
+  <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>
+  <mat-dialog-content>
+    <strong>LƯU Ý:</strong>
+    <p>
+      Ghi ghi dấu vào thời gian này sẽ trùng khung giờ với một sự kiện đã ghi
+      dấu.
+    </p>
+    <p>Bạn vẫn muốn tiếp tục?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-dialog-close="true">Hủy</button>
+    <button mat-dialog-close="true" (click)="onCoutinue()">Tiếp tục</button>
+  </mat-dialog-actions>
+</ng-template>

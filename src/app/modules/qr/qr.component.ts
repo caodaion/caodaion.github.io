@@ -10,7 +10,7 @@ import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mi
 export class QrComponent {
   settingsMenu = <any>[
     {
-      url: '/qr',
+      url: 'quet-ma',
       icon: 'qr_code_scanner',
       label: 'Quét mã QR',
     },

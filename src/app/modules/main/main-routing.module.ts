@@ -28,6 +28,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/thanh-ngon-hiep-tuyen/thanh-ngon-hiep-tuyen.module').then((m) => m.ThanhNgonHiepTuyenModule),
       },
+      {
+        path: 'hanh-trinh',
+        loadChildren: () =>
+          import('../../pages/journey/journey.module').then((m) => m.JourneyModule),
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },

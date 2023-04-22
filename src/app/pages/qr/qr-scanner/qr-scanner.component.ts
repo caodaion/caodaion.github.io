@@ -35,11 +35,10 @@ export class QrScannerComponent {
   durationInSeconds = 3;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar
   ) {
-    route.queryParams.subscribe((query) => {
+    this.route.queryParams.subscribe((query) => {
       if (query['token']) {
         const token = query['token']
         const jwtHelper = new JwtHelperService()

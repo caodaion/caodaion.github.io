@@ -32,7 +32,15 @@ export const MENU = [
         released: true,
       },
       {
-        key: 'trang-chu.thanh-that',
+        key: 'trang-chu.hanh-trinh',
+        url: 'hanh-trinh',
+        label: 'Hành trình',
+        icon: 'trip_origin',
+        fullAssess: true,
+        released: true,
+      },
+      {
+        key: 'trang-chu.thanh-that', //??
         url: 'thanh-that',
         label: 'Thánh Thất',
         icon: 'location_city',
