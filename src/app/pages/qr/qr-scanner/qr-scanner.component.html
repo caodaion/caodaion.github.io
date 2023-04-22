@@ -1,29 +1,5 @@
 <div class="wrapper-container qr-scanner-container">
   <div class="container-fluid">
     <h1>Quét mã QR</h1>
-    <mat-form-field class="w-100">
-      <mat-label>Chọn thiết bị quét</mat-label>
-      <mat-select
-        [(ngModel)]="currentDevice"
-        (ngModelChange)="onDeviceSelectChange()"
-      >
-        <mat-option
-          *ngFor="let item of availableDevices"
-          [value]="item?.deviceId"
-          >{{ item?.label }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <zxing-scanner
-    [autofocusEnabled]="true"
-    [torch]="torchEnabled"
-    [(device)]="currentDevice"
-    (scanSuccess)="onCodeResult($event)"
-    [formats]="formatsEnabled"
-    [tryHarder]="tryHarder"
-    (permissionResponse)="onHasPermission($event)"
-    (camerasFound)="onCamerasFound($event)"
-    (torchCompatible)="onTorchCompatible($event)"
-  ></zxing-scanner>
+    <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
 </div>

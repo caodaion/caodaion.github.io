@@ -19,11 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {ReleasedGuard} from "./shared/guards/released.guard";
 import { DatePipe } from '@angular/common';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MatSelectModule } from '@angular/material/select';
-import {QRCodeModule} from "angularx-qrcode";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {NgTinyUrlModule} from "ng-tiny-url";
 
 @NgModule({
   declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent],

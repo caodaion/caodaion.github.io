@@ -1,10 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { BarcodeFormat } from '@zxing/library';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-update-journey',
@@ -13,36 +11,18 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UpdateJourneyComponent {
   isShowQRScanner: boolean = false
-  availableDevices: any;
-  currentDevice: any;
+  qrData: any = ''
   journeyLog = {
     type: '',
     timestamp: 0
   }
   journeyUser: any = null;
-
-  formatsEnabled: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.QR_CODE,
-  ];
-
-  hasDevices: any;
-  hasPermission: any;
-
-  qrResultString: any;
-  duplicateDialogRef: any;
-  isContinueLog: boolean = false;
-  @ViewChild('duplicateDialog') duplicateDialog!: any;
-  @ViewChild('audioPlayer') audioPlayer!: ElementRef;
-
-  torchEnabled = false;
-  torchAvailable$ = new BehaviorSubject<boolean>(false);
-  tryHarder = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
+  duplicateDialogRef: any;
+  isContinueLog: boolean = false;
+  @ViewChild('duplicateDialog') duplicateDialog!: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,48 +38,10 @@ export class UpdateJourneyComponent {
       }
     })
   }
-
-
-  clearResult(): void {
-    this.qrResultString = null;
-  }
-
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
-    this.availableDevices = devices;
-    this.hasDevices = Boolean(devices && devices.length);
-    const device = JSON.parse(localStorage.getItem('device') || '')
-    if (device && device?.scanner) {
-      this.currentDevice = device?.scanner
-    }
-    console.log(this.currentDevice);
-  }
-
-  onCodeResult(resultString: string) {
-    this.qrResultString = resultString;
+  scanComplete(qrData: any) {
+    this.qrData = qrData
+    console.log(this.qrData);
     this.scanAction()
-  }
-
-  onDeviceSelectChange() {
-    let device = {
-      scanner: this.currentDevice
-    }
-    localStorage.setItem('device', JSON.stringify(device))
-  }
-
-  onHasPermission(has: boolean) {
-    this.hasPermission = has;
-  }
-
-  onTorchCompatible(isCompatible: boolean): void {
-    this.torchAvailable$.next(isCompatible || false);
-  }
-
-  toggleTorch(): void {
-    this.torchEnabled = !this.torchEnabled;
-  }
-
-  toggleTryHarder(): void {
-    this.tryHarder = !this.tryHarder;
   }
 
   scanAction() {
@@ -121,28 +63,28 @@ export class UpdateJourneyComponent {
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-    console.log(this.qrResultString);
+    console.log(this.qrData);
 
-    if (this.qrResultString) {
+    if (this.qrData) {
       this.isShowQRScanner = false
-      this._snackBar.open(`Đã quét được: ${this.qrResultString}`, 'Đóng', {
+      this._snackBar.open(`Đã quét được: ${this.qrData}`, 'Đóng', {
         duration: this.durationInSeconds * 1000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       })
 
-      if (isValidUrl(this.qrResultString)) {
-        if (this.qrResultString?.includes('hanh-trinh')) {
-          console.log(getParameterByName('t', this.qrResultString));
+      if (isValidUrl(this.qrData)) {
+        if (this.qrData?.includes('hanh-trinh')) {
+          console.log(getParameterByName('t', this.qrData));
 
-          if (getParameterByName('t', this.qrResultString) == 'tuGia') {
+          if (getParameterByName('t', this.qrData) == 'tuGia') {
             this.journeyLog.type = 'tuGia'
             this.checkTuGiaJourney()
           }
         }
       } else {
-        if (this.qrResultString?.split('|')?.length > 1) {
-          const userData = this.qrResultString?.split('|')
+        if (this.qrData?.split('|')?.length > 1) {
+          const userData = this.qrData?.split('|')
           this.journeyUser = {
             id: userData[0],
             na: userData?.find((item: any) => item.includes('na='))?.replace('na=', ''),

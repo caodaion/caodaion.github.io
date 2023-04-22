@@ -63,7 +63,7 @@ export class QrScannerComponent {
 
   }
 
-  onCodeResult(resultString: string) {
+  scanComplete(resultString: string) {
     this.qrResultString = resultString;
     this.scanAction()
   }
