@@ -137,8 +137,8 @@ export class UpdateJourneyComponent {
     let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
     journeys.push(this.journeyLog)
     console.log(journeys);
-    localStorage.setItem('journey', JSON.stringify(journeys))
     this.isStored = true
+    localStorage.setItem('journey', JSON.stringify(journeys))
     setTimeout(() => {
       this.isStored = false
       this.isShowLog = false
@@ -160,8 +160,8 @@ export class UpdateJourneyComponent {
 
 export class JourneyLog {
   location: any;
-  type: any;
   timestamp: any;
+  type?: any;
   rating?: any;
   comment?: any;
 }
