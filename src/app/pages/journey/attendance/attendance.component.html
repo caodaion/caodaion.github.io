@@ -1,6 +1,9 @@
 <div class="attendance">
   <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
   <div class="attendance-table">
+    <div *ngIf="attendanceList?.length > 0">
+      Số lượng: {{ attendanceList?.length }}
+    </div>
     <mat-list>
       <mat-list-item *ngFor="let item of attendanceList">
         <span matListItemTitle>{{ item?.na }}</span>

@@ -1,4 +1,4 @@
-<div class="rating-pie-chart">
+<div class="rating-pie-chart" *ngIf="isShowChart">
   <h2>
     Biểu đồ độ hài lòng
     <button
@@ -10,7 +10,6 @@
     </button>
   </h2>
   <canvas
-    *ngIf="isShowChart"
     baseChart
     [type]="'pie'"
     [datasets]="ratingPieChartDatasets"

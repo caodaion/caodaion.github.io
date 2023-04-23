@@ -50,6 +50,8 @@ export class DashboardComponent {
       setTimeout(() => {
         this.isShowChart = true
       }, 0)
+    } else {
+      this.isShowChart = false
     }
     console.log(data);
 

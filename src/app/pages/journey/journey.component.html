@@ -1,15 +1,15 @@
 <div class="wrapper-container journey-container">
   <div class="container-fluid">
-    <mat-tab-group>
+    <mat-tab-group #journeyTab>
       <mat-tab [label]="'SỔ TAY HÀNH TRÌNH'">
         <h1>Sổ tay hành trình</h1>
-        <div>
+        <div *ngIf="journeyTab?.selectedIndex == 0">
           <app-update-journey></app-update-journey>
         </div>
       </mat-tab>
       <mat-tab [label]="'ĐIỂM DANH HÀNH TRÌNH'">
         <h1>Điểm danh hành trình</h1>
-        <div>
+        <div *ngIf="journeyTab?.selectedIndex == 1">
           <app-attendance></app-attendance>
         </div>
       </mat-tab>

@@ -282,7 +282,7 @@
   </div>
 </div>
 <div class="w-100 dashboard-section">
-  <app-dashboard></app-dashboard>
+  <app-dashboard *ngIf="isShowDashboard"></app-dashboard>
 </div>
 <ng-template #duplicateDialog>
   <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>

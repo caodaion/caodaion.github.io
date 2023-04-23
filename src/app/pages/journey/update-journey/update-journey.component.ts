@@ -22,6 +22,7 @@ export class UpdateJourneyComponent {
   checkInTypes = CHECKINTYPES
   checkInEvents = CHECKINEVENT
   isShowLog: boolean = false;
+  isShowDashboard: boolean = true;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -143,6 +144,10 @@ export class UpdateJourneyComponent {
       this.isStored = false
       this.isShowLog = false
       this.isContinueLog = false
+      this.isShowDashboard = false
+      setTimeout(() => {
+        this.isShowDashboard = true
+      }, 0)
     }, 3000)
   }
 
