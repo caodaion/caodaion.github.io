@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
 import { ScannerQRCodeConfig, ScannerQRCodeSelectedFiles, NgxScannerQrcodeComponent, NgxScannerQrcodeService, ScannerQRCodeResult } from 'ngx-scanner-qrcode';
 import { delay } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { delay } from 'rxjs';
   templateUrl: './cp-qr-scanner.component.html',
   styleUrls: ['./cp-qr-scanner.component.scss']
 })
-export class CpQrScannerComponent implements AfterViewInit {
+export class CpQrScannerComponent implements AfterViewInit, OnDestroy {
 
   @Output() qrData = new EventEmitter<any>();
 
@@ -36,9 +36,15 @@ export class CpQrScannerComponent implements AfterViewInit {
   constructor(private qrcode: NgxScannerQrcodeService) { }
 
   ngAfterViewInit(): void {
+    this.action.stop()
     this.action.isReady.pipe(delay(3000)).subscribe(() => {
       this.action.start();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.action.stop()
+    console.log('destroy');
   }
 
   public onEvent(e: ScannerQRCodeResult[]): void {

@@ -11,6 +11,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 export class JourneyComponent implements OnInit {
 
   updateJourneyDialogRef: any
+  selectedIndex: any = 0
   isShowUpdate: boolean = false
 
   constructor(
