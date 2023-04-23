@@ -16,13 +16,16 @@ import { AttendanceComponent } from './attendance/attendance.component';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgChartsModule } from 'ng2-charts';
 
 
 @NgModule({
   declarations: [
     JourneyComponent,
     UpdateJourneyComponent,
-    AttendanceComponent
+    AttendanceComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTabsModule,
     MatListModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    NgChartsModule
   ]
 })
 export class JourneyModule { }

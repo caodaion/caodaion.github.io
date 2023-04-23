@@ -59,7 +59,17 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <strong>Mức độ hài lòng của bạn về ghi dấu này?</strong>
+        <p>
+          <strong>Mức độ hài lòng của bạn về ghi dấu hành trình này?</strong>
+        </p>
+        <p>
+          <em
+            ><strong>Ví dụ: </strong>Ghi dấu của bạn là một ghi dấu cúng thời,
+            và bạn cảm thấy đàn cúng của mình rất hiệu quả thì bạn chọn Rất hài
+            lòng và thực hiện tương tực với các đánh giá về ghi chú hành trình
+            của bạn.</em
+          >
+        </p>
         <div class="rating">
           <button
             (click)="journeyLog.rating = 1"
@@ -270,27 +280,30 @@
       Ghi dấu hành trình thành công!
     </h1>
   </div>
-  <ng-template #duplicateDialog>
-    <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>
-    <mat-dialog-content>
-      <strong>LƯU Ý:</strong>
-      <p>
-        Ghi dấu vào thời gian này sẽ trùng khung giờ với một sự kiện đã ghi dấu.
-      </p>
-      <p>Bạn vẫn muốn tiếp tục?</p>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-flat-button mat-dialog-close="true" (click)="onCancelLog()">
-        Hủy
-      </button>
-      <button
-        mat-flat-button
-        [color]="'primary'"
-        mat-dialog-close="true"
-        (click)="onCoutinue()"
-      >
-        Tiếp tục
-      </button>
-    </mat-dialog-actions>
-  </ng-template>
 </div>
+<div class="w-100 dashboard-section">
+  <app-dashboard></app-dashboard>
+</div>
+<ng-template #duplicateDialog>
+  <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>
+  <mat-dialog-content>
+    <strong>LƯU Ý:</strong>
+    <p>
+      Ghi dấu vào thời gian này sẽ trùng khung giờ với một sự kiện đã ghi dấu.
+    </p>
+    <p>Bạn vẫn muốn tiếp tục?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button mat-dialog-close="true" (click)="onCancelLog()">
+      Hủy
+    </button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      mat-dialog-close="true"
+      (click)="onCoutinue()"
+    >
+      Tiếp tục
+    </button>
+  </mat-dialog-actions>
+</ng-template>
