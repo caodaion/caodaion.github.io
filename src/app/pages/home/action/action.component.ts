@@ -35,6 +35,11 @@ export class ActionComponent {
       icon: 'calculate',
       label: 'Tính tuần cửu'
     },
+    {
+      link: '/trang-chu/hanh-trinh',
+      icon: 'trip_origin',
+      label: 'Hành trình'
+    },
   ]
 
   constructor (
@@ -46,7 +51,7 @@ export class ActionComponent {
         if (state.matches) {
           this.cols = 2;
         } else {
-          this.cols = 5;
+          this.cols = 6;
         }
       });
   }
