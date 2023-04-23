@@ -11,12 +11,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { CpQrScannerModule } from "../../components/cp-qr-scanner/cp-qr-scanner.module";
 import { UpdateJourneyComponent } from './update-journey/update-journey.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
   declarations: [
     JourneyComponent,
-    UpdateJourneyComponent
+    UpdateJourneyComponent,
+    AttendanceComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,9 @@ import { UpdateJourneyComponent } from './update-journey/update-journey.componen
     MatFormFieldModule,
     MatSelectModule,
     FormsModule,
-    CpQrScannerModule
+    CpQrScannerModule,
+    MatTabsModule,
+    MatListModule
   ]
 })
 export class JourneyModule { }

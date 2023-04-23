@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateJourneyComponent } from './update-journey/update-journey.component';
+import { AttendanceComponent } from './attendance/attendance.component';
 
 @Component({
   selector: 'app-journey',
@@ -23,5 +24,9 @@ export class JourneyComponent implements OnInit {
 
   onUpdateJourney() {
     this.updateJourneyDialogRef = this.matDialog.open(UpdateJourneyComponent)
+  }
+
+  onUpdateAttendance() {
+    this.updateJourneyDialogRef = this.matDialog.open(AttendanceComponent)
   }
 }

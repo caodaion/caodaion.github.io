@@ -1,0 +1,30 @@
+<div class="attendance">
+  <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
+  <div class="attendance-table">
+    <mat-list>
+      <mat-list-item *ngFor="let item of attendanceList">
+        <span matListItemTitle>{{ item?.na }}</span>
+        <span matListItemLine>{{ item?.id }}</span>
+        <span>{{ item?.ti }}</span>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+<ng-template #welcomeDialog>
+  <div mat-dialog-title>Xin chào👋!</div>
+  <mat-dialog-content>
+    <div *ngIf="!isDuplicate">
+      <h1 style="line-height: normal">
+        {{ journeyUser?.ti }} {{ journeyUser?.na }}
+      </h1>
+      <p *ngIf="journeyUser?.id">Mã số: {{ journeyUser?.id }}</p>
+    </div>
+    <div *ngIf="isDuplicate">
+      <p>
+        {{ journeyUser?.ti }} {{ journeyUser?.na }}
+        <span *ngIf="journeyUser?.id">Mã số: {{ journeyUser?.id }}</span>
+      </p>
+      <h1>Bạn đã được ghi nhận hành trình rồi👌!</h1>
+    </div>
+  </mat-dialog-content>
+</ng-template>

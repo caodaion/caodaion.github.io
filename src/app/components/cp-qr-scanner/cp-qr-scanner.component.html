@@ -1,8 +1,6 @@
-<mat-form-field class="w-100">
+<mat-form-field class="w-100" *ngIf="action.devices.value.length > 0">
   <mat-label>Chọn thiết bị quét</mat-label>
-  <mat-select
-  [ngModel]="null" (ngModelChange)="action.playDevice($event)"
-  >
+  <mat-select [ngModel]="null" (ngModelChange)="action.playDevice($event)">
     <mat-option
       *ngFor="let c of action.devices.value; let i = index"
       [value]="c.deviceId"
@@ -10,4 +8,15 @@
     >
   </mat-select>
 </mat-form-field>
-<ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+<div>
+  {{
+    action.devices.value.length == 0
+      ? "Ứng dụng đang tìm thiết bị quét của bạn🔍. Xin đợi trong giây lát nhé😉!"
+      : ""
+  }}
+</div>
+<ngx-scanner-qrcode
+  #action="scanner"
+  [config]="config"
+  (event)="onEvent($event)"
+></ngx-scanner-qrcode>

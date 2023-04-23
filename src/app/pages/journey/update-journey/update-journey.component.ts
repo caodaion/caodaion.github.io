@@ -16,7 +16,6 @@ export class UpdateJourneyComponent {
     type: '',
     timestamp: 0
   }
-  journeyUser: any = null;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
@@ -25,19 +24,11 @@ export class UpdateJourneyComponent {
   @ViewChild('duplicateDialog') duplicateDialog!: any;
 
   constructor(
-    private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     public matDialog: MatDialog
   ) {
-    this.route.queryParams.subscribe((query) => {
-      if (query['token']) {
-        const token = query['token']
-        const jwtHelper = new JwtHelperService()
-        const decodedToken = jwtHelper.decodeToken(token)
-        this.tokenAction(decodedToken)
-      }
-    })
   }
+
   scanComplete(qrData: any) {
     this.qrData = qrData
     console.log(this.qrData);
@@ -66,7 +57,6 @@ export class UpdateJourneyComponent {
     console.log(this.qrData);
 
     if (this.qrData) {
-      this.isShowQRScanner = false
       this._snackBar.open(`Đã quét được: ${this.qrData}`, 'Đóng', {
         duration: this.durationInSeconds * 1000,
         horizontalPosition: this.horizontalPosition,
@@ -74,9 +64,9 @@ export class UpdateJourneyComponent {
       })
 
       if (isValidUrl(this.qrData)) {
+        this.isShowQRScanner = false
         if (this.qrData?.includes('hanh-trinh')) {
           console.log(getParameterByName('t', this.qrData));
-
           if (getParameterByName('t', this.qrData) == 'tuGia') {
             this.journeyLog.type = 'tuGia'
             this.checkTuGiaJourney()
@@ -84,16 +74,7 @@ export class UpdateJourneyComponent {
         }
       } else {
         if (this.qrData?.split('|')?.length > 1) {
-          const userData = this.qrData?.split('|')
-          this.journeyUser = {
-            id: userData[0],
-            na: userData?.find((item: any) => item.includes('na='))?.replace('na=', ''),
-            nm: userData?.find((item: any) => item.includes('nm='))?.replace('nm=', ''),
-            ch: userData?.find((item: any) => item.includes('ch='))?.replace('ch=', ''),
-            or: userData?.find((item: any) => item.includes('or='))?.replace('or=', ''),
-            ti: userData?.find((item: any) => item.includes('ti='))?.replace('ti=', ''),
-          }
-          console.log(this.journeyUser);
+          // show a dialog to require checkout to the attendance tab
         }
       }
     }
@@ -141,5 +122,12 @@ export class UpdateJourneyComponent {
 
   onCoutinue() {
     this.isContinueLog = true
+  }
+
+  storeJourney() {
+    let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
+    journeys.push(this.journeyLog)
+    console.log(journeys);
+    localStorage.setItem('journey', JSON.stringify(journeys))
   }
 }

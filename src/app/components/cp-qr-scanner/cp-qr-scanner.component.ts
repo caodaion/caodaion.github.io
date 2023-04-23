@@ -44,6 +44,9 @@ export class CpQrScannerComponent implements AfterViewInit {
   public onEvent(e: ScannerQRCodeResult[]): void {
     console.log(e);
     this.qrData.emit(e[0].value)
+    this.action.pause().pipe(delay(3000)).subscribe(() => {
+      this.action.play()
+    })
   }
 
   public handle(action: NgxScannerQrcodeComponent, fn: string): void {
