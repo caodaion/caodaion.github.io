@@ -11,6 +11,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 export class JourneyComponent implements OnInit {
 
   updateJourneyDialogRef: any
+  isShowUpdate: boolean = false
 
   constructor(
     public matDialog: MatDialog
@@ -20,13 +21,5 @@ export class JourneyComponent implements OnInit {
 
   ngOnInit(): void {
 
-  }
-
-  onUpdateJourney() {
-    this.updateJourneyDialogRef = this.matDialog.open(UpdateJourneyComponent)
-  }
-
-  onUpdateAttendance() {
-    this.updateJourneyDialogRef = this.matDialog.open(AttendanceComponent)
   }
 }

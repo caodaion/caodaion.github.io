@@ -1,8 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { CHECKINEVENT, CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 
 @Component({
   selector: 'app-update-journey',
@@ -11,17 +10,18 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class UpdateJourneyComponent {
   isShowQRScanner: boolean = false
+  isStored: boolean = false
   qrData: any = ''
-  journeyLog = {
-    type: '',
-    timestamp: 0
-  }
+  journeyLog: JourneyLog = new JourneyLog()
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
   duplicateDialogRef: any;
   isContinueLog: boolean = false;
   @ViewChild('duplicateDialog') duplicateDialog!: any;
+  checkInTypes = CHECKINTYPES
+  checkInEvents = CHECKINEVENT
+  isShowLog: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -68,7 +68,7 @@ export class UpdateJourneyComponent {
         if (this.qrData?.includes('hanh-trinh')) {
           console.log(getParameterByName('t', this.qrData));
           if (getParameterByName('t', this.qrData) == 'tuGia') {
-            this.journeyLog.type = 'tuGia'
+            this.journeyLog.location = 'tuGia'
             this.checkTuGiaJourney()
           }
         }
@@ -105,6 +105,14 @@ export class UpdateJourneyComponent {
       this.onCoutinue()
     }
     if (
+      newDate >= startTy && newDate <= endTy ||
+      newDate >= startMeo && newDate <= endMeo ||
+      newDate >= startNgo && newDate <= endNgo ||
+      newDate >= startDau && newDate <= endDau
+    ) {
+      this.journeyLog.type = 'cungTuThoi'
+    }
+    if (
       !(journeys?.find((item: any) => new Date(item?.timestamp) >= startTy && new Date(item?.timestamp) <= endTy) ||
         journeys?.find((item: any) => new Date(item?.timestamp) >= startMeo && new Date(item?.timestamp) <= endMeo) ||
         journeys?.find((item: any) => new Date(item?.timestamp) >= startNgo && new Date(item?.timestamp) <= endNgo) ||
@@ -122,6 +130,7 @@ export class UpdateJourneyComponent {
 
   onCoutinue() {
     this.isContinueLog = true
+    this.journeyLog.timestamp = Date.now()
   }
 
   storeJourney() {
@@ -129,5 +138,30 @@ export class UpdateJourneyComponent {
     journeys.push(this.journeyLog)
     console.log(journeys);
     localStorage.setItem('journey', JSON.stringify(journeys))
+    this.isStored = true
+    setTimeout(() => {
+      this.isStored = false
+      this.isShowLog = false
+      this.isContinueLog = false
+    }, 3000)
   }
+
+  onShowLog() {
+    this.journeyLog = new JourneyLog()
+    this.isShowLog = !this.isShowLog
+  }
+
+  onCancelLog() {
+    this.isStored = false
+    this.isShowLog = false
+    this.isContinueLog = false
+  }
+}
+
+export class JourneyLog {
+  location: any;
+  type: any;
+  timestamp: any;
+  rating?: any;
+  comment?: any;
 }

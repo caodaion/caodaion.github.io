@@ -5,6 +5,7 @@ import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
     NgxScannerQrcodeModule,
     MatFormFieldModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     CpQrScannerComponent

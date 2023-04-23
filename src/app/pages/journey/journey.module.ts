@@ -14,6 +14,8 @@ import { UpdateJourneyComponent } from './update-journey/update-journey.componen
 import { MatTabsModule } from '@angular/material/tabs';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { MatListModule } from '@angular/material/list';
     FormsModule,
     CpQrScannerModule,
     MatTabsModule,
-    MatListModule
+    MatListModule,
+    MatInputModule,
+    MatDividerModule
   ]
 })
 export class JourneyModule { }

@@ -4,15 +4,7 @@
       <mat-tab [label]="'SỔ TAY HÀNH TRÌNH'">
         <h1>Sổ tay hành trình</h1>
         <div>
-          <button
-            mat-flat-button
-            [color]="'primary'"
-            class="w-100"
-            (click)="onUpdateJourney()"
-          >
-            <mat-icon>add</mat-icon>
-            Ghi dấu hành trình
-          </button>
+          <app-update-journey></app-update-journey>
         </div>
       </mat-tab>
       <mat-tab [label]="'ĐIỂM DANH HÀNH TRÌNH'">

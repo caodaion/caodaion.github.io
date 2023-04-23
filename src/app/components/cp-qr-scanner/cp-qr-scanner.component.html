@@ -8,13 +8,13 @@
     >
   </mat-select>
 </mat-form-field>
-<div>
-  {{
-    action.devices.value.length == 0
-      ? "Ứng dụng đang tìm thiết bị quét của bạn🔍. Xin đợi trong giây lát nhé😉!"
-      : ""
-  }}
-</div>
+<h2
+  class="d-flex flex-column align-items-center text-center"
+  *ngIf="action.devices.value.length == 0"
+>
+  "Ứng dụng đang tìm thiết bị quét của bạn🔍. Xin đợi trong giây lát nhé😉!"
+  <mat-spinner></mat-spinner>
+</h2>
 <ngx-scanner-qrcode
   #action="scanner"
   [config]="config"

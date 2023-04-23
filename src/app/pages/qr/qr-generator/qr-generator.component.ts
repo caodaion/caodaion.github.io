@@ -3,6 +3,7 @@ import { CommonService } from "../../../shared/services/common/common.service";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 import { NgTinyUrlService } from "ng-tiny-url";
 import * as CryptoJS from 'crypto-js';
+import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 
 @Component({
   selector: 'app-qr-generator',
@@ -20,23 +21,7 @@ export class QrGeneratorComponent {
   checkInQRData = ''
   syncError = ''
   syncQRData = ''
-  checkInTypes = [
-    {
-      key: 'tuGia',
-      label: 'Tại tư gia cá nhân người dùng',
-      disabled: false,
-    },
-    {
-      key: 'church',
-      label: 'Tại Thánh Thất/Thánh Tịnh/Cơ Quan Đạo/Nhà Tu, ...',
-      disabled: true,
-    },
-    {
-      key: 'tuGiaTinDo',
-      label: 'Tại tư gia của một tín đồ',
-      disabled: true,
-    }
-  ]
+  checkInTypes = CHECKINTYPES
   checkInType: any = ''
 
   constructor(
