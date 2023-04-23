@@ -28,32 +28,32 @@ export class DashboardComponent {
     this.isShowChart = false
     const localStorageData = JSON.parse(localStorage.getItem('journey') || '[]')
     console.log(localStorageData);
-    let data = [0, 0, 0, 0, 0]
+    let ratingData = [0, 0, 0, 0, 0]
     if (localStorageData?.length > 0) {
       localStorageData?.forEach((item: any) => {
         switch (item.rating) {
-          case 1: data[0] += 1
+          case 1: ratingData[0] += 1
             break;
-          case 2: data[1] += 1
+          case 2: ratingData[1] += 1
             break;
-          case 3: data[2] += 1
+          case 3: ratingData[2] += 1
             break;
-          case 4: data[3] += 1
+          case 4: ratingData[3] += 1
             break;
-          case 5: data[4] += 1
+          case 5: ratingData[4] += 1
             break;
           default:
             break;
         }
       })
-      this.ratingPieChartDatasets[0].data = data
+      this.ratingPieChartDatasets[0].data = ratingData
       setTimeout(() => {
         this.isShowChart = true
       }, 0)
     } else {
       this.isShowChart = false
     }
-    console.log(data);
+    console.log(ratingData);
 
   }
 

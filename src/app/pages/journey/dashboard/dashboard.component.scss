@@ -2,7 +2,9 @@
 @use "sass:map";
 .rating-pie-chart, .location-bar-chart {
   width: 30%;
+  display: inline-block;
   @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
     width: 100%;
+    display: block;
   }
 }
