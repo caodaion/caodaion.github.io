@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
 import { CHECKINEVENT, CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
+import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
 @Component({
   selector: 'app-update-journey',
@@ -21,6 +22,7 @@ export class UpdateJourneyComponent {
   @ViewChild('duplicateDialog') duplicateDialog!: any;
   checkInTypes = CHECKINTYPES
   checkInEvents = CHECKINEVENT
+  tuThoiType = <any>[];
   isShowLog: boolean = false;
   isShowDashboard: boolean = true;
 
@@ -28,6 +30,7 @@ export class UpdateJourneyComponent {
     private _snackBar: MatSnackBar,
     public matDialog: MatDialog
   ) {
+    this.tuThoiType = TIME_TYPE?.data?.filter((item: any) => item?.key == 'ty-2301' || item?.key == 'meo-0507' || item?.key == 'ngo-1113' || item?.key == 'dau-1719')
   }
 
   scanComplete(qrData: any) {
@@ -112,6 +115,18 @@ export class UpdateJourneyComponent {
       newDate >= startDau && newDate <= endDau
     ) {
       this.journeyLog.type = 'cungTuThoi'
+      if (newDate >= startTy && newDate <= endTy) {
+        this.journeyLog.tuThoiType = 'ty-2301'
+      }
+      if (newDate >= startMeo && newDate <= endMeo) {
+        this.journeyLog.tuThoiType = 'meo-0507'
+      }
+      if (newDate >= startNgo && newDate <= endNgo) {
+        this.journeyLog.tuThoiType = 'ngo-1113'
+      }
+      if (newDate >= startDau && newDate <= endDau) {
+        this.journeyLog.tuThoiType = 'dau-1719'
+      }
     }
     if (
       !(journeys?.find((item: any) => new Date(item?.timestamp) >= startTy && new Date(item?.timestamp) <= endTy) ||
@@ -148,7 +163,7 @@ export class UpdateJourneyComponent {
       setTimeout(() => {
         this.isShowDashboard = true
       }, 0)
-    }, 3000)
+    }, 1000)
   }
 
   onShowLog() {
@@ -161,12 +176,32 @@ export class UpdateJourneyComponent {
     this.isShowLog = false
     this.isContinueLog = false
   }
+
+  onClearJourney(clearJourney: any) {
+    const matdialog = this.matDialog.open(clearJourney)
+  }
+
+  onClearJourneyLocalStorage() {
+    localStorage.removeItem('journey')
+    this.isShowDashboard = false
+    setTimeout(() => {
+      this.isShowDashboard = true
+    }, 0)
+  }
+
+  validateJourney() {
+    if (this.journeyLog.type === 'cungTuThoi') {
+      return this.journeyLog.tuThoiType
+    }
+    return this.journeyLog.location && this.journeyLog.timestamp
+  }
 }
 
 export class JourneyLog {
   location: any;
   timestamp: any;
   type?: any;
+  tuThoiType?: any;
   rating?: any;
   comment?: any;
 }

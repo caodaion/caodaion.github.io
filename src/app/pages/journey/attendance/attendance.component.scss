@@ -31,5 +31,19 @@
         }
       }
     }
+    mat-divider {
+      margin-top: 1rem;
+    }
+  }
+}
+.mat-dialog-welcome-attendance {
+  h1, .welcomeIcon {
+    line-height: normal;
+  }
+  .welcomeIcon {
+    font-size: 200px;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      font-size: 100px;
+    }
   }
 }

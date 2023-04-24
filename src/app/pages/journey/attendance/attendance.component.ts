@@ -19,6 +19,7 @@ export class AttendanceComponent {
   timeout = 3000
   @ViewChild('welcomeDialog') welcomeDialog!: any;
   welcomeDialogRef: any
+  welcomeIcon: any
   isDuplicate: boolean = true;
 
   constructor(
@@ -77,6 +78,16 @@ export class AttendanceComponent {
       this.cd.detectChanges()
       this.welcomeDialogRef?.close();
       this.welcomeDialogRef = this.matDialog.open(this.welcomeDialog)
+      const getRandomWelcomeIcon = () => {
+        const icon = ["👋", "😉", "🤗", "🙌"]
+        const getRandomIntInclusive = (min: any, max: any) => {
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+        }
+        return icon[getRandomIntInclusive(0, icon.length - 1)];
+      }
+      this.welcomeIcon = getRandomWelcomeIcon()
       this.welcomeDialogRef?.afterOpened().subscribe(() => {
         setTimeout(() => {
           this.welcomeDialogRef?.close();
@@ -87,6 +98,7 @@ export class AttendanceComponent {
       })
     } else {
       this.welcomeDialogRef?.close();
+      this.welcomeIcon = "🤔"
       this.isDuplicate = true
       this.welcomeDialogRef = this.matDialog.open(this.welcomeDialog)
       this.welcomeDialogRef?.afterOpened().subscribe(() => {

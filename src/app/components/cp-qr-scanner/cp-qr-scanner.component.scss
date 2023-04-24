@@ -1,0 +1,16 @@
+.scanner-wrapper {
+  position: relative;
+  .feature-button {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    button {
+      color: #ffffff;
+      background: #0000001f;
+    }
+  }
+}

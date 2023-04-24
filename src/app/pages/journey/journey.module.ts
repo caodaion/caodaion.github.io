@@ -18,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { NgChartsModule } from 'ng2-charts';
     MatListModule,
     MatInputModule,
     MatDividerModule,
-    NgChartsModule
+    NgChartsModule,
+    MatTableModule,
+    MatMenuModule
   ]
 })
 export class JourneyModule { }

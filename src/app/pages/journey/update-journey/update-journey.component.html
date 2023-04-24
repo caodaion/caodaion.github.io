@@ -1,3 +1,14 @@
+<div class="d-flex justify-content-between">
+  <h1>Sổ tay hành trình</h1>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onClearJourney(clearJourney)">
+      <mat-icon>delete</mat-icon> Làm mới
+    </button>
+  </mat-menu>
+</div>
 <button
   mat-flat-button
   [color]="isShowLog ? 'warn' : 'primary'"
@@ -56,6 +67,22 @@
               [disabled]="item?.disabled"
             >
               {{ item?.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-100" *ngIf="journeyLog.type == 'cungTuThoi'">
+          <mat-label>Thời cúng</mat-label>
+          <mat-select
+            [required]="journeyLog.type == 'cungTuThoi'"
+            [(ngModel)]="journeyLog.tuThoiType"
+            (ngModelChange)="checkTuGiaJourney()"
+          >
+            <mat-option
+              *ngFor="let item of tuThoiType"
+              [value]="item?.key"
+              [disabled]="item?.disabled"
+            >
+              {{ item?.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -254,13 +281,23 @@
           </p>
         </div>
         <button
-          *ngIf="journeyLog.location && journeyLog.timestamp"
+          *ngIf="validateJourney()"
           class="w-100"
           mat-flat-button
           [color]="'primary'"
           (click)="storeJourney()"
         >
           Xác nhận
+        </button>
+        <button
+          mat-flat-button
+          [color]="'warn'"
+          class="w-100"
+          style="margin-top: 1rem;"
+          (click)="onCancelLog()"
+        >
+          <mat-icon>close</mat-icon>
+          Hủy ghi dấu
         </button>
       </div>
     </div>
@@ -282,7 +319,7 @@
   </div>
 </div>
 <div class="w-100 dashboard-section">
-  <app-dashboard *ngIf="isShowDashboard"></app-dashboard>
+  <app-dashboard *ngIf="isShowDashboard && !isStored" (onShowLogClick)="onShowLog()"></app-dashboard>
 </div>
 <ng-template #duplicateDialog>
   <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>
@@ -304,6 +341,29 @@
       (click)="onCoutinue()"
     >
       Tiếp tục
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #clearJourney>
+  <div mat-dialog-title>Làm mới sổ tay hành trình</div>
+  <mat-dialog-content>
+    <strong>LƯU Ý:</strong>
+    <p>
+      Nếu bạn chấp nhận, <strong> mọi dữ liệu sổ tay hành trình</strong> của bạn
+      sẽ <strong> bị xóa hết và không có cách nào hồi phục lại được</strong>.
+    </p>
+    <p>Bạn vẫn muốn tiếp tục?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button mat-dialog-close="true">Hủy</button>
+    <button
+      mat-flat-button
+      [color]="'warn'"
+      mat-dialog-close="true"
+      (click)="onClearJourneyLocalStorage()"
+    >
+      Chấp nhận
     </button>
   </mat-dialog-actions>
 </ng-template>

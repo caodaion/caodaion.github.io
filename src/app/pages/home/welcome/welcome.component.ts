@@ -16,8 +16,8 @@ export class WelcomeComponent implements OnInit {
     `Bạn có khỏe không?🤔`,
   ]
   randomRemember = [
-    `<div>Hãy luôn ghi nhớ <h2 class="d-inline-block">"SỰ THƯƠNG YÊU là giềng bảo sanh của càn khôn thế giới"</h2> nhé!😉</div>`,
-    `<div>Hãy luôn ghi nhớ <h2 class="d-inline-block">"THẦY là Cha SỰ THƯƠNG YÊU"</h2> nhé!😉</div>`,
+    `<div>Hãy luôn ghi nhớ <h2 class="d-inline-block">"SỰ THƯƠNG YÊU là giềng bảo sanh của càn khôn thế giới"</h2> nhé!🫶</div>`,
+    `<div>Hãy luôn ghi nhớ <h2 class="d-inline-block">"THẦY là Cha SỰ THƯƠNG YÊU"</h2> nhé!🫶</div>`,
     `<div>Hãy nhớ làm theo lời Thầy dạy bạn nhé!👉<h2 class="d-inline-block">"Thầy vui muốn các con thuận hòa cùng nhau hoài, ấy là lễ hiến cho Thầy rất trân trọng."</h2></div>`,
   ]
   rememberPlease: any = ''

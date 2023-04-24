@@ -15,8 +15,20 @@
   "Ứng dụng đang tìm thiết bị quét của bạn🔍. Xin đợi trong giây lát nhé😉!"
   <mat-spinner></mat-spinner>
 </h2>
-<ngx-scanner-qrcode
-  #action="scanner"
-  [config]="config"
-  (event)="onEvent($event)"
-></ngx-scanner-qrcode>
+<div class="scanner-wrapper">
+  <ngx-scanner-qrcode
+    #action="scanner"
+    [config]="config"
+    (event)="onEvent($event)"
+  ></ngx-scanner-qrcode>
+  <div class="feature-button">
+    <button
+      mat-icon-button
+      (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')"
+      class="flash-button"
+      *ngIf="action.devices.value.length > 0"
+    >
+      <mat-icon>{{ action.isTorch ? "flash_on" : "flash_off" }}</mat-icon>
+    </button>
+  </div>
+</div>

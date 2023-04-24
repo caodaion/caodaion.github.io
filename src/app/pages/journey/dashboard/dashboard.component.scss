@@ -1,10 +1,26 @@
 @use "../../../../sass/variables.scss";
 @use "sass:map";
-.rating-pie-chart, .location-bar-chart {
+.dashboard-chart {
   width: 30%;
   display: inline-block;
   @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
     width: 100%;
     display: block;
+  }
+}
+
+.view-data {
+  mat-divider {
+    margin-top: 1rem;
+  }
+}
+
+.dashboard-welcome {
+  text-align: center;
+  &-icon {
+    font-size: 200px;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      font-size: 100px;
+    }
   }
 }
