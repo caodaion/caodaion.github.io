@@ -4,7 +4,7 @@
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="onClearJourney(clearJourney)">
+    <button mat-menu-item (click)="onClearJourney()">
       <mat-icon>delete</mat-icon> Làm mới
     </button>
   </mat-menu>
@@ -28,7 +28,7 @@
       [color]="isShowQRScanner ? 'warn' : 'primary'"
       class="w-100"
       [matTooltip]="'Quét mã QR'"
-      (click)="isShowQRScanner = !isShowQRScanner"
+      (click)="isShowQRScanner = !isShowQRScanner; isUpdateJourney = false"
     >
       <mat-icon>{{ isShowQRScanner ? "close" : "qr_code_scanner" }}</mat-icon>
       {{ isShowQRScanner ? "Đóng" : "Quét mã QR" }}
@@ -37,8 +37,8 @@
       <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
     </div>
     <div>
-      <h2>Nội dung ghi dấu hành trình:</h2>
-      <mat-form-field class="w-100">
+      <h2>{{ isUpdateJourney ? "Sửa " : "" }} Nội dung ghi dấu hành trình:</h2>
+      <mat-form-field class="w-100" [appearance]="'outline'">
         <mat-label>Ghi dấu tại</mat-label>
         <mat-select
           [(ngModel)]="journeyLog.location"
@@ -55,7 +55,7 @@
       </mat-form-field>
       <mat-divider></mat-divider>
       <div class="optional-log" *ngIf="journeyLog.location">
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100" [appearance]="'outline'">
           <mat-label>Loại ghi dấu</mat-label>
           <mat-select
             [(ngModel)]="journeyLog.type"
@@ -70,7 +70,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="w-100" *ngIf="journeyLog.type == 'cungTuThoi'">
+        <mat-form-field
+          class="w-100"
+          *ngIf="journeyLog.type == 'cungTuThoi'"
+          [appearance]="'outline'"
+        >
           <mat-label>Thời cúng</mat-label>
           <mat-select
             [required]="journeyLog.type == 'cungTuThoi'"
@@ -252,11 +256,10 @@
             Rất hài lòng
           </button>
         </div>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100" [appearance]="'outline'">
           <mat-label>Ghi chú</mat-label>
           <textarea
-            cols="30"
-            rows="10"
+            rows="3"
             matInput
             [(ngModel)]="journeyLog.comment"
           ></textarea>
@@ -293,7 +296,7 @@
           mat-flat-button
           [color]="'warn'"
           class="w-100"
-          style="margin-top: 1rem;"
+          style="margin-top: 1rem"
           (click)="onCancelLog()"
         >
           <mat-icon>close</mat-icon>
@@ -319,7 +322,12 @@
   </div>
 </div>
 <div class="w-100 dashboard-section">
-  <app-dashboard *ngIf="isShowDashboard && !isStored" (onShowLogClick)="onShowLog()"></app-dashboard>
+  <app-dashboard
+    *ngIf="isShowDashboard && !isStored"
+    (onShowLogClick)="onShowLog()"
+    (onUpdateJourneyClick)="onUpdateJourney($event)"
+    (onRemoveJourneyClick)="onClearJourney($event)"
+  ></app-dashboard>
 </div>
 <ng-template #duplicateDialog>
   <div mat-dialog-title>Ghi dấu cùng một khung thời gian</div>
@@ -346,17 +354,30 @@
 </ng-template>
 
 <ng-template #clearJourney>
-  <div mat-dialog-title>Làm mới sổ tay hành trình</div>
+  <div mat-dialog-title>
+    {{
+      removedJourneyIndex == -1 ? "Làm mới sổ tay hành trình" : "Xóa hành trình"
+    }}
+  </div>
   <mat-dialog-content>
     <strong>LƯU Ý:</strong>
-    <p>
+    <p *ngIf="removedJourneyIndex == -1">
       Nếu bạn chấp nhận, <strong> mọi dữ liệu sổ tay hành trình</strong> của bạn
       sẽ <strong> bị xóa hết và không có cách nào hồi phục lại được</strong>.
     </p>
+    <div *ngIf="removedJourneyIndex !== -1">
+      <p>
+        Nếu bạn chấp nhận,
+        <strong> hành trình {{ removedJourneyMessage }}</strong> của bạn sẽ
+        <strong> bị xóa và không có cách nào hồi phục lại được</strong>.
+      </p>
+    </div>
     <p>Bạn vẫn muốn tiếp tục?</p>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button mat-dialog-close="true">Hủy</button>
+    <button mat-flat-button mat-dialog-close="true" (click)="onCancelLog()">
+      Hủy
+    </button>
     <button
       mat-flat-button
       [color]="'warn'"

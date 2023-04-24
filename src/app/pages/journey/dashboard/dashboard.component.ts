@@ -34,8 +34,10 @@ export class DashboardComponent {
   public typePieChartLegend = true;
   public typePieChartPlugins = [];
   localStorageData = <any>[];
-  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment']
+  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment', 'action']
   @Output() onShowLogClick = new EventEmitter();
+  @Output() onUpdateJourneyClick = new EventEmitter();
+  @Output() onRemoveJourneyClick = new EventEmitter();
 
   constructor(
     private breakpointObserver: BreakpointObserver) {
@@ -55,7 +57,6 @@ export class DashboardComponent {
     this.isShowChart = false
     const localStorageData = JSON.parse(localStorage.getItem('journey') || '[]')
     this.localStorageData = localStorageData
-    console.log(localStorageData);
     let ratingData = [0, 0, 0, 0, 0, 0]
     if (localStorageData?.length > 0) {
       localStorageData?.forEach((item: any) => {
@@ -127,5 +128,12 @@ export class DashboardComponent {
 
   onShowLog() {
     this.onShowLogClick.emit()
+  }
+
+  onUpdateJourney(item: any) {
+    this.onUpdateJourneyClick.emit(item)
+  }
+  onRemoveJourney(item: any) {
+    this.onRemoveJourneyClick.emit(item)
   }
 }

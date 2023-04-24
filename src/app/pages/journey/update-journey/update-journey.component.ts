@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { CHECKINEVENT, CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
@@ -9,28 +10,47 @@ import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.consta
   templateUrl: './update-journey.component.html',
   styleUrls: ['./update-journey.component.scss']
 })
-export class UpdateJourneyComponent {
+export class UpdateJourneyComponent implements AfterViewInit {
   isShowQRScanner: boolean = false
   isStored: boolean = false
   qrData: any = ''
+  removedJourneyMessage: any = ''
   journeyLog: JourneyLog = new JourneyLog()
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
   duplicateDialogRef: any;
+  clearJourneyDialogRef: any;
   isContinueLog: boolean = false;
+  isUpdateJourney: boolean = false;
   @ViewChild('duplicateDialog') duplicateDialog!: any;
+  @ViewChild('clearJourney') clearJourney!: any;
   checkInTypes = CHECKINTYPES
   checkInEvents = CHECKINEVENT
   tuThoiType = <any>[];
   isShowLog: boolean = false;
   isShowDashboard: boolean = true;
+  removedJourneyIndex: any = -1;
 
   constructor(
     private _snackBar: MatSnackBar,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.tuThoiType = TIME_TYPE?.data?.filter((item: any) => item?.key == 'ty-2301' || item?.key == 'meo-0507' || item?.key == 'ngo-1113' || item?.key == 'dau-1719')
+  }
+
+  ngAfterViewInit(): void {
+    this.route.queryParams.subscribe((query) => {
+      if (query['l']) {
+        this.isShowQRScanner = false
+        this.onShowLog()
+        this.journeyLog.location = query['l']
+        this.checkTuGiaJourney()
+      }
+    })
+    this.cd.detectChanges()
   }
 
   scanComplete(qrData: any) {
@@ -70,7 +90,7 @@ export class UpdateJourneyComponent {
       if (isValidUrl(this.qrData)) {
         this.isShowQRScanner = false
         if (this.qrData?.includes('hanh-trinh')) {
-          console.log(getParameterByName('t', this.qrData));
+          console.log(getParameterByName('l', this.qrData));
           if (getParameterByName('t', this.qrData) == 'tuGia') {
             this.journeyLog.location = 'tuGia'
             this.checkTuGiaJourney()
@@ -101,7 +121,7 @@ export class UpdateJourneyComponent {
     const startDau = new Date(new Date().setHours(17, 0, 0));
     const endDau = new Date(new Date().setHours(18, 59, 59));
     const newDate = new Date()
-
+    this.isUpdateJourney = false
     const logJourney = () => {
       console.log('Continue');
       this.journeyLog.timestamp = Date.now()
@@ -151,42 +171,62 @@ export class UpdateJourneyComponent {
 
   storeJourney() {
     let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
-    journeys.push(this.journeyLog)
-    console.log(journeys);
     this.isStored = true
+    let foundJourney = journeys?.find((item: any) => item.timestamp === this.journeyLog.timestamp)
+    const journeyIndex = journeys?.indexOf(foundJourney)
+    if (foundJourney) {
+      journeys[journeyIndex] = this.journeyLog
+    } else {
+      journeys.push(this.journeyLog)
+    }
     localStorage.setItem('journey', JSON.stringify(journeys))
-    setTimeout(() => {
-      this.isStored = false
-      this.isShowLog = false
-      this.isContinueLog = false
-      this.isShowDashboard = false
-      setTimeout(() => {
-        this.isShowDashboard = true
-      }, 0)
-    }, 1000)
+    this.onCancelLog()
   }
 
   onShowLog() {
     this.journeyLog = new JourneyLog()
-    this.isShowLog = !this.isShowLog
+    this.isShowLog = true
   }
 
   onCancelLog() {
+    this.journeyLog = new JourneyLog()
     this.isStored = false
     this.isShowLog = false
     this.isContinueLog = false
-  }
-
-  onClearJourney(clearJourney: any) {
-    const matdialog = this.matDialog.open(clearJourney)
-  }
-
-  onClearJourneyLocalStorage() {
-    localStorage.removeItem('journey')
     this.isShowDashboard = false
     setTimeout(() => {
       this.isShowDashboard = true
     }, 0)
+  }
+
+  onClearJourney(item?: any) {
+    this.removedJourneyIndex = -1
+    if (item) {
+      this.removedJourneyMessage = ''
+      let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
+      this.journeyLog = item
+      let foundJourney = journeys?.find((item: any) => item.timestamp === this.journeyLog.timestamp)
+      const journeyIndex = journeys?.indexOf(foundJourney)
+      if (item?.tuThoiType) {
+        this.removedJourneyMessage += `Cúng Thời ${TIME_TYPE.data.find((tt: any) => tt.key == item.tuThoiType)?.name.split('|')[0]}`
+      } else {
+        this.removedJourneyMessage += CHECKINEVENT.find((cie: any) => cie.key == item.type)?.label || 'Chưa xác định'
+      }
+      this.removedJourneyMessage += ` tại ${CHECKINTYPES.find((cit: any) => cit.key == item.location)?.label || 'Chưa xác định'}`
+      this.removedJourneyIndex = journeyIndex
+    }
+    this.clearJourneyDialogRef = this.matDialog.open(this.clearJourney)
+  }
+
+  onClearJourneyLocalStorage() {
+    if (this.removedJourneyIndex !== -1) {
+      let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
+      journeys.splice(this.removedJourneyIndex, 1)
+      localStorage.setItem('journey', JSON.stringify(journeys))
+    } else {
+      localStorage.removeItem('journey')
+    }
+    this.onCancelLog()
   }
 
   validateJourney() {
@@ -194,6 +234,18 @@ export class UpdateJourneyComponent {
       return this.journeyLog.tuThoiType
     }
     return this.journeyLog.location && this.journeyLog.timestamp
+  }
+
+  onUpdateJourney(item: any) {
+    this.onShowLog()
+    this.journeyLog = item
+    this.isShowQRScanner = false
+    this.isContinueLog = true
+    this.isUpdateJourney = true
+    const subSidenavContent = document.getElementById('subSidenavContent')
+    if (subSidenavContent) {
+      subSidenavContent.scroll({ top: 0 })
+    }
   }
 }
 

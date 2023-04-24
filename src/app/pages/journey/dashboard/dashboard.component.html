@@ -100,11 +100,32 @@
         {{ element.comment }}
       </td>
     </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div class="d-flex">
+          <button
+            mat-icon-button
+            [matTooltip]="'Chỉnh sửa hành trình'"
+            (click)="onUpdateJourney(element)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [matTooltip]="'Xóa hành trình'"
+            (click)="onRemoveJourney(element)"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <mat-list *ngIf="isShowPhoneLayout">
-    <mat-list-item *ngFor="let item of localStorageData">
+    <mat-list-item *ngFor="let item of localStorageData; let index = index">
       <span matListItemTitle>{{ getRowData(item, "type") }} </span>
       <span matListItemLine
         ><strong>Địa điểm:</strong> {{ getRowData(item, "location") }}</span
@@ -118,6 +139,22 @@
         >{{ ratingPieChartLabels[item.rating - 1] }}</span
       >
       <span matListItemLine><strong>Ghi chú: </strong>{{ item.comment }}</span>
+      <div class="d-flex" matListItemLine>
+        <button
+          mat-icon-button
+          [matTooltip]="'Chỉnh sửa hành trình'"
+          (click)="onUpdateJourney(item)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          [matTooltip]="'Xóa hành trình'"
+          (click)="onRemoveJourney(item)"
+        >
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
       <mat-divider matListItemLine></mat-divider>
     </mat-list-item>
   </mat-list>
