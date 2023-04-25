@@ -47,6 +47,7 @@ export class UpdateJourneyComponent implements AfterViewInit {
         this.isShowQRScanner = false
         this.onShowLog()
         this.journeyLog.location = query['l']
+        this.journeyLog.location = 'Quét mã QR'
         this.checkTuGiaJourney()
       }
     })
