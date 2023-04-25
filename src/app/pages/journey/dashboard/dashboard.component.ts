@@ -33,6 +33,27 @@ export class DashboardComponent {
   }];
   public typePieChartLegend = true;
   public typePieChartPlugins = [];
+
+  public devicePieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+  };
+  public devicePieChartLabels = <any>[];
+  public devicePieChartDatasets = [{
+    data: <any>[]
+  }];
+  public devicePieChartLegend = true;
+  public devicePieChartPlugins = [];
+
+  public methodPieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+  };
+  public methodPieChartLabels = <any>[];
+  public methodPieChartDatasets = [{
+    data: <any>[]
+  }];
+  public methodPieChartLegend = true;
+  public methodPieChartPlugins = [];
+
   localStorageData = <any>[];
   displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment', 'device', 'action']
   @Output() onShowLogClick = new EventEmitter();
@@ -60,49 +81,78 @@ export class DashboardComponent {
     let ratingData = [0, 0, 0, 0, 0, 0]
     if (localStorageData?.length > 0) {
       localStorageData?.forEach((item: any) => {
-        switch (item.rating) {
-          case 1: ratingData[0] += 1
-            break;
-          case 2: ratingData[1] += 1
-            break;
-          case 3: ratingData[2] += 1
-            break;
-          case 4: ratingData[3] += 1
-            break;
-          case 5: ratingData[4] += 1
-            break;
-          default:
-            ratingData[5] += 1
-            break;
-        }
-      })
-      localStorageData?.forEach((item: any) => {
-        const foundType = CHECKINEVENT?.find((cit: any) => item?.type == cit?.key)
-        if (foundType) {
-          let label: any = foundType.label
-          if (item.tuThoiType) {
-            label = `Cúng Thời ${TIME_TYPE.data.find((tt: any) => tt.key == item.tuThoiType)?.name.split('|')[0]}`
-          }
-          if (!this.typePieChartLabels?.find((tpcl: any) => tpcl == label)) {
-            this.typePieChartLabels.push(label)
-          }
-          const pushDataIndex = this.typePieChartLabels.indexOf(label)
-          if (this.typePieChartDatasets[0].data[pushDataIndex]) {
-            this.typePieChartDatasets[0].data[pushDataIndex] += 1
-          } else {
-            this.typePieChartDatasets[0].data.push(1)
-          }
-        } else {
-          if (!this.typePieChartLabels?.find((tpcl: any) => tpcl == 'Chưa xác định')) {
-            this.typePieChartLabels.push('Chưa xác định')
-          }
-          const pushDataIndex = this.typePieChartLabels.indexOf('Chưa xác định')
-          if (this.typePieChartDatasets[0].data[pushDataIndex]) {
-            this.typePieChartDatasets[0].data[pushDataIndex] += 1
-          } else {
-            this.typePieChartDatasets[0].data.push(1)
+        const updateRatingChart = () => {
+          switch (item.rating) {
+            case 1: ratingData[0] += 1
+              break;
+            case 2: ratingData[1] += 1
+              break;
+            case 3: ratingData[2] += 1
+              break;
+            case 4: ratingData[3] += 1
+              break;
+            case 5: ratingData[4] += 1
+              break;
+            default:
+              ratingData[5] += 1
+              break;
           }
         }
+        const updateLabelChart = () => {
+          const foundType = CHECKINEVENT?.find((cit: any) => item?.type == cit?.key)
+          if (foundType) {
+            let label: any = foundType.label
+            if (item.tuThoiType) {
+              label = `Cúng Thời ${TIME_TYPE.data.find((tt: any) => tt.key == item.tuThoiType)?.name.split('|')[0]}`
+            }
+            if (!this.typePieChartLabels?.find((tpcl: any) => tpcl == label)) {
+              this.typePieChartLabels.push(label)
+            }
+            const pushDataIndex = this.typePieChartLabels.indexOf(label)
+            if (pushDataIndex !== -1 && this.typePieChartDatasets[0].data[pushDataIndex]) {
+              this.typePieChartDatasets[0].data[pushDataIndex] += 1
+            } else {
+              this.typePieChartDatasets[0].data.push(1)
+            }
+          } else {
+            if (!this.typePieChartLabels?.find((tpcl: any) => tpcl == 'Chưa xác định')) {
+              this.typePieChartLabels.push('Chưa xác định')
+            }
+            const pushDataIndex = this.typePieChartLabels.indexOf('Chưa xác định')
+            if (pushDataIndex !== -1 && this.typePieChartDatasets[0].data[pushDataIndex]) {
+              this.typePieChartDatasets[0].data[pushDataIndex] += 1
+            } else {
+              this.typePieChartDatasets[0].data.push(1)
+            }
+          }
+        }
+        const updateDeviceChart = () => {
+          if (!this.devicePieChartLabels?.find((dv: any) => dv == item?.device)) {
+            this.devicePieChartLabels.push(item?.device)
+          }
+          const pushDataIndex = this.devicePieChartLabels.indexOf(item.device)
+          if (pushDataIndex !== -1 && this.devicePieChartDatasets[0].data[pushDataIndex]) {
+            this.devicePieChartDatasets[0].data[pushDataIndex] += 1
+          } else {
+            this.devicePieChartDatasets[0].data.push(1)
+          }
+        }
+
+        const updateMethodChart = () => {
+          if (!this.methodPieChartLabels?.find((dv: any) => dv == item?.method)) {
+            this.methodPieChartLabels.push(item?.method)
+          }
+          const pushDataIndex = this.methodPieChartLabels.indexOf(item.method)
+          if (pushDataIndex !== -1 && this.methodPieChartDatasets[0].data[pushDataIndex]) {
+            this.methodPieChartDatasets[0].data[pushDataIndex] += 1
+          } else {
+            this.methodPieChartDatasets[0].data.push(1)
+          }
+        }
+        updateRatingChart()
+        updateLabelChart()
+        updateDeviceChart()
+        updateMethodChart()
       })
       this.ratingPieChartDatasets[0].data = ratingData
       setTimeout(() => {
