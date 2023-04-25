@@ -90,10 +90,13 @@ export class SyncComponent implements OnInit {
   }
 
   storeJourney() {
+    let storedData = ''
     if (typeof this.syncData.data !== 'string') {
-      this.syncData.data = JSON.stringify(this.syncData.data)
+      storedData = JSON.stringify(this.syncData.data)
+    } else {
+      storedData = this.syncData.data
     }
-    localStorage.setItem('journey', JSON.stringify(this.syncData.data))
+    localStorage.setItem('journey', storedData)
     setTimeout(() => {
       this.onGetSyncData()
     }, 0)
