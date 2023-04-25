@@ -95,9 +95,9 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="device">
-      <th mat-header-cell *matHeaderCellDef>Thiết bị</th>
+      <th mat-header-cell *matHeaderCellDef>Cách thức</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.device }}
+        {{element.method}} trên {{ element.device }}
       </td>
     </ng-container>
     <ng-container matColumnDef="comment">
@@ -144,7 +144,7 @@
         ><strong>Đánh giá: </strong
         >{{ ratingPieChartLabels[item.rating - 1] }}</span
       >
-      <span matListItemLine><strong>Thiết bị: </strong>{{ item.device }}</span>
+      <span matListItemLine><strong>Cách thức: </strong>{{item.method}} trên {{ item.device }}</span>
       <span matListItemLine><strong>Ghi chú: </strong>{{ item.comment }}</span>
       <div class="d-flex" matListItemLine>
         <button

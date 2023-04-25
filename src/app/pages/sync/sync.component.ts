@@ -16,7 +16,7 @@ export class SyncComponent implements OnInit {
   syncData: any;
   ratingPieChartLabels = ["Hoàn toàn không", "Không hài lòng", "Bình thường", "Hài lòng", "Rất hài lòng", "Chưa đánh giá"];
   public isShowPhoneLayout: boolean = true
-  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment']
+  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'device', 'comment']
   confirmSyncJourneyDialogRef: any;
   @ViewChild('confirmSyncJourneyDialog') confirmSyncJourneyDialog!: any;
   isSyncSavedLoccaly: any;

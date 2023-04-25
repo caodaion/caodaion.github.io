@@ -58,6 +58,7 @@ export class UpdateJourneyComponent implements AfterViewInit {
   scanComplete(qrData: any) {
     this.qrData = qrData
     console.log(this.qrData);
+    this.journeyLog.method = 'Quét mã QR'
     this.scanAction()
   }
 
@@ -171,7 +172,10 @@ export class UpdateJourneyComponent implements AfterViewInit {
   onCoutinue() {
     this.isContinueLog = true
     this.journeyLog.timestamp = Date.now()
-    this.journeyLog.device = navigator.userAgent.includes('Win') ? 'Máy tính' : navigator.userAgent
+    if (this.journeyLog.method) {
+      this.journeyLog.method = 'Thủ công'
+    }
+    this.journeyLog.device = navigator.userAgent.includes('Win') ? 'Máy tính' : navigator.userAgent.includes('Mobile') ? 'Điện thoại' : 'Chưa xác định'
   }
 
   storeJourney() {
@@ -262,4 +266,5 @@ export class JourneyLog {
   rating?: any;
   comment?: any;
   device?: any;
+  method?: any;
 }
