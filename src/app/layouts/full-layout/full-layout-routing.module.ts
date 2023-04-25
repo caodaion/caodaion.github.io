@@ -42,7 +42,7 @@ const routes: Routes = [
           import('../../modules/action/action.module').then(
             (m) => m.ActionModule
           ),
-        canActivate: [ReleasedGuard, AuthGuard]
+        canActivate: [ReleasedGuard]
       },
       {
         path: 'qr',

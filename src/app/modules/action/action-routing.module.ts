@@ -16,6 +16,11 @@ const routes: Routes = [
           import('../../pages/cau-sieu-vo-vi/cau-sieu-vo-vi.module').then((m) => m.CauSieuVoViModule),
         canActivate: [AssessGuard, VoviGuard]
       },
+      {
+        path: 'sync',
+        loadChildren: () =>
+          import('../../pages/sync/sync.module').then((m) => m.SyncModule)
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },

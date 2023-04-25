@@ -80,7 +80,7 @@ export const MENU = [
     url: 'tac-vu',
     label: 'Tác vụ',
     icon: 'commit',
-    fullAssess: false,
+    fullAssess: true,
     released: true,
     children: [
       {
@@ -106,6 +106,14 @@ export const MENU = [
         label: 'Phòng Thơ',
         icon: 'circle',
         fullAssess: false,
+        released: true,
+      },
+      {
+        key: 'tac-vu.sync',
+        url: 'sync',
+        label: 'Đồng bộ dữ liệu',
+        icon: 'sync',
+        fullAssess: true,
         released: true,
       },
     ]

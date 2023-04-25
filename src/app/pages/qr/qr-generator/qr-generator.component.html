@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <h1>Tạo mã QR</h1>
   </div>
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab [label]="'TẠO MÃ QR THEO NỘI DUNG'">
       <div class="container-fluid">
         <h2>Tạo mã QR theo nội dung</h2>
@@ -29,10 +29,7 @@
           />
         </mat-form-field>
         <p class="text-center" *ngIf="error">{{ error }}</p>
-        <div
-          *ngIf="!error && !qrData"
-          class="w-100 d-flex justify-content-center"
-        >
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
           <mat-spinner></mat-spinner>
         </div>
         <div *ngIf="!error && qrData">
@@ -95,10 +92,7 @@
           </mat-select>
         </mat-form-field>
         <p class="text-center" *ngIf="checkInError">{{ checkInError }}</p>
-        <div
-          *ngIf="!checkInError && !checkInQRData"
-          class="w-100 d-flex justify-content-center"
-        >
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
           <mat-spinner></mat-spinner>
         </div>
         <div *ngIf="!checkInError && checkInQRData">
@@ -133,24 +127,37 @@
     <mat-tab [label]="'TẠO MÃ QR ĐỒNG BỘ DỮ LIỆU CÁ NHÂN'">
       <div class="container-fluid">
         <h2>Tạo mã QR đồng bộ dữ liệu</h2>
-        <mat-form-field class="w-100">
-          <mat-label>Nội dung mã</mat-label>
-          <input type="text" matInput [(ngModel)]="syncQRData" disabled />
-          <button
-            mat-icon-button
-            matSuffix
-            [matTooltip]="'Sao chép liên kết'"
-            *ngIf="syncQRData"
-            (click)="copyLink(syncQRData)"
-          >
-            <mat-icon>link</mat-icon>
-          </button>
-        </mat-form-field>
+        <div>
+          <mat-form-field class="w-100">
+            <mat-label>Nội dung mã</mat-label>
+            <input type="text" matInput [(ngModel)]="syncQRData" disabled />
+            <button
+              mat-icon-button
+              matSuffix
+              [matTooltip]="'Sao chép liên kết'"
+              *ngIf="syncQRData"
+              (click)="copyLink(syncQRData)"
+            >
+              <mat-icon>link</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Loại đồng bộ</mat-label>
+            <mat-select
+              [(ngModel)]="syncType"
+              (ngModelChange)="generateSyncQR()"
+            >
+              <mat-option
+                *ngFor="let item of syncTypes"
+                [value]="item?.key"
+                [disabled]="item?.disabled"
+                >{{ item?.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
         <p class="text-center" *ngIf="syncError">{{ syncError }}</p>
-        <div
-          *ngIf="!syncError && !syncQRData"
-          class="w-100 d-flex justify-content-center"
-        >
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
           <mat-spinner></mat-spinner>
         </div>
         <div *ngIf="!syncError && syncQRData">

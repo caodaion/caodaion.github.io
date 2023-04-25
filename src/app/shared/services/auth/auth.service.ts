@@ -33,7 +33,7 @@ export class AuthService {
     let result = menu?.map((item: any) => {
       if (item?.released) {
         if (item?.voViWorkspace) {
-          if (this.currentUser.voViWorker) {
+          if (this.currentUser?.voViWorker) {
             return item
           }
           return undefined

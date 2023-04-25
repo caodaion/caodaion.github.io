@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonService } from "../../../shared/services/common/common.service";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 import { NgTinyUrlService } from "ng-tiny-url";
 import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
+import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-qr-generator',
   templateUrl: './qr-generator.component.html',
   styleUrls: ['./qr-generator.component.scss']
 })
-export class QrGeneratorComponent {
+export class QrGeneratorComponent implements OnInit {
   qrData = location.href
   data = location.href
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -23,12 +25,25 @@ export class QrGeneratorComponent {
   syncQRData = ''
   checkInTypes = CHECKINTYPES
   checkInType: any = ''
+  syncTypes = SYNCTYPES;
+  syncType: any;
+  loadingData: boolean = false;
+  selectedIndex: any;
 
   constructor(
     private tinyUrl: NgTinyUrlService,
     private _snackBar: MatSnackBar,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private route: ActivatedRoute
   ) {
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((query: any) => {
+      if (query['selectedIndex']) {
+        this.selectedIndex = parseInt(query['selectedIndex'])
+      }
+    })
   }
 
   private convertBase64ToBlob(Base64Image: string) {
@@ -83,12 +98,15 @@ export class QrGeneratorComponent {
       this.qrData = ''
       this.error = ''
       try {
+        this.loadingData = true
         this.tinyUrl.shorten(this.data)
           .subscribe(res => {
             this.qrData = res;
+            this.loadingData = false
           });
       } catch (e) {
         console.log(e)
+        this.loadingData = false
         this.error = 'Khô thể tạo mã QR vì dữ liệu của bạn quá dài và không có kết nối mạng'
       }
     }
@@ -120,7 +138,7 @@ export class QrGeneratorComponent {
     let checkInData: any = null
     let checkInQrData = `${location?.origin}`
     if (this.checkInType == 'tuGia') {
-      checkInQrData += `/trang-chu/hanh-trinh?t=tuGia`
+      checkInQrData += `/trang-chu/hanh-trinh?l=tuGia`
     } else {
       checkInData = {
         t: this.checkInType
@@ -133,11 +151,14 @@ export class QrGeneratorComponent {
       this.checkInQRData = ''
       this.checkInError = ''
       try {
+        this.loadingData = true
         this.tinyUrl.shorten(checkInQrData)
           .subscribe(res => {
+            this.loadingData = false
             this.checkInQRData = res;
           });
       } catch (e) {
+        this.loadingData = false
         console.log(e)
         this.checkInError = 'Khô thể tạo mã QR vì dữ liệu của bạn quá dài và không có kết nối mạng'
       }
@@ -146,15 +167,26 @@ export class QrGeneratorComponent {
 
   generateSyncQR() {
     let syncData: any = null
-    let syncQrData = `${location?.origin}/sync`
-    // if (this.checkInType == 'tuGia') {
-    //   syncQrData+=`?t=tuGia`
-    // } else {
-    //   syncData = {
-    //     t: this.syncType
-    //   }
-    //   syncQrData+=`?token=${this.generaToken(syncData)}`
-    // }
+    let syncQrData = `${location?.origin}/tac-vu/sync`
+    this.syncError = ''
+    if (this.syncType == 'journey') {
+      const localStorageJourney = localStorage.getItem('journey')
+      if (JSON.parse(localStorageJourney || '[]')?.length > 0) {
+        const syncObject = {
+          type: 'journey',
+          data: localStorageJourney
+        }
+        const token = this.generaToken(syncObject)
+        syncQrData += `?token=${token}`
+      } else {
+        this.syncError = 'Sổ tay hành trình chưa có ghi dấu nào cả.'
+      }
+    } else {
+      syncData = {
+        t: this.syncType
+      }
+      syncQrData += `?token=${this.generaToken(syncData)}`
+    }
     console.log(syncQrData);
 
     if (syncQrData?.length <= 350) {
@@ -163,12 +195,15 @@ export class QrGeneratorComponent {
       this.syncQRData = ''
       this.syncError = ''
       try {
+        this.loadingData = true;
         this.tinyUrl.shorten(syncQrData)
           .subscribe(res => {
             this.syncQRData = res;
+            this.loadingData = false;
           });
       } catch (e) {
         console.log(e)
+        this.loadingData = false;
         this.syncError = 'Khô thể tạo mã QR vì dữ liệu của bạn quá dài và không có kết nối mạng'
       }
     }

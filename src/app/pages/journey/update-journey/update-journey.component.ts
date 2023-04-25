@@ -91,8 +91,10 @@ export class UpdateJourneyComponent implements AfterViewInit {
         this.isShowQRScanner = false
         if (this.qrData?.includes('hanh-trinh')) {
           console.log(getParameterByName('l', this.qrData));
-          if (getParameterByName('t', this.qrData) == 'tuGia') {
+          if (getParameterByName('l', this.qrData) == 'tuGia') {
             this.journeyLog.location = 'tuGia'
+            console.log(this.journeyLog);
+
             this.checkTuGiaJourney()
           }
         }
