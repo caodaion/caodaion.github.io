@@ -56,7 +56,7 @@ export class DashboardComponent {
   getData() {
     this.isShowChart = false
     const localStorageData = JSON.parse(localStorage.getItem('journey') || '[]')
-    this.localStorageData = localStorageData
+    this.localStorageData = localStorageData.sort((a: any, b: any) => a.timestamp > b.timestamp)
     let ratingData = [0, 0, 0, 0, 0, 0]
     if (localStorageData?.length > 0) {
       localStorageData?.forEach((item: any) => {
