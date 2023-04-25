@@ -58,7 +58,6 @@ export class UpdateJourneyComponent implements AfterViewInit {
   scanComplete(qrData: any) {
     this.qrData = qrData
     console.log(this.qrData);
-    this.journeyLog.method = 'Quét mã QR'
     this.scanAction()
   }
 
@@ -96,6 +95,7 @@ export class UpdateJourneyComponent implements AfterViewInit {
           console.log(getParameterByName('l', this.qrData));
           if (getParameterByName('l', this.qrData) == 'tuGia') {
             this.journeyLog.location = 'tuGia'
+            this.journeyLog.method = 'Quét mã QR'
             console.log(this.journeyLog);
 
             this.checkTuGiaJourney()
