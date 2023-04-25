@@ -51,6 +51,8 @@ export class UpdateJourneyComponent implements AfterViewInit {
       }
     })
     this.cd.detectChanges()
+    console.log(navigator);
+
   }
 
   scanComplete(qrData: any) {
@@ -169,6 +171,7 @@ export class UpdateJourneyComponent implements AfterViewInit {
   onCoutinue() {
     this.isContinueLog = true
     this.journeyLog.timestamp = Date.now()
+    this.journeyLog.device = navigator.userAgent.includes('Win') ? 'Máy tính' : navigator.userAgent
   }
 
   storeJourney() {
@@ -258,4 +261,5 @@ export class JourneyLog {
   tuThoiType?: any;
   rating?: any;
   comment?: any;
+  device?: any;
 }

@@ -34,7 +34,7 @@ export class DashboardComponent {
   public typePieChartLegend = true;
   public typePieChartPlugins = [];
   localStorageData = <any>[];
-  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment', 'action']
+  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment', 'device', 'action']
   @Output() onShowLogClick = new EventEmitter();
   @Output() onUpdateJourneyClick = new EventEmitter();
   @Output() onRemoveJourneyClick = new EventEmitter();
