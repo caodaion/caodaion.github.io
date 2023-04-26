@@ -2,7 +2,8 @@
   class="knoll-flat"
   [ngStyle]="{
     left: koll.dropPoint.x,
-    top: koll.dropPoint.y
+    top: koll.dropPoint.y,
+    transform: isLocallyLocation ? 'translateX(-50%)' : ''
   }"
   cdkDrag
   (cdkDragMoved)="isShowTool = false"

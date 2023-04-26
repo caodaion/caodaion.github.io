@@ -19,6 +19,7 @@ export class KnollComponent implements OnInit {
   }
   isPhone: boolean = false;
   isShowTool: boolean = false;
+  isLocallyLocation: boolean = false;
   koll = {
     dropPoint: {
       x: `calc(${window.innerWidth}px - 56px - 16px)`,
@@ -37,6 +38,7 @@ export class KnollComponent implements OnInit {
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
         if (!localStorage.getItem('koll') || localStorage.getItem('koll') == '{}') {
+          this.isLocallyLocation = false
           this.koll = {
             dropPoint: {
               x: '',
@@ -45,6 +47,7 @@ export class KnollComponent implements OnInit {
           }
         } else {
           this.koll = JSON.parse(localStorage.getItem('koll') || '{}')
+          this.isLocallyLocation = true
           this.koll.dropPoint.x = `${this.koll.dropPoint.x}px`
           this.koll.dropPoint.y = `${this.koll.dropPoint.y}px`
         }
