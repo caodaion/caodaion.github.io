@@ -78,7 +78,7 @@
           </button>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <mat-label>Loại check-in</mat-label>
+          <mat-label>Địa điểm check-in</mat-label>
           <mat-select
             [(ngModel)]="checkInType"
             (ngModelChange)="generateCheckInQR()"
@@ -89,8 +89,18 @@
               [disabled]="item?.disabled"
               >{{ item?.label }}</mat-option
             >
+            <mat-option [value]="'addMore'">Địa điểm mới</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field
+        class="w-100"
+        [appearance]="'outline'"
+        *ngIf="checkInType == 'addMore'"
+      >
+        <mat-label>Địa điểm mới</mat-label>
+        <input type="text" matInput [(ngModel)]="addedMoreLocation"
+        (ngModelChange)="generateCheckInQR()"/>
+      </mat-form-field>
         <p class="text-center" *ngIf="checkInError">{{ checkInError }}</p>
         <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
           <mat-spinner></mat-spinner>

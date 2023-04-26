@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CHECKINEVENT, CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
@@ -38,7 +38,8 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
     private _snackBar: MatSnackBar,
     public matDialog: MatDialog,
     private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router
   ) {
     this.tuThoiType = TIME_TYPE?.data?.filter((item: any) => item?.key == 'ty-2301' || item?.key == 'meo-0507' || item?.key == 'ngo-1113' || item?.key == 'dau-1719')
   }
@@ -79,9 +80,15 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.route.queryParams.subscribe((query) => {
       if (query['l']) {
+        console.log(query['l']);
         this.isShowQRScanner = false
         this.onShowLog()
         this.journeyLog.location = query['l']
+        let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+        if (!localstorageLocation?.find((item: any) => item === query['l'])) {
+          this.journeyLog.location == 'addMore'
+          this.addedMoreLocation = query['l']
+        }
         this.journeyLog.method = 'Quét mã QR'
         this.checkTuGiaJourney()
       }
@@ -127,11 +134,10 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
         this.isShowQRScanner = false
         if (this.qrData?.includes('hanh-trinh')) {
           console.log(getParameterByName('l', this.qrData));
-          if (getParameterByName('l', this.qrData) == 'tuGia') {
-            this.journeyLog.location = 'tuGia'
+          if (getParameterByName('l', this.qrData)) {
+            this.journeyLog.location = getParameterByName('l', this.qrData)
             this.journeyLog.method = 'Quét mã QR'
             console.log(this.journeyLog);
-
             this.checkTuGiaJourney()
           }
         }
@@ -273,6 +279,11 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
     this.isShowDashboard = false
     setTimeout(() => {
       this.isShowDashboard = true
+      this.route.queryParams.subscribe((query) => {
+        if (query['l']) {
+          this.router.navigate([], {})
+        }
+      })
     }, 0)
   }
 

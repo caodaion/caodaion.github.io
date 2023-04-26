@@ -29,6 +29,7 @@ export class QrGeneratorComponent implements OnInit {
   syncType: any;
   loadingData: boolean = false;
   selectedIndex: any;
+  addedMoreLocation: any;
 
   constructor(
     private tinyUrl: NgTinyUrlService,
@@ -140,10 +141,9 @@ export class QrGeneratorComponent implements OnInit {
     if (this.checkInType == 'tuGia') {
       checkInQrData += `/trang-chu/hanh-trinh?l=tuGia`
     } else {
-      checkInData = {
-        t: this.checkInType
+      if (this.checkInType == 'addMore' && this.addedMoreLocation) {
+        checkInQrData += `/trang-chu/hanh-trinh?l=${this.addedMoreLocation}`
       }
-      checkInQrData += `qr/quet-ma?token=${this.generaToken(checkInData)}`
     }
     if (checkInQrData?.length <= 350) {
       this.checkInQRData = checkInQrData
