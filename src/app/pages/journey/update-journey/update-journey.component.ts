@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.consta
   templateUrl: './update-journey.component.html',
   styleUrls: ['./update-journey.component.scss']
 })
-export class UpdateJourneyComponent implements AfterViewInit {
+export class UpdateJourneyComponent implements AfterViewInit, OnInit {
   isShowQRScanner: boolean = false
   isStored: boolean = false
   qrData: any = ''
@@ -31,6 +31,8 @@ export class UpdateJourneyComponent implements AfterViewInit {
   isShowLog: boolean = false;
   isShowDashboard: boolean = true;
   removedJourneyIndex: any = -1;
+  addedMoreType: any;
+  addedMoreLocation: any;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -39,6 +41,39 @@ export class UpdateJourneyComponent implements AfterViewInit {
     private cd: ChangeDetectorRef
   ) {
     this.tuThoiType = TIME_TYPE?.data?.filter((item: any) => item?.key == 'ty-2301' || item?.key == 'meo-0507' || item?.key == 'ngo-1113' || item?.key == 'dau-1719')
+  }
+
+  ngOnInit(): void {
+    this.mergeLocalstorageVariable()
+  }
+
+  mergeLocalstorageVariable() {
+    const mergeLocation = () => {
+      let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+      if (localstorageLocation && localstorageLocation?.length > 0) {
+        this.checkInTypes = this.checkInTypes.concat(localstorageLocation.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    const mergeType = () => {
+      let localstorageType = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.type
+      if (localstorageType && localstorageType?.length > 0) {
+        this.checkInEvents = this.checkInEvents.concat(localstorageType.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    mergeLocation()
+    mergeType()
   }
 
   ngAfterViewInit(): void {
@@ -52,8 +87,6 @@ export class UpdateJourneyComponent implements AfterViewInit {
       }
     })
     this.cd.detectChanges()
-    console.log(navigator);
-
   }
 
   scanComplete(qrData: any) {
@@ -182,6 +215,40 @@ export class UpdateJourneyComponent implements AfterViewInit {
   storeJourney() {
     let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
     this.isStored = true
+    if (this.journeyLog.type == 'addMore' && this.addedMoreType) {
+      this.journeyLog.type = this.addedMoreType
+      let addedVariable = JSON.parse(localStorage.getItem('addedVariable') || 'null')
+      if (!addedVariable) {
+        addedVariable = {
+          type: []
+        }
+      }
+      if (!addedVariable?.type || !addedVariable?.type?.find((item: any) => item === this.addedMoreType)) {
+        if (!addedVariable?.type || addedVariable?.type?.length == 0) {
+          addedVariable.type = []
+        }
+        addedVariable?.type.push(this.addedMoreType)
+        localStorage.setItem('addedVariable', JSON.stringify(addedVariable))
+      }
+    }
+    if (this.journeyLog.location == 'addMore' && this.addedMoreLocation) {
+      this.journeyLog.location = this.addedMoreLocation
+      let addedVariable = JSON.parse(localStorage.getItem('addedVariable') || 'null')
+      if (!addedVariable) {
+        addedVariable = {
+          location: []
+        }
+      }
+      if (!addedVariable?.location || !addedVariable?.location?.find((item: any) => item === this.addedMoreLocation)) {
+        if (!addedVariable?.location || addedVariable?.location?.length == 0) {
+          addedVariable.location = []
+        }
+        addedVariable?.location.push(this.addedMoreLocation)
+        localStorage.setItem('addedVariable', JSON.stringify(addedVariable))
+      }
+    }
+    console.log(this.journeyLog);
+
     let foundJourney = journeys?.find((item: any) => item.timestamp === this.journeyLog.timestamp)
     const journeyIndex = journeys?.indexOf(foundJourney)
     if (foundJourney) {
@@ -248,7 +315,8 @@ export class UpdateJourneyComponent implements AfterViewInit {
 
   onUpdateJourney(item: any) {
     this.onShowLog()
-    this.journeyLog = item
+    const foundJourney = JSON.parse(localStorage.getItem('journey') || '[]')?.find((j: any) => j?.timestamp == item?.timestamp)
+    this.journeyLog = foundJourney
     this.isShowQRScanner = false
     this.isContinueLog = true
     this.isUpdateJourney = true

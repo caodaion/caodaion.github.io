@@ -51,7 +51,16 @@
           >
             {{ item?.label }}
           </mat-option>
+          <mat-option [value]="'addMore'">Địa điểm mới</mat-option>
         </mat-select>
+      </mat-form-field>
+      <mat-form-field
+        class="w-100"
+        [appearance]="'outline'"
+        *ngIf="journeyLog.location == 'addMore'"
+      >
+        <mat-label>Địa điểm mới</mat-label>
+        <input type="text" matInput [(ngModel)]="addedMoreLocation"/>
       </mat-form-field>
       <mat-divider></mat-divider>
       <div class="optional-log" *ngIf="journeyLog.location">
@@ -68,7 +77,16 @@
             >
               {{ item?.label }}
             </mat-option>
+            <mat-option [value]="'addMore'">Loại khác</mat-option>
           </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="w-100"
+          [appearance]="'outline'"
+          *ngIf="journeyLog.type == 'addMore'"
+        >
+          <mat-label>Loại mới</mat-label>
+          <input type="text" matInput [(ngModel)]="addedMoreType"/>
         </mat-form-field>
         <mat-form-field
           class="w-100"

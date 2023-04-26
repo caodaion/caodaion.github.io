@@ -114,6 +114,31 @@
   >
   </canvas>
 </div>
+<div
+  class="dashboard-chart location-pie-chart"
+  *ngIf="isShowChart && locationPieChartLabels.length > 1"
+>
+  <h2>
+    Biểu đồ phương thức
+    <button
+      mat-icon-button
+      [matTooltip]="'Tải lại thống kê'"
+      (click)="getData()"
+    >
+      <mat-icon>replay</mat-icon>
+    </button>
+  </h2>
+  <canvas
+    baseChart
+    [type]="'pie'"
+    [datasets]="locationPieChartDatasets"
+    [labels]="locationPieChartLabels"
+    [options]="locationPieChartOptions"
+    [plugins]="locationPieChartPlugins"
+    [legend]="locationPieChartLegend"
+  >
+  </canvas>
+</div>
 <div *ngIf="isShowChart" class="view-data">
   <h2>
     Danh sách chi tiết

@@ -54,11 +54,23 @@ export class DashboardComponent {
   public methodPieChartLegend = true;
   public methodPieChartPlugins = [];
 
+  public locationPieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+  };
+  public locationPieChartLabels = <any>[];
+  public locationPieChartDatasets = [{
+    data: <any>[]
+  }];
+  public locationPieChartLegend = true;
+  public locationPieChartPlugins = [];
+
   localStorageData = <any>[];
   displayedColumns = ['timestamp', 'type', 'location', 'rating', 'comment', 'device', 'action']
   @Output() onShowLogClick = new EventEmitter();
   @Output() onUpdateJourneyClick = new EventEmitter();
   @Output() onRemoveJourneyClick = new EventEmitter();
+  checkInTypes = CHECKINTYPES
+  checkInEvents = CHECKINEVENT
 
   constructor(
     private breakpointObserver: BreakpointObserver) {
@@ -74,10 +86,40 @@ export class DashboardComponent {
     this.getData()
   }
 
+  mergeLocalstorageVariable() {
+    const mergeLocation = () => {
+      let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+      if (localstorageLocation && localstorageLocation?.length > 0) {
+        this.checkInTypes = this.checkInTypes.concat(localstorageLocation.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    const mergeType = () => {
+      let localstorageType = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.type
+      if (localstorageType && localstorageType?.length > 0) {
+        this.checkInEvents = this.checkInEvents.concat(localstorageType.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    mergeLocation()
+    mergeType()
+  }
+
   getData() {
+    this.mergeLocalstorageVariable()
     this.isShowChart = false
     const localStorageData = JSON.parse(localStorage.getItem('journey') || '[]')
-    this.localStorageData = localStorageData.sort((a: any, b: any) => a.timestamp > b.timestamp)
+    this.localStorageData = localStorageData.sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)
     let ratingData = [0, 0, 0, 0, 0, 0]
     if (localStorageData?.length > 0) {
       localStorageData?.forEach((item: any) => {
@@ -99,7 +141,7 @@ export class DashboardComponent {
           }
         }
         const updateLabelChart = () => {
-          const foundType = CHECKINEVENT?.find((cit: any) => item?.type == cit?.key)
+          const foundType = this.checkInEvents?.find((cit: any) => item?.type == cit?.key)
           if (foundType) {
             let label: any = foundType.label
             if (item.tuThoiType) {
@@ -149,10 +191,24 @@ export class DashboardComponent {
             this.methodPieChartDatasets[0].data.push(1)
           }
         }
+
+        const updateLocationChart = () => {
+          const foundLocation = this.checkInTypes.find((cit: any) => cit.key == item?.location)?.label
+          if (!this.locationPieChartLabels?.find((dv: any) => dv == (foundLocation || item?.location))) {
+            this.locationPieChartLabels.push(foundLocation || item?.location)
+          }
+          const pushDataIndex = this.locationPieChartLabels.indexOf(foundLocation || item?.location)
+          if (pushDataIndex !== -1 && this.locationPieChartDatasets[0].data[pushDataIndex]) {
+            this.locationPieChartDatasets[0].data[pushDataIndex] += 1
+          } else {
+            this.locationPieChartDatasets[0].data.push(1)
+          }
+        }
         updateRatingChart()
         updateLabelChart()
         updateDeviceChart()
         updateMethodChart()
+        updateLocationChart()
       })
       this.ratingPieChartDatasets[0].data = ratingData
       setTimeout(() => {
@@ -165,13 +221,13 @@ export class DashboardComponent {
 
   getRowData(item: any, object: any) {
     if (object == 'location') {
-      return CHECKINTYPES.find((cit: any) => cit.key == item.location)?.label || 'Chưa xác định'
+      return this.checkInTypes.find((cit: any) => cit.key == item.location)?.label || 'Chưa xác định'
     }
     if (object == 'type') {
       if (item?.tuThoiType) {
         return `Cúng Thời ${TIME_TYPE.data.find((tt: any) => tt.key == item.tuThoiType)?.name.split('|')[0]}`
       }
-      return CHECKINEVENT.find((cie: any) => cie.key == item.type)?.label || 'Chưa xác định'
+      return this.checkInEvents.find((cie: any) => cie.key == item.type)?.label || 'Chưa xác định'
     }
     return ''
   }
