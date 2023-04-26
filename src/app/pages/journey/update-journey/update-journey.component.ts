@@ -173,6 +173,7 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
       console.log(this.journeyLog);
       this.onCoutinue()
     }
+    this.journeyLog.tuThoiType = ''
     if (
       !this.journeyLog.type && (
         newDate >= startTy && newDate <= endTy ||
