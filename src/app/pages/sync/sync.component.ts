@@ -20,6 +20,8 @@ export class SyncComponent implements OnInit {
   confirmSyncJourneyDialogRef: any;
   @ViewChild('confirmSyncJourneyDialog') confirmSyncJourneyDialog!: any;
   isSyncSavedLoccaly: any;
+  checkInTypes = CHECKINTYPES
+  checkInEvents = CHECKINEVENT
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +40,39 @@ export class SyncComponent implements OnInit {
       });
   }
 
+
+
+  mergeLocalstorageVariable() {
+    const mergeLocation = () => {
+      let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+      if (localstorageLocation && localstorageLocation?.length > 0) {
+        this.checkInTypes = this.checkInTypes.concat(localstorageLocation.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    const mergeType = () => {
+      let localstorageType = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.type
+      if (localstorageType && localstorageType?.length > 0) {
+        this.checkInEvents = this.checkInEvents.concat(localstorageType.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    mergeLocation()
+    mergeType()
+  }
+
   ngOnInit(): void {
+    this.mergeLocalstorageVariable()
     this.route.queryParams.subscribe((query) => {
       if (query['token']) {
         this.syncData = this.jwtHelper.decodeToken(query['token']);
@@ -96,6 +130,34 @@ export class SyncComponent implements OnInit {
     } else {
       storedData = this.syncData.data
     }
+    const mergeNewVariable = () => {
+      console.log(this.checkInTypes);
+      let localStorageVariable = JSON.parse(localStorage.getItem('addedVariable') || 'null')
+      const syncLocation = this.syncData.data?.filter((item: any) => !this.checkInTypes?.every((cit: any) => cit.key.includes(item?.location)))
+      const syncType = this.syncData.data?.filter((item: any) => !this.checkInEvents?.every((cie: any) => cie.key.includes(item?.type)))
+      if (!localStorageVariable) {
+        localStorageVariable = {
+          location: [],
+          type: []
+        }
+      }
+      if (syncLocation?.length > 0) {
+        if (!localStorageVariable?.location) {
+          localStorageVariable.location = []
+        }
+        localStorageVariable.location = localStorageVariable.location
+          .concat(syncLocation.map((item: any) => item?.location))
+      }
+      if (syncType?.length > 0) {
+        if (!localStorageVariable?.type) {
+          localStorageVariable.type = []
+        }
+        localStorageVariable.type = localStorageVariable.type
+          .concat(syncType.map((item: any) => item?.type))
+      }
+      localStorage.setItem('addedVariable', JSON.stringify(localStorageVariable))
+    }
+    mergeNewVariable()
     localStorage.setItem('journey', storedData)
     setTimeout(() => {
       this.onGetSyncData()
