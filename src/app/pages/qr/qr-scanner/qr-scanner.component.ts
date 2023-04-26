@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
-import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-qr-scanner',
@@ -111,7 +111,9 @@ export class QrScannerComponent {
       })
 
       if (isValidUrl(this.qrResultString)) {
-        location.href = this.qrResultString
+        setTimeout(() => {
+          location.href = this.qrResultString
+        }, 500)
       }
     }
   }
