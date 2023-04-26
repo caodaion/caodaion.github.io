@@ -174,10 +174,11 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
       this.onCoutinue()
     }
     if (
-      newDate >= startTy && newDate <= endTy ||
-      newDate >= startMeo && newDate <= endMeo ||
-      newDate >= startNgo && newDate <= endNgo ||
-      newDate >= startDau && newDate <= endDau
+      !this.journeyLog.type && (
+        newDate >= startTy && newDate <= endTy ||
+        newDate >= startMeo && newDate <= endMeo ||
+        newDate >= startNgo && newDate <= endNgo ||
+        newDate >= startDau && newDate <= endDau)
     ) {
       this.journeyLog.type = 'cungTuThoi'
       if (newDate >= startTy && newDate <= endTy) {
