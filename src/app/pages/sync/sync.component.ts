@@ -89,13 +89,13 @@ export class SyncComponent implements OnInit {
         this.syncData.data = JSON.stringify(this.syncData.data)
       }
       if (this.syncData.data == localStorageJourneyData) {
-        this.syncData.data = JSON.parse(this.syncData.data)
+        this.syncData.data = JSON.parse(this.syncData.data).sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)
         this.isSyncSavedLoccaly = true
       } else {
         if (typeof this.syncData.data == 'string') {
-          this.syncData.data = JSON.parse(this.syncData.data)
+          this.syncData.data = JSON.parse(this.syncData.data).sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)
         } else {
-          this.syncData.data = this.syncData.data
+          this.syncData.data = this.syncData.data.sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)
         }
       }
     }
