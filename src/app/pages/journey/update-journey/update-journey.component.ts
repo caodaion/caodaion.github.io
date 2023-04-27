@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Outp
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { CHECKINEVENT, CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
@@ -33,6 +34,7 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
   removedJourneyIndex: any = -1;
   addedMoreType: any;
   addedMoreLocation: any;
+  jwtHelper = new JwtHelperService();
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -83,17 +85,28 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
         console.log(query['l']);
         this.isShowQRScanner = false
         this.onShowLog()
-        this.journeyLog.location = query['l']
-        let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
-        if (!localstorageLocation?.find((item: any) => item === query['l'])) {
-          this.journeyLog.location == 'addMore'
-          this.addedMoreLocation = query['l']
-        }
+        this.getJourneyLocation(query['l'])
         this.journeyLog.method = 'Quét mã QR'
         this.checkTuGiaJourney()
       }
     })
     this.cd.detectChanges()
+  }
+
+  getJourneyLocation(queryL: any) {
+    let location: any = null
+    try {
+      location = this.jwtHelper.decodeToken(queryL)
+    } catch {
+      location = queryL
+    }
+    let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+    if (!localstorageLocation?.find((item: any) => item === location)) {
+      this.journeyLog.location = 'addMore'
+      this.addedMoreLocation = location
+    } else {
+      this.journeyLog.location = location
+    }
   }
 
   scanComplete(qrData: any) {
@@ -134,12 +147,10 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
         this.isShowQRScanner = false
         if (this.qrData?.includes('hanh-trinh')) {
           console.log(getParameterByName('l', this.qrData));
-          if (getParameterByName('l', this.qrData)) {
-            this.journeyLog.location = getParameterByName('l', this.qrData)
-            this.journeyLog.method = 'Quét mã QR'
-            console.log(this.journeyLog);
-            this.checkTuGiaJourney()
-          }
+          this.getJourneyLocation(getParameterByName('l', this.qrData))
+          this.journeyLog.method = 'Quét mã QR'
+          console.log(this.journeyLog);
+          this.checkTuGiaJourney()
         }
       } else {
         if (this.qrData?.split('|')?.length > 1) {

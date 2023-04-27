@@ -45,6 +45,23 @@ export class QrGeneratorComponent implements OnInit {
         this.selectedIndex = parseInt(query['selectedIndex'])
       }
     })
+    this.mergeLocalstorageVariable()
+  }
+
+  mergeLocalstorageVariable() {
+    const mergeLocation = () => {
+      let localstorageLocation = JSON.parse(localStorage.getItem('addedVariable') || 'null')?.location
+      if (localstorageLocation && localstorageLocation?.length > 0) {
+        this.checkInTypes = this.checkInTypes.concat(localstorageLocation.map((item: any) => {
+          return {
+            key: item,
+            label: item,
+            disabled: false,
+          }
+        }))
+      }
+    }
+    mergeLocation()
   }
 
   private convertBase64ToBlob(Base64Image: string) {
@@ -138,11 +155,13 @@ export class QrGeneratorComponent implements OnInit {
   generateCheckInQR() {
     let checkInData: any = null
     let checkInQrData = `${location?.origin}`
-    if (this.checkInType == 'tuGia') {
-      checkInQrData += `/trang-chu/hanh-trinh?l=tuGia`
+    if (this.checkInType == 'addMore' && this.addedMoreLocation) {
+      checkInQrData += `/trang-chu/hanh-trinh?l=${this.generaToken(this.addedMoreLocation)}`
     } else {
-      if (this.checkInType == 'addMore' && this.addedMoreLocation) {
-        checkInQrData += `/trang-chu/hanh-trinh?l=${this.addedMoreLocation}`
+      if (this.checkInType == 'tuGia') {
+        checkInQrData += `/trang-chu/hanh-trinh?l=${this.checkInType}`
+      } else {
+        checkInQrData += `/trang-chu/hanh-trinh?l=${this.generaToken(this.checkInType)}`
       }
     }
     if (checkInQrData?.length <= 350) {
