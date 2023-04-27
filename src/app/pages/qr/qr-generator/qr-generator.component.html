@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <h1>Tạo mã QR</h1>
   </div>
-  <mat-tab-group [selectedIndex]="selectedIndex">
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="selectedTabChange($event)">
     <mat-tab [label]="'TẠO MÃ QR THEO NỘI DUNG'">
       <div class="container-fluid">
         <h2>Tạo mã QR theo nội dung</h2>

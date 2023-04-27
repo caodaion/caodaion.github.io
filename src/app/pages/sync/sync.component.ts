@@ -166,7 +166,7 @@ export class SyncComponent implements OnInit {
 
   onGoToGenerate() {
     this.router.navigate(['/qr/tao-ma'], {
-      queryParams: {
+      state: {
         selectedIndex: 2
       }
     })

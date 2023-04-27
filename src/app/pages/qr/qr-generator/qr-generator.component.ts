@@ -40,11 +40,9 @@ export class QrGeneratorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((query: any) => {
-      if (query['selectedIndex']) {
-        this.selectedIndex = parseInt(query['selectedIndex'])
-      }
-    })
+    if (!!window.history.state.selectedIndex) {
+      this.selectedIndex = parseInt(window.history.state.selectedIndex)
+    }
     this.mergeLocalstorageVariable()
   }
 
@@ -95,7 +93,7 @@ export class QrGeneratorComponent implements OnInit {
       const link = document.createElement("a")
       link.href = url
       // name of the file
-      link.download = this.commonService.generatedSlug('caodaion-qr')
+      link.download = this.commonService.generatedSlug(`caodaion-qr-${this.selectedIndex === 0 ? '0' : this.selectedIndex === 1 ? ('checkin-' + this.addedMoreLocation || this.checkInType) : this.selectedIndex === 2 ? 'sync' : ''}`)
       link.click()
     }
   }
@@ -226,5 +224,9 @@ export class QrGeneratorComponent implements OnInit {
         this.syncError = 'Khô thể tạo mã QR vì dữ liệu của bạn quá dài và không có kết nối mạng'
       }
     }
+  }
+
+  selectedTabChange(event: any) {
+    this.selectedIndex = event.index
   }
 }
