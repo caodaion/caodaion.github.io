@@ -153,7 +153,7 @@ export class SyncComponent implements OnInit {
           localStorageVariable.type = []
         }
         localStorageVariable.type = [...new Set(localStorageVariable.type
-          .concat(syncType?.filter((item: any) => !!item?.type && this.checkInEvents?.every((ci: any) => !ci.key?.includes(item?.location)))?.map((item: any) => item?.type)))]
+          .concat(syncType?.filter((item: any) => !!item?.type && this.checkInEvents?.every((ci: any) => !ci.key?.includes(item?.type)))?.map((item: any) => item?.type)))]
       }
       localStorage.setItem('addedVariable', JSON.stringify(localStorageVariable))
     }
