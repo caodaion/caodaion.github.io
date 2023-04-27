@@ -84,11 +84,11 @@ export class SyncComponent implements OnInit {
   onGetSyncData() {
     console.log(this.syncData);
     if (this.syncData.type == 'journey') {
-      const localStorageJourneyData = localStorage.getItem('journey')
+      const localStorageJourneyData = JSON.stringify(JSON.parse(localStorage.getItem('journey') || '[]').sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1))
       if (typeof this.syncData.data !== 'string') {
-        this.syncData.data = JSON.stringify(this.syncData.data)
+        this.syncData.data = JSON.stringify(this.syncData.data?.sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1))
       }
-      if (this.syncData.data == localStorageJourneyData) {
+      if (JSON.stringify(JSON.parse(this.syncData.data)?.sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)) == JSON.stringify(JSON.parse(localStorageJourneyData || '')?.sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1))) {
         this.syncData.data = JSON.parse(this.syncData.data).sort((a: any, b: any) => a.timestamp > b.timestamp ? -1 : 1)
         this.isSyncSavedLoccaly = true
       } else {
@@ -133,8 +133,8 @@ export class SyncComponent implements OnInit {
     const mergeNewVariable = () => {
       console.log(this.checkInTypes);
       let localStorageVariable = JSON.parse(localStorage.getItem('addedVariable') || 'null')
-      const syncLocation = this.syncData.data?.filter((item: any) => !this.checkInTypes?.every((cit: any) => cit.key.includes(item?.location)))
-      const syncType = this.syncData.data?.filter((item: any) => !this.checkInEvents?.every((cie: any) => cie.key.includes(item?.type)))
+      const syncLocation = this.syncData.data?.filter((item: any) => !this.checkInTypes?.every((cit: any) => cit?.key?.includes(item?.location)))
+      const syncType = this.syncData.data?.filter((item: any) => !this.checkInEvents?.every((cie: any) => cie?.key?.includes(item?.type)))
       if (!localStorageVariable) {
         localStorageVariable = {
           location: [],
@@ -145,15 +145,15 @@ export class SyncComponent implements OnInit {
         if (!localStorageVariable?.location) {
           localStorageVariable.location = []
         }
-        localStorageVariable.location = localStorageVariable.location
-          .concat(syncLocation.map((item: any) => item?.location))
+        localStorageVariable.location = [...new Set(localStorageVariable.location
+          .concat(syncLocation?.filter((item: any) => !!item?.location)?.map((item: any) => item?.location)))]
       }
       if (syncType?.length > 0) {
         if (!localStorageVariable?.type) {
           localStorageVariable.type = []
         }
-        localStorageVariable.type = localStorageVariable.type
-          .concat(syncType.map((item: any) => item?.type))
+        localStorageVariable.type = [...new Set(localStorageVariable.type
+          .concat(syncType?.filter((item: any) => !!item?.type)?.map((item: any) => item?.type)))]
       }
       localStorage.setItem('addedVariable', JSON.stringify(localStorageVariable))
     }
