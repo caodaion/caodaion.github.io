@@ -180,7 +180,10 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
     this.isUpdateJourney = false
     const logJourney = () => {
       console.log('Continue');
-      this.journeyLog.timestamp = Date.now()
+      let foundJourney = journeys?.find((item: any) => item.timestamp === this.journeyLog.timestamp)
+      if (!foundJourney) {
+        this.journeyLog.timestamp = Date.now()
+      }
       console.log(this.journeyLog);
       this.onCoutinue()
     }
@@ -223,8 +226,12 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
   }
 
   onCoutinue() {
+    let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
     this.isContinueLog = true
-    this.journeyLog.timestamp = Date.now()
+    let foundJourney = journeys?.find((item: any) => item.timestamp === this.journeyLog.timestamp)
+    if (!foundJourney) {
+      this.journeyLog.timestamp = Date.now()
+    }
     if (!this.journeyLog.method) {
       this.journeyLog.method = 'Thủ công'
     }
@@ -341,6 +348,7 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
     this.onShowLog()
     const foundJourney = JSON.parse(localStorage.getItem('journey') || '[]')?.find((j: any) => j?.timestamp == item?.timestamp)
     this.journeyLog = foundJourney
+    console.log(this.journeyLog);
     this.isShowQRScanner = false
     this.isContinueLog = true
     this.isUpdateJourney = true
