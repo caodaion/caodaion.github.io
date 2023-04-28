@@ -103,13 +103,13 @@ export class SyncComponent implements OnInit {
 
   getRowData(item: any, object: any) {
     if (object == 'location') {
-      return CHECKINTYPES.find((cit: any) => cit.key == item.location)?.label || 'Chưa xác định'
+      return this.checkInTypes.find((cit: any) => cit.key == item.location)?.label || 'Chưa xác định'
     }
     if (object == 'type') {
       if (item?.tuThoiType) {
         return `Cúng Thời ${TIME_TYPE.data.find((tt: any) => tt.key == item.tuThoiType)?.name.split('|')[0]}`
       }
-      return CHECKINEVENT.find((cie: any) => cie.key == item.type)?.label || 'Chưa xác định'
+      return this.checkInEvents.find((cie: any) => cie.key == item.type)?.label || 'Chưa xác định'
     }
     return ''
   }
