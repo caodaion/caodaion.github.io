@@ -177,14 +177,14 @@
               </div>
             </div>
           </div>
-          <mat-divider
-            [ngStyle]="{
-              marginTop: upcomingEvents.event.length * 0.75 + 'rem'
-            }"
-          ></mat-divider>
         </div>
+        <mat-divider
+          [ngStyle]="{
+            marginTop: upcomingEvents.event.length * 0.75 + 'rem'
+          }"
+        ></mat-divider>
         <div
-          class="event-group happenning-event"
+          class="container-fluid event-group happenning-event"
           *ngIf="todayEvents.event.length > 0"
         >
           <div
@@ -242,16 +242,17 @@
                   </ng-container>
                 </div>
                 <div class="event-time">
-                  {{ item?.startTime }} {{ item?.endTime ? '-' + item?.endTime : '' }}
+                  {{ item?.startTime }}
+                  {{ item?.endTime ? "-" + item?.endTime : "" }}
                 </div>
                 <div class="event-location">{{ item?.location }}</div>
               </div>
             </div>
           </div>
-          <mat-divider
-            [ngStyle]="{ marginTop: todayEvents.event.length * 0.75 + 'rem' }"
-          ></mat-divider>
         </div>
+        <mat-divider
+          [ngStyle]="{ marginTop: todayEvents.event.length * 0.75 + 'rem' }"
+        ></mat-divider>
       </div>
     </mat-tab>
     <mat-tab [label]="'CÀI ĐẶT'" #tabGroup *ngIf="contentEditable">
@@ -278,7 +279,12 @@
               </mat-card>
             </mat-grid-tile>
             <mat-grid-tile *ngIf="contentEditable">
-              <mat-card appearance="outlined" class="h-100 w-100" matRipple [routerLink]="'them-moi'">
+              <mat-card
+                appearance="outlined"
+                class="h-100 w-100"
+                matRipple
+                [routerLink]="'them-moi'"
+              >
                 <mat-card-header>
                   <mat-card-title>+ Thêm mới</mat-card-title>
                   <mat-card-subtitle>Thêm mới sự kiện</mat-card-subtitle>

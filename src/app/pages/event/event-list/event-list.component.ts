@@ -82,6 +82,8 @@ export class EventListComponent implements OnInit {
 
   getEvents() {
     this.eventList = this.eventService.eventList
+    this.getTodayTuThoiEvents()
+    this.getLocalStorageEvents()
   }
 
   getLocalStorageEvents() {

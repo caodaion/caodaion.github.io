@@ -69,7 +69,7 @@ export class EventDetailsComponent implements OnInit {
     }
     this.event = find(this.eventList, this.eventKey)
     if (this.event.time) {
-      this.event.time = this.commonService.commonTimes.find((time: any) => time.key === this.event.time[0])?.name
+      this.event.timeName = this.commonService.commonTimes.find((time: any) => time.key === this.event.time[0])?.name
     }
     this.event.kinh.forEach((item: any) => {
       let currentKinh = this.kinhList.find((kinh: any) => kinh.key === item);
