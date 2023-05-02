@@ -168,8 +168,8 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
 
   checkTuGiaJourney() {
     let journeys = JSON.parse(localStorage.getItem('journey') || '[]')
-    const startTy = new Date(new Date().setHours(23, 0, 0));
-    const endTy = new Date(new Date().setHours(0, 59, 59));
+    const startTy = new Date(new Date().getHours() == 23 ? new Date().setHours(23, 0, 0) : new Date(new Date().setHours(0, 59, 59)).setDate(new Date().getDate() - 1));
+    const endTy = new Date(new Date().getHours() == 23 ? new Date(new Date().setHours(0, 59, 59)).setDate(new Date().getDate() + 1) : new Date().setHours(0, 59, 59));
     const startMeo = new Date(new Date().setHours(5, 0, 0));
     const endMeo = new Date(new Date().setHours(6, 59, 59));
     const startNgo = new Date(new Date().setHours(11, 0, 0));
@@ -187,7 +187,9 @@ export class UpdateJourneyComponent implements AfterViewInit, OnInit {
       console.log(this.journeyLog);
       this.onCoutinue()
     }
-    this.journeyLog.tuThoiType = ''
+    if (this.journeyLog.type !== 'cungTuThoi') {
+      this.journeyLog.tuThoiType = ''
+    }
     if (
       !this.journeyLog.type && (
         newDate >= startTy && newDate <= endTy ||
