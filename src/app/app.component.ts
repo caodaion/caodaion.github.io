@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
     private title: Title,
     private datePipe: DatePipe,
     private notificationsService: NotificationsService,
-    private tnhtService: TnhtService,
+    private tnhtService: TnhtService
   ) {
     router.events.subscribe((val: any) => {
       localStorage.setItem(

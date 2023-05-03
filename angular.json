@@ -35,6 +35,7 @@
               "src/manifest.webmanifest",
               "src/sitemap.xml",
               "src/robots.txt",
+              "src/firebase-messaging-sw.js",
               {
                 "glob": "**/*",
                 "input": "node_modules/ngx-scanner-qrcode/wasm/",
