@@ -1,5 +1,5 @@
-import firebase from "firebase/app";
-import "firebase/messaging";
+importScripts('https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js')
+importScripts('https://www.gstatic.com/firebasejs/9.21.0/firebase-messaging.js')
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
