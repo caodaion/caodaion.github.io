@@ -21,8 +21,6 @@ export class AssessGuard implements CanActivate {
     if (find(this.authService.currentUser?.children, path)) {
       return true
     }
-    console.log('sd');
-
     this.router.navigate([`/${state.url.split('/')[1]}`]);
     return false
   }

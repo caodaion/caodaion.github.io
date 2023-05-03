@@ -60,7 +60,7 @@ export class AuthService {
       }
     })?.filter((item: any) => item !== undefined)
     if (location.pathname.split('/').length <= 2) {
-      if (!location.pathname.includes('trang-chu') && !location.pathname.includes('qr')) {
+      if (!location.pathname.includes('trang-chu') && !location.pathname.includes('qr') && !location.pathname.includes('firebase-cloud-messaging-push-scope')) {
         this.router.navigate([result[0]?.key?.replaceAll('.', '/')])
       }
     }
