@@ -70,7 +70,7 @@ export class ButtonShareComponent {
     // hold the content type
     const imageType = parts[0].split(":")[1]
     // decode base64 string
-    const decodedData = window.atob(parts[1])
+    const decodedData = window?.atob(parts[1])
     // create unit8array of size same as row data length
     const uInt8Array = new Uint8Array(decodedData.length)
     // insert all character code into uint8array
