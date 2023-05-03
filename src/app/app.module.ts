@@ -18,11 +18,12 @@ import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from "./shared/guards/auth.guard";
 import { ReleasedGuard } from "./shared/guards/released.guard";
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
+import { MessagingService } from './shared/services/messaging/messaging.service';
 
 @NgModule({
   declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent],
@@ -47,7 +48,7 @@ import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
     MatTooltipModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
-  providers: [AuthGuard, ReleasedGuard, DatePipe],
+  providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

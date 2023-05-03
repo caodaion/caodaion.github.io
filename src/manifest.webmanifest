@@ -6,6 +6,7 @@
   "display": "standalone",
   "scope": "https://www.caodaion.com/",
   "start_url": "https://www.caodaion.com",
+  "gsm_sender_id": "671089239835",
   "icons": [
     {
       "src": "assets/icons/windows11/SmallTile.scale-100.png",

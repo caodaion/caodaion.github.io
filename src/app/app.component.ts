@@ -9,6 +9,7 @@ import { CONSTANT } from "./shared/constants/constants.constant";
 import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
 import { TnhtService } from './shared/services/tnht/tnht.service';
+import { MessagingService } from './shared/services/messaging/messaging.service';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,8 @@ export class AppComponent implements OnInit {
     private title: Title,
     private datePipe: DatePipe,
     private notificationsService: NotificationsService,
-    private tnhtService: TnhtService
+    private tnhtService: TnhtService,
+    private messagingService: MessagingService
   ) {
     router.events.subscribe((val: any) => {
       localStorage.setItem(
@@ -71,6 +73,8 @@ export class AppComponent implements OnInit {
 
         }
       });
+      // this.messagingService.requestPermission()
+      // this.messagingService.receiveMessaging()
   }
 
   private addTag() {
