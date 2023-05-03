@@ -73,8 +73,8 @@ export class AppComponent implements OnInit {
 
         }
       });
-      // this.messagingService.requestPermission()
-      // this.messagingService.receiveMessaging()
+      this.messagingService.requestPermission()
+      this.messagingService.receiveMessaging()
   }
 
   private addTag() {

@@ -68,17 +68,17 @@ export class ButtonShareComponent {
     // split into two parts
     const parts = Base64Image.split(";base64,")
     // hold the content type
-    // const imageType = parts[0].split(":")[1]
-    // // decode base64 string
-    // const decodedData = URL.createObjectURL(new Blob([parts[1]] , {type:'text/plain'}));
-    // // create unit8array of size same as row data length
-    // const uInt8Array = new Uint8Array(decodedData.length)
-    // // insert all character code into uint8array
-    // for (let i = 0; i < decodedData.length; ++i) {
-    //   uInt8Array[i] = decodedData.charCodeAt(i)
-    // }
+    const imageType = parts[0].split(":")[1]
+    // decode base64 string
+    const decodedData = window.atob(parts[1])
+    // create unit8array of size same as row data length
+    const uInt8Array = new Uint8Array(decodedData.length)
+    // insert all character code into uint8array
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
+    }
     // return blob image after conversion
-    return URL.createObjectURL(new Blob([parts[1]] , {type:'text/plain'}))
+    return new Blob([uInt8Array], { type: imageType })
   }
 
   saveAsImage(parent: any) {
