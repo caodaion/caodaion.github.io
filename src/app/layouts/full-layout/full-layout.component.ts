@@ -69,8 +69,8 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     this.handleAppConnectivityChanges();
     this.onUpdateVersion();
     this.autoCheckForUpdate();
-    this.pushSubscription();
-    this.checkMessage()
+    // this.pushSubscription();
+    // this.checkMessage()
     this.notificationClicks()
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
