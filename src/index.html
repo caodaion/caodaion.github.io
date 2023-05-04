@@ -1,43 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>CaoDaiON</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#eaf1fb">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330 -->
-  <meta content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330" itemprop="image">
-  <meta name="description" content="Đơn giản hóa công cụ để trực tiến nội tâm">
-  <meta name="title" content="CaoDaiON">
-  <meta name="og:title" content="CaoDaiON">
-  <meta name="og:url" content="https://www.caodaion.com">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#FFFFFF">
-  <meta name="og:image" content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330">
-  <meta name="og:image:secure_url" content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330">
-  <meta name="image" content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330">
-  <meta name="twitter:label1" content="Est. reading time">
-  <meta name="twitter:data1" content="3 minutes">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8EMJZEB65T"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  <head>
+    <meta charset="utf-8" />
+    <title>CaoDaiON</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#eaf1fb" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330 -->
+    <meta
+      content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330"
+      itemprop="image"
+    />
+    <meta
+      name="description"
+      content="Đơn giản hóa công cụ để trực tiến nội tâm"
+    />
+    <meta name="title" content="CaoDaiON" />
+    <meta name="og:title" content="CaoDaiON" />
+    <meta name="og:url" content="https://www.caodaion.com" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta
+      name="og:image"
+      content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330"
+    />
+    <meta
+      name="og:image:secure_url"
+      content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330"
+    />
+    <meta
+      name="image"
+      content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330"
+    />
+    <meta name="twitter:label1" content="Est. reading time" />
+    <meta name="twitter:data1" content="3 minutes" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://firebasestorage.googleapis.com/v0/b/caodaion-5167e.appspot.com/o/images%2Fmeta%20og_image.png?alt=media&token=6fa8ce3c-9d60-4b3e-99ac-6951770fc330"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-8EMJZEB65T"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-    gtag('config', 'G-8EMJZEB65T');
-  </script>
-</head>
-<body>
-  <app-root></app-root>
-  <noscript>Please enable JavaScript to continue using this application.</noscript>
-</body>
+      gtag("config", "G-8EMJZEB65T");
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+    <noscript
+      >Please enable JavaScript to continue using this application.</noscript
+    >
+    <!-- Messenger Plugin chat Code -->
+    <div id="fb-root"></div>
+
+    <!-- Your Plugin chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+    <script>
+      var chatbox = document.getElementById("fb-customer-chat");
+      chatbox.setAttribute("page_id", "106098005208741");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
+    <script>
+      window.fbAsyncInit = function () {
+        FB.init({
+          xfbml: true,
+          version: "v16.0",
+        });
+      };
+
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script>
+  </body>
 </html>

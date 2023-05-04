@@ -15,6 +15,7 @@ export class MessagingService {
     try {
       this.angularFireMessaging.requestToken.subscribe((token: any) => {
         console.log(token);
+        // navigator.clipboard.writeText(token);
       })
     } catch(error) {
       console.log(error);
