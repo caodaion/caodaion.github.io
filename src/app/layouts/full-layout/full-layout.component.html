@@ -4,8 +4,17 @@
       class="h-100 d-flex justify-content-between align-items-center flex-column"
     >
       <div>
-        <button class="menu-icon" mat-icon-button (click)="onToggleDrawer()">
-          <mat-icon>menu</mat-icon>
+        <button
+          class="menu-icon"
+          mat-icon-button
+          (click)="onToggleDrawer()"
+          [matTooltip]="
+            viewMissionService.isDrawerOpened ? 'Ẩn menu' : 'Mở menu'
+          "
+        >
+          <mat-icon>{{
+            viewMissionService.isDrawerOpened ? "menu_open" : "menu"
+          }}</mat-icon>
         </button>
         <mat-nav-list class="main-nav-list">
           <a
@@ -44,8 +53,13 @@
           class="menu-icon-mobile"
           mat-icon-button
           (click)="onToggleDrawer()"
+          [matTooltip]="
+            viewMissionService.isDrawerOpened ? 'Ẩn menu' : 'Mở menu'
+          "
         >
-          <mat-icon>menu</mat-icon>
+          <mat-icon>{{
+            viewMissionService.isDrawerOpened ? "menu_open" : "menu"
+          }}</mat-icon>
         </button>
         <a
           [routerLink]="'trang-chu'"

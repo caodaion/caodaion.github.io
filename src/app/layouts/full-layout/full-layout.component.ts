@@ -53,7 +53,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private viewMissionService: ViewMissionService,
+    public viewMissionService: ViewMissionService,
     private commonService: CommonService,
     private cd: ChangeDetectorRef,
     private swUpdate: SwUpdate,
