@@ -17,7 +17,7 @@ export class CpQrScannerComponent implements AfterViewInit, OnDestroy {
     vibrate: 400,
     // isBeep: true,
     // decode: 'macintosh',
-    deviceActive: 1, // camera front: deviceActive=0  // back camera: deviceActive=1
+    deviceActive: 0, // camera front: deviceActive=0  // back camera: deviceActive=1
     constraints: {
       facingMode: "environment", // 'user' (front camera), and 'environment' (back camera).
       audio: false,
