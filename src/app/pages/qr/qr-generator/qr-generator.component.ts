@@ -144,7 +144,7 @@ export class QrGeneratorComponent implements OnInit {
     const encodedHeader = base64url(stringifiedHeader);
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
-    const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     return token

@@ -207,7 +207,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     const data = `${item?.details?.name}+${item?.details?.age}+${item?.details?.sex}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
-    const signature = CryptoJS.HmacSHA512("myawesomedata", "mysecretkey").toString();
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     item.token = token
