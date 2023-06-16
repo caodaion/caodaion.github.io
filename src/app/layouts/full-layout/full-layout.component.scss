@@ -48,7 +48,7 @@
     margin-top: 5px;
     color: map.get(variables.$light-theme, "on-surface-variant");
   }
-  .mat-mdc-list-item {
+  .mat-mdc-list-item, .mdc-list-item {
     &.active {
       color: map.get(variables.$light-theme, "on-primary-container") !important;
       .main-drawer-label-text {
@@ -59,6 +59,11 @@
           variables.$light-theme,
           "secondary-container"
         ) !important;
+      }
+    }
+    &:focus {
+      &::before {
+        background-color: transparent !important;
       }
     }
   }
