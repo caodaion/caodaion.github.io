@@ -13,9 +13,5 @@
         <div [innerHTML]="rememberPlease"></div>
       </div>
     </div>
-    <div>
-      Ngày {{nowDate?.lunar?.lunarDay}} tháng {{nowDate?.lunar?.lunarMonth}} {{nowDate?.lunar?.lunarLeap ? ' nhuận' : ''}} năm {{nowDate?.lunar?.lunarYearName}} ({{nowDate?.solar | date: 'dd/MM/YYYY'}}) <br>
-      Thời {{time.commonTime.kanji}} - {{ time.time | async | date : "hh:mm:ssaa" }}
-    </div>
   </div>
 </div>

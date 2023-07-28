@@ -1,0 +1,29 @@
+<div class="container-fluid calendar-home-container d-flex">
+  <div class="text-center w-100">
+    <div class="date-solar-month">Tháng {{ nowDate?.solar | date : "MM" }}</div>
+    <div class="date-solar">{{ nowDate?.solar | date : "dd" }}</div>
+    <div class="date-week">{{ dateWeek }}</div>
+    <div class="date-lunar">
+      {{ nowDate?.lunar?.lunarDay | number : "2.0" }}
+    </div>
+    <div class="date-lunar-month">
+      Tháng {{ nowDate?.lunar?.lunarMonth | number : "2.0" }}
+      {{ nowDate?.lunar?.lunarLeap ? " nhuận" : "" }} (ÂL)
+    </div>
+  </div>
+  <div class="w-100 text-center">
+    <div class="time-lk">Thời {{ time.commonTime.kanji }}</div>
+    <div>
+      <div class="time-hm">
+        <span class="time-as">{{ time.time | async | date : "aa" }}</span>
+        {{ time.time | async | date : "hh" }}
+        <span class="time-as" style="visibility: hidden;">{{ time.time | async | date : "aa" }}</span>
+      </div>
+      <div class="time-hm">
+        <span class="time-as" style="visibility: hidden;">{{ time.time | async | date : "ss'" }}</span>
+        {{ time.time | async | date : "mm" }}
+        <span class="time-as">{{ time.time | async | date : "ss'" }}</span>
+      </div>
+    </div>
+  </div>
+</div>

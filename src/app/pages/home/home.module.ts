@@ -10,13 +10,15 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { BaiThuongYeuComponent } from './bai-thuong-yeu/bai-thuong-yeu.component';
+import { TimeComponent } from './time/time.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     WelcomeComponent,
     ActionComponent,
-    BaiThuongYeuComponent
+    BaiThuongYeuComponent,
+    TimeComponent
   ],
   imports: [
     CommonModule,
