@@ -117,5 +117,14 @@ export const MENU = [
         released: true,
       },
     ]
-  }
+  },
+  {
+    key: 'game',
+    url: 'game',
+    label: 'Trò chơi',
+    icon: 'videogame_asset',
+    fullAssess: true,
+    released: true,
+    children: []
+  },
 ]
