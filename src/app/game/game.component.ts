@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CaoDaiONHome } from 'src/assets/game/CaoDaiONHome';
 
 @Component({
@@ -31,14 +31,16 @@ export class GameComponent implements OnInit, AfterViewInit {
   collisions: any;
   boundaries = <any>[];
   offset = <any>{
-    x: -2400, y: -500
+    x: -1220, y: -535
   }
   movables = <any>[]
   moving: boolean = true
-  speed: number = 10
+  speed: number = 5
   lastTurn: any;
+  mapWidth = 480
+  mapUnit = 8 * 4
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
 
   }
 
@@ -77,6 +79,7 @@ export class GameComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.renderMap()
+    this.cd.detectChanges()
   }
 
   renderMap() {
@@ -85,24 +88,30 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.canvas.width = this.gameScene.nativeElement.offsetWidth
     this.canvas.height = this.gameScene.nativeElement.offsetHeight - 4
     this.collisions = []
-    for (let index = 0; index < CaoDaiONHome.tiled.layers[1].data.length; index += 70) {
-      this.collisions.push(CaoDaiONHome.tiled.layers[1].data.slice(index, 70 + index))
-    }
-    this.collisions.forEach((row: any, i: any) => {
-      row.forEach((symbol: any, j: any) => {
-        if (symbol === 43) {
-          this.boundaries.push(
-            new Boundary({
-              position: {
-                x: j * 96 + this.offset.x,
-                y: i * 96 + this.offset.y,
-              },
-              c: this.c
-            })
-          )
-        }
+    const collision = CaoDaiONHome.tiled.layers.find((item: any) => item.name == 'collision')
+    if (collision) {
+      for (let index = 0; index < (collision.data.length); index += this.mapWidth) {
+        this.collisions.push(collision.data.slice(index, this.mapWidth + index))
+      }
+      this.collisions.forEach((row: any, i: any) => {
+        row.forEach((symbol: any, j: any) => {
+          if (symbol === 137) {
+            this.boundaries.push(
+              new Boundary({
+                position: {
+                  x: j * this.mapUnit + this.offset.x,
+                  y: i * this.mapUnit + this.offset.y,
+                },
+                c: this.c,
+                height: this.mapUnit,
+                width: this.mapUnit
+              })
+            )
+          }
+        })
       })
-    })
+    }
+
     this.map = new Image()
     this.map.src = 'assets/game/CaoDaiONHome.png'
     this.playerImage = new Image()
@@ -113,18 +122,18 @@ export class GameComponent implements OnInit, AfterViewInit {
     playerMoveRight.src = 'assets/game/moveright.png'
     this.player = new Sprite({
       position: {
-        x: this.canvas.width / 2 - (playerMoveLeft.width / 4) / 2,
-        y: this.canvas.height / 2 - (playerMoveLeft.height / 4) / 2
+        x: this.canvas.width / 2 - (this.playerImage.width / 4) / 2,
+        y: this.canvas.height / 2 - (this.playerImage.height / 4) / 2
       },
-      image: playerMoveLeft,
+      image: this.playerImage,
       c: this.c,
       frames: {
         max: 4,
         speed: this.speed
       },
       sprites: {
-        left: playerMoveLeft,
-        right: playerMoveRight
+        left: this.playerImage,
+        right: this.playerImage
       }
     })
     this.lastTurn = this.player.sprites.left
@@ -139,10 +148,10 @@ export class GameComponent implements OnInit, AfterViewInit {
       this.background.draw()
     }
     const rectangularCollistion = (rectagle1: any, rectangle2: any) => {
-      return rectagle1.position.x + rectagle1.width >= rectangle2.position.x &&
-        rectagle1.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectagle1.position.y + rectagle1.height >= rectangle2.position.y &&
-        rectagle1.position.y <= rectangle2.position.y + rectangle2.height
+      return rectagle1.position.x + rectagle1.width - this.mapUnit * 2 >= rectangle2.position.x &&
+        rectagle1.position.x <= rectangle2.position.x + rectangle2.width - this.mapUnit * 2 &&
+        rectagle1.position.y + rectagle1.height - this.mapUnit * 2 >= rectangle2.position.y &&
+        rectagle1.position.y <= rectangle2.position.y + rectangle2.height - this.mapUnit * 2
     }
     this.movables = [this.background, ...this.boundaries]
     const animate = () => {
@@ -301,10 +310,10 @@ class Boundary {
   width: any;
   height: any;
   c: any;
-  constructor({ position, c }: any) {
+  constructor({ position, c, height, width }: any) {
     this.position = position
-    this.width = 96
-    this.height = 96
+    this.width = width
+    this.height = height
     this.c = c
   }
 

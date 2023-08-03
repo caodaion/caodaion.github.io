@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<!-- <div class="latlong">
-  <p>y: {{ background.position.y }}</p>
+<div *ngIf="!!background" class="latlong">
   <p>x: {{ background.position.x }}</p>
-</div> -->
+  <p>y: {{ background.position.y }}</p>
+</div>
