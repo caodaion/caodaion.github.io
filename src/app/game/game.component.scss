@@ -9,3 +9,28 @@
   top: 0;
   left: 0;
 }
+.game-page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+.gender-select {
+  padding: 1rem;
+  .gender-option {
+    border-radius: 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    &--male {
+      color: #09abe9;
+    }
+    &--female {
+      color: #e784b1;
+    }
+    &.active {
+      font-weight: bold;
+    }
+  }
+}

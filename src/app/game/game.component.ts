@@ -11,7 +11,8 @@ export class GameComponent implements OnInit, AfterViewInit {
   canvas: any;
   c: any;
   map: any;
-  playerImage: any;
+  playerImageRight: any;
+  playerImageLeft: any;
   player: any;
   background: any;
   keys: any = {
@@ -39,6 +40,7 @@ export class GameComponent implements OnInit, AfterViewInit {
   lastTurn: any;
   mapWidth = 480
   mapUnit = 8 * 4
+  gender: any = null;
 
   constructor(private cd: ChangeDetectorRef) {
 
@@ -82,6 +84,14 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.cd.detectChanges()
   }
 
+  selectGender(gender: any) {
+    if (gender != this.gender) {
+      this.gender = gender;
+      this.playerImageLeft.src = `assets/game/${this.gender}-left.png`
+      this.playerImageRight.src = `assets/game/${this.gender}-right.png`
+    }
+  }
+
   renderMap() {
     this.canvas = document.getElementById('gameCanvas')
     this.c = this.canvas.getContext('2d')
@@ -114,26 +124,28 @@ export class GameComponent implements OnInit, AfterViewInit {
 
     this.map = new Image()
     this.map.src = 'assets/game/CaoDaiONHome.png'
-    this.playerImage = new Image()
-    this.playerImage.src = 'assets/game/male.png'
-    const playerMoveLeft = new Image()
-    playerMoveLeft.src = 'assets/game/male-left.png'
-    const playerMoveRight = new Image()
-    playerMoveRight.src = 'assets/game/male-right.png'
+    this.playerImageLeft = new Image()
+    this.playerImageLeft.src = `assets/game/form-left.png`
+    this.playerImageRight = new Image()
+    this.playerImageRight.src = `assets/game/form-right.png`
+    if (!!this.gender) {
+      this.playerImageLeft.src = `assets/game/${this.gender}-left.png`
+      this.playerImageRight.src = `assets/game/${this.gender}-right.png`
+    }
     this.player = new Sprite({
       position: {
-        x: this.canvas.width / 2 - (playerMoveRight.width / 4) / 2,
-        y: this.canvas.height / 2 - (playerMoveRight.height / 4) / 2
+        x: this.canvas.width / 2 - (this.playerImageLeft.width / 4) / 2,
+        y: this.canvas.height / 2 - (this.playerImageLeft.height / 4) / 2
       },
-      image: playerMoveRight,
+      image: this.playerImageLeft,
       c: this.c,
       frames: {
         max: 4,
         speed: this.speed
       },
       sprites: {
-        left: playerMoveLeft,
-        right: playerMoveRight
+        left: this.playerImageLeft,
+        right: this.playerImageRight
       }
     })
     this.lastTurn = this.player.sprites.left

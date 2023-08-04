@@ -1,11 +1,40 @@
-<div class="wrapper-container">
-  <a href="trang-chu">Trang Chủ</a>
+<div class="wrapper-container game-page">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex">
+        <h1>CaoDaiON Trò chơi</h1>
+        <div class="text-center gender-select">
+          <strong>Giới tính</strong>
+          <div class="d-flex">
+            <div
+              class="gender-option gender-option--male d-flex align-items-center"
+              (click)="selectGender('male')"
+              [ngClass]="{active: gender == 'male'}"
+            >
+              <mat-icon>male</mat-icon>Nam
+            </div>
+            <div
+              class="gender-option gender-option--female d-flex align-items-center"
+              (click)="selectGender('female')"
+              [ngClass]="{active: gender == 'female'}"
+            >
+              <mat-icon>female</mat-icon>Nữ
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div *ngIf="background" class="text-right">
+          <strong>tọa độ: </strong>
+          <span
+            >x: {{ background.position.x }} | y:
+            {{ background.position.y }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
   <div #gameScene class="flex-1 h-100">
     <canvas id="gameCanvas"></canvas>
   </div>
-</div>
-
-<div *ngIf="!!background" class="latlong">
-  <p>x: {{ background.position.x }}</p>
-  <p>y: {{ background.position.y }}</p>
 </div>
