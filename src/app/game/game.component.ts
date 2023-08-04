@@ -32,7 +32,7 @@ export class GameComponent implements OnInit, AfterViewInit {
   collisions: any;
   boundaries = <any>[];
   offset = <any>{
-    x: -1185, y: -460
+    x: -1185, y: -400
   }
   movables = <any>[]
   moving: boolean = true
