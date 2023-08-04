@@ -4,10 +4,18 @@
     height: 100%;
   }
 }
+.gameScene {
+  position: relative;
+}
 .latlong {
   position: absolute;
   top: 0;
   left: 0;
+  padding: 0.5rem;
+  * {
+    text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff, 1px 1px #fff,
+      -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+  }
 }
 .game-page {
   position: absolute;
@@ -21,6 +29,7 @@
   padding: 1rem;
   .gender-option {
     border-radius: 1rem;
+    border: 1px solid transparent;
     cursor: pointer;
     padding: 0.5rem;
     &--male {
@@ -31,6 +40,7 @@
     }
     &.active {
       font-weight: bold;
+      border: 1px dashed currentColor;
     }
   }
 }
