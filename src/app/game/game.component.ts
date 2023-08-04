@@ -117,23 +117,23 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.playerImage = new Image()
     this.playerImage.src = 'assets/game/male.png'
     const playerMoveLeft = new Image()
-    playerMoveLeft.src = 'assets/game/moveleft.png'
+    playerMoveLeft.src = 'assets/game/male-left.png'
     const playerMoveRight = new Image()
-    playerMoveRight.src = 'assets/game/moveright.png'
+    playerMoveRight.src = 'assets/game/male-right.png'
     this.player = new Sprite({
       position: {
-        x: this.canvas.width / 2 - (this.playerImage.width / 4) / 2,
-        y: this.canvas.height / 2 - (this.playerImage.height / 4) / 2
+        x: this.canvas.width / 2 - (playerMoveRight.width / 4) / 2,
+        y: this.canvas.height / 2 - (playerMoveRight.height / 4) / 2
       },
-      image: this.playerImage,
+      image: playerMoveRight,
       c: this.c,
       frames: {
         max: 4,
         speed: this.speed
       },
       sprites: {
-        left: this.playerImage,
-        right: this.playerImage
+        left: playerMoveLeft,
+        right: playerMoveRight
       }
     })
     this.lastTurn = this.player.sprites.left
