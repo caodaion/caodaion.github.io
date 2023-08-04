@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { CaoDaiONHome } from 'src/assets/game/CaoDaiONHome';
 
 @Component({
@@ -41,8 +42,14 @@ export class GameComponent implements OnInit, AfterViewInit {
   mapWidth = 480
   mapUnit = 8 * 4
   gender: any = null;
+  isFlycamInusing: boolean = true
 
-  constructor(private cd: ChangeDetectorRef) {
+  @ViewChild('itemChestDialog') itemChestDialog!: any;
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private matDialog: MatDialog
+    ) {
 
   }
 
@@ -89,6 +96,8 @@ export class GameComponent implements OnInit, AfterViewInit {
       this.gender = gender;
       this.playerImageLeft.src = `assets/game/${this.gender}-left.png`
       this.playerImageRight.src = `assets/game/${this.gender}-right.png`
+      this.player.frames.max = 4
+      this.player.frames.speed = 5
     }
   }
 
@@ -261,6 +270,17 @@ export class GameComponent implements OnInit, AfterViewInit {
     animate()
   }
 
+  openItemchest() {
+    this.matDialog.open(this.itemChestDialog)
+  }
+
+  useFlycam() {
+    this.isFlycamInusing = true
+    this.playerImageLeft.src = `assets/game/flycam.png`
+    this.playerImageRight.src = `assets/game/flycam.png`
+    this.player.frames.max = 1
+    this.player.frames.speed = 10
+  }
 }
 
 class Sprite {

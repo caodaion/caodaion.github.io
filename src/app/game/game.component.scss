@@ -44,3 +44,20 @@
     }
   }
 }
+.item-chest {
+  cursor: pointer;
+}
+
+.item-chest-content {
+  min-width: 600px;
+}
+.chest-item {
+  border: 1px solid #e9ebec;
+  border-radius: 1rem;
+  cursor: pointer;
+  img {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+  }
+}

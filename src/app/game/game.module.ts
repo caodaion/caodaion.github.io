@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { GameComponent } from './game.component';
 import { GameRoutingModule } from './game-routing.module';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -12,7 +15,10 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     GameRoutingModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatTooltipModule
   ]
 })
 export class GameModule { }

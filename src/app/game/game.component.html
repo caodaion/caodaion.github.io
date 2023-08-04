@@ -92,7 +92,12 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="h-100">
+        <div class="h-100 d-flex align-items-center">
+          <div class="item-chest" (click)="openItemchest()" [matTooltip]="'Mở rương vật phẩm'">
+            <img src="assets/game/item-chest.png" alt="item-chest" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -101,9 +106,18 @@
     <div *ngIf="background" class="latlong">
       <strong>tọa độ: </strong>
       <span
-        >x: {{ background.position.x }} | y:
-        {{ background.position.y }}</span
+        >x: {{ background.position.x }} | y: {{ background.position.y }}</span
       >
     </div>
   </div>
 </div>
+<ng-template #itemChestDialog>
+  <div mat-dialog-title>Rương vật phẩm</div>
+  <mat-dialog-content class="item-chest-content">
+    <mat-grid-list [cols]="3" [gutterSize]="'30px'" fixed>
+      <mat-grid-tile class="chest-item" [matTooltip]="'Dùng flycam'" (click)="useFlycam()" [matDialogClose]="true">
+        <img src="assets/game/flycam.png" alt="flycam">
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-dialog-content>
+</ng-template>
