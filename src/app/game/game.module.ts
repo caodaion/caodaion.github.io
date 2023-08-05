@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatDialogModule,
     MatGridListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatButtonModule
   ]
 })
 export class GameModule { }
