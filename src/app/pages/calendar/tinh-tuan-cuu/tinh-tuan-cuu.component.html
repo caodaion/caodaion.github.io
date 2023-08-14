@@ -146,17 +146,20 @@
             <button-share [title]="item?.title" [url]="item?.location">
               <button mat-menu-item><mat-icon>share</mat-icon>Chia sẻ</button>
             </button-share>
+            <button mat-menu-item (click)="onPrint(item)">
+              <mat-icon>print</mat-icon>In
+            </button>
             <button mat-menu-item (click)="deleteTuanCuu(item)">
               <mat-icon>delete</mat-icon>Xóa
             </button>
           </mat-menu>
         </div>
         <p>
-          Từ trần: ngày {{ item?.date?.lunarDay }} tháng
+          Từ trần ngày {{ item?.date?.lunarDay }} tháng
           {{ item?.date?.lunarMonth }} năm {{ item?.date?.lunarYearName }}
         </p>
-        <div *ngIf="item?.event?.length > 0">
-          <table mat-table [dataSource]="item?.event">
+        <div *ngIf="item?.event?.length > 0" [id]="item?.key">
+          <table mat-table [dataSource]="item?.event" style="width: 100%;" class="tableContent" cellspacing="0">
             <!-- eventName Column -->
             <ng-container matColumnDef="eventName">
               <th mat-header-cell *matHeaderCellDef>Tuần</th>

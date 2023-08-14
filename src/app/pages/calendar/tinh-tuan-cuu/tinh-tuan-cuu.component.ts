@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -50,7 +50,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private titleService: Title,
     private cd: ChangeDetectorRef,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private decimalPipe: DecimalPipe
   ) {
 
   }
@@ -117,6 +118,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       this.dialogRef = this.dialog.open(this.expiriedEventDialog)
     }
     this.tuanCuuList?.forEach((item: any) => {
+      console.log(item);
+
       item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
       item.title = `Chia sẻ lịch cúng cửu của ${item.name}`
@@ -220,5 +223,53 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       this.deleteTuanCuu(item)
       this.dialogRef.close()
     })
+  }
+
+  onPrint(item: any) {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 24px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+    console.log(item);
+
+    const information = `
+    <h1 style="text-align: center;">LỊCH CÚNG TUẦN CỬU <br /> CỦA ${item.name?.toUpperCase()}</h1>
+    <h2 style="text-align: center;">
+    TỪ TRẦN NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
+    </h2>`
+
+    const printContent = document.getElementById(
+      `${item?.key}`
+      );
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      // @ts-ignore
+      writeContent.innerHTML = `${information}${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
   }
 }
