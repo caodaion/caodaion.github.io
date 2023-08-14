@@ -116,6 +116,14 @@ export const MENU = [
         fullAssess: true,
         released: true,
       },
+      {
+        key: 'tac-vu.quiz',
+        url: 'quiz',
+        label: 'Quiz',
+        icon: 'quiz',
+        fullAssess: true,
+        released: true,
+      },
     ]
   },
   {

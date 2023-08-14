@@ -21,6 +21,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/sync/sync.module').then((m) => m.SyncModule)
       },
+      {
+        path: 'quiz',
+        loadChildren: () =>
+          import('../../pages/quiz/quiz.module').then((m) => m.QuizModule)
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },
