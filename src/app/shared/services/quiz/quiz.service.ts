@@ -14,7 +14,9 @@ export class QuizService {
   readonly settingStudentData: any;
   readonly quizOfWorkbook: any;
   readonly quizList: any;
+  readonly quizSetting: any;
   isActiveQuizList: boolean = false;
+  countSettingValueColIndex = 2
   constructor() {
     this.fetchWorkbook()
   }
@@ -49,6 +51,11 @@ export class QuizService {
     const responseData = utils.sheet_to_json<any>(data, {
       header: header || column
     })?.slice(slice);
+    responseData.forEach((item: any) => {
+      if (item?.option?.includes('||')) {
+        item.options = item?.option?.split('||')
+      }
+    })
     return responseData
   }
 
@@ -66,8 +73,6 @@ export class QuizService {
       }
       const ref: Mutable<this> = this;
       ref.quizList = data
-      console.log(ref.quizList);
-
       const response = {
         code: data?.length > 0 ? 200 : 404,
         data: data
@@ -77,7 +82,7 @@ export class QuizService {
     })
   }
 
-  getQuizListOfDoc(docId: any) {
+  getQuizListOfDoc(docId: any, article: any) {
     return new Observable((observable) => {
       const ref: Mutable<this> = this;
       const sheetUrl = this.sheetUrl.replace('{id}', docId)
@@ -86,8 +91,18 @@ export class QuizService {
         .then((req => {
           const workbook = read(req)
           ref.quizOfWorkbook = workbook
-          console.log(ref.quizOfWorkbook);
-          observable.next(this.quizOfWorkbook)
+          ref.quizSetting = this.decodeRawSheetData(this.quizOfWorkbook.Sheets[article || 'setting'])
+          if (!article) {
+            ref.quizSetting = ref.quizSetting.filter((item: any) => !!item.key)
+          }
+          const response = <any>{
+            code: ref.quizSetting?.length > 0 ? 200 : 404,
+            data: ref.quizSetting
+          }
+          if (article) {
+            response['name'] =this.decodeRawSheetData(this.quizOfWorkbook.Sheets['setting'])?.find((item: any) => item.key === article)?.name
+          }
+          observable.next(response)
           observable.complete()
         }))
     })

@@ -14,6 +14,8 @@ import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
     MatIconModule,
     MatDialogModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule,
+    FormsModule
   ]
 })
 export class QuizModule { }
