@@ -146,7 +146,7 @@
             <button-share [title]="item?.title" [url]="item?.location">
               <button mat-menu-item><mat-icon>share</mat-icon>Chia sẻ</button>
             </button-share>
-            <button mat-menu-item (click)="onPrint(item)">
+            <button mat-menu-item (click)="onCallPrint(item)">
               <mat-icon>print</mat-icon>In
             </button>
             <button mat-menu-item (click)="deleteTuanCuu(item)">
@@ -159,7 +159,13 @@
           {{ item?.date?.lunarMonth }} năm {{ item?.date?.lunarYearName }}
         </p>
         <div *ngIf="item?.event?.length > 0" [id]="item?.key">
-          <table mat-table [dataSource]="item?.event" style="width: 100%;" class="tableContent" cellspacing="0">
+          <table
+            mat-table
+            [dataSource]="item?.event"
+            style="width: 100%"
+            class="tableContent"
+            cellspacing="0"
+          >
             <!-- eventName Column -->
             <ng-container matColumnDef="eventName">
               <th mat-header-cell *matHeaderCellDef>Tuần</th>
@@ -240,4 +246,47 @@
       Xóa tất cả
     </button>
   </mat-dialog-actions>
+</ng-template>
+<ng-template #printBottomSheet>
+  <h3>Xác nhận in</h3>
+  <div class="container-fluid">
+    <p>Xác nhận in lịch cúng cửu cho {{ printedInfo?.name }}</p>
+    <p>
+      Từ trần ngày {{ printedInfo?.date?.lunarDay }} tháng
+      {{ printedInfo?.date?.lunarMonth }} năm
+      {{ printedInfo?.date?.lunarYearName }} ({{
+        printedInfo?.date.date | number : "2.0-0"
+      }}/{{
+        printedInfo?.date.month | number : "2.0-0"
+      }}/{{
+        printedInfo?.date.year
+      }})
+    </p>
+    <div class="qr-area">
+      <qrcode
+        #parent
+        [qrdata]="printedInfo?.location"
+        [width]="300"
+        [imageHeight]="75"
+        [imageWidth]="75"
+        [cssClass]="'text-center'"
+        [errorCorrectionLevel]="'M'"
+        [colorDark]="'#000000ff'"
+        [colorLight]="'#ffffffff'"
+        [elementType]="'canvas'"
+        [margin]="4"
+        [scale]="128"
+        [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+      ></qrcode>
+      <div class="text-center">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onPrint(printedInfo, parent)"
+        >
+          <mat-icon>print</mat-icon> Xác nhận in
+        </button>
+      </div>
+    </div>
+  </div>
 </ng-template>

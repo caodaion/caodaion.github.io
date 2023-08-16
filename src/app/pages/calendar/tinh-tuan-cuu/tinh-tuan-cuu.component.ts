@@ -8,6 +8,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from 'crypto-js';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatDialog } from '@angular/material/dialog';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -15,6 +16,9 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./tinh-tuan-cuu.component.scss']
 })
 export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
+  print(arg0: any, _t285: HTMLElement) {
+    throw new Error('Method not implemented.');
+  }
 
   selectedDate = {
     year: 0,
@@ -37,10 +41,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       sex: null
     }
   }
-  shareBottomSheetRef: any;
+  printBottomSheetRef: any;
   sharedData: any;
   selectedIndex = 0
   @ViewChild('expiriedEventDialog') expiriedEventDialog!: any;
+  @ViewChild('printBottomSheet') printBottomSheet!: any;
+  printedInfo: any;
+  sharedUrl: any;
 
   constructor(
     private calendarService: CalendarService,
@@ -51,7 +58,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef,
     private router: Router,
     public dialog: MatDialog,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private matBottomSheet: MatBottomSheet
   ) {
 
   }
@@ -225,7 +233,17 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     })
   }
 
-  onPrint(item: any) {
+  onCallPrint(item: any) {
+    this.printedInfo = item
+    this.printBottomSheetRef = this.matBottomSheet.open(this.printBottomSheet)
+  }
+
+  onPrint(item: any, parent?: any) {
+    let parentElement = null
+    parentElement = parent.qrcElement.nativeElement
+      .querySelector("canvas")
+      .toDataURL("image/png")
+    console.log(parentElement);
     let printTab = window.open(
       '',
       'PRINT',
@@ -236,7 +254,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       <title>${document.title.toUpperCase()}PRINTER</title>
       <style>
       .tableContent td, th {
-        font-size: 24px;
+        font-size: 22px;
         text-align: left;
         padding: 1rem;
         border-bottom: 1px solid #000000;
@@ -248,18 +266,28 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     console.log(item);
 
     const information = `
-    <h1 style="text-align: center;">LỊCH CÚNG TUẦN CỬU <br /> CỦA ${item.name?.toUpperCase()}</h1>
+    <h2 style="text-align: center;">LỊCH CÚNG TUẦN CỬU <br /> CỦA ${item.name?.toUpperCase()}</h2>
     <h2 style="text-align: center;">
-    TỪ TRẦN NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
+    TỪ TRẦN NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
     </h2>`
 
     const printContent = document.getElementById(
       `${item?.key}`
-      );
+    );
+    const caodaiOnInFo = `<div>
+    <div style="float: left; width: 50%">
+    <p><strong>Truy Cập</strong> <a href="https://www.caodaion.com">https://www.caodaion.com</a> để tính lịch cúng tuần cửu tự động</p>
+    <p style="text-align: center">hoặc</p>
+    <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng cửu của ${item?.name}</p>
+    </div>
+    <div style="float: right; width: 50%; text-align: right">
+    <img src="${parentElement}" height="300px" width="300px" />
+    </div>
+    </div>`
     const writeContent = document.createElement('DIV');
     if (writeContent) {
       // @ts-ignore
-      writeContent.innerHTML = `${information}${printContent?.outerHTML}`;
+      writeContent.innerHTML = `${information}${printContent?.outerHTML}${caodaiOnInFo}`;
       // @ts-ignore
       if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
         // @ts-ignore
