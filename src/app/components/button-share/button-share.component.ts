@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
   templateUrl: './button-share.component.html',
   styleUrls: ['./button-share.component.scss']
 })
-export class ButtonShareComponent {
+export class ButtonShareComponent implements OnInit {
   @Input() title?: any
   @Input() url?: any = ``
   shareBottomSheetRef: any;
@@ -35,13 +35,17 @@ export class ButtonShareComponent {
     private commonService: CommonService,
     private router: Router
   ) {
-    router.events.subscribe((val: any) => {
-      this.sharedUrl = `${window.location.href}`
-      if (this.url) {
-        this.sharedUrl = this.url
-      }
-    })
   }
+
+  ngOnInit(): void {
+    this.router.events.subscribe((val: any) => {
+      this.sharedUrl = `${window.location.origin}${val.url || window.location.pathname}`
+    })
+    if (this.url) {
+      this.sharedUrl = this.url
+    }
+  }
+
 
   copyLink() {
     navigator.clipboard.writeText(this.sharedUrl);
