@@ -9,6 +9,7 @@ import * as CryptoJS from 'crypto-js';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -35,10 +36,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     key: '',
     event: <any>[],
     date: <any>Object,
-    details: {
+    details: <any>{
       name: '',
       age: null,
-      sex: null
+      sex: null,
+      holyName: null,
+      title: null,
+      subTitle: null,
+      color: null,
     }
   }
   printBottomSheetRef: any;
@@ -48,6 +53,28 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   @ViewChild('printBottomSheet') printBottomSheet!: any;
   printedInfo: any;
   sharedUrl: any;
+  caoDaiTitle = CAODAI_TITLE.data
+  isHolyNameRequired: boolean = false;
+  colors = <any>[
+    {
+      key: 'thai',
+      name: 'Thái',
+      color: '#fbbc05'
+    },
+    {
+      key: 'thuong',
+      name: 'Thượng',
+      color: '#4285f4'
+    },
+    {
+      key: 'ngoc',
+      name: 'Ngọc',
+      color: '#ea4335'
+    }
+  ]
+  eventSummary: any;
+  calculatedLunarDate: any;
+  subTitles: any;
 
   constructor(
     private calendarService: CalendarService,
@@ -90,10 +117,15 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
             month: parseInt(param['m']),
             year: parseInt(param['y'])
           }
+          console.log(decodedToken);
           this.calculatedTuanCuu.details = {
-            name: decodedToken[0],
-            age: decodedToken[1],
-            sex: decodedToken[2]
+            name: decodedToken[0] === 'empty' ? '' : decodedToken[0],
+            age: decodedToken[1] === 'empty' ? null : decodedToken[1],
+            sex: decodedToken[2] === 'empty' ? null : decodedToken[2],
+            color: decodedToken[3] === 'empty' ? null : decodedToken[3],
+            title: decodedToken[4] === 'empty' ? null : decodedToken[4],
+            subTitle: decodedToken[5] === 'empty' ? null : decodedToken[5],
+            holyName: decodedToken[6] === 'empty' ? null : decodedToken[6],
           }
           this.saveSharedEvent()
         }
@@ -111,7 +143,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.selectedIndex = this.tuanCuuList.length
     if (!!location.search) {
       this.router.navigate([], {
-
       })
     }
   }
@@ -127,10 +158,11 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     }
     this.tuanCuuList?.forEach((item: any) => {
       console.log(item);
-
-      item.name = `${item?.details?.name} ${item?.details?.age ? item?.details?.age + ' tuổi' : ''}`
+      let selectedTitle: any = this.caoDaiTitle.find((v: any) => v.key === item.details.title);
+      item.tab = `${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
+      item.name = `${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
-      item.title = `Chia sẻ lịch cúng cửu của ${item.name}`
+      item.title = `Chia sẻ lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((item: any) => item?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       const date = this.calendarService.getConvertedFullDate(new Date(`${item?.date?.year}-${item?.date?.month < 10 ? '0' + item?.date?.month : item?.date?.month}-${item?.date?.date < 10 ? '0' + item?.date?.date : item?.date?.date}`)).convertSolar2Lunar
       item.date.lunarMonth = `${date.lunarMonth} ${date.lunarLeap ? 'nhuận' : ''}`
       item.date.lunarDay = date.lunarDay
@@ -182,10 +214,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       key: '',
       event: <any>[],
       date: <any>Object,
-      details: {
+      details: <any>{
         name: '',
         age: null,
-        sex: null
+        sex: null,
+        holyName: null,
+        title: null,
+        subTitle: null,
+        color: null,
       }
     }
     this.getLocalStorageTuanCuu()
@@ -215,7 +251,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = `${item?.details?.name}+${item?.details?.age}+${item?.details?.sex}`;
+    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
@@ -266,10 +302,10 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     console.log(item);
 
     const information = `
-    <h2 style="text-align: center;">LỊCH CÚNG TUẦN CỬU <br /> CỦA ${item.name?.toUpperCase()}</h2>
-    <h2 style="text-align: center;">
+    <h2 style="text-align: center;">LỊCH ${item.name?.toUpperCase()}</h2>
+    <h3 style="text-align: center;">
     TỪ TRẦN NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
-    </h2>`
+    </h3>`
 
     const printContent = document.getElementById(
       `${item?.key}`
@@ -299,5 +335,29 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     printTab?.document.close(); // necessary for IE >= 10
     printTab?.focus(); // necessary for IE >= 10*/
     printTab?.print();
+  }
+
+  onUpdateInfomation() {
+    this.isHolyNameRequired = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title)?.isHolyNameRequired || false
+    let selectedTitle: any = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title);
+    this.subTitles = []
+    if (selectedTitle?.subTitle) {
+      this.subTitles = selectedTitle?.subTitle
+    }
+    if (this.calculatedTuanCuu.details.name) {
+      if (this.isHolyNameRequired) {
+        if (this.calculatedTuanCuu.details.sex === 'male') {
+          if (this.calculatedTuanCuu.details.color) {
+            this.calculatedTuanCuu.details.holyName = `${this.colors.find((item: any) => item.key === this.calculatedTuanCuu.details.color)?.name} ${this.calculatedTuanCuu.details.name?.split(' ')[this.calculatedTuanCuu.details.name?.split(' ').length - 1]} Thanh`
+          }
+        }
+        if (this.calculatedTuanCuu.details.sex === 'female') {
+          this.calculatedTuanCuu.details.holyName = `Hương ${this.calculatedTuanCuu.details.name?.split(' ')[this.calculatedTuanCuu.details.name?.split(' ').length - 1]}`
+        }
+      }
+    }
+    this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && this.calculatedTuanCuu.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[this.calculatedTuanCuu.details.sex] : ''} ${this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || ''} ${this.calculatedTuanCuu.details.holyName ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})` : this.calculatedTuanCuu.details.name} ${this.calculatedTuanCuu.details.age ? this.calculatedTuanCuu.details.age + ' tuổi' : ''}`
+    const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}`)).convertSolar2Lunar
+    this.calculatedLunarDate = `${calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
   }
 }

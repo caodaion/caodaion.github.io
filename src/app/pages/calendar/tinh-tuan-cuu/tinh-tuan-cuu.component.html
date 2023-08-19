@@ -9,7 +9,10 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Năm</mat-label>
-            <mat-select [(ngModel)]="selectedDate.year">
+            <mat-select
+              [(ngModel)]="selectedDate.year"
+              (ngModelChange)="onUpdateInfomation()"
+            >
               <mat-option
                 *ngFor="let item of yearOptions"
                 [value]="item?.solar"
@@ -21,7 +24,10 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Tháng</mat-label>
-            <mat-select [(ngModel)]="selectedDate.month">
+            <mat-select
+              [(ngModel)]="selectedDate.month"
+              (ngModelChange)="onUpdateInfomation()"
+            >
               <mat-option *ngFor="let item of monthOptions" [value]="item">{{
                 item
               }}</mat-option>
@@ -31,11 +37,25 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Ngày</mat-label>
-            <mat-select [(ngModel)]="selectedDate.date">
+            <mat-select
+              [(ngModel)]="selectedDate.date"
+              (ngModelChange)="onUpdateInfomation()"
+            >
               <mat-option *ngFor="let item of dayOptions" [value]="item">{{
                 item
               }}</mat-option>
             </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group" *ngIf="calculatedLunarDate">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Âm lịch</mat-label>
+            <input
+              type="text"
+              matInput
+              [value]="calculatedLunarDate"
+              [disabled]="true"
+            />
           </mat-form-field>
         </div>
       </div>
@@ -44,16 +64,94 @@
           <mat-expansion-panel-header>
             <mat-panel-title> Thông tin bổ sung</mat-panel-title>
           </mat-expansion-panel-header>
+          <p>{{ eventSummary }}</p>
           <h3>Thông tin người vừa từ trần</h3>
           <div class="d-flex flex-wrap">
             <div class="form-group">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Họ và tên</mat-label>
+                <mat-label>Họ và Tên</mat-label>
                 <input
                   type="text"
                   matInput
                   required
                   [(ngModel)]="calculatedTuanCuu.details.name"
+                  (input)="onUpdateInfomation()"
+                  (ngModelChange)="onUpdateInfomation()"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-label>Giới tính</mat-label>
+              <div>
+                <mat-radio-group
+                  [(ngModel)]="calculatedTuanCuu.details.sex"
+                  (ngModelChange)="onUpdateInfomation()"
+                >
+                  <mat-radio-button [value]="'male'">Nam</mat-radio-button>
+                  <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chức Đạo</mat-label>
+                <mat-select
+                  [(ngModel)]="calculatedTuanCuu.details.title"
+                  (ngModelChange)="onUpdateInfomation()"
+                >
+                  <mat-option
+                    *ngFor="let item of caoDaiTitle"
+                    [value]="item.key"
+                    >{{ item.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group" *ngIf="subTitles?.length > 0">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chức Vụ</mat-label>
+                <mat-select
+                  [(ngModel)]="calculatedTuanCuu.details.subTitle"
+                  (ngModelChange)="onUpdateInfomation()"
+                >
+                  <mat-option
+                    *ngFor="let item of subTitles"
+                    [value]="item.key"
+                    >{{ item.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="
+                calculatedTuanCuu.details.sex === 'male' && isHolyNameRequired
+              "
+            >
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Sắc phái</mat-label>
+                <mat-select
+                  [(ngModel)]="calculatedTuanCuu.details.color"
+                  (ngModelChange)="onUpdateInfomation()"
+                >
+                  <mat-option
+                    *ngFor="let item of colors"
+                    [value]="item.key"
+                    [ngStyle]="{ background: item.color }"
+                    >{{ item.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group" *ngIf="isHolyNameRequired">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Thánh Danh</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  [required]="isHolyNameRequired"
+                  [(ngModel)]="calculatedTuanCuu.details.holyName"
+                  (ngModelChange)="onUpdateInfomation()"
                 />
               </mat-form-field>
             </div>
@@ -64,6 +162,7 @@
                   type="number"
                   matInput
                   [(ngModel)]="calculatedTuanCuu.details.age"
+                  (ngModelChange)="onUpdateInfomation()"
                 />
               </mat-form-field>
             </div>
@@ -125,11 +224,11 @@
     </mat-tab>
     <mat-tab
       *ngFor="let item of tuanCuuList; let index = index"
-      [label]="item?.name"
+      [label]="item?.tab"
     >
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
-          <h3>Lịch cúng cửu cho {{ item?.name }}</h3>
+          <h3>Lịch {{ item?.name }}</h3>
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -146,8 +245,25 @@
           </mat-menu>
         </div>
         <p>
-          Từ trần ngày {{ item?.date?.lunarDay }} tháng
-          {{ item?.date?.lunarMonth }} năm {{ item?.date?.lunarYearName }}
+          Từ trần ngày
+          {{
+            item?.date?.lunarDay < 10
+              ? "0" + item?.date?.lunarDay
+              : item?.date?.lunarDay
+          }}
+          tháng
+          {{
+            item?.date?.lunarMonth < 10
+              ? "0" + item?.date?.lunarMonth
+              : item?.date?.lunarMonth
+          }}
+          năm {{ item?.date?.lunarYearName }} ({{
+            item?.date?.date < 10 ? "0" + item?.date?.date : item?.date?.date
+          }}/{{
+            item?.date?.month < 10
+              ? "0" + item?.date?.month
+              : item?.date?.month
+          }}/{{ item?.date?.year }})
         </p>
         <div *ngIf="item?.event?.length > 0" [id]="item?.key">
           <table
@@ -247,9 +363,7 @@
       {{ printedInfo?.date?.lunarMonth }} năm
       {{ printedInfo?.date?.lunarYearName }} ({{
         printedInfo?.date.date | number : "2.0-0"
-      }}/{{
-        printedInfo?.date.month | number : "2.0-0"
-      }}/{{
+      }}/{{ printedInfo?.date.month | number : "2.0-0" }}/{{
         printedInfo?.date.year
       }})
     </p>
