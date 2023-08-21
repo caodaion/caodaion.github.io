@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,6 +14,15 @@ export class SignupComponent implements OnInit {
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
   submitted: boolean = false
+  userNameHasBeenUsed: boolean = false
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+    ) {
+
+  }
+
 
   ngOnInit(): void {
     this.getRoles()
@@ -37,11 +48,18 @@ export class SignupComponent implements OnInit {
 
   singUp() {
     this.submitted = true
+    this.userNameHasBeenUsed = false
     if (!this.signUpDisabled()) {
       let localStorageUsers = <any>{}
       localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
-      localStorageUsers[this.signUpUser.userName] = this.signUpUser
-      localStorage.setItem('users', JSON.stringify(localStorageUsers))
+      if (localStorageUsers[this.signUpUser.userName]) {
+        this.userNameHasBeenUsed = true
+      } else {
+        localStorageUsers[this.signUpUser.userName] = this.signUpUser
+        localStorage.setItem('users', JSON.stringify(localStorageUsers))
+        this.authService.currentUser = this.signUpUser
+        this.router.navigate(['/trang-chu'])
+      }
     }
   }
 

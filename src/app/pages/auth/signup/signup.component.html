@@ -40,6 +40,10 @@
               (input)="updateSignUpInfo()"
             />
           </mat-form-field>
+          <mat-error *ngIf="submitted && userNameHasBeenUsed"
+            >Thiết bị này đã đăng ký tên người dùng "{{ signUpUser.userName }}"
+            của bạn. Hãy chọn một tên người dùng khác.</mat-error
+          >
         </div>
         <div class="form-group w-1/2 !ps-0">
           <mat-form-field appearance="fill" class="w-full">
