@@ -1,8 +1,8 @@
 @use "../../../../sass/variables.scss";
 @use "sass:map";
-.login-form-container {
+.signup-form-container {
   width: 100%;
-  max-width: 700px;
+  max-width: 1000px;
   min-width: 100px;
   padding: 2rem;
   border: solid 1px #f4eff4;
@@ -13,8 +13,11 @@
   @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
     margin-bottom: 3rem;
   }
-  .form-control {
-    width: 100%;
+  .form-group {
+    padding: 0 1rem;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      width: 100%;
+    }
   }
   .button-group {
     margin-top: 2rem;
@@ -37,18 +40,5 @@
     left: 0;
     visibility: hidden;
     cursor: pointer;
-  }
-  .section-divider {
-    width: 100%;
-    margin: 2rem 0;
-    position: relative;
-    span {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #ffffff;
-      padding: 0.5rem;
-    }
   }
 }

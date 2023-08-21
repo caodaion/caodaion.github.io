@@ -24,9 +24,16 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
 import { MessagingService } from './shared/services/messaging/messaging.service';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { CpQrScannerModule } from './components/cp-qr-scanner/cp-qr-scanner.module';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 @NgModule({
-  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent],
+  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, SignupComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -46,9 +53,16 @@ import { MessagingService } from './shared/services/messaging/messaging.service'
     MatSelectModule,
     MatFormFieldModule,
     MatTooltipModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    MatDividerModule,
+    CpQrScannerModule,
+    MatExpansionModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService],
+  providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService,
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

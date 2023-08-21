@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {JwtHelperService} from "@auth0/angular-jwt";
-import {AuthService} from "../../../shared/services/auth/auth.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from "@auth0/angular-jwt";
+import { AuthService } from "../../../shared/services/auth/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   };
   devAdministratorAction: boolean = false
   debugDevAdminCount = 0
+  qrData: any;
 
   constructor(private authService: AuthService, private router: Router) {
   }
@@ -54,5 +55,10 @@ export class LoginComponent implements OnInit {
 
   enterLoginInformation() {
     this.devAdministratorAction = (this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) || this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) && this.loginUser.password.split(' ').every((t) => t.includes('CaoDaiON'))
+  }
+
+  scanComplete(qrData: any) {
+    this.qrData = qrData
+    console.log(this.qrData);
   }
 }

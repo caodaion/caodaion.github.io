@@ -28,59 +28,73 @@ export const CAODAI_TITLE = {
       subTitle: [
         {
           key: 'chanh-tri-su',
-          name: 'Chánh Trị Sự'
+          name: 'Chánh Trị Sự',
+          isChucViecRequired: true
         },
         {
           key: 'pho-tri-su',
-          name: 'Phó Trị Sự'
+          name: 'Phó Trị Sự',
+          isChucViecRequired: true
         },
         {
           key: 'thong-su',
-          name: 'Thông Sự'
+          name: 'Thông Sự',
+          isChucViecRequired: true
         },
         {
           key: 'hoi-truong',
-          name: 'Hội Trưởng'
+          name: 'Hội Trưởng',
+          isChucViecRequired: true
         },
         {
           key: 'pho-hoi-truong',
-          name: 'Phó Hội Trưởng'
+          name: 'Phó Hội Trưởng',
+          isChucViecRequired: true
         },
         {
           key: 'quan-ly-phong-le',
-          name: 'Quản Lý Phòng Lễ'
+          name: 'Quản Lý Phòng Lễ',
+          isChucViecRequired: true
         },
         {
           key: 'pho-quan-ly-phong-le',
-          name: 'Phó Quản Lý Phòng Lễ'
+          name: 'Phó Quản Lý Phòng Lễ',
+          isChucViecRequired: false
         },
         {
           key: 'giao-nhi',
-          name: 'Giáo Nhi'
+          name: 'Giáo Nhi',
+          isChucViecRequired: true
         },
         {
           key: 'quan-ly-phong-tho',
-          name: 'Quản Lý Phòng Thơ'
+          name: 'Quản Lý Phòng Thơ',
+          isChucViecRequired: true
         },
         {
           key: 'pho-quan-ly-phong-tho',
-          name: 'Phó Quản Lý Phòng Thơ'
+          name: 'Phó Quản Lý Phòng Thơ',
+          isChucViecRequired: false
         },
         {
           key: 'quan-ly-phong-cong',
-          name: 'Quản Lý Phòng Công'
+          name: 'Quản Lý Phòng Công',
+          isChucViecRequired: true
         },
         {
           key: 'pho-quan-ly-phong-cong',
-          name: 'Phó Quản Lý Phòng Công'
+          name: 'Phó Quản Lý Phòng Công',
+          isChucViecRequired: false
         },
         {
           key: 'quan-ly-phong-luong',
-          name: 'Quản Lý Phòng Lương'
+          name: 'Quản Lý Phòng Lương',
+          isChucViecRequired: true
         },
         {
           key: 'pho-quan-ly-phong-luong',
-          name: 'Phó Quản Lý Phòng Lương'
+          name: 'Phó Quản Lý Phòng Lương',
+          isChucViecRequired: false
         }
       ]
     },

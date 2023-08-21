@@ -1,0 +1,182 @@
+<div class="w-100 h-100">
+  <div class="w-100 h-100 d-flex flex-column align-items-center">
+    <div class="signup-form-container d-flex flex-column align-items-center">
+      <h1>Đăng ký</h1>
+      <p class="text-center"><strong>*LƯU Ý*</strong></p>
+      <p class="text-center">
+        Tài mỗi tài khoản chỉ lưu dữ liệu của bạn trên
+        <strong>duy nhất</strong> một thiết bị.
+      </p>
+      <p class="text-center">
+        Khi đăng nhập trên thiết bị khác bằng cách đồng bộ thông qua mã QR sẽ
+        hiển thị như một tài khoản mới.
+      </p>
+      <div class="w-full flex flex-wrap mx-[-1rem] mt-5">
+        <div class="form-group w-full !px-0">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Họ và Tên</mat-label>
+            <input
+              matInput
+              [(ngModel)]="signUpUser.name"
+              type="text"
+              required
+              autocomplete="new-password"
+              (ngModelChange)="updateSignUpInfo()"
+              (input)="updateSignUpInfo()"
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-group w-full !px-0">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Tên đăng nhập</mat-label>
+            <input
+              matInput
+              [(ngModel)]="signUpUser.userName"
+              type="text"
+              required
+              autocomplete="new-password"
+              (ngModelChange)="updateSignUpInfo()"
+              (keydown)="blockNotAllowKeys($event, [' '])"
+              (input)="updateSignUpInfo()"
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-group w-1/2 !ps-0">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Mật khẩu</mat-label>
+            <input
+              matInput
+              [(ngModel)]="signUpUser.password"
+              type="password"
+              required
+              autocomplete="new-password"
+              (ngModelChange)="updateSignUpInfo()"
+              (input)="updateSignUpInfo()"
+              (keydown)="blockNotAllowKeys($event, [' '])"
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-group w-1/2 !pe-0">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Nhập lại mật khẩu</mat-label>
+            <input
+              matInput
+              [(ngModel)]="signUpUser.confirmPassword"
+              type="password"
+              required
+              autocomplete="new-password"
+              (ngModelChange)="updateSignUpInfo()"
+              (input)="updateSignUpInfo()"
+              (keydown)="blockNotAllowKeys($event, [' '])"
+            />
+          </mat-form-field>
+          <mat-error
+            *ngIf="
+              submitted &&
+              signUpUser.confirmPassword &&
+              signUpUser.password &&
+              signUpUser.confirmPassword !== signUpUser.password
+            "
+            >Nhập lại mật khẩu phải giống mật khẩu</mat-error
+          >
+        </div>
+      </div>
+      <div class="w-100">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Thông tin bổ sung </mat-panel-title>
+            <mat-panel-description>
+              Thông tin bổ sung giúp tài khoản đầy đủ hơn
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="w-full flex flex-wrap">
+            <div class="form-group w-1/2 !ps-0">
+              <mat-label>Giới tính</mat-label>
+              <div>
+                <mat-radio-group
+                  [(ngModel)]="signUpUser.sex"
+                  (ngModelChange)="updateSignUpInfo()"
+                >
+                  <mat-radio-button [value]="'male'">Nam</mat-radio-button>
+                  <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="form-group w-1/2 !pe-0">
+              <mat-form-field class="w-full">
+                <mat-label>Ngày sinh</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  [(ngModel)]="signUpUser.birthday"
+                  (ngModelChange)="updateSignUpInfo()"
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <mat-divider class="w-full mx-auto"></mat-divider>
+            <div class="form-group w-full mt-5 !px-0">
+              <mat-form-field class="w-full">
+                <mat-label>Thánh sở(Thánh Thất/Thánh Tịnh/Cơ Quan)</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="signUpUser.thanhSo"
+                  type="text"
+                  (ngModelChange)="updateSignUpInfo()"
+                  (input)="updateSignUpInfo()"
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-group w-full !px-0">
+              <mat-form-field class="w-full">
+                <mat-label>Chức đạo</mat-label>
+                <mat-select
+                  [(ngModel)]="signUpUser.title"
+                  (ngModelChange)="updateSignUpInfo(); getRoles()"
+                >
+                  <mat-option
+                    *ngFor="let item of caodaiTitle"
+                    [value]="item?.key"
+                    >{{ item?.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group w-full !px-0">
+              <mat-form-field class="w-full">
+                <mat-label>Nhiệm vụ hành chánh(Chức việc)</mat-label>
+                <mat-select
+                  [(ngModel)]="signUpUser.role"
+                  [required]="signUpUser.title === 'chuc-viec'"
+                  (ngModelChange)="updateSignUpInfo()"
+                  [multiple]="true"
+                >
+                  <mat-option *ngFor="let item of roles" [value]="item?.key">{{
+                    item?.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div class="w-100 d-flex justify-content-between button-group">
+        <button mat-button color="primary" [routerLink]="'/auth/dang-nhap'">
+          Đăng nhập
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="signUpDisabled()"
+          (click)="singUp()"
+        >
+          ĐĂNG KÝ
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
