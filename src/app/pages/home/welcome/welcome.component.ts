@@ -1,7 +1,8 @@
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
-import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
-import { CommonService } from 'src/app/shared/services/common/common.service';
+import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import {Component, OnInit} from '@angular/core';
+import {CalendarService} from 'src/app/shared/services/calendar/calendar.service';
+import {CommonService} from 'src/app/shared/services/common/common.service';
+import {AuthService} from "../../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'app-welcome',
@@ -26,24 +27,21 @@ export class WelcomeComponent implements OnInit {
   time = this.commonService.time;
   nowDate: any;
 
-  constructor (
+  constructor(
     private breakpointObserver: BreakpointObserver,
     private commonService: CommonService,
-    private calendarService: CalendarService
-    ) {
-      this.breakpointObserver
+    private calendarService: CalendarService,
+    private authService: AuthService
+  ) {
+    this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.isPhone = true;
-        } else {
-          this.isPhone = false;
-        }
+        this.isPhone = state.matches;
       });
-      this.nowDate = {
-        lunar: this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar,
-        solar: new Date()
-      }
+    this.nowDate = {
+      lunar: this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar,
+      solar: new Date()
+    }
   }
 
   ngOnInit(): void {
@@ -53,6 +51,6 @@ export class WelcomeComponent implements OnInit {
       return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
     }
     this.rememberPlease = this.randomRemember[getRandomIntInclusive(0, this.randomRemember.length - 1)]
-    this.greating = this.greatings[getRandomIntInclusive(0, this.greatings.length - 1)]
+    this.greating = `${this.greatings[getRandomIntInclusive(0, this.greatings.length - 1)]} ${this.authService.currentUser?.name}.`
   }
 }

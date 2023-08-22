@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {CAODAI_TITLE} from 'src/app/shared/constants/master-data/caodai-title.constant';
+import {AuthService} from 'src/app/shared/services/auth/auth.service';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +20,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-    ) {
+  ) {
 
   }
 
@@ -55,10 +56,12 @@ export class SignupComponent implements OnInit {
       if (localStorageUsers[this.signUpUser.userName]) {
         this.userNameHasBeenUsed = true
       } else {
-        localStorageUsers[this.signUpUser.userName] = this.signUpUser
+        const userToken = this.generaToken(this.signUpUser)
+        localStorageUsers[this.signUpUser.userName] = userToken
         localStorage.setItem('users', JSON.stringify(localStorageUsers))
-        this.authService.currentUser = this.signUpUser
-        this.router.navigate(['/trang-chu'])
+        localStorage.setItem('token', JSON.stringify(userToken))
+        this.authService.getCurrentUser()
+        window.location.href = '/trang-chu'
       }
     }
   }
@@ -79,5 +82,27 @@ export class SignupComponent implements OnInit {
 
   blockNotAllowKeys(event: any, notAllowedKeys: any) {
     return !notAllowedKeys?.includes(event?.key)
+  }
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
   }
 }
