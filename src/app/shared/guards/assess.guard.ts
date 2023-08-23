@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
 import {AuthService} from "../services/auth/auth.service";
 import {Observable} from "rxjs";
+import {MENU} from "../constants/menu.constant";
 
 @Injectable()
 export class AssessGuard implements CanActivate {
@@ -18,6 +19,10 @@ export class AssessGuard implements CanActivate {
     }
     // @ts-ignore
     let path = state.url.slice(1, state.url.length)?.split('?')[0]?.replaceAll('/', '.')
+    console.log(path)
+    if (!find(MENU, path)) {
+      return true
+    }
     if (find(this.authService.currentUser?.children, path)) {
       return true
     }

@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
-import { FullLayoutComponent } from './full-layout.component';
-import { AuthGuard } from "../../shared/guards/auth.guard";
-import { ReleasedGuard } from "../../shared/guards/released.guard";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes, UrlSegment} from '@angular/router';
+import {PagenotfoundComponent} from '../pagenotfound/pagenotfound.component';
+import {FullLayoutComponent} from './full-layout.component';
+import {AuthGuard} from "../../shared/guards/auth.guard";
+import {ReleasedGuard} from "../../shared/guards/released.guard";
 
 
 const routes: Routes = [
@@ -11,7 +11,23 @@ const routes: Routes = [
     path: '',
     component: FullLayoutComponent,
     children: [
-      { path: '', redirectTo: 'trang-chu', pathMatch: 'full' },
+      {
+        matcher: (url) => {
+          if (url?.length === 1 && url[0].path.match(/^@[\w]+$/gm)) {
+            return {
+              consumed: url,
+              posParams: {
+                username: new UrlSegment(url[0].path.slice(1), {})
+              }
+            };
+          }
+          return null
+        },
+        loadChildren: () =>
+          import('../../modules/profile/profile.module').then((m) => m.ProfileModule),
+        canActivate: [ReleasedGuard]
+      },
+      {path: '', redirectTo: 'trang-chu', pathMatch: 'full'},
       {
         path: 'trang-chu',
         loadChildren: () =>
@@ -49,7 +65,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../modules/qr/qr.module').then((m) => m.QrModule),
       },
-      { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
+      {path: '**', pathMatch: 'full', component: PagenotfoundComponent},
     ],
   },
 ];
@@ -58,4 +74,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FullLayoutRoutingModule { }
+export class FullLayoutRoutingModule {
+}

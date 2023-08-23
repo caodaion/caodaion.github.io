@@ -14,7 +14,7 @@
         >
           <mat-icon>{{
             viewMissionService.isDrawerOpened ? "menu_open" : "menu"
-          }}</mat-icon>
+            }}</mat-icon>
         </button>
         <mat-nav-list class="main-nav-list">
           <a
@@ -31,7 +31,7 @@
             </div>
             <span class="label-small main-drawer-label-text">{{
               item?.label
-            }}</span>
+              }}</span>
           </a>
         </mat-nav-list>
       </div>
@@ -59,7 +59,7 @@
         >
           <mat-icon>{{
             viewMissionService.isDrawerOpened ? "menu_open" : "menu"
-          }}</mat-icon>
+            }}</mat-icon>
         </button>
         <a
           [routerLink]="'trang-chu'"
@@ -109,11 +109,11 @@
               height="426.666"
               fill="#4285F4"
             />
-            <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
-            <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
-            <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
-            <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
-            <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
+            <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05"/>
+            <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05"/>
+            <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4"/>
+            <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335"/>
+            <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4"/>
             <circle
               cx="220.993"
               cy="1386.66"
@@ -135,7 +135,7 @@
           Thời {{ time.commonTime.kanji
           }}<span class="number-time">
             ({{ time.time | async | date : "hh:mm:ssaa" }})</span
-          >
+        >
         </div>
         <div class="d-flex justify-content-center align-items-center">
           <a
@@ -158,7 +158,7 @@
           >
             <mat-icon>{{
               viewPortMode === "desktop" ? "install_desktop" : "install_mobile"
-            }}</mat-icon>
+              }}</mat-icon>
           </button>
           <button
             mat-icon-button
@@ -169,6 +169,10 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <mat-menu #profileMenu="matMenu">
+            <button *ngIf="currentUser?.userName" mat-menu-item (click)="goToScreen('/@' + currentUser?.userName)">
+              <mat-icon>account_circle</mat-icon>
+              {{currentUser?.name}}
+            </button>
             <!-- <button
               mat-menu-item
               (click)="goToScreen('/thong-bao')"
@@ -178,24 +182,28 @@
               >Thông báo
             </button> -->
             <button mat-menu-item (click)="goToScreen('/cai-dat')">
-              <mat-icon>settings</mat-icon>Cài đặt
+              <mat-icon>settings</mat-icon>
+              Cài đặt
             </button>
             <button mat-menu-item (click)="goToScreen('/qr')">
-              <mat-icon>qr_code_2</mat-icon>Quét mã QR
+              <mat-icon>qr_code_2</mat-icon>
+              Quét mã QR
             </button>
             <!-- <button mat-menu-item (click)="checkForUpdate()">
                 <mat-icon>system_update</mat-icon>Cập nhật phiên bản
               </button> -->
             <button
-                mat-menu-item
-                [routerLink]="'auth/dang-nhap'"
-                *ngIf="!currentUser"
-              >
-                <mat-icon>login</mat-icon>Đăng nhập
-              </button>
-              <button mat-menu-item *ngIf="currentUser" (click)="logout()">
-                <mat-icon>logout</mat-icon>Đăng xuất
-              </button>
+              mat-menu-item
+              [routerLink]="'auth/dang-nhap'"
+              *ngIf="!currentUser"
+            >
+              <mat-icon>login</mat-icon>
+              Đăng nhập
+            </button>
+            <button mat-menu-item *ngIf="currentUser" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              Đăng xuất
+            </button>
           </mat-menu>
         </div>
       </mat-toolbar>

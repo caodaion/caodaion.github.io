@@ -30,7 +30,7 @@ import { CpQrScannerModule } from './components/cp-qr-scanner/cp-qr-scanner.modu
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, MAT_DATE_LOCALE, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 @NgModule({
   declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, SignupComponent],
@@ -62,7 +62,9 @@ import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } 
     MatNativeDateModule
   ],
   providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService,
-    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }],
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+    {provide: MAT_DATE_LOCALE, useValue: 'vi-VN'},
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

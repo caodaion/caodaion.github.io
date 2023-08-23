@@ -37,6 +37,7 @@
     "firebase": "^9.21.0",
     "ng-tiny-url": "^1.0.2",
     "ng2-charts": "^4.1.1",
+    "ngx-image-compress": "^15.1.6",
     "ngx-scanner-qrcode": "^1.2.8",
     "path": "^0.12.7",
     "rxjs": "~7.4.0",

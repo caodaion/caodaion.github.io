@@ -27,6 +27,11 @@ export const CAODAI_TITLE = {
       eventTitle: 'Cầu Siêu',
       subTitle: [
         {
+          key: 'dau-ho-dao',
+          name: 'Đầu Họ Đạo',
+          isChucViecRequired: true
+        },
+        {
           key: 'chanh-tri-su',
           name: 'Chánh Trị Sự',
           isChucViecRequired: true

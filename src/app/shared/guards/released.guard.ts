@@ -20,6 +20,11 @@ export class ReleasedGuard implements CanActivate {
     }
     // @ts-ignore
     let path = state.url.slice(1, state.url.length)?.split('?')[0]?.replaceAll('/', '.')
+    console.log(path)
+    console.log(!find(MENU, path))
+    if (!find(MENU, path)) {
+      return true
+    }
     // @ts-ignore
     if (!find(MENU, path) && (find(MENU, path?.split('.').slice(0, path.split('.').length - 1)?.join().replaceAll(',', '.'))?.released || find(MENU, path?.split('.').slice(0, path.split('.').length - 2)?.join().replaceAll(',', '.'))?.released)) {
       return true
@@ -27,6 +32,7 @@ export class ReleasedGuard implements CanActivate {
     if (find(MENU, path)?.released) {
       return true
     }
+    console.log(!find(MENU, path))
     // @ts-ignore
     this.router.navigate([`/${path?.split('.').slice(0, path.split('.').length - 1)?.join().replaceAll(',', '/')}`]);
     return false

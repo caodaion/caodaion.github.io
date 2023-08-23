@@ -145,7 +145,7 @@
     "symbol-observable" "4.0.0"
     "yargs" "17.6.2"
 
-"@angular/common@^10.0.14", "@angular/common@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/common@^15.0.0 || ^16.0.0", "@angular/common@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/common@>=12.0.0", "@angular/common@>=14.0.0", "@angular/common@~15.2.2", "@angular/common@15.2.2":
+"@angular/common@^10.0.14", "@angular/common@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/common@^15.0.0 || ^16.0.0", "@angular/common@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/common@>=12.0.0", "@angular/common@>=14.0.0", "@angular/common@~15.2.2", "@angular/common@15.2.2", "@angular/common@x.x.x":
   "version" "15.2.2"
   dependencies:
     "tslib" "^2.3.0"
@@ -169,7 +169,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/core@^10.0.14", "@angular/core@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/core@^15.0.0", "@angular/core@^15.0.0 || ^16.0.0", "@angular/core@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/core@>=14.0.0", "@angular/core@~15.2.2", "@angular/core@15.2.2":
+"@angular/core@^10.0.14", "@angular/core@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/core@^15.0.0", "@angular/core@^15.0.0 || ^16.0.0", "@angular/core@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/core@>=14.0.0", "@angular/core@~15.2.2", "@angular/core@15.2.2", "@angular/core@x.x.x":
   "version" "15.2.2"
   dependencies:
     "tslib" "^2.3.0"
@@ -5911,6 +5911,13 @@
     "lodash-es" "^4.17.15"
     "tslib" "^2.3.0"
 
+"ngx-image-compress@^15.1.6":
+  "integrity" "sha512-kMoK06er6vLV7/3Ly3S8Eef4mADZHU2A+JeBAt56nOV7iAzz6GolT2cNq40XR5hFpthcnzHs7aIcl4Sr84xK6w=="
+  "resolved" "https://registry.npmjs.org/ngx-image-compress/-/ngx-image-compress-15.1.6.tgz"
+  "version" "15.1.6"
+  dependencies:
+    "tslib" "^2.5.0"
+
 "ngx-scanner-qrcode@^1.2.8":
   "integrity" "sha512-66vc4CUEGY57fp/D9F61aLaM+z2gTjbae/G6HQcEYPIBfbSFJIUxEA4HoAvNf50iq89vA7LHDZ4U9Av8EqJ0ww=="
   "resolved" "https://registry.npmjs.org/ngx-scanner-qrcode/-/ngx-scanner-qrcode-1.2.8.tgz"
@@ -7558,7 +7565,7 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.0.0", "tslib@^2.1.0", "tslib@^2.3.0", "tslib@2.5.0":
+"tslib@^2.0.0", "tslib@^2.1.0", "tslib@^2.3.0", "tslib@^2.5.0", "tslib@2.5.0":
   "integrity" "sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   "version" "2.5.0"

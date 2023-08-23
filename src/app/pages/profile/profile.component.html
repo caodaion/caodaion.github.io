@@ -1,0 +1,170 @@
+<div class="container-fluid" *ngIf="currentUser?.userName">
+  <h1 class="text-4xl my-4">{{ currentUser?.name }}</h1>
+  <p>@{{ currentUser?.userName }}</p>
+  <div>
+    <div class="block lg:flex">
+      <div class="w-full">
+        <div class="text-2xl text-center">
+          Mã QR đăng nhập/đồng bộ tài khoản
+        </div>
+        <div *ngIf="qrData" class="w-full flex flex-column items-center">
+          <qrcode
+            #parent
+            [qrdata]="qrData"
+            [width]="300"
+            [imageHeight]="75"
+            [imageWidth]="75"
+            [cssClass]="'text-center'"
+            [errorCorrectionLevel]="'M'"
+            [colorDark]="'#000000ff'"
+            [colorLight]="'#ffffffff'"
+            [elementType]="'canvas'"
+            [margin]="4"
+            [scale]="128"
+            [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+          ></qrcode>
+          <div class="text-center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveAsImage(parent)"
+            >
+              <mat-icon>download</mat-icon>
+              Tải Mã QR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block lg:flex lg:flex-wrap mx-[-0.5rem] my-8">
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Tên đăng nhập</mat-label>
+          <input
+            [disabled]="true"
+            type="text"
+            matInput
+            [(ngModel)]="currentUser.userName"
+            (ngModelChange)="updateUserProfile()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Họ và Tên</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="currentUser.name"
+            (ngModelChange)="updateUserProfile()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <div class="w-full">
+          <mat-label>Giới tính</mat-label>
+          <div>
+            <mat-radio-group
+              [(ngModel)]="currentUser.sex"
+              (ngModelChange)="updateUserProfile()"
+            >
+              <mat-radio-button [value]="'male'">Nam</mat-radio-button>
+              <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Ngày sinh</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="currentUser.birthday"
+            (ngModelChange)="updateUserProfile()"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Chức đạo</mat-label>
+          <mat-select
+            [(ngModel)]="currentUser.title"
+            (ngModelChange)="updateUserProfile()"
+          >
+            <mat-option *ngFor="let item of caodaiTitle" [value]="item?.key">{{
+              item?.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        class="form-group w-full lg:w-1/5"
+        *ngIf="currentUser.sex === 'male' && isHolyNameRequired"
+      >
+        <mat-form-field class="w-full">
+          <mat-label>Sắc phái</mat-label>
+          <mat-select
+            [(ngModel)]="currentUser.color"
+            (ngModelChange)="updateUserProfile()"
+          >
+            <mat-option
+              *ngFor="let item of colors"
+              [value]="item.key"
+              [ngStyle]="{ background: item.color }"
+              >{{ item.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5" *ngIf="isHolyNameRequired">
+        <mat-form-field class="w-full">
+          <mat-label>Thánh Danh</mat-label>
+          <input
+            type="text"
+            matInput
+            [required]="isHolyNameRequired"
+            [(ngModel)]="currentUser.holyName"
+            (ngModelChange)="updateUserProfile()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Thánh Sở</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="currentUser.thanhSo"
+            (ngModelChange)="updateUserProfile()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full">
+          <mat-label>Nhiệm vụ hành chánh</mat-label>
+          <mat-select
+            [(ngModel)]="currentUser.role"
+            [multiple]="true"
+            (ngModelChange)="updateUserProfile()"
+          >
+            <mat-option *ngFor="let item of roles" [value]="item?.key">{{
+              item?.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid text-center" *ngIf="!currentUser?.userName">
+  <h1 class="text-4xl my-4">Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
+  <button mat-flat-button [routerLink]="'/auth/dang-nhap'" [color]="'primary'">
+    Đăng nhập
+  </button>
+</div>
