@@ -26,6 +26,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/quiz/quiz.module').then((m) => m.QuizModule)
       },
+      {
+        path: 'phong-le',
+        loadChildren: () =>
+          import('../../pages/phong-le/phong-le.module').then((m) => m.PhongLeModule)
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },
