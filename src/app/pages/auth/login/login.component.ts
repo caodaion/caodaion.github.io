@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   devAdministratorAction: boolean = false
   debugDevAdminCount = 0
   qrData: any;
+  jwtHelper = new JwtHelperService();
 
   constructor(private authService: AuthService, private router: Router) {
   }
@@ -36,7 +37,16 @@ export class LoginComponent implements OnInit {
   login() {
     if (!this.devAdministratorAction) {
       if (this.loginUser.userName && this.loginUser.password && !this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) && !this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) {
-        console.log('sd')
+        const localStorageUser = JSON.parse(localStorage.getItem('users') || '{}')
+        if (localStorageUser[this.loginUser.userName]) {
+          const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
+          if (decodeUser.password === this.loginUser.password) {
+            localStorage.setItem('token', localStorageUser[this.loginUser.userName])
+            this.authService.getCurrentUser()
+            location.reload()
+            location.href = 'trang-chu'
+          }
+        }
       }
     } else {
       if (this.debugDevAdminCount >= 12 && this.debugDevAdminCount % 2 === 0) {

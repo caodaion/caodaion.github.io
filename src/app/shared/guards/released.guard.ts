@@ -20,8 +20,6 @@ export class ReleasedGuard implements CanActivate {
     }
     // @ts-ignore
     let path = state.url.slice(1, state.url.length)?.split('?')[0]?.replaceAll('/', '.')
-    console.log(path)
-    console.log(!find(MENU, path))
     if (!find(MENU, path)) {
       return true
     }
