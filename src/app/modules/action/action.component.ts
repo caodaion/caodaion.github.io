@@ -1,10 +1,11 @@
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ViewMissionService} from 'src/app/shared/services/view-mission/view-mission.service';
-import {MENU} from "../../shared/constants/menu.constant";
-import {AuthService} from "../../shared/services/auth/auth.service";
-import {CONSTANT} from "../../shared/constants/constants.constant";
-import {Title} from "@angular/platform-browser";
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
+import { MENU } from "../../shared/constants/menu.constant";
+import { AuthService } from "../../shared/services/auth/auth.service";
+import { CONSTANT } from "../../shared/constants/constants.constant";
+import { Title } from "@angular/platform-browser";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-action',
@@ -20,7 +21,8 @@ export class ActionComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     public authService: AuthService,
     private titleSerVice: Title,
-    public viewMissionService: ViewMissionService
+    public viewMissionService: ViewMissionService,
+    private router: Router
   ) {
   }
 
@@ -38,8 +40,9 @@ export class ActionComponent implements OnInit {
       });
     this.menu = this.authService.getMenu(MENU.find((item: any) => item.key === 'tac-vu')?.children, this.authService.currentUser?.children?.find((item: any) => item.key === 'tac-vu'))
     this.titleSerVice.setTitle(`Tác vụ | ${CONSTANT.page.name}`)
-    console.log(this.menu);
-
+    if (this.menu?.length > 0 && location.pathname === '/tac-vu') {
+      this.router.navigate([`tac-vu/${this.menu[0].url}`])
+    }
   }
 
   onToggleDrawer() {
