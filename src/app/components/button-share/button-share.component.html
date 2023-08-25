@@ -1,8 +1,8 @@
 <ng-content></ng-content>
 <ng-template #shareBottomSheet>
-  <h3>{{title}}</h3>
+  <h3 class="text-3xl my-3 font-semibold">{{title}}</h3>
   <div class="container-fluid">
-    <h4>Sao chép liên kết chia sẻ</h4>
+    <h4 class="text-2xl my-2 font-semibold">Sao chép liên kết chia sẻ</h4>
     <mat-form-field class="w-100">
       <mat-label>Liên kết</mat-label>
       <input
@@ -20,14 +20,14 @@
         <mat-icon>link</mat-icon>
       </button>
     </mat-form-field>
-    <div class="qr-area">
+    <div class="qr-area text-center">
       <qrcode
         #parent
         [qrdata]="sharedUrl"
         [width]="300"
         [imageHeight]="75"
         [imageWidth]="75"
-        [cssClass]="'text-center'"
+        [cssClass]="'flex justify-center'"
         [errorCorrectionLevel]="'M'"
         [colorDark]="'#000000ff'"
         [colorLight]="'#ffffffff'"

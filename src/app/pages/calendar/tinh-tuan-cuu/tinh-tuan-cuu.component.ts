@@ -10,6 +10,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
+import { NgxCaptureService } from 'ngx-capture';
+import { tap } from 'rxjs';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -47,11 +51,15 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     }
   }
   printBottomSheetRef: any;
+  shareBottomSheetRef: any;
   sharedData: any;
   selectedIndex = 0
   @ViewChild('expiriedEventDialog') expiriedEventDialog!: any;
   @ViewChild('printBottomSheet') printBottomSheet!: any;
+  @ViewChild('shareBottomSheet') shareBottomSheet!: any;
   printedInfo: any;
+  shareItem = <any>{};
+  timeZone = <any>[];
   sharedUrl: any;
   caoDaiTitle = CAODAI_TITLE.data
   isHolyNameRequired: boolean = false;
@@ -75,6 +83,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   eventSummary: any;
   calculatedLunarDate: any;
   subTitles: any;
+  downloading: boolean = false
+  isShowDownLoadImage: boolean = false
 
   constructor(
     private calendarService: CalendarService,
@@ -86,12 +96,23 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private router: Router,
     public dialog: MatDialog,
     private decimalPipe: DecimalPipe,
-    private matBottomSheet: MatBottomSheet
+    private matBottomSheet: MatBottomSheet,
+    private breakpointObserver: BreakpointObserver,
+    private captureService: NgxCaptureService
   ) {
 
   }
 
   ngOnInit(): void {
+    this.breakpointObserver
+    .observe(['(min-width: 800px)'])
+    .subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this.isShowDownLoadImage = true
+      } else {
+        this.isShowDownLoadImage = false;
+      }
+    });
     this.getYearOptions()
     const now = new Date()
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
@@ -157,7 +178,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       this.dialogRef = this.dialog.open(this.expiriedEventDialog)
     }
     this.tuanCuuList?.forEach((item: any) => {
-      console.log(item);
       let selectedTitle: any = this.caoDaiTitle.find((v: any) => v.key === item.details.title);
       item.tab = `${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       item.name = `${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
@@ -279,7 +299,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     parentElement = parent.qrcElement.nativeElement
       .querySelector("canvas")
       .toDataURL("image/png")
-    console.log(parentElement);
     let printTab = window.open(
       '',
       'PRINT',
@@ -295,12 +314,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
         padding: 1rem;
         border-bottom: 1px solid #000000;
       }
+      .btn-share-item {
+        display: none;
+      }
       </style>
       `
     );
     printTab?.document.write('</head><body >');
-    console.log(item);
-
     const information = `
     <h2 style="text-align: center;">LỊCH ${item.name?.toUpperCase()}</h2>
     <h3 style="text-align: center;">
@@ -359,5 +379,60 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && this.calculatedTuanCuu.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[this.calculatedTuanCuu.details.sex] : ''} ${this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || ''} ${this.calculatedTuanCuu.details.holyName ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})` : this.calculatedTuanCuu.details.name} ${this.calculatedTuanCuu.details.age ? this.calculatedTuanCuu.details.age + ' tuổi' : ''}`
     const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}`)).convertSolar2Lunar
     this.calculatedLunarDate = `${calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
+  }
+
+  showShareImage(element: any, item: any) {
+    this.shareItem = {
+      element, item
+    }
+    this.timeZone = TIME_TYPE.data
+    this.shareItem.time = 'DẬU | 17:00-19:00'
+    this.shareItem.id = this.commonService
+      .generatedSlug(`${this.shareItem?.element?.eventName} ${this.datePipe
+        .transform(this.shareItem?.element?.solar, 'YYYYMMdd')}` || 'caodaion-qr')
+    this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
+  }
+
+  private convertBase64ToBlob(Base64Image: string) {
+    // split into two parts
+    const parts = Base64Image.split(";base64,")
+    // hold the content type
+    const imageType = parts[0].split(":")[1]
+    // decode base64 string
+    const decodedData = window.atob(parts[1])
+    // create unit8array of size same as row data length
+    const uInt8Array = new Uint8Array(decodedData.length)
+    // insert all character code into uint8array
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
+    }
+    // return blob image after conversion
+    return new Blob([uInt8Array], { type: imageType })
+  }
+
+  saveAsImage(element: any) {
+    setTimeout(() => {
+      this.downloading = true
+      const saveItem = document.getElementById(element.id)
+      this.captureService
+        //@ts-ignore
+        .getImage(saveItem, true)
+        .pipe(
+          tap((img: string) => {
+            // converts base 64 encoded image to blobData
+            let blobData = this.convertBase64ToBlob(img)
+            // saves as image
+            const blob = new Blob([blobData], { type: "image/png" })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            link.href = url
+            // name of the file
+            link.download = `${element.id}`
+            link.click()
+            this.downloading = false
+          })
+        )
+        .subscribe();
+    }, 0)
   }
 }

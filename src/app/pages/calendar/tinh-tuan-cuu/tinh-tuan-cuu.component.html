@@ -300,7 +300,18 @@
             <ng-container matColumnDef="solar">
               <th mat-header-cell *matHeaderCellDef>Ngày dương lịch</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.solar | date : "dd-MM-yyyy" }}
+                <div class="flex justify-between items-center">
+                  {{ element.solar | date : "dd-MM-yyyy" }}
+                  <button
+                    mat-icon-button
+                    class="btn-share-item"
+                    [matTooltip]="'Tải ảnh chia sẻ'"
+                    (click)="showShareImage(element, item)"
+                    *ngIf="isShowDownLoadImage"
+                  >
+                    <mat-icon>download</mat-icon>
+                  </button>
+                </div>
               </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -355,7 +366,7 @@
   </mat-dialog-actions>
 </ng-template>
 <ng-template #printBottomSheet>
-  <h3>Xác nhận in</h3>
+  <h3 class="text-3xl my-3 font-semibold">Xác nhận in</h3>
   <div class="container-fluid">
     <p>Xác nhận in lịch cúng cửu cho {{ printedInfo?.name }}</p>
     <p>
@@ -374,7 +385,7 @@
         [width]="300"
         [imageHeight]="75"
         [imageWidth]="75"
-        [cssClass]="'text-center'"
+        [cssClass]="'flex justify-center'"
         [errorCorrectionLevel]="'M'"
         [colorDark]="'#000000ff'"
         [colorLight]="'#ffffffff'"
@@ -392,6 +403,45 @@
           <mat-icon>print</mat-icon> Xác nhận in
         </button>
       </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #shareBottomSheet>
+  <h3 class="text-3xl my-3 font-semibold">Tải ảnh chia sẻ</h3>
+  <div class="container-fluid">
+    <mat-form-field class="w-full">
+      <mat-label>Thời gian cúng</mat-label>
+      <mat-select [(ngModel)]="shareItem.time">
+        <mat-option *ngFor="let item of timeZone" [value]="item.name">{{
+          item.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div #shareImage class="p-8 max-w-[720px]" [id]="shareItem.id">
+      <h1 class="text-2xl font-bold text-center mb-8">
+        {{ shareItem?.element?.eventName?.toUpperCase() }} CHO
+        {{ shareItem?.item?.tab?.toUpperCase() }}
+      </h1>
+      <p class="text-center text-xl font-bold mb-8">
+        {{ shareItem?.element?.day }}
+        Ngày {{ shareItem?.element?.lunar?.lunarDay | number : "2.0-0" }} tháng
+        {{ shareItem?.element?.lunar?.lunarMonth | number : "2.0-0" }}
+        {{ shareItem?.element?.lunar?.lunarLeap ? "nhuận" : "" }}
+        năm {{ shareItem?.element?.lunar?.lunarYearName }} ({{
+          shareItem?.element?.solar | date : "dd/MM/yyyy"
+        }})
+      </p>
+      <p class="text-center text-xl font-bold">THỜI {{ shareItem.time }}</p>
+    </div>
+    <div class="text-center">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="saveAsImage(shareItem)"
+        [disabled]="downloading"
+      >
+        <mat-icon>download</mat-icon> Tải ảnh chia sẻ
+      </button>
     </div>
   </div>
 </ng-template>

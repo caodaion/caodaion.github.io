@@ -38,6 +38,8 @@ export class ActionComponent implements OnInit {
       });
     this.menu = this.authService.getMenu(MENU.find((item: any) => item.key === 'tac-vu')?.children, this.authService.currentUser?.children?.find((item: any) => item.key === 'tac-vu'))
     this.titleSerVice.setTitle(`Tác vụ | ${CONSTANT.page.name}`)
+    console.log(this.menu);
+
   }
 
   onToggleDrawer() {
