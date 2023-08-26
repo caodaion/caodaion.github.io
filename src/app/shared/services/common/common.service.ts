@@ -122,11 +122,14 @@ export class CommonService {
   );
 
   get time() {
-    return { commonTime: this.getTimeCurrentLunarTime(), time: this._time$ };
+    return { commonTime: this.getTimeLunarTime(), time: this._time$ };
   }
 
-  getTimeCurrentLunarTime() {
+  getTimeLunarTime(time?: Date) {
     let currentDate = new Date();
+    if (time) {
+      currentDate = time
+    }
     let currentFoundTime = this.commonTimes
       ?.filter((item: any) => item.key !== 'all' && item.key !== 'tu-thoi')
       ?.find((item: any) => {

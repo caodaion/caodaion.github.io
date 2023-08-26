@@ -5,17 +5,32 @@ import { PhongLeRoutingModule } from './phong-le-routing.module';
 import { PhongLeMainComponent } from './phong-le-main/phong-le-main.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TapSoVanComponent } from './phong-le-main/components/tap-so-van/tap-so-van.component';
-
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
+import { SoanSoComponent } from './soan-so/soan-so.component';
+import { TuanCuuComponent } from './phong-le-main/components/tap-so-van/tuan-cuu/tuan-cuu.component';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 @NgModule({
   declarations: [
     PhongLeMainComponent,
-    TapSoVanComponent
+    TapSoVanComponent,
+    SoanSoComponent,
+    TuanCuuComponent
   ],
   imports: [
     CommonModule,
     PhongLeRoutingModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatCardModule,
+    MatRippleModule,
+    NgxMatTimepickerModule,
   ]
 })
 export class PhongLeModule { }

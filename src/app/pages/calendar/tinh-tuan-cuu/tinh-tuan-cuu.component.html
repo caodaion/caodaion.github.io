@@ -3,7 +3,7 @@
   <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab label="Tính Tuần Cửu mới">
       <div class="form-group">
-        <h3>Hãy chọn ngày từ trần</h3>
+        <h3 class="text-3xl my-3">Hãy chọn ngày từ trần</h3>
       </div>
       <div class="d-flex flex-wrap">
         <div class="form-group">
@@ -47,7 +47,25 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="form-group" *ngIf="calculatedLunarDate">
+        <div class="form-group">
+          <mat-form-field>
+            <mat-label>Chọn giờ</mat-label>
+            <input
+              matInput
+              [(ngModel)]="selectedDate.time"
+              [ngxMatTimepicker]="pickerA"
+              placeholder="14:00 PM"
+              [format]="24"
+              readonly
+              (ngModelChange)="onUpdateInfomation()"
+            />
+            <mat-icon matSuffix (click)="pickerA.open()">
+              watch_later
+            </mat-icon>
+          </mat-form-field>
+          <ngx-mat-timepicker #pickerA></ngx-mat-timepicker>
+        </div>
+        <div class="form-group w-full" *ngIf="calculatedLunarDate">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Âm lịch</mat-label>
             <input
@@ -65,7 +83,7 @@
             <mat-panel-title> Thông tin bổ sung</mat-panel-title>
           </mat-expansion-panel-header>
           <p>{{ eventSummary }}</p>
-          <h3>Thông tin người vừa từ trần</h3>
+          <h3 class="text-3xl my-3">Thông tin người vừa từ trần</h3>
           <div class="d-flex flex-wrap">
             <div class="form-group">
               <mat-form-field appearance="outline" class="w-100">

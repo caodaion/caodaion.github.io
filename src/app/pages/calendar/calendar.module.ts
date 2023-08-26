@@ -25,6 +25,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
 import { QRCodeModule } from 'angularx-qrcode';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 @NgModule({
   declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
@@ -53,7 +54,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatMenuModule,
     MatSnackBarModule,
     ButtonShareModule,
-    QRCodeModule
+    QRCodeModule,
+    NgxMatTimepickerModule
   ],
   providers: [DatePipe, DecimalPipe],
 })

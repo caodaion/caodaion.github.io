@@ -12,6 +12,7 @@
     }
 
     .mat-expansion-panel-header {
+      min-height: 48px;
       height: auto;
       .mat-expansion-panel-header-title, .mat-expansion-panel-header .mat-expansion-panel-header-description, .content-name {
         white-space: normal;

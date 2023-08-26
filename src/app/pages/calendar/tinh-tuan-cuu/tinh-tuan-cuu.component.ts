@@ -25,10 +25,12 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     throw new Error('Method not implemented.');
   }
 
-  selectedDate = {
+  selectedDate = <any>{
     year: 0,
     month: 0,
     date: 0,
+    time: null,
+    lunarTime: null
   };
   yearOptions = <any>[];
   monthOptions = <any>[];
@@ -105,14 +107,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.breakpointObserver
-    .observe(['(min-width: 800px)'])
-    .subscribe((state: BreakpointState) => {
-      if (state.matches) {
-        this.isShowDownLoadImage = true
-      } else {
-        this.isShowDownLoadImage = false;
-      }
-    });
+      .observe(['(min-width: 800px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.isShowDownLoadImage = true
+        } else {
+          this.isShowDownLoadImage = false;
+        }
+      });
     this.getYearOptions()
     const now = new Date()
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
@@ -191,18 +193,22 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   getYearOptions() {
-    for (let i = new Date().getFullYear(); i > new Date().getFullYear() - 5; i--) {
+    for (let i = new Date().getFullYear() + 1; i > new Date().getFullYear() - 5; i--) {
       const convertedDate = this.calendarService.getConvertedFullDate(new Date(new Date().setFullYear(i)))
       this.yearOptions.push({
         solar: convertedDate.convertSolar2Lunar.lunarYear,
       })
     }
     this.monthOptions = Array.from({ length: 12 }, (x, i) => i + 1)
-    this.dayOptions = Array.from({ length: 30 }, (x, i) => i + 1)
+    this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1)
   }
 
   calculateTuanCuu() {
-    this.calendarService.getTuanCuuEvents(new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date}`))
+    let calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date}T${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)
+    if (calDate > new Date(new Date(calDate).setHours(22, 59, 59))) {
+      calDate = new Date(new Date(calDate.setDate(calDate.getDate() + 1)).setHours(0, 0, 0))
+    }
+    this.calendarService.getTuanCuuEvents(calDate)
       .subscribe((res: any) => {
         if (res) {
           res.forEach((item: any) => {
@@ -224,7 +230,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   storeTuanCuu() {
-    localStorage.setItem('tuanCuu', JSON.stringify(this.tuanCuuList))
+    localStorage.setItem('tuanCuu', JSON.stringify(this.tuanCuuList?.map((item: any) => {
+      return {
+        key: item.key,
+        date: item.date,
+        details: item.details,
+        event: item.event,
+      }
+    })))
     this.selectedDate = {
       year: new Date().getFullYear(),
       month: new Date().getMonth(),
@@ -377,8 +390,9 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       }
     }
     this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && this.calculatedTuanCuu.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[this.calculatedTuanCuu.details.sex] : ''} ${this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || ''} ${this.calculatedTuanCuu.details.holyName ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})` : this.calculatedTuanCuu.details.name} ${this.calculatedTuanCuu.details.age ? this.calculatedTuanCuu.details.age + ' tuổi' : ''}`
-    const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}`)).convertSolar2Lunar
-    this.calculatedLunarDate = `${calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
+    const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}T${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)).convertSolar2Lunar
+    this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || ''
+    this.calculatedLunarDate = `${calculatedLunarDate.lunarTime ? 'Thời ' + calculatedLunarDate.lunarTime : ''} | ${calculatedLunarDate.lunarDay < 10 ? '0' + calculatedLunarDate.lunarDay : calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
   }
 
   showShareImage(element: any, item: any) {
