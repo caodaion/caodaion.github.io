@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <mat-tab-group>
-    <mat-tab *ngIf="tuanCuuEvents?.length > 0" [label]="'Soạn sớ tuần cửu'">
+    <mat-tab *ngIf="tuanCuuEvents?.length > 0" [label]="'Soạn sớ tuần cửu (' + tuanCuuEvents?.length + ')'">
       <app-tuan-cuu></app-tuan-cuu>
     </mat-tab>
   </mat-tab-group>
