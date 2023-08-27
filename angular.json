@@ -51,7 +51,8 @@
             "ngswConfigPath": "ngsw-config.json",
             "allowedCommonJsDependencies": [
               "qrcode",
-              "crypto-js"
+              "crypto-js",
+              "moment"
             ]
           },
           "configurations": {
