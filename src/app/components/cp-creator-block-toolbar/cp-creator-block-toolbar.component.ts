@@ -161,6 +161,7 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
   }
 
   showAudioTimeStamp() {
+    this.isShowAudioTimeStamp = false
     const find = (array: any, key: any) => {
       let result: any;
       array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
