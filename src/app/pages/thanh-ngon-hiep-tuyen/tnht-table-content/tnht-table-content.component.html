@@ -8,7 +8,7 @@
           Bạn đang đọc:
           <span style="font-weight: 400">{{ reading?.name }}</span>
         </h2>
-        <p *ngIf="reading?.stopAt">
+        <p *ngIf="reading?.stopAt" class="mb-5">
           <strong>Đoạn: </strong>{{ reading?.stopAt }}
         </p>
         <button
@@ -57,9 +57,9 @@
             >
               <mat-expansion-panel-header>
                 <mat-panel-title
-                  ><h3 class="content-name">
+                  ><h6 class="content-name">
                     {{ getContentName(s) }}
-                  </h3></mat-panel-title
+                  </h6></mat-panel-title
                 >
                 <div class="d-flex align-items-center">
                   <button mat-stroked-button (click)="readTNHTContent(s)">
