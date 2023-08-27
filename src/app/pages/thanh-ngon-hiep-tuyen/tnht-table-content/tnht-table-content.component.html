@@ -1,10 +1,10 @@
 <div class="tnht-table-content">
-  <h1 class="text-center tnht-title">Thánh-Ngôn Hiệp-Tuyển</h1>
+  <h1 class="text-center tnht-title text-4xl">Thánh-Ngôn Hiệp-Tuyển</h1>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="table-content-wrapper">
     <div class="container-fluid">
       <div class="reading-section" *ngIf="reading?.name">
-        <h2>Bạn đang đọc: <span style="font-weight: 400;">{{ reading?.name }}</span></h2>
+        <h2 class="text-3xl">Bạn đang đọc: <span style="font-weight: 400;">{{ reading?.name }}</span></h2>
         <p *ngIf="reading?.stopAt">
           <strong>Đoạn: </strong>{{ reading?.stopAt }}
         </p>
@@ -36,7 +36,7 @@
       >
         <mat-expansion-panel-header>
           <mat-panel-title
-            ><h2 class="content-name">
+            ><h2 class="content-name text-3xl">
               {{ getContentName(q) }}
             </h2></mat-panel-title
           >
