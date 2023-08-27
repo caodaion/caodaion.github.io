@@ -174,4 +174,29 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
     console.log(this.data.audio);
 
   }
+
+  splitParagraph() {
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+      return result;
+    }
+    const sel = document.getSelection();
+    if (this.data.type == 'contentBlock' && sel) {
+      // @ts-ignore
+      console.log(sel?.focusNode);
+      // @ts-ignore
+      const focusContentId = sel?.focusNode?.parentNode.id
+      console.log(find(this.data.content, focusContentId));
+      const range = sel?.getRangeAt(0);
+      let nodeValue = 'SPAN'
+      sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.innerHTML = `${sel?.toString()}`;
+      updatedNode.classList.add('split')
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+    }
+  }
 }

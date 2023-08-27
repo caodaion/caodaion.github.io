@@ -133,4 +133,8 @@
       <input matInput [(ngModel)]="data.audio.end" />
     </mat-form-field>
   </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button mat-icon-button (click)="splitParagraph()">
+    <mat-icon>splitscreen_left</mat-icon>
+  </button>
 </div>

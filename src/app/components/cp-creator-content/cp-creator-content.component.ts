@@ -152,10 +152,12 @@ export class CpCreatorContentComponent implements OnChanges {
             if (item.childNodes && item.childNodes.length > 0) {
               [...item.childNodes]?.filter((node: any) => node?.nodeName !== '#comment')?.forEach((node: any) => {
                 if (node.nodeName == `#text`) {
-                  find(this.data.content, item.id).content.push({
-                    type: 'text',
-                    text: node.data
-                  })
+                  if (node.data?.length > 0) {
+                    find(this.data.content, item.id).content.push({
+                      type: 'text',
+                      text: node.data
+                    })
+                  }
                 }
                 if (node.nodeName == `B` || node.nodeName == `STRONG`) {
                   find(this.data.content, item.id).content.push({
@@ -178,16 +180,29 @@ export class CpCreatorContentComponent implements OnChanges {
                     }
                   })
                 }
+                if (node.nodeName == `SPAN` && node.classList.contains('split')) {
+                  const textContent = node.textContent
+                  if (textContent.toString()?.length > 0) {
+                    find(this.data.content, item.id).content.push({
+                      type: 'text',
+                      text: textContent,
+                      attrs: {
+                        split: true
+                      },
+                      key: `${item.id}t${find(this.data.content, item.id).content?.length}`
+                    })
+                  }
+                }
               })
               item.innerHTML = find(this.data.content, item.id).content
-              .map((text: any) => text?.attrs?.knoll ? `<span style="color: #FF992B; position: relative; text-decoration: underline" class="knoll"><span class="stading-bell-icon" style="position: absolute; height: 15px; right: 100%; bottom: 100%; transform: translate(5px, 5px);"><svg width="15" height="15" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                .map((text: any) => text?.attrs?.knoll ? `<span style="color: #FF992B; position: relative; text-decoration: underline" class="knoll"><span class="stading-bell-icon" style="position: absolute; height: 15px; right: 100%; bottom: 100%; transform: translate(5px, 5px);"><svg width="15" height="15" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M7 10C7 8.89543 7.89543 8 9 8H55C56.1046 8 57 8.89543 57 10V23C57 36.8071 45.8071 48 32 48C18.1929 48 7 36.8071 7 23V10Z" fill="#FF992B"/>
               <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1182 8H18.8819L50.5937 39.7118C50.0001 40.3719 49.3719 41.0001 48.7119 41.5937L15.1182 8ZM13.377 8H14.1485L48.1947 42.0462C48.0556 42.1645 47.9153 42.2814 47.7737 42.3967L13.377 8ZM51.0462 39.1947L19.8516 8H32.3848L55.614 31.2292C54.5879 34.1741 53.0264 36.8681 51.0462 39.1947Z" fill="#B87333"/>
               <rect x="31" y="53" width="2" height="16" rx="1" transform="rotate(-90 31 53)" fill="#A82300"/>
               <rect x="30" y="55" width="6" height="6" rx="3" transform="rotate(-90 30 55)" fill="#A82300"/>
               <rect x="17" y="56" width="8" height="16" rx="1" transform="rotate(-90 17 56)" fill="#FFD700"/>
               <rect x="45" y="54" width="4" height="2" rx="1" transform="rotate(-90 45 54)" fill="#A82300"/>
-              </svg></span><span class="knoll-content">${text.text}</span></span>` : text?.attrs?.fontWeight === 'bold' ? `<b>${text.text}</b>` : text.text).join('')
+              </svg></span><span class="knoll-content">${text.text}</span></span>` : text?.attrs?.split ? `<span class="split" id="${text.key}">${text.text}</span>` : text?.attrs?.fontWeight === 'bold' ? `<b>${text.text}</b>` : `${text.text}`).join('')
               this.updated = false
             }
           }
