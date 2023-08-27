@@ -125,8 +125,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       if (focusedAudio && focusedAudio?.currentTime) {
         let timeStampContent = find(this.data.content, 0)
         this.audioPlayer.nativeElement.currentTime = timeStampContent?.audio?.start || focusedAudio?.currentTime
-        this.fromLocalStorage = false
       }
+      this.fromLocalStorage = false
       this.audioPlayer.nativeElement.addEventListener('loadstart', (event: any) => {
         this.audioReadyToPlay = false
       })
