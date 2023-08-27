@@ -120,6 +120,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.selectedDate.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
     this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
+    this.selectedDate.time = this.datePipe.transform(now, 'HH:mm')
+    this.getCalculatedLunarDate()
     this.route.queryParams.subscribe((param: any) => {
       if (param['y']) {
         this.selectedDate.year = parseInt(param['y']);
@@ -390,6 +392,10 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       }
     }
     this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && this.calculatedTuanCuu.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[this.calculatedTuanCuu.details.sex] : ''} ${this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || ''} ${this.calculatedTuanCuu.details.holyName ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})` : this.calculatedTuanCuu.details.name} ${this.calculatedTuanCuu.details.age ? this.calculatedTuanCuu.details.age + ' tuổi' : ''}`
+    this.getCalculatedLunarDate()
+  }
+
+  getCalculatedLunarDate() {
     const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}T${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)).convertSolar2Lunar
     this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || ''
     this.calculatedLunarDate = `${calculatedLunarDate.lunarTime ? 'Thời ' + calculatedLunarDate.lunarTime : ''} | ${calculatedLunarDate.lunarDay < 10 ? '0' + calculatedLunarDate.lunarDay : calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
