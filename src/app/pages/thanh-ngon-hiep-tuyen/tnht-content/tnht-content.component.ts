@@ -98,7 +98,7 @@ export class TnhtContentComponent implements OnInit {
           if (location.pathname.includes('thanh-ngon-hiep-tuyen')) {
             setTimeout(() => {
               // @ts-ignore
-              const targetedContent = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${location.hash.replace('#', '')}`)
+              const targetedContent = document.getElementById(`${location.hash.replace('#', '')}`)
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               if (targetedContent) {
                 targetedContent.style.color = '#4285f4';

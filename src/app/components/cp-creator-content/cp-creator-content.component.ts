@@ -24,40 +24,35 @@ export class CpCreatorContentComponent implements OnChanges {
   @HostListener('document:click', ['$event'])
   click(event: any) {
     if (this.eRef.nativeElement.contains(event.target)) {
-      if (this.authService.contentEditable) {
-        this.data.focused = true
-      } else {
-        if (this.data.attrs.pathname && this.data.attrs.hash) {
-          this.eRef.nativeElement.style.color = '#4285f4';
-          let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
-          if (!studyStorage) {
-            studyStorage = []
-          }
-          let foundItem = studyStorage.find((item: any) => item.key == this.rootContent.key)
-          if (foundItem) {
-            const parentNodeContent = this.rootContent?.content?.find((item: any) => this.data.key.includes(item?.key))
-            foundItem.stopAt = this.data.content[0].content[0]?.text
-            foundItem.content = this.data.key
-            foundItem.name = parentNodeContent ? parentNodeContent?.name : this.rootContent.name
-            foundItem.location = `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`
-            if (!this.data.audio) {
-              foundItem.currentTime = null
+      const sel = document.getSelection();
+      if (this.data.type == 'contentBlock' && sel) {
+        // @ts-ignore
+        const focusContentId = sel?.focusNode?.parentNode?.id
+        // @ts-ignore
+        const focusContentClass = [...sel?.focusNode?.parentNode?.classList]
+        if (this.authService.contentEditable) {
+          this.data.focused = true
+        } else {
+          this.data.focused = false
+          if (focusContentId && focusContentClass?.includes('split')) {
+            const splits = new Array(document.getElementsByClassName('split'))[0]
+            const focusedSplit = document.getElementById(focusContentId)
+            for (let i = 0; i <= splits.length; i++) {
+              splits[i]?.setAttribute('style', 'color: unset')
+            }
+            if (focusedSplit) {
+              focusedSplit.style.color = '#4285f4'
+              let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
+              if (!studyStorage) {
+                studyStorage = []
+              }
+              this.contentToContent.emit(focusContentId)
             }
           } else {
-            studyStorage.push({
-              content: this.data.key,
-              stopAt: this.data.content[0]?.text,
-              key: this.rootContent.key,
-              name: this.rootContent.name,
-              location: `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}`,
-            })
           }
-          localStorage.setItem('reading', JSON.stringify(studyStorage))
         }
-        this.contentToContent.emit(this.data)
       }
     } else {
-      this.eRef.nativeElement.style.color = 'unset';
       this.data.focused = false
       this.focusedBlock.emit(this.data)
     }

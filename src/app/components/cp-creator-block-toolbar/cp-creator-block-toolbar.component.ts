@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'cp-creator-block-toolbar',
@@ -10,6 +10,9 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
   isShowSetting: boolean = false;
   isShowAudioTimeStamp: boolean = false
   textAlign: any = 'justify'
+  audioStart: any;
+  audioEnd: any;
+  foundSplit: any;
 
   ngOnInit() {
     const find = (array: any, key: any) => {
@@ -158,21 +161,41 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
   }
 
   showAudioTimeStamp() {
-    if (!this.data.audio) {
-      this.data.audio = {
-        start: '',
-        end: ''
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+      return result;
+    }
+    const sel = document.getSelection();
+    if (this.data.type == 'contentBlock' && sel) {
+      // @ts-ignore
+      const focusContentId = sel?.focusNode?.parentNode?.id
+      // @ts-ignore
+      const focusContentClass = [...sel?.focusNode?.parentNode?.classList]
+      if (focusContentId && focusContentClass?.includes('split')) {
+        this.isShowAudioTimeStamp = true
+        this.foundSplit = null
+        this.foundSplit = find(this.data.content, focusContentId)
+        if (this.foundSplit) {
+          if (!this.foundSplit?.audio) {
+            this.foundSplit.audio = {
+              start: '',
+              end: ''
+            }
+          }
+          this.audioStart = this.foundSplit?.audio?.start || ''
+          this.audioEnd = this.foundSplit?.audio?.end || ''
+        }
+      } else {
+        this.isShowAudioTimeStamp = false
       }
     }
-    this.isShowAudioTimeStamp = !this.isShowAudioTimeStamp
   }
 
-  changetime(event: any, field: any) {
-    console.log(event);
-    console.log(field);
-
-    console.log(this.data.audio);
-
+  changetime(event?: any, field?: any) {
+    this.foundSplit.audio.start = this.audioStart
+    this.foundSplit.audio.end = this.audioEnd
+    console.log(this.data);
   }
 
   splitParagraph() {
@@ -183,11 +206,6 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
     }
     const sel = document.getSelection();
     if (this.data.type == 'contentBlock' && sel) {
-      // @ts-ignore
-      console.log(sel?.focusNode);
-      // @ts-ignore
-      const focusContentId = sel?.focusNode?.parentNode.id
-      console.log(find(this.data.content, focusContentId));
       const range = sel?.getRangeAt(0);
       let nodeValue = 'SPAN'
       sel?.focusNode

@@ -16,6 +16,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   isShowController: boolean = false;
   isAutoPlay: boolean = false;
   audioReadyToPlay: boolean = false;
+  fromLocalStorage: boolean = true;
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
@@ -78,8 +79,15 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   contentToContent(event: any) {
-    if (this.audioPlayer && event?.audio?.start) {
-      this.audioPlayer.nativeElement.currentTime = event.audio.start
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+      return result;
+    }
+
+    const foundFocusBlock = find(this.data.content, event)
+    if (this.audioPlayer && foundFocusBlock?.audio?.start) {
+      this.audioPlayer.nativeElement.currentTime = foundFocusBlock.audio.start
       const currentTime = this.audioPlayer.nativeElement.currentTime
       if (this.authService.contentEditable) {
         navigator.clipboard.writeText(currentTime)
@@ -108,12 +116,16 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         }
       })
       const storedAudio = JSON.parse(localStorage.getItem('reading') || '[]')
-      const focusedAudio = storedAudio.find((item: any) => item.content == this.data.key)
+      const focusedAudio = this.fromLocalStorage ? storedAudio.find((item: any) => item.content == this.data.key) : this.audioPlayer.nativeElement
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = focusedAudio?.currentTime >= o?.audio?.start && focusedAudio?.currentTime <= o?.audio?.end ? o : find(o.content || [], key));
+        return result;
+      }
       if (focusedAudio && focusedAudio?.currentTime) {
-        let timeStampContent = this.data.content.find((item: any) => {
-          return focusedAudio?.currentTime >= item?.audio?.start && focusedAudio?.currentTime <= item?.audio?.end
-        })
+        let timeStampContent = find(this.data.content, 0)
         this.audioPlayer.nativeElement.currentTime = timeStampContent?.audio?.start || focusedAudio?.currentTime
+        this.fromLocalStorage = false
       }
       this.audioPlayer.nativeElement.addEventListener('loadstart', (event: any) => {
         this.audioReadyToPlay = false
@@ -145,19 +157,32 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       if (!this.authService.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
           const currentTime = this.audioPlayer?.nativeElement.currentTime
-          let timeStampContent = this.data.content.find((item: any) => {
-            return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
-          })
+          let timeStampContent = find(this.data.content, 0)
           if (timeStampContent) {
             this.updateStudy(timeStampContent, currentTime)
             const targetAudioContent = document.getElementById(timeStampContent.key)
             if (targetAudioContent) {
               if (!targetAudioContent.style.color || targetAudioContent.style.color == 'unset') {
-                const creatorContentEditable = document.getElementsByTagName('cp-creator-content')
-                Array.from({ length: creatorContentEditable.length }, (x, i) => {
-                  creatorContentEditable[i].setAttribute('style', 'color: unset')
-                })
+                const splits = new Array(document.getElementsByClassName('split'))[0]
+                for (let i = 0; i <= splits.length; i++) {
+                  splits[i]?.setAttribute('style', 'color: unset')
+                }
                 targetAudioContent.style.color = '#4285f4'
+                let foundData = <any>{}
+                if (targetAudioContent) {
+                  const parrent = targetAudioContent.parentNode
+                  //@ts-ignore
+                  if (parrent?.parentNode?.parentNode?.id) {
+                    const find = (array: any, key: any) => {
+                      let result: any;
+                      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+                      return result;
+                    }
+                    //@ts-ignore
+                    foundData = find(this.data.content, parrent?.parentNode?.parentNode?.id)
+                    timeStampContent.attrs.pathname = foundData.attrs?.pathname
+                  }
+                }
                 this.updateStudy(timeStampContent, currentTime)
               }
             }
@@ -165,18 +190,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         })
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
           const currentTime = this.audioPlayer?.nativeElement.currentTime
-          let timeStampContent = this.data.content.find((item: any) => {
-            return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
-          })
+          let timeStampContent = find(this.data.content, 0)
           if (timeStampContent) {
             this.updateStudy(timeStampContent, currentTime)
           }
         })
         this.audioPlayer.nativeElement.addEventListener('ended', (event: any) => {
           const currentTime = this.audioPlayer?.nativeElement.currentTime
-          let timeStampContent = this.data.content.find((item: any) => {
-            return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
-          })
+          let timeStampContent = find(this.data.content, 0)
           if (timeStampContent) {
             this.updateStudy(timeStampContent, currentTime)
           }
@@ -186,9 +207,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
           const currentTime = this.audioPlayer?.nativeElement.currentTime
           navigator.clipboard.writeText(currentTime)
-          let timeStampContent = this.data.content.find((item: any) => {
-            return currentTime >= item?.audio?.start && currentTime <= item?.audio?.end
-          })
+          let timeStampContent = find(this.data.content, 0)
           if (timeStampContent) {
             this.updateStudy(timeStampContent, currentTime)
           }
@@ -208,16 +227,16 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       foundItem.name = this.data.name
       foundItem.content = this.data.key
       foundItem.currentTime = currentTime
-      foundItem.location = `${location.origin}${timeStampContent?.attrs?.pathname}${timeStampContent?.attrs?.hash}`
-      foundItem.stopAt = timeStampContent?.content[0].content[0].text
+      foundItem.location = `${location.origin}${timeStampContent.attrs?.pathname}#${timeStampContent?.key}`
+      foundItem.stopAt = timeStampContent?.text || timeStampContent?.content[0].content[0].text
     } else {
       studyStorage.push({
         name: this.data.name,
         content: this.data.key,
         key: this.rootContent.key,
         currentTime: currentTime,
-        location: `${location.origin}${timeStampContent?.attrs?.pathname}${timeStampContent?.attrs?.hash}`,
-        stopAt: timeStampContent?.content[0].content[0].text,
+        location: `${location.origin}${timeStampContent.attrs?.pathname}#${timeStampContent?.key}`,
+        stopAt: timeStampContent?.text || timeStampContent?.content[0].content[0].text,
       })
     }
     localStorage.setItem('reading', JSON.stringify(studyStorage))

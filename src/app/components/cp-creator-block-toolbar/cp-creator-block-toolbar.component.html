@@ -126,11 +126,11 @@
   <div class="d-flex" *ngIf="isShowAudioTimeStamp">
     <mat-form-field appearance="fill" class="setting-form-field">
       <mat-label>Bắt đầu</mat-label>
-      <input matInput [(ngModel)]="data.audio.start" />
+      <input matInput [(ngModel)]="audioStart" (ngModelChange)="changetime()" />
     </mat-form-field>
     <mat-form-field appearance="fill" class="setting-form-field">
       <mat-label>Kết thúc</mat-label>
-      <input matInput [(ngModel)]="data.audio.end" />
+      <input matInput [(ngModel)]="audioEnd" (ngModelChange)="changetime()" />
     </mat-form-field>
   </div>
   <mat-divider [vertical]="true"></mat-divider>
