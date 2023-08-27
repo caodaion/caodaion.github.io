@@ -227,7 +227,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       foundItem.name = this.data.name
       foundItem.content = this.data.key
       foundItem.currentTime = currentTime
-      foundItem.location = `${location.origin}${timeStampContent.attrs?.pathname}#${timeStampContent?.key}`
+      foundItem.location = `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}#${timeStampContent?.key}`
       foundItem.stopAt = timeStampContent?.text || timeStampContent?.content[0].content[0].text
     } else {
       studyStorage.push({
@@ -235,7 +235,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         content: this.data.key,
         key: this.rootContent.key,
         currentTime: currentTime,
-        location: `${location.origin}${timeStampContent.attrs?.pathname}#${timeStampContent?.key}`,
+        location: `${location.origin}${this.data?.attrs?.pathname}${this.data?.attrs?.hash}#${timeStampContent?.key}`,
         stopAt: timeStampContent?.text || timeStampContent?.content[0].content[0].text,
       })
     }
