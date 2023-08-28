@@ -1,30 +1,55 @@
-<div class="container-fluid">
-  <mat-grid-list [cols]="3" *ngIf="!article">
-    <mat-grid-tile *ngFor="let item of quizListOfDoc" class="quiz" [routerLink]="item?.key">
-      <mat-card>
-        <mat-card-title>{{ item?.name }}</mat-card-title>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-  <div *ngIf="article">
-    <h2>Quiz: {{name}}</h2>
-    <div *ngFor="let item of quizListOfDoc" class="quiz-question" [ngClass]="{
-      correct: item['correct'] === true,
-      wrong: item['correct'] === false
-    }">
-      <mat-expansion-panel [expanded]="true" [disabled]="true">
-        <mat-expansion-panel-header>{{item?.question}}</mat-expansion-panel-header>
-        <div>
-          <mat-selection-list [multiple]="false" [(ngModel)]="item.selected">
-            <mat-list-option *ngFor="let item of item?.options" [value]="item" class="quiz-option">
-              {{item}}
-            </mat-list-option>
-          </mat-selection-list>
-        </div>
-      </mat-expansion-panel>
-    </div>
-    <div class="d-flex justify-content-end quiz-footer">
-      <button mat-flat-button [color]="'primary'" (click)="checkResult()">Kiểm tra kết quả</button>
-    </div>
+<ng-container *ngIf="isLoading">
+  <div class="h-full flex justify-center items-center">
+    <mat-icon class="text-[300px] !h-[300px] !w-[300px] animate-bounce"
+      >quiz</mat-icon
+    >
   </div>
+</ng-container>
+<div class="container-fluid">
+  <ng-container *ngIf="!isLoading">
+    <mat-grid-list [cols]="3" *ngIf="!article">
+      <mat-grid-tile
+        *ngFor="let item of quizListOfDoc"
+        class="quiz"
+        [routerLink]="item?.key"
+      >
+        <mat-card>
+          <mat-card-title>{{ item?.name }}</mat-card-title>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <div *ngIf="article">
+      <h2>Quiz: {{ name }}</h2>
+      <div
+        *ngFor="let item of quizListOfDoc"
+        class="quiz-question"
+        [ngClass]="{
+          correct: item['correct'] === true,
+          wrong: item['correct'] === false
+        }"
+      >
+        <mat-expansion-panel [expanded]="true" [disabled]="true">
+          <mat-expansion-panel-header>{{
+            item?.question
+          }}</mat-expansion-panel-header>
+          <div>
+            <mat-selection-list [multiple]="false" [(ngModel)]="item.selected">
+              <mat-list-option
+                *ngFor="let item of item?.options"
+                [value]="item"
+                class="quiz-option"
+              >
+                {{ item }}
+              </mat-list-option>
+            </mat-selection-list>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div class="d-flex justify-content-end quiz-footer">
+        <button mat-flat-button [color]="'primary'" (click)="checkResult()">
+          Kiểm tra kết quả
+        </button>
+      </div>
+    </div>
+  </ng-container>
 </div>

@@ -13,6 +13,7 @@ export class QuizDetailsComponent implements OnInit {
   name: any;
   article: any;
   quizListOfDoc: any;
+  isLoading: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -29,17 +30,24 @@ export class QuizDetailsComponent implements OnInit {
   }
 
   getQuizListOfDoc() {
+    this.isLoading = true
     if (this.doc) {
       const foundQuiz = this.quizService.quizList.find((item: any) => item.key === this.doc)
       if (foundQuiz) {
-        this.quizService.getQuizListOfDoc(foundQuiz.googleDocId, this.article)
+        try {
+          this.quizService.getQuizListOfDoc(foundQuiz.googleDocId, this.article)
           .subscribe((res: any) => {
             if (res.code === 200) {
               this.name = res.name
               this.quizListOfDoc = res.data
               console.log(this.quizListOfDoc);
+              this.isLoading = false
             }
           })
+        } catch(e) {
+          console.log(e);
+          this.isLoading = false
+        }
       }
     }
   }

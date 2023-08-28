@@ -1,3 +1,8 @@
+<ng-container *ngIf="!quizService.isActiveQuizList">
+  <div class="h-full flex justify-center items-center">
+    <mat-icon class="text-[300px] !h-[300px] !w-[300px] animate-bounce">quiz</mat-icon>
+  </div>
+</ng-container>
 <ng-container *ngIf="quizService.isActiveQuizList">
   <router-outlet></router-outlet>
 </ng-container>
