@@ -46,6 +46,7 @@ export class TuanCuuComponent implements OnInit {
         item.eventName = `Soạn sớ ${foundTitle?.eventTitle?.toLocaleLowerCase()} tuần cửu cho ${foundTitle?.howToAddress ? (item.details.sex === 'male' ? foundTitle?.howToAddress.male : item.details.sex === 'female' ? foundTitle?.howToAddress.female : '') : ''} ${foundTitle?.name} ${item.details?.holyName || item.details?.name} ${item.details?.age ? item.details?.age + ' tuổi.' : '.'}`
       }
       item?.event?.forEach((ev: any) => {
+        ev.lunar.lunarTime = item.defaultTime || ev.lunar.lunarTime
         const tokenData = <any>{
           soTemplate: foundTitle?.eventTitle,
           eventName: ev.eventName,

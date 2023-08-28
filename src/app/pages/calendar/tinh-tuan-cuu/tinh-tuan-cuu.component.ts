@@ -87,6 +87,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   subTitles: any;
   downloading: boolean = false
   isShowDownLoadImage: boolean = false
+  isShowButtonSetDefault: boolean = false
 
   constructor(
     private calendarService: CalendarService,
@@ -406,7 +407,15 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       element, item
     }
     this.timeZone = TIME_TYPE.data
-    this.shareItem.time = 'DẬU | 17:00-19:00'
+    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    const foundCurrentEvent = localStorageEvents.find((lc: any) => lc.key === this.shareItem.item.key)
+    if (foundCurrentEvent.defaultTime) {
+      this.shareItem.time = foundCurrentEvent.defaultTime
+      this.isShowButtonSetDefault = false
+    } else {
+      this.shareItem.time = 'DẬU | 17:00-19:00'
+      this.isShowButtonSetDefault = true
+    }
     this.shareItem.id = this.commonService
       .generatedSlug(`${this.shareItem?.element?.eventName} ${this.datePipe
         .transform(this.shareItem?.element?.solar, 'YYYYMMdd')}` || 'caodaion-qr')
@@ -454,5 +463,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
         )
         .subscribe();
     }, 0)
+  }
+
+  setDefaultTimeForEvent() {
+    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    const foundCurrentEvent = localStorageEvents.find((item: any) => item.key === this.shareItem.item.key)
+    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)].defaultTime = this.shareItem.time
+    localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
+    this.isShowButtonSetDefault = false
   }
 }

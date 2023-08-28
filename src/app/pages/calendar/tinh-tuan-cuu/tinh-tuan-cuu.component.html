@@ -263,7 +263,13 @@
           </mat-menu>
         </div>
         <p>
-          Từ trần ngày
+          Từ trần
+          {{
+            item?.date?.lunarTime
+              ? "thời " + item?.date?.lunarTime + " (" + item?.date?.time + ")"
+              : ""
+          }}
+          ngày
           {{
             item?.date?.lunarDay < 10
               ? "0" + item?.date?.lunarDay
@@ -427,14 +433,25 @@
 <ng-template #shareBottomSheet>
   <h3>Tải ảnh chia sẻ</h3>
   <div class="container-fluid">
-    <mat-form-field class="w-full">
-      <mat-label>Thời gian cúng</mat-label>
-      <mat-select [(ngModel)]="shareItem.time">
-        <mat-option *ngFor="let item of timeZone" [value]="item.name">{{
-          item.name
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="flex">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Thời gian cúng</mat-label>
+        <mat-select [(ngModel)]="shareItem.time" (ngModelChange)="isShowButtonSetDefault = true">
+          <mat-option *ngFor="let item of timeZone" [value]="item.name">{{
+            item.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+      *ngIf="isShowButtonSetDefault"
+        mat-flat-button
+        [color]="'primary'"
+        class="!h-auto"
+        (click)="setDefaultTimeForEvent()"
+      >
+        Đặt làm giờ mặc định
+      </button>
+    </div>
     <div #shareImage class="p-8 max-w-[720px]" [id]="shareItem.id">
       <h1 class="text-2xl font-bold text-center mb-8">
         {{ shareItem?.element?.eventName?.toUpperCase() }} CHO
