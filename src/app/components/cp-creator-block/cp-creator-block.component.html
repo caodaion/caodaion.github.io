@@ -45,6 +45,7 @@
     <cp-creator-content
       *ngIf="block.type == 'contentBlock'"
       [data]="block"
+      [contentEditable]="contentEditable"
       [rootContent]="rootContent"
       [id]="getId(block)"
       (contentToContent)="contentToContent($event)"

@@ -18,7 +18,9 @@
   (touchstart)="swipe($event, 'start')"
   (touchend)="swipe($event, 'end')">
     <div *ngIf="content" class="h-100">
-      <cp-content-creator [data]="content" (save)="onSaveContent()"></cp-content-creator>
+      <cp-content-creator
+      [contentEditable]="contentEditable"
+      [data]="content" (save)="onSaveContent()"></cp-content-creator>
     </div>
   </div>
   <app-bottom-navigator *ngIf="!authService.contentEditable || content?.type == 'block'"

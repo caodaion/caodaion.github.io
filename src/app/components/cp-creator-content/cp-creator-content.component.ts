@@ -14,6 +14,7 @@ import { AuthService } from "../../shared/services/auth/auth.service";
 export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
   @Input() rootContent: any;
+  @Input() contentEditable: boolean = false;
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -30,7 +31,7 @@ export class CpCreatorContentComponent implements OnChanges {
         const focusContentId = sel?.focusNode?.parentNode?.id
         // @ts-ignore
         const focusContentClass = [...sel?.focusNode?.parentNode?.classList]
-        if (this.authService.contentEditable) {
+        if (this.contentEditable) {
           this.data.focused = true
         } else {
           this.data.focused = false

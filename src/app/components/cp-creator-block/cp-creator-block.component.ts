@@ -35,6 +35,8 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.audioTracking()
+    console.log(this.contentEditable);
+
   }
 
   constructor(

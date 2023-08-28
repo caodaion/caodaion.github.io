@@ -1,1 +1,22 @@
-<p>soan-so works!</p>
+<div class="wrapper-container soan-so-content-container">
+  <app-header
+    class="header"
+    [prevPage]="{
+      navigate: { link: '/tac-vu/phong-le' }
+    }"
+  >
+    <div class="soan-so-header">
+      <app-header-title>{{ editData?.name }}</app-header-title>
+    </div>
+  </app-header>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  <div class="soan-so-container-wrapper">
+    <div *ngIf="editData" class="h-100">
+      <cp-content-creator
+        [data]="content"
+        (save)="onSaveContent()"
+        [contentEditable]="true"
+      ></cp-content-creator>
+    </div>
+  </div>
+</div>

@@ -5,16 +5,18 @@
       <audio #audioPlayer class="w-100" *ngIf="data?.type === 'block' && data?.audio?.src" [src]="data?.audio?.src"></audio>
     </div>
     <div class="cp-creator-block-group" [ngClass]="{'contentEditable': isShowController}">
-      <ng-container *ngFor="let block of data.content">
+      <ng-container *ngFor="let block of data?.content">
         <cp-creator-block
           *ngIf="block?.type == 'block'" [data]="block"
           [rootContent]="rootContent"
+          [contentEditable]="contentEditable"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
         ></cp-creator-block>
         <cp-creator-content
           *ngIf="block?.type == 'contentBlock'" [data]="block"
           [rootContent]="rootContent"
+          [contentEditable]="contentEditable"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
           (contentToContent)="contentToContent($event)"

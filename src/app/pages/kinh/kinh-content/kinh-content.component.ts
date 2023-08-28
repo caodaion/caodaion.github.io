@@ -15,6 +15,7 @@ export class KinhContentComponent implements OnInit {
   rootContent: any;
   content: any;
   isLoading: boolean = false;
+  contentEditable: boolean = false;
   nowContent: any;
   navigate = {
     prev: {
@@ -65,6 +66,7 @@ export class KinhContentComponent implements OnInit {
         }
       );
     })
+    this.contentEditable = this.authService.contentEditable
   }
 
   getKinhContent(key?: any) {

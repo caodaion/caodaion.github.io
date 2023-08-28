@@ -46,20 +46,37 @@
             mat-icon-button
             (click)="addNewBlock()"
             [disabled]="!focusedBlock || focusedBlock?.type == 'contentBlock'"
+            [matTooltip]="'Thêm khối'"
           >
             <mat-icon>add</mat-icon>
           </button>
-          <button mat-icon-button (click)="addNewContentBlock()">
+          <button
+            mat-icon-button
+            (click)="addNewContentBlock()"
+            [matTooltip]="'Thêm nội dung'"
+          >
             <mat-icon>text_fields</mat-icon>
           </button>
-          <button mat-icon-button (click)="openAudioDialog(audioDialog)">
+          <button
+            mat-icon-button
+            (click)="openAudioDialog(audioDialog)"
+            [matTooltip]="'Thêm âm thanh'"
+          >
             <mat-icon>music_note</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="openAddNewInputField(newFieldDialog)"
+            [matTooltip]="'Thêm trường'"
+          >
+            <mat-icon>input</mat-icon>
           </button>
         </div>
       </mat-tab>
     </mat-tab-group>
   </div>
 </div>
+
 <ng-template #audioDialog>
   <div mat-dialog-title>Chỉnh sửa âm thanh</div>
   <mat-dialog-content>
@@ -77,6 +94,40 @@
       [mat-dialog-close]="true"
     >
       Lưu
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #newFieldDialog>
+  <div mat-dialog-title>Thêm trường mới</div>
+  <mat-dialog-content>
+    <div class="w-full !my-4">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Mã định danh trường</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="addedFormField.key"
+          [required]="true"
+        />
+      </mat-form-field>
+    </div>
+    <div class="my-4 p-2 border rounded">
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Trường nhập dữ liệu</div>
+        <mat-divider></mat-divider>
+        <div class="mt-2">Nhập bằng cách gõ bàn phím vào trường được thêm vào</div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      [disabled]="!addedFormField.key || !addedFormField.field"
+      (click)="addNewInputField()"
+    >
+      Thêm
     </button>
   </mat-dialog-actions>
 </ng-template>

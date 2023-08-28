@@ -10,6 +10,9 @@ import {FormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -27,7 +30,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     MatRadioModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatDividerModule
   ],
   exports: [
     CpContentCreatorToolbarComponent

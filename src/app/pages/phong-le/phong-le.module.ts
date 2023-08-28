@@ -13,6 +13,9 @@ import { MatRippleModule } from '@angular/material/core';
 import { SoanSoComponent } from './soan-so/soan-so.component';
 import { TuanCuuComponent } from './phong-le-main/components/tap-so-van/tuan-cuu/tuan-cuu.component';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { HeaderModule } from "../../components/header/header.module";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CpContentCreatorModule } from 'src/app/components/cp-content-creator/cp-content-creator.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
     MatCardModule,
     MatRippleModule,
     NgxMatTimepickerModule,
+    HeaderModule,
+    MatProgressBarModule,
+    CpContentCreatorModule
   ]
 })
 export class PhongLeModule { }

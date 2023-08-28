@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
   selector: 'cp-content-creator-toolbar',
   templateUrl: './cp-content-creator-toolbar.component.html',
@@ -23,7 +24,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   }
 
   @ViewChild('audioDialog') audioDialog!: ElementRef;
-
+  readonly sel: any;
   constructor(public dialog: MatDialog) {
 
   }
@@ -66,15 +67,15 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         return result;
       }
       this.data.content.push({
-          // @ts-ignore
-          key: `${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length || 0}`,
-          attrs: {
-            pathname: location.pathname,
-            hash: `#${this.data.content.length}`
-          },
-          type: 'contentBlock',
-          focused: true
-        })
+        // @ts-ignore
+        key: `${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length || 0}`,
+        attrs: {
+          pathname: location.pathname,
+          hash: `#${this.data.content.length}`
+        },
+        type: 'contentBlock',
+        focused: true
+      })
       setTimeout(() => {
         // @ts-ignore
         const newEl = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length - 1 || 0}p0`)
@@ -140,9 +141,40 @@ export class CpContentCreatorToolbarComponent implements OnInit {
 
   openAudioDialog(audioDialog?: any) {
     if (!this.data.audio) {
-      this.data.audio = {src: ''}
+      this.data.audio = { src: '' }
     }
     const dialogRef = this.dialog.open(audioDialog)
+  }
+
+  openAddNewInputField(newFieldDialog: any) {
+    const dialogRef = this.dialog.open(newFieldDialog)
+    const sel = document.getSelection();
+    const ref: Mutable<this> = this;
+    ref.sel = sel
+    console.log(this.sel);
+  }
+
+  addedFormField = <any>{}
+
+  addNewInputField() {
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+      return result;
+    }
+    if (this.sel) {
+      console.log(this.sel);
+      const range = this.sel?.getRangeAt(0);
+      let nodeValue = 'INPUT'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.innerHTML = `${this.sel?.toString()}`;
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('input')
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+    }
   }
 }
 
