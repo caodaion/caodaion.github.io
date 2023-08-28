@@ -1,5 +1,5 @@
 <div class="container-fluid" *ngIf="currentUser?.userName">
-  <h1 class="text-4xl my-4">{{ currentUser?.name }}</h1>
+  <h1>{{ currentUser?.name }}</h1>
   <p>@{{ currentUser?.userName }}</p>
   <div>
     <div class="block lg:flex">
@@ -163,7 +163,7 @@
   </div>
 </div>
 <div class="container-fluid text-center" *ngIf="!currentUser?.userName">
-  <h1 class="text-4xl my-4">Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
+  <h1>Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
   <button mat-flat-button [routerLink]="'/auth/dang-nhap'" [color]="'primary'">
     Đăng nhập
   </button>
