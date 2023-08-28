@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import { AuthService } from "../../shared/services/auth/auth.service";
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
   @Input() rootContent: any;
+  @Input() contentEditable: boolean = false;
   @Output() save = new EventEmitter();
   @Output() nextContent = new EventEmitter();
   isShowController: boolean = false;
@@ -22,18 +22,17 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private authService: AuthService,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef
   ) {
-    this.breakpointObserver
-      .observe(['(max-width: 600px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isShowController = !state.matches && this.authService.contentEditable;
-      });
   }
 
   ngAfterViewInit(): void {
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isShowController = !state.matches && this.contentEditable;
+      });
     this.audioTracking()
   }
 
@@ -89,7 +88,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     if (this.audioPlayer && foundFocusBlock?.audio?.start) {
       this.audioPlayer.nativeElement.currentTime = foundFocusBlock.audio.start
       const currentTime = this.audioPlayer.nativeElement.currentTime
-      if (this.authService.contentEditable) {
+      if (this.contentEditable) {
         navigator.clipboard.writeText(currentTime)
       }
     } else {
@@ -154,7 +153,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           }
         })
       })
-      if (!this.authService.contentEditable) {
+      if (!this.contentEditable) {
         this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
           const currentTime = this.audioPlayer?.nativeElement.currentTime
           let timeStampContent = find(this.data.content, 0)

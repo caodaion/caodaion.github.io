@@ -2,7 +2,7 @@
   <div class="d-flex align-items-center justify-content-between">
     <h2
       class="w-100"
-      [contentEditable]="authService.contentEditable"
+      [contentEditable]="contentEditable"
       (blur)="changeValue($event)"
     >
       {{ data.name }}
@@ -37,8 +37,8 @@
 </div>
 <ng-container
   *ngIf="
-    (!authService.contentEditable && data.published) ||
-    (authService.contentEditable && (data.published || !data.published))
+    (!contentEditable && data.published) ||
+    (contentEditable && (data.published || !data.published))
   "
 >
   <ng-container *ngFor="let block of data.content">
@@ -53,7 +53,7 @@
   </ng-container>
 </ng-container>
 <ng-container
-  *ngIf="!authService.contentEditable && !data.published"
+  *ngIf="!contentEditable && !data.published"
 ><h3>Chưa hoàn thành</h3></ng-container>
 <cp-creator-block-toolbar
   *ngIf="data.focused"

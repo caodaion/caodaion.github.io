@@ -23,6 +23,7 @@ export class TnhtContentComponent implements OnInit {
       link: undefined,
     }
   };
+  contentEditable: boolean = false
 
   constructor(
     private tnhtService: TnhtService,
@@ -47,6 +48,7 @@ export class TnhtContentComponent implements OnInit {
       ['.'],
       { relativeTo: this.route, fragment: location.hash.replace('#', '') }
     );
+    this.contentEditable = this.authService.contentEditable
   }
 
   getContent(key?: any, level?: any) {
