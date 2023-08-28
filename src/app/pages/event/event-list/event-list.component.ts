@@ -8,6 +8,7 @@ import { CONSTANT } from "../../../shared/constants/constants.constant";
 import { Title } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { NotificationsService } from 'src/app/shared/services/notifications/notifications.service';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 
 @Component({
   selector: 'app-event-list',
@@ -96,9 +97,12 @@ export class EventListComponent implements OnInit {
           new Date(e?.solar).getFullYear() == currentDate.getFullYear()
       })
       if (foundEvent) {
-        foundEvent.eventName = `Cầu siêu ${foundEvent.eventName} cho ${tuanCuu?.details?.name}`
-        foundEvent.backgroundColor = `#fbbc05`
-        this.todayEvents.event.push(foundEvent)
+        const title = CAODAI_TITLE.data.find((ct: any) => ct.key === tuanCuu.details.title)
+        const data = <any>{
+          eventName: `${title?.eventTitle} ${foundEvent.eventName} cho ${title?.howToAddress ? (tuanCuu.details.sex === 'male' ? title?.howToAddress.male : tuanCuu.details.sex === 'female' ? title?.howToAddress.female : '') : ''} ${title?.name} ${tuanCuu.details?.holyName || tuanCuu.details?.name} ${tuanCuu.details?.age ? tuanCuu.details?.age + ' tuổi.' : '.'}`
+        }
+        data.backgroundColor = `#fbbc05`
+        this.todayEvents.event.push(data)
       }
     })
   }
