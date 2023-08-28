@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from "crypto-js";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-tuan-cuu',
@@ -19,7 +20,8 @@ export class TuanCuuComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private datePipe: DatePipe
   ) {
 
   }
@@ -59,8 +61,10 @@ export class TuanCuuComponent implements OnInit {
             ev.link = `soan-so/${tk}`
           })
         ev.upComming = false
-        if (new Date(ev?.solar) == currentDate) {
+        if (this.datePipe.transform(new Date(ev?.solar), 'dd/MM/yyyy') == this.datePipe.transform(currentDate, 'dd/MM/yyyy')) {
           this.expanedIndex = index
+          ev.upComming = true
+          return;
         }
         if (new Date(ev?.solar) > currentDate) {
           const difference = moment(new Date(), "DD/MM/YYYY HH:mm:ss").diff(moment(new Date(ev?.solar), "DD/MM/YYYY HH:mm:ss"))
