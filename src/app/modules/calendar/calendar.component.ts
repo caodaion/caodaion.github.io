@@ -45,7 +45,6 @@ export class CalendarComponent implements OnInit {
     if (location.pathname.split('/').length > 2) {
       this.calendarService.calendarViewMode = ''
     }
-
   }
 
   onToggleDrawer() {
