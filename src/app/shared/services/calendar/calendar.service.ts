@@ -10,7 +10,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 export class CalendarService {
   commonTimes: any[] = [];
   commonLocationTypes: any[] = [];
-  calendarViewMode: any = 'month';
+  calendarViewMode: any = 'day';
 
   constructor(private http: HttpClient, private commonService: CommonService, private datePipe: DatePipe) { }
 
@@ -39,7 +39,7 @@ export class CalendarService {
         { key: 'nham', name: 'Nhâm' },
         { key: 'quy', name: 'Quý' },
         { key: 'giap', name: 'Giáp' },
-        { key: 'at', name: 'Ấy' },
+        { key: 'at', name: 'Ất' },
         { key: 'binh', name: 'Bính' },
         { key: 'dinh', name: 'Đinh' },
         { key: 'mau', name: 'Mậu' },
@@ -50,7 +50,7 @@ export class CalendarService {
         { key: 'dau', name: 'Dậu' },
         { key: 'tuat', name: 'Tuất' },
         { key: 'hoi', name: 'Hợi' },
-        { key: 'ti', name: 'Tí' },
+        { key: 'ti', name: 'Tý' },
         { key: 'suu', name: 'Sửu' },
         { key: 'dan', name: 'Dần' },
         { key: 'mao', name: 'Mão' },
@@ -299,12 +299,48 @@ export class CalendarService {
       if (lunarMonth >= 11 && diff < 4) {
         lunarYear -= 1;
       }
+      const canChiMonth = ['Giáp Tý', 'Ất Sửu', 'Bính Dần', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi']
+      const lunarMonthName = canChiMonth[(((lunarYear % 10) * 2 + lunarMonth) % 10)]
       const lunarTime = this.commonService.getTimeLunarTime(calDate)
+      const cans = [
+        'Tân',
+        'Nhâm',
+        'Quý',
+        'Giáp',
+        'Ất',
+        'Bính',
+        'Đinh',
+        'Mậu',
+        'Kỷ',
+        'Canh']
+      const chis = [
+        'Tý',
+        'Sửu',
+        'Dần',
+        'Mão',
+        'Thìn',
+        'Tỵ',
+        'Ngọ',
+        'Mùi',
+        'Thân',
+        'Dậu',
+        'Tuất',
+        'Hợi']
+      const a = (14 - mm) % 12
+      const y = yy + 4800 - a
+      const m = mm + 12 * a - 3
+      const JDN = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045
+      const canDay = Math.floor(JDN % 10)
+      const chiDay = Math.floor((JDN + 1) % 12)
+      const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
+
       return {
         lunarDay,
         lunarMonth,
         lunarYear,
         lunarYearName: getLunarYear(lunarYear).name,
+        lunarMonthName: lunarMonthName,
+        lunarDayName: lunarDayName,
         lunarTime: lunarTime?.kanji || lunarTime?.tuThoiUpcoming?.name.split('|')[0],
         lunarLeap,
       };
@@ -352,6 +388,7 @@ export class CalendarService {
         lunarMonth: 0,
         lunarYear: 0,
         lunarYearName: '',
+        lunarMonthName: '',
         lunarTime: 0,
         lunarLeap: 0,
       },
