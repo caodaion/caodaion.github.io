@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
@@ -11,6 +12,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;
   @Input() focusedBlock: any;
   @Output() save = new EventEmitter();
+
+
+  addedFormField = <any>{}
 
   @HostListener('document:keydown.control.enter')
   onKeyControlEnterDown() {
@@ -25,7 +29,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
 
   @ViewChild('audioDialog') audioDialog!: ElementRef;
   readonly sel: any;
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private commonService: CommonService) {
 
   }
 
@@ -148,13 +152,39 @@ export class CpContentCreatorToolbarComponent implements OnInit {
 
   openAddNewInputField(newFieldDialog: any) {
     const dialogRef = this.dialog.open(newFieldDialog)
-    const sel = document.getSelection();
-    const ref: Mutable<this> = this;
-    ref.sel = sel
-    console.log(this.sel);
+    const sel: any = document.getSelection();
+    if (sel) {
+      const fix = {
+        anchorNode: sel.anchorNode,
+        anchorOffset: sel.anchorOffset,
+        baseNode: sel.baseNode,
+        baseOffset: sel.baseOffset,
+        extentNode: sel.extentNode,
+        extentOffset: sel.extentOffset,
+        focusNode: sel.focusNode,
+        focusOffset: sel.focusOffset,
+        isCollapsed: sel.isCollapsed,
+        rangeCount: sel.rangeCount,
+        type: sel.type,
+        getRangeAt: sel?.getRangeAt(0),
+      }
+
+      const ref: Mutable<this> = this;
+      ref.sel = fix
+      console.log(this.sel);
+    }
   }
 
-  addedFormField = <any>{}
+  disabledAddFormField() {
+    if (!this.addedFormField.type || !this.addedFormField.key) {
+      return true
+    }
+    return false
+  }
+
+  updateAddedFormFieldKey() {
+    this.addedFormField.key = this.commonService.generatedSlug(this.addedFormField.label)
+  }
 
   addNewInputField() {
     const find = (array: any, key: any) => {
@@ -162,18 +192,57 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
       return result;
     }
-    if (this.sel) {
-      console.log(this.sel);
-      const range = this.sel?.getRangeAt(0);
+    const addText = () => {
+      const range = this.sel?.getRangeAt;
       let nodeValue = 'INPUT'
       this.sel?.focusNode
       let updatedNode = document.createElement(nodeValue);
-      updatedNode.innerHTML = `${this.sel?.toString()}`;
+      updatedNode.setAttribute('placeholder', this.addedFormField.label)
       updatedNode.classList.add('form-control')
-      updatedNode.classList.add('input')
+      updatedNode.classList.add('text')
+      updatedNode.id = this.addedFormField.key
       range?.deleteContents();
       range?.insertNode(updatedNode);
       document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'text'
+      })
+    }
+    const addTextarea = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'TEXTAREA'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.setAttribute('placeholder', this.addedFormField.label)
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('textarea')
+      updatedNode.id = this.addedFormField.key
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'textarea'
+      })
+    }
+    if (this.sel) {
+      switch (this.addedFormField.type) {
+        case 'text':
+          addText()
+          break;
+        case 'textarea':
+          addTextarea()
+          break;
+        default:
+          break;
+      }
     }
   }
 }

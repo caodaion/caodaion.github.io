@@ -12,11 +12,18 @@
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="soan-so-container-wrapper">
     <div *ngIf="editData" class="h-100">
-      <cp-content-creator
-        [data]="content"
-        (save)="onSaveContent()"
-        [contentEditable]="true"
-      ></cp-content-creator>
+      <mat-tab-group>
+        <mat-tab [label]="'Chỉnh sửa'">
+          <cp-content-creator
+            [data]="content"
+            (save)="onSaveContent()"
+            [contentEditable]="true"
+          ></cp-content-creator>
+        </mat-tab>
+        <mat-tab [label]="'Xem trước'">
+          <cp-content-creator [data]="content"></cp-content-creator>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </div>

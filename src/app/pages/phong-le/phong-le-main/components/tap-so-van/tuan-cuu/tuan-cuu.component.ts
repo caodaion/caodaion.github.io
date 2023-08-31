@@ -80,7 +80,6 @@ export class TuanCuuComponent implements OnInit {
             ev.upComming = true
           }
         }
-
       })
     })
   }

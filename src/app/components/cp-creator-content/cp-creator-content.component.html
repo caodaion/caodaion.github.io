@@ -40,6 +40,34 @@
       }"
     >
       <ng-container *ngFor="let text of content.content">
+        <ng-container *ngIf="text.type == 'form-control'">
+          <ng-container *ngIf="contentEditable">
+            <ng-container *ngIf="text.formType == 'text'">
+              <input
+                type="text"
+                [placeholder]="text?.label"
+                [id]="text?.key"
+                class="form-control text"
+                [value]="text?.value"
+              />
+            </ng-container>
+            <ng-container *ngIf="text.formType == 'textarea'">
+              <textarea
+                [placeholder]="text?.label"
+                [id]="text?.key"
+                class="form-control textarea"
+                >{{ text?.value }}</textarea
+              >
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!contentEditable">
+            <span
+              [ngClass]="{ 'opacity-50': !text?.value }"
+              [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }"
+              >{{ text?.value || text?.label }}</span
+            >
+          </ng-container>
+        </ng-container>
         <ng-container *ngIf="text.type == 'text' && !text.attrs">{{
           text.text
         }}</ng-container>
@@ -144,7 +172,7 @@
 <button
   mat-icon-button
   class="targetButton"
-  *ngIf="data.attrs.pathname && data.attrs.hash"
+  *ngIf="data?.attrs?.pathname && data?.attrs?.hash"
   (click)="getLink(data)"
   matTooltip="Sao chép liên kết"
 >
