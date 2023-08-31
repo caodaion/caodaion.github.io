@@ -77,8 +77,10 @@ export class TuanCuuComponent implements OnInit {
             }
           } else {
             lessDiff = difference
+            ev.upComming = true
           }
         }
+
       })
     })
   }
