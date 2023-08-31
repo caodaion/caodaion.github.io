@@ -15,6 +15,8 @@ export class SoanSoComponent implements OnInit {
   isLoading: any;
   token: any;
   content = <any>{};
+  previewContent = <any>{};
+  contentEditable: boolean = true
 
   constructor(
     private route: ActivatedRoute,
@@ -54,38 +56,74 @@ export class SoanSoComponent implements OnInit {
       try {
         this.soanSoService.getSoTemplate(this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`))
           .subscribe((res: any) => {
-            if (res.data) {
+            if (res?.data) {
               this.content = res.data
-              console.log(this.content);
+              let content = JSON.stringify(this.content)
+              // @ts-ignore
+              content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
+              let data = JSON.parse(content);
+              data.content = data.content.map((item: any, index: any) => {
+                return {
+                  key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}`,
+                  type: item.type,
+                  content: item.content?.map((evn: any, i: any) => {
+                    return {
+                      attrs: evn.attrs,
+                      content: evn.content,
+                      key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}p${i}`,
+                      type: evn.type,
+                    }
+                  }),
+                }
+              })
+              // @ts-ignore
+              data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
+              this.previewContent = data
             } else {
               initNewContent()
-              console.log(this.content);
             }
           })
       } catch (e) {
         console.log(e);
         initNewContent()
-        console.log(this.content);
       }
     }
   }
 
   onSaveContent() {
+    console.log(this.content);
     let content = JSON.stringify(this.content)
     // @ts-ignore
     content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
     let data = JSON.parse(content);
-    data.content = data.content.map((item: any) => {
+    data.content = data.content.map((item: any, index: any) => {
       return {
-        key: item.key,
+        key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}`,
         type: item.type,
-        content: item.content,
+        content: item.content?.map((evn: any, i: any) => {
+          return {
+            attrs: evn.attrs,
+            content: evn.content,
+            key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}p${i}`,
+            type: evn.type,
+          }
+        }),
       }
     })
     // @ts-ignore
     data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
     console.log({ data: data });
     navigator.clipboard.writeText(JSON.stringify({ data: data }));
-    this.content = data
+    this.previewContent = data
+  }
+
+  onChangeSelectedIndex(event: any) {
+    if (event === 1) {
+      this.contentEditable = false
+    }
+    if (event === 0) {
+      this.contentEditable = true
+    }
+
   }
 }

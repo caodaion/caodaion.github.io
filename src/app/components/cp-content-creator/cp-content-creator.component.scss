@@ -38,5 +38,8 @@
         padding: 1rem;
       }
     }
+    .form-control {
+      @apply border-b
+    }
   }
 }

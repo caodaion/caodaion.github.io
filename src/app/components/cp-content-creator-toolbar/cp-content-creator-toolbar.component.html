@@ -125,7 +125,7 @@
     </div>
     <button
       [type]="'button'"
-      class="block my-4 p-2 border rounded"
+      class="w-full block my-4 p-2 border rounded"
       [disabled]="!addedFormField.key"
       (click)="addedFormField.type = 'text'"
       [ngClass]="{selectedType: addedFormField.type === 'text'}"
@@ -140,7 +140,7 @@
     </button>
     <button
       [type]="'button'"
-      class="block my-4 p-2 border rounded"
+      class="w-full block my-4 p-2 border rounded"
       [disabled]="!addedFormField.key"
       (click)="addedFormField.type = 'textarea'"
       [ngClass]="{selectedType: addedFormField.type === 'textarea'}"
@@ -150,6 +150,21 @@
         <mat-divider></mat-divider>
         <div class="mt-2">
           Nhập nội dung dài bằng cách gõ bàn phím vào trường được thêm vào
+        </div>
+      </div>
+    </button>
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'checkbox'"
+      [ngClass]="{selectedType: addedFormField.type === 'checkbox'}"
+    >
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Hộp kiểm</div>
+        <mat-divider></mat-divider>
+        <div class="mt-2">
+          Giá trị của trường sẽ hiển thị khi ấn chọn vào
         </div>
       </div>
     </button>

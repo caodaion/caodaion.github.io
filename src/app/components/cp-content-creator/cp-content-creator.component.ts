@@ -34,8 +34,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.isShowController = !state.matches && this.contentEditable;
       });
     this.audioTracking()
-    console.log(this.contentEditable);
-
   }
 
   ngOnChanges() {

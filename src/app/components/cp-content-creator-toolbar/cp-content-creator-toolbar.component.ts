@@ -198,6 +198,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       this.sel?.focusNode
       let updatedNode = document.createElement(nodeValue);
       updatedNode.setAttribute('placeholder', this.addedFormField.label)
+      updatedNode.classList.add('font-bold')
       updatedNode.classList.add('form-control')
       updatedNode.classList.add('text')
       updatedNode.id = this.addedFormField.key
@@ -218,6 +219,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       this.sel?.focusNode
       let updatedNode = document.createElement(nodeValue);
       updatedNode.setAttribute('placeholder', this.addedFormField.label)
+      updatedNode.classList.add('font-bold')
       updatedNode.classList.add('form-control')
       updatedNode.classList.add('textarea')
       updatedNode.id = this.addedFormField.key
@@ -232,6 +234,32 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         type: 'textarea'
       })
     }
+    const addCheckbox = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'INPUT'
+      let label = 'LABEL'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(label);
+      let inputNode = document.createElement(nodeValue);
+      inputNode.setAttribute('type', 'checkbox')
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('checkbox')
+      inputNode.classList.add('form-control')
+      inputNode.classList.add('checkbox')
+      inputNode.id = this.addedFormField.key
+      updatedNode.setAttribute('for', this.addedFormField.key)
+      updatedNode.innerHTML = `${this.addedFormField.label}${inputNode.outerHTML.toString()}`
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'checkbox'
+      })
+    }
     if (this.sel) {
       switch (this.addedFormField.type) {
         case 'text':
@@ -239,6 +267,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
           break;
         case 'textarea':
           addTextarea()
+          break;
+        case 'checkbox':
+          addCheckbox()
           break;
         default:
           break;
