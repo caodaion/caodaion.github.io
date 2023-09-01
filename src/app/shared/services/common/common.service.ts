@@ -192,49 +192,64 @@ export class CommonService {
     };
   }
 
-  convertNumberToText(n: any) {
-    const convertNumberGeaterThanTen = (n: any) => {
-      return ''
+  convertNumberToText(n: any, ignoreDeSe: boolean = false) {
+    const convertSplitToText = (num: any) => {
+      let lunar = ''
+      switch (num) {
+        case 1:
+          lunar = 'Nhất'
+          break;
+        case 2:
+          lunar = 'Nhị'
+          break;
+        case 3:
+          lunar = 'Tam'
+          break;
+        case 4:
+          lunar = 'Tứ'
+          break;
+        case 5:
+          lunar = 'Ngũ'
+          break;
+        case 6:
+          lunar = 'Lục'
+          break;
+        case 7:
+          lunar = 'Thất'
+          break;
+        case 8:
+          lunar = 'Bát'
+          break;
+        case 9:
+          lunar = 'Cửu'
+          break;
+        case 10:
+          lunar = 'Thập'
+          break;
+        default:
+          break;
+      }
+      return lunar
     }
-    let lunar = ''
-    switch (n) {
-      case 1:
-        lunar = 'Nhất'
-        break;
-      case 2:
-        lunar = 'Nhị'
-        break;
-      case 3:
-        lunar = 'Tam'
-        break;
-      case 4:
-        lunar = 'Tứ'
-        break;
-      case 5:
-        lunar = 'Ngũ'
-        break;
-      case 6:
-        lunar = 'Lục'
-        break;
-      case 7:
-        lunar = 'Thất'
-        break;
-      case 8:
-        lunar = 'Bát'
-        break;
-      case 9:
-        lunar = 'Cửu'
-        break;
-      case 10:
-        lunar = 'Thập'
-        break;
-      default:
-        convertNumberGeaterThanTen(n)
-        break;
+    const convertNumber = (n: any) => {
+      const decimalSeparator = ['ức', 'thập vạn', 'vạn', 'thiên', 'bách', 'thập']
+      const splitValue = n.toString().split('')
+      let returnValue = ''
+      for (let index = decimalSeparator.length - 1; index >= splitValue.length; index--) {
+        decimalSeparator.shift()
+      }
+      for (let index = splitValue.length - 1; index >= 0; index--) {
+        let item = splitValue[index]
+        let value = convertSplitToText(parseInt(item))
+        if (ignoreDeSe) {
+          value = index < splitValue.length - 1 && item == 1 ? '' : convertSplitToText(parseInt(item)).toLowerCase()
+        }
+        const noNeedDeSe = !value && !convertSplitToText(parseInt(splitValue[index - 1]))
+        returnValue = (index === 0 ? '' : noNeedDeSe ? '' : decimalSeparator[index]) + ' ' + value + ' ' + returnValue
+      }
+      return returnValue.split(/\s+/).join(' ').trim();
     }
-    return {
-      lunar: lunar
-    }
+    return convertNumber(n)
   }
 
   convertDay(day: any): any {

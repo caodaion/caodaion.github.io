@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 
@@ -21,7 +23,8 @@ export class SoanSoComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private soanSoService: SoanSoService
+    private soanSoService: SoanSoService,
+    private calendarService: CalendarService
   ) {
 
   }
@@ -60,9 +63,7 @@ export class SoanSoComponent implements OnInit {
               this.content = res.data
               this.content.name = `Sớ ${this.editData.soTemplate}`
               console.log(this.content);
-              if (this.editData.eventLunar.lunarYearName) {
-                this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
-              }
+              this.applyForm()
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -95,8 +96,47 @@ export class SoanSoComponent implements OnInit {
     }
   }
 
+  applyForm() {
+    const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
+    if (namDaoFound) {
+      this.applyData('nam-dao', this.commonService.convertNumberToText(new Date().getFullYear() - 1926 + 1).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarYearName) {
+      this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
+    }
+    if (this.editData.eventLunar.lunarMonth) {
+      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarDay) {
+      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarTime) {
+      this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())
+    }
+    if (this.editData.subject.details.name) {
+      this.applyData('ho-va-ten', this.editData.subject.details.name)
+    }
+    if (this.editData.subject.details.age) {
+      this.applyData('tuoi', this.commonService.convertNumberToText(this.editData.subject.details.age, true))
+    }
+    if (this.editData.subject.date.year && this.editData.subject.date.date && this.editData.subject.date.month) {
+      const lunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.editData?.subject?.date?.year}-${this.editData?.subject?.date?.month < 10 ? '0' + this.editData?.subject?.date?.month : this.editData?.subject?.date?.month}-${this.editData?.subject?.date?.date < 10 ? '0' + this.editData?.subject?.date?.date : this.editData?.subject?.date?.date}`)).convertSolar2Lunar
+      this.applyData('nam-tu-tran', lunarDate.lunarYearName)
+      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarMonth, true).toLowerCase())
+      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarDay, true).toLowerCase())
+    }
+    if (this.editData.subject.date.lunarTime) {
+      this.applyData('gio-tu-tran', this.editData.subject.date.lunarTime.split('|')[0].trim())
+    }
+    if (this.editData.eventName) {
+      this.applyData('ten-dan-cung', this.editData.eventName)
+    }
+    if (this.editData?.subject?.details?.holyName) {
+      this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.holyName}`)
+    }
+  }
+
   onSaveContent() {
-    console.log(this.content);
     let content = JSON.stringify(this.content)
     // @ts-ignore
     content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -181,8 +221,6 @@ export class SoanSoComponent implements OnInit {
     if (this.content.formGroup.find((item: any) => item.key === key)) {
       this.content.formGroup.find((item: any) => item.key === key).value = value
     }
-    console.log(find(this.content.content, key));
-
     if (find(this.content.content, key)) {
       find(this.content.content, key).value = value
     }

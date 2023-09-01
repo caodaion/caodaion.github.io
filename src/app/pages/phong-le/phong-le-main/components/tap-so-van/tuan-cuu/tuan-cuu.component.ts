@@ -49,7 +49,7 @@ export class TuanCuuComponent implements OnInit {
         ev.lunar.lunarTime = item.defaultTime || ev.lunar.lunarTime
         const tokenData = <any>{
           soTemplate: foundTitle?.eventTitle,
-          eventName: ev.eventName,
+          eventName: `${ev.eventName} chi tuần`,
           eventLunar: ev.lunar,
           subject: {
             date: item?.date,

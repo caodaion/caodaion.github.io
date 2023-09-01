@@ -452,7 +452,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     }
     if (this.calendarMode === 'day') {
       this.selectedDate = date;
-      console.log(this.selectedDate);
       let startOfDate = new Date(this.selectedDate.solar);
       startOfDate.setDate(startOfDate.getDate() - 1);
       startOfDate.setHours(23, 0, 0, 0);
@@ -474,7 +473,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         this.dateRange.push(minute);
       }
       this.calendarService.calendarViewMode = mode;
-      console.log(this.dateRange);
       setTimeout(() => {
         this.getTuThoiTimes();
       }, 0);
@@ -495,7 +493,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       e.changedTouches[0].clientY,
     ];
     const time = new Date().getTime();
-
     if (when === 'start') {
       this.swipeCoord = coord;
       this.swipeTime = time;
@@ -511,7 +508,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       if (this.swipeTime) {
         duration = time - this.swipeTime;
       }
-
       if (
         duration < 1000 && //
         Math.abs(direction[0]) > 30 && // Long enough
