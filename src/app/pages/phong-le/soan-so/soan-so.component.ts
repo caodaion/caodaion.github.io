@@ -58,6 +58,7 @@ export class SoanSoComponent implements OnInit {
           .subscribe((res: any) => {
             if (res?.data) {
               this.content = res.data
+              this.content.name = `Sớ ${this.editData.soTemplate}`
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -124,6 +125,47 @@ export class SoanSoComponent implements OnInit {
     if (event === 0) {
       this.contentEditable = true
     }
+  }
+
+  onPrint() {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 22px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      .btn-share-item {
+        display: none;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+
+    const printContent = document.getElementById('contentCreatorWrapper');
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      writeContent.innerHTML = `${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
 
   }
 }

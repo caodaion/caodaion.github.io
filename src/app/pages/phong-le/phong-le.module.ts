@@ -17,6 +17,8 @@ import { HeaderModule } from "../../components/header/header.module";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CpContentCreatorModule } from 'src/app/components/cp-content-creator/cp-content-creator.module';
 import { PreviewComponent } from './soan-so/preview/preview.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { PreviewComponent } from './soan-so/preview/preview.component';
     NgxMatTimepickerModule,
     HeaderModule,
     MatProgressBarModule,
-    CpContentCreatorModule
+    CpContentCreatorModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class PhongLeModule { }
