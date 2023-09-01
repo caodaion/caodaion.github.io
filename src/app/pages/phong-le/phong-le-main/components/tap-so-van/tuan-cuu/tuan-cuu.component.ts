@@ -6,6 +6,7 @@ import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from "crypto-js";
 import { DatePipe } from '@angular/common';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'app-tuan-cuu',

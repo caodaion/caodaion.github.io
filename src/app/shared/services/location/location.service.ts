@@ -6,6 +6,10 @@ import { Injectable } from '@angular/core';
 })
 export class LocationService {
 
+  provinces = <any>[]
+  districts = <any>[]
+  wards = <any>[]
+
   constructor(private http: HttpClient) { }
 
   getAllDivisions() {

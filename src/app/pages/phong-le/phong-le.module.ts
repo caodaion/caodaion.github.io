@@ -16,7 +16,6 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { HeaderModule } from "../../components/header/header.module";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CpContentCreatorModule } from 'src/app/components/cp-content-creator/cp-content-creator.module';
-import { PreviewComponent } from './soan-so/preview/preview.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -25,8 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
     PhongLeMainComponent,
     TapSoVanComponent,
     SoanSoComponent,
-    TuanCuuComponent,
-    PreviewComponent
+    TuanCuuComponent
   ],
   imports: [
     CommonModule,

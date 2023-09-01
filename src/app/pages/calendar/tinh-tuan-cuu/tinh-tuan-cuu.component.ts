@@ -156,6 +156,10 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
             title: decodedToken[4] === 'empty' ? null : decodedToken[4],
             subTitle: decodedToken[5] === 'empty' ? null : decodedToken[5],
             holyName: decodedToken[6] === 'empty' ? null : decodedToken[6],
+            province: decodedToken[7] === 'empty' ? null : decodedToken[7],
+            district: decodedToken[8] === 'empty' ? null : decodedToken[8],
+            ward: decodedToken[9] === 'empty' ? null : decodedToken[9],
+            address: decodedToken[10] === 'empty' ? null : decodedToken[10],
           }
           this.saveSharedEvent()
         }
@@ -172,11 +176,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   getAllDivisions() {
+    this.provinces = this.locationService.provinces
     try {
       this.locationService.getAllDivisions()
         .subscribe((res: any) => {
           if (res?.length > 0) {
             this.provinces = res
+            this.locationService.provinces = res
           }
         })
     } catch (e) {
@@ -185,12 +191,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   getDistricts() {
+    this.districts = this.locationService.districts
     if (!this.districts || this.districts?.length === 0) {
       try {
         this.locationService.getDistricts()
           .subscribe((res: any) => {
             if (res?.length > 0) {
               this.districts = res
+              this.locationService.districts = res
             }
           })
       } catch (e) {
@@ -202,12 +210,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   getWards() {
+    this.wards = this.locationService.wards
     if (!this.wards || this.wards?.length === 0) {
       try {
         this.locationService.getWards()
           .subscribe((res: any) => {
             if (res?.length > 0) {
               this.wards = res
+              this.locationService.wards = res
             }
           })
       } catch (e) {
@@ -341,7 +351,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}`;
+    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}+${item?.details?.provice || 'empty'}+${item?.details?.distrcit || 'empty'}+${item?.details?.ward || 'empty'}+${item?.details?.address || 'empty'}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();

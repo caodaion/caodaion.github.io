@@ -240,6 +240,16 @@
                 </mat-select>
               </mat-form-field>
             </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Địa chỉ (thôn/đường)</mat-label>
+                <input
+                  type="text"
+                  [(ngModel)]="calculatedTuanCuu.details.address"
+                  matInput
+                />
+              </mat-form-field>
+            </div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

@@ -4,6 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 
 @Component({
@@ -19,12 +20,19 @@ export class SoanSoComponent implements OnInit {
   content = <any>{};
   previewContent = <any>{};
   contentEditable: boolean = true
+  provinces = <any>[];
+  districts = <any>[];
+  filteredDistricts = <any>[];
+  calculatedTuanCuu = <any>[];
+  wards = <any>[];
+  filteredWards = <any>[];
 
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
     private soanSoService: SoanSoService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private locationService: LocationService
   ) {
 
   }
@@ -42,6 +50,9 @@ export class SoanSoComponent implements OnInit {
       }
     })
     this.getCotnent()
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   getCotnent() {
@@ -223,6 +234,59 @@ export class SoanSoComponent implements OnInit {
     }
     if (find(this.content.content, key)) {
       find(this.content.content, key).value = value
+    }
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.provice)
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu.details.district)
     }
   }
 }
