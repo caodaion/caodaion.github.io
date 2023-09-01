@@ -11,6 +11,8 @@
         padding: 1rem;
       }
     }
-
+  }
+  .selectedType {
+    @apply border-[#3f51b5]
   }
 }

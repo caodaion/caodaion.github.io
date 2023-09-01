@@ -12,11 +12,32 @@
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="soan-so-container-wrapper">
     <div *ngIf="editData" class="h-100">
-      <cp-content-creator
-        [data]="content"
-        (save)="onSaveContent()"
-        [contentEditable]="true"
-      ></cp-content-creator>
+      <mat-tab-group
+        class="h-full"
+        (selectedIndexChange)="onChangeSelectedIndex($event)"
+      >
+        <mat-tab [label]="'Chỉnh sửa'">
+          <cp-content-creator
+            [data]="content"
+            (save)="onSaveContent()"
+            [contentEditable]="contentEditable"
+          ></cp-content-creator>
+        </mat-tab>
+        <mat-tab [label]="'Xem trước'">
+          <button
+            class="w-full"
+            mat-stroked-button
+            [color]="'primary'"
+            (click)="onPrint()"
+          >
+            <mat-icon>print</mat-icon>In
+          </button>
+          <cp-content-creator
+            [data]="previewContent"
+            [contentEditable]="contentEditable"
+          ></cp-content-creator>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </div>

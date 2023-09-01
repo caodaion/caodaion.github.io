@@ -502,7 +502,7 @@ export class CalendarService {
             {
               solar: calDate,
               lunar: this.getConvertedFullDate(calDate).convertSolar2Lunar,
-              eventName: i < 9 ? `Đệ ${this.commonService.convertNumberToText(i).lunar} Cửu` : 'Chung Cửu'
+              eventName: i < 9 ? `${this.commonService.convertNumberToText(i)} Cửu` : 'Chung Cửu'
             }
           )
           break;
