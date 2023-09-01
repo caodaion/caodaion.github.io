@@ -31,10 +31,22 @@
                 >
               </mat-radio-group>
             </ng-container>
-            <ng-container *ngIf="form?.type == 'shortText'">
+            <ng-container *ngIf="form?.type == 'shortText' || form?.type == 'text'">
               <mat-form-field appearance="fill" class="w-100">
                 <mat-label>{{ form?.label }}</mat-label>
                 <input matInput [(ngModel)]="form.value" />
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngIf="form?.type == 'checkbox'">
+              <div class="w-100">
+                <mat-label>{{form.label}}</mat-label>
+                <mat-checkbox [(ngModel)]="form.value"></mat-checkbox>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="form?.type == 'textarea'">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ form?.label }}</mat-label>
+                <textarea matInput [(ngModel)]="form.value"></textarea>
               </mat-form-field>
             </ng-container>
           </ng-container>
@@ -109,25 +121,69 @@
           matInput
           [(ngModel)]="addedFormField.key"
           [required]="true"
+          [disabled]="true"
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Tiêu đề của trường</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="addedFormField.label"
+          [required]="true"
+          (input)="updateAddedFormFieldKey()"
         />
       </mat-form-field>
     </div>
-    <div class="my-4 p-2 border rounded">
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'text'"
+      [ngClass]="{selectedType: addedFormField.type === 'text'}"
+    >
       <div class="px-2 mb-2">
         <div class="text-xl font-bold mb-2">Trường nhập dữ liệu</div>
         <mat-divider></mat-divider>
-        <div class="mt-2">Nhập bằng cách gõ bàn phím vào trường được thêm vào</div>
+        <div class="mt-2">
+          Nhập nội dung ngắn bằng cách gõ bàn phím vào trường được thêm vào
+        </div>
       </div>
-    </div>
+    </button>
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'textarea'"
+      [ngClass]="{selectedType: addedFormField.type === 'textarea'}"
+    >
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Trường nhập dữ liệu dài</div>
+        <mat-divider></mat-divider>
+        <div class="mt-2">
+          Nhập nội dung dài bằng cách gõ bàn phím vào trường được thêm vào
+        </div>
+      </div>
+    </button>
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'checkbox'"
+      [ngClass]="{selectedType: addedFormField.type === 'checkbox'}"
+    >
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Hộp kiểm</div>
+        <mat-divider></mat-divider>
+        <div class="mt-2">
+          Giá trị của trường sẽ hiển thị khi ấn chọn vào
+        </div>
+      </div>
+    </button>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button
-      mat-flat-button
-      [color]="'primary'"
-      [disabled]="!addedFormField.key || !addedFormField.field"
-      (click)="addNewInputField()"
-    >
-      Thêm
-    </button>
+    <button mat-flat-button [color]="'primary'"
+    [disabled]="disabledAddFormField()"
+    (click)="addNewInputField()">Thêm</button>
   </mat-dialog-actions>
 </ng-template>
