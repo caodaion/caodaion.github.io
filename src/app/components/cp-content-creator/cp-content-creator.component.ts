@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { ActivatedRoute } from '@angular/router';
 
@@ -20,10 +20,20 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
+  @HostListener('document:click', ['$event'])
+  click(event: any) {
+    if (this.eRef.nativeElement.contains(event.target)) {
+      if ([...event.target.classList].includes('form-control') && [...event.target.classList].includes('comboLocation')) {
+        console.log(event.target);
+      }
+    }
+  }
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private eRef: ElementRef
   ) {
   }
 

@@ -10,7 +10,6 @@ import {CpContentCreatorToolbarModule} from "../cp-content-creator-toolbar/cp-co
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
-
 @NgModule({
   declarations: [
     CpContentCreatorComponent

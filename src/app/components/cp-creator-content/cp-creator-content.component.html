@@ -60,7 +60,10 @@
               >
             </ng-container>
             <ng-container *ngIf="text.formType == 'checkbox'">
-              <label class="form-control checkbox" [for]="text?.key"
+              <label
+                class="form-control checkbox"
+                contentEditable="false"
+                [for]="text?.key"
                 >{{ text?.label
                 }}<input
                   type="checkbox"
@@ -79,9 +82,7 @@
                 >{{ text?.label }}</span
               >
             </ng-container>
-            <ng-container
-              *ngIf="text.formType !== 'checkbox'"
-            >
+            <ng-container *ngIf="text.formType !== 'checkbox'">
               <span
                 [ngClass]="{ 'opacity-50': !text?.value }"
                 [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }"

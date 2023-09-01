@@ -180,6 +180,30 @@
         </div>
       </div>
     </button>
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'comboLocation'"
+      [ngClass]="{selectedType: addedFormField.type === 'comboLocation'}"
+    >
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Khối địa chỉ</div>
+        <mat-divider></mat-divider>
+        <div class="mt-2">
+          Khối địa chỉ sẽ giúp cập nhật thông tin về địa chỉ
+        </div>
+        <div class="mt-2">
+          Hãy chọn một trong các kiểu hiển thị địa chỉ như dưới đây
+        </div>
+        <div class="mt-2">
+          <mat-radio-group [(ngModel)]="addedFormField.mode" [disabled]="addedFormField.type !== 'comboLocation'">
+            <mat-radio-button class="w-full block" [value]="'PpDdWwA'">Lâm Đồng tỉnh, Đà Lạt thành phố, đệ thất phường, Đa Thành thôn</mat-radio-button>
+            <mat-radio-button class="w-full block" [value]="'pPdDwWA'">tỉnh Lâm Đồng, thành phố Đà Lạt, phường 7, thôn Đa Thành</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </button>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button [color]="'primary'"
