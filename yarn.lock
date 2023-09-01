@@ -201,7 +201,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/material@^15.0.0", "@angular/material@~15.2.2":
+"@angular/material@^15.0.0", "@angular/material@^15.0.0 || ^16.0.0", "@angular/material@~15.2.2":
   "version" "15.2.2"
   dependencies:
     "@material/animation" "15.0.0-canary.684e33d25.0"
@@ -5959,6 +5959,13 @@
   dependencies:
     "tslib" "^2.5.0"
 
+"ngx-mat-select-search@^7.0.3":
+  "integrity" "sha512-IdTCKpUTsC0QBtII9n07UxQSxDhr03RVIGWebxRHGmLt97SgIt3dY+bOQ9Wr4LGrcTUFrxHJMuWuPkp7BhuNNQ=="
+  "resolved" "https://registry.npmjs.org/ngx-mat-select-search/-/ngx-mat-select-search-7.0.3.tgz"
+  "version" "7.0.3"
+  dependencies:
+    "tslib" "^2.4.0"
+
 "ngx-mat-timepicker@^15.1.7":
   "integrity" "sha512-FqlRMl5MaFJf+2gM9EC/tjhyph76ec6fHOM5qI+ZF1AQAafzLYq/b2jMsPs6vaVRGiwLQBbH4TgpRkJhRtpsNg=="
   "resolved" "https://registry.npmjs.org/ngx-mat-timepicker/-/ngx-mat-timepicker-15.1.7.tgz"
@@ -7626,7 +7633,7 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.0.0", "tslib@^2.1.0", "tslib@^2.3.0", "tslib@^2.4.1", "tslib@^2.5.0", "tslib@2.5.0":
+"tslib@^2.0.0", "tslib@^2.1.0", "tslib@^2.3.0", "tslib@^2.4.0", "tslib@^2.4.1", "tslib@^2.5.0", "tslib@2.5.0":
   "integrity" "sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   "version" "2.5.0"

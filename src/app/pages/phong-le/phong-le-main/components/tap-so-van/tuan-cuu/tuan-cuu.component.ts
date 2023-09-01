@@ -20,7 +20,6 @@ export class TuanCuuComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private commonService: CommonService,
     private datePipe: DatePipe
   ) {
 
@@ -36,6 +35,10 @@ export class TuanCuuComponent implements OnInit {
           this.cols = 6;
         }
       });
+    this.getTuanCuuEvents()
+  }
+
+  getTuanCuuEvents() {
     this.tuanCuuEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
     this.expanedIndex = 0
     let lessDiff = 0

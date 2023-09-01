@@ -14,6 +14,7 @@ import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.consta
 import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -21,10 +22,11 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
   styleUrls: ['./tinh-tuan-cuu.component.scss']
 })
 export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
-  print(arg0: any, _t285: HTMLElement) {
-    throw new Error('Method not implemented.');
-  }
-
+  provinces = <any>[]
+  districts = <any>[]
+  filteredDistricts = <any>[]
+  wards = <any>[]
+  filteredWards = <any>[]
   selectedDate = <any>{
     year: 0,
     month: 0,
@@ -85,6 +87,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   eventSummary: any;
   calculatedLunarDate: any;
   subTitles: any;
+  provinceFilter: any;
   downloading: boolean = false
   isShowDownLoadImage: boolean = false
   isShowButtonSetDefault: boolean = false
@@ -101,7 +104,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private decimalPipe: DecimalPipe,
     private matBottomSheet: MatBottomSheet,
     private breakpointObserver: BreakpointObserver,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private locationService: LocationService
   ) {
 
   }
@@ -158,10 +162,60 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   ngAfterViewInit(): void {
     this.getLocalStorageTuanCuu()
+  }
+
+  getAllDivisions() {
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.provice)
+    }
+  }
+
+  getWards() {
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu.details.district)
+    }
   }
 
   saveSharedEvent() {
