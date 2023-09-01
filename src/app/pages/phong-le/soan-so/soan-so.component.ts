@@ -59,6 +59,10 @@ export class SoanSoComponent implements OnInit {
             if (res?.data) {
               this.content = res.data
               this.content.name = `Sớ ${this.editData.soTemplate}`
+              console.log(this.content);
+              if (this.editData.eventLunar.lunarYearName) {
+                this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
+              }
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -166,6 +170,21 @@ export class SoanSoComponent implements OnInit {
     printTab?.document.close(); // necessary for IE >= 10
     printTab?.focus(); // necessary for IE >= 10*/
     printTab?.print();
+  }
 
+  applyData(key: any, value: any) {
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+      return result;
+    }
+    if (this.content.formGroup.find((item: any) => item.key === key)) {
+      this.content.formGroup.find((item: any) => item.key === key).value = value
+    }
+    console.log(find(this.content.content, key));
+
+    if (find(this.content.content, key)) {
+      find(this.content.content, key).value = value
+    }
   }
 }
