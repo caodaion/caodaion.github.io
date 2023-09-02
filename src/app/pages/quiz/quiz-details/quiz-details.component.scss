@@ -1,4 +1,10 @@
 ::ng-deep {
+  app-sync {
+    @apply h-full flex flex-col;
+    app-quiz-details {
+      @apply flex-1 flex-1 flex-col;
+    }
+  }
   .quiz {
     cursor: pointer;
     .mat-grid-tile-content {
@@ -12,38 +18,7 @@
       justify-content: center;
     }
   }
-  .mat-expansion-panel-header[aria-disabled=true] {
-    color: #000000;
-  }
-  .mat-expansion-panel-header.mat-expanded {
-    height: auto;
-    min-height: 64px;
-  }
-  .quiz-option .mdc-list-item__primary-text {
-    white-space: normal;
-  }
-  .quiz-question {
-    margin-top: 1rem;
-  }
-  .mdc-list-item.mdc-list-item--with-one-line {
-    height: auto;
-  }
-  .quiz-footer {
-    padding: 1rem 0;
-  }
-  .quiz-question {
-    .mat-expansion-panel {
-      border: 2px solid transparent;
-    }
-    &.correct {
-      .mat-expansion-panel {
-        border: 2px solid #30c730;
-      }
-    }
-    &.wrong {
-      .mat-expansion-panel {
-        border: 2px solid red;
-      }
-    }
+  .mat-mdc-tab-body-wrapper {
+    @apply h-full;
   }
 }

@@ -5,7 +5,7 @@
     >
   </div>
 </ng-container>
-<div class="container-fluid">
+<div class="container-fluid h-full">
   <ng-container *ngIf="!isLoading">
     <mat-grid-list [cols]="3" *ngIf="!article">
       <mat-grid-tile
@@ -18,38 +18,20 @@
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
-    <div *ngIf="article">
-      <h2>Quiz: {{ name }}</h2>
-      <div
-        *ngFor="let item of quizListOfDoc"
-        class="quiz-question"
-        [ngClass]="{
-          correct: item['correct'] === true,
-          wrong: item['correct'] === false
-        }"
-      >
-        <mat-expansion-panel [expanded]="true" [disabled]="true">
-          <mat-expansion-panel-header>{{
-            item?.question
-          }}</mat-expansion-panel-header>
-          <div>
-            <mat-selection-list [multiple]="false" [(ngModel)]="item.selected">
-              <mat-list-option
-                *ngFor="let item of item?.options"
-                [value]="item"
-                class="quiz-option"
-              >
-                {{ item }}
-              </mat-list-option>
-            </mat-selection-list>
-          </div>
-        </mat-expansion-panel>
-      </div>
-      <div class="d-flex justify-content-end quiz-footer">
-        <button mat-flat-button [color]="'primary'" (click)="checkResult()">
-          Kiểm tra kết quả
-        </button>
-      </div>
+    <div *ngIf="article" class="w-full h-full flex flex-col ">
+      <!-- <h2>Quiz: {{ name }}</h2> -->
+      <mat-tab-group class="w-full h-full">
+        <ng-container *ngFor="let item of quizListOfDoc; let index = index">
+          <mat-tab [disabled]="true" [label]="(index + 1).toString()">
+            <div class="h-full flex flex-col justify-between">
+              <h4>{{ item?.question }}</h4>
+              <div class="w-full flex justify-around p-4">
+                <button mat-flat-button [color]="'primary'">KIỂM TRA</button>
+              </div>
+            </div>
+          </mat-tab>
+        </ng-container>
+      </mat-tab-group>
     </div>
   </ng-container>
 </div>
