@@ -1,5 +1,6 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
 @Component({
@@ -14,10 +15,16 @@ export class QuizDetailsComponent implements OnInit {
   article: any;
   quizListOfDoc: any;
   isLoading: boolean = false
+  selectedIndex = 0
+  cols = 0
+  correctlyCount = 0
+  inCorrectlyCount = 0
 
   constructor(
     private route: ActivatedRoute,
-    private quizService: QuizService
+    private quizService: QuizService,
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
   }
 
@@ -27,6 +34,31 @@ export class QuizDetailsComponent implements OnInit {
       this.article = query['article']
     })
     this.getQuizListOfDoc()
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: true,
+                isHideBottomNavBar: true,
+              })
+            );
+            this.cols = 1
+          } else {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: false,
+                isHideBottomNavBar: false,
+              })
+            );
+            this.cols = 4
+          }
+        });
+    }, 0)
   }
 
   getQuizListOfDoc() {
@@ -36,15 +68,15 @@ export class QuizDetailsComponent implements OnInit {
       if (foundQuiz) {
         try {
           this.quizService.getQuizListOfDoc(foundQuiz.googleDocId, this.article)
-          .subscribe((res: any) => {
-            if (res.code === 200) {
-              this.name = res.name
-              this.quizListOfDoc = res.data
-              console.log(this.quizListOfDoc);
-              this.isLoading = false
-            }
-          })
-        } catch(e) {
+            .subscribe((res: any) => {
+              if (res.code === 200) {
+                this.name = res.name
+                this.quizListOfDoc = res.data
+                console.log(this.quizListOfDoc);
+                this.isLoading = false
+              }
+            })
+        } catch (e) {
           console.log(e);
           this.isLoading = false
         }
@@ -52,15 +84,24 @@ export class QuizDetailsComponent implements OnInit {
     }
   }
 
-  checkResult() {
-    this.quizListOfDoc.forEach((item: any) => {
-      if (item.selected) {
-        if (item.selected[0] === item?.answer) {
-          item['correct'] = true
-        } else {
-          item['correct'] = false
-        }
-      }
-    })
+  checkAnswer(item: any) {
+    if (item.selected === item.answer) {
+      item.correctly = true
+    } else {
+      item.correctly = false
+    }
+  }
+
+  onNext() {
+    this.selectedIndex++
+    this.correctlyCount = this.quizListOfDoc.filter((item: any) => item.correctly === true)?.length
+    this.inCorrectlyCount = this.quizListOfDoc.filter((item: any) => item.correctly === false)?.length
+  }
+
+  onCompleted() {
+    const path = location.pathname.split('/')
+    path.pop()
+    this.router
+      .navigate([path.join('/')]);
   }
 }

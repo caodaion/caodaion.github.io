@@ -1,8 +1,8 @@
 <div class="container-fluid">
-  <mat-grid-list [cols]="3">
+  <mat-grid-list [cols]="cols">
     <mat-grid-tile *ngFor="let item of quizList" class="quiz" [routerLink]="item?.key">
       <mat-card>
-        <mat-card-title>{{ item?.name }}</mat-card-title>
+        <mat-card-title class="text-center">{{ item?.name }}</mat-card-title>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>

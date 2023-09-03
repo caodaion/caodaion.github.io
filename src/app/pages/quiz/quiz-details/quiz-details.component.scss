@@ -21,4 +21,21 @@
   .mat-mdc-tab-body-wrapper {
     @apply h-full;
   }
+  .mat-mdc-tab-disabled {
+    opacity: 1 !important;
+    .correctly {
+      @apply text-[#4285f4];
+    }
+    .incorrectly {
+      @apply text-[#f44a3e];
+    }
+  }
+  .bottom-side {
+    &.correctly {
+      @apply bg-[#4285f41a];
+    }
+    &.incorrectly {
+      @apply bg-[#f44a3e1a];
+    }
+  }
 }

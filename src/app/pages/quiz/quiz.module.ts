@@ -17,6 +17,7 @@ import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
+import { HeaderModule } from "../../components/header/header.module";
 
 
 @NgModule({
@@ -39,7 +40,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCardModule,
     MatExpansionModule,
     FormsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatListModule,
+    HeaderModule
   ]
 })
 export class QuizModule { }
