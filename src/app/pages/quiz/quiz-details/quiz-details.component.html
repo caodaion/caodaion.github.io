@@ -5,9 +5,12 @@
     >
   </div>
 </ng-container>
-<div class="container-fluid">
+<div class="h-full flex flex-col">
   <ng-container *ngIf="!isLoading">
-    <mat-grid-list [cols]="3" *ngIf="!article">
+    <app-header class="header">
+      <div class="kinh-header">{{ name || "" }}</div>
+    </app-header>
+    <mat-grid-list [cols]="cols" *ngIf="!article">
       <mat-grid-tile
         *ngFor="let item of quizListOfDoc"
         class="quiz"
@@ -18,38 +21,160 @@
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
-    <div *ngIf="article">
-      <h2>Quiz: {{ name }}</h2>
-      <div
-        *ngFor="let item of quizListOfDoc"
-        class="quiz-question"
-        [ngClass]="{
-          correct: item['correct'] === true,
-          wrong: item['correct'] === false
-        }"
-      >
-        <mat-expansion-panel [expanded]="true" [disabled]="true">
-          <mat-expansion-panel-header>{{
-            item?.question
-          }}</mat-expansion-panel-header>
-          <div>
-            <mat-selection-list [multiple]="false" [(ngModel)]="item.selected">
-              <mat-list-option
-                *ngFor="let item of item?.options"
-                [value]="item"
-                class="quiz-option"
+    <div *ngIf="article" class="w-full h-full flex flex-col">
+      <mat-tab-group class="w-full h-full" [selectedIndex]="selectedIndex">
+        <ng-container *ngFor="let item of quizListOfDoc; let index = index">
+          <mat-tab [disabled]="true">
+            <ng-template mat-tab-label>
+              <div
+                [ngClass]="{
+                  correctly: item.correctly === true,
+                  incorrectly: item.correctly === false
+                }"
               >
-                {{ item }}
-              </mat-list-option>
-            </mat-selection-list>
+                {{ (index + 1 | number : "2.0-0")?.toString() || "" }}
+              </div>
+            </ng-template>
+            <div class="h-full flex flex-col justify-between">
+              <div
+                class="container-fluid h-full flex flex-col justify-start lg:justify-center lg:!px-12"
+              >
+                <h4 class="text-center mb-4">{{ item?.question }}</h4>
+                <div class="answers">
+                  <div
+                    *ngFor="let option of item.options"
+                    class="border-4 p-4 m-4 rounded-2xl cursor-pointer"
+                    (click)="item.selected = option"
+                    [ngClass]="{
+                      'border-[#4285f4] text-[#4285f4] font-bold':
+                        item.selected === option,
+                      'border-[#f44a3e] text-[#f44a3e] font-bold':
+                        item.correctly === false && item.selected === option,
+                      'select-none pointer-events-none cursor-not-allowed':
+                        item.correctly === true || item.correctly === false
+                    }"
+                  >
+                    {{ option }}
+                  </div>
+                </div>
+              </div>
+              <div
+                class="container-fluid bottom-side lg:!px-12 sticky bottom-0 border-t-4"
+                [ngClass]="{
+                  'correctly border-[#4285f4]': item.correctly === true,
+                  'incorrectly border-[#f44a3e]': item.correctly === false
+                }"
+              >
+                <div
+                  class="w-full flex justify-between flex-col lg:flex-row  items-center p-4 lg:py-10"
+                >
+                  <div>
+                    <div *ngIf="item.correctly === true">
+                      <div class="flex items-center">
+                        <mat-icon
+                          class="text-[#4285f4] font-bold !text-[5rem] !h-[5rem] !w-[5rem]"
+                          >check_circle</mat-icon
+                        >
+                        <div class="text-[#4285f4] ms-4">
+                          <h4 class="font-bold">Chính xác</h4>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="item.correctly === false">
+                      <div class="flex items-center">
+                        <mat-icon
+                          class="text-[#f44a3e] font-bold !text-[5rem] !h-[5rem] !w-[5rem]"
+                          >cancel</mat-icon
+                        >
+                        <div class="text-[#f44a3e] ms-4">
+                          <h4 class="font-bold">Chưa chính xác</h4>
+                          <strong>Đáp án là: </strong>{{ item?.answer }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full lg:w-auto mt-4 lg:mt-0">
+                    <button
+                      mat-flat-button
+                      [color]="item.correctly === false ? 'warn' : 'primary'"
+                      (click)="checkAnswer(item)"
+                      [disabled]="!item.selected"
+                      *ngIf="
+                        item.correctly !== true && item.correctly !== false
+                      "
+                      class="w-full lg:w-auto"
+                    >
+                      KIỂM TRA
+                    </button>
+                    <button
+                      mat-flat-button
+                      [color]="item.correctly === false ? 'warn' : 'primary'"
+                      (click)="onNext()"
+                      [disabled]="!item.selected"
+                      *ngIf="
+                        item.correctly === true || item.correctly === false
+                      "
+                      class="w-full lg:w-auto"
+                    >
+                      TIẾP TỤC
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </ng-container>
+        <mat-tab [disabled]="true">
+          <ng-template mat-tab-label>
+            <div>
+              <span class="text-[#4285f4]">{{ correctlyCount }}</span
+              >/<span class="text-[#f44a3e]">{{ inCorrectlyCount }}</span>
+            </div>
+          </ng-template>
+          <div class="h-full flex flex-col justify-between">
+            <div
+              class="container-fluid h-full justify-around items-center flex-wrap lg:!px-12"
+            >
+              <div
+                class="border-4 border-[#4285f4] rounded-2xl w-[150px] h-[100px]"
+              >
+                <div class="text-center font-bold text-[#4285f4]">ĐÚNG</div>
+                <div class="text-center font-bold text-[#4285f4] text-6xl">
+                  {{ correctlyCount }}
+                </div>
+              </div>
+              <div
+                class="border-4 border-[#f44a3e] rounded-2xl w-[150px] h-[100px]"
+              >
+                <div class="text-center font-bold text-[#f44a3e]">
+                  KHÔNG ĐÚNG
+                </div>
+                <div class="text-center font-bold text-[#f44a3e] text-6xl">
+                  {{ inCorrectlyCount }}
+                </div>
+              </div>
+            </div>
+            <div
+              class="container-fluid bottom-side lg:!px-12 sticky bottom-0 border-t-4"
+            >
+              <div
+                class="w-full flex justify-between items-center p-4 lg:py-10"
+              >
+                <div></div>
+                <div>
+                  <button
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="onCompleted()"
+                  >
+                    TIẾP TỤC
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </mat-expansion-panel>
-      </div>
-      <div class="d-flex justify-content-end quiz-footer">
-        <button mat-flat-button [color]="'primary'" (click)="checkResult()">
-          Kiểm tra kết quả
-        </button>
-      </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </ng-container>
 </div>

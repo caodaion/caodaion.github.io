@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
@@ -9,13 +10,24 @@ import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 export class QuizListComponent implements OnInit {
 
   quizList: any;
+  cols = 0
 
-  constructor(private quizService: QuizService) {
+  constructor(private quizService: QuizService,
+    private breakpointObserver: BreakpointObserver) {
 
   }
 
   ngOnInit(): void {
     this.getQuizList()
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.cols = 1
+        } else {
+          this.cols = 4
+        }
+      });
   }
 
   getQuizList() {
