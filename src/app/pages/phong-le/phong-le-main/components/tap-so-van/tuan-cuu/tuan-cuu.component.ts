@@ -65,7 +65,6 @@ export class TuanCuuComponent implements OnInit {
         if (this.datePipe.transform(new Date(ev?.solar), 'dd/MM/yyyy') == this.datePipe.transform(currentDate, 'dd/MM/yyyy')) {
           this.expanedIndex = index
           ev.upComming = true
-          return;
         }
         if (new Date(ev?.solar) > currentDate) {
           const difference = moment(new Date(), "DD/MM/YYYY HH:mm:ss").diff(moment(new Date(ev?.solar), "DD/MM/YYYY HH:mm:ss"))
