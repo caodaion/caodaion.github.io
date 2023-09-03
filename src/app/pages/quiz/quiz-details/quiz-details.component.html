@@ -22,6 +22,26 @@
       </mat-grid-tile>
     </mat-grid-list>
     <div *ngIf="article" class="w-full h-full flex flex-col">
+      <audio
+        src="assets/audios/sound-effect/mixkit-correct-answer-notification-947.wav"
+        #correctAnswer
+      ></audio>
+      <audio
+        src="assets/audios/sound-effect/mixkit-tech-break-fail-2947.wav"
+        #inCorrectAnswer
+      ></audio>
+      <audio
+        src="assets/audios/sound-effect/mixkit-negative-answer-lose-2032.wav"
+        #lose
+      ></audio>
+      <audio
+        src="assets/audios/sound-effect/mixkit-achievement-bell-600.wav"
+        #almostWin
+      ></audio>
+      <audio
+        src="assets/audios/sound-effect/mixkit-fantasy-game-success-notification-270.wav"
+        #win
+      ></audio>
       <mat-tab-group class="w-full h-full" [selectedIndex]="selectedIndex">
         <ng-container *ngFor="let item of quizListOfDoc; let index = index">
           <mat-tab [disabled]="true">
@@ -66,7 +86,7 @@
                 }"
               >
                 <div
-                  class="w-full flex justify-between flex-col lg:flex-row  items-center p-4 lg:py-10"
+                  class="w-full flex justify-between flex-col lg:flex-row items-center p-4 lg:py-10"
                 >
                   <div>
                     <div *ngIf="item.correctly === true">
