@@ -19,6 +19,7 @@ export class QuizDetailsComponent implements OnInit {
   cols = 0
   correctlyCount = 0
   inCorrectlyCount = 0
+  message: any;
 
   @ViewChild('correctAnswer') correctAnswer!: ElementRef;
   @ViewChild('inCorrectAnswer') inCorrectAnswer!: ElementRef;
@@ -111,12 +112,15 @@ export class QuizDetailsComponent implements OnInit {
     if (this.quizListOfDoc.filter((item: any) => item.correctly === undefined || item.correctly === null)?.length === 0) {
       if (this.correctlyCount >= this.inCorrectlyCount && this.correctlyCount < this.quizListOfDoc.length) {
         this.almostWin.nativeElement.play()
+        this.message = 'Còn chút nữa thôi'
       }
       if (this.correctlyCount < this.inCorrectlyCount) {
         this.lose.nativeElement.play()
+        this.message = 'Cố gắng lần sau bạn nhé'
       }
       if (this.correctlyCount === this.quizListOfDoc.length) {
         this.win.nativeElement.play()
+        this.message = 'Chúc mừng bạn'
       }
     }
   }

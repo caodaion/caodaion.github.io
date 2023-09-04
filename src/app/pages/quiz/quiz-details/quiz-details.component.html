@@ -153,24 +153,27 @@
           </ng-template>
           <div class="h-full flex flex-col justify-between">
             <div
-              class="container-fluid h-full justify-around items-center flex-wrap lg:!px-12"
+              class="container-fluid h-full flex flex-col items-center justify-center"
             >
-              <div
-                class="border-4 border-[#4285f4] rounded-2xl w-[150px] h-[100px]"
-              >
-                <div class="text-center font-bold text-[#4285f4]">ĐÚNG</div>
-                <div class="text-center font-bold text-[#4285f4] text-6xl">
-                  {{ correctlyCount }}
+              <h3 class="text-center mb-8">{{ message }}</h3>
+              <div class="w-full justify-around items-center flex-wrap lg:!px-12">
+                <div
+                  class="border-4 border-[#4285f4] rounded-2xl w-[150px] h-[100px] mb-4"
+                >
+                  <div class="text-center font-bold text-[#4285f4]">ĐÚNG</div>
+                  <div class="text-center font-bold text-[#4285f4] text-6xl">
+                    {{ correctlyCount }}
+                  </div>
                 </div>
-              </div>
-              <div
-                class="border-4 border-[#f44a3e] rounded-2xl w-[150px] h-[100px]"
-              >
-                <div class="text-center font-bold text-[#f44a3e]">
-                  KHÔNG ĐÚNG
-                </div>
-                <div class="text-center font-bold text-[#f44a3e] text-6xl">
-                  {{ inCorrectlyCount }}
+                <div
+                  class="border-4 border-[#f44a3e] rounded-2xl w-[150px] h-[100px] mb-4"
+                >
+                  <div class="text-center font-bold text-[#f44a3e]">
+                    KHÔNG ĐÚNG
+                  </div>
+                  <div class="text-center font-bold text-[#f44a3e] text-6xl">
+                    {{ inCorrectlyCount }}
+                  </div>
                 </div>
               </div>
             </div>
