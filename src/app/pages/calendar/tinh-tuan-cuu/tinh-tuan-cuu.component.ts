@@ -205,7 +205,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
         console.log(e);
       }
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.provice)
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.province)
     }
   }
 
@@ -351,7 +351,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}+${item?.details?.provice || 'empty'}+${item?.details?.distrcit || 'empty'}+${item?.details?.ward || 'empty'}+${item?.details?.address || 'empty'}`;
+    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}+${item?.details?.province || 'empty'}+${item?.details?.distrcit || 'empty'}+${item?.details?.ward || 'empty'}+${item?.details?.address || 'empty'}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();

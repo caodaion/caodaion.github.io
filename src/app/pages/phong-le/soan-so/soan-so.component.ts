@@ -74,7 +74,7 @@ export class SoanSoComponent implements OnInit {
               this.content = res.data
               this.content.name = `Sớ ${this.editData.soTemplate}`
               console.log(this.content);
-              this.applyForm()
+              // this.applyForm()
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -267,7 +267,7 @@ export class SoanSoComponent implements OnInit {
         console.log(e);
       }
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.provice)
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.province)
     }
   }
 

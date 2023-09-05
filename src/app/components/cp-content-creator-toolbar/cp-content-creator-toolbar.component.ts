@@ -284,6 +284,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       this.sel?.focusNode
       let updatedNode = document.createElement(nodeValue);
       updatedNode.classList.add('form-control')
+      updatedNode.classList.add('font-bold')
       updatedNode.classList.add('comboLocation')
       updatedNode.id = this.addedFormField.key
       updatedNode.innerHTML = this.addedFormField.label
@@ -350,7 +351,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         console.log(e);
       }
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.provice)
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.province)
     }
   }
 

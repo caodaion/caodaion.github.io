@@ -1,6 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'cp-content-creator',
@@ -19,12 +21,23 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   fromLocalStorage: boolean = true;
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
+  @ViewChild('comboLocation') comboLocation!: any;
+  addedComboLocation = <any>{};
+  provinces = <any>[];
+  districts = <any>[];
+  filteredDistricts = <any>[];
+  calculatedTuanCuu = <any>[];
+  wards = <any>[];
+  filteredWards = <any>[];
 
   @HostListener('document:click', ['$event'])
   click(event: any) {
     if (this.eRef.nativeElement.contains(event.target)) {
       if ([...event.target.classList].includes('form-control') && [...event.target.classList].includes('comboLocation')) {
-        console.log(event.target);
+        this.addedComboLocation.title = event.target.innerHTML
+        const comboLocationRef = this.matDialog.open(this.comboLocation)
+        this.filteredDistricts = <any>[];
+        this.filteredWards = <any>[];
       }
     }
   }
@@ -33,7 +46,9 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
-    private eRef: ElementRef
+    private eRef: ElementRef,
+    private matDialog: MatDialog,
+    private locationService: LocationService
   ) {
   }
 
@@ -44,6 +59,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.isShowController = !state.matches && this.contentEditable;
       });
     this.audioTracking()
+    this.getLocationSettings()
   }
 
   ngOnChanges() {
@@ -77,6 +93,12 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         }
       ]
     }
+  }
+
+  getLocationSettings() {
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   getId(block: any) {
@@ -249,5 +271,63 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       })
     }
     localStorage.setItem('reading', JSON.stringify(studyStorage))
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.addedComboLocation.province)
+      console.log(this.filteredDistricts);
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.addedComboLocation.district)
+    }
+  }
+
+  addComboLocation() {
+    console.log(this.addedComboLocation);
   }
 }
