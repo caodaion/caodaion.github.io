@@ -3,6 +3,7 @@ import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationService } from 'src/app/shared/services/location/location.service';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'cp-content-creator',
@@ -34,7 +35,10 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   click(event: any) {
     if (this.eRef.nativeElement.contains(event.target)) {
       if ([...event.target.classList].includes('form-control') && [...event.target.classList].includes('comboLocation')) {
-        this.addedComboLocation.title = event.target.innerHTML
+        this.addedComboLocation = <any>{};
+        this.addedComboLocation.title = event.target.getAttribute('aria-label')
+        this.addedComboLocation.key = event.target.getAttribute('id')
+        this.addedComboLocation.mode = event.target.classList.contains('PpDdWwA') ? 'PpDdWwA' : event.target.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
         const comboLocationRef = this.matDialog.open(this.comboLocation)
         this.filteredDistricts = <any>[];
         this.filteredWards = <any>[];
@@ -48,7 +52,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     private cd: ChangeDetectorRef,
     private eRef: ElementRef,
     private matDialog: MatDialog,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private commonService: CommonService
   ) {
   }
 
@@ -328,6 +333,30 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   addComboLocation() {
-    console.log(this.addedComboLocation);
+    const comboLocation = document.getElementById(this.addedComboLocation.key)
+    comboLocation?.setAttribute('value', JSON.stringify(this.addedComboLocation))
+    if (comboLocation) {
+      const province = this.provinces.find((item: any) => item.code === parseInt(this.addedComboLocation.province))
+      const district = this.districts.find((item: any) => item.code === parseInt(this.addedComboLocation.district))
+      const ward = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))
+      const wardName = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+      switch (this.addedComboLocation.mode) {
+        case 'PpDdWwA':
+          this.addedComboLocation.text = `Việt Nam quốc, ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+            province?.division_type : ''
+            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+              district?.division_type : ''
+            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+              ward?.division_type : ''
+            }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
+          break;
+        case 'pPdDwWA':
+          this.addedComboLocation.text = this.addedComboLocation.title
+          break;
+        default:
+          break;
+      }
+      comboLocation.innerHTML = this.addedComboLocation.text
+    }
   }
 }

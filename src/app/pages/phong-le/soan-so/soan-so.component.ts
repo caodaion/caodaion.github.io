@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
@@ -49,10 +49,10 @@ export class SoanSoComponent implements OnInit {
         console.log(this.editData);
       }
     })
-    this.getCotnent()
     this.getAllDivisions()
     this.getDistricts()
     this.getWards()
+    this.getCotnent()
   }
 
   getCotnent() {
@@ -74,7 +74,7 @@ export class SoanSoComponent implements OnInit {
               this.content = res.data
               this.content.name = `Sớ ${this.editData.soTemplate}`
               console.log(this.content);
-              // this.applyForm()
+              this.applyForm()
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -145,6 +145,123 @@ export class SoanSoComponent implements OnInit {
     if (this.editData?.subject?.details?.holyName) {
       this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.holyName}`)
     }
+    if (this.editData?.subject?.details?.province) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'que-quan')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.province = this.editData?.subject?.details?.province
+        if (this.content.formGroup.find((item: any) => item.key === 'que-quan')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'que-quan').value) {
+            this.content.formGroup.find((item: any) => item.key === 'que-quan').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'que-quan').value.province = this.editData?.subject?.details?.province
+        }
+        this.applyLocation('que-quan')
+      }
+    }
+    if (this.editData?.subject?.details?.district) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'que-quan')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.district = this.editData?.subject?.details?.district
+        if (this.content.formGroup.find((item: any) => item.key === 'que-quan')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'que-quan').value) {
+            this.content.formGroup.find((item: any) => item.key === 'que-quan').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'que-quan').value.district = this.editData?.subject?.details?.district
+        }
+        this.applyLocation('que-quan')
+      }
+    }
+    if (this.editData?.subject?.details?.ward) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'que-quan')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.ward = this.editData?.subject?.details?.ward
+        if (this.content.formGroup.find((item: any) => item.key === 'que-quan')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'que-quan').value) {
+            this.content.formGroup.find((item: any) => item.key === 'que-quan').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'que-quan').value.ward = this.editData?.subject?.details?.ward
+        }
+        this.applyLocation('que-quan')
+      }
+    }
+    if (this.editData?.subject?.details?.address) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'que-quan')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.village = this.editData?.subject?.details?.address
+        if (this.content.formGroup.find((item: any) => item.key === 'que-quan')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'que-quan').value) {
+            this.content.formGroup.find((item: any) => item.key === 'que-quan').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'que-quan').value.village = this.editData?.subject?.details?.address
+        }
+        this.applyLocation('que-quan')
+      }
+    }
+  }
+
+  applyLocation(id: any) {
+    setTimeout(() => {
+      const comboLocation = document.getElementById(id)
+      let value = <any>{}
+      value = this.content.formGroup.find((item: any) => item.key === id).value
+      comboLocation?.setAttribute('value', JSON.stringify(value))
+      if (comboLocation) {
+        const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
+        const district = this.districts.find((item: any) => item.code == parseInt(value.district))
+        const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
+        const wardName = this.wards.find((item: any) => item.code == parseInt(value.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+        value.mode = comboLocation.classList.contains('PpDdWwA') ? 'PpDdWwA' : comboLocation.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
+        switch (value.mode) {
+          case 'PpDdWwA':
+            value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+              province?.division_type : ''
+              }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+                district?.division_type : ''
+              }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+                ward?.division_type : ''
+              }${value.village ? ', ' + value.village : ''}`.trim()
+            break;
+          case 'pPdDwWA':
+            value.text = value.title
+            break;
+          default:
+            break;
+        }
+        comboLocation.innerHTML = value.text
+      }
+    }, 0)
   }
 
   onSaveContent() {
@@ -267,7 +384,7 @@ export class SoanSoComponent implements OnInit {
         console.log(e);
       }
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.province)
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
     }
   }
 
@@ -286,7 +403,7 @@ export class SoanSoComponent implements OnInit {
         console.log(e);
       }
     } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu.details.district)
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
     }
   }
 }

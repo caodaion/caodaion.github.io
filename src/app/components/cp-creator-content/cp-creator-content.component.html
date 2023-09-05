@@ -72,6 +72,18 @@
                   [checked]="text?.value"
               /></label>
             </ng-container>
+            <ng-container *ngIf="text.formType == 'comboLocation'">
+              <button
+                class="form-control font-bold comboLocation"
+                [class]="text.mode"
+                [id]="text?.key"
+                [ariaLabel]="text?.label"
+                contentEditable="false"
+                [value]="text?.value"
+              >
+                {{ text?.text || text.label }}
+              </button>
+            </ng-container>
           </ng-container>
           <ng-container *ngIf="!contentEditable">
             <ng-container
@@ -82,7 +94,12 @@
                 >{{ text?.label }}</span
               >
             </ng-container>
-            <ng-container *ngIf="text.formType !== 'checkbox'">
+            <ng-container *ngIf="text.formType == 'comboLocation'">
+              <span [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }">
+                {{ text?.text }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="text.formType !== 'checkbox' && text.formType !== 'comboLocation'">
               <span
                 [ngClass]="{ 'opacity-50': !text?.value }"
                 [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }"

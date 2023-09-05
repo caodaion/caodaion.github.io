@@ -49,10 +49,14 @@
 <ng-template #comboLocation>
   <div mat-dialog-title>Cập nhật {{ addedComboLocation.title }}</div>
   <mat-dialog-content>
-    <div class="py-8">
+    <div>Mặc định chọn nước <strong>Việt Nam</strong></div>
+    <div class="pt-8">
       <mat-form-field [appearance]="'outline'">
         <mat-label>Tỉnh/Thành phố</mat-label>
-        <mat-select [(ngModel)]="addedComboLocation.province" (ngModelChange)="getDistricts()">
+        <mat-select
+          [(ngModel)]="addedComboLocation.province"
+          (ngModelChange)="getDistricts()"
+        >
           <mat-option *ngFor="let item of provinces" [value]="item.code">{{
             item.name
           }}</mat-option>
@@ -60,10 +64,15 @@
       </mat-form-field>
       <mat-form-field [appearance]="'outline'">
         <mat-label>Quận/Huyện</mat-label>
-        <mat-select [(ngModel)]="addedComboLocation.district" (ngModelChange)="getWards()">
-          <mat-option *ngFor="let item of filteredDistricts" [value]="item.code">{{
-            item.name
-          }}</mat-option>
+        <mat-select
+          [(ngModel)]="addedComboLocation.district"
+          (ngModelChange)="getWards()"
+        >
+          <mat-option
+            *ngFor="let item of filteredDistricts"
+            [value]="item.code"
+            >{{ item.name }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
       <mat-form-field [appearance]="'outline'">
@@ -75,12 +84,19 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field [appearance]="'outline'">
-        <mat-label>Thôn</mat-label>
+        <mat-label>Thôn/Lộ</mat-label>
         <input type="text" matInput [(ngModel)]="addedComboLocation.village" />
       </mat-form-field>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button [color]="'primary'" (click)="addComboLocation()" [matDialogClose]="true">Cập nhật</button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      (click)="addComboLocation()"
+      [matDialogClose]="true"
+    >
+      Cập nhật
+    </button>
   </mat-dialog-actions>
 </ng-template>

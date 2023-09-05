@@ -233,19 +233,23 @@ export class CommonService {
     }
     const convertNumber = (n: any) => {
       const decimalSeparator = ['ức', 'thập vạn', 'vạn', 'thiên', 'bách', 'thập']
-      const splitValue = n.toString().split('')
+      const splitValue = n.toString().trim().split('')
       let returnValue = ''
       for (let index = decimalSeparator.length - 1; index >= splitValue.length; index--) {
         decimalSeparator.shift()
       }
-      for (let index = splitValue.length - 1; index >= 0; index--) {
-        let item = splitValue[index]
-        let value = convertSplitToText(parseInt(item))
-        if (ignoreDeSe) {
-          value = index < splitValue.length - 1 && item == 1 ? '' : convertSplitToText(parseInt(item)).toLowerCase()
+      if (splitValue?.length > 1) {
+        for (let index = splitValue.length - 1; index >= 0; index--) {
+          let item = splitValue[index]
+          let value = convertSplitToText(parseInt(item))
+          if (ignoreDeSe) {
+            value = index < splitValue.length - 1 && item == 1 ? '' : convertSplitToText(parseInt(item)).toLowerCase()
+          }
+          const noNeedDeSe = !value && !convertSplitToText(parseInt(splitValue[index - 1]))
+          returnValue = (index === 0 ? '' : noNeedDeSe ? '' : decimalSeparator[index]) + ' ' + value + ' ' + returnValue
         }
-        const noNeedDeSe = !value && !convertSplitToText(parseInt(splitValue[index - 1]))
-        returnValue = (index === 0 ? '' : noNeedDeSe ? '' : decimalSeparator[index]) + ' ' + value + ' ' + returnValue
+      } else {
+        returnValue = convertSplitToText(parseInt(splitValue[0]))
       }
       return returnValue.split(/\s+/).join(' ').trim();
     }
