@@ -302,6 +302,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
             if (res?.length > 0) {
               this.districts = res
               this.locationService.districts = res
+              this.filteredDistricts = res?.filter((item: any) => item.province_code === this.addedComboLocation?.province)
             }
           })
       } catch (e) {
@@ -322,6 +323,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
             if (res?.length > 0) {
               this.wards = res
               this.locationService.wards = res
+              this.filteredWards = res?.filter((item: any) => item.district_code === this.addedComboLocation?.district)
             }
           })
       } catch (e) {

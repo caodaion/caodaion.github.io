@@ -26,6 +26,7 @@ export class SoanSoComponent implements OnInit {
   calculatedTuanCuu = <any>[];
   wards = <any>[];
   filteredWards = <any>[];
+  defaultLocation = <any>{}
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +53,13 @@ export class SoanSoComponent implements OnInit {
     this.getAllDivisions()
     this.getDistricts()
     this.getWards()
+    this.getDefaultLocation()
     this.getCotnent()
+  }
+
+  getDefaultLocation() {
+    this.defaultLocation = <any>{}
+    this.defaultLocation = JSON.parse(localStorage.getItem('defaultLocation') || '{}')
   }
 
   getCotnent() {
@@ -107,23 +114,7 @@ export class SoanSoComponent implements OnInit {
     }
   }
 
-  applyForm() {
-    const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
-    if (namDaoFound) {
-      this.applyData('nam-dao', this.commonService.convertNumberToText(new Date().getFullYear() - 1926 + 1).toLowerCase())
-    }
-    if (this.editData.eventLunar.lunarYearName) {
-      this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
-    }
-    if (this.editData.eventLunar.lunarMonth) {
-      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true).toLowerCase())
-    }
-    if (this.editData.eventLunar.lunarDay) {
-      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true).toLowerCase())
-    }
-    if (this.editData.eventLunar.lunarTime) {
-      this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())
-    }
+  applyCauSieuForm() {
     if (this.editData.subject.details.name) {
       this.applyData('ho-va-ten', this.editData.subject.details.name)
     }
@@ -231,7 +222,127 @@ export class SoanSoComponent implements OnInit {
     }
   }
 
-  applyLocation(id: any) {
+  applyDefaultForm() {
+    const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
+    if (namDaoFound) {
+      this.applyData('nam-dao', this.commonService.convertNumberToText(new Date().getFullYear() - 1926 + 1).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarYearName) {
+      this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
+    }
+    if (this.editData.eventLunar.lunarMonth) {
+      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarDay) {
+      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true).toLowerCase())
+    }
+    if (this.editData.eventLunar.lunarTime) {
+      this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())
+    }
+    if (this.defaultLocation?.province) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.province = this.defaultLocation?.province
+        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.defaultLocation?.province
+        }
+        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+      }
+    }
+    if (this.defaultLocation?.district) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.district = this.defaultLocation?.district
+        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.defaultLocation?.district
+        }
+        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+      }
+    }
+    if (this.defaultLocation?.ward) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.ward = this.defaultLocation?.ward
+        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.defaultLocation?.ward
+        }
+        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+      }
+    }
+    if (this.defaultLocation?.village) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        }
+        foundComboLocation.value.village = this.defaultLocation?.village
+        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.defaultLocation?.village
+        }
+        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+      }
+      if (this.defaultLocation?.called) {
+        this.applyData('dia-diem', this.defaultLocation?.called)
+      }
+      if (this.defaultLocation?.target) {
+        this.applyData('dien-tienthien-ban', this.defaultLocation?.target)
+      }
+      if (this.defaultLocation?.eventLeader) {
+        this.applyData('chuc-sac-chung-dan', this.defaultLocation?.eventLeader)
+      }
+      if (this.defaultLocation?.isThienPhong) {
+        this.applyData('thien-phong', this.defaultLocation?.isThienPhong)
+      }
+    }
+  }
+
+  applyForm() {
+    this.applyCauSieuForm()
+    this.applyDefaultForm()
+  }
+
+  applyLocation(id: any, prefix?: any) {
     setTimeout(() => {
       const comboLocation = document.getElementById(id)
       let value = <any>{}
@@ -259,7 +370,7 @@ export class SoanSoComponent implements OnInit {
           default:
             break;
         }
-        comboLocation.innerHTML = value.text
+        comboLocation.innerHTML = `${prefix || ''} ${value.text}`
       }
     }, 0)
   }
