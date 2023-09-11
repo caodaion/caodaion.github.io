@@ -68,8 +68,12 @@
 <ng-template #comboLocation>
   <div mat-dialog-title>Cập nhật {{ addedComboLocation.title }}</div>
   <mat-dialog-content>
-    <div>Mặc định chọn nước <strong>Việt Nam</strong></div>
     <div class="pt-8">
+      <mat-checkbox [(ngModel)]="isShowCountry">Hiển thị quốc gia</mat-checkbox>
+      <mat-form-field *ngIf="isShowCountry" [appearance]="'outline'">
+        <mat-label>Quốc gia</mat-label>
+        <input type="text" matInput [(ngModel)]="addedComboLocation.country" />
+      </mat-form-field>
       <mat-form-field [appearance]="'outline'">
         <mat-label>Tỉnh/Thành phố</mat-label>
         <mat-select

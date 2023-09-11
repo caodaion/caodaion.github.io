@@ -25,6 +25,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   isAutoPlay: boolean = false;
   audioReadyToPlay: boolean = false;
   fromLocalStorage: boolean = true;
+  isShowCountry: boolean = false;
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
   @ViewChild('comboLocation') comboLocation!: any;
@@ -50,6 +51,25 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         const comboLocationRef = this.matDialog.open(this.comboLocation)
         this.filteredDistricts = <any>[];
         this.filteredWards = <any>[];
+        const openedData = JSON.parse(event.target.getAttribute('value') || '{}')
+        this.addedComboLocation.country = 'Việt Nam'
+        this.isShowCountry = false
+        if (openedData?.country) {
+          this.addedComboLocation.country = openedData?.country
+          this.isShowCountry = true
+        }
+        if (openedData?.province) {
+          this.addedComboLocation.province = openedData?.province
+        }
+        if (openedData?.district) {
+          this.addedComboLocation.district = openedData?.district
+        }
+        if (openedData?.ward) {
+          this.addedComboLocation.ward = openedData?.ward
+        }
+        if (openedData?.village) {
+          this.addedComboLocation.village = openedData?.village
+        }
       }
     }
   }
