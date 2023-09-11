@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LongSoComponent } from './phong-le-main/components/tap-so-van/long-so/long-so.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     TapSoVanComponent,
     SoanSoComponent,
     TuanCuuComponent,
-    SettingsComponent
+    SettingsComponent,
+    LongSoComponent
   ],
   imports: [
     CommonModule,
