@@ -371,13 +371,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     const comboLocation = document.getElementById(this.addedComboLocation.key)
     comboLocation?.setAttribute('value', JSON.stringify(this.addedComboLocation))
     if (comboLocation) {
+      const country = this.addedComboLocation.country
       const province = this.provinces.find((item: any) => item.code === parseInt(this.addedComboLocation.province))
       const district = this.districts.find((item: any) => item.code === parseInt(this.addedComboLocation.district))
       const ward = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))
       const wardName = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
       switch (this.addedComboLocation.mode) {
         case 'PpDdWwA':
-          this.addedComboLocation.text = `Việt Nam quốc, ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+          this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
             province?.division_type : ''
             }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
               district?.division_type : ''

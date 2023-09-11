@@ -240,6 +240,31 @@ export class SoanSoComponent implements OnInit {
     if (this.editData.eventLunar.lunarTime) {
       this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())
     }
+    if (this.defaultLocation?.country) {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        if (!foundComboLocation.value) {
+          foundComboLocation.value = <any>{}
+        } else {
+          if (typeof foundComboLocation.value === 'string') {
+            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          }
+        }
+        foundComboLocation.value.country = this.defaultLocation?.country
+        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          }
+          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.country = this.defaultLocation?.country
+        }
+        this.applyLocation('dia-chi')
+      }
+    }
     if (this.defaultLocation?.province) {
       const find = (array: any, key: any) => {
         let result: any;
@@ -250,6 +275,10 @@ export class SoanSoComponent implements OnInit {
       if (foundComboLocation) {
         if (!foundComboLocation.value) {
           foundComboLocation.value = <any>{}
+        } else {
+          if (typeof foundComboLocation.value === 'string') {
+            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          }
         }
         foundComboLocation.value.province = this.defaultLocation?.province
         if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
@@ -271,6 +300,10 @@ export class SoanSoComponent implements OnInit {
       if (foundComboLocation) {
         if (!foundComboLocation.value) {
           foundComboLocation.value = <any>{}
+        } else {
+          if (typeof foundComboLocation.value === 'string') {
+            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          }
         }
         foundComboLocation.value.district = this.defaultLocation?.district
         if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
@@ -292,6 +325,10 @@ export class SoanSoComponent implements OnInit {
       if (foundComboLocation) {
         if (!foundComboLocation.value) {
           foundComboLocation.value = <any>{}
+        } else {
+          if (typeof foundComboLocation.value === 'string') {
+            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          }
         }
         foundComboLocation.value.ward = this.defaultLocation?.ward
         if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
@@ -313,6 +350,10 @@ export class SoanSoComponent implements OnInit {
       if (foundComboLocation) {
         if (!foundComboLocation.value) {
           foundComboLocation.value = <any>{}
+        } else {
+          if (typeof foundComboLocation.value === 'string') {
+            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          }
         }
         foundComboLocation.value.village = this.defaultLocation?.village
         if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
@@ -350,6 +391,7 @@ export class SoanSoComponent implements OnInit {
       value = this.content.formGroup.find((item: any) => item.key === id).value
       comboLocation?.setAttribute('value', JSON.stringify(value))
       if (comboLocation) {
+        const country = value.country
         const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
         const district = this.districts.find((item: any) => item.code == parseInt(value.district))
         const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
@@ -357,7 +399,7 @@ export class SoanSoComponent implements OnInit {
         value.mode = comboLocation.classList.contains('PpDdWwA') ? 'PpDdWwA' : comboLocation.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
         switch (value.mode) {
           case 'PpDdWwA':
-            value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+            value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
               province?.division_type : ''
               }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
                 district?.division_type : ''

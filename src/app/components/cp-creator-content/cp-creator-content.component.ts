@@ -288,6 +288,7 @@ export class CpCreatorContentComponent implements OnChanges {
   getComboLocationText(text: any) {
     let value = <any>{}
     value = this.rootContent.formGroup.find((item: any) => item.key === text?.key)?.value || {}
+    const country = value?.country
     const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
     const district = this.districts.find((item: any) => item.code == parseInt(value.district))
     const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
@@ -295,7 +296,7 @@ export class CpCreatorContentComponent implements OnChanges {
     value.mode = text?.mode
     switch (value.mode) {
       case 'PpDdWwA':
-        value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+        value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
           province?.division_type : ''
           }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
             district?.division_type : ''
