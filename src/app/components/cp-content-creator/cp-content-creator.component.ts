@@ -324,7 +324,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       }
     } else {
       this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.addedComboLocation.province)
-      console.log(this.filteredDistricts);
     }
   }
 
