@@ -18,7 +18,10 @@
     user-select: text;
   "
   [ngStyle]="{
-    fontSize: !contentEditable && contentFormat.fontSize ? contentFormat.fontSize + 'px' : '18px'
+    fontSize:
+      !contentEditable && contentFormat.fontSize
+        ? contentFormat.fontSize + 'px'
+        : '18px'
   }"
   #contentDiv
   (blur)="onBlur()"
@@ -123,8 +126,27 @@
         <ng-container *ngIf="text.type == 'text' && !text.attrs">{{
           text.text
         }}</ng-container>
+        <strong
+          *ngIf="text.type == 'text' && text.attrs && text?.attrs?.fontWeight"
+          [ngClass]="{ knoll: text?.attrs?.knoll, split: text?.attrs?.split }"
+          [ngStyle]="{
+            textAlign: text?.attrs?.textAlign
+              ? text?.attrs?.textAlign
+              : 'jusify',
+            color: text?.attrs?.color,
+            fontWeight: text?.attrs?.fontWeight,
+            fontStyle: text?.attrs?.fontStyle,
+            fontSize: text?.attrs?.fontSize,
+            textDecoration: text?.attrs?.textDecoration,
+            textIndent: text?.attrs?.textIndent,
+            position: text?.attrs?.knoll ? 'relative' : ''
+          }"
+          [id]="text?.key || ''"
+        >
+          {{ text.text }}</strong
+        >
         <span
-          *ngIf="text.type == 'text' && text.attrs"
+          *ngIf="text.type == 'text' && text.attrs && !text?.attrs?.fontWeight"
           [ngClass]="{ knoll: text?.attrs?.knoll, split: text?.attrs?.split }"
           [ngStyle]="{
             textAlign: text?.attrs?.textAlign

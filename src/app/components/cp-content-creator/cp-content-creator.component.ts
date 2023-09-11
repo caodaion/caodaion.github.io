@@ -373,7 +373,12 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           break;
       }
       comboLocation.innerHTML = this.addedComboLocation.text
-      this.onBlur()
+      const data = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key)
+      if (data) {
+        data.value = this.addedComboLocation
+        this.onBlur()
+        this.saveData()
+      }
     }
   }
 

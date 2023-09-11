@@ -149,8 +149,6 @@ export class CpCreatorContentComponent implements OnChanges {
 
   public onBlur() {
     if (this.updated) {
-      console.log(this.contentDiv.nativeElement.children);
-
       [...this.contentDiv.nativeElement.children]?.forEach((item: any) => {
         const find = (array: any, key: any) => {
           let result: any;
@@ -278,7 +276,7 @@ export class CpCreatorContentComponent implements OnChanges {
               <rect x="30" y="55" width="6" height="6" rx="3" transform="rotate(-90 30 55)" fill="#A82300"/>
               <rect x="17" y="56" width="8" height="16" rx="1" transform="rotate(-90 17 56)" fill="#FFD700"/>
               <rect x="45" y="54" width="4" height="2" rx="1" transform="rotate(-90 45 54)" fill="#A82300"/>
-              </svg></span><span class="knoll-content">${text.text}</span></span>` : text?.attrs?.split ? `<span class="split" id="${text.key}">${text.text}</span>` : text?.attrs?.fontWeight === 'bold' ? `<b>${text.text}</b>` : `${text.text}`).join('')
+              </svg></span><span class="knoll-content">${text.text}</span></span>` : text?.attrs?.split ? `<span class="split" id="${text.key}">${text.text}</span>` : text?.attrs?.fontWeight === 'bold' ? `<strong>${text.text}</strong>` : `${text.text}`).join('')
               this.updated = false
             }
           }

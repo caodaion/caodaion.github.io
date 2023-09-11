@@ -410,8 +410,8 @@ export class SoanSoComponent implements OnInit {
     }
     if (event === 0) {
       this.contentEditable = true
+      this.getCotnent()
     }
-    this.getCotnent()
   }
 
   onPrint() {
