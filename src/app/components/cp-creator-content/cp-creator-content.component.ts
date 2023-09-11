@@ -292,24 +292,26 @@ export class CpCreatorContentComponent implements OnChanges {
     const district = this.districts.find((item: any) => item.code == parseInt(value.district))
     const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
     const wardName = this.wards.find((item: any) => item.code == parseInt(value.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-    value.mode = text?.mode
-    switch (value.mode) {
-      case 'PpDdWwA':
-        value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-          province?.division_type : ''
-          }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-            district?.division_type : ''
-          }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-            ward?.division_type : ''
-          }${value.village ? ', ' + value.village : ''}`.trim()
-        break;
-      case 'pPdDwWA':
-        value.text = value.title
-        break;
-      default:
-        break;
+    if (value?.mode) {
+      value.mode = text?.mode
+      switch (value.mode) {
+        case 'PpDdWwA':
+          value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+            province?.division_type : ''
+            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+              district?.division_type : ''
+            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+              ward?.division_type : ''
+            }${value.village ? ', ' + value.village : ''}`.trim()
+          break;
+        case 'pPdDwWA':
+          value.text = value.title
+          break;
+        default:
+          break;
+      }
+      return value.text
     }
-    return value.text
   }
 
   getAllDivisions() {
