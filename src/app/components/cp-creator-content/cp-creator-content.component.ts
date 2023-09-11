@@ -15,6 +15,7 @@ export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
+  @Input() contentFormat = <any>{};
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';

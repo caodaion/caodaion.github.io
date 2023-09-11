@@ -17,6 +17,9 @@
     text-align: justify;
     user-select: text;
   "
+  [ngStyle]="{
+    fontSize: !contentEditable && contentFormat.fontSize ? contentFormat.fontSize + 'px' : '18px'
+  }"
   #contentDiv
   (blur)="onBlur()"
   (input)="updated = true"
@@ -103,7 +106,12 @@
                 {{ text?.text }}
               </span>
             </ng-container>
-            <ng-container *ngIf="text.formType !== 'checkbox' && text.formType !== 'comboLocation'">
+            <ng-container
+              *ngIf="
+                text.formType !== 'checkbox' &&
+                text.formType !== 'comboLocation'
+              "
+            >
               <span
                 [ngClass]="{ 'opacity-50': !text?.value }"
                 [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }"

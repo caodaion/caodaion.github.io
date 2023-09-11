@@ -46,6 +46,7 @@
       *ngIf="block.type == 'contentBlock'"
       [data]="block"
       [contentEditable]="contentEditable"
+      [contentFormat]="contentFormat"
       [rootContent]="rootContent"
       [id]="getId(block)"
       (contentToContent)="contentToContent($event)"
