@@ -76,8 +76,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     if (settingFontSize) {
       const jwtHelper = new JwtHelperService()
       const decodedToken = jwtHelper.decodeToken(settingFontSize)
-      console.log(decodedToken);
-
       this.contentFormat.fontSize = decodedToken?.fontSize || 18
     }
   }
