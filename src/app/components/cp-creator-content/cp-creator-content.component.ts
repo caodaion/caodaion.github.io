@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -15,12 +15,14 @@ export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
+  @Input() contentFormat = <any>{};
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   @Output() focusedBlock = new EventEmitter()
   @Output() contentToContent = new EventEmitter()
   updated: boolean = false
+  @ViewChild('contentDiv') contentDiv!: ElementRef<any>;
 
   @HostListener('document:click', ['$event'])
   click(event: any) {
@@ -62,7 +64,7 @@ export class CpCreatorContentComponent implements OnChanges {
   @HostListener('document:keydown.control.s', ['$event'])
   onKeyControlS(event: any) {
     event.preventDefault()
-    this.onBlur(event)
+    this.onBlur()
   }
 
   @HostListener('document:keydown.control.enter')
@@ -127,9 +129,11 @@ export class CpCreatorContentComponent implements OnChanges {
     // range?.setEndAfter(enterNode);
   }
 
-  onBlur(event: any) {
+  public onBlur() {
     if (this.updated) {
-      [...event?.target?.children]?.forEach((item: any) => {
+      console.log(this.contentDiv.nativeElement.children);
+
+      [...this.contentDiv.nativeElement.children]?.forEach((item: any) => {
         const find = (array: any, key: any) => {
           let result: any;
           array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
@@ -234,7 +238,7 @@ export class CpCreatorContentComponent implements OnChanges {
                     type: 'form-control',
                     formType: 'comboLocation',
                     text: node.getAttribute('aria-label') !== node.textContent ? node.textContent : '',
-                    value: node.getAttribute('value') ? JSON.parse(node.getAttribute('value')) : '',
+                    value: node.getAttribute('value') ? (node.getAttribute('value') || '{}') : '',
                     label: node.getAttribute('aria-label'),
                     mode: node.classList.contains('PpDdWwA') ? 'PpDdWwA' : node.classList.contains('pPdDwWA') ? 'pPdDwWA' : '',
                     key: node.id

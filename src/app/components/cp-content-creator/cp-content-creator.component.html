@@ -5,12 +5,25 @@
         mode="indeterminate"
         *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"
       ></mat-progress-bar>
-      <audio
-        #audioPlayer
-        class="w-100"
-        *ngIf="data?.type === 'block' && data?.audio?.src"
-        [src]="data?.audio?.src"
-      ></audio>
+      <div class="flex">
+        <audio
+          #audioPlayer
+          class="w-100"
+          *ngIf="data?.type === 'block' && data?.audio?.src"
+          [src]="data?.audio?.src"
+        ></audio>
+        <mat-form-field>
+          <mat-label>Cỡ chữ</mat-label>
+          <mat-select
+            [(ngModel)]="contentFormat.fontSize"
+            (ngModelChange)="updateFontSize()"
+          >
+            <mat-option *ngFor="let item of fontSizeRange" [value]="item"
+              >{{ item }}px</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <div
       class="cp-creator-block-group"
@@ -22,14 +35,17 @@
           [data]="block"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
+          [contentFormat]="contentFormat"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
         ></cp-creator-block>
         <cp-creator-content
+          #creatorContent
           *ngIf="block?.type == 'contentBlock'"
           [data]="block"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
+          [contentFormat]="contentFormat"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
           (contentToContent)="contentToContent($event)"

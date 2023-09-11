@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationService } from 'src/app/shared/services/location/location.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { CpCreatorContentComponent } from '../cp-creator-content/cp-creator-content.component';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'cp-content-creator',
@@ -11,6 +14,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
   styleUrls: ['./cp-content-creator.component.scss']
 })
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
+  [x: string]: any;
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
@@ -23,6 +27,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
   @ViewChild('comboLocation') comboLocation!: any;
+  @ViewChild('creatorContent') creatorContent!: CpCreatorContentComponent;
   addedComboLocation = <any>{};
   provinces = <any>[];
   districts = <any>[];
@@ -30,6 +35,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   calculatedTuanCuu = <any>[];
   wards = <any>[];
   filteredWards = <any>[];
+  contentFormat = <any>{}
+  fontSizeRange = [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
 
   @HostListener('document:click', ['$event'])
   click(event: any) {
@@ -65,6 +72,12 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       });
     this.audioTracking()
     this.getLocationSettings()
+    const settingFontSize = localStorage.getItem('token')
+    if (settingFontSize) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(settingFontSize)
+      this.contentFormat.fontSize = decodedToken?.fontSize || 18
+    }
   }
 
   ngOnChanges() {
@@ -359,6 +372,45 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           break;
       }
       comboLocation.innerHTML = this.addedComboLocation.text
+      this.creatorContent.updated = true
+      this.creatorContent.onBlur()
+    }
+  }
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
+  }
+
+  updateFontSize() {
+    const users = JSON.parse(localStorage.getItem('users') || '{}')
+    const token = localStorage.getItem('token')
+    if (token) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(token)
+      decodedToken.fontSize = this.contentFormat?.fontSize
+      if (users[decodedToken.userName]) {
+        users[decodedToken.userName] = this.generaToken(decodedToken)
+        localStorage.setItem('users', JSON.stringify(users))
+        localStorage.setItem('token', JSON.stringify(this.generaToken(decodedToken)))
+      }
     }
   }
 }
