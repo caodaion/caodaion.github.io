@@ -27,14 +27,6 @@
           ></cp-content-creator>
         </mat-tab>
         <mat-tab [label]="'Xem trước'">
-          <button
-            class="w-full"
-            mat-stroked-button
-            [color]="'primary'"
-            (click)="onPrint()"
-          >
-            <mat-icon>print</mat-icon>In
-          </button>
           <cp-content-creator
             [rootContent]="previewContent"
             [data]="previewContent"

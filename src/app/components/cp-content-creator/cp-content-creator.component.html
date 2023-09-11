@@ -59,6 +59,7 @@
   <mat-drawer mode="side" opened [position]="'end'" [opened]="isShowController">
     <cp-content-creator-toolbar
       [focusedBlock]="focusedBlock"
+      [contentEditable]="contentEditable"
       [data]="data"
       (save)="saveData()"
     ></cp-content-creator-toolbar>

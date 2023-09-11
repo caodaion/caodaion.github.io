@@ -258,7 +258,7 @@ export class SoanSoComponent implements OnInit {
           }
           this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.defaultLocation?.province
         }
-        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+        this.applyLocation('dia-chi')
       }
     }
     if (this.defaultLocation?.district) {
@@ -279,7 +279,7 @@ export class SoanSoComponent implements OnInit {
           }
           this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.defaultLocation?.district
         }
-        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+        this.applyLocation('dia-chi')
       }
     }
     if (this.defaultLocation?.ward) {
@@ -300,7 +300,7 @@ export class SoanSoComponent implements OnInit {
           }
           this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.defaultLocation?.ward
         }
-        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+        this.applyLocation('dia-chi')
       }
     }
     if (this.defaultLocation?.village) {
@@ -321,7 +321,7 @@ export class SoanSoComponent implements OnInit {
           }
           this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.defaultLocation?.village
         }
-        this.applyLocation('dia-chi', 'Việt Nam quốc, ')
+        this.applyLocation('dia-chi')
       }
       if (this.defaultLocation?.called) {
         this.applyData('dia-diem', this.defaultLocation?.called)
@@ -412,47 +412,6 @@ export class SoanSoComponent implements OnInit {
       this.contentEditable = true
       this.getCotnent()
     }
-  }
-
-  onPrint() {
-    let printTab = window.open(
-      '',
-      'PRINT',
-      `width=${window.innerWidth},height=${window.innerHeight}`
-    );
-    printTab?.document.write(
-      `<html><head>
-      <title>${document.title.toUpperCase()}PRINTER</title>
-      <style>
-      .tableContent td, th {
-        font-size: 22px;
-        text-align: left;
-        padding: 1rem;
-        border-bottom: 1px solid #000000;
-      }
-      .btn-share-item {
-        display: none;
-      }
-      </style>
-      `
-    );
-    printTab?.document.write('</head><body >');
-
-    const printContent = document.getElementById('contentCreatorWrapper');
-    const writeContent = document.createElement('DIV');
-    if (writeContent) {
-      writeContent.innerHTML = `${printContent?.outerHTML}`;
-      // @ts-ignore
-      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
-        // @ts-ignore
-        writeContent.childNodes[0].style.padding = 0;
-      }
-    }
-    printTab?.document.write(writeContent?.outerHTML);
-    printTab?.document.write('</body></html>');
-    printTab?.document.close(); // necessary for IE >= 10
-    printTab?.focus(); // necessary for IE >= 10*/
-    printTab?.print();
   }
 
   applyData(key: any, value: any) {
