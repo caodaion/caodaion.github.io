@@ -18,6 +18,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
+  @Input() isShowFontSizeSelect: boolean = true;
   @Output() save = new EventEmitter();
   @Output() nextContent = new EventEmitter();
   isShowController: boolean = false;
@@ -372,9 +373,13 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           break;
       }
       comboLocation.innerHTML = this.addedComboLocation.text
-      this.creatorContent.updated = true
-      this.creatorContent.onBlur()
+      this.onBlur()
     }
+  }
+
+  onBlur() {
+    this.creatorContent.updated = true
+    this.creatorContent.onBlur()
   }
 
   generaToken(data: any) {

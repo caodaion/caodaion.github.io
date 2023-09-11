@@ -5,6 +5,8 @@ import {
   MatSnackBarVerticalPosition
 } from "@angular/material/snack-bar";
 import { AuthService } from "../../shared/services/auth/auth.service";
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'cp-creator-content',
@@ -15,10 +17,17 @@ export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
+  @Input() isShowFontSizeSelect: boolean = true;
   @Input() contentFormat = <any>{};
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  provinces = <any>[];
+  districts = <any>[];
+  filteredDistricts = <any>[];
+  calculatedTuanCuu = <any>[];
+  wards = <any>[];
+  filteredWards = <any>[];
   @Output() focusedBlock = new EventEmitter()
   @Output() contentToContent = new EventEmitter()
   updated: boolean = false
@@ -72,7 +81,13 @@ export class CpCreatorContentComponent implements OnChanges {
     this.data.focused = false
   }
 
-  constructor(private _snackBar: MatSnackBar, private eRef: ElementRef, public authService: AuthService) {
+  constructor(
+    private _snackBar: MatSnackBar,
+    private eRef: ElementRef,
+    public authService: AuthService,
+    private commonService: CommonService,
+    private locationService: LocationService
+  ) {
   }
 
   ngOnChanges() {
@@ -92,6 +107,9 @@ export class CpCreatorContentComponent implements OnChanges {
         ]
       }
     }
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   getLink(data: any) {
@@ -266,6 +284,86 @@ export class CpCreatorContentComponent implements OnChanges {
           }
         }
       })
+    }
+  }
+
+  getComboLocationText(text: any) {
+    let value = <any>{}
+    value = this.rootContent.formGroup.find((item: any) => item.key === text?.key)?.value
+    const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
+    const district = this.districts.find((item: any) => item.code == parseInt(value.district))
+    const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
+    const wardName = this.wards.find((item: any) => item.code == parseInt(value.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+    value.mode = text?.mode
+    switch (value.mode) {
+      case 'PpDdWwA':
+        value.text = `${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+          province?.division_type : ''
+          }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+            district?.division_type : ''
+          }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+            ward?.division_type : ''
+          }${value.village ? ', ' + value.village : ''}`.trim()
+        break;
+      case 'pPdDwWA':
+        value.text = value.title
+        break;
+      default:
+        break;
+    }
+    return value.text
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
     }
   }
 }

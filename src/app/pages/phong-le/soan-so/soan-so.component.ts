@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
@@ -63,6 +63,7 @@ export class SoanSoComponent implements OnInit {
   }
 
   getCotnent() {
+    this.content = <any>{}
     if (!this.content?.content || this.content?.content?.length === 0) {
       const initNewContent = () => {
         this.content = {
@@ -81,7 +82,6 @@ export class SoanSoComponent implements OnInit {
               this.content = res.data
               this.content.name = `Sớ ${this.editData.soTemplate}`
               console.log(this.content);
-              this.applyForm()
               let content = JSON.stringify(this.content)
               // @ts-ignore
               content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -103,6 +103,7 @@ export class SoanSoComponent implements OnInit {
               // @ts-ignore
               data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
               this.previewContent = data
+              this.applyForm()
             } else {
               initNewContent()
             }
@@ -375,7 +376,7 @@ export class SoanSoComponent implements OnInit {
     }, 0)
   }
 
-  onSaveContent() {
+  onSaveContent(isNeedToCoppy = true) {
     let content = JSON.stringify(this.content)
     // @ts-ignore
     content = content.replaceAll(this.token.replace('=', '').replaceAll('-', ''), '').replaceAll('%3D', '')
@@ -396,8 +397,10 @@ export class SoanSoComponent implements OnInit {
     })
     // @ts-ignore
     data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
-    console.log({ data: data });
-    navigator.clipboard.writeText(JSON.stringify({ data: data }));
+    if (isNeedToCoppy) {
+      console.log({ data: data });
+      navigator.clipboard.writeText(JSON.stringify({ data: data }));
+    }
     this.previewContent = data
   }
 
@@ -408,6 +411,7 @@ export class SoanSoComponent implements OnInit {
     if (event === 0) {
       this.contentEditable = true
     }
+    this.getCotnent()
   }
 
   onPrint() {
@@ -463,6 +467,7 @@ export class SoanSoComponent implements OnInit {
     if (find(this.content.content, key)) {
       find(this.content.content, key).value = value
     }
+    this.onSaveContent(false)
   }
 
   getAllDivisions() {

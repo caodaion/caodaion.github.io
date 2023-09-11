@@ -103,7 +103,7 @@
             </ng-container>
             <ng-container *ngIf="text.formType == 'comboLocation'">
               <span [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }">
-                {{ text?.text }}
+                {{ getComboLocationText(text) }}
               </span>
             </ng-container>
             <ng-container
