@@ -26,6 +26,7 @@
           (focusedBlock)="focusedBlock = $event"
         ></cp-creator-block>
         <cp-creator-content
+          #creatorContent
           *ngIf="block?.type == 'contentBlock'"
           [data]="block"
           [rootContent]="rootContent"

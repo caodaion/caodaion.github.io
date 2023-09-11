@@ -17,7 +17,8 @@
     text-align: justify;
     user-select: text;
   "
-  (blur)="onBlur($event)"
+  #contentDiv
+  (blur)="onBlur()"
   (input)="updated = true"
   (keydown.enter)="onEnter($event)"
   (keydown.tab)="onTab($event)"
@@ -49,6 +50,7 @@
                 [id]="text?.key"
                 class="font-bold form-control text"
                 [value]="text?.value"
+                (change)="onBlur()"
               />
             </ng-container>
             <ng-container *ngIf="text.formType == 'textarea'">
@@ -56,6 +58,7 @@
                 [placeholder]="text?.label"
                 [id]="text?.key"
                 class="font-bold form-control textarea"
+                (change)="onBlur()"
                 >{{ text?.value }}</textarea
               >
             </ng-container>
@@ -70,6 +73,7 @@
                   class="form-control checkbox"
                   [id]="text?.key"
                   [checked]="text?.value"
+                  (change)="onBlur()"
               /></label>
             </ng-container>
             <ng-container *ngIf="text.formType == 'comboLocation'">
@@ -212,7 +216,7 @@
 <button
   mat-icon-button
   class="targetButton"
-  *ngIf="data?.attrs?.pathname && data?.attrs?.hash"
+  *ngIf="!contentEditable && data?.attrs?.pathname && data?.attrs?.hash"
   (click)="getLink(data)"
   matTooltip="Sao chép liên kết"
 >

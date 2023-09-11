@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'cp-creator-block-toolbar',
@@ -13,6 +14,14 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
   audioStart: any;
   audioEnd: any;
   foundSplit: any;
+  durationInSeconds = 3;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
+  constructor(private _snackBar: MatSnackBar) {
+
+  }
+
 
   ngOnInit() {
     const find = (array: any, key: any) => {
@@ -216,6 +225,11 @@ export class CpCreatorBlockToolbarComponent implements OnInit {
       range?.deleteContents();
       range?.insertNode(updatedNode);
       document.body.focus()
+      this._snackBar.open('Đã tách thành công', 'Đóng', {
+        duration: this.durationInSeconds * 200,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
     }
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationService } from 'src/app/shared/services/location/location.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { CpCreatorContentComponent } from '../cp-creator-content/cp-creator-content.component';
 
 @Component({
   selector: 'cp-content-creator',
@@ -11,6 +12,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
   styleUrls: ['./cp-content-creator.component.scss']
 })
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
+  [x: string]: any;
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
@@ -23,6 +25,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   focusedBlock: any;
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
   @ViewChild('comboLocation') comboLocation!: any;
+  @ViewChild('creatorContent') creatorContent!: CpCreatorContentComponent;
   addedComboLocation = <any>{};
   provinces = <any>[];
   districts = <any>[];
@@ -359,6 +362,8 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
           break;
       }
       comboLocation.innerHTML = this.addedComboLocation.text
+      this.creatorContent.updated = true
+      this.creatorContent.onBlur()
     }
   }
 }
