@@ -23,6 +23,16 @@
               >Soạn Sớ {{ item?.name }}</mat-card-title
             >
           </mat-card-header>
+          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center">
+            Diễn ra lúc:
+            {{
+              item?.eventLunar?.lunarTime
+                ? "Thời " + item?.eventLunar?.lunarTime
+                : ""
+            }}
+            ngày {{ item?.eventLunar?.lunarDay | number : "2.0-0" }} tháng
+            {{ item?.eventLunar?.lunarMonth | number : "2.0-0" }}
+          </mat-card-content>
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>

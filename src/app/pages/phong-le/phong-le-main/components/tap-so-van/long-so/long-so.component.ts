@@ -68,11 +68,13 @@ export class LongSoComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.longSoList = Object.keys(res).map((item: any) => {
-            return {
+            const data = <any>{
               key: item,
               name: res[item]?.name,
-              chi: res[item]?.chi
+              chi: res[item]?.chi,
+              eventLunar: res[item]?.eventLunar
             }
+            return data
           })
           const newDate = new Date()
           this.longSoList.forEach((item: any) => {
@@ -80,7 +82,7 @@ export class LongSoComponent implements OnInit {
               longSo: this.longSo,
               soTemplate: item?.name?.replace('Sớ ', ''),
               eventName: `${item?.name?.replace('Sớ ', '')} ${item?.chi ? 'chi ' + item?.chi : ''}`,
-              eventLunar: this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
+              eventLunar: item?.eventLunar ? item?.eventLunar : this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
             }
             this.generateToken(tokenData)
               .subscribe((tk: any) => {
