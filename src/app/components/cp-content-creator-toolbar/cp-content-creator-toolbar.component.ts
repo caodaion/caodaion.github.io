@@ -396,6 +396,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       .btn-share-item {
         display: none;
       }
+      .hide-print {
+        display: none;
+      }
       </style>
       `
     );

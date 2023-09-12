@@ -527,4 +527,9 @@ export class SoanSoComponent implements OnInit {
       this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
     }
   }
+
+  updateFontSize(event: any) {
+    this.content.fontSize = event;
+    this.onSaveContent()
+  }
 }

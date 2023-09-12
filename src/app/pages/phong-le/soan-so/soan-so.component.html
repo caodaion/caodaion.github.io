@@ -31,7 +31,8 @@
             [rootContent]="previewContent"
             [data]="previewContent"
             [contentEditable]="contentEditable"
-            [isShowFontSizeSelect]="false"
+            (nextFontSize)="updateFontSize($event)"
+            [isShowFontSizeSelect]="true"
           ></cp-content-creator>
         </mat-tab>
       </mat-tab-group>

@@ -5,7 +5,7 @@
         mode="indeterminate"
         *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"
       ></mat-progress-bar>
-      <div class="flex">
+      <div class="flex hide-print">
         <audio
           #audioPlayer
           class="w-100"
