@@ -80,7 +80,7 @@ export class SoanSoComponent implements OnInit {
           .subscribe((res: any) => {
             if (res?.data) {
               this.content = res.data
-              this.content.name = `Sớ ${this.editData.soTemplate}`
+              this.content.name = `Sớ ${this.editData.eventName}`
               console.log(this.content);
               let content = JSON.stringify(this.content)
               // @ts-ignore
@@ -101,9 +101,9 @@ export class SoanSoComponent implements OnInit {
                 }
               })
               // @ts-ignore
-              data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
+              data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`${this.editData.soTemplate}`)))
               this.previewContent = data
-              this.applyForm()
+              // this.applyForm()
             } else {
               initNewContent()
             }
@@ -425,20 +425,20 @@ export class SoanSoComponent implements OnInit {
     let data = JSON.parse(content);
     data.content = data.content.map((item: any, index: any) => {
       return {
-        key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}`,
+        key: `preview-${this.commonService.generatedSlug(`${this.editData.soTemplate}`)}-${index}`,
         type: item.type,
         content: item.content?.map((evn: any, i: any) => {
           return {
             attrs: evn.attrs,
             content: evn.content,
-            key: `preview-${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}-${index}p${i}`,
+            key: `preview-${this.commonService.generatedSlug(`${this.editData.soTemplate}`)}-${index}p${i}`,
             type: evn.type,
           }
         }),
       }
     })
     // @ts-ignore
-    data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)))
+    data = JSON.parse(JSON.stringify(data).replaceAll('preview-', ''))
     if (isNeedToCoppy) {
       console.log({ data: data });
       navigator.clipboard.writeText(JSON.stringify({ data: data }));
