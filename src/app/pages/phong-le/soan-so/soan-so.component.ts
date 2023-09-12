@@ -103,7 +103,7 @@ export class SoanSoComponent implements OnInit {
               // @ts-ignore
               data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`${this.editData.soTemplate}`)))
               this.previewContent = data
-              // this.applyForm()
+              this.applyForm()
             } else {
               initNewContent()
             }
