@@ -116,7 +116,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill" class="setting-form-field">
       <mat-label>Liên kết định danh</mat-label>
-      <input matInput [value]="data.attrs.hash" (blur)="changeHash($event)" />
+      <input matInput [value]="data.attrs?.hash" (blur)="changeHash($event)" />
     </mat-form-field>
   </div>
   <mat-divider [vertical]="true"></mat-divider>

@@ -10,7 +10,7 @@ export class SoanSoService {
   longSoData = <any>{
     'tam-giao': {
       'so-nguon-dan-thoi-ty': {
-        name: 'Ngươn Đán',
+        name: 'Ngươn Đán (Thời Tý)',
         eventLunar: {
           lunarDay: 1,
           lunarMonth: 1,
@@ -18,13 +18,29 @@ export class SoanSoService {
         }
       },
       'so-le-via-duc-dieu-tri-kim-mau-thoi-ty': {
-        name: 'Lễ Vía Đức Diêu Trì Kim Mẫu',
+        name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Tý)',
         eventLunar: {
           lunarDay: 15,
           lunarMonth: 8,
           lunarTime: 'TÝ',
         }
-      }
+      },
+      'so-le-via-duc-dieu-tri-kim-mau-thoi-ngo-cung-cac-thanh-that': {
+        name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Ngọ) (Cúng các Thánh Thất)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 8,
+          lunarTime: 'NGỌ',
+        }
+      },
+      'so-le-via-duc-dieu-tri-kim-mau-thoi-ngo': {
+        name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Ngọ)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 8,
+          lunarTime: 'NGỌ',
+        }
+      },
     },
     'tam-tran': {
       'so-cau-sieu': {
