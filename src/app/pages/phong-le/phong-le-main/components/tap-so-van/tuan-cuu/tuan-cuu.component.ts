@@ -3,10 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
-import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as CryptoJS from "crypto-js";
 import { DatePipe } from '@angular/common';
-import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'app-tuan-cuu',
@@ -52,6 +50,7 @@ export class TuanCuuComponent implements OnInit {
       item?.event?.forEach((ev: any) => {
         ev.lunar.lunarTime = item.defaultTime || ev.lunar.lunarTime
         const tokenData = <any>{
+          longSo: 'tam-tran',
           soTemplate: foundTitle?.eventTitle,
           eventName: `${ev.eventName} chi tuần`,
           eventLunar: ev.lunar,

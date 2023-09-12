@@ -10,6 +10,21 @@
           : ""
       }}
     </h2>
-    <mat-accordion> </mat-accordion>
+    <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+      <mat-grid-tile *ngFor="let item of longSoList">
+        <mat-card
+          appearance="outlined"
+          class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+          matRipple
+          [routerLink]="[item?.link]"
+        >
+          <mat-card-header class="w-100">
+            <mat-card-title class="w-100 text-center"
+              >Soạn Sớ {{ item?.name }}</mat-card-title
+            >
+          </mat-card-header>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
 </div>

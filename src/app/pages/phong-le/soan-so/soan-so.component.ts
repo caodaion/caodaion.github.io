@@ -76,7 +76,7 @@ export class SoanSoComponent implements OnInit {
         }
       }
       try {
-        this.soanSoService.getSoTemplate(this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`))
+        this.soanSoService.getSoTemplate(`${this.editData.longSo}/${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}`)
           .subscribe((res: any) => {
             if (res?.data) {
               this.content = res.data
@@ -116,20 +116,20 @@ export class SoanSoComponent implements OnInit {
   }
 
   applyCauSieuForm() {
-    if (this.editData.subject.details.name) {
-      this.applyData('ho-va-ten', this.editData.subject.details.name)
+    if (this.editData?.subject?.details?.name) {
+      this.applyData('ho-va-ten', this.editData?.subject?.details?.name)
     }
-    if (this.editData.subject.details.age) {
-      this.applyData('tuoi', this.commonService.convertNumberToText(this.editData.subject.details.age, true))
+    if (this.editData?.subject?.details?.age) {
+      this.applyData('tuoi', this.commonService.convertNumberToText(this.editData?.subject?.details?.age, true))
     }
-    if (this.editData.subject.date.year && this.editData.subject.date.date && this.editData.subject.date.month) {
+    if (this.editData?.subject?.date?.year && this.editData?.subject?.date?.date && this.editData?.subject?.date?.month) {
       const lunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.editData?.subject?.date?.year}-${this.editData?.subject?.date?.month < 10 ? '0' + this.editData?.subject?.date?.month : this.editData?.subject?.date?.month}-${this.editData?.subject?.date?.date < 10 ? '0' + this.editData?.subject?.date?.date : this.editData?.subject?.date?.date}`)).convertSolar2Lunar
       this.applyData('nam-tu-tran', lunarDate.lunarYearName)
       this.applyData('thang-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarMonth, true).toLowerCase())
       this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarDay, true).toLowerCase())
     }
-    if (this.editData.subject.date.lunarTime) {
-      this.applyData('gio-tu-tran', this.editData.subject.date.lunarTime.split('|')[0].trim())
+    if (this.editData?.subject?.date?.lunarTime) {
+      this.applyData('gio-tu-tran', this.editData?.subject?.date?.lunarTime.split('|')[0].trim())
     }
     if (this.editData.eventName) {
       this.applyData('ten-dan-cung', this.editData.eventName)
