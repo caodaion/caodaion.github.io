@@ -80,7 +80,7 @@ export class LongSoComponent implements OnInit {
           this.longSoList.forEach((item: any) => {
             const tokenData = <any>{
               longSo: this.longSo,
-              soTemplate: item?.name?.replace('Sớ ', ''),
+              soTemplate: item.key,
               eventName: `${item?.name?.replace('Sớ ', '')} ${item?.chi ? 'chi ' + item?.chi : ''}`,
               eventLunar: item?.eventLunar ? item?.eventLunar : this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
             }

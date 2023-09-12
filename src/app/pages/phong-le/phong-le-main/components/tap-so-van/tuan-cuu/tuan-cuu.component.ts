@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import * as CryptoJS from "crypto-js";
 import { DatePipe } from '@angular/common';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-tuan-cuu',
@@ -19,7 +20,8 @@ export class TuanCuuComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private commonService: CommonService,
   ) {
 
   }
@@ -51,7 +53,7 @@ export class TuanCuuComponent implements OnInit {
         ev.lunar.lunarTime = item.defaultTime || ev.lunar.lunarTime
         const tokenData = <any>{
           longSo: 'tam-tran',
-          soTemplate: foundTitle?.eventTitle,
+          soTemplate: this.commonService.generatedSlug(`Sớ ${foundTitle?.eventTitle}`),
           eventName: `${ev.eventName} chi tuần`,
           eventLunar: ev.lunar,
           subject: {

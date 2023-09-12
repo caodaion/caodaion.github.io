@@ -10,7 +10,7 @@ export class SoanSoService {
   longSoData = <any>{
     'tam-giao': {
       'so-nguon-dan-thoi-ty': {
-        name: 'Ngươn Đán (Thời Tý)',
+        name: 'Ngươn Đán',
         eventLunar: {
           lunarDay: 1,
           lunarMonth: 1,

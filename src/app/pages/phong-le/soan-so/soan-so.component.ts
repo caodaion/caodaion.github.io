@@ -76,7 +76,7 @@ export class SoanSoComponent implements OnInit {
         }
       }
       try {
-        this.soanSoService.getSoTemplate(`${this.editData.longSo}/${this.commonService.generatedSlug(`Sớ ${this.editData.soTemplate}`)}`)
+        this.soanSoService.getSoTemplate(`${this.editData.longSo}/${this.editData.soTemplate}`)
           .subscribe((res: any) => {
             if (res?.data) {
               this.content = res.data
