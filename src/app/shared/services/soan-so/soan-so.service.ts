@@ -16,6 +16,14 @@ export class SoanSoService {
           lunarMonth: 1,
           lunarTime: 'TÝ',
         }
+      },
+      'so-le-via-duc-dieu-tri-kim-mau-thoi-ty': {
+        name: 'Lễ Vía Đức Diêu Trì Kim Mẫu',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 8,
+          lunarTime: 'TÝ',
+        }
       }
     },
     'tam-tran': {
