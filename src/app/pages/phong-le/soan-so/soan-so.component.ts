@@ -115,6 +115,11 @@ export class SoanSoComponent implements OnInit {
     }
   }
 
+  applyForm() {
+    this.applyCauSieuForm()
+    this.applyDefaultForm()
+  }
+
   applyCauSieuForm() {
     if (this.editData?.subject?.details?.name) {
       this.applyData('ho-va-ten', this.editData?.subject?.details?.name)
@@ -229,7 +234,11 @@ export class SoanSoComponent implements OnInit {
       this.applyData('nam-dao', this.commonService.convertNumberToText(new Date().getFullYear() - 1926 + 1).toLowerCase())
     }
     if (this.editData.eventLunar.lunarYearName) {
+      const date = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
       this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
+    } else {
+      const date = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+      this.applyData('nam-am-lich', date.lunarYearName)
     }
     if (this.editData.eventLunar.lunarMonth) {
       this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true).toLowerCase())
@@ -377,11 +386,6 @@ export class SoanSoComponent implements OnInit {
         this.applyData('thien-phong', this.defaultLocation?.isThienPhong)
       }
     }
-  }
-
-  applyForm() {
-    this.applyCauSieuForm()
-    this.applyDefaultForm()
   }
 
   applyLocation(id: any, prefix?: any) {
