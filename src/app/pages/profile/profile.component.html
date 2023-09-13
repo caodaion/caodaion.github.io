@@ -1,8 +1,8 @@
 <div class="container-fluid" *ngIf="currentUser?.userName">
-  <h1>{{ currentUser?.name }}</h1>
+  <h1>{{ currentUser?.holyName || currentUser?.name }}</h1>
   <p>@{{ currentUser?.userName }}</p>
   <div>
-    <div class="block lg:flex">
+    <div class="block lg:flex" *ngIf="!currentUser.isGuest">
       <div class="w-full">
         <div class="text-2xl text-center">
           Mã QR đăng nhập/đồng bộ tài khoản
@@ -36,18 +36,32 @@
         </div>
       </div>
     </div>
+    <div *ngIf="currentUser.isGuest">
+      <button
+        mat-flat-button
+        [color]="'warn'"
+        class="w-full"
+        (click)="activeAccount()"
+      >
+        KÍCH HOẠT
+      </button>
+    </div>
     <div class="block lg:flex lg:flex-wrap mx-[-0.5rem] my-8">
       <div class="form-group w-full lg:w-1/5">
         <mat-form-field class="w-full">
           <mat-label>Tên đăng nhập</mat-label>
           <input
-            [disabled]="true"
+            [disabled]="!currentUser.isGuest"
             type="text"
             matInput
             [(ngModel)]="currentUser.userName"
-            (ngModelChange)="updateUserProfile()"
           />
         </mat-form-field>
+        <mat-error *ngIf="userNameRequired"
+          >Bạn cần cập nhật Tên đăng nhập mới có thể kích hoạt. Nếu bạn không
+          biết tạo tên gì? Hãy nhập thông tin của bạn, hệ thống sẽ giúp bạn tạo
+          tên đăng nhập tự động.</mat-error
+        >
       </div>
       <div class="form-group w-full lg:w-1/5">
         <mat-form-field class="w-full">
@@ -162,9 +176,39 @@
     </div>
   </div>
 </div>
-<div class="container-fluid text-center" *ngIf="!currentUser?.userName">
+<div
+  class="container-fluid text-center"
+  *ngIf="!currentUser?.isGuest && !currentUser?.userName"
+>
   <h1>Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
   <button mat-flat-button [routerLink]="'/auth/dang-nhap'" [color]="'primary'">
     Đăng nhập
   </button>
 </div>
+
+<ng-template #passwordDialog>
+  <div mat-dialog-title>Cập nhật nhật mật khẩu</div>
+  <mat-dialog-content>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>Mật khẩu</mat-label>
+      <input type="password" matInput [(ngModel)]="currentUser.password" />
+    </mat-form-field>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>Nhập lại mật khẩu</mat-label>
+      <input type="password" matInput [(ngModel)]="confirmPassword" />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button [matDialogClose]="true">Hủy</button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      [disabled]="
+        currentUser.password && currentUser.password !== confirmPassword
+      "
+      [matDialogClose]="true"
+    >
+      Cập nhật
+    </button>
+  </mat-dialog-actions>
+</ng-template>

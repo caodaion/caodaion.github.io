@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PagenotfoundComponent } from 'src/app/layouts/pagenotfound/pagenotfound.component';
 import { ActionComponent } from './action.component';
-import {AssessGuard} from "../../shared/guards/assess.guard";
-import {VoviGuard} from "../../shared/guards/vovi.guard";
+import { AssessGuard } from "../../shared/guards/assess.guard";
+import { VoviGuard } from "../../shared/guards/vovi.guard";
+import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -40,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ActionRoutingModule {}
+export class ActionRoutingModule { }

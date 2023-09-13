@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {CAODAI_TITLE} from 'src/app/shared/constants/master-data/caodai-title.constant';
 import {AuthService} from 'src/app/shared/services/auth/auth.service';
 import * as CryptoJS from "crypto-js";
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup',
@@ -10,7 +10,9 @@ import * as CryptoJS from "crypto-js";
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
   signUpUser = <any>{};
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
@@ -19,7 +21,7 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private _snackBar: MatSnackBar
   ) {
 
   }
@@ -62,6 +64,11 @@ export class SignupComponent implements OnInit {
         localStorage.setItem('token', JSON.stringify(userToken))
         this.authService.getCurrentUser()
         window.location.href = '/trang-chu'
+        this._snackBar.open('Đã đăng ký thành công', 'Đóng', {
+          duration: this.durationInSeconds * 1000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        })
       }
     }
   }
