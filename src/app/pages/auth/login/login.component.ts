@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { AuthService } from "../../../shared/services/auth/auth.service";
 import { Router } from "@angular/router";
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,9 @@ import { Router } from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
   loginUser = {
     userName: '',
     password: ''
@@ -18,7 +22,10 @@ export class LoginComponent implements OnInit {
   qrData: any;
   jwtHelper = new JwtHelperService();
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private _snackBar: MatSnackBar
+  ) {
   }
 
   ngOnInit(): void {
@@ -45,6 +52,11 @@ export class LoginComponent implements OnInit {
             this.authService.getCurrentUser()
             location.reload()
             location.href = 'trang-chu'
+            this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+              duration: this.durationInSeconds * 1000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            })
           }
         }
       }

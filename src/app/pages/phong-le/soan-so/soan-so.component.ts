@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { LocationService } from 'src/app/shared/services/location/location.service';
@@ -14,6 +15,10 @@ import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 })
 export class SoanSoComponent implements OnInit {
 
+  isPhongLeAccessible: boolean = false
+  currentUser: any;
+  message: any;
+  buttonSettings = <any>{};
   editData: any;
   isLoading: any;
   token: any;
@@ -33,12 +38,29 @@ export class SoanSoComponent implements OnInit {
     private commonService: CommonService,
     private soanSoService: SoanSoService,
     private calendarService: CalendarService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private authService: AuthService
   ) {
 
   }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser()
+    if (this.currentUser) {
+      if (this.currentUser.role.indexOf('phong-le') !== -1) {
+        this.isPhongLeAccessible = true
+      } else {
+        this.isPhongLeAccessible = false
+        this.message = 'Bạn cần cập nhật nhiệm vụ hành chánh có chứa PHÒNG LỄ trong cài đặt tài khoản thì mới được dùng tính năng này'
+        this.buttonSettings.label = 'CẬP NHẬT NGAY'
+        this.buttonSettings.link = `/@${this.currentUser.userName}`
+      }
+    } else {
+      this.isPhongLeAccessible = false
+      this.message = 'Bạn cần phải đăng nhập tài khoản có phân quyền PHÒNG LỄ mới được dùng tính năng này'
+      this.buttonSettings.label = 'ĐĂNG NHẬP NGAY'
+      this.buttonSettings.link = '/auth/dang-nhap'
+    }
     this.route.params.subscribe((query) => {
       if (query['token']) {
         const token = query['token']

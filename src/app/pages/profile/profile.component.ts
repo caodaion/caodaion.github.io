@@ -4,6 +4,7 @@ import { CommonService } from "../../shared/services/common/common.service";
 import * as CryptoJS from "crypto-js";
 import { NgTinyUrlService } from 'ng-tiny-url';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -11,6 +12,9 @@ import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
   currentUser: any;
   qrData: any;
   caodaiTitle = CAODAI_TITLE.data
@@ -37,7 +41,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private commonService: CommonService,
-    private tinyUrl: NgTinyUrlService
+    private tinyUrl: NgTinyUrlService,
+    private _snackBar: MatSnackBar
   ) {
   }
 
@@ -56,6 +61,7 @@ export class ProfileComponent implements OnInit {
     this.roles = this.caodaiTitle
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
   }
+
   getCurrentUser() {
     this.currentUser = this.authService.getCurrentUser()
     console.log(this.currentUser);
@@ -158,5 +164,10 @@ export class ProfileComponent implements OnInit {
     localStorage.setItem('users', JSON.stringify(localStorageUsers))
     localStorage.setItem('token', JSON.stringify(userToken))
     this.getCurrentUser()
+    this._snackBar.open('Đã cập nhật thông tin', 'Đóng', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    })
   }
 }
