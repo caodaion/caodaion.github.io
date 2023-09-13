@@ -176,9 +176,39 @@
     </div>
   </div>
 </div>
-<div class="container-fluid text-center" *ngIf="!currentUser?.isGuest && !currentUser?.userName">
+<div
+  class="container-fluid text-center"
+  *ngIf="!currentUser?.isGuest && !currentUser?.userName"
+>
   <h1>Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
   <button mat-flat-button [routerLink]="'/auth/dang-nhap'" [color]="'primary'">
     Đăng nhập
   </button>
 </div>
+
+<ng-template #passwordDialog>
+  <div mat-dialog-title>Cập nhật nhật mật khẩu</div>
+  <mat-dialog-content>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>Mật khẩu</mat-label>
+      <input type="password" matInput [(ngModel)]="currentUser.password" />
+    </mat-form-field>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>Nhập lại mật khẩu</mat-label>
+      <input type="password" matInput [(ngModel)]="confirmPassword" />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button [matDialogClose]="true">Hủy</button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      [disabled]="
+        currentUser.password && currentUser.password !== confirmPassword
+      "
+      [matDialogClose]="true"
+    >
+      Cập nhật
+    </button>
+  </mat-dialog-actions>
+</ng-template>

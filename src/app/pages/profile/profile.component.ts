@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { CommonService } from "../../shared/services/common/common.service";
 import * as CryptoJS from "crypto-js";
 import { NgTinyUrlService } from 'ng-tiny-url';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,7 @@ export class ProfileComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
-  currentUser: any;
+  currentUser =  <any>{};
   qrData: any;
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
@@ -38,12 +39,16 @@ export class ProfileComponent implements OnInit {
   ]
   userNameRequired: boolean = false
   isHolyNameRequired: boolean = false
+  confirmPassword: any = ''
+
+  @ViewChild('passwordDialog') passwordDialog!: any;
 
   constructor(
     private authService: AuthService,
     private commonService: CommonService,
     private tinyUrl: NgTinyUrlService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private matDiaLog: MatDialog
   ) {
   }
 
@@ -65,7 +70,6 @@ export class ProfileComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.authService.getCurrentUser()
-    console.log(this.currentUser);
     const qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
     if (qrData?.length >= 350) {
       try {
@@ -193,18 +197,26 @@ export class ProfileComponent implements OnInit {
   activeAccount() {
     if (this.currentUser.userName) {
       if (new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
-        delete this.currentUser.isGuest;
-        this.updateUserProfile()
-        this._snackBar.open(`Bạn đã làm rất tốt ${this.currentUser.name}`, 'Đóng', {
-          duration: this.durationInSeconds * 1000,
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
-        })
-        location.reload()
-        location.href = 'trang-chu'
+        if (this.currentUser.password) {
+          delete this.currentUser.isGuest;
+          this.updateUserProfile()
+          this._snackBar.open(`Bạn đã làm rất tốt ${this.currentUser.name}`, 'Đóng', {
+            duration: this.durationInSeconds * 1000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          })
+          location.reload()
+          location.href = 'trang-chu'
+        } else {
+          this.currentUser.password = ''
+          const passworddialog = this.matDiaLog.open(this.passwordDialog, {
+            disableClose: true
+          })
+        }
       } else {
         this.userNameRequired = true
       }
     }
   }
 }
+
