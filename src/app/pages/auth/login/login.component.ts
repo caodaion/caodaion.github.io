@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { AuthService } from "../../../shared/services/auth/auth.service";
-import { Router } from "@angular/router";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-login',
@@ -21,15 +23,30 @@ export class LoginComponent implements OnInit {
   debugDevAdminCount = 0
   qrData: any;
   jwtHelper = new JwtHelperService();
+  cols: any;
+  guestAccounts: any;
+  caodaiTitle = CAODAI_TITLE.data
 
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private _snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit(): void {
-
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.cols = 1;
+        } else {
+          this.cols = 3;
+        }
+      });
+    this.guestAccounts = this.caodaiTitle
+      ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
+    console.log(this.guestAccounts);
   }
 
   countDebugAdmin() {
@@ -82,5 +99,44 @@ export class LoginComponent implements OnInit {
   scanComplete(qrData: any) {
     this.qrData = qrData
     console.log(this.qrData);
+  }
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
+  }
+
+  logInWithGuest(role: any) {
+    const user = {
+      userName: `${new Date().getTime()}`,
+      role: [role],
+      isGuest: true
+    }
+    localStorage.setItem('token', this.generaToken(user))
+    this.authService.getCurrentUser()
+    location.reload()
+    location.href = 'trang-chu'
+    this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    })
   }
 }

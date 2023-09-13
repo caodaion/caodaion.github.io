@@ -36,6 +36,7 @@ export class ProfileComponent implements OnInit {
       color: '#ea4335'
     }
   ]
+  userNameRequired: boolean = false
   isHolyNameRequired: boolean = false
 
   constructor(
@@ -157,17 +158,53 @@ export class ProfileComponent implements OnInit {
         }
       }
     }
-    let localStorageUsers = <any>{}
-    localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
-    const userToken = this.generaToken(this.currentUser)
-    localStorageUsers[this.currentUser.userName] = userToken
-    localStorage.setItem('users', JSON.stringify(localStorageUsers))
-    localStorage.setItem('token', JSON.stringify(userToken))
-    this.getCurrentUser()
-    this._snackBar.open('Đã cập nhật thông tin', 'Đóng', {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    })
+    if (!this.currentUser.isGuest && new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
+      let localStorageUsers = <any>{}
+      localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
+      const userToken = this.generaToken(this.currentUser)
+      localStorageUsers[this.currentUser.userName] = userToken
+      localStorage.setItem('users', JSON.stringify(localStorageUsers))
+      localStorage.setItem('token', JSON.stringify(userToken))
+      this.getCurrentUser()
+      this._snackBar.open('Đã cập nhật thông tin', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      })
+    }
+    if (this.currentUser.isGuest) {
+      const name = this.currentUser?.name?.trim()?.split(' ')
+      let userName = ''
+      if (name?.length > 1) {
+        userName = this.commonService.generatedSlug(name[name.length - 1])
+        name.forEach((item: any, index: any) => {
+          if (index < name.length - 1) {
+            userName += `${this.commonService.generatedSlug(item)[0]}`
+          }
+        })
+        if (this.currentUser?.birthday?.getFullYear()) {
+          userName += this.currentUser?.birthday?.getFullYear()?.toString()?.split('')?.splice(2, 2)?.join('')
+        }
+        this.currentUser.userName = userName
+      }
+    }
+  }
+
+  activeAccount() {
+    if (this.currentUser.userName) {
+      if (new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
+        delete this.currentUser.isGuest;
+        this.updateUserProfile()
+        this._snackBar.open(`Bạn đã làm rất tốt ${this.currentUser.name}`, 'Đóng', {
+          duration: this.durationInSeconds * 1000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        })
+        location.reload()
+        location.href = 'trang-chu'
+      } else {
+        this.userNameRequired = true
+      }
+    }
   }
 }

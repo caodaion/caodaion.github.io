@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {CAODAI_TITLE} from 'src/app/shared/constants/master-data/caodai-title.constant';
 import {AuthService} from 'src/app/shared/services/auth/auth.service';
 import * as CryptoJS from "crypto-js";

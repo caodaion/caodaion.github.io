@@ -1,8 +1,8 @@
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {Component, OnInit} from '@angular/core';
-import {CalendarService} from 'src/app/shared/services/calendar/calendar.service';
-import {CommonService} from 'src/app/shared/services/common/common.service';
-import {AuthService} from "../../../shared/services/auth/auth.service";
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { AuthService } from "../../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'app-welcome',
@@ -50,6 +50,7 @@ export class WelcomeComponent implements OnInit {
   ]
   rememberPlease: any = ''
   greating: any = ''
+  isActiveRequired: any = false;
   isPhone: boolean = false;
   time = this.commonService.time;
   nowDate: any;
@@ -79,5 +80,6 @@ export class WelcomeComponent implements OnInit {
     }
     this.rememberPlease = this.randomRemember[getRandomIntInclusive(0, this.randomRemember.length - 1)]
     this.greating = `${this.greatings[getRandomIntInclusive(0, this.greatings.length - 1)]} ${this.authService.currentUser?.name || ''}.`
+    this.isActiveRequired = this.authService.currentUser?.isGuest ? this.authService.currentUser?.userName : ''
   }
 }
