@@ -10,24 +10,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { CpQrScannerModule } from "../../components/cp-qr-scanner/cp-qr-scanner.module";
-import { UpdateJourneyComponent } from './update-journey/update-journey.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AttendanceComponent } from './attendance/attendance.component';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ExpantionJourneyComponent } from './components/expantion-journey/expantion-journey.component';
 
 
 @NgModule({
   declarations: [
     JourneyComponent,
-    UpdateJourneyComponent,
-    AttendanceComponent,
-    DashboardComponent
+    ExpantionJourneyComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +43,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDividerModule,
     NgChartsModule,
     MatTableModule,
-    MatMenuModule
+    MatMenuModule,
+    MatExpansionModule
   ]
 })
 export class JourneyModule { }
