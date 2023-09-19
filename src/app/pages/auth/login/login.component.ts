@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
 
   scanComplete(qrData: any) {
     this.qrData = qrData
-    console.log(this.qrData);
+    location.href = this.qrData
   }
 
   generaToken(data: any) {

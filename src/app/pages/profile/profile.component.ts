@@ -6,6 +6,8 @@ import { NgTinyUrlService } from 'ng-tiny-url';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-profile',
@@ -48,7 +50,8 @@ export class ProfileComponent implements OnInit {
     private commonService: CommonService,
     private tinyUrl: NgTinyUrlService,
     private _snackBar: MatSnackBar,
-    private matDiaLog: MatDialog
+    private matDiaLog: MatDialog,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -59,6 +62,16 @@ export class ProfileComponent implements OnInit {
       this.getRoles()
       this.updateUserProfile()
     } else {
+      this.route.params.subscribe((param: any) => {
+        if (param?.username) {
+          this.route.queryParams.subscribe((query: any) => {
+            if (query['t']) {
+              localStorage.setItem('token', query['t'])
+              location.href = location.href.split('?')[0]
+            }
+          })
+        }
+      })
     }
   }
 
