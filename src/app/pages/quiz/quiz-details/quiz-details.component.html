@@ -10,17 +10,19 @@
     <app-header class="header">
       <div class="kinh-header">{{ name || "" }}</div>
     </app-header>
-    <mat-grid-list [cols]="cols" *ngIf="!article">
-      <mat-grid-tile
-        *ngFor="let item of quizListOfDoc"
-        class="quiz"
-        [routerLink]="item?.key"
-      >
-        <mat-card>
-          <mat-card-title>{{ item?.name }}</mat-card-title>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+    <div class="container-fluid" *ngIf="!article">
+      <mat-grid-list [cols]="cols">
+        <mat-grid-tile
+          *ngFor="let item of quizListOfDoc"
+          class="quiz"
+          [routerLink]="item?.key"
+        >
+          <mat-card>
+            <mat-card-title>{{ item?.name }}</mat-card-title>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
     <div *ngIf="article" class="w-full h-full flex flex-col">
       <audio
         src="assets/audios/sound-effect/mixkit-correct-answer-notification-947.wav"
@@ -156,7 +158,9 @@
               class="container-fluid h-full flex flex-col items-center justify-center"
             >
               <h3 class="text-center mb-8">{{ message }}</h3>
-              <div class="w-full justify-around items-center flex-wrap lg:!px-12">
+              <div
+                class="w-full justify-around items-center flex-wrap lg:!px-12"
+              >
                 <div
                   class="border-4 border-[#4285f4] rounded-2xl w-[150px] h-[100px] mb-4"
                 >
