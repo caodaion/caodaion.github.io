@@ -52,7 +52,7 @@
     <mat-accordion multi>
       <mat-expansion-panel disabled hideToggle [expanded]="true">
         <mat-expansion-panel-header>
-          <mat-panel-title><h2 class="content-name">{{ content?.name }}</h2></mat-panel-title>
+          <mat-panel-title><h3 class="content-name">{{ content?.name }}</h3></mat-panel-title>
           <div class="d-flex align-items-center">
             <button mat-stroked-button (click)="onReadNow()">Đọc</button>
           </div>
@@ -61,7 +61,7 @@
           <mat-accordion multi>
             <mat-expansion-panel *ngFor="let q of content?.content" hideToggle [expanded]="false">
               <mat-expansion-panel-header>
-                <mat-panel-title><h3 class="content-name">{{getContentName(q)}}</h3></mat-panel-title>
+                <mat-panel-title><h6 class="content-name">{{getContentName(q)}}</h6></mat-panel-title>
                 <div class="d-flex align-items-center">
                   <button mat-stroked-button (click)="readContent(q)">Đọc</button>
                 </div>

@@ -19,7 +19,6 @@ import { HeaderModule } from "../../components/header/header.module";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CpContentCreatorModule } from "../../components/cp-content-creator/cp-content-creator.module";
 import { BottomNavigatorModule } from "../../components/bottom-navigator/bottom-navigator.module";
-import { BookTableContentComponent } from './book-table-content/book-table-content.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 
@@ -28,8 +27,7 @@ import { MatListModule } from '@angular/material/list';
     declarations: [
         LibrarianComponent,
         BooksComponent,
-        BookComponent,
-        BookTableContentComponent
+        BookComponent
     ],
     imports: [
         CommonModule,
