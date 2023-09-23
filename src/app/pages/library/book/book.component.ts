@@ -2,6 +2,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LibraryService } from 'src/app/shared/services/library/library.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class BookComponent implements OnInit {
   content: any;
   isLoading: boolean = false;
   isShowTableContent: boolean = false;
+  contentEditable: boolean = false;
   nowContent: any;
   level: any;
   navigate = {
@@ -33,7 +35,8 @@ export class BookComponent implements OnInit {
     private route: ActivatedRoute,
     private breakpointObserver: BreakpointObserver,
     private libraryService: LibraryService,
-    private titleService: Title
+    private titleService: Title,
+    private authService: AuthService
   ) {
 
   }
@@ -55,6 +58,8 @@ export class BookComponent implements OnInit {
         );
       }
     })
+    this.authService.getCurrentUser()
+    this.contentEditable = this.authService.contentEditable
   }
 
   getContent(key?: any, level?: any) {

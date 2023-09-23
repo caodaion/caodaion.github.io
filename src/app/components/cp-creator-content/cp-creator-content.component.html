@@ -256,3 +256,32 @@
   *ngIf="data.focused"
   [data]="data"
 ></cp-creator-block-toolbar>
+<ng-template #contentMenu>
+  <h4>{{ shareInformation?.content }}</h4>
+  <div class="flex">
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      class="w-1/2 me-2"
+      (click)="copyContent('content')"
+    >
+      Sao Chép nội dung
+    </button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      class="w-1/2 ms-2"
+      (click)="copyContent('link')"
+    >
+      Sao chép liên kết
+    </button>
+  </div>
+  <button
+    mat-flat-button
+    [color]="'primary'"
+    class="w-full mt-4"
+    (click)="copyContent('content&link')"
+  >
+    Sao chép cả nội dung và liên kết
+  </button>
+</ng-template>

@@ -7,6 +7,7 @@ import {
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { LocationService } from 'src/app/shared/services/location/location.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'cp-creator-content',
@@ -32,6 +33,9 @@ export class CpCreatorContentComponent implements OnChanges {
   @Output() contentToContent = new EventEmitter()
   updated: boolean = false
   @ViewChild('contentDiv') contentDiv!: ElementRef<any>;
+  @ViewChild('contentMenu') contentMenu!: any;
+  shareBottomSheetRef: any;
+  shareInformation: any;
 
   @HostListener('document:click', ['$event'])
   click(event: any) {
@@ -81,11 +85,22 @@ export class CpCreatorContentComponent implements OnChanges {
     this.data.focused = false
   }
 
+  @HostListener('document:contextmenu', ['$event'])
+  onContextMenu(event: MouseEvent) {
+    if (!this.contentEditable) {
+      if (event?.button === 2) {
+        event.preventDefault()
+        this.showContentMenu(event)
+      }
+    }
+  }
+
   constructor(
     private _snackBar: MatSnackBar,
     private eRef: ElementRef,
     public authService: AuthService,
     private commonService: CommonService,
+    private matBottomSheet: MatBottomSheet,
     private locationService: LocationService
   ) {
   }
@@ -363,6 +378,45 @@ export class CpCreatorContentComponent implements OnChanges {
       }
     } else {
       this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
+    }
+  }
+
+  showContentMenu(event: any) {
+    this.shareInformation = {
+      content: event.target?.outerText,
+      id: event.target?.id,
+      targetLink: `${location.href?.split('#')[0]}#${event.target?.id}`
+    }
+    this.shareBottomSheetRef = this.matBottomSheet.open(this.contentMenu)
+  }
+
+  copyContent(type: any) {
+    if (type === 'content') {
+      navigator.clipboard.writeText(this.shareInformation.content);
+      this.shareBottomSheetRef.dismiss()
+      this._snackBar.open('Đã sao chép nội dung', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    }
+    if (type === 'link') {
+      navigator.clipboard.writeText(this.shareInformation.targetLink);
+      this.shareBottomSheetRef.dismiss()
+      this._snackBar.open('Đã sao chép liên kết', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    }
+    if (type === 'content&link') {
+      navigator.clipboard.writeText(`${this.shareInformation.content}\n${this.shareInformation.targetLink}`);
+      this.shareBottomSheetRef.dismiss()
+      this._snackBar.open('Đã sao chép nội dung và liên kết', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
     }
   }
 }
