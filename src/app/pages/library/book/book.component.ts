@@ -120,7 +120,7 @@ export class BookComponent implements OnInit {
         if (location.hash) {
           setTimeout(() => {
             // @ts-ignore
-            const targetedContent = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${location.hash.replace('#', '')}`)
+            const targetedContent = document.getElementById(`${location.hash.replace('#', '')}`)
             const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
             if (targetedContent) {
               // @ts-ignore
