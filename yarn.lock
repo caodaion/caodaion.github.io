@@ -1851,6 +1851,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@kulkul/tinyurl-client@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/@kulkul/tinyurl-client/-/tinyurl-client-1.0.7.tgz"
+  integrity sha512-MWTs55Wt8Kl/JdDlXfugtTIjACqKMOIpz//DskG9EA0v2tPeNTyyvL8w3mTpSvyVlIzmuvqgB/RcvglZc2mDtw==
+
 "@kurkle/color@^0.3.0":
   version "0.3.2"
   resolved "https://registry.npmjs.org/@kurkle/color/-/color-0.3.2.tgz"
@@ -2904,6 +2909,13 @@
   version "20.4.5"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.4.5.tgz"
   integrity sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==
+
+"@types/qrcode@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.npmjs.org/@types/qrcode/-/qrcode-1.5.2.tgz"
+  integrity sha512-W4KDz75m7rJjFbyCctzCtRzZUj+PrUHV+YjqDp50sSRezTbrtEAIq2iTzC6lISARl3qw+8IlcCyljdcVJE0Wug==
+  dependencies:
+    "@types/node" "*"
 
 "@types/qs@*":
   version "6.9.8"
@@ -8125,6 +8137,18 @@ thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.npmjs.org/thunky/-/thunky-1.1.0.tgz"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
+
+tiny-url-regex@^1.0.0:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/tiny-url-regex/-/tiny-url-regex-1.0.4.tgz"
+  integrity sha512-tcOeF/S8E611CS6Od8MH18Or/OWBDSut214bIiegcRuLX+xPo8SPFnNsn3hVHE7M8S9OrV03R87PgGrZr/HI9Q==
+
+tiny-url@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/tiny-url/-/tiny-url-1.0.0.tgz"
+  integrity sha512-+YOiK+7HFg7/edckyz2tRDiZqz0hUEyRTLY2oYGRCPuX/bsXddbHYcKp/UepvpirSqZhAI8ESGFBlpo6xzrzvg==
+  dependencies:
+    tiny-url-regex "^1.0.0"
 
 tmp@^0.0.33:
   version "0.0.33"

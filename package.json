@@ -55,6 +55,7 @@
     "@angular/compiler-cli": "~16.2.6",
     "@types/jasmine": "~3.10.7",
     "@types/node": "^12.11.1",
+    "@types/qrcode": "^1.5.2",
     "angular-cli-ghpages": "^1.0.5",
     "autoprefixer": "^10.4.15",
     "jasmine-core": "~3.10.0",
