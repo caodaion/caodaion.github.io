@@ -150,14 +150,14 @@
     ora "5.4.1"
     rxjs "7.8.1"
 
-"@angular/animations@^15.0.0", "@angular/animations@^16.0.0 || ^17.0.0", "@angular/animations@~16.2.6", "@angular/animations@16.2.6":
+"@angular/animations@^16.0.0", "@angular/animations@^16.0.0 || ^17.0.0", "@angular/animations@~16.2.6", "@angular/animations@16.2.6":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/animations/-/animations-16.2.6.tgz"
   integrity sha512-NHnHdZFKLr1PB8RhscjsE/DMSVHhtjCqc3bhtOiOMYfAgm4nYrSFvp6nAaT5OoMTeAWuM0n8/HvAiFweEQgVQA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^15.0.0", "@angular/cdk@>=14.0.0", "@angular/cdk@~16.2.3", "@angular/cdk@16.2.5":
+"@angular/cdk@^16.0.0", "@angular/cdk@>=14.0.0", "@angular/cdk@~16.2.3", "@angular/cdk@16.2.5":
   version "16.2.5"
   resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-16.2.5.tgz"
   integrity sha512-9VbdWSYVFQq9y7Dl8KMooE+Sa5nx0l4Neue1IMmSS2v8b602VykiYA5aqz0BsLjfoiboXlUz6LCBXxukJtogcQ==
@@ -190,7 +190,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^10.0.14", "@angular/common@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/common@^15.0.0", "@angular/common@^16.0.0 || ^17.0.0", "@angular/common@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/common@>= 10.0.0", "@angular/common@>=12.0.0", "@angular/common@>=14.0.0", "@angular/common@~16.2.6", "@angular/common@16.2.6", "@angular/common@x.x.x":
+"@angular/common@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/common@^16.0.0", "@angular/common@^16.0.0 || ^17.0.0", "@angular/common@>= 10.0.0", "@angular/common@>=12.0.0", "@angular/common@>=14.0.0", "@angular/common@~16.2.6", "@angular/common@16.2.6", "@angular/common@x.x.x":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/common/-/common-16.2.6.tgz"
   integrity sha512-BjnahvtJHh2zXfCZjpWit+zMkggl/PrgUtPd02egzLmEKyXIMmQLYNpDZ+Pqgpb7eefU8yBPhL7WA2oKFjHjSg==
@@ -211,14 +211,14 @@
     tslib "^2.3.0"
     yargs "^17.2.1"
 
-"@angular/compiler@^15.0.0", "@angular/compiler@~16.2.6", "@angular/compiler@16.2.6":
+"@angular/compiler@^16.0.0", "@angular/compiler@~16.2.6", "@angular/compiler@16.2.6":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-16.2.6.tgz"
   integrity sha512-FKv9isn8BdM9TydyhdqcFhFD8nn11+fGqg3qbIQnOlnLb0ryYign93zBmlx/qFu46PvPtTmhsa4saE2NwvrSbg==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^10.0.14", "@angular/core@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/core@^15.0.0", "@angular/core@^16.0.0 || ^17.0.0", "@angular/core@^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0", "@angular/core@>= 10.0.0", "@angular/core@>=14.0.0", "@angular/core@~16.2.6", "@angular/core@16.2.6", "@angular/core@x.x.x":
+"@angular/core@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/core@^16.0.0", "@angular/core@^16.0.0 || ^17.0.0", "@angular/core@>= 10.0.0", "@angular/core@>=14.0.0", "@angular/core@~16.2.6", "@angular/core@16.2.6", "@angular/core@x.x.x":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/core/-/core-16.2.6.tgz"
   integrity sha512-F7kJbkVHLupdVQbwjjEuWp5rtxmfnL571VtqRN/8OJZAI2OjZjnSbL+FRZGEZHDmOZ2cNgPKpYt/d3nbK8hpSw==
@@ -247,14 +247,14 @@
     tslib "^2.0.0"
     winston "^3.0.0"
 
-"@angular/forms@^15.0.0", "@angular/forms@^16.0.0 || ^17.0.0", "@angular/forms@~16.2.6":
+"@angular/forms@^16.0.0", "@angular/forms@^16.0.0 || ^17.0.0", "@angular/forms@~16.2.6":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/forms/-/forms-16.2.6.tgz"
   integrity sha512-TsSpV6Oh0Z5WlCmRB6jEsChLA8ChBn8CY1uOkTh4YQEzdMCwvBvc1Q2DugER5iGvZU/hRNgjyHX7VR3ysB3JlQ==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/material@^15.0.0", "@angular/material@^15.0.0 || ^16.0.0", "@angular/material@~16.2.3":
+"@angular/material@^15.0.0 || ^16.0.0", "@angular/material@^16.0.0", "@angular/material@~16.2.3":
   version "16.2.5"
   resolved "https://registry.npmjs.org/@angular/material/-/material-16.2.5.tgz"
   integrity sha512-IK+Xs0IYnPUMzbUKzKzL59uDu0LVxwqyNOKj3ZU1MaZrbKIY/KCgjK2TcShYB0nLjuQhuz8Zr5AJW0m2pLZ+0g==
@@ -315,7 +315,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/platform-browser@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/platform-browser@^15.0.0", "@angular/platform-browser@^16.0.0 || ^17.0.0", "@angular/platform-browser@~16.2.6", "@angular/platform-browser@16.2.6":
+"@angular/platform-browser@^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "@angular/platform-browser@^16.0.0", "@angular/platform-browser@^16.0.0 || ^17.0.0", "@angular/platform-browser@~16.2.6", "@angular/platform-browser@16.2.6":
   version "16.2.6"
   resolved "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-16.2.6.tgz"
   integrity sha512-jXtarSZ/n6ytZQ9+Y0aDuazz5POz4UmLN3GxIWtc4kqPOQp4o3DCM16Ig4ioSm53Z/WSDASVaMwtRWN5SXCKfw==
@@ -2905,13 +2905,6 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-20.4.5.tgz"
   integrity sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==
 
-"@types/qrcode@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/@types/qrcode/-/qrcode-1.5.0.tgz"
-  integrity sha512-x5ilHXRxUPIMfjtM+1vf/GPTRWZ81nqscursm5gMznJeK9M0YnZ1c3bEvRLQ0zSSgedLx1J6MGL231ObQGGhaA==
-  dependencies:
-    "@types/node" "*"
-
 "@types/qs@*":
   version "6.9.8"
   resolved "https://registry.npmjs.org/@types/qs/-/qs-6.9.8.tgz"
@@ -3262,13 +3255,12 @@ angular-cli-ghpages@^1.0.5:
     fs-extra "^9.0.1"
     gh-pages "^3.1.0"
 
-angularx-qrcode@^15.0.1:
-  version "15.0.1"
-  resolved "https://registry.npmjs.org/angularx-qrcode/-/angularx-qrcode-15.0.1.tgz"
-  integrity sha512-CirpL2rhhYX/QZ1OSaJ/fusABjDlwl1oYBqaLRqmyie0xTbscWqTBW0DEoht2yCNGN8Wt+JmZwTLxYG6tLuWeQ==
+angularx-qrcode@16.0.2:
+  version "16.0.2"
+  resolved "https://registry.npmjs.org/angularx-qrcode/-/angularx-qrcode-16.0.2.tgz"
+  integrity sha512-FztOM7vjNu88sGxUU5jG2I+A9TxZBXXYBWINjpwIBbTL+COMgrtzXnScG7TyQeNknv5w3WFJWn59PcngRRYVXA==
   dependencies:
-    "@types/qrcode" "1.5.0"
-    qrcode "1.5.1"
+    qrcode "1.5.3"
     tslib "^2.3.0"
 
 ansi-colors@4.1.3:
@@ -4272,7 +4264,9 @@ didyoumean@^1.2.2:
   integrity sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==
 
 dijkstrajs@^1.0.1:
-  version "1.0.2"
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/dijkstrajs/-/dijkstrajs-1.0.3.tgz"
+  integrity sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==
 
 dir-glob@^3.0.1:
   version "3.0.1"
@@ -6368,13 +6362,6 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-tiny-url@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/ng-tiny-url/-/ng-tiny-url-1.0.2.tgz"
-  integrity sha512-rn0Q2Smdzou19LAp0Cg9Hglu7hHBfwzXeqOX43U/5XBsvo7KkRAtge8P683v2PLGMbil4yfridA7NIi1Z1izfw==
-  dependencies:
-    tslib "^2.0.0"
-
 ng2-charts@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/ng2-charts/-/ng2-charts-4.1.1.tgz"
@@ -6406,20 +6393,20 @@ ngx-mat-select-search@^7.0.3:
   dependencies:
     tslib "^2.4.0"
 
-ngx-mat-timepicker@^15.1.7:
-  version "15.1.7"
-  resolved "https://registry.npmjs.org/ngx-mat-timepicker/-/ngx-mat-timepicker-15.1.7.tgz"
-  integrity sha512-FqlRMl5MaFJf+2gM9EC/tjhyph76ec6fHOM5qI+ZF1AQAafzLYq/b2jMsPs6vaVRGiwLQBbH4TgpRkJhRtpsNg==
+ngx-mat-timepicker@16.0.3:
+  version "16.0.3"
+  resolved "https://registry.npmjs.org/ngx-mat-timepicker/-/ngx-mat-timepicker-16.0.3.tgz"
+  integrity sha512-ZuKzUD8IMVyHrxey002SQ/eWl3nu6GGoWrQy4IVpYawIdUWVaPlADiwmH5ru5PYOJNjwY/KBwKVWSU8RCip1/Q==
   dependencies:
-    ts-luxon "^4.2.1"
-    tslib "^2.4.1"
+    ts-luxon "^4.3.2"
+    tslib "^2.5.2"
 
-ngx-scanner-qrcode@^1.2.8:
-  version "1.2.8"
-  resolved "https://registry.npmjs.org/ngx-scanner-qrcode/-/ngx-scanner-qrcode-1.2.8.tgz"
-  integrity sha512-66vc4CUEGY57fp/D9F61aLaM+z2gTjbae/G6HQcEYPIBfbSFJIUxEA4HoAvNf50iq89vA7LHDZ4U9Av8EqJ0ww==
+ngx-scanner-qrcode@1.6.4:
+  version "1.6.4"
+  resolved "https://registry.npmjs.org/ngx-scanner-qrcode/-/ngx-scanner-qrcode-1.6.4.tgz"
+  integrity sha512-heFyE8Jex4QBbsRWfvYXIFb9BRnX1GmExEaH116ANdKh22V8nZPcP/14b18DGjNNBnk1USn/Ry+/5irbio0O4Q==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.3.0"
 
 node-fetch@^2.6.1:
   version "2.6.12"
@@ -7116,10 +7103,10 @@ qjobs@^1.2.0:
   resolved "https://registry.npmjs.org/qjobs/-/qjobs-1.2.0.tgz"
   integrity sha512-8YOJEHtxpySA3fFDyCRxA+UUV+fA+rTWnuWvylOK/NCjhY+b4ocCtmu8TtsWb+mYeU+GCHf/S66KZF/AsteKHg==
 
-qrcode@1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/qrcode/-/qrcode-1.5.1.tgz"
-  integrity sha512-nS8NJ1Z3md8uTjKtP+SGGhfqmTCs5flU/xR623oI0JX+Wepz9R8UrRVCTBTJm3qGw3rH6jJ6MUHjkDx15cxSSg==
+qrcode@1.5.3:
+  version "1.5.3"
+  resolved "https://registry.npmjs.org/qrcode/-/qrcode-1.5.3.tgz"
+  integrity sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==
   dependencies:
     dijkstrajs "^1.0.1"
     encode-utf8 "^1.0.3"
@@ -8219,7 +8206,7 @@ ts-interface-checker@^0.1.9:
   resolved "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz"
   integrity sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==
 
-ts-luxon@^4.2.1:
+ts-luxon@^4.3.2:
   version "4.3.2"
   resolved "https://registry.npmjs.org/ts-luxon/-/ts-luxon-4.3.2.tgz"
   integrity sha512-Vx4iGyvpKxC0pnY1e7O+btm8HxHqbL3s8WNQ+2KCLqCnO13aW3W5LDK8YtzvLDqlbpOTWO08SNC5Ku4lNb/PKw==
@@ -8234,7 +8221,7 @@ tslib@^1.9.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0, tslib@^2.4.1, tslib@^2.5.0, tslib@2.6.1:
+tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0, tslib@^2.5.0, tslib@^2.5.2, tslib@2.6.1:
   version "2.6.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
   integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
@@ -8651,7 +8638,9 @@ whatwg-url@^8.5.0:
     webidl-conversions "^6.1.0"
 
 which-module@^2.0.0:
-  version "2.0.0"
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/which-module/-/which-module-2.0.1.tgz"
+  integrity sha512-iBdZ57RDvnOR9AGBhML2vFZf7h8vmBjhoaZqODJBFWHVtKkDmKuHai3cx5PgVMrX5YDNp27AofYbAwctSS+vhQ==
 
 which@^1.2.1:
   version "1.3.1"
