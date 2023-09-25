@@ -8,6 +8,7 @@
     .hint-max-lenght {
       white-space: nowrap;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
     mat-radio-group {
       margin: 1.34375em 0;
     }
@@ -16,6 +17,7 @@
       flex-direction: column;
       align-items: flex-start;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
     mat-radio-button {
       margin: 5px;
     }

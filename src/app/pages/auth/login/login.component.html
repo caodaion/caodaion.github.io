@@ -2,26 +2,94 @@
   <div class="w-100 h-100 d-flex flex-column align-items-center">
     <div class="login-form-container d-flex flex-column align-items-center">
       <h1>Đăng nhập</h1>
-      <div class="backad" (click)="countDebugAdmin()" *ngIf="devAdministratorAction"></div>
+      <p class="text-center"><strong>*LƯU Ý*</strong></p>
+      <p class="text-center">
+        Tài mỗi tài khoản chỉ lưu dữ liệu của bạn trên
+        <strong>duy nhất</strong> một thiết bị.
+      </p>
+      <p class="text-center">
+        Khi đăng nhập trên thiết bị khác bằng cách đồng bộ thông qua mã QR sẽ
+        hiển thị như một tài khoản mới.
+      </p>
+      <div
+        class="backad"
+        (click)="countDebugAdmin()"
+        *ngIf="devAdministratorAction"
+      ></div>
       <mat-form-field appearance="fill" class="form-control">
         <mat-label>Tên đăng nhập</mat-label>
-        <input matInput [(ngModel)]="loginUser.userName" type="text" autocomplete="new-password"
-               (input)="enterLoginInformation()"
-               (keyup.enter)="login()">
+        <input
+          matInput
+          [(ngModel)]="loginUser.userName"
+          type="text"
+          autocomplete="new-password"
+          (input)="enterLoginInformation()"
+          (keyup.enter)="login()"
+        />
       </mat-form-field>
       <mat-form-field appearance="fill" class="form-control">
         <mat-label>Mật khẩu</mat-label>
-        <input matInput [(ngModel)]="loginUser.password" type="password" autocomplete="new-password"
-               (input)="enterLoginInformation()"
-               (keyup.enter)="login()">
+        <input
+          matInput
+          [(ngModel)]="loginUser.password"
+          type="password"
+          autocomplete="new-password"
+          (input)="enterLoginInformation()"
+          (keyup.enter)="login()"
+        />
       </mat-form-field>
       <div class="w-100 d-flex justify-content-between button-group">
-        <button mat-button color="primary">Chưa có tài khoản? Đăng ký.</button>
-        <button mat-raised-button color="primary" [disabled]="!loginUser.userName || !loginUser.password"
-                *ngIf="!debugDevAdminCount || (debugDevAdminCount >= 12 && debugDevAdminCount % 2 === 0)"
-                (click)="login()">
+        <button mat-button color="primary" [routerLink]="'/auth/dang-ky'">
+          Chưa có tài khoản? Đăng ký.
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!loginUser.userName || !loginUser.password"
+          *ngIf="
+            !debugDevAdminCount ||
+            (debugDevAdminCount >= 12 && debugDevAdminCount % 2 === 0)
+          "
+          (click)="login()"
+        >
           ĐĂNG NHẬP
         </button>
+      </div>
+      <mat-accordion class="w-full">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header
+            >Đăng nhập với quyền khách</mat-expansion-panel-header
+          >
+          <p class="text-lg">
+            <strong class="text-2xl">LƯU Ý:</strong>
+            <br />
+            Tài khoản khách này chỉ là tài khoản trải nghiệm tính năng. Không
+            có tác dụng lưu trữ dữ liệu hoạt động.
+            <br />
+            Bạn hoàn toàn có thể
+            <strong> kích hoạt tài khoản</strong>
+            thành <strong>tài khoản chính thức</strong> nếu chưa đăng xuất.
+            <br />
+            Nếu đăng xuất, mọi dữ liệu của tài khoản khách sẽ bị XÓA khỏi hệ
+            thống.
+          </p>
+          <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+            <mat-grid-tile
+              *ngFor="let item of guestAccounts"
+              (click)="logInWithGuest(item?.key)"
+              class="border cursor-pointer rounded"
+              >{{ item?.name }}</mat-grid-tile
+            >
+          </mat-grid-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="section-divider">
+        <mat-divider class="w-100"></mat-divider>
+        <span>hoặc</span>
+      </div>
+      <div class="w-100">
+        <h3 class="text-center">Quét Mã QR để đăng nhập</h3>
+        <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
       </div>
     </div>
   </div>

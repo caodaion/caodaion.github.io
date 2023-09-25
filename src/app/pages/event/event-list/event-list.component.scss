@@ -3,23 +3,25 @@
 
 ::ng-deep {
   .event-list-container {
+    height: 100%;
+    overflow: hidden;
     .mat-grid-tile-content {
       padding: 0.5rem !important;
     }
 
-    .mat-card {
+    .mat-mdc-card {
       cursor: pointer;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
     .mat-tab-body-content {
       padding: 0.5rem;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
     .mat-tab-body-wrapper {
       flex: 1;
     }
 
-    .mat-tab-group {
+    .mat-mdc-tab-group {
       flex: 1;
       height: 100%;
       overflow: hidden;
@@ -33,10 +35,6 @@
         .event-group-header {
           margin: 1rem 0;
           color: rgba(0, 0, 0, 0.87);
-
-          .event-group-title {
-          }
-
           .event-group-action {
             text-decoration: underline;
           }
@@ -66,13 +64,13 @@
             }
 
             .event-name {
-              margin-bottom: .5rem;
+              padding-bottom: .5rem;
             }
 
             .event-time {
               font-size: 30px;
               font-weight: bold;
-              margin-bottom: .5rem;
+              padding-bottom: .5rem;
             }
 
             .event-location {

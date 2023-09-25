@@ -1,3 +1,5 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
 .login-form-container {
   width: 100%;
   max-width: 700px;
@@ -7,12 +9,23 @@
   border-radius: 1rem;
   margin-top: 3rem;
   position: relative;
+  background: #ffffff;
+  @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+    margin-bottom: 3rem;
+  }
   .form-control {
     width: 100%;
-    margin-top: 2rem;
   }
   .button-group {
     margin-top: 2rem;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      flex-direction: column;
+    }
+    button {
+      @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+        width: 100%;
+      }
+    }
   }
   .backad {
     position: absolute;
@@ -24,5 +37,18 @@
     left: 0;
     visibility: hidden;
     cursor: pointer;
+  }
+  .section-divider {
+    width: 100%;
+    margin: 2rem 0;
+    position: relative;
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+      padding: 0.5rem;
+    }
   }
 }

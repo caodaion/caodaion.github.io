@@ -9,13 +9,6 @@
     }
     .account-logo {
       margin-left: 15px;
-      .mat-icon {
-        height: 30px;
-        width: 30px;
-      }
-      .material-icons {
-        font-size: 30px;
-      }
     }
     .mat-toolbar {
       color: map.get(variables.$light-theme, "on-surface-variant") !important;

@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../../shared/services/auth/auth.service";
-import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {KinhService} from "../../../shared/services/kinh/kinh.service";
-import {EventService} from "../../../shared/services/event/event.service";
-import {Title} from "@angular/platform-browser";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "../../../shared/services/auth/auth.service";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { KinhService } from "../../../shared/services/kinh/kinh.service";
+import { EventService } from "../../../shared/services/event/event.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-kinh-content',
@@ -15,6 +15,7 @@ export class KinhContentComponent implements OnInit {
   rootContent: any;
   content: any;
   isLoading: boolean = false;
+  contentEditable: boolean = false;
   nowContent: any;
   navigate = {
     prev: {
@@ -36,7 +37,8 @@ export class KinhContentComponent implements OnInit {
     private route: ActivatedRoute,
     public authService: AuthService,
     private breakpointObserver: BreakpointObserver,
-    private titleService: Title
+    private titleService: Title,
+    private router: Router
   ) {
   }
 
@@ -52,7 +54,19 @@ export class KinhContentComponent implements OnInit {
         this.queryParams.me = query['me']
         this.queryParams.e = query['e']
       }
+      this.router.navigate(
+        ['.'],
+        {
+          relativeTo: this.route,
+          fragment: location.hash.replace('#', ''),
+          queryParams: {
+            me: this.queryParams.me,
+            e: this.queryParams.e
+          }
+        }
+      );
     })
+    this.contentEditable = this.authService.contentEditable
   }
 
   getKinhContent(key?: any) {
@@ -69,27 +83,29 @@ export class KinhContentComponent implements OnInit {
         this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
         this.isLoading = false
         this.getEventList()
-        this.breakpointObserver
-          .observe(['(max-width: 600px)'])
-          .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: true,
-                  isHideBottomNavBar: true,
-                })
-              );
-            } else {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: false,
-                  isHideBottomNavBar: false,
-                })
-              );
-            }
-          });
+        setTimeout(() => {
+          this.breakpointObserver
+            .observe(['(max-width: 600px)'])
+            .subscribe((state: BreakpointState) => {
+              if (state.matches) {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: true,
+                    isHideBottomNavBar: true,
+                  })
+                );
+              } else {
+                localStorage.setItem(
+                  'currentLayout',
+                  JSON.stringify({
+                    isHideToolbar: false,
+                    isHideBottomNavBar: false,
+                  })
+                );
+              }
+            });
+        }, 0)
         if (location.hash) {
           if (location.pathname.includes('kinh')) {
             setTimeout(() => {
@@ -99,7 +115,7 @@ export class KinhContentComponent implements OnInit {
               targetedContent.style.color = '#4285f4';
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               // @ts-ignore
-              contentCreatorWrapper.scroll({top: targetedContent.offsetTop})
+              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop })
             }, 0)
           }
         }
@@ -113,8 +129,8 @@ export class KinhContentComponent implements OnInit {
       this.rootContent.type = 'block'
     }
     this.rootContent.event = 'quan-hon-tang-te'
-    console.log({data: this.rootContent})
-    navigator.clipboard.writeText(JSON.stringify({data: this.rootContent}));
+    console.log({ data: this.rootContent })
+    navigator.clipboard.writeText(JSON.stringify({ data: this.rootContent }));
   }
 
   private getEventList() {
@@ -156,5 +172,47 @@ export class KinhContentComponent implements OnInit {
 
   getFormValue(key: string) {
     return this.content?.formGroup?.find((item: any) => item.key === key)?.value || ''
+  }
+  swipeCoord: any;
+  swipeTime: any;
+  swipe(e: any, when: any) {
+    const coord: [number, number] = [
+      e.changedTouches[0].clientX,
+      e.changedTouches[0].clientY,
+    ];
+    const time = new Date().getTime();
+
+    if (when === 'start') {
+      this.swipeCoord = coord;
+      this.swipeTime = time;
+    } else if (when === 'end') {
+      let direction: any[] = [];
+      if (this.swipeCoord) {
+        direction = [
+          coord[0] - this.swipeCoord[0],
+          coord[1] - this.swipeCoord[1],
+        ];
+      }
+      let duration: any;
+      if (this.swipeTime) {
+        duration = time - this.swipeTime;
+      }
+
+      if (
+        duration < 1000 && //
+        Math.abs(direction[0]) > 30 && // Long enough
+        Math.abs(direction[0]) > Math.abs(direction[1] * 3)
+      ) {
+        // Horizontal enough
+        const link = direction[0] < 0 ? this.navigate.next.link : this.navigate.prev.link;
+        if (link !== '/') {
+          // Do whatever you want with swipe
+          this.router
+          .navigate([link], {
+            queryParams: this.queryParams,
+          })
+        }
+      }
+    }
   }
 }

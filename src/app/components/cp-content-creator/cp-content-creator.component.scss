@@ -21,6 +21,11 @@
     .mat-drawer-content {
       overflow-y: auto;
       overflow-x: hidden;
+      .block-audio-player {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
     }
 
     .cp-creator-block-group {
@@ -32,6 +37,9 @@
       @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
         padding: 1rem;
       }
+    }
+    .form-control {
+      @apply border-b
     }
   }
 }

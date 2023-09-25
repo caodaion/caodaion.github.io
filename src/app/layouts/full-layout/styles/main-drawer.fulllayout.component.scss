@@ -16,6 +16,7 @@
       flex-direction: column;
       align-items: center;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
     .mat-list-item-content {
       display: flex !important;
       flex-direction: column !important;
@@ -23,15 +24,19 @@
       justify-content: center;
       padding: 0;
     }
-    .mat-list-base .mat-list-item {
+    .mat-mdc-list-base .mat-mdc-list-item {
       color: map.get(variables.$light-theme, "on-surface-variant");
       height: auto;
       margin-bottom: 10px;
       border-radius: 32px;
+      text-align: center;
       &:hover {
         background-color: transparent;
         .icon-hover {
           background: map.get(variables.$light-theme, "hover-background");
+        }
+        &::before {
+          background-color: transparent;
         }
       }
       &:focus {

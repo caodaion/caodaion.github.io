@@ -1,0 +1,203 @@
+<div class="wrapper-container qr-generator-container">
+  <div class="container-fluid">
+    <h1>Tạo mã QR</h1>
+  </div>
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="selectedTabChange($event)">
+    <mat-tab [label]="'TẠO MÃ QR THEO NỘI DUNG'">
+      <div class="container-fluid">
+        <h2>Tạo mã QR theo nội dung</h2>
+        <mat-form-field class="w-100">
+          <mat-label>Nội dung mã</mat-label>
+          <input type="text" matInput [(ngModel)]="qrData" disabled />
+          <button
+            mat-icon-button
+            matSuffix
+            [matTooltip]="'Sao chép liên kết'"
+            *ngIf="qrData"
+            (click)="copyLink(qrData)"
+          >
+            <mat-icon>link</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-label>Nội dung tạo mã</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="data"
+            (change)="onChangeData()"
+          />
+        </mat-form-field>
+        <p class="text-center" *ngIf="error">{{ error }}</p>
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="!error && qrData">
+          <qrcode
+            #parent
+            [qrdata]="qrData"
+            [width]="300"
+            [imageHeight]="75"
+            [imageWidth]="75"
+            [cssClass]="'text-center'"
+            [errorCorrectionLevel]="'M'"
+            [colorDark]="'#000000ff'"
+            [colorLight]="'#ffffffff'"
+            [elementType]="'canvas'"
+            [margin]="4"
+            [scale]="128"
+            [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+          ></qrcode>
+          <div class="text-center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveAsImage(parent)"
+            >
+              <mat-icon>download</mat-icon>
+              Tải Mã QR
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab [label]="'TẠO MÃ QR CHECK-IN'">
+      <div class="container-fluid">
+        <h2>Tạo mã QR check-in</h2>
+        <mat-form-field class="w-100">
+          <mat-label>Nội dung mã</mat-label>
+          <input type="text" matInput [(ngModel)]="checkInQRData" disabled />
+          <button
+            mat-icon-button
+            matSuffix
+            [matTooltip]="'Sao chép liên kết'"
+            *ngIf="checkInQRData"
+            (click)="copyLink(checkInQRData)"
+          >
+            <mat-icon>link</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-label>Địa điểm check-in</mat-label>
+          <mat-select
+            [(ngModel)]="checkInType"
+            (ngModelChange)="generateCheckInQR()"
+          >
+            <mat-option
+              *ngFor="let item of checkInTypes"
+              [value]="item?.key"
+              [disabled]="item?.disabled"
+              >{{ item?.label }}</mat-option
+            >
+            <mat-option [value]="'addMore'">Địa điểm mới</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+        class="w-100"
+        [appearance]="'outline'"
+        *ngIf="checkInType == 'addMore'"
+      >
+        <mat-label>Địa điểm mới</mat-label>
+        <input type="text" matInput [(ngModel)]="addedMoreLocation"
+        (ngModelChange)="generateCheckInQR()"/>
+      </mat-form-field>
+        <p class="text-center" *ngIf="checkInError">{{ checkInError }}</p>
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="!checkInError && checkInQRData">
+          <qrcode
+            #checkIn
+            [qrdata]="checkInQRData"
+            [width]="300"
+            [imageHeight]="75"
+            [imageWidth]="75"
+            [cssClass]="'text-center'"
+            [errorCorrectionLevel]="'M'"
+            [colorDark]="'#000000ff'"
+            [colorLight]="'#ffffffff'"
+            [elementType]="'canvas'"
+            [margin]="4"
+            [scale]="128"
+            [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+          ></qrcode>
+          <div class="text-center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveAsImage(checkIn)"
+            >
+              <mat-icon>download</mat-icon>
+              Tải Mã QR
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab [label]="'TẠO MÃ QR ĐỒNG BỘ DỮ LIỆU CÁ NHÂN'">
+      <div class="container-fluid">
+        <h2>Tạo mã QR đồng bộ dữ liệu</h2>
+        <div>
+          <mat-form-field class="w-100">
+            <mat-label>Nội dung mã</mat-label>
+            <input type="text" matInput [(ngModel)]="syncQRData" disabled />
+            <button
+              mat-icon-button
+              matSuffix
+              [matTooltip]="'Sao chép liên kết'"
+              *ngIf="syncQRData"
+              (click)="copyLink(syncQRData)"
+            >
+              <mat-icon>link</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Loại đồng bộ</mat-label>
+            <mat-select
+              [(ngModel)]="syncType"
+              (ngModelChange)="generateSyncQR()"
+            >
+              <mat-option
+                *ngFor="let item of syncTypes"
+                [value]="item?.key"
+                [disabled]="item?.disabled"
+                >{{ item?.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <p class="text-center" *ngIf="syncError">{{ syncError }}</p>
+        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="!syncError && syncQRData">
+          <qrcode
+            #sync
+            [qrdata]="syncQRData"
+            [width]="300"
+            [imageHeight]="75"
+            [imageWidth]="75"
+            [cssClass]="'text-center'"
+            [errorCorrectionLevel]="'M'"
+            [colorDark]="'#000000ff'"
+            [colorLight]="'#ffffffff'"
+            [elementType]="'canvas'"
+            [margin]="4"
+            [scale]="128"
+            [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+          ></qrcode>
+          <div class="text-center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveAsImage(sync)"
+            >
+              <mat-icon>download</mat-icon>
+              Tải Mã QR
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,18 +1,64 @@
 <div class="creator-block-title position-relative">
   <div class="d-flex align-items-center justify-content-between">
-    <h2 class="w-100" [contentEditable]="authService.contentEditable" (blur)="changeValue($event)">{{data.name}}</h2>
-    <button mat-icon-button class="redirectButton"  (click)="getLink(data, true)" matTooltip="Đọc riêng bài này">
-      <mat-icon>local_library</mat-icon>
-    </button>
+    <h2
+      class="w-100"
+      [contentEditable]="contentEditable"
+      (blur)="changeValue($event)"
+    >
+      {{ data.name }}
+    </h2>
+    <audio class="w-100" #audioPlayer [src]="data?.audio?.src"></audio>
+    <div class="d-flex redirectButton">
+      <button
+        *ngIf="data?.audio?.src"
+        mat-icon-button
+        matTooltip="Nghe riêng bài này"
+        (click)="toggleAudioPlayer(audioPlayer)"
+      >
+        <mat-icon>{{ playerIcon }}</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="getLink(data, true)"
+        matTooltip="Đọc riêng bài này"
+      >
+        <mat-icon>local_library</mat-icon>
+      </button>
+    </div>
   </div>
-  <button mat-icon-button class="targetButton" (click)="getLink(data)" matTooltip="Sao chép liên kết">
+  <button
+    mat-icon-button
+    class="targetButton"
+    (click)="getLink(data)"
+    matTooltip="Sao chép liên kết"
+  >
     <mat-icon>link</mat-icon>
   </button>
 </div>
-<ng-container *ngFor="let block of data.content">
-  <cp-creator-content
-    *ngIf="block.type == 'contentBlock'" [data]="block"
-    [id]="getId(block)"
-    [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
+<ng-container
+  *ngIf="
+    (!contentEditable && data.published) ||
+    (contentEditable && (data.published || !data.published))
+  "
+>
+  <ng-container *ngFor="let block of data.content">
+    <cp-creator-content
+      *ngIf="block.type == 'contentBlock'"
+      [data]="block"
+      [contentEditable]="contentEditable"
+      [contentFormat]="contentFormat"
+      [isShowFontSizeSelect]="isShowFontSizeSelect"
+      [rootContent]="rootContent"
+      [id]="getId(block)"
+      (contentToContent)="contentToContent($event)"
+      [ngClass]="{ targetBlock: block.type == 'contentBlock' }"
+    ></cp-creator-content>
+  </ng-container>
 </ng-container>
-<cp-creator-block-toolbar *ngIf="data.focused" [data]="data"></cp-creator-block-toolbar>
+<ng-container
+  *ngIf="!contentEditable && !data.published"
+><h3>Chưa hoàn thành</h3></ng-container>
+<cp-creator-block-toolbar
+  *ngIf="data.focused"
+  [data]="data"
+></cp-creator-block-toolbar>

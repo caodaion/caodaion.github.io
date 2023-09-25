@@ -7,10 +7,10 @@ import {
   OnInit,
 } from '@angular/core';
 import {
-  MatLegacySnackBar as MatSnackBar,
-  MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
-  MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition,
-} from '@angular/material/legacy-snack-bar';
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import {SwPush, SwUpdate} from '@angular/service-worker';
 import {fromEvent, interval, Observable, Subscription} from 'rxjs';
 import {CommonService} from 'src/app/shared/services/common/common.service';
@@ -18,6 +18,7 @@ import {ViewMissionService} from 'src/app/shared/services/view-mission/view-miss
 import {OfflineSnackbarComponent} from '../offline-snackbar/offline-snackbar.component';
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {MENU} from "../../shared/constants/menu.constant";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'full-layout',
@@ -45,21 +46,22 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   isStandalone: any;
   unreadCount: any = 1;
   protected readonly publicKey =
-    'BH4bb3BZ6rxrmrusCi7YoWbKiWRUbhcKxYZdRsj8MP5-kYcXnCXYhCedWGrTBXmdykfMd8TPX4jALszAgz13h3E';
+    'BOVH41pe57AnjbYpRvEOrJvyo9eGeOkfyCVPvBnvS8KF4IG9Wo6NsEubLzrXbeEz1ihntSxRWh0qOxrdhaWo_I4';
 
   mainMenu = <any>[]
   currentUser: any
 
   constructor(
     private _snackBar: MatSnackBar,
-    private viewMissionService: ViewMissionService,
+    public viewMissionService: ViewMissionService,
     private commonService: CommonService,
     private cd: ChangeDetectorRef,
     private swUpdate: SwUpdate,
     private swPush: SwPush,
     private appRef: ApplicationRef,
     private authService: AuthService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
   }
 
@@ -79,7 +81,6 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
           this.viewPortMode = 'desktop';
         }
       });
-
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -116,6 +117,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // });
     this.mainMenu = this.authService.getMenu(MENU)
     this.currentUser = this.authService.getCurrentUser()
+
   }
 
   clearUnread() {
@@ -137,14 +139,14 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     this.onlineEvent = fromEvent(window, 'online');
     this.offlineEvent = fromEvent(window, 'offline');
     this.subscriptions.push(
-      this.onlineEvent.subscribe((e) => {
+      this.onlineEvent.subscribe((e: any) => {
         this.isOffline = false;
         this.openSnackBar();
       })
     );
 
     this.subscriptions.push(
-      this.offlineEvent.subscribe((e) => {
+      this.offlineEvent.subscribe((e: any) => {
         this.isOffline = true;
         this.openSnackBar();
       })
@@ -178,7 +180,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
       console.log('Not enable to update');
       return;
     }
-    this.swUpdate.available.subscribe((event) => {
+    this.swUpdate.available.subscribe((event: any) => {
       console.log(`current`, event.current, `available`, event.available);
       if (
         confirm(
@@ -188,13 +190,13 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
         this.swUpdate.activateUpdate().then(() => location.reload());
       }
     });
-    this.swUpdate.activated.subscribe((event) => {
+    this.swUpdate.activated.subscribe((event: any) => {
       console.log(`current`, event.previous, `available`, event.current);
     });
   }
 
   checkForUpdate() {
-    this.appRef.isStable.subscribe((isStable) => {
+    this.appRef.isStable.subscribe((isStable: any) => {
       if (!isStable) {
         this.swUpdate.checkForUpdate().then(() => {
           console.log('update checked');
@@ -212,11 +214,11 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     }
     this.swPush.requestSubscription({
       serverPublicKey: this.publicKey,
-    }).then((sub) => console.log(JSON.stringify(sub))).catch(error => console.log(error));
+    }).then((sub: any) => console.log(JSON.stringify(sub))).catch((error: any) => console.log(error));
   }
 
   checkMessage() {
-    this.swPush.messages.subscribe((message) => console.log(message))
+    this.swPush.messages.subscribe((message: any) => console.log(message))
   }
 
   notificationClicks() {
@@ -226,7 +228,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   autoCheckForUpdate() {
-    this.appRef.isStable.subscribe((isStable) => {
+    this.appRef.isStable.subscribe((isStable: any) => {
       if (!isStable) {
         const timeInterval = interval(8 * 60 * 60 * 1000);
         // const timeInterval = interval(2000);
@@ -246,7 +248,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // Show the install prompt
     this.deferredPrompt?.prompt();
     // Wait for the user to respond to the prompt
-    const {outcome} = await this.deferredPrompt.userChoice;
+    const {outcome} = await this.deferredPrompt?.userChoice;
     // Optionally, send analytics event with outcome of user choice
     console.log(`User response to the install prompt: ${outcome}`);
     // We've used the prompt, and can't use it again, throw it away
@@ -266,5 +268,9 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   logout() {
     localStorage.removeItem('token')
     location.reload()
+  }
+
+  goToScreen(path: any) {
+    this.router.navigate([path])
   }
 }

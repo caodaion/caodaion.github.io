@@ -21,6 +21,7 @@
         flex-direction: column;
         overflow: hidden;
         height: 100%;
+        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         mat-tab-group {
           flex: 1;
           overflow: auto;
@@ -49,6 +50,7 @@
       overflow: auto;
     }
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   .mat-tab-label {
     min-width: 0 !important;
     width: 100%;
@@ -69,7 +71,7 @@
     display: flex !important;
     flex-direction: column;
     overflow: hidden !important;
-    .mat-tab-group {
+    .mat-mdc-tab-group {
       max-width: 100%;
       flex: 1;
       overflow: hidden;

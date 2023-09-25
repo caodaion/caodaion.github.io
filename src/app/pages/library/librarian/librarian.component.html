@@ -1,0 +1,140 @@
+<mat-drawer-container class="librarian-container">
+  <mat-drawer-content>
+    <mat-tab-group>
+      <mat-tab label="Sách">
+        <librarian-books
+          [books]="staticBooks"
+          (onItemFocus)="onItemFocus($event, libradianDrawer)"
+        ></librarian-books>
+      </mat-tab>
+      <!-- <mat-tab label="Audio"></mat-tab> -->
+      <mat-tab label="Settings" *ngIf="contentEditable">
+        <div class="container-fluid">
+          <div class="w-100 d-flex align-items-center justify-content-between">
+            <h2>Settings</h2>
+            <button
+              mat-flat-button
+              [color]="'primary'"
+              (click)="saveSettings()"
+            >
+              Save
+            </button>
+          </div>
+          <div *ngFor="let item of staticBooks">
+            <div class="d-flex flex-wrap">
+              <div class="form-group">
+                <mat-label>Published</mat-label>
+                <mat-checkbox [(ngModel)]="item.published"></mat-checkbox>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Key</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.key" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Tên</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.name" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Subtitle</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.subtitle" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field [appearance]="'outline'">
+                  <mat-label>Path</mat-label>
+                  <input type="text" matInput [(ngModel)]="item.path" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <div class="d-flex">
+                  <img [src]="item.image" [alt]="item.name" width="150px" />
+                  <div>
+                    <mat-form-field [appearance]="'outline'">
+                      <mat-label>Hình ảnh</mat-label>
+                      <input type="text" matInput [(ngModel)]="item.image" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group w-100" style="margin-top: 1rem">
+                <mat-form-field [appearance]="'outline'" class="w-100">
+                  <mat-label>Mô tả</mat-label>
+                  <textarea
+                    [(ngModel)]="item.description"
+                    matInput
+                    resize
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+          </div>
+          <button mat-flat-button (click)="addNewSettings()">+ Add new</button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-drawer-content>
+  <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
+    <div class="container-fluid">
+      <div class="preview-area">
+        <button
+          mat-icon-button
+          class="preview-close"
+          (click)="libradianDrawer.close()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <div class="d-flex align-items-center flex-column">
+          <h2 class="text-center">Tóm tắt</h2>
+          <div class="preview-image-wrapper">
+            <img
+              mat-card-image
+              [src]="previewingItem?.image"
+              [alt]="previewingItem?.name"
+            />
+          </div>
+          <h3 class="text-center">{{ previewingItem?.name }}</h3>
+          <p class="text-center">{{ previewingItem?.subtitle }}</p>
+          <div class="w-100" *ngIf="!!previewingItem?.description">
+            <h4>Mô tả:</h4>
+            <p>{{ previewingItem?.description }}</p>
+            <mat-divider></mat-divider>
+          </div>
+          <div class="w-100" *ngIf="!!previewingItem?.reading?.key">
+            <h4>Đang đọc:</h4>
+            <p>
+              <strong>{{ previewingItem?.reading?.name }}</strong>
+              <span *ngIf="previewingItem?.reading?.stopAt">
+                đến đoạn: <br />
+                {{ previewingItem?.reading?.stopAt }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="read-now-button">
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        *ngIf="!!previewingItem?.reading?.key"
+        (click)="onRead(previewingItem?.reading?.location)"
+        style="margin-bottom: 1rem;"
+      >
+        ĐỌC TIẾP
+      </button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        (click)="onRead(previewingItem?.path, true)"
+      >
+        XEM MỤC LỤC
+      </button>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

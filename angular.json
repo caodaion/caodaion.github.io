@@ -35,7 +35,12 @@
               "src/manifest.webmanifest",
               "src/sitemap.xml",
               "src/robots.txt",
-              "src/CNAME"
+              "src/firebase-messaging-sw.js",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-scanner-qrcode/wasm/",
+                "output": "./assets/wasm/"
+              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
@@ -43,7 +48,12 @@
             ],
             "scripts": [],
             "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "ngswConfigPath": "ngsw-config.json",
+            "allowedCommonJsDependencies": [
+              "qrcode",
+              "crypto-js",
+              "moment"
+            ]
           },
           "configurations": {
             "production": {
@@ -51,7 +61,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "500mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -119,7 +129,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://www.caodaion.com"
+            "baseHref": "https://caodaion.github.io"
           }
         }
       }

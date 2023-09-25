@@ -5,6 +5,7 @@
     .selected-month-calendar {
       .dates {
         display: flex;
+        height: 100%;
         flex-wrap: wrap;
         .date {
           width: calc(100% / 7);
@@ -42,8 +43,9 @@
           .date-event {
             height: 100%;
             overflow: auto;
-            .mat-list-base {
-              .mat-list-item,
+            .mat-mdc-list-base {
+              /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+              .mat-mdc-list-item,
               .mat-list-option {
                 height: auto;
                 padding: 3px;

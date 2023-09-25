@@ -1,0 +1,53 @@
+<ng-content></ng-content>
+<ng-template #shareBottomSheet>
+  <h3>{{title}}</h3>
+  <div class="container-fluid">
+    <h4 class="text-2xl my-2 font-semibold">Sao chép liên kết chia sẻ</h4>
+    <mat-form-field class="w-100">
+      <mat-label>Liên kết</mat-label>
+      <input
+        type="text"
+        matInput
+        [value]="sharedUrl"
+        [disabled]="true"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        [matTooltip]="'Sao chép liên kết'"
+        (click)="copyLink()"
+      >
+        <mat-icon>link</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="qr-area text-center">
+      <qrcode
+        #parent
+        [qrdata]="sharedUrl"
+        [width]="300"
+        [imageHeight]="75"
+        [imageWidth]="75"
+        [cssClass]="'flex justify-center'"
+        [errorCorrectionLevel]="'M'"
+        [colorDark]="'#000000ff'"
+        [colorLight]="'#ffffffff'"
+        [elementType]="'canvas'"
+        [margin]="4"
+        [scale]="128"
+        [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+      ></qrcode>
+      <div class="text-center">
+        <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
+          <mat-icon>download</mat-icon> Tải Mã QR chia sẻ
+        </button>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-nav-list>
+      <a mat-list-item (click)="shareTo('facebook')">
+        <span matListItemTitle>Chia sẻ lên Facebook</span>
+        <!-- <span matLine>Chia sẻ lịch cúng cửu này lên Facebook</span> -->
+      </a>
+    </mat-nav-list>
+  </div>
+</ng-template>

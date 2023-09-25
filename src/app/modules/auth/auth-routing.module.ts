@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagenotfoundComponent } from '../../layouts/pagenotfound/pagenotfound.component';
 import { AuthComponent } from './auth.component';
 import {LoginComponent} from "../../pages/auth/login/login.component";
+import { SignupComponent } from 'src/app/pages/auth/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
       {
         path: 'dang-nhap',
         component: LoginComponent,
+      },
+      {
+        path: 'dang-ky',
+        component: SignupComponent,
       },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],

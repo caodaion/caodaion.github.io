@@ -29,6 +29,7 @@ export class BottomNavigatorComponent implements OnInit {
         }
       });
   }
+
   onNavigate(item?: any) {
     this.router
       .navigate([item?.navigate?.link], {

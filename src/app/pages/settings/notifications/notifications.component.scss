@@ -1,0 +1,11 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+
+::ng-deep {
+  .form-group {
+    padding: 0 1rem;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      width: 100%;
+    }
+  }
+}

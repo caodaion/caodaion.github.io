@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div *ngIf="isActiveRequired" class="text-center">
+    <p class="text-2xl text-center text-[#ea4335]">
+      Hãy kích hoạt tài khoản ngay để dùng nhiều tính năng hơn và cá nhân hóa
+      tài khoản của bạn
+    </p>
+    <button mat-flat-button [color]="'warn'" [routerLink]="'/@' + isActiveRequired">KÍCH HOẠT HAY</button>
+  </div>
+  <div
+    class="welcome-container"
+    [ngStyle]="{
+      background: !isPhone ? 'url(assets/images/caodaion-logo.png)' : ''
+    }"
+  >
+    <div class="d-flex">
+      <div>
+        <h1>{{ greating }}</h1>
+        <div [innerHTML]="rememberPlease"></div>
+      </div>
+    </div>
+  </div>
+</div>

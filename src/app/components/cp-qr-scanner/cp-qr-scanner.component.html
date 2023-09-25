@@ -1,0 +1,34 @@
+<mat-form-field class="w-100" *ngIf="action.devices.value.length > 0">
+  <mat-label>Chọn thiết bị quét</mat-label>
+  <mat-select [ngModel]="null" (ngModelChange)="action.playDevice($event)">
+    <mat-option
+      *ngFor="let c of action.devices.value; let i = index"
+      [value]="c.deviceId"
+      >{{ c.label }}</mat-option
+    >
+  </mat-select>
+</mat-form-field>
+<h2
+  class="d-flex flex-column align-items-center text-center"
+  *ngIf="action.devices.value.length == 0"
+>
+  "Ứng dụng đang tìm thiết bị quét của bạn🔍. Xin đợi trong giây lát nhé😉!"
+  <mat-spinner></mat-spinner>
+</h2>
+<div class="scanner-wrapper">
+  <ngx-scanner-qrcode
+    #action="scanner"
+    [config]="config"
+    (event)="onEvent($event)"
+  ></ngx-scanner-qrcode>
+  <div class="feature-button">
+    <button
+      mat-icon-button
+      (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')"
+      class="flash-button"
+      *ngIf="action.devices.value.length > 0"
+    >
+      <mat-icon>{{ action.isTorch ? "flash_on" : "flash_off" }}</mat-icon>
+    </button>
+  </div>
+</div>

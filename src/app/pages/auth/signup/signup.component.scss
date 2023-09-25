@@ -1,0 +1,44 @@
+@use "../../../../sass/variables.scss";
+@use "sass:map";
+.signup-form-container {
+  width: 100%;
+  max-width: 1000px;
+  min-width: 100px;
+  padding: 2rem;
+  border: solid 1px #f4eff4;
+  border-radius: 1rem;
+  margin-top: 3rem;
+  position: relative;
+  background: #ffffff;
+  @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+    margin-bottom: 3rem;
+  }
+  .form-group {
+    padding: 0 1rem;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      width: 100%;
+    }
+  }
+  .button-group {
+    margin-top: 2rem;
+    @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+      flex-direction: column;
+    }
+    button {
+      @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
+        width: 100%;
+      }
+    }
+  }
+  .backad {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background: red;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    cursor: pointer;
+  }
+}

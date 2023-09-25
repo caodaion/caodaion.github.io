@@ -1,0 +1,23 @@
+<ng-container *ngIf="!isPhongLeAccessible">
+  <div class="flex-1 flex flex-col justify-center items-center">
+    <p class="text-center text-3xl my-3">{{ message }}</p>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      *ngIf="buttonSettings"
+      [routerLink]="buttonSettings?.link"
+    >
+      {{ buttonSettings?.label }}
+    </button>
+  </div>
+</ng-container>
+<ng-container *ngIf="isPhongLeAccessible">
+  <mat-tab-group>
+    <mat-tab [label]="'Tập sớ văn'">
+      <app-tap-so-van></app-tap-so-van>
+    </mat-tab>
+    <mat-tab [label]="'Cài đặt'">
+      <app-settings></app-settings>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>

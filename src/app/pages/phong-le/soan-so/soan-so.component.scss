@@ -1,0 +1,29 @@
+::ng-deep {
+  app-soan-so {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+
+    .soan-so-content-title {
+      padding: 2rem;
+      margin: 0;
+    }
+
+    .soan-so-container {
+      &-wrapper {
+        flex: 1;
+        overflow: hidden;
+        .mat-mdc-tab-body-wrapper {
+          @apply h-full
+        }
+      }
+    }
+    .soan-so-header {
+      white-space: normal;
+      overflow: hidden;
+      width: 100%;
+    }
+  }
+}

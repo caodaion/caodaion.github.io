@@ -4,13 +4,16 @@ import { FullLayoutComponent } from './full-layout.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FullLayoutRoutingModule } from './full-layout-routing.module';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 import { CaodaionEditorModule } from 'src/app/components/caodaion-editor/caodaion-editor.module';
 import { MatBadgeModule } from '@angular/material/badge';
+import { KnollModule } from 'src/app/components/knoll/knoll.module';
+import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [FullLayoutComponent],
@@ -26,6 +29,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatMenuModule,
     MatBadgeModule,
     CaodaionEditorModule,
+    KnollModule,
+    ButtonShareModule,
+    MatTooltipModule
   ],
   exports: [FullLayoutComponent],
 })

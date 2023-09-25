@@ -4,8 +4,8 @@ import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [

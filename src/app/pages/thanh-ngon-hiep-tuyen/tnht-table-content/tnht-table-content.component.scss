@@ -12,12 +12,20 @@
     }
 
     .mat-expansion-panel-header {
+      min-height: 48px;
       height: auto;
       .mat-expansion-panel-header-title, .mat-expansion-panel-header .mat-expansion-panel-header-description, .content-name {
         white-space: normal;
         margin-right: 1rem;
       }
     }
+
+    .reading-section {
+      button {
+        margin-bottom: 1rem;
+      }
+    }
+
     .content-name {
       white-space: nowrap;
       overflow: hidden;

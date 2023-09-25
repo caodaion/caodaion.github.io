@@ -1,30 +1,85 @@
 <div class="tnht-table-content">
-  <h1 class="text-center tnht-title">Thánh-Ngôn Hiệp-Tuyển</h1>
+  <h1 class="text-center tnht-title text-4xl">Thánh-Ngôn Hiệp-Tuyển</h1>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="table-content-wrapper">
+    <div class="container-fluid">
+      <div class="reading-section" *ngIf="reading?.name">
+        <h2 class="text-3xl">
+          Bạn đang đọc:
+          <span style="font-weight: 400">{{ reading?.name }}</span>
+        </h2>
+        <p *ngIf="reading?.stopAt" class="mb-5">
+          <strong>Đoạn: </strong>{{ reading?.stopAt }}
+        </p>
+        <button
+          mat-flat-button
+          [color]="'primary'"
+          class="w-100"
+          (click)="continueReading()"
+        >
+          ĐỌC TIẾP
+        </button>
+        <button
+          mat-flat-button
+          [color]="'primary'"
+          class="w-100"
+          *ngIf="reading?.currentTime"
+          (click)="continueReading(true)"
+        >
+          ĐỌC TIẾP VÀ NGHE
+        </button>
+      </div>
+    </div>
     <mat-accordion multi>
-      <mat-expansion-panel *ngFor="let q of tableContent" [expanded]="true" disabled hideToggle>
+      <mat-expansion-panel
+        *ngFor="let q of tableContent"
+        [expanded]="true"
+        disabled
+        hideToggle
+      >
         <mat-expansion-panel-header>
-          <mat-panel-title><h2 class="content-name">{{getContentName(q)}}</h2></mat-panel-title>
+          <mat-panel-title
+            ><h3 class="content-name text-3xl">
+              {{ getContentName(q) }}
+            </h3></mat-panel-title
+          >
           <div class="d-flex align-items-center">
             <button mat-stroked-button (click)="readTNHTContent(q)">Đọc</button>
           </div>
         </mat-expansion-panel-header>
         <div>
           <mat-accordion multi>
-            <mat-expansion-panel *ngFor="let s of q?.content" [expanded]="false" hideToggle [disabled]="!s.content">
+            <mat-expansion-panel
+              *ngFor="let s of q?.content"
+              [expanded]="false"
+              hideToggle
+              [disabled]="!s.content"
+            >
               <mat-expansion-panel-header>
-                <mat-panel-title><h3 class="content-name">{{getContentName(s)}}</h3></mat-panel-title>
+                <mat-panel-title
+                  ><h6 class="content-name">
+                    {{ getContentName(s) }}
+                  </h6></mat-panel-title
+                >
                 <div class="d-flex align-items-center">
-                  <button mat-stroked-button (click)="readTNHTContent(s)">Đọc</button>
+                  <button mat-stroked-button (click)="readTNHTContent(s)">
+                    Đọc
+                  </button>
                 </div>
               </mat-expansion-panel-header>
               <div>
                 <mat-list>
                   <mat-list-item *ngFor="let p of s.content">
-                    <div class="w-100 d-flex justify-content-between align-items-center">
-                      <div class="content-name">{{getContentName(p)}}</div>
+                    <div
+                      class="w-100 d-flex justify-content-between align-items-center"
+                    >
+                      <div class="content-name">
+                        {{ getContentName(p) }}
+                      </div>
                       <div class="d-flex align-items-center">
-                        <button mat-stroked-button (click)="readTNHTContent(p)">Đọc</button>
+                        <button mat-stroked-button (click)="readTNHTContent(p)">
+                          Đọc
+                        </button>
                       </div>
                     </div>
                   </mat-list-item>

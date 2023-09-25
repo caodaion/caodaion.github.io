@@ -1,0 +1,130 @@
+<div class="container-fluid !py-4">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header
+      >Cài đặt mặc định lòng sớ</mat-expansion-panel-header
+    >
+    <div class="flex flex-wrap pt-8">
+      <div class="form-group w-1/4">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Tỉnh/Thành phố</mat-label>
+          <mat-select
+            [(ngModel)]="defaultLocation.province"
+            (ngModelChange)="getDistricts(); updateDefaultLocation()"
+          >
+            <mat-option *ngFor="let item of provinces" [value]="item.code">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/4">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Quận/Huyện</mat-label>
+          <mat-select
+            [(ngModel)]="defaultLocation.district"
+            (ngModelChange)="getWards(); updateDefaultLocation()"
+          >
+            <mat-option
+              *ngFor="let item of filteredDistricts"
+              [value]="item.code"
+              >{{ item.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/4">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Phường/Xã</mat-label>
+          <mat-select
+            [(ngModel)]="defaultLocation.ward"
+            (ngModelChange)="updateDefaultLocation()"
+          >
+            <mat-option
+              *ngFor="let item of filteredWards"
+              [value]="item.code"
+              >{{ item.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/4">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Thôn/Lộ</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="defaultLocation.village"
+            (ngModelChange)="updateDefaultLocation()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/2">
+        <mat-form-field
+          [appearance]="'outline'"
+          class="w-full"
+          [hintLabel]="'Nếu Thánh Thất Đà Lạt thì điền Đà Lạt'"
+        >
+          <mat-label>Tên Thánh Sở</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="defaultLocation.name"
+            (ngModelChange)="updateDefaultLocation()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/2">
+        <mat-form-field
+          [appearance]="'outline'"
+          [hintLabel]="'Thánh Thất/Thánh Tịnh/Nhà Tu/...'"
+          class="w-full"
+        >
+          <mat-label>Tên gọi Thánh sở</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="defaultLocation.called"
+            (ngModelChange)="updateDefaultLocation()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/2">
+        <mat-form-field
+          [appearance]="'outline'"
+          [hintLabel]="'Thiên Bàn/Điện Tiền'"
+          class="w-full"
+        >
+          <mat-label>Tên gọi vị điểm thờ Đức Chí Tôn</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="defaultLocation.target"
+            (ngModelChange)="updateDefaultLocation()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/4">
+        <mat-form-field
+          [appearance]="'outline'"
+          [hintLabel]="'Điền Thánh danh'"
+          class="w-full"
+        >
+          <mat-label>Chức sắc chứng đàn mặc định</mat-label>
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="defaultLocation.eventLeader"
+            (ngModelChange)="updateDefaultLocation()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-1/4">
+        <mat-checkbox
+          (change)="updateDefaultLocation()"
+          [(ngModel)]="defaultLocation.isThienPhong"
+          >Là chức sắc Thiên Phong?</mat-checkbox
+        >
+      </div>
+    </div>
+  </mat-expansion-panel>
+</div>

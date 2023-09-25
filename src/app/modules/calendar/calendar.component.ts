@@ -42,10 +42,9 @@ export class CalendarComponent implements OnInit {
       });
     this.titleSerVice.setTitle(`Lịch | ${CONSTANT.page.name}`)
     this.menu = this.authService.getMenu(MENU.find((item: any) => item.key === 'lich')?.children)
-    if (location.pathname.includes('tinh-tuan-cuu')) {
+    if (location.pathname.split('/').length > 2) {
       this.calendarService.calendarViewMode = ''
     }
-
   }
 
   onToggleDrawer() {

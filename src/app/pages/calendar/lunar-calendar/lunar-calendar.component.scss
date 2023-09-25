@@ -2,6 +2,18 @@
 @use "sass:map";
 ::ng-deep {
   .lunar-calendar-container {
+    .date-event-item {
+      background-color: #fbbc05;
+      height: auto !important;
+      margin-bottom: 0.25rem;
+      border-radius: 3px;
+      padding: 0.25rem;
+      * {
+        font: 400 12px/14px Roboto, sans-serif;
+        overflow: visible;
+        white-space: normal;
+      }
+    }
     .lunar-calendar-toolbar {
       background-color: map.get(variables.$light-theme, "on-primary");
     }
@@ -11,10 +23,16 @@
     .yearly-monthly-special {
       background-color: #4086f4;
       color: map.get(variables.$light-theme, "on-primary");
+      * {
+        color: map.get(variables.$light-theme, "on-primary");
+      }
     }
     .yearly-special-special {
       background-color: #eb4132;
       color: map.get(variables.$light-theme, "on-primary");
+      * {
+        color: map.get(variables.$light-theme, "on-primary");
+      }
     }
   }
   .event-summary-dialog {

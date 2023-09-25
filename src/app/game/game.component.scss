@@ -1,0 +1,63 @@
+::ng-deep {
+  app-game {
+    background-color: #000000;
+    height: 100%;
+  }
+}
+.gameScene {
+  position: relative;
+}
+.latlong {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.5rem;
+  * {
+    text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff, 1px 1px #fff,
+      -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+  }
+}
+.game-page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+.gender-select {
+  padding: 1rem;
+  .gender-option {
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 0.5rem;
+    &--male {
+      color: #09abe9;
+    }
+    &--female {
+      color: #e784b1;
+    }
+    &.active {
+      font-weight: bold;
+      border: 1px dashed currentColor;
+    }
+  }
+}
+.item-chest {
+  cursor: pointer;
+}
+
+.item-chest-content {
+  min-width: 600px;
+}
+.chest-item {
+  border: 1px solid #e9ebec;
+  border-radius: 1rem;
+  cursor: pointer;
+  img {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+  }
+}

@@ -4,8 +4,9 @@
   "theme_color": "#eaf1fb",
   "background_color": "#eaf1fb",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "https://www.caodaion.com/",
+  "start_url": "https://www.caodaion.com",
+  "gsm_sender_id": "671089239835",
   "icons": [
     {
       "src": "assets/icons/windows11/SmallTile.scale-100.png",
@@ -64,7 +65,7 @@
       "sizes": "620x300"
     },
     {
-      "src": "assets/icons/windows11/Wide310x150Logo.scale-400.png",
+      "src": "assets/icons/windows11/Square150x150Logo.scale-400.png",
       "sizes": "1240x600"
     },
     {
@@ -475,7 +476,7 @@
       "name": "Thánh Ngôn Hiệp Tuyển",
       "short_name": "Thánh Ngôn Hiệp Tuyển",
       "description": "Thánh Ngôn Hiệp Tuyển",
-      "url": "/thanh-ngon-hiep-tuyen",
+      "url": "/trang-chu/thanh-ngon-hiep-tuyen",
       "icons": [{ "src": "assets/icons/assets/auto_stories.svg", "sizes": "192x192" }]
     }
   ]

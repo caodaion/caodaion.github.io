@@ -1,5 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
+type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
   selector: 'cp-content-creator-toolbar',
   templateUrl: './cp-content-creator-toolbar.component.html',
@@ -8,7 +12,17 @@ import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@ang
 export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;
   @Input() focusedBlock: any;
+  @Input() contentEditable: boolean = false;
   @Output() save = new EventEmitter();
+
+
+  addedFormField = <any>{}
+  provinces = <any>[];
+  districts = <any>[];
+  filteredDistricts = <any>[];
+  calculatedTuanCuu = <any>[];
+  wards = <any>[];
+  filteredWards = <any>[];
 
   @HostListener('document:keydown.control.enter')
   onKeyControlEnterDown() {
@@ -21,6 +35,16 @@ export class CpContentCreatorToolbarComponent implements OnInit {
     this.saveData()
   }
 
+  @ViewChild('audioDialog') audioDialog!: ElementRef;
+  readonly sel: any;
+  constructor(
+    public dialog: MatDialog,
+    private commonService: CommonService,
+    private locationService: LocationService
+  ) {
+
+  }
+
   ngOnInit(): void {
     // console.log(this.data)
     // @ts-ignore
@@ -30,6 +54,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         key: ''
       }
     }
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   saveData() {
@@ -59,15 +86,15 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         return result;
       }
       this.data.content.push({
-          // @ts-ignore
-          key: `${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length || 0}`,
-          attrs: {
-            pathname: location.pathname,
-            hash: `#${this.data.content.length}`
-          },
-          type: 'contentBlock',
-          focused: true
-        })
+        // @ts-ignore
+        key: `${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length || 0}`,
+        attrs: {
+          pathname: location.pathname,
+          hash: `#${this.data.content.length}`
+        },
+        type: 'contentBlock',
+        focused: true
+      })
       setTimeout(() => {
         // @ts-ignore
         const newEl = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${this.data.content.length - 1 || 0}p0`)
@@ -125,6 +152,273 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         focused: true
       })
     }
+  }
+
+  addContentAudio() {
+    console.log(this.data);
+  }
+
+  openAudioDialog(audioDialog?: any) {
+    if (!this.data.audio) {
+      this.data.audio = { src: '' }
+    }
+    const dialogRef = this.dialog.open(audioDialog)
+  }
+
+  openAddNewInputField(newFieldDialog: any) {
+    const dialogRef = this.dialog.open(newFieldDialog)
+    const sel: any = document.getSelection();
+    if (sel) {
+      const fix = {
+        anchorNode: sel.anchorNode,
+        anchorOffset: sel.anchorOffset,
+        baseNode: sel.baseNode,
+        baseOffset: sel.baseOffset,
+        extentNode: sel.extentNode,
+        extentOffset: sel.extentOffset,
+        focusNode: sel.focusNode,
+        focusOffset: sel.focusOffset,
+        isCollapsed: sel.isCollapsed,
+        rangeCount: sel.rangeCount,
+        type: sel.type,
+        getRangeAt: sel?.getRangeAt(0),
+      }
+
+      const ref: Mutable<this> = this;
+      ref.sel = fix
+      console.log(this.sel);
+    }
+  }
+
+  disabledAddFormField() {
+    if (!this.addedFormField.type || !this.addedFormField.key) {
+      return true
+    }
+    if (this.addedFormField.type === 'comboLocation' && !this.addedFormField.mode) {
+      return true
+    }
+    return false
+  }
+
+  updateAddedFormFieldKey() {
+    this.addedFormField.key = this.commonService.generatedSlug(this.addedFormField.label)
+  }
+
+  addNewInputField() {
+    const find = (array: any, key: any) => {
+      let result: any;
+      array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
+      return result;
+    }
+    const addText = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'INPUT'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.setAttribute('placeholder', this.addedFormField.label)
+      updatedNode.classList.add('font-bold')
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('text')
+      updatedNode.id = this.addedFormField.key
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'text'
+      })
+    }
+    const addTextarea = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'TEXTAREA'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.setAttribute('placeholder', this.addedFormField.label)
+      updatedNode.classList.add('font-bold')
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('textarea')
+      updatedNode.id = this.addedFormField.key
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'textarea'
+      })
+    }
+    const addCheckbox = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'INPUT'
+      let label = 'LABEL'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(label);
+      let inputNode = document.createElement(nodeValue);
+      inputNode.setAttribute('type', 'checkbox')
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('checkbox')
+      inputNode.classList.add('form-control')
+      inputNode.classList.add('checkbox')
+      inputNode.id = this.addedFormField.key
+      updatedNode.setAttribute('for', this.addedFormField.key)
+      updatedNode.innerHTML = `${this.addedFormField.label}${inputNode.outerHTML.toString()}`
+      updatedNode.setAttribute('contentEditable', 'false')
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        value: '',
+        required: false,
+        type: 'checkbox'
+      })
+    }
+    const addComboLocation = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'button'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('font-bold')
+      updatedNode.classList.add('comboLocation')
+      updatedNode.classList.add(this.addedFormField.mode)
+      updatedNode.id = this.addedFormField.key
+      updatedNode.innerHTML = this.addedFormField.label
+      updatedNode.setAttribute('aria-label', this.addedFormField.label)
+      updatedNode.setAttribute('contentEditable', 'false')
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        mode: this.addedFormField.mode,
+        value: '',
+        required: false,
+        type: 'comboLocation'
+      })
+    }
+    if (this.sel) {
+      switch (this.addedFormField.type) {
+        case 'text':
+          addText()
+          break;
+        case 'textarea':
+          addTextarea()
+          break;
+        case 'checkbox':
+          addCheckbox()
+          break;
+        case 'comboLocation':
+          addComboLocation()
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
+    }
+  }
+
+  onPrint() {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 22px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      .btn-share-item {
+        display: none;
+      }
+      .hide-print {
+        display: none;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+
+    const printContent = document.getElementById('contentCreatorWrapper');
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      writeContent.innerHTML = `${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
   }
 }
 

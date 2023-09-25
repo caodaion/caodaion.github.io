@@ -9,19 +9,29 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: '',
+        loadChildren: () =>
+          import('../../pages/home/home.module').then((m) => m.HomeModule),
+      },
+      {
         path: 'kinh',
         loadChildren: () =>
           import('../../pages/kinh/kinh.module').then((m) => m.KinhModule),
       },
       {
-        path: 'su-kien',
+        path: 'thu-vien',
         loadChildren: () =>
-          import('../../pages/event/event.module').then((m) => m.EventModule),
+          import('../../pages/library/library.module').then((m) => m.LibraryModule),
       },
       {
         path: 'thanh-ngon-hiep-tuyen',
         loadChildren: () =>
           import('../../pages/thanh-ngon-hiep-tuyen/thanh-ngon-hiep-tuyen.module').then((m) => m.ThanhNgonHiepTuyenModule),
+      },
+      {
+        path: 'hanh-trinh',
+        loadChildren: () =>
+          import('../../pages/journey/journey.module').then((m) => m.JourneyModule),
       },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],

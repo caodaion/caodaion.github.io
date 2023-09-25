@@ -1,0 +1,140 @@
+<div class="container-fluid">
+  <h1>Đồng bộ dữ liệu</h1>
+  <div *ngIf="syncData">
+    <div *ngIf="syncData?.type === 'journey'">
+      <p>
+        Dữ liệu được đồng bộ là dữ liệu: <strong> Sổ tay hành trình</strong>
+      </p>
+      <div *ngIf="syncData.data">
+        <button
+          mat-flat-button
+          [color]="'primary'"
+          *ngIf="!isSyncSavedLoccaly"
+          (click)="onSyncJourneyData()"
+        >
+          <mat-icon>sync</mat-icon>
+          Đồng bộ ngay
+        </button>
+        <div *ngIf="isSyncSavedLoccaly" class="text-center">
+          <span
+            [ngStyle]="{
+              fontSize: isShowPhoneLayout ? '100px' : '200px'
+            }"
+            >🎉</span
+          >
+          <h2>Dữ liệu Sổ tay hành trình đã được đồng bộ giống nhau</h2>
+          <button
+            mat-flat-button
+            [color]="'primary'"
+            [routerLink]="'/trang-chu/hanh-trinh'"
+          >
+            <mat-icon>trip_origin</mat-icon>
+            Xem Sổ tay hành trình
+          </button>
+        </div>
+        <table
+          mat-table
+          [dataSource]="syncData.data"
+          *ngIf="!isShowPhoneLayout"
+        >
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>Thời gian</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.timestamp | date : "dd/MM/YYYY hh:mm:ss" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Loại</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getRowData(element, "type") }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Địa điểm</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getRowData(element, "location") }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef>Đánh giá</th>
+            <td mat-cell *matCellDef="let element">
+              {{ ratingPieChartLabels[element.rating - 1] || "Chưa đánh giá" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="device">
+            <th mat-header-cell *matHeaderCellDef>Thiết bị</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.method }} trên {{ element.device }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>Ghi chú</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.comment }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-list *ngIf="isShowPhoneLayout">
+          <mat-list-item *ngFor="let item of syncData.data; let index = index">
+            <span matListItemTitle>{{ getRowData(item, "type") }} </span>
+            <span matListItemLine
+              ><strong>Địa điểm:</strong>
+              {{ getRowData(item, "location") }}</span
+            >
+            <span matListItemLine
+              ><strong>Thời gian:</strong>
+              {{ item.timestamp | date : "dd/MM/YYYY hh:mm:ss" }}</span
+            >
+            <span matListItemLine
+              ><strong>Đánh giá: </strong
+              >{{ ratingPieChartLabels[item.rating - 1] }}</span
+            >
+            <span matListItemLine
+              ><strong>Phương thức: </strong>{{ item.method }} trên
+              {{ item.device }}</span
+            >
+            <span matListItemLine
+              ><strong>Ghi chú: </strong>{{ item.comment }}</span
+            >
+            <mat-divider matListItemLine></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!syncData">
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      (click)="onGoToGenerate()"
+      class="w-100"
+    >
+      <mat-icon>add</mat-icon>
+      Tạo mã đồng bộ ngay
+    </button>
+  </div>
+</div>
+<ng-template #confirmSyncJourneyDialog>
+  <div mat-dialog-title>Xác nhận đồng bộ Sổ tay hành trình</div>
+  <mat-dialog-content>
+    <strong>LƯU Ý:</strong>
+    <p>
+      Nấu chấp nhận, Sổ tay hành trình hiện tại của bạn sẽ được làm mới theo dữ
+      liệu đồng bộ.
+    </p>
+    <p>Bạn có muốn tiếp tục?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button mat-dialog-close="true">Hủy</button>
+    <button
+      mat-flat-button
+      mat-dialog-close="true"
+      [color]="'primary'"
+      (click)="storeJourney()"
+    >
+      Chấp nhận
+    </button>
+  </mat-dialog-actions>
+</ng-template>

@@ -6,40 +6,253 @@
   >
     <mat-tab [label]="'SỰ KIỆN'" #tabGroup>
       <div class="main-event-list">
-        <div class="event-group happenning-event" *ngIf="todayEvents.event.length > 0">
-          <div class="event-group-header d-flex justify-content-between align-items-center">
-            <h1 class="event-group-title">HÔM NAY</h1>
-            <button mat-button class="event-group-action"
-                    *ngIf="todayEvents.event.length > 1"
-                    (click)="todayEvents.showFullList = !todayEvents.showFullList">
-              {{todayEvents.showFullList ? 'Ẩn bớt' : 'Xem thêm'}}
+        <div
+          class="container-fluid event-group happenning-event"
+          *ngIf="happeningEvents.event.length > 0"
+        >
+          <div
+            class="event-group-header d-flex justify-content-between align-items-center"
+          >
+            <h1 class="event-group-title">ĐANG DIỄN RA</h1>
+            <button
+              mat-button
+              class="event-group-action"
+              *ngIf="happeningEvents.event.length > 1"
+              (click)="
+                happeningEvents.showFullList = !happeningEvents.showFullList
+              "
+            >
+              {{ happeningEvents.showFullList ? "Ẩn bớt" : "Xem thêm" }}
             </button>
           </div>
           <div class="event-group-list d-flex flex-column align-items-center">
-            <div class="event-card d-flex" *ngFor="let item of todayEvents.event; let index = index"
-                 (click)="viewEvent(item, index)"
-                 [ngClass]="{'position-absolute': !todayEvents.showFullList && index !== 0}"
-                 [ngStyle]="{transform: 'translateY(' + (!todayEvents.showFullList ? (index * 0.5 + 'rem') : '') + ')',
-                 color: item.color || 'rgba(0, 0, 0, 0.87)',
-                 background: item.backgroundColor,
-                 width: !todayEvents.showFullList ? ((100 - (index * 5)) + '%') : '',
-                 zIndex: !todayEvents.showFullList ? (todayEvents.event.length - index) : '',
-                 opacity: !todayEvents.showFullList ? ((100 - (index * 5)) < 100 ? '0.' + ((100 - (index * 5)) - 30) : 1) : ''}">
-              <div class="event-information">
+            <div
+              class="event-card d-flex"
+              *ngFor="let item of happeningEvents.event; let index = index"
+              (click)="clickEvent(item, index)"
+              [ngClass]="{
+                'position-absolute':
+                  !happeningEvents.showFullList && index !== 0
+              }"
+              [ngStyle]="{
+                transform:
+                  'translateY(' +
+                  (!happeningEvents.showFullList ? index * 0.5 + 'rem' : '') +
+                  ')',
+                color: item.color || 'rgba(0, 0, 0, 0.87)',
+                background: item.backgroundColor,
+                width: !happeningEvents.showFullList
+                  ? 100 - index * 5 + '%'
+                  : '',
+                zIndex: !happeningEvents.showFullList
+                  ? happeningEvents.event.length - index
+                  : '',
+                opacity: !happeningEvents.showFullList
+                  ? 100 - index * 5 < 100
+                    ? '0.' + (100 - index * 5 - 30)
+                    : 1
+                  : ''
+              }"
+            >
+              <div class="w-100 event-information">
                 <div class="notification-subscribe">
-                  <button class="notification-subscribe-btn" mat-icon-button aria-label="Bật/Tắt thông báo">
-                    <mat-icon>notifications</mat-icon>
+                  <button
+                    class="notification-subscribe-btn"
+                    (click)="toggleNotificationSubscription(item, index)"
+                    mat-icon-button
+                    aria-label="Bật/Tắt thông báo"
+                  >
+                    <mat-icon>{{
+                      item?.isActiveNotification === true
+                        ? "notifications_active"
+                        : item?.isActiveNotification === false
+                        ? "notifications_off"
+                        : "notifications"
+                    }}</mat-icon>
                   </button>
                   Nhận thông báo
                 </div>
-                <div class="event-name">{{item?.name}}</div>
-                <div class="event-time">{{item?.startTime}}-{{item?.endTime}}</div>
-                <div class="event-location">{{item?.location}}</div>
+                <div (click)="viewEvent(item, index)" class="w-100 event-name">
+                  {{ item?.name }}
+                </div>
+                <div (click)="viewEvent(item, index)" class="w-100 event-time">
+                  {{ item?.startTime | date : "HH:mm" }}-{{
+                    item?.endTime | date : "HH:mm"
+                  }}
+                </div>
+                <div
+                  (click)="viewEvent(item, index)"
+                  class="w-100 event-location"
+                >
+                  {{ item?.location }}
+                </div>
               </div>
             </div>
           </div>
-          <mat-divider [ngStyle]="{marginTop: (todayEvents.event.length * 0.75) + 'rem' }"></mat-divider>
+          <mat-divider
+            [ngStyle]="{
+              marginTop: happeningEvents.event.length * 0.75 + 'rem'
+            }"
+          ></mat-divider>
         </div>
+        <div
+          class="container-fluid event-group happenning-event"
+          *ngIf="upcomingEvents.event.length > 0"
+        >
+          <div
+            class="event-group-header d-flex justify-content-between align-items-center"
+          >
+            <h1 class="event-group-title">SẮP TỚI</h1>
+            <button
+              mat-button
+              class="event-group-action"
+              *ngIf="upcomingEvents.event.length > 1"
+              (click)="
+                upcomingEvents.showFullList = !upcomingEvents.showFullList
+              "
+            >
+              {{ upcomingEvents.showFullList ? "Ẩn bớt" : "Xem thêm" }}
+            </button>
+          </div>
+          <div class="event-group-list d-flex flex-column align-items-center">
+            <div
+              class="event-card d-flex"
+              *ngFor="let item of upcomingEvents.event; let index = index"
+              (click)="clickEvent(item, index)"
+              [ngClass]="{
+                'position-absolute': !upcomingEvents.showFullList && index !== 0
+              }"
+              [ngStyle]="{
+                transform:
+                  'translateY(' +
+                  (!upcomingEvents.showFullList ? index * 0.5 + 'rem' : '') +
+                  ')',
+                color: item.color || 'rgba(0, 0, 0, 0.87)',
+                background: item.backgroundColor,
+                width: !upcomingEvents.showFullList
+                  ? 100 - index * 5 + '%'
+                  : '',
+                zIndex: !upcomingEvents.showFullList
+                  ? upcomingEvents.event.length - index
+                  : '',
+                opacity: !upcomingEvents.showFullList
+                  ? 100 - index * 5 < 100
+                    ? '0.' + (100 - index * 5 - 30)
+                    : 1
+                  : ''
+              }"
+            >
+              <div class="w-100 event-information">
+                <div class="notification-subscribe">
+                  <button
+                    class="notification-subscribe-btn"
+                    (click)="toggleNotificationSubscription(item, index)"
+                    mat-icon-button
+                    aria-label="Bật/Tắt thông báo"
+                  >
+                    <mat-icon>{{
+                      item?.isActiveNotification === true
+                        ? "notifications_active"
+                        : item?.isActiveNotification === false
+                        ? "notifications_off"
+                        : "notifications"
+                    }}</mat-icon>
+                  </button>
+                  Nhận thông báo
+                </div>
+                <div (click)="viewEvent(item, index)" class="w-100 event-name">
+                  {{ item?.name }}
+                </div>
+                <div (click)="viewEvent(item, index)" class="w-100 event-time">
+                  {{ item?.startTime | date : "HH:mm" }}-{{
+                    item?.endTime | date : "HH:mm"
+                  }}
+                </div>
+                <div
+                  (click)="viewEvent(item, index)"
+                  class="w-100 event-location"
+                >
+                  {{ item?.location }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider
+          [ngStyle]="{
+            marginTop: upcomingEvents.event.length * 0.75 + 'rem'
+          }"
+        ></mat-divider>
+        <div
+          class="container-fluid event-group happenning-event"
+          *ngIf="todayEvents.event.length > 0"
+        >
+          <div
+            class="event-group-header d-flex justify-content-between align-items-center"
+          >
+            <h1 class="event-group-title">HÔM NAY</h1>
+            <button
+              mat-button
+              class="event-group-action"
+              *ngIf="todayEvents.event.length > 1"
+              (click)="todayEvents.showFullList = !todayEvents.showFullList"
+            >
+              {{ todayEvents.showFullList ? "Ẩn bớt" : "Xem thêm" }}
+            </button>
+          </div>
+          <div class="event-group-list d-flex flex-column align-items-center">
+            <div
+              class="event-card d-flex"
+              *ngFor="let item of todayEvents.event; let index = index"
+              (click)="clickEvent(item, index)"
+              [ngClass]="{
+                'position-absolute': !todayEvents.showFullList && index !== 0
+              }"
+              [ngStyle]="{
+                transform:
+                  'translateY(' +
+                  (!todayEvents.showFullList ? index * 0.5 + 'rem' : '') +
+                  ')',
+                color: item.color || 'rgba(0, 0, 0, 0.87)',
+                background: item.backgroundColor,
+                width: !todayEvents.showFullList ? 100 - index * 5 + '%' : '',
+                zIndex: !todayEvents.showFullList
+                  ? todayEvents.event.length - index
+                  : '',
+                opacity: !todayEvents.showFullList
+                  ? 100 - index * 5 < 100
+                    ? '0.' + (100 - index * 5 - 30)
+                    : 1
+                  : ''
+              }"
+            >
+              <div class="event-information">
+                <div class="notification-subscribe">
+                  <!-- <button class="notification-subscribe-btn" mat-icon-button aria-label="Bật/Tắt thông báo">
+                    <mat-icon>notifications</mat-icon>
+                  </button>
+                  Nhận thông báo -->
+                </div>
+                <div class="event-name">
+                  <ng-container *ngIf="!item?.startTime && !item?.endTime">
+                    <h2>{{ item?.name || item?.eventName }}</h2>
+                  </ng-container>
+                  <ng-container *ngIf="item?.startTime && item?.endTime">
+                    {{ item?.name || item?.eventName }}
+                  </ng-container>
+                </div>
+                <div class="event-time">
+                  {{ item?.startTime }}
+                  {{ item?.endTime ? "-" + item?.endTime : "" }}
+                </div>
+                <div class="event-location">{{ item?.location }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider
+          [ngStyle]="{ marginTop: todayEvents.event.length * 0.75 + 'rem' }"
+        ></mat-divider>
       </div>
     </mat-tab>
     <mat-tab [label]="'CÀI ĐẶT'" #tabGroup *ngIf="contentEditable">
@@ -50,7 +263,12 @@
           </mat-expansion-panel-header>
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let event of eventList">
-              <mat-card class="h-100 w-100" matRipple [routerLink]="event?.key">
+              <mat-card
+                appearance="outlined"
+                class="h-100 w-100"
+                matRipple
+                [routerLink]="'chinh-sua/' + event?.key"
+              >
                 <mat-card-header>
                   <mat-card-title>{{ event?.name }}</mat-card-title>
                   <mat-card-subtitle>{{ event?.key }}</mat-card-subtitle>
@@ -61,7 +279,12 @@
               </mat-card>
             </mat-grid-tile>
             <mat-grid-tile *ngIf="contentEditable">
-              <mat-card class="h-100 w-100" matRipple [routerLink]="'them-moi'">
+              <mat-card
+                appearance="outlined"
+                class="h-100 w-100"
+                matRipple
+                [routerLink]="'them-moi'"
+              >
                 <mat-card-header>
                   <mat-card-title>+ Thêm mới</mat-card-title>
                   <mat-card-subtitle>Thêm mới sự kiện</mat-card-subtitle>

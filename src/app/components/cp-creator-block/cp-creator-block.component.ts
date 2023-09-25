@@ -1,23 +1,29 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import {
-  MatLegacySnackBar as MatSnackBar,
-  MatLegacySnackBarHorizontalPosition as MatSnackBarHorizontalPosition,
-  MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition
-} from "@angular/material/legacy-snack-bar";
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition
+} from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
-import {AuthService} from "../../shared/services/auth/auth.service";
+import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'cp-creator-block',
   templateUrl: './cp-creator-block.component.html',
   styleUrls: ['./cp-creator-block.component.scss']
 })
-export class CpCreatorBlockComponent implements OnChanges {
+export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
+  @Input() rootContent: any;
+  @Input() contentEditable: boolean = false;
+  @Input() isShowFontSizeSelect: boolean = true;
+  @Input() contentFormat = <any>{};
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  playerIcon = 'play_circle'
   @Output() focusedBlock = new EventEmitter()
+  @ViewChild('audioPlayer') audioPlayer!: ElementRef;
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
@@ -29,12 +35,18 @@ export class CpCreatorBlockComponent implements OnChanges {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.audioTracking()
+    console.log(this.contentEditable);
+
+  }
+
   constructor(
     private _snackBar: MatSnackBar,
     private eRef: ElementRef,
     public authService: AuthService,
     private router: Router
-    ) {
+  ) {
   }
 
   ngOnChanges() {
@@ -47,7 +59,7 @@ export class CpCreatorBlockComponent implements OnChanges {
   getLink(data: any, redirect: boolean = false) {
     if (redirect) {
       if (data?.attrs?.hash?.includes('#')) {
-        this.router.navigate([data?.attrs?.pathname], {fragment: data?.attrs?.hash.replace('#', '')})
+        this.router.navigate([data?.attrs?.pathname], { fragment: data?.attrs?.hash.replace('#', '') })
       } else {
         this.router.navigate([`${data?.attrs?.pathname}${data?.attrs?.hash || ''}`])
       }
@@ -64,5 +76,73 @@ export class CpCreatorBlockComponent implements OnChanges {
   changeValue(event: any) {
     this.data.name = event.target.innerText
     event.target.innerText = event.target.innerHTML
+  }
+
+  toggleAudioPlayer(player?: any) {
+    if (player.paused) {
+      player.play()
+      player.controls = true
+      this.playerIcon = 'pause_circle'
+      let currentTime = player.currentTime
+      localStorage.setItem('audio', JSON.stringify({
+        content: this.data.key,
+        currentTime: currentTime
+      }))
+    } else {
+      player.pause()
+      player.controls = false
+      this.playerIcon = 'play_circle'
+      let currentTime = player.currentTime
+      localStorage.setItem('audio', JSON.stringify({
+        content: this.data.key,
+        currentTime: currentTime
+      }))
+    }
+  }
+
+  contentToContent(event: any) {
+    if (event?.audio?.start) {
+      this.audioPlayer.nativeElement.currentTime = event.audio.start
+    } else {
+      // this.audioPlayer.nativeElement.pause()
+    }
+  }
+
+  audioTracking() {
+    if (this.data.type == 'block') {
+      if (!this.authService.contentEditable) {
+        this.audioPlayer.nativeElement.addEventListener('timeupdate', (event: any) => {
+          const currentTime = this.audioPlayer.nativeElement.currentTime
+          let timeStampContent = this.data.content.find((item: any) => {
+            return currentTime > item?.audio?.start && currentTime < item?.audio?.end
+          })
+          if (timeStampContent) {
+            const targetAudioContent = document.getElementById(timeStampContent.key)
+            if (targetAudioContent) {
+              if (!targetAudioContent.style.color || targetAudioContent.style.color == 'unset') {
+                const creatorContentEditable = document.getElementsByTagName('cp-creator-content')
+                Array.from({ length: creatorContentEditable.length }, (x, i) => {
+                  creatorContentEditable[i].setAttribute('style', 'color: unset')
+                })
+                targetAudioContent.style.color = '#4285f4'
+              }
+            }
+          }
+        })
+        this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
+          const currentTime = this.audioPlayer.nativeElement.currentTime
+          localStorage.setItem('audio', JSON.stringify({
+            content: this.data.key,
+            currentTime: currentTime
+          }))
+        })
+      } else {
+        this.audioPlayer.nativeElement.addEventListener('pause', (event: any) => {
+          const currentTime = this.audioPlayer.nativeElement.currentTime
+          navigator.clipboard.writeText(currentTime)
+          navigator.clipboard.writeText(currentTime)
+        })
+      }
+    }
   }
 }

@@ -1,0 +1,51 @@
+<div class="container-fluid">
+  <div class="pb-4">
+    <h2>Soạn sớ tuần cửu</h2>
+    <mat-accordion>
+      <ng-container *ngFor="let item of tuanCuuEvents; let tceIndex = index">
+        <mat-expansion-panel
+          [expanded]="tceIndex === expanedIndex ? true : false"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">{{
+              item?.eventName
+            }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+              <mat-grid-tile *ngFor="let item of item?.event">
+                <mat-card
+                  appearance="outlined"
+                  class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+                  matRipple
+                  [routerLink]="[item?.link]"
+                  [ngClass]="{
+                    '!border-[#fbbc05] relative': item?.upComming
+                  }"
+                >
+                  <mat-card-header class="w-100">
+                    <mat-card-title class="w-100 text-center"
+                      >Soạn Sớ {{ item?.eventName }}</mat-card-title
+                    >
+                  </mat-card-header>
+                  <mat-card-content>
+                    {{ item?.day }}
+                    {{ item?.lunar?.lunarDay }} tháng
+                    {{ item?.lunar?.lunarMonth }} năm
+                    {{ item?.lunar?.lunarYearName }} ({{
+                      item?.solar | date : "dd/MM/yyyy"
+                    }})
+                  </mat-card-content>
+                  <span
+                    *ngIf="item?.upComming"
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fbbc05] opacity-75"
+                  ></span>
+                </mat-card>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div>
+</div>

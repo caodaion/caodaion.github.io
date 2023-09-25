@@ -1,0 +1,47 @@
+::ng-deep {
+  app-book {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+
+    .mat-expansion-panel-header[aria-disabled=true] {
+      color: unset;
+    }
+
+    .book-content-title {
+      padding: 2rem;
+      margin: 0;
+    }
+
+    .book-container {
+      &-wrapper {
+        flex: 1;
+        overflow: hidden;
+      }
+    }
+    .book-table-content-container {
+      &-wrapper {
+        flex: 1;
+        overflow: auto;
+      }
+    }
+    .book-header {
+      white-space: normal;
+      overflow: hidden;
+      width: 100%;
+    }
+    .content-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reading-section {
+      button {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

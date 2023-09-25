@@ -57,6 +57,7 @@
         <mat-divider></mat-divider>
         <div class="form-group event-form-group">
           <mat-card
+            appearance="outlined"
             *ngFor="let event of currentEvent.event; let eventIndex = index"
             class="event-details"
           >
@@ -167,7 +168,7 @@
               <div class="form-group">
                 <mat-grid-list [cols]="2" [rowHeight]="'2:1'">
                   <mat-grid-tile class="kinh-list-wrapper">
-                    <mat-card class="w-100 h-100 wrapper-container">
+                    <mat-card appearance="outlined" class="w-100 h-100 wrapper-container">
                       <mat-card-header>
                         <mat-card-title>NGUỒN</mat-card-title>
                       </mat-card-header>
@@ -197,7 +198,7 @@
                     </mat-card>
                   </mat-grid-tile>
                   <mat-grid-tile class="kinh-list-wrapper">
-                    <mat-card class="w-100 h-100 wrapper-container">
+                    <mat-card appearance="outlined" class="w-100 h-100 wrapper-container">
                       <mat-card-header>
                         <mat-card-title
                           >Danh sách kinh: {{ event?.name }}</mat-card-title

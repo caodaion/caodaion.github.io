@@ -1,4 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -8,15 +10,33 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input() prevPage: any = '..';
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  current: any;
 
-  ngOnInit(): void {}
+  constructor(
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.current = {
+      title: 'Chia sẻ ngay',
+      location: location.href,
+    }
+  }
 
   onClickBackButton() {
-    this.router
-      .navigate([this.prevPage?.navigate?.link], {
-        relativeTo: this.route,
-        queryParams: this.prevPage?.navigate?.queryParams,
-      });
+    if (this.prevPage?.navigate?.link) {
+      this.router
+        .navigate([this.prevPage?.navigate?.link], {
+          queryParams: this.prevPage?.navigate?.queryParams,
+        });
+    } else {
+      const path = location.pathname.split('/')
+      path.pop()
+      this.router
+        .navigate([path.join('/')], {
+          queryParams: this.prevPage?.navigate?.queryParams,
+        });
+    }
   }
+
 }

@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
+import { DatePipe } from '@angular/common';
+import { TIME_TYPE } from '../../constants/master-data/time-type.constant'
+import { LOCATION_TYPE } from '../../constants/master-data/location-type.constant';
+import { DATE_TYPE } from '../../constants/master-data/date-type.constant';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -10,7 +15,26 @@ export class CommonService {
   commonLocationTypes: any[] = [];
   commonDates: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe
+  ) {
+    this.commonTimes = TIME_TYPE.data
+    this.commonLocationTypes = LOCATION_TYPE.data
+    this.commonDates = DATE_TYPE.data
+    for (let i = 1; i <= 31; i++) {
+      if (i <= 12) {
+        this.commonDates.month.push({
+          key: i < 10 ? `0${i}` : i.toString(),
+          name: `tháng ${i}`,
+        });
+      }
+      this.commonDates.date.push({
+        key: i < 10 ? `0${i}` : i.toString(),
+        name: i,
+      });
+    }
+  }
 
   getTimeList(): Observable<any> {
     return this.http
@@ -98,11 +122,14 @@ export class CommonService {
   );
 
   get time() {
-    return { commonTime: this.getTimeCurrentLunarTime(), time: this._time$ };
+    return { commonTime: this.getTimeLunarTime(), time: this._time$ };
   }
 
-  getTimeCurrentLunarTime() {
+  getTimeLunarTime(time?: Date) {
     let currentDate = new Date();
+    if (time) {
+      currentDate = time
+    }
     let currentFoundTime = this.commonTimes
       ?.filter((item: any) => item.key !== 'all' && item.key !== 'tu-thoi')
       ?.find((item: any) => {
@@ -165,49 +192,68 @@ export class CommonService {
     };
   }
 
-  convertNumberToText(n: any) {
-    const convertNumberGeaterThanTen = (n: any) => {
-      return ''
+  convertNumberToText(n: any, ignoreDeSe: boolean = false) {
+    const convertSplitToText = (num: any) => {
+      let lunar = ''
+      switch (num) {
+        case 1:
+          lunar = 'Nhất'
+          break;
+        case 2:
+          lunar = 'Nhị'
+          break;
+        case 3:
+          lunar = 'Tam'
+          break;
+        case 4:
+          lunar = 'Tứ'
+          break;
+        case 5:
+          lunar = 'Ngũ'
+          break;
+        case 6:
+          lunar = 'Lục'
+          break;
+        case 7:
+          lunar = 'Thất'
+          break;
+        case 8:
+          lunar = 'Bát'
+          break;
+        case 9:
+          lunar = 'Cửu'
+          break;
+        case 10:
+          lunar = 'Thập'
+          break;
+        default:
+          break;
+      }
+      return lunar
     }
-    let lunar = ''
-    switch (n) {
-      case 1:
-        lunar = 'Nhất'
-        break;
-      case 2:
-        lunar = 'Nhị'
-        break;
-      case 3:
-        lunar = 'Tam'
-        break;
-      case 4:
-        lunar = 'Tứ'
-        break;
-      case 5:
-        lunar = 'Ngũ'
-        break;
-      case 6:
-        lunar = 'Lục'
-        break;
-      case 7:
-        lunar = 'Thất'
-        break;
-      case 8:
-        lunar = 'Bát'
-        break;
-      case 9:
-        lunar = 'Cửu'
-        break;
-      case 10:
-        lunar = 'Thập'
-        break;
-      default:
-        convertNumberGeaterThanTen(n)
-        break;
+    const convertNumber = (n: any) => {
+      const decimalSeparator = ['ức', 'thập vạn', 'vạn', 'thiên', 'bách', 'thập']
+      const splitValue = n.toString().trim().split('')
+      let returnValue = ''
+      for (let index = decimalSeparator.length - 1; index >= splitValue.length; index--) {
+        decimalSeparator.shift()
+      }
+      if (splitValue?.length > 1) {
+        for (let index = splitValue.length - 1; index >= 0; index--) {
+          let item = splitValue[index]
+          let value = convertSplitToText(parseInt(item))
+          if (ignoreDeSe) {
+            value = index < splitValue.length - 1 && item == 1 ? '' : convertSplitToText(parseInt(item)).toLowerCase()
+          }
+          const noNeedDeSe = !value && !convertSplitToText(parseInt(splitValue[index - 1]))
+          returnValue = (index === 0 ? '' : noNeedDeSe ? '' : decimalSeparator[index]) + ' ' + value + ' ' + returnValue
+        }
+      } else {
+        returnValue = convertSplitToText(parseInt(splitValue[0]))
+      }
+      return returnValue.split(/\s+/).join(' ').trim();
     }
-    return {
-      lunar: lunar
-    }
+    return convertNumber(n)
   }
 
   convertDay(day: any): any {
@@ -229,5 +275,36 @@ export class CommonService {
       default:
         return day
     }
+  }
+
+  public generatedSlug(text: any) {
+    let slug;
+    slug = text?.toLowerCase();
+
+    //Đổi ký tự có dấu thành không dấu
+    slug = slug?.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+    slug = slug?.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+    slug = slug?.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+    slug = slug?.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+    slug = slug?.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+    slug = slug?.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+    slug = slug?.replace(/đ/gi, 'd');
+    //Xóa các ký tự đặt biệt
+    slug = slug?.replace(
+      /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
+      ''
+    );
+    //Đổi khoảng trắng thành ký tự gạch ngang
+    slug = slug?.replace(/ /gi, '-');
+    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+    slug = slug?.replace(/\-\-\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-\-/gi, '-');
+    slug = slug?.replace(/\-\-/gi, '-');
+    //Xóa các ký tự gạch ngang ở đầu và cuối
+    slug = '@' + slug + '@';
+    slug = slug?.replace(/\@\-|\-\@|\@/gi, '');
+    return slug
   }
 }

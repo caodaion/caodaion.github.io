@@ -3,16 +3,16 @@ import { map, Observable, observable, shareReplay, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_PATH } from '../../constants/api.constant';
 import { CommonService } from '../common/common.service';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
   commonTimes: any[] = [];
   commonLocationTypes: any[] = [];
-  calendarViewMode: any = 'month';
+  calendarViewMode: any = 'day';
 
-  constructor(private http: HttpClient, private commonService: CommonService) { }
+  constructor(private http: HttpClient, private commonService: CommonService, private datePipe: DatePipe) { }
 
   getConvertedFullDate(date?: any) {
     let comparedDate = null;
@@ -39,7 +39,7 @@ export class CalendarService {
         { key: 'nham', name: 'Nhâm' },
         { key: 'quy', name: 'Quý' },
         { key: 'giap', name: 'Giáp' },
-        { key: 'at', name: 'Ấy' },
+        { key: 'at', name: 'Ất' },
         { key: 'binh', name: 'Bính' },
         { key: 'dinh', name: 'Đinh' },
         { key: 'mau', name: 'Mậu' },
@@ -50,7 +50,7 @@ export class CalendarService {
         { key: 'dau', name: 'Dậu' },
         { key: 'tuat', name: 'Tuất' },
         { key: 'hoi', name: 'Hợi' },
-        { key: 'ti', name: 'Tí' },
+        { key: 'ti', name: 'Tý' },
         { key: 'suu', name: 'Sửu' },
         { key: 'dan', name: 'Dần' },
         { key: 'mao', name: 'Mão' },
@@ -229,7 +229,7 @@ export class CalendarService {
       return i - 1;
     };
 
-    const convertSolar2Lunar = (dd: any, mm: any, yy: any, timeZone: any) => {
+    const convertSolar2Lunar = (dd: any, mm: any, yy: any, tt: any, timeZone: any) => {
       /* Comvert solar date dd/mm/yyyy to the corresponding lunar date */
       let k,
         dayNumber,
@@ -256,8 +256,32 @@ export class CalendarService {
         lunarYear = yy + 1;
         b11 = getLunarMonth11(yy + 1, timeZone);
       }
+      const calDate = new Date(tt)
       lunarDay = dayNumber - monthStart + 1;
       let diff = INT((monthStart - a11) / 29);
+      if (calDate > new Date(new Date(tt).setHours(22, 59, 59))) {
+        const nextDate = this.datePipe.transform(new Date(new Date(tt).setDate(new Date(tt).getDate() + 1)), 'dd/MM/YYYY')
+        let nextDateNumber: any;
+        let nextMonthStart: any
+        nextDateNumber = jdFromDate(parseInt(nextDate?.split('/')[0] || ''), parseInt(nextDate?.split('/')[1] || ''), parseInt(nextDate?.split('/')[2] || ''));
+        let nextK = INT((nextDateNumber - 2415021.076998695) / 29.530588853);
+        nextMonthStart = getNewMoonDay(nextK + 1, timeZone);
+        if (nextMonthStart > nextDateNumber) {
+          nextMonthStart = getNewMoonDay(nextK, timeZone);
+        }
+        let lunarNextDay = nextDateNumber - nextMonthStart + 1;
+        a11 = getLunarMonth11(parseInt(nextDate?.split('/')[2] || ''), timeZone);
+        b11 = a11;
+        if (a11 >= nextMonthStart) {
+          lunarYear = parseInt(nextDate?.split('/')[2] || '');
+          a11 = getLunarMonth11(parseInt(nextDate?.split('/')[2] || '') - 1, timeZone);
+        } else {
+          lunarYear = parseInt(nextDate?.split('/')[2] || '') + 1;
+          b11 = getLunarMonth11(parseInt(nextDate?.split('/')[2] || '') + 1, timeZone);
+        }
+        lunarDay = lunarNextDay
+        diff = INT((nextMonthStart - a11) / 29);
+      }
       lunarLeap = 0;
       lunarMonth = diff + 11;
       if (b11 - a11 > 365) {
@@ -275,11 +299,49 @@ export class CalendarService {
       if (lunarMonth >= 11 && diff < 4) {
         lunarYear -= 1;
       }
+      const canChiMonth = ['Giáp Tý', 'Ất Sửu', 'Bính Dần', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi']
+      const lunarMonthName = canChiMonth[(((lunarYear % 10) * 2 + lunarMonth) % 10)]
+      const lunarTime = this.commonService.getTimeLunarTime(calDate)
+      const cans = [
+        'Tân',
+        'Nhâm',
+        'Quý',
+        'Giáp',
+        'Ất',
+        'Bính',
+        'Đinh',
+        'Mậu',
+        'Kỷ',
+        'Canh']
+      const chis = [
+        'Tý',
+        'Sửu',
+        'Dần',
+        'Mão',
+        'Thìn',
+        'Tỵ',
+        'Ngọ',
+        'Mùi',
+        'Thân',
+        'Dậu',
+        'Tuất',
+        'Hợi']
+      const a = (14 - mm) % 12
+      const y = yy + 4800 - a
+      const m = mm + 12 * a - 3
+      const JDN = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045
+      const canDay = Math.floor(JDN % 10)
+      const chiDay = Math.floor((JDN + 1) % 12)
+      const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
+
       return {
         lunarDay,
         lunarMonth,
         lunarYear,
         lunarYearName: getLunarYear(lunarYear).name,
+        lunarMonthName: lunarMonthName,
+        lunarDayName: lunarDayName,
+        lunarTime: lunarTime?.kanji || lunarTime?.tuThoiUpcoming?.name.split('|')[0],
         lunarLeap,
       };
     };
@@ -326,6 +388,8 @@ export class CalendarService {
         lunarMonth: 0,
         lunarYear: 0,
         lunarYearName: '',
+        lunarMonthName: '',
+        lunarTime: 0,
         lunarLeap: 0,
       },
       convertLunar2Solar: jdToDate(0 + 0 - 1)
@@ -335,6 +399,7 @@ export class CalendarService {
         comparedDate.getDate() || new Date().getDate(),
         comparedDate.getMonth() + 1 || new Date().getMonth(),
         comparedDate.getFullYear() || new Date().getFullYear(),
+        comparedDate.getTime() || new Date().getTime(),
         '+7'
       )
     } else {
@@ -388,9 +453,8 @@ export class CalendarService {
   getTuanCuuEvents(date: any): Observable<any> {
     let events = <any>[]
     const eventCount = 9
-    const convertedToSolar = this.getConvertedFullDate(date).convertLunar2Solar
-    const startDate = new Date(`${convertedToSolar[2]}-${convertedToSolar[1] > 9 ? convertedToSolar[1] : '0' + convertedToSolar[1]}-${convertedToSolar[0] > 9 ? convertedToSolar[0] : '0' + convertedToSolar[0]}`)
-    Array.from({length: eventCount}, (x, i) => {
+    let startDate = date
+    Array.from({ length: eventCount }, (x, i) => {
       i++
       switch (i) {
         case 1: {
@@ -438,7 +502,7 @@ export class CalendarService {
             {
               solar: calDate,
               lunar: this.getConvertedFullDate(calDate).convertSolar2Lunar,
-              eventName: i < 9 ? `Đệ ${this.commonService.convertNumberToText(i).lunar} Cửu` : 'Chung Cửu'
+              eventName: i < 9 ? `${this.commonService.convertNumberToText(i)} Cửu` : 'Chung Cửu'
             }
           )
           break;
