@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { CommonService } from "../../shared/services/common/common.service";
 import * as CryptoJS from "crypto-js";
-import { NgTinyUrlService } from 'ng-tiny-url';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
-  currentUser =  <any>{};
+  currentUser = <any>{};
   qrData: any;
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
@@ -48,10 +48,10 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private commonService: CommonService,
-    private tinyUrl: NgTinyUrlService,
     private _snackBar: MatSnackBar,
     private matDiaLog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private tinyUrlService: TinyUrlService
   ) {
   }
 
@@ -86,10 +86,12 @@ export class ProfileComponent implements OnInit {
     const qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
     if (qrData?.length >= 350) {
       try {
-        this.tinyUrl.shorten(qrData)
+        this.tinyUrlService.shortenUrl(qrData)
           .subscribe((res: any) => {
-            this.qrData = res;
-          });
+            if (res.code === 0) {
+              this.qrData = res?.data?.tiny_url
+            }
+          })
       } catch (e) {
         console.log(e)
       }
