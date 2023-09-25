@@ -1,11 +1,11 @@
 import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router";
 import {AuthService} from "../services/auth/auth.service";
 import {Observable} from "rxjs";
 
 
 @Injectable()
-export class VoviGuard implements CanActivate {
+export class VoviGuard  {
 
   constructor(private authService: AuthService,
               private router: Router) {

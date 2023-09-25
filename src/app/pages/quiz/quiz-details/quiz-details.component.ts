@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
@@ -19,6 +19,13 @@ export class QuizDetailsComponent implements OnInit {
   cols = 0
   correctlyCount = 0
   inCorrectlyCount = 0
+  message: any;
+
+  @ViewChild('correctAnswer') correctAnswer!: ElementRef;
+  @ViewChild('inCorrectAnswer') inCorrectAnswer!: ElementRef;
+  @ViewChild('lose') lose!: ElementRef;
+  @ViewChild('almostWin') almostWin!: ElementRef;
+  @ViewChild('win') win!: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -87,8 +94,14 @@ export class QuizDetailsComponent implements OnInit {
   checkAnswer(item: any) {
     if (item.selected === item.answer) {
       item.correctly = true
+      if (this.correctAnswer) {
+        this.correctAnswer.nativeElement.play()
+      }
     } else {
       item.correctly = false
+      if (this.correctAnswer) {
+        this.inCorrectAnswer.nativeElement.play()
+      }
     }
   }
 
@@ -96,6 +109,20 @@ export class QuizDetailsComponent implements OnInit {
     this.selectedIndex++
     this.correctlyCount = this.quizListOfDoc.filter((item: any) => item.correctly === true)?.length
     this.inCorrectlyCount = this.quizListOfDoc.filter((item: any) => item.correctly === false)?.length
+    if (this.quizListOfDoc.filter((item: any) => item.correctly === undefined || item.correctly === null)?.length === 0) {
+      if (this.correctlyCount >= this.inCorrectlyCount && this.correctlyCount < this.quizListOfDoc.length) {
+        this.almostWin.nativeElement.play()
+        this.message = 'Còn chút nữa thôi'
+      }
+      if (this.correctlyCount < this.inCorrectlyCount) {
+        this.lose.nativeElement.play()
+        this.message = 'Cố gắng lần sau bạn nhé'
+      }
+      if (this.correctlyCount === this.quizListOfDoc.length) {
+        this.win.nativeElement.play()
+        this.message = 'Chúc mừng bạn'
+      }
+    }
   }
 
   onCompleted() {

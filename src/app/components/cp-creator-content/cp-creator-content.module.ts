@@ -7,7 +7,6 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {CpCreatorBlockToolbarModule} from "../cp-creator-block-toolbar/cp-creator-block-toolbar.module";
 
 
-
 @NgModule({
   declarations: [
     CpCreatorContentComponent

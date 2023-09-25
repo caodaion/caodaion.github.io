@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonService } from "../../../shared/services/common/common.service";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
-import { NgTinyUrlService } from "ng-tiny-url";
 import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
-import { ActivatedRoute } from '@angular/router';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url.service';
 
 @Component({
   selector: 'app-qr-generator',
@@ -32,10 +31,9 @@ export class QrGeneratorComponent implements OnInit {
   addedMoreLocation: any;
 
   constructor(
-    private tinyUrl: NgTinyUrlService,
+    private tinyUrlService: TinyUrlService,
     private _snackBar: MatSnackBar,
-    private commonService: CommonService,
-    private route: ActivatedRoute
+    private commonService: CommonService
   ) {
   }
 
@@ -115,9 +113,9 @@ export class QrGeneratorComponent implements OnInit {
       this.error = ''
       try {
         this.loadingData = true
-        this.tinyUrl.shorten(this.data)
-          .subscribe(res => {
-            this.qrData = res;
+        this.tinyUrlService.shortenUrl(this.data)
+          .subscribe((res: any) => {
+            this.qrData = res?.data?.tiny_url;
             this.loadingData = false
           });
       } catch (e) {
@@ -169,10 +167,10 @@ export class QrGeneratorComponent implements OnInit {
       this.checkInError = ''
       try {
         this.loadingData = true
-        this.tinyUrl.shorten(checkInQrData)
-          .subscribe(res => {
+        this.tinyUrlService.shortenUrl(checkInQrData)
+          .subscribe((res: any) => {
             this.loadingData = false
-            this.checkInQRData = res;
+            this.checkInQRData = res?.data?.tiny_url;
           });
       } catch (e) {
         this.loadingData = false
@@ -213,9 +211,9 @@ export class QrGeneratorComponent implements OnInit {
       this.syncError = ''
       try {
         this.loadingData = true;
-        this.tinyUrl.shorten(syncQrData)
-          .subscribe(res => {
-            this.syncQRData = res;
+        this.tinyUrlService.shortenUrl(syncQrData)
+          .subscribe((res: any) => {
+            this.syncQRData = res?.data?.tiny_url;
             this.loadingData = false;
           });
       } catch (e) {

@@ -55,6 +55,34 @@
           ĐĂNG NHẬP
         </button>
       </div>
+      <mat-accordion class="w-full">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header
+            >Đăng nhập với quyền khách</mat-expansion-panel-header
+          >
+          <p class="text-lg">
+            <strong class="text-2xl">LƯU Ý:</strong>
+            <br />
+            Tài khoản khách này chỉ là tài khoản trải nghiệm tính năng. Không
+            có tác dụng lưu trữ dữ liệu hoạt động.
+            <br />
+            Bạn hoàn toàn có thể
+            <strong> kích hoạt tài khoản</strong>
+            thành <strong>tài khoản chính thức</strong> nếu chưa đăng xuất.
+            <br />
+            Nếu đăng xuất, mọi dữ liệu của tài khoản khách sẽ bị XÓA khỏi hệ
+            thống.
+          </p>
+          <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+            <mat-grid-tile
+              *ngFor="let item of guestAccounts"
+              (click)="logInWithGuest(item?.key)"
+              class="border cursor-pointer rounded"
+              >{{ item?.name }}</mat-grid-tile
+            >
+          </mat-grid-list>
+        </mat-expansion-panel>
+      </mat-accordion>
       <div class="section-divider">
         <mat-divider class="w-100"></mat-divider>
         <span>hoặc</span>

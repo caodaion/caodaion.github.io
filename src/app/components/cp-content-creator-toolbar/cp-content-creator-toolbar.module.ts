@@ -33,7 +33,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCheckboxModule,
     MatTooltipModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatRadioModule
   ],
   exports: [
     CpContentCreatorToolbarComponent

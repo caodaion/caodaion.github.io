@@ -57,14 +57,9 @@ export const CAODAI_TITLE = {
           isChucViecRequired: true
         },
         {
-          key: 'quan-ly-phong-le',
-          name: 'Quản Lý Phòng Lễ',
+          key: 'phong-le',
+          name: 'Phòng Lễ',
           isChucViecRequired: true
-        },
-        {
-          key: 'pho-quan-ly-phong-le',
-          name: 'Phó Quản Lý Phòng Lễ',
-          isChucViecRequired: false
         },
         {
           key: 'giao-nhi',
@@ -72,34 +67,19 @@ export const CAODAI_TITLE = {
           isChucViecRequired: true
         },
         {
-          key: 'quan-ly-phong-tho',
-          name: 'Quản Lý Phòng Thơ',
+          key: 'phong-tho',
+          name: 'Phòng Thơ',
           isChucViecRequired: true
         },
         {
-          key: 'pho-quan-ly-phong-tho',
-          name: 'Phó Quản Lý Phòng Thơ',
-          isChucViecRequired: false
-        },
-        {
-          key: 'quan-ly-phong-cong',
-          name: 'Quản Lý Phòng Công',
+          key: 'phong-cong',
+          name: 'Phòng Công',
           isChucViecRequired: true
         },
         {
-          key: 'pho-quan-ly-phong-cong',
-          name: 'Phó Quản Lý Phòng Công',
-          isChucViecRequired: false
-        },
-        {
-          key: 'quan-ly-phong-luong',
-          name: 'Quản Lý Phòng Lương',
+          key: 'phong-luong',
+          name: 'Phòng Lương',
           isChucViecRequired: true
-        },
-        {
-          key: 'pho-quan-ly-phong-luong',
-          name: 'Phó Quản Lý Phòng Lương',
-          isChucViecRequired: false
         }
       ]
     },

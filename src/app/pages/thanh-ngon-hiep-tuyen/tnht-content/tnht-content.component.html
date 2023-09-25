@@ -17,6 +17,7 @@
         [contentEditable]="contentEditable"
         [rootContent]="rootContent"
         (save)="onSaveContent()"
+        (nextFontSize)="updateFontSize($event)"
         (nextContent)="onNextContent()"
       ></cp-content-creator>
     </div>

@@ -1,6 +1,21 @@
 <div class="cp-creator-toolbar">
-  <div>
-    <button (click)="saveData()" mat-raised-button color="primary">Lưu</button>
+  <div class="flex justify-around items-center">
+    <button
+      *ngIf="contentEditable"
+      (click)="saveData()"
+      mat-raised-button
+      color="primary"
+    >
+      <mat-icon>save</mat-icon>Lưu
+    </button>
+    <button
+      *ngIf="!contentEditable"
+      (click)="onPrint()"
+      mat-stroked-button
+      [color]="'primary'"
+    >
+      <mat-icon>print</mat-icon>In
+    </button>
   </div>
   <div class="toolbar-content">
     <mat-tab-group>
@@ -31,7 +46,9 @@
                 >
               </mat-radio-group>
             </ng-container>
-            <ng-container *ngIf="form?.type == 'shortText' || form?.type == 'text'">
+            <ng-container
+              *ngIf="form?.type == 'shortText' || form?.type == 'text'"
+            >
               <mat-form-field appearance="fill" class="w-100">
                 <mat-label>{{ form?.label }}</mat-label>
                 <input matInput [(ngModel)]="form.value" />
@@ -39,7 +56,7 @@
             </ng-container>
             <ng-container *ngIf="form?.type == 'checkbox'">
               <div class="w-100">
-                <mat-label>{{form.label}}</mat-label>
+                <mat-label>{{ form.label }}</mat-label>
                 <mat-checkbox [(ngModel)]="form.value"></mat-checkbox>
               </div>
             </ng-container>
@@ -140,7 +157,7 @@
       class="w-full block my-4 p-2 border rounded"
       [disabled]="!addedFormField.key"
       (click)="addedFormField.type = 'text'"
-      [ngClass]="{selectedType: addedFormField.type === 'text'}"
+      [ngClass]="{ selectedType: addedFormField.type === 'text' }"
     >
       <div class="px-2 mb-2">
         <div class="text-xl font-bold mb-2">Trường nhập dữ liệu</div>
@@ -155,7 +172,7 @@
       class="w-full block my-4 p-2 border rounded"
       [disabled]="!addedFormField.key"
       (click)="addedFormField.type = 'textarea'"
-      [ngClass]="{selectedType: addedFormField.type === 'textarea'}"
+      [ngClass]="{ selectedType: addedFormField.type === 'textarea' }"
     >
       <div class="px-2 mb-2">
         <div class="text-xl font-bold mb-2">Trường nhập dữ liệu dài</div>
@@ -170,20 +187,57 @@
       class="w-full block my-4 p-2 border rounded"
       [disabled]="!addedFormField.key"
       (click)="addedFormField.type = 'checkbox'"
-      [ngClass]="{selectedType: addedFormField.type === 'checkbox'}"
+      [ngClass]="{ selectedType: addedFormField.type === 'checkbox' }"
     >
       <div class="px-2 mb-2">
         <div class="text-xl font-bold mb-2">Hộp kiểm</div>
         <mat-divider></mat-divider>
+        <div class="mt-2">Giá trị của trường sẽ hiển thị khi ấn chọn vào</div>
+      </div>
+    </button>
+    <button
+      [type]="'button'"
+      class="w-full block my-4 p-2 border rounded"
+      [disabled]="!addedFormField.key"
+      (click)="addedFormField.type = 'comboLocation'"
+      [ngClass]="{ selectedType: addedFormField.type === 'comboLocation' }"
+    >
+      <div class="px-2 mb-2">
+        <div class="text-xl font-bold mb-2">Khối địa chỉ</div>
+        <mat-divider></mat-divider>
         <div class="mt-2">
-          Giá trị của trường sẽ hiển thị khi ấn chọn vào
+          Khối địa chỉ sẽ giúp cập nhật thông tin về địa chỉ
+        </div>
+        <div class="mt-2">
+          Hãy chọn một trong các kiểu hiển thị địa chỉ như dưới đây
+        </div>
+        <div class="mt-2">
+          <mat-radio-group
+            [(ngModel)]="addedFormField.mode"
+            [disabled]="addedFormField.type !== 'comboLocation'"
+          >
+            <mat-radio-button class="w-full block" [value]="'PpDdWwA'"
+              >Lâm Đồng tỉnh, Đà Lạt thành phố, đệ thất phường, Đa Thành
+              thôn</mat-radio-button
+            >
+            <mat-radio-button class="w-full block" [value]="'pPdDwWA'"
+              >tỉnh Lâm Đồng, thành phố Đà Lạt, phường 7, thôn Đa
+              Thành</mat-radio-button
+            >
+          </mat-radio-group>
         </div>
       </div>
     </button>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button [color]="'primary'"
-    [disabled]="disabledAddFormField()"
-    (click)="addNewInputField()">Thêm</button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      [disabled]="disabledAddFormField()"
+      [matDialogClose]="true"
+      (click)="addNewInputField()"
+    >
+      Thêm
+    </button>
   </mat-dialog-actions>
 </ng-template>

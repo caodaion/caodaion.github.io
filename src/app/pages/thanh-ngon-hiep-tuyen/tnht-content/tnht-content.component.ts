@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../../shared/services/auth/auth.service";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { Title } from "@angular/platform-browser";
+import { JwtHelperService } from '@auth0/angular-jwt';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-tnht-content',
@@ -104,8 +106,8 @@ export class TnhtContentComponent implements OnInit {
               const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
               if (targetedContent) {
                 targetedContent.style.color = '#4285f4';
-              // @ts-ignore
-              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
+                // @ts-ignore
+                contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
               }
             }, 0)
           }
@@ -157,6 +159,43 @@ export class TnhtContentComponent implements OnInit {
             top: 0
           })
         });
+    }
+  }
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
+  }
+
+  updateFontSize(event: any) {
+    const users = JSON.parse(localStorage.getItem('users') || '{}')
+    const token = localStorage.getItem('token')
+    if (token) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(token)
+      decodedToken.fontSize = event
+      if (users[decodedToken.userName]) {
+        users[decodedToken.userName] = this.generaToken(decodedToken)
+        localStorage.setItem('users', JSON.stringify(users))
+        localStorage.setItem('token', JSON.stringify(this.generaToken(decodedToken)))
+      }
     }
   }
 }

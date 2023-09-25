@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {QrGeneratorComponent} from "./qr-generator.component";
 import {QRCodeModule} from "angularx-qrcode";
-import {NgTinyUrlModule} from "ng-tiny-url";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
@@ -24,7 +23,6 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     QRGeneratorRoutingModule,
     QRCodeModule,
-    NgTinyUrlModule,
     MatFormFieldModule,
     FormsModule,
     MatIconModule,

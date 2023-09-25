@@ -14,6 +14,7 @@ import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.consta
 import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -21,10 +22,11 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
   styleUrls: ['./tinh-tuan-cuu.component.scss']
 })
 export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
-  print(arg0: any, _t285: HTMLElement) {
-    throw new Error('Method not implemented.');
-  }
-
+  provinces = <any>[]
+  districts = <any>[]
+  filteredDistricts = <any>[]
+  wards = <any>[]
+  filteredWards = <any>[]
   selectedDate = <any>{
     year: 0,
     month: 0,
@@ -85,6 +87,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   eventSummary: any;
   calculatedLunarDate: any;
   subTitles: any;
+  provinceFilter: any;
   downloading: boolean = false
   isShowDownLoadImage: boolean = false
   isShowButtonSetDefault: boolean = false
@@ -101,7 +104,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private decimalPipe: DecimalPipe,
     private matBottomSheet: MatBottomSheet,
     private breakpointObserver: BreakpointObserver,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private locationService: LocationService
   ) {
 
   }
@@ -152,16 +156,76 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
             title: decodedToken[4] === 'empty' ? null : decodedToken[4],
             subTitle: decodedToken[5] === 'empty' ? null : decodedToken[5],
             holyName: decodedToken[6] === 'empty' ? null : decodedToken[6],
+            province: decodedToken[7] === 'empty' ? null : decodedToken[7],
+            district: decodedToken[8] === 'empty' ? null : decodedToken[8],
+            ward: decodedToken[9] === 'empty' ? null : decodedToken[9],
+            address: decodedToken[10] === 'empty' ? null : decodedToken[10],
           }
           this.saveSharedEvent()
         }
       }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   ngAfterViewInit(): void {
     this.getLocalStorageTuanCuu()
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu.details.province)
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu.details.district)
+    }
   }
 
   saveSharedEvent() {
@@ -287,7 +351,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}`;
+    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}+${item?.details?.province || 'empty'}+${item?.details?.district || 'empty'}+${item?.details?.ward || 'empty'}+${item?.details?.address || 'empty'}`;
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();

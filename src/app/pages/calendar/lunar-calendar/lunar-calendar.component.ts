@@ -73,7 +73,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       if (param['m']) {
         this.calendarMode = param['m'];
       } else {
-        this.calendarMode = 'day';
+        this.calendarMode = 'month';
       }
       if (param['s']) {
         this.selectedDate.solar = new Date(param['s']);

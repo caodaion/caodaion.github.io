@@ -1,30 +1,125 @@
 <mat-drawer-container autosize class="cp-content-creator-mat-drawer">
   <mat-drawer-content id="contentCreatorWrapper">
     <div class="block-audio-player">
-      <mat-progress-bar mode="indeterminate" *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"></mat-progress-bar>
-      <audio #audioPlayer class="w-100" *ngIf="data?.type === 'block' && data?.audio?.src" [src]="data?.audio?.src"></audio>
+      <mat-progress-bar
+        mode="indeterminate"
+        *ngIf="!audioReadyToPlay && data?.type === 'block' && data?.audio?.src"
+      ></mat-progress-bar>
+      <div class="flex hide-print">
+        <audio
+          #audioPlayer
+          class="w-100"
+          *ngIf="data?.type === 'block' && data?.audio?.src"
+          [src]="data?.audio?.src"
+        ></audio>
+        <mat-form-field *ngIf="isShowFontSizeSelect">
+          <mat-label>Cỡ chữ</mat-label>
+          <mat-select
+            [(ngModel)]="contentFormat.fontSize"
+            (ngModelChange)="updateFontSize()"
+          >
+            <mat-option *ngFor="let item of fontSizeRange" [value]="item"
+              >{{ item }}px</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
-    <div class="cp-creator-block-group" [ngClass]="{'contentEditable': isShowController}">
+    <div
+      class="cp-creator-block-group"
+      [ngClass]="{ contentEditable: isShowController }"
+    >
       <ng-container *ngFor="let block of data?.content">
         <cp-creator-block
-          *ngIf="block?.type == 'block'" [data]="block"
+          *ngIf="block?.type == 'block'"
+          [data]="block"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
+          [isShowFontSizeSelect]="isShowFontSizeSelect"
+          [contentFormat]="contentFormat"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
         ></cp-creator-block>
         <cp-creator-content
-          *ngIf="block?.type == 'contentBlock'" [data]="block"
+          #creatorContent
+          *ngIf="block?.type == 'contentBlock'"
+          [data]="block"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
+          [isShowFontSizeSelect]="isShowFontSizeSelect"
+          [contentFormat]="contentFormat"
           [id]="getId(block)"
           (focusedBlock)="focusedBlock = $event"
           (contentToContent)="contentToContent($event)"
-          [ngClass]="{'targetBlock': block.type == 'contentBlock'}"></cp-creator-content>
+          [ngClass]="{ targetBlock: block.type == 'contentBlock' }"
+        ></cp-creator-content>
       </ng-container>
     </div>
   </mat-drawer-content>
   <mat-drawer mode="side" opened [position]="'end'" [opened]="isShowController">
-    <cp-content-creator-toolbar [focusedBlock]="focusedBlock" [data]="data" (save)="saveData()"></cp-content-creator-toolbar>
+    <cp-content-creator-toolbar
+      [focusedBlock]="focusedBlock"
+      [contentEditable]="contentEditable"
+      [data]="data"
+      (save)="saveData()"
+    ></cp-content-creator-toolbar>
   </mat-drawer>
 </mat-drawer-container>
+<ng-template #comboLocation>
+  <div mat-dialog-title>Cập nhật {{ addedComboLocation.title }}</div>
+  <mat-dialog-content>
+    <div class="pt-8">
+      <mat-checkbox [(ngModel)]="isShowCountry">Hiển thị quốc gia</mat-checkbox>
+      <mat-form-field *ngIf="isShowCountry" [appearance]="'outline'">
+        <mat-label>Quốc gia</mat-label>
+        <input type="text" matInput [(ngModel)]="addedComboLocation.country" />
+      </mat-form-field>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Tỉnh/Thành phố</mat-label>
+        <mat-select
+          [(ngModel)]="addedComboLocation.province"
+          (ngModelChange)="getDistricts()"
+        >
+          <mat-option *ngFor="let item of provinces" [value]="item.code">{{
+            item.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Quận/Huyện</mat-label>
+        <mat-select
+          [(ngModel)]="addedComboLocation.district"
+          (ngModelChange)="getWards()"
+        >
+          <mat-option
+            *ngFor="let item of filteredDistricts"
+            [value]="item.code"
+            >{{ item.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Phường/Xã</mat-label>
+        <mat-select [(ngModel)]="addedComboLocation.ward">
+          <mat-option *ngFor="let item of filteredWards" [value]="item.code">{{
+            item.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Thôn/Lộ</mat-label>
+        <input type="text" matInput [(ngModel)]="addedComboLocation.village" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      (click)="addComboLocation()"
+      [matDialogClose]="true"
+    >
+      Cập nhật
+    </button>
+  </mat-dialog-actions>
+</ng-template>

@@ -97,7 +97,7 @@ export const MENU = [
         url: 'phong-le',
         label: 'Phòng lễ',
         icon: 'circle',
-        fullAssess: false,
+        fullAssess: true,
         released: true,
       },
       {

@@ -17,7 +17,14 @@
     text-align: justify;
     user-select: text;
   "
-  (blur)="onBlur($event)"
+  [ngStyle]="{
+    fontSize:
+      !contentEditable && contentFormat.fontSize
+        ? contentFormat.fontSize + 'px'
+        : '18px'
+  }"
+  #contentDiv
+  (blur)="onBlur()"
   (input)="updated = true"
   (keydown.enter)="onEnter($event)"
   (keydown.tab)="onTab($event)"
@@ -49,6 +56,7 @@
                 [id]="text?.key"
                 class="font-bold form-control text"
                 [value]="text?.value"
+                (change)="onBlur()"
               />
             </ng-container>
             <ng-container *ngIf="text.formType == 'textarea'">
@@ -56,18 +64,35 @@
                 [placeholder]="text?.label"
                 [id]="text?.key"
                 class="font-bold form-control textarea"
+                (change)="onBlur()"
                 >{{ text?.value }}</textarea
               >
             </ng-container>
             <ng-container *ngIf="text.formType == 'checkbox'">
-              <label class="form-control checkbox" [for]="text?.key"
+              <label
+                class="form-control checkbox"
+                contentEditable="false"
+                [for]="text?.key"
                 >{{ text?.label
                 }}<input
                   type="checkbox"
                   class="form-control checkbox"
                   [id]="text?.key"
                   [checked]="text?.value"
+                  (change)="onBlur()"
               /></label>
+            </ng-container>
+            <ng-container *ngIf="text.formType == 'comboLocation'">
+              <button
+                class="form-control font-bold comboLocation"
+                [class]="text.mode"
+                [id]="text?.key"
+                [ariaLabel]="text?.label"
+                contentEditable="false"
+                [value]="text?.value"
+              >
+                {{ text?.text || text.label }}
+              </button>
             </ng-container>
           </ng-container>
           <ng-container *ngIf="!contentEditable">
@@ -79,8 +104,16 @@
                 >{{ text?.label }}</span
               >
             </ng-container>
+            <ng-container *ngIf="text.formType == 'comboLocation'">
+              <span [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }">
+                {{ getComboLocationText(text) }}
+              </span>
+            </ng-container>
             <ng-container
-              *ngIf="text.formType !== 'checkbox'"
+              *ngIf="
+                text.formType !== 'checkbox' &&
+                text.formType !== 'comboLocation'
+              "
             >
               <span
                 [ngClass]="{ 'opacity-50': !text?.value }"
@@ -93,8 +126,27 @@
         <ng-container *ngIf="text.type == 'text' && !text.attrs">{{
           text.text
         }}</ng-container>
+        <strong
+          *ngIf="text.type == 'text' && text.attrs && text?.attrs?.fontWeight"
+          [ngClass]="{ knoll: text?.attrs?.knoll, split: text?.attrs?.split }"
+          [ngStyle]="{
+            textAlign: text?.attrs?.textAlign
+              ? text?.attrs?.textAlign
+              : 'jusify',
+            color: text?.attrs?.color,
+            fontWeight: text?.attrs?.fontWeight,
+            fontStyle: text?.attrs?.fontStyle,
+            fontSize: text?.attrs?.fontSize,
+            textDecoration: text?.attrs?.textDecoration,
+            textIndent: text?.attrs?.textIndent,
+            position: text?.attrs?.knoll ? 'relative' : ''
+          }"
+          [id]="text?.key || ''"
+        >
+          {{ text.text }}</strong
+        >
         <span
-          *ngIf="text.type == 'text' && text.attrs"
+          *ngIf="text.type == 'text' && text.attrs && !text?.attrs?.fontWeight"
           [ngClass]="{ knoll: text?.attrs?.knoll, split: text?.attrs?.split }"
           [ngStyle]="{
             textAlign: text?.attrs?.textAlign
@@ -194,7 +246,7 @@
 <button
   mat-icon-button
   class="targetButton"
-  *ngIf="data?.attrs?.pathname && data?.attrs?.hash"
+  *ngIf="!contentEditable && data?.attrs?.pathname && data?.attrs?.hash"
   (click)="getLink(data)"
   matTooltip="Sao chép liên kết"
 >
@@ -204,3 +256,32 @@
   *ngIf="data.focused"
   [data]="data"
 ></cp-creator-block-toolbar>
+<ng-template #contentMenu>
+  <h4>{{ shareInformation?.content }}</h4>
+  <div class="flex">
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      class="w-1/2 me-2"
+      (click)="copyContent('content')"
+    >
+      Sao Chép nội dung
+    </button>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      class="w-1/2 ms-2"
+      (click)="copyContent('link')"
+    >
+      Sao chép liên kết
+    </button>
+  </div>
+  <button
+    mat-flat-button
+    [color]="'primary'"
+    class="w-full mt-4"
+    (click)="copyContent('content&link')"
+  >
+    Sao chép cả nội dung và liên kết
+  </button>
+</ng-template>

@@ -6,6 +6,10 @@
     max-height: 100%;
     overflow: hidden;
 
+    .mat-expansion-panel-header[aria-disabled=true] {
+      color: unset;
+    }
+
     .book-content-title {
       padding: 2rem;
       margin: 0;

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UpdateJourneyComponent } from './update-journey/update-journey.component';
-import { AttendanceComponent } from './attendance/attendance.component';
+import { PHUONG_TU_TAM_THUA } from 'src/app/shared/constants/master-data/phuong-tu-tam-thua';
 
 @Component({
   selector: 'app-journey',
@@ -13,14 +12,16 @@ export class JourneyComponent implements OnInit {
   updateJourneyDialogRef: any
   selectedIndex: any = 0
   isShowUpdate: boolean = false
+  phuongTuTamThuaKeys = <any>[]
+  phuongTuTamThua = PHUONG_TU_TAM_THUA
 
   constructor(
     public matDialog: MatDialog
-    ) {
+  ) {
 
   }
 
   ngOnInit(): void {
-
+    this.phuongTuTamThua = PHUONG_TU_TAM_THUA
   }
 }

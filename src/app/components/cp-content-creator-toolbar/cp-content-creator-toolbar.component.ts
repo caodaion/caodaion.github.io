@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { LocationService } from 'src/app/shared/services/location/location.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
@@ -11,10 +12,17 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;
   @Input() focusedBlock: any;
+  @Input() contentEditable: boolean = false;
   @Output() save = new EventEmitter();
 
 
   addedFormField = <any>{}
+  provinces = <any>[];
+  districts = <any>[];
+  filteredDistricts = <any>[];
+  calculatedTuanCuu = <any>[];
+  wards = <any>[];
+  filteredWards = <any>[];
 
   @HostListener('document:keydown.control.enter')
   onKeyControlEnterDown() {
@@ -29,7 +37,11 @@ export class CpContentCreatorToolbarComponent implements OnInit {
 
   @ViewChild('audioDialog') audioDialog!: ElementRef;
   readonly sel: any;
-  constructor(public dialog: MatDialog, private commonService: CommonService) {
+  constructor(
+    public dialog: MatDialog,
+    private commonService: CommonService,
+    private locationService: LocationService
+  ) {
 
   }
 
@@ -42,6 +54,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         key: ''
       }
     }
+    this.getAllDivisions()
+    this.getDistricts()
+    this.getWards()
   }
 
   saveData() {
@@ -179,6 +194,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
     if (!this.addedFormField.type || !this.addedFormField.key) {
       return true
     }
+    if (this.addedFormField.type === 'comboLocation' && !this.addedFormField.mode) {
+      return true
+    }
     return false
   }
 
@@ -249,6 +267,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
       inputNode.id = this.addedFormField.key
       updatedNode.setAttribute('for', this.addedFormField.key)
       updatedNode.innerHTML = `${this.addedFormField.label}${inputNode.outerHTML.toString()}`
+      updatedNode.setAttribute('contentEditable', 'false')
       range?.deleteContents();
       range?.insertNode(updatedNode);
       document.body.focus()
@@ -258,6 +277,31 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         value: '',
         required: false,
         type: 'checkbox'
+      })
+    }
+    const addComboLocation = () => {
+      const range = this.sel?.getRangeAt;
+      let nodeValue = 'button'
+      this.sel?.focusNode
+      let updatedNode = document.createElement(nodeValue);
+      updatedNode.classList.add('form-control')
+      updatedNode.classList.add('font-bold')
+      updatedNode.classList.add('comboLocation')
+      updatedNode.classList.add(this.addedFormField.mode)
+      updatedNode.id = this.addedFormField.key
+      updatedNode.innerHTML = this.addedFormField.label
+      updatedNode.setAttribute('aria-label', this.addedFormField.label)
+      updatedNode.setAttribute('contentEditable', 'false')
+      range?.deleteContents();
+      range?.insertNode(updatedNode);
+      document.body.focus()
+      this.data.formGroup.push({
+        key: this.addedFormField.key,
+        label: this.addedFormField.label,
+        mode: this.addedFormField.mode,
+        value: '',
+        required: false,
+        type: 'comboLocation'
       })
     }
     if (this.sel) {
@@ -271,10 +315,110 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         case 'checkbox':
           addCheckbox()
           break;
+        case 'comboLocation':
+          addComboLocation()
+          break;
         default:
           break;
       }
     }
+  }
+
+  getAllDivisions() {
+    this.provinces = this.locationService.provinces
+    try {
+      this.locationService.getAllDivisions()
+        .subscribe((res: any) => {
+          if (res?.length > 0) {
+            this.provinces = res
+            this.locationService.provinces = res
+          }
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  getDistricts() {
+    this.districts = this.locationService.districts
+    if (!this.districts || this.districts?.length === 0) {
+      try {
+        this.locationService.getDistricts()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.districts = res
+              this.locationService.districts = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
+    }
+  }
+
+  getWards() {
+    this.wards = this.locationService.wards
+    if (!this.wards || this.wards?.length === 0) {
+      try {
+        this.locationService.getWards()
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              this.wards = res
+              this.locationService.wards = res
+            }
+          })
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
+    }
+  }
+
+  onPrint() {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 22px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      .btn-share-item {
+        display: none;
+      }
+      .hide-print {
+        display: none;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+
+    const printContent = document.getElementById('contentCreatorWrapper');
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      writeContent.innerHTML = `${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
   }
 }
 

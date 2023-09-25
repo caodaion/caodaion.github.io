@@ -16,6 +16,8 @@ export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
   @Input() data: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
+  @Input() isShowFontSizeSelect: boolean = true;
+  @Input() contentFormat = <any>{};
   durationInSeconds = 3;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';

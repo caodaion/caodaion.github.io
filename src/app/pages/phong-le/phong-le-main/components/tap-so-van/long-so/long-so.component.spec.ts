@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateJourneyComponent } from './update-journey.component';
+import { LongSoComponent } from './long-so.component';
 
-describe('UpdateJourneyComponent', () => {
-  let component: UpdateJourneyComponent;
-  let fixture: ComponentFixture<UpdateJourneyComponent>;
+describe('LongSoComponent', () => {
+  let component: LongSoComponent;
+  let fixture: ComponentFixture<LongSoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpdateJourneyComponent ]
+      declarations: [ LongSoComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UpdateJourneyComponent);
+    fixture = TestBed.createComponent(LongSoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

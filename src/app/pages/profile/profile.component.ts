@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { CommonService } from "../../shared/services/common/common.service";
 import * as CryptoJS from "crypto-js";
-import { NgTinyUrlService } from 'ng-tiny-url';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +15,10 @@ import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  currentUser: any;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
+  currentUser = <any>{};
   qrData: any;
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
@@ -32,12 +39,19 @@ export class ProfileComponent implements OnInit {
       color: '#ea4335'
     }
   ]
+  userNameRequired: boolean = false
   isHolyNameRequired: boolean = false
+  confirmPassword: any = ''
+
+  @ViewChild('passwordDialog') passwordDialog!: any;
 
   constructor(
     private authService: AuthService,
     private commonService: CommonService,
-    private tinyUrl: NgTinyUrlService
+    private _snackBar: MatSnackBar,
+    private matDiaLog: MatDialog,
+    private route: ActivatedRoute,
+    private tinyUrlService: TinyUrlService
   ) {
   }
 
@@ -48,6 +62,16 @@ export class ProfileComponent implements OnInit {
       this.getRoles()
       this.updateUserProfile()
     } else {
+      this.route.params.subscribe((param: any) => {
+        if (param?.username) {
+          this.route.queryParams.subscribe((query: any) => {
+            if (query['t']) {
+              localStorage.setItem('token', query['t'])
+              location.href = location.href.split('?')[0]
+            }
+          })
+        }
+      })
     }
   }
 
@@ -56,16 +80,18 @@ export class ProfileComponent implements OnInit {
     this.roles = this.caodaiTitle
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
   }
+
   getCurrentUser() {
     this.currentUser = this.authService.getCurrentUser()
-    console.log(this.currentUser);
     const qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
     if (qrData?.length >= 350) {
       try {
-        this.tinyUrl.shorten(qrData)
+        this.tinyUrlService.shortenUrl(qrData)
           .subscribe((res: any) => {
-            this.qrData = res;
-          });
+            if (res.code === 0) {
+              this.qrData = res?.data?.tiny_url
+            }
+          })
       } catch (e) {
         console.log(e)
       }
@@ -151,12 +177,61 @@ export class ProfileComponent implements OnInit {
         }
       }
     }
-    let localStorageUsers = <any>{}
-    localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
-    const userToken = this.generaToken(this.currentUser)
-    localStorageUsers[this.currentUser.userName] = userToken
-    localStorage.setItem('users', JSON.stringify(localStorageUsers))
-    localStorage.setItem('token', JSON.stringify(userToken))
-    this.getCurrentUser()
+    if (!this.currentUser.isGuest && new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
+      let localStorageUsers = <any>{}
+      localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
+      const userToken = this.generaToken(this.currentUser)
+      localStorageUsers[this.currentUser.userName] = userToken
+      localStorage.setItem('users', JSON.stringify(localStorageUsers))
+      localStorage.setItem('token', JSON.stringify(userToken))
+      this.getCurrentUser()
+      this._snackBar.open('Đã cập nhật thông tin', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      })
+    }
+    if (this.currentUser.isGuest) {
+      const name = this.currentUser?.name?.trim()?.split(' ')
+      let userName = ''
+      if (name?.length > 1) {
+        userName = this.commonService.generatedSlug(name[name.length - 1])
+        name.forEach((item: any, index: any) => {
+          if (index < name.length - 1) {
+            userName += `${this.commonService.generatedSlug(item)[0]}`
+          }
+        })
+        if (this.currentUser?.birthday?.getFullYear()) {
+          userName += this.currentUser?.birthday?.getFullYear()?.toString()?.split('')?.splice(2, 2)?.join('')
+        }
+        this.currentUser.userName = userName
+      }
+    }
+  }
+
+  activeAccount() {
+    if (this.currentUser.userName) {
+      if (new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
+        if (this.currentUser.password) {
+          delete this.currentUser.isGuest;
+          this.updateUserProfile()
+          this._snackBar.open(`Bạn đã làm rất tốt ${this.currentUser.name}`, 'Đóng', {
+            duration: this.durationInSeconds * 1000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          })
+          location.reload()
+          location.href = 'trang-chu'
+        } else {
+          this.currentUser.password = ''
+          const passworddialog = this.matDiaLog.open(this.passwordDialog, {
+            disableClose: true
+          })
+        }
+      } else {
+        this.userNameRequired = true
+      }
+    }
   }
 }
+
