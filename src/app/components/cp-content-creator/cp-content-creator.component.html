@@ -123,3 +123,13 @@
     </button>
   </mat-dialog-actions>
 </ng-template>
+
+<button
+  mat-fab
+  class="!fixed bottom-[80px] lg:bottom-8 right-8 z-[999999999999]"
+  *ngIf="!contentEditable"
+  [color]="'primary'"
+  (click)="onPrint()"
+>
+  <mat-icon>print</mat-icon>
+</button>

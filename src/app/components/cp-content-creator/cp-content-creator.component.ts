@@ -18,10 +18,10 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
   @Input() isShowFontSizeSelect: boolean = true;
+  @Input() isShowController: any = undefined;
   @Output() save = new EventEmitter();
   @Output() nextContent = new EventEmitter();
   @Output() nextFontSize = new EventEmitter();
-  isShowController: boolean = false;
   isAutoPlay: boolean = false;
   audioReadyToPlay: boolean = false;
   fromLocalStorage: boolean = true;
@@ -86,11 +86,16 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.breakpointObserver
-      .observe(['(max-width: 600px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isShowController = !state.matches && this.contentEditable;
-      });
+    console.log(typeof this.isShowController);
+
+    if (typeof this.isShowController === 'undefined') {
+      this.isShowController = true
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          this.isShowController = !state.matches && this.contentEditable;
+        });
+    }
     this.audioTracking()
     this.getLocationSettings()
     console.log(this.rootContent);
@@ -415,5 +420,50 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
 
   updateFontSize() {
     this.nextFontSize.emit(this.contentFormat?.fontSize)
+  }
+
+
+  onPrint() {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 22px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      .btn-share-item {
+        display: none;
+      }
+      .hide-print {
+        display: none;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+
+    const printContent = document.getElementById('contentCreatorWrapper');
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      writeContent.innerHTML = `${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
   }
 }
