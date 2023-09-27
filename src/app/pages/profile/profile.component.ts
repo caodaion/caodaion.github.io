@@ -6,7 +6,7 @@ import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { TinyUrlService } from 'src/app/shared/services/tiny-url.service';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 
 
 @Component({
