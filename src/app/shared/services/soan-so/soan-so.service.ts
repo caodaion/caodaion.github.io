@@ -46,6 +46,9 @@ export class SoanSoService {
       'so-cau-sieu': {
         name: 'Cầu Siêu',
         chi: 'nhựt'
+      },
+      'so-cao-hoang-thien-hau-tho': {
+        name: 'Cáo Hoàng Thiên Hậu Thổ'
       }
     }
   }

@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
-import { TinyUrlService } from 'src/app/shared/services/tiny-url.service';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 
 @Component({
   selector: 'app-qr-generator',
