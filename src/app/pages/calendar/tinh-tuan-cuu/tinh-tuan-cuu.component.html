@@ -395,6 +395,15 @@
                   <button
                     mat-icon-button
                     class="btn-share-item"
+                    [matTooltip]="'Đồng bộ lên Google Calendar'"
+                    (click)="onSyncToGoogleCalendar(element, item)"
+                    *ngIf="element?.isShowSync"
+                  >
+                    <mat-icon>cloud_sync</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    class="btn-share-item"
                     [matTooltip]="'Tải ảnh chia sẻ'"
                     (click)="showShareImage(element, item)"
                     *ngIf="isShowDownLoadImage"
@@ -504,7 +513,7 @@
         <mat-label>Thời gian cúng</mat-label>
         <mat-select
           [(ngModel)]="shareItem.time"
-          (ngModelChange)="isShowButtonSetDefault = true"
+          (ngModelChange)="isShowButtonSetDefault = true; changeTime()"
         >
           <mat-option *ngFor="let item of timeZone" [value]="item.name">{{
             item.name
