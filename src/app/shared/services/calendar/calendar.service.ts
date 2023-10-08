@@ -565,20 +565,28 @@ export class CalendarService {
         dates.push(endDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
         url += `&dates=${dates?.join('/')}`
       } else {
-        item?.dates?.forEach((date: any) => {
-          const dateValue = new Date()
-          dateValue.setHours(date.split(':')[0])
-          dateValue.setMinutes(date.split(':')[1])
-          dateValue.setSeconds(date.split(':')[2])
-          detailsStartDateValue = dates[0];
-          detailsEndDateValue = dates[1];
+        item?.dates?.forEach((date: any, index: any) => {
+          let dateValue = new Date()
+          if (typeof date === 'string') {
+            dateValue.setHours(parseInt(date.split(':')[0]))
+            dateValue.setMinutes(parseInt(date.split(':')[1]))
+            dateValue.setSeconds(parseInt(date.split(':')[2]))
+          } else {
+            dateValue = date
+          }
+          if (index === 0) {
+            detailsStartDateValue = `${this.datePipe.transform(dateValue, 'HH:mm:ss')}`;
+          }
+          if (index === 1) {
+            detailsEndDateValue = `${this.datePipe.transform(dateValue, 'HH:mm:ss')}`;
+          }
           // @ts-ignore
           dates.push(dateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
         })
         url += `&dates=${dates?.join('/')}`
       }
     }
-    item.details = encodeURI(`<h1>${item?.text} | ${item?.subTitle}</h1><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
+    item.details = encodeURI(`<h2>${item?.text} | ${item?.subTitle}</h2><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
     if (item?.details) {
       url += `&details=${item?.details}`
     }

@@ -246,6 +246,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       // @ts-ignore
       this.dialogRef = this.dialog.open(this.expiriedEventDialog)
     }
+    const newDate = new Date()
     this.tuanCuuList?.forEach((item: any) => {
       let selectedTitle: any = this.caoDaiTitle.find((v: any) => v.key === item.details.title);
       item.tab = `${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
@@ -256,6 +257,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       item.date.lunarMonth = `${date.lunarMonth} ${date.lunarLeap ? 'nhuận' : ''}`
       item.date.lunarDay = date.lunarDay
       item.date.lunarYearName = date.lunarYearName
+      item?.event?.forEach((ev: any) => {
+        if (new Date(ev.solar) < newDate) {
+          ev.isShowSync = false
+        } else {
+          ev.isShowSync = true
+        }
+      })
     })
   }
 
@@ -473,12 +481,16 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.timeZone = TIME_TYPE.data
     let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
     const foundCurrentEvent = localStorageEvents.find((lc: any) => lc.key === this.shareItem.item.key)
-    if (foundCurrentEvent.defaultTime) {
-      this.shareItem.time = foundCurrentEvent.defaultTime
-      this.isShowButtonSetDefault = false
+    if (element?.lunar?.lunarTime) {
+      this.shareItem.time = element?.lunar?.lunarTime
     } else {
-      this.shareItem.time = 'DẬU | 17:00-19:00'
-      this.isShowButtonSetDefault = true
+      if (foundCurrentEvent.defaultTime) {
+        this.shareItem.time = foundCurrentEvent.defaultTime
+        this.isShowButtonSetDefault = false
+      } else {
+        this.shareItem.time = 'DẬU | 17:00-19:00'
+        this.isShowButtonSetDefault = true
+      }
     }
     this.shareItem.id = this.commonService
       .generatedSlug(`${this.shareItem?.element?.eventName} ${this.datePipe
@@ -533,7 +545,45 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
     const foundCurrentEvent = localStorageEvents.find((item: any) => item.key === this.shareItem.item.key)
     localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)].defaultTime = this.shareItem.time
-    localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
-    this.isShowButtonSetDefault = false
+    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)]?.event?.forEach((item: any) => {
+      item.solar = new Date(item.solar)
+      item.solar = new Date(new Date(new Date(item.solar.setHours(parseInt(localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)]?.defaultTime?.split('|')[1].split(':')[0]))).setMinutes(0)).setSeconds(0))
+      item.lunar.lunarTime = this.shareItem.time
+    })
+    setTimeout(() => {
+      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
+      this.isShowButtonSetDefault = false
+      this.getLocalStorageTuanCuu()
+    }, 0)
+  }
+
+  onSyncToGoogleCalendar(element: any, item: any) {
+    const foundTitle = this.caoDaiTitle.find((cdt: any) => cdt.key === item?.details?.title)
+    const data = {
+      text: `${foundTitle?.eventTitle} ${element?.eventName} cho ${foundTitle?.name} ${item?.details.holyName ? item?.details?.holyName + ' - ' + item?.details?.name : item?.details?.name}`,
+      dates: [new Date(element.solar), new Date(new Date(element.solar).setMinutes(new Date(element.solar).getMinutes() + 60))],
+      subTitle: ''
+    }
+    const url = this.calendarService.getGoogleCalendarEventEditUrl(data)
+    window.open(url, '_blank')
+  }
+
+  changeTime() {
+    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    const foundCurrentEvent = localStorageEvents.find((item: any) => item.key === this.shareItem.item.key)
+    foundCurrentEvent?.event?.forEach((ev: any) => {
+      ev.key = this.commonService
+        .generatedSlug(`${ev?.eventName} ${this.datePipe
+          .transform(ev?.solar, 'YYYYMMdd')}` || 'caodaion-qr')
+    })
+    const foundElement = foundCurrentEvent.event.find((item: any) => item?.key === this.shareItem?.id)
+    foundElement.solar = new Date(foundElement.solar)
+    foundElement.solar = new Date(new Date(new Date(new Date(foundElement.solar.setHours(parseInt(this.shareItem.time.split('|')[1].split(":")[0]))).setMinutes(0))).setSeconds(0))?.toJSON()
+    foundElement.lunar.lunarTime = this.shareItem.time
+    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)].event = foundCurrentEvent.event
+    setTimeout(() => {
+      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
+      this.getLocalStorageTuanCuu()
+    }, 0)
   }
 }
