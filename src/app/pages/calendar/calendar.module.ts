@@ -26,9 +26,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { SynchronizedComponent } from './synchronized/synchronized.component';
 
 @NgModule({
-  declarations: [LunarCalendarComponent, TinhTuanCuuComponent],
+  declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
   imports: [
     CommonModule,
     CalendarRoutingModule,

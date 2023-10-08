@@ -72,6 +72,14 @@ export const MENU = [
         icon: 'calculate',
         fullAssess: true,
         released: true,
+      },
+      {
+        key: 'lich.dong-bo',
+        url: 'dong-bo',
+        label: 'Đồng bộ cloud',
+        icon: 'cloud_sync',
+        fullAssess: true,
+        released: true,
       }
     ]
   },

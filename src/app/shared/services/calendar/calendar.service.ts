@@ -11,6 +11,24 @@ export class CalendarService {
   commonTimes: any[] = [];
   commonLocationTypes: any[] = [];
   calendarViewMode: any = 'day';
+  tuThoiTimeRange = <any>{
+    'ty-23-01': {
+      start: '23:00:00',
+      end: '01:00:00'
+    },
+    'meo-05-07': {
+      start: '05:00:00',
+      end: '07:00:00'
+    },
+    'ngo-11-13': {
+      start: '11:00:00',
+      end: '13:00:00'
+    },
+    'dau-17-19': {
+      start: '17:00:00',
+      end: '19:00:00'
+    }
+  }
 
   constructor(private http: HttpClient, private commonService: CommonService, private datePipe: DatePipe) { }
 
@@ -512,5 +530,61 @@ export class CalendarService {
     return new Observable((observer) => {
       observer.next(events)
     });
+  }
+
+  getGoogleCalendarEventEditUrl(item: any): string {
+    let url = `https://calendar.google.com/calendar/u/0/r/eventedit`
+    if (item?.text) {
+      url += `?text=${encodeURI(item?.text + ' | ' + item?.subTitle)}`
+    }
+    const dates = <any>[]
+    let detailsStartDateValue = ''
+    let detailsEndDateValue = ''
+    if (item?.dates.length > 0) {
+      if (item?.dates[0] === 'ty-23-01' || item?.dates[0] === 'meo-05-07' || item?.dates[0] === 'ngo-11-13' || item?.dates[0] === 'dau-17-19') {
+        const startDateValue = new Date()
+        const endDateValue = new Date()
+        const foundDateRange = this.tuThoiTimeRange[item?.dates[0]]
+        if (foundDateRange) {
+          startDateValue.setHours(foundDateRange?.start?.split(':')[0])
+          startDateValue.setMinutes(foundDateRange?.start?.split(':')[1])
+          startDateValue.setSeconds(foundDateRange?.start?.split(':')[2])
+          detailsStartDateValue = `${foundDateRange?.start} mỗi ngày`
+          endDateValue.setHours(foundDateRange?.end?.split(':')[0])
+          endDateValue.setMinutes(foundDateRange?.end?.split(':')[1])
+          endDateValue.setSeconds(foundDateRange?.end?.split(':')[2])
+          detailsEndDateValue = `${foundDateRange?.end} mỗi ngày`
+        }
+        if (item?.dates[0] === 'ty-23-01') {
+          startDateValue.setDate(startDateValue.getDate() - 1)
+          detailsStartDateValue = `${foundDateRange?.start} mỗi ngày trước`
+        }
+        // @ts-ignore
+        dates.push(startDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        // @ts-ignore
+        dates.push(endDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        url += `&dates=${dates?.join('/')}`
+      } else {
+        item?.dates?.forEach((date: any) => {
+          const dateValue = new Date()
+          dateValue.setHours(date.split(':')[0])
+          dateValue.setMinutes(date.split(':')[1])
+          dateValue.setSeconds(date.split(':')[2])
+          detailsStartDateValue = dates[0];
+          detailsEndDateValue = dates[1];
+          // @ts-ignore
+          dates.push(dateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        })
+        url += `&dates=${dates?.join('/')}`
+      }
+    }
+    item.details = encodeURI(`<h1>${item?.text} | ${item?.subTitle}</h1><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
+    if (item?.details) {
+      url += `&details=${item?.details}`
+    }
+    if (item?.recur) {
+      url += `&recur=${item?.recur}`
+    }
+    return url;
   }
 }

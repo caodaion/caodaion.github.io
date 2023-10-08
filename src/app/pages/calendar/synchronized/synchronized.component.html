@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <h1>Đồng bộ</h1>
+  <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+    <ng-container *ngFor="let item of synchronizationList">
+      <mat-grid-tile>
+        <mat-card
+          appearance="outlined"
+          class="w-100 h-100 cursor-pointer"
+          (click)="onOpenSynchronizeData(item)"
+        >
+          <mat-card-header>
+            <mat-card-title>{{ item?.text }}</mat-card-title>
+            <mat-card-subtitle>{{ item?.subTitle }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </mat-grid-tile>
+    </ng-container>
+  </mat-grid-list>
+</div>
