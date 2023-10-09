@@ -549,15 +549,15 @@ export class CalendarService {
           startDateValue.setHours(foundDateRange?.start?.split(':')[0])
           startDateValue.setMinutes(foundDateRange?.start?.split(':')[1])
           startDateValue.setSeconds(foundDateRange?.start?.split(':')[2])
-          detailsStartDateValue = `${foundDateRange?.start} mỗi ngày`
+          detailsStartDateValue = `${foundDateRange?.start}`
           endDateValue.setHours(foundDateRange?.end?.split(':')[0])
           endDateValue.setMinutes(foundDateRange?.end?.split(':')[1])
           endDateValue.setSeconds(foundDateRange?.end?.split(':')[2])
-          detailsEndDateValue = `${foundDateRange?.end} mỗi ngày`
+          detailsEndDateValue = `${foundDateRange?.end}`
         }
         if (item?.dates[0] === 'ty-23-01') {
           startDateValue.setDate(startDateValue.getDate() - 1)
-          detailsStartDateValue = `${foundDateRange?.start} mỗi ngày trước`
+          detailsStartDateValue = `${foundDateRange?.start} ngày trước`
         }
         // @ts-ignore
         dates.push(startDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
@@ -593,6 +593,7 @@ export class CalendarService {
     if (item?.recur) {
       url += `&recur=${item?.recur}`
     }
+    url += `&sprop=website:www.caodaion.com&sprop=name:CaoDaiON`
     return url;
   }
 }

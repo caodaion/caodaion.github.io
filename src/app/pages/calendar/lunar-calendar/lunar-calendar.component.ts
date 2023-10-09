@@ -566,14 +566,16 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         const url = this.calendarService.getGoogleCalendarEventEditUrl(request)
         window.open(url, '_blank')
       } else {
-        if (data.date === 'yearly-monthly-daily') {
+        if (data.dateType === 'lunar') {
           if (data?.time[0] === 'ty-2301' || data?.time[0] === 'meo-0507' || data?.time[0] === 'ngo-1113' || data?.time[0] === 'dau-1719') {
             const startDate = `${JSON.parse(JSON.stringify(data.time[0])).split('-')[0]}-${JSON.parse(JSON.stringify(data.time[0])).split('-')[1].slice(0, 2)}-${JSON.parse(JSON.stringify(data.time[0])).split('-')[1].slice(-2)}`
-            const request = {
+            const request = <any>{
               text: data.name,
               dates: [startDate],
-              subTitle: '',
-              recur: 'RRULE:FREQ=DAILY',
+              subTitle: ''
+            }
+            if (data.date === 'yearly-monthly-daily') {
+              request.recur = 'RRULE:FREQ=DAILY'
             }
             const url = this.calendarService.getGoogleCalendarEventEditUrl(request)
             window.open(url, '_blank')
