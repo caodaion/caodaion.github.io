@@ -321,6 +321,15 @@
       >
         Xem kinh
       </button>
+      <button
+        mat-button
+        [color]="'primary'"
+        (click)="syncToGoogleCalendar()"
+        [mat-dialog-close]="true"
+      >
+      <mat-icon>cloud_sync</mat-icon>
+        Đồng bộ lên Google Calendar
+      </button>
     </mat-dialog-actions>
   </div>
 </ng-template>

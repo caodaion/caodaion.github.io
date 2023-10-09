@@ -4,7 +4,7 @@
   .main-drawer {
     border-color: transparent;
     flex-direction: column;
-    background-color: map.get(variables.$light-theme, "main-background");
+    background-color: map.get(variables.$light-theme, "main-background") !important;
     @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
       display: none !important;
     }

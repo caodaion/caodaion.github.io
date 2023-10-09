@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
@@ -385,7 +386,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
               new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
           })
           if (foundEvent) {
-            foundEvent.eventName = `Cầu siêu ${foundEvent.eventName} cho ${tuanCuu?.details?.name}`
+            const foundTitle = CAODAI_TITLE.data.find((cdontt: any) => cdontt.key === tuanCuu.details.title)
+            foundEvent.eventName = `${foundTitle?.eventTitle} ${foundEvent.eventName} cho ${foundTitle?.name} ${tuanCuu.details.holyName ? tuanCuu.details.holyName + " - " + tuanCuu.details.name : tuanCuu.details.name}`
             if (!date.event || date.event?.length == 0) {
               date.event = []
             }
@@ -531,7 +533,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       const currentTimeMinute = document.getElementById(currentTimeId);
       const currentTimeMinuteOffset: any =
         currentTimeMinute?.getBoundingClientRect().top;
-        return currentTimeMinuteOffset - dateRangeOffset?.top;
+      return currentTimeMinuteOffset - dateRangeOffset?.top;
     }
     return 0
   }
@@ -546,6 +548,36 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       if (event.wheelDelta < 0) {
         if (this.calendarMode === 'month') {
           this.onChangeSelectedCalendar('next')
+        }
+      }
+    }
+  }
+
+  syncToGoogleCalendar() {
+    console.log(this.shownDate);
+    const data = JSON.parse(JSON.stringify(this.shownDate?.event?.event))
+    if (data) {
+      if (data.solar) {
+        const request = {
+          text: data.name,
+          dates: [new Date(data.solar), new Date(new Date(new Date(data.solar).toJSON()).setHours(new Date(data.solar).getHours() + 1))],
+          subTitle: ''
+        }
+        const url = this.calendarService.getGoogleCalendarEventEditUrl(request)
+        window.open(url, '_blank')
+      } else {
+        if (data.date === 'yearly-monthly-daily') {
+          if (data?.time[0] === 'ty-2301' || data?.time[0] === 'meo-0507' || data?.time[0] === 'ngo-1113' || data?.time[0] === 'dau-1719') {
+            const startDate = `${JSON.parse(JSON.stringify(data.time[0])).split('-')[0]}-${JSON.parse(JSON.stringify(data.time[0])).split('-')[1].slice(0, 2)}-${JSON.parse(JSON.stringify(data.time[0])).split('-')[1].slice(-2)}`
+            const request = {
+              text: data.name,
+              dates: [startDate],
+              subTitle: '',
+              recur: 'RRULE:FREQ=DAILY',
+            }
+            const url = this.calendarService.getGoogleCalendarEventEditUrl(request)
+            window.open(url, '_blank')
+          }
         }
       }
     }

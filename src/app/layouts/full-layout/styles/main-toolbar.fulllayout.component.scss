@@ -3,7 +3,7 @@
 ::ng-deep {
   .main-toolbar {
     border-bottom: solid 1px transparent;
-    background-color: map.get(variables.$light-theme, "secondary-background");
+    background-color: map.get(variables.$light-theme, "secondary-background") !important;
     .wifi-logo {
       color: map.get(variables.$light-theme, "error") !important;
     }

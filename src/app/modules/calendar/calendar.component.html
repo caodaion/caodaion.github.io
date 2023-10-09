@@ -6,6 +6,9 @@
     [mode]="drawerMode"
   >
     <mat-nav-list class="mat-list-sub-sidenav">
+      <button mat-stroked-button [color]="'primary'" class="!rounded-full w-full !p-4 !h-auto !bg-white !border-[#3f51b5]">
+        <mat-icon>add</mat-icon>Thêm
+      </button>
       <a
         mat-list-item
         class="icon-hover"
@@ -32,8 +35,8 @@
         [routerLinkActive]="'active'"
         (click)="calendarService.calendarViewMode = ''; onToggleDrawer()"
       >
-      <mat-icon class="sub-sidenav-icon">{{item?.icon}}</mat-icon
-        ><span class="label-large">{{item?.label}}</span></a
+        <mat-icon class="sub-sidenav-icon">{{ item?.icon }}</mat-icon
+        ><span class="label-large">{{ item?.label }}</span></a
       >
     </mat-nav-list>
   </mat-sidenav>
