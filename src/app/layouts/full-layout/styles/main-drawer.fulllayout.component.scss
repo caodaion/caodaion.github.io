@@ -5,6 +5,7 @@
     border-color: transparent;
     flex-direction: column;
     background-color: map.get(variables.$light-theme, "main-background") !important;
+    border-right: 0 !important;
     @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {
       display: none !important;
     }
