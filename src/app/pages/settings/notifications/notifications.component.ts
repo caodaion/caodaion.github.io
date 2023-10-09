@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 import { NotificationsService } from 'src/app/shared/services/notifications/notifications.service';
 
@@ -14,8 +15,9 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private notificationsService: NotificationsService,
-    private eventService: EventService
-    ) { }
+    private eventService: EventService,
+    private calendarService: CalendarService
+  ) { }
 
   ngOnInit(): void {
     this.tuThoiEvents = this.eventService.eventList.find((item: any) => {
@@ -31,5 +33,17 @@ export class NotificationsComponent implements OnInit {
   changeSetting() {
     const settings = this.pushNotificationsSettings;
     this.notificationsService.updatePushSettings(settings)
+  }
+
+  onSyncToGoogleCalendar() {
+    const startDate = new Date(new Date(new Date(new Date().setHours(this.pushNotificationsSettings.study.time?.split(':')[0])).setMinutes(this.pushNotificationsSettings.study.time?.split(':')[1])).setSeconds(0))
+    const data = {
+      text: `Tự học mỗi ngày`,
+      dates: [startDate, new Date(new Date(startDate.toJSON()).setHours(startDate.getHours() + 1))],
+      subTitle: '',
+      recur: 'RRULE:FREQ=DAILY',
+    }
+    const url = this.calendarService.getGoogleCalendarEventEditUrl(data)
+    window.open(url, '_blank')
   }
 }

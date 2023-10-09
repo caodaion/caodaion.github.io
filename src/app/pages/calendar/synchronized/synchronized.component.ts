@@ -58,16 +58,14 @@ export class SynchronizedComponent implements OnInit {
         if (state.matches) {
           this.cols = 1;
         } else {
-          this.cols = 5;
+          this.cols = 6;
         }
       });
   }
 
   onOpenSynchronizeData(item: any) {
-    console.log(item);
     const url = this.calendarService.getGoogleCalendarEventEditUrl(item)
     if (url) {
-      console.log(url);
       window.open(url, '_blank');
     }
   }
