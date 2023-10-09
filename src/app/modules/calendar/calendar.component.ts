@@ -7,6 +7,7 @@ import {CONSTANT} from "../../shared/constants/constants.constant";
 import {Title} from "@angular/platform-browser";
 import { MENU } from 'src/app/shared/constants/menu.constant';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-calendar',
@@ -16,7 +17,9 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 export class CalendarComponent implements OnInit {
   public drawerMode: any;
   @ViewChild('drawer') drawer!: ElementRef;
+  @ViewChild('addNewModal') addNewModal!: any;
   menu = <any>[]
+  addNewModalRef: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -25,7 +28,8 @@ export class CalendarComponent implements OnInit {
     private router: Router,
     private titleSerVice: Title,
     public authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +57,7 @@ export class CalendarComponent implements OnInit {
         !this.viewMissionService.isDrawerOpened;
     }
   }
+
   onChangeCalendarViewMode(mode: any) {
     this.onToggleDrawer()
     this.calendarService.calendarViewMode = mode;
@@ -61,5 +66,9 @@ export class CalendarComponent implements OnInit {
       queryParams: { m: mode },
       queryParamsHandling: 'merge',
     });
+  }
+
+  addNew() {
+    this.addNewModalRef = this.matDialog.open(this.addNewModal)
   }
 }

@@ -58,6 +58,6 @@ import { SynchronizedComponent } from './synchronized/synchronized.component';
     QRCodeModule,
     NgxMatTimepickerModule
   ],
-  providers: [DatePipe, DecimalPipe],
+  providers: [DatePipe, DecimalPipe]
 })
 export class CalendarModule {}

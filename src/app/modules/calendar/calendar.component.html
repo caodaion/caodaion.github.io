@@ -6,8 +6,16 @@
     [mode]="drawerMode"
   >
     <mat-nav-list class="mat-list-sub-sidenav">
-      <button mat-stroked-button [color]="'primary'" class="!rounded-full w-full !p-4 !h-auto !bg-white !border-[#3f51b5]">
-        <mat-icon>add</mat-icon>Thêm
+      <button
+        mat-raised-button
+        [color]="'primary'"
+        class="!rounded-full !py-2 !px-8 !h-auto !bg-white !border-[#3f51b5] !text-[#3f51b5]"
+        (click)="onToggleDrawer(); addNew()"
+      >
+        <mat-icon
+          class="!text-[2rem] !w-[2rem] !h-[2rem]"
+          >add</mat-icon
+        >Thêm
       </button>
       <a
         mat-list-item
@@ -44,3 +52,7 @@
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #addNewModal>
+  <app-calendar-add-new></app-calendar-add-new>
+</ng-template>
