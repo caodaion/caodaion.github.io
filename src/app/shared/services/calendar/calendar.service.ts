@@ -586,14 +586,13 @@ export class CalendarService {
         url += `&dates=${dates?.join('/')}`
       }
     }
-    item.details = encodeURI(`<h2>${item?.text} | ${item?.subTitle}</h2><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
+    item.details = encodeURI(`<h1><a href="${location.origin}">CaoDaiON</a></h1><h2>${item?.text} | ${item?.subTitle}</h2><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
     if (item?.details) {
       url += `&details=${item?.details}`
     }
     if (item?.recur) {
       url += `&recur=${item?.recur}`
     }
-    url += `&sprop=website:www.caodaion.com&sprop=name:CaoDaiON`
     return url;
   }
 }

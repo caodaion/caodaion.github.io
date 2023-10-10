@@ -10,6 +10,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -27,7 +28,8 @@ import { MatSelectModule } from '@angular/material/select';
     NgxMatTimepickerModule,
     MatIconModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule
   ],
   exports: [
     CalendarAddNewComponent
