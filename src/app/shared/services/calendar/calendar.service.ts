@@ -587,6 +587,7 @@ export class CalendarService {
       }
     }
     item.details = encodeURI(`<h1><a href="${location.origin}">CaoDaiON</a></h1><h2>${item?.text} | ${item?.subTitle}</h2><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
+    url += `&location=${item?.location || location.origin}`
     if (item?.details) {
       url += `&details=${item?.details}`
     }
