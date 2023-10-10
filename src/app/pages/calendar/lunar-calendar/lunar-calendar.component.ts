@@ -577,6 +577,15 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
             if (data.date === 'yearly-monthly-daily') {
               request.recur = 'RRULE:FREQ=DAILY'
             }
+            if (data.date.match(new RegExp('yearly-[0-9][0-9]-[0-9][0-9]')) || data.date.match(new RegExp('yearly-monthly-[0-9][0-9]'))) {
+              console.log(parseInt(data?.time[0].split('-').slice(0, 2)));
+              let startDateV = new Date(new Date(JSON.parse(JSON.stringify(this.shownDate.date.solar))).setHours(parseInt(data?.time[0].split('-')[1].slice(0, 2))))
+              let endDateV = new Date(new Date(JSON.parse(JSON.stringify(this.shownDate.date.solar))).setHours(parseInt(data?.time[0].split('-')[1].slice(-2))))
+              if (data?.time[0] === 'ty-2301') {
+                startDateV = new Date(startDateV.setDate(startDateV.getDate() - 1))
+              }
+              request.dates = [startDateV, endDateV]
+            }
             const url = this.calendarService.getGoogleCalendarEventEditUrl(request)
             window.open(url, '_blank')
           }
