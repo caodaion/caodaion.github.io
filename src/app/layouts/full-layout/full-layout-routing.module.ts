@@ -61,6 +61,14 @@ const routes: Routes = [
         canActivate: [ReleasedGuard]
       },
       {
+        path: 'game',
+        loadChildren: () =>
+          import('../../modules/game/game.module').then(
+            (m) => m.GameModule
+          ),
+        canActivate: [ReleasedGuard]
+      },
+      {
         path: 'qr',
         loadChildren: () =>
           import('../../modules/qr/qr.module').then((m) => m.QrModule),

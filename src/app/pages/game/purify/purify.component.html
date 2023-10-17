@@ -1,0 +1,55 @@
+<div class="container-fluid py-8">
+  <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+    <mat-grid-tile *ngFor="let item of purifyList">
+      <div
+        class="flex flex-col justify-between items-center h-full w-full cursor-pointer"
+      >
+        <div class="w-full flex justify-center items-end">
+          <span class="leading-none">HP</span
+          ><span class="font-semibold text-2xl mx-2 leading-none">{{
+            item?.hp
+          }}</span
+          ><span [matTooltip]="item?.elm === 'electricity' ? 'hệ điện' : ''">
+            <img
+              class="w-[32px] h-[32px]"
+              [src]="'assets/game/purify/element.' + item?.elm + '.svg'"
+              [alt]="item?.elm"
+            />
+          </span>
+        </div>
+        <div
+          class="h-[60px] lg:h-[100px] w-[60px] lg:w-[100px] bg-[#d9d9d9] rounded-full overflow-hidden relative"
+        >
+          <img
+            [src]="item?.preview"
+            [alt]="item?.name"
+            class="w-full h-full object-cover"
+          />
+          <div
+            class="mask absolute top-0 left-0 h-full w-full rounded-full"
+            [ngStyle]="{
+              backgroundColor:
+                'rgba(255, 255, 255, ' + (100 - item?.percent) / 100 + ')',
+              'backdrop-filter': 'blur(' + (100 - item?.percent) / 4 + 'px)'
+            }"
+          ></div>
+        </div>
+        <div class="w-full text-center">
+          <div class="mb-4">{{ item?.key }}. {{ item?.name }}</div>
+          <div
+            class="relative h-[5px] w-full bg-[#d9d9d9] rounded-full"
+            [matTooltip]="'thu phục'"
+          >
+            <div
+              class="absolute h-full bg-[#62ca2f] rounded-full"
+              [matTooltip]="item?.percent + '%'"
+              [ngStyle]="{
+                width: item?.percent + '%'
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

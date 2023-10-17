@@ -141,6 +141,16 @@ export const MENU = [
     icon: 'videogame_asset',
     fullAssess: true,
     released: true,
-    children: []
+    children: [
+      {
+        key: 'game.purify',
+        url: 'purify',
+        label: 'Purify',
+        icon: 'pets',
+        fullAssess: true,
+        released: true,
+        voViWorkspace: true,
+      },
+    ]
   },
 ]
