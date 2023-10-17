@@ -6,12 +6,14 @@ import { GameComponent } from './game.component';
 import { PurifyComponent } from './purify/purify.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PurifyDetailsComponent } from './purify-details/purify-details.component';
 
 
 @NgModule({
   declarations: [
     GameComponent,
-    PurifyComponent
+    PurifyComponent,
+    PurifyDetailsComponent
   ],
   imports: [
     CommonModule,

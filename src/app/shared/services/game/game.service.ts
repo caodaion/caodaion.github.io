@@ -71,4 +71,18 @@ export class GameService {
       observable.complete()
     })
   }
+
+  getPurifyByKey(key: any): Observable<any>  {
+    return new Observable((observable) => {
+      let data = this.purifyList.find((item: any) => item.key === key)
+      const ref: Mutable<this> = this;
+      ref.purifyList = data
+      const response = {
+        code: data ? 200 : 404,
+        data: data
+      }
+      observable.next(response)
+      observable.complete()
+    })
+  }
 }

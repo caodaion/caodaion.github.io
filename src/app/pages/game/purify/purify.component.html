@@ -1,6 +1,7 @@
 <div class="container-fluid py-8">
+  <h1 class="text-center">Purify</h1>
   <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
-    <mat-grid-tile *ngFor="let item of purifyList">
+    <mat-grid-tile *ngFor="let item of purifyList" [routerLink]="item?.key">
       <div
         class="flex flex-col justify-between items-center h-full w-full cursor-pointer"
       >
@@ -30,7 +31,7 @@
             [ngStyle]="{
               backgroundColor:
                 'rgba(255, 255, 255, ' + (100 - item?.percent) / 100 + ')',
-              'backdrop-filter': 'blur(' + (100 - item?.percent) / 4 + 'px)'
+              backdropFilter: 'blur(' + (100 - item?.percent) / 4 + 'px)'
             }"
           ></div>
         </div>

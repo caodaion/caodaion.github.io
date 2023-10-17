@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { GameComponent } from './game.component';
 import { PurifyComponent } from './purify/purify.component';
+import { PurifyDetailsComponent } from './purify-details/purify-details.component';
 
 const routes: Routes = [
   {
     path: '',
     children: [
-      { path: '', component: GameComponent },
-      { path: 'purify', component: PurifyComponent }
+      {
+        path: '',
+        redirectTo: 'purify',
+        pathMatch: 'full'
+      },
+      { path: 'purify', component: PurifyComponent },
+      { path: 'purify/:key', component: PurifyDetailsComponent }
     ]
   },
 ];

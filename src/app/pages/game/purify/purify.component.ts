@@ -46,7 +46,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
         if (res.code === 200) {
           this.purifyList = res.data
           this.purifyList.forEach((item: any) => {
-            item.percent = 80
+            item.percent = 50
           })
           console.log(this.purifyList);
 

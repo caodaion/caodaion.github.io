@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="flex items-center justify-between"></div>
+  <div class="text-center">
+    <p>{{ purify?.key }}</p>
+    <h1>{{ purify?.name }}</h1>
+  </div>
+  <div class="w-full flex">
+    <div class="purify-card relative shadow rounded-[36px]" #purifyCard>
+      <img
+        *ngIf="purify?.image"
+        [src]="purify?.image"
+        [alt]="purify?.name"
+        class="rounded-[36px]"
+      />
+      <div
+        class="frame absolute top-0 right-0 bottom-0 left-0 border-[1rem] border-[#ffffff] rounded-[36px]"
+      >
+        <div class="flex">
+          <div
+            class="border-[#ffffff] border-t-0 border-l-0 border-b-[12px] border-r-[6px] rounded-br-[120px] w-full"
+          >
+            <div class="ps-[12px] flex items-center">
+              <span
+                class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
+                >{{ purify?.rarity?.toUpperCase() }}</span
+              >
+              <span class="text-shadow text-[32px]">{{ purify?.name }}</span>
+              <span
+                class="text-shadow text-[32px] text-white italic ms-[10px]"
+                [ngStyle]="{
+                  'text-shadow':
+                    purify?.level?.toLowerCase() === 'hiền'
+                      ? '2px 0 #00A959, -2px 0 #00A959, 0 2px #00A959, 0 -2px #00A959, 1px 1px #00A959, -1px -1px #00A959, 1px -1px #00A959, -1px 1px #00A959'
+                      : ''
+                }"
+                >{{ purify?.level?.toUpperCase() }}</span
+              >
+            </div>
+          </div>
+          <div class="flex items-end px-[9px]">
+            <span class="text-shadow text-[24px]">HP</span>
+            <span class="text-shadow font-semibold text-[32px] mx-[10px]">{{
+              purify?.hp
+            }}</span>
+            <span
+              ><img
+                [src]="'assets/game/purify/element.' + purify?.elm + '.svg'"
+                [alt]="purify?.elm"
+                class="min-h-[48px] min-w-[48px]"
+            /></span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="absolute top-0 right-0 bottom-0 left-0 rounded-[36px]"
+        [ngStyle]="{
+          backgroundColor:
+            'rgba(255, 255, 255, ' + (100 - purify?.percent) / 100 + ')',
+          backdropFilter: 'blur(' + (100 - purify?.percent) / 4 + 'px)'
+        }"
+      ></div>
+    </div>
+  </div>
+</div>
