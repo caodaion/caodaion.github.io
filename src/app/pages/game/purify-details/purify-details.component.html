@@ -1,13 +1,13 @@
-<div class="container-fluid">
+<div class="container-fluid bg-[#f6f8fc]">
   <div class="flex items-center justify-between"></div>
   <div class="text-center">
     <p>{{ purify?.key }}</p>
     <h1>{{ purify?.name }}</h1>
   </div>
   <div class="w-full flex py-8">
-    <div class="purify-card-wrapper w-full lg:w-1/2" #purifyCardWrapper>
+    <div class="purify-card-wrapper w-full lg:w-1/2 flex justify-center" #purifyCardWrapper>
       <div
-        class="w-[1024px] h-[1024px] purify-card relative shadow-[0_12px_12px_rgba(0,0,0,0.25)] rounded-[36px] origin-top"
+        class="min-w-[1024px] max-w-[1024px] min-h-[1024px] max-h-[1024px] purify-card relative rounded-[36px] origin-top"
         #purifyCard
         [style]="getStyleForWrapper()"
       >
@@ -57,7 +57,7 @@
           </div>
           <div class="bottom-section">
             <div class="flex justify-between">
-              <div class="flex relative">
+              <div class="flex relative text-shadow">
                 <div class="bg-white me-[60px]">
                   <div class="flex py-[12px] items-center">
                     <span class="px-[12px] whitespace-nowrap">nhược điểm</span>
@@ -116,7 +116,7 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white p-[12px] text-justify text-[12px]">
+            <div class="bg-white p-[12px] text-justify text-[12px] rounded-[0_0_20px_20px]">
               {{ purify?.story }}
             </div>
           </div>

@@ -51,7 +51,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   }
 
   getStyleForWrapper() {
-    return `transform: scale(${1 - (100 / (this.purifyCard?.nativeElement?.offsetWidth - this.purifyCardWrapper?.nativeElement?.offsetWidth))}) translateX(-${(100 * (100 / (this.purifyCard?.nativeElement?.offsetWidth - this.purifyCardWrapper?.nativeElement?.offsetWidth))) / 2}%)`
+    return `transform: scale(${1 - (100 / (this.purifyCard?.nativeElement?.offsetWidth - this.purifyCardWrapper?.nativeElement?.offsetWidth))})`
   }
 
   private convertBase64ToBlob(Base64Image: string) {
