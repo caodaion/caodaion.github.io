@@ -10,7 +10,7 @@ export class GameService {
   readonly sheetUrl = `https://docs.google.com/spreadsheets/d/e/{id}/pub?output=xlsx`
   readonly purifySheetId = `2PACX-1vTKgO-Mpj1tp5jJbSl3NyiDtSekkZeobqdLPib1UA9HR3xNJ7ey3o60ob7YRd795X1vAaejq3ulNfs7`
   readonly purifyWorkbook: any;
-  readonly purifyList: any;
+  readonly purifyList = <any>[];
   isActivePurifyList: boolean = false;
   countSettingValueColIndex = 2
 
@@ -75,8 +75,6 @@ export class GameService {
   getPurifyByKey(key: any): Observable<any>  {
     return new Observable((observable) => {
       let data = this.purifyList.find((item: any) => item.key === key)
-      const ref: Mutable<this> = this;
-      ref.purifyList = data
       const response = {
         code: data ? 200 : 404,
         data: data

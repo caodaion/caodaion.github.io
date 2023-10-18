@@ -1,19 +1,39 @@
 <div class="container-fluid bg-[#f6f8fc]">
-  <div class="flex items-center justify-between"></div>
-  <div class="text-center">
+  <div class="flex items-center justify-between border-b p-3">
+    <div
+      *ngIf="prev"
+      class="w-full cursor-pointer flex items-center justify-start"
+      [routerLink]="'/game/purify/' + prev.key"
+    >
+      <mat-icon>arrow_back_ios</mat-icon>
+      {{ prev?.key }}. {{ prev?.name }}
+    </div>
+    <div
+      *ngIf="next"
+      class="w-full cursor-pointer flex items-center justify-end"
+      [routerLink]="'/game/purify/' + next.key"
+    >
+      {{ next?.key }}. {{ next?.name }}
+      <mat-icon>arrow_forward_ios</mat-icon>
+    </div>
+  </div>
+  <div class="text-center pt-3">
     <p>{{ purify?.key }}</p>
     <h1>{{ purify?.name }}</h1>
   </div>
   <div class="w-full flex py-8">
-    <div class="purify-card-wrapper w-full lg:w-1/2 flex justify-center" #purifyCardWrapper>
+    <div
+      class="purify-card-wrapper w-full lg:w-3/5 flex justify-center"
+      #purifyCardWrapper
+    >
       <div
         class="min-w-[1024px] max-w-[1024px] min-h-[1024px] max-h-[1024px] purify-card relative rounded-[36px] origin-top"
         #purifyCard
         [style]="getStyleForWrapper()"
       >
         <img
-          *ngIf="purify?.image"
-          [src]="purify?.image"
+          *ngIf="purify?.image || purify?.preview"
+          [src]="purify?.image || purify?.preview"
           [alt]="purify?.name"
           class="rounded-[36px]"
         />
@@ -31,11 +51,19 @@
                 >
                 <span class="text-shadow text-[32px]">{{ purify?.name }}</span>
                 <span
-                  class="text-shadow text-[32px] text-white italic ms-[10px]"
+                  class="text-shadow text-[32px] text-white italic ms-[10px] font-bold"
                   [ngStyle]="{
                     'text-shadow':
                       purify?.level?.toLowerCase() === 'hiền'
-                        ? '2px 0 #00A959, -2px 0 #00A959, 0 2px #00A959, 0 -2px #00A959, 1px 1px #00A959, -1px -1px #00A959, 1px -1px #00A959, -1px 1px #00A959'
+                        ? '3px 0 #00A959, -3px 0 #00A959, 0 3px #00A959, 0 -3px #00A959, 3px 3px #00A959, -3px -3px #00A959, 3px -3px #00A959, -3px 3px #00A959'
+                        : purify?.level?.toLowerCase() === 'thần'
+                        ? '3px 0 #5D098C, -3px 0 #5D098C, 0 3px #5D098C, 0 -3px #5D098C, 3px 3px #5D098C, -3px -3px #5D098C, 3px -3px #5D098C, -3px 3px #5D098C'
+                        : purify?.level?.toLowerCase() === 'thánh'
+                        ? '3px 0 #EA4335, -3px 0 #EA4335, 0 3px #EA4335, 0 -3px #EA4335, 3px 3px #EA4335, -3px -3px #EA4335, 3px -3px #EA4335, -3px 3px #EA4335'
+                        : purify?.level?.toLowerCase() === 'tiên'
+                        ? '3px 0 #4285F4, -3px 0 #4285F4, 0 3px #4285F4, 0 -3px #4285F4, 3px 3px #4285F4, -3px -3px #4285F4, 3px -3px #4285F4, -3px 3px #4285F4'
+                        : purify?.level?.toLowerCase() === 'phật'
+                        ? '3px 0 #FBBC05, -3px 0 #FBBC05, 0 3px #FBBC05, 0 -3px #FBBC05, 3px 3px #FBBC05, -3px -3px #FBBC05, 3px -3px #FBBC05, -3px 3px #FBBC05'
                         : ''
                   }"
                   >{{ purify?.level?.toUpperCase() }}</span
@@ -116,7 +144,7 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white p-[12px] text-justify text-[12px] rounded-[0_0_20px_20px]">
+            <div class="bg-white p-[12px] text-justify text-[12px]">
               {{ purify?.story }}
             </div>
           </div>
@@ -133,7 +161,7 @@
     </div>
     <div class="">
       <button
-      *ngIf="purify.percent == 100"
+        *ngIf="purify.percent == 100 && purify?.image"
         mat-flat-button
         [color]="'primary'"
         (click)="saveAsImage(purifyCard)"

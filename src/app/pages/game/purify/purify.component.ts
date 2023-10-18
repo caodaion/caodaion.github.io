@@ -30,7 +30,6 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           this.cols = 6
         }
       });
-
   }
 
   ngAfterViewChecked(): void {
@@ -47,6 +46,11 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           this.purifyList = res.data
           this.purifyList.forEach((item: any) => {
             item.percent = 50
+            if (item.preview) {
+              console.log(item.preview.match(/d\/([^\/]+)/));
+
+              item.preview = `https://drive.google.com/uc?export=view&id=${item.preview.match(/d\/([^\/]+)/)[1]}`
+            }
           })
           console.log(this.purifyList);
 

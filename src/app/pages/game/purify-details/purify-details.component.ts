@@ -17,6 +17,8 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
 
   purify = <any>{}
   purifyKey: any;
+  prev: any;
+  next: any;
 
   constructor(
     private gameService: GameService,
@@ -29,6 +31,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.purifyKey = params['key']
+      this.getPurifyProfile()
     })
   }
 
@@ -43,15 +46,26 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.purify = res.data
-          this.purify.percent = 100
-          this.purify.counter = JSON.parse(this.purify.counter)
-          console.log(this.purify);
+          const foundData = this.gameService?.purifyList?.find((item: any) => item.key === this.purifyKey)
+          this.prev = this.gameService?.purifyList[this.gameService?.purifyList.indexOf(foundData) - 1]
+          this.next = this.gameService?.purifyList[this.gameService?.purifyList.indexOf(foundData) + 1]
+          this.purify.percent = 50
+          if (this.purify.counter) {
+            this.purify.counter = JSON.parse(this.purify.counter)
+          }
+          if (this.purify.preview) {
+            this.purify.preview = `https://drive.google.com/uc?export=view&id=${this.purify.preview.match(/d\/([^\/]+)/)[1]}`
+          }
         }
       })
   }
 
   getStyleForWrapper() {
-    return `transform: scale(${1 - (100 / (this.purifyCard?.nativeElement?.offsetWidth - this.purifyCardWrapper?.nativeElement?.offsetWidth))})`
+    let value = this.purifyCard?.nativeElement?.offsetWidth / this.purifyCardWrapper?.nativeElement?.offsetWidth
+    if (this.purifyCard?.nativeElement?.offsetWidth > this.purifyCardWrapper?.nativeElement?.offsetWidth) {
+      value = this.purifyCardWrapper?.nativeElement?.offsetWidth / this.purifyCard?.nativeElement?.offsetWidth
+    }
+    return `transform: scale(${((value) * 100) / 100})`
   }
 
   private convertBase64ToBlob(Base64Image: string) {
