@@ -4,61 +4,142 @@
     <p>{{ purify?.key }}</p>
     <h1>{{ purify?.name }}</h1>
   </div>
-  <div class="w-full flex">
-    <div class="purify-card relative shadow rounded-[36px]" #purifyCard>
-      <img
-        *ngIf="purify?.image"
-        [src]="purify?.image"
-        [alt]="purify?.name"
-        class="rounded-[36px]"
-      />
+  <div class="w-full flex py-8">
+    <div class="purify-card-wrapper w-full lg:w-1/2" #purifyCardWrapper>
       <div
-        class="frame absolute top-0 right-0 bottom-0 left-0 border-[1rem] border-[#ffffff] rounded-[36px]"
+        class="w-[1024px] h-[1024px] purify-card relative shadow-[0_12px_12px_rgba(0,0,0,0.25)] rounded-[36px] origin-top"
+        #purifyCard
+        [style]="getStyleForWrapper()"
       >
-        <div class="flex">
-          <div
-            class="border-[#ffffff] border-t-0 border-l-0 border-b-[12px] border-r-[6px] rounded-br-[120px] w-full"
-          >
-            <div class="ps-[12px] flex items-center">
-              <span
-                class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
-                >{{ purify?.rarity?.toUpperCase() }}</span
-              >
-              <span class="text-shadow text-[32px]">{{ purify?.name }}</span>
-              <span
-                class="text-shadow text-[32px] text-white italic ms-[10px]"
-                [ngStyle]="{
-                  'text-shadow':
-                    purify?.level?.toLowerCase() === 'hiền'
-                      ? '2px 0 #00A959, -2px 0 #00A959, 0 2px #00A959, 0 -2px #00A959, 1px 1px #00A959, -1px -1px #00A959, 1px -1px #00A959, -1px 1px #00A959'
-                      : ''
-                }"
-                >{{ purify?.level?.toUpperCase() }}</span
-              >
+        <img
+          *ngIf="purify?.image"
+          [src]="purify?.image"
+          [alt]="purify?.name"
+          class="rounded-[36px]"
+        />
+        <div
+          class="frame absolute top-0 right-0 bottom-0 left-0 border-[1rem] border-[#ffffff] rounded-[36px] flex flex-col justify-between"
+        >
+          <div class="flex">
+            <div
+              class="border-[#ffffff] border-t-0 border-l-0 border-b-[12px] border-r-[6px] rounded-br-[120px] w-full"
+            >
+              <div class="ps-[12px] flex items-center">
+                <span
+                  class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
+                  >{{ purify?.rarity?.toUpperCase() }}</span
+                >
+                <span class="text-shadow text-[32px]">{{ purify?.name }}</span>
+                <span
+                  class="text-shadow text-[32px] text-white italic ms-[10px]"
+                  [ngStyle]="{
+                    'text-shadow':
+                      purify?.level?.toLowerCase() === 'hiền'
+                        ? '2px 0 #00A959, -2px 0 #00A959, 0 2px #00A959, 0 -2px #00A959, 1px 1px #00A959, -1px -1px #00A959, 1px -1px #00A959, -1px 1px #00A959'
+                        : ''
+                  }"
+                  >{{ purify?.level?.toUpperCase() }}</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center px-[9px]">
+              <span class="text-shadow text-[24px]">HP</span>
+              <span class="text-shadow font-semibold text-[32px] mx-[10px]">{{
+                purify?.hp
+              }}</span>
+              <span *ngIf="purify?.elm"
+                ><img
+                  [src]="'assets/game/purify/element.' + purify?.elm + '.svg'"
+                  [alt]="purify?.elm"
+                  class="min-h-[48px] min-w-[48px]"
+              /></span>
             </div>
           </div>
-          <div class="flex items-end px-[9px]">
-            <span class="text-shadow text-[24px]">HP</span>
-            <span class="text-shadow font-semibold text-[32px] mx-[10px]">{{
-              purify?.hp
-            }}</span>
-            <span
-              ><img
-                [src]="'assets/game/purify/element.' + purify?.elm + '.svg'"
-                [alt]="purify?.elm"
-                class="min-h-[48px] min-w-[48px]"
-            /></span>
+          <div class="bottom-section">
+            <div class="flex justify-between">
+              <div class="flex relative">
+                <div class="bg-white me-[60px]">
+                  <div class="flex py-[12px] items-center">
+                    <span class="px-[12px] whitespace-nowrap">nhược điểm</span>
+                    <span *ngIf="purify?.defect"
+                      ><img
+                        class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
+                        [src]="
+                          'assets/game/purify/element.' +
+                          purify?.defect +
+                          '.svg'
+                        "
+                        [alt]="purify?.name"
+                    /></span>
+                    <span class="px-[12px] font-semibold text-[24px]">{{
+                      purify?.defectValue
+                    }}</span>
+                    <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
+                    <span class="px-[12px] whitespace-nowrap">khắc chế</span>
+                    <ng-container
+                      *ngFor="let item of purify.counter; let index = index"
+                    >
+                      <span *ngIf="item?.key"
+                        ><img
+                          class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
+                          [src]="
+                            'assets/game/purify/element.' + item?.key + '.svg'
+                          "
+                          [alt]="item?.key"
+                      /></span>
+                      <span class="px-[12px] font-semibold text-[24px]">{{
+                        item?.value
+                      }}</span>
+                    </ng-container>
+                  </div>
+                </div>
+                <div
+                  class="h-0 w-0 border-b-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-r-[60px] border-r-[transparent] absolute right-0 bottom-0"
+                ></div>
+              </div>
+              <div class="flex relative w-full">
+                <div
+                  class="h-0 w-0 border-t-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-l-[60px] border-l-[transparent] absolute left-0 top-0"
+                ></div>
+                <div class="bg-white ms-[60px] w-full">
+                  <div class="flex py-[12px] items-center">
+                    <span class="px-[12px]">tốc độ</span>
+                    <span class="px-[12px] font-semibold text-[24px]">{{
+                      purify?.speed
+                    }}</span>
+                    <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
+                    <span class="px-[12px]">chống chịu</span>
+                    <span class="px-[12px] font-semibold text-[24px]">{{
+                      purify?.def
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-[12px] text-justify text-[12px]">
+              {{ purify?.story }}
+            </div>
           </div>
         </div>
+        <div
+          class="absolute top-0 right-0 bottom-0 left-0 rounded-[36px]"
+          [ngStyle]="{
+            backgroundColor:
+              'rgba(255, 255, 255, ' + (100 - purify?.percent) / 100 + ')',
+            backdropFilter: 'blur(' + (100 - purify?.percent) / 4 + 'px)'
+          }"
+        ></div>
       </div>
-      <div
-        class="absolute top-0 right-0 bottom-0 left-0 rounded-[36px]"
-        [ngStyle]="{
-          backgroundColor:
-            'rgba(255, 255, 255, ' + (100 - purify?.percent) / 100 + ')',
-          backdropFilter: 'blur(' + (100 - purify?.percent) / 4 + 'px)'
-        }"
-      ></div>
+    </div>
+    <div class="">
+      <button
+      *ngIf="purify.percent == 100"
+        mat-flat-button
+        [color]="'primary'"
+        (click)="saveAsImage(purifyCard)"
+      >
+        Tải ảnh
+      </button>
     </div>
   </div>
 </div>

@@ -7,6 +7,9 @@ import { PurifyComponent } from './purify/purify.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PurifyDetailsComponent } from './purify-details/purify-details.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -19,7 +22,10 @@ import { PurifyDetailsComponent } from './purify-details/purify-details.componen
     CommonModule,
     GameRoutingModule,
     MatGridListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class GameModule { }
