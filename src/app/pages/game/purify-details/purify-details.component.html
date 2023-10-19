@@ -22,7 +22,7 @@
 <div class="container-fluid">
   <div class="text-center pt-3">
     <p>{{ purify?.key }}</p>
-    <h1>{{ purify?.name }}</h1>
+    <h1>{{ purify?.name || '???' }}</h1>
   </div>
   <audio [src]="purify?.audio" [controls]="true" class="w-100" [autoplay]="true"></audio>
   <div class="w-full flex flex-wrap py-8 relative">
@@ -39,7 +39,7 @@
         <img
           *ngIf="purify?.image || purify?.preview"
           [src]="purify?.image || purify?.preview"
-          [alt]="purify?.name"
+          [alt]="purify?.name || '???'"
           class="rounded-[36px]"
         />
         <div
@@ -54,7 +54,7 @@
                   class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
                   >{{ purify?.rarity?.toUpperCase() }}</span
                 >
-                <span class="text-shadow text-[32px]">{{ purify?.name }}</span>
+                <span class="text-shadow text-[32px]">{{ purify?.name || '???' }}</span>
                 <span
                   class="text-shadow text-[32px] text-white italic ms-[10px] font-bold"
                   [ngStyle]="{
@@ -102,7 +102,7 @@
                           purify?.defect +
                           '.svg'
                         "
-                        [alt]="purify?.name"
+                        [alt]="purify?.name || '???'"
                     /></span>
                     <span class="px-[12px] font-semibold text-[24px]">{{
                       purify?.defectValue
