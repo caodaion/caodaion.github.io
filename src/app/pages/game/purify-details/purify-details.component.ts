@@ -1,7 +1,8 @@
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
@@ -19,16 +20,20 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   purifyKey: any;
   prev: any;
   next: any;
+  contentEditable: boolean = false
 
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private authService: AuthService,
+    private cd: ChangeDetectorRef
   ) {
 
   }
   ngOnInit(): void {
+    this.contentEditable = this.authService.contentEditable
     this.route.params.subscribe((params: any) => {
       this.purifyKey = params['key']
       this.getPurifyProfile()
@@ -46,9 +51,13 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.purify = res.data
-          const foundData = this.gameService?.purifyList?.find((item: any) => item.key === this.purifyKey)
-          this.prev = this.gameService?.purifyList[this.gameService?.purifyList.indexOf(foundData) - 1]
-          this.next = this.gameService?.purifyList[this.gameService?.purifyList.indexOf(foundData) + 1]
+          let purifyList = this.gameService?.purifyList
+          if (!this.contentEditable) {
+            purifyList = purifyList?.filter((item: any) => item.published)
+          }
+          const foundData = purifyList?.find((item: any) => item.key === this.purifyKey)
+          this.prev = purifyList[purifyList.indexOf(foundData) - 1]
+          this.next = purifyList[purifyList.indexOf(foundData) + 1]
           this.purify.percent = 50
           if (this.purify.counter) {
             this.purify.counter = JSON.parse(this.purify.counter)
@@ -60,12 +69,15 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       })
   }
 
-  getStyleForWrapper() {
+  getStyleForWrapper(): any {
     let value = this.purifyCard?.nativeElement?.offsetWidth / this.purifyCardWrapper?.nativeElement?.offsetWidth
     if (this.purifyCard?.nativeElement?.offsetWidth > this.purifyCardWrapper?.nativeElement?.offsetWidth) {
       value = this.purifyCardWrapper?.nativeElement?.offsetWidth / this.purifyCard?.nativeElement?.offsetWidth
     }
-    return `transform: scale(${((value) * 100) / 100})`
+    return {
+      card: `transform: scale(${((value) * 100) / 100})`,
+      wrapper: `height: ${this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100)}px`
+    }
   }
 
   private convertBase64ToBlob(Base64Image: string) {

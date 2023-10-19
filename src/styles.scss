@@ -45,6 +45,9 @@ $pwa-theme: mat.define-light-theme(
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'prismjs/themes/prism-okaidia.css';
+// @import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+// @import 'prismjs/plugins/line-highlight/prism-line-highlight.css';
 /* You can add global styles to this file, and also import other style files */
 @import "./sass/custom";
 body {

@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
@@ -11,10 +12,13 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
 
   purifyList = <any>[]
   cols = 6
+  contentEditable: boolean = false
+
   constructor(
     private gameService: GameService,
     private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
+    private authService: AuthService
   ) {
 
 
@@ -30,6 +34,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           this.cols = 6
         }
       });
+    this.contentEditable = this.authService.contentEditable
   }
 
   ngAfterViewChecked(): void {
@@ -44,6 +49,9 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.purifyList = res.data
+          if (!this.contentEditable) {
+            this.purifyList = this.purifyList?.filter((item: any) => item.published)
+          }
           this.purifyList.forEach((item: any) => {
             item.percent = 50
             if (item.preview) {

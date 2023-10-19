@@ -10,6 +10,8 @@ import { PurifyDetailsComponent } from './purify-details/purify-details.componen
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MarkdownModule } from 'ngx-markdown';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatTooltipModule,
     MatDividerModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MarkdownModule,
+    FormsModule
   ]
 })
 export class GameModule { }
