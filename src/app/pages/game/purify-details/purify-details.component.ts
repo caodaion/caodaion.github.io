@@ -17,6 +17,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   @ViewChild('purifyCard') purifyCard: any;
 
   purify = <any>{}
+  updatedStyle = <any>{}
   purifyKey: any;
   prev: any;
   next: any;
@@ -44,6 +45,8 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
       this.getPurifyProfile()
     }
+    this.getStyleForWrapper()
+    this.cd.detectChanges()
   }
 
   getPurifyProfile() {
@@ -56,14 +59,23 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             purifyList = purifyList?.filter((item: any) => item.published)
           }
           const foundData = purifyList?.find((item: any) => item.key === this.purifyKey)
-          this.prev = purifyList[purifyList.indexOf(foundData) - 1]
-          this.next = purifyList[purifyList.indexOf(foundData) + 1]
+          if (purifyList?.length > 0) {
+            this.prev = purifyList[purifyList.indexOf(foundData) - 1]
+            this.next = purifyList[purifyList.indexOf(foundData) + 1]
+          }
           this.purify.percent = 50
           if (this.purify.counter) {
             this.purify.counter = JSON.parse(this.purify.counter)
           }
           if (this.purify.preview) {
-            this.purify.preview = `https://drive.google.com/uc?export=view&id=${this.purify.preview.match(/d\/([^\/]+)/)[1]}`
+            if (this.purify.preview.match(/d\/([^\/]+)/)) {
+              this.purify.preview = `https://drive.google.com/uc?export=view&id=${this.purify.preview.match(/d\/([^\/]+)/)[1]}`
+            }
+          }
+          if (this.purify.audio) {
+            if (this.purify.audio.match(/d\/([^\/]+)/)) {
+              this.purify.audio = `https://drive.google.com/uc?export=view&id=${this.purify.audio.match(/d\/([^\/]+)/)[1]}`
+            }
           }
         }
       })
@@ -74,7 +86,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     if (this.purifyCard?.nativeElement?.offsetWidth > this.purifyCardWrapper?.nativeElement?.offsetWidth) {
       value = this.purifyCardWrapper?.nativeElement?.offsetWidth / this.purifyCard?.nativeElement?.offsetWidth
     }
-    return {
+    this.updatedStyle = {
       card: `transform: scale(${((value) * 100) / 100})`,
       wrapper: `height: ${this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100)}px`
     }
