@@ -209,11 +209,11 @@
         class="p-3 lg:sticky top-[50px] z-10 bg-white"
         [style]="updatedStyle?.wrapper"
       >
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>ID</strong>
           <div>{{ purify?.key }}</div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>Tên</strong>
           <div>{{ purify?.name }}</div>
         </div>
@@ -229,19 +229,19 @@
             />
           </div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>Máu</strong>
           <div>{{ purify?.hp }}</div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>Chống chịu</strong>
           <div>{{ purify?.def }}</div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>Tốc độ</strong>
           <div>{{ purify?.speed }}</div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start">
           <strong>Khắc chế</strong>
           <div class="flex items-center flex-wrap">
             <ng-container *ngFor="let item of purify.defect; let index = index">
@@ -256,6 +256,21 @@
               <span>{{ item?.value || "???" }}</span>
             </ng-container>
           </div>
+        </div>
+        <div class="flex justify-between items-start">
+          <h4>Cách thu phục</h4>
+        </div>
+        <div class="flex justify-between items-start">
+          <strong>Công phu</strong>
+          <div class="text-right">{{ purify?.congPhu }}</div>
+        </div>
+        <div class="flex justify-between items-start">
+          <strong>Công quả</strong>
+          <div class="text-right">{{ purify?.congQua }}</div>
+        </div>
+        <div class="flex justify-between items-start">
+          <strong>Công trình</strong>
+          <div class="text-right">{{ purify?.congTrinh }}</div>
         </div>
       </div>
     </div>

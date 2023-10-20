@@ -67,7 +67,10 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           if (this.currentKid?.purify) {
             const froundPurify = this.currentKid.purify[this.purify?.key]
             if (froundPurify) {
-              const collectRange = this.purify?.congPhu + this.purify?.congQua + this.purify?.congTrinh
+              const rangeCongPhu = parseInt(this.purify?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+              const rangeCongQua = parseInt(this.purify?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+              const rangeCongTrinh = parseInt(this.purify?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+              const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
               const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
               this.purify.percent = ((collected / collectRange) * 100) || 0
             }
@@ -85,7 +88,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           this.purify = res.data
           let purifyList = this.gameService?.purifyList
           if (!this.contentEditable) {
-            purifyList = purifyList?.filter((item: any) => item.published == 'TRUE')
+            purifyList = purifyList?.filter((item: any) => item.published == true)
           }
           const foundData = purifyList?.find((item: any) => item.key === this.purifyKey)
           if (purifyList?.length > 0) {

@@ -61,7 +61,10 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             this.purifyList?.forEach((item: any) => {
               const froundPurify = this.currentKid.purify[item?.key]
               if (froundPurify) {
-                const collectRange = item?.congPhu + item?.congQua + item?.congTrinh
+                const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+                const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+                const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+                const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
                 const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
                 item.percent = ((collected / collectRange) * 100) || 0
               }
@@ -79,7 +82,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
         if (res.code === 200) {
           this.purifyList = res.data
           if (!this.contentEditable) {
-            this.purifyList = this.purifyList?.filter((item: any) => item.published == 'TRUE')
+            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
           }
           this.purifyList.forEach((item: any) => {
             item.percent = 0

@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { AuthService } from "../../../shared/services/auth/auth.service";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import * as CryptoJS from "crypto-js";
+import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewChecked {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
@@ -26,12 +27,30 @@ export class LoginComponent implements OnInit {
   cols: any;
   guestAccounts: any;
   caodaiTitle = CAODAI_TITLE.data
+  kids = <any>[]
+  message: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private gameService: GameService
   ) {
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.gameService.isActiveKidsList && this.kids?.length === 0) {
+      this.getKidsList()
+    }
+  }
+
+  getKidsList() {
+    this.gameService.getKidsList()
+      .subscribe((res: any) => {
+        if (res.code === 200) {
+          this.kids = res.data
+        }
+      })
   }
 
   ngOnInit(): void {
@@ -50,7 +69,6 @@ export class LoginComponent implements OnInit {
       key: 'kids',
       name: 'Nhi Đồng'
     }])
-    console.log(this.guestAccounts);
   }
 
   countDebugAdmin() {
@@ -64,12 +82,11 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (!this.devAdministratorAction) {
-      if (this.loginUser.userName && this.loginUser.password && !this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) && !this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) {
-        const localStorageUser = JSON.parse(localStorage.getItem('users') || '{}')
-        if (localStorageUser[this.loginUser.userName]) {
-          const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
-          if (decodeUser.password === this.loginUser.password) {
-            localStorage.setItem('token', localStorageUser[this.loginUser.userName])
+      if (this.kids?.length > 0) {
+        const foundKid = this.kids?.find((item: any) => item?.userName === this.loginUser.userName)
+        if (foundKid) {
+          if (foundKid?.password === this.loginUser.password) {
+            localStorage.setItem('token', this.generaToken(foundKid))
             this.authService.getCurrentUser()
             location.reload()
             location.href = 'trang-chu'
@@ -78,6 +95,26 @@ export class LoginComponent implements OnInit {
               horizontalPosition: this.horizontalPosition,
               verticalPosition: this.verticalPosition,
             })
+          } else {
+            this.message = 'Tài khoản hoặc mật khẩu không đúng.'
+          }
+        }
+      } else {
+        if (this.loginUser.userName && this.loginUser.password && !this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) && !this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) {
+          const localStorageUser = JSON.parse(localStorage.getItem('users') || '{}')
+          if (localStorageUser[this.loginUser.userName]) {
+            const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
+            if (decodeUser.password === this.loginUser.password) {
+              localStorage.setItem('token', localStorageUser[this.loginUser.userName])
+              this.authService.getCurrentUser()
+              location.reload()
+              location.href = 'trang-chu'
+              this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                duration: this.durationInSeconds * 1000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              })
+            }
           }
         }
       }
@@ -97,6 +134,7 @@ export class LoginComponent implements OnInit {
   }
 
   enterLoginInformation() {
+    this.message = ''
     this.devAdministratorAction = (this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) || this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) && this.loginUser.password.split(' ').every((t) => t.includes('CaoDaiON'))
   }
 
