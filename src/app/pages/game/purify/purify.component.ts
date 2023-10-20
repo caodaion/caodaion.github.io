@@ -63,8 +63,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
               if (froundPurify) {
                 const collectRange = item?.congPhu + item?.congQua + item?.congTrinh
                 const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
-                item.percent = 0
-                item.percent = (collected / collectRange) * 100
+                item.percent = ((collected / collectRange) * 100) || 0
               }
             })
           }
@@ -83,6 +82,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             this.purifyList = this.purifyList?.filter((item: any) => item.published)
           }
           this.purifyList.forEach((item: any) => {
+            item.percent = 0
             if (item.preview) {
               if (item.preview.match(/d\/([^\/]+)/)) {
                 item.preview = `https://drive.google.com/uc?export=view&id=${item.preview.match(/d\/([^\/]+)/)[1]}`
