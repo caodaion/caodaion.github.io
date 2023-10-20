@@ -85,7 +85,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           this.purify = res.data
           let purifyList = this.gameService?.purifyList
           if (!this.contentEditable) {
-            purifyList = purifyList?.filter((item: any) => item.published)
+            purifyList = purifyList?.filter((item: any) => item.published == 'TRUE')
           }
           const foundData = purifyList?.find((item: any) => item.key === this.purifyKey)
           if (purifyList?.length > 0) {

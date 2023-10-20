@@ -79,7 +79,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
         if (res.code === 200) {
           this.purifyList = res.data
           if (!this.contentEditable) {
-            this.purifyList = this.purifyList?.filter((item: any) => item.published)
+            this.purifyList = this.purifyList?.filter((item: any) => item.published == 'TRUE')
           }
           this.purifyList.forEach((item: any) => {
             item.percent = 0
