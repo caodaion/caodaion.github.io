@@ -15,6 +15,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('purifyCardWrapper') purifyCardWrapper: any;
   @ViewChild('purifyCard') purifyCard: any;
+  @ViewChild('videoFrame') videoFrame: any;
 
   purify = <any>{}
   updatedStyle = <any>{}
@@ -64,8 +65,10 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             this.next = purifyList[purifyList.indexOf(foundData) + 1]
           }
           this.purify.percent = 50
-          if (this.purify.counter) {
-            this.purify.counter = JSON.parse(this.purify.counter)
+          if (this.purify.defect) {
+            if (typeof this.purify.defect === 'string') {
+              this.purify.defect = JSON.parse(this.purify.defect)
+            }
           }
           if (this.purify.preview) {
             if (this.purify.preview.match(/d\/([^\/]+)/)) {
@@ -76,6 +79,9 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             if (this.purify.audio.match(/d\/([^\/]+)/)) {
               this.purify.audio = `https://drive.google.com/uc?export=view&id=${this.purify.audio.match(/d\/([^\/]+)/)[1]}`
             }
+          }
+          if (this.purify.video) {
+            this.videoFrame.nativeElement.innerHTML = `<iframe src="${this.purify.video}" style="width: 100%;" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
           }
         }
       })

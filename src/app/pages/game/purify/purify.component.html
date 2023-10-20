@@ -8,12 +8,12 @@
         <div class="w-full flex justify-center items-end">
           <span class="leading-none">HP</span
           ><span class="font-semibold text-2xl mx-2 leading-none">{{
-            item?.hp
+            item?.hp || '???'
           }}</span
-          ><span [matTooltip]="item?.elm === 'electricity' ? 'hệ điện' : ''">
+          ><span>
             <img
               class="w-[32px] h-[32px]"
-              [src]="'assets/game/purify/element.' + item?.elm + '.svg'"
+              [src]="'assets/game/purify/element/element.' + item?.elm + '.svg'"
               [alt]="item?.elm"
             />
           </span>

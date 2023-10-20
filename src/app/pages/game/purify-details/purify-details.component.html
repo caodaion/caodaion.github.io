@@ -22,155 +22,205 @@
 <div class="container-fluid">
   <div class="text-center pt-3">
     <p>{{ purify?.key }}</p>
-    <h1>{{ purify?.name || '???' }}</h1>
+    <h1>{{ purify?.name || "???" }}</h1>
   </div>
-  <audio [src]="purify?.audio" [controls]="true" class="w-100" [autoplay]="true"></audio>
+  <audio
+    [src]="purify?.audio"
+    [controls]="true"
+    class="w-100"
+    [autoplay]="true"
+  ></audio>
   <div class="w-full flex flex-wrap py-8 relative">
-    <div
-      class="purify-card-wrapper w-full lg:w-1/3 flex justify-center lg:sticky top-0"
-      #purifyCardWrapper
-      [style]="updatedStyle?.wrapper"
-    >
+    <div class="w-full lg:w-1/3">
       <div
-        class="min-w-[1024px] max-w-[1024px] min-h-[1024px] max-h-[1024px] purify-card relative rounded-[36px] origin-top"
-        #purifyCard
-        [style]="updatedStyle?.card"
+        class="purify-card-wrapper flex justify-center lg:sticky top-0"
+        #purifyCardWrapper
+        [style]="updatedStyle?.wrapper"
       >
-        <img
-          *ngIf="purify?.image || purify?.preview"
-          [src]="purify?.image || purify?.preview"
-          [alt]="purify?.name || '???'"
-          class="rounded-[36px]"
-        />
         <div
-          class="frame absolute top-0 right-0 bottom-0 left-0 border-[1rem] border-[#ffffff] rounded-[36px] flex flex-col justify-between"
+          class="min-w-[1024px] max-w-[1024px] min-h-[1024px] max-h-[1024px] purify-card relative rounded-[36px] origin-top"
+          #purifyCard
+          [style]="updatedStyle?.card"
         >
-          <div class="flex">
-            <div
-              class="border-[#ffffff] border-t-0 border-l-0 border-b-[12px] border-r-[6px] rounded-br-[120px] w-full"
-            >
-              <div class="ps-[12px] flex items-center">
-                <span
-                  class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
-                  >{{ purify?.rarity?.toUpperCase() }}</span
-                >
-                <span class="text-shadow text-[32px]">{{ purify?.name || '???' }}</span>
-                <span
-                  class="text-shadow text-[32px] text-white italic ms-[10px] font-bold"
-                  [ngStyle]="{
-                    'text-shadow':
-                      purify?.level?.toLowerCase() === 'hiền'
-                        ? '3px 0 #00A959, -3px 0 #00A959, 0 3px #00A959, 0 -3px #00A959, 3px 3px #00A959, -3px -3px #00A959, 3px -3px #00A959, -3px 3px #00A959'
-                        : purify?.level?.toLowerCase() === 'thần'
-                        ? '3px 0 #5D098C, -3px 0 #5D098C, 0 3px #5D098C, 0 -3px #5D098C, 3px 3px #5D098C, -3px -3px #5D098C, 3px -3px #5D098C, -3px 3px #5D098C'
-                        : purify?.level?.toLowerCase() === 'thánh'
-                        ? '3px 0 #EA4335, -3px 0 #EA4335, 0 3px #EA4335, 0 -3px #EA4335, 3px 3px #EA4335, -3px -3px #EA4335, 3px -3px #EA4335, -3px 3px #EA4335'
-                        : purify?.level?.toLowerCase() === 'tiên'
-                        ? '3px 0 #4285F4, -3px 0 #4285F4, 0 3px #4285F4, 0 -3px #4285F4, 3px 3px #4285F4, -3px -3px #4285F4, 3px -3px #4285F4, -3px 3px #4285F4'
-                        : purify?.level?.toLowerCase() === 'phật'
-                        ? '3px 0 #FBBC05, -3px 0 #FBBC05, 0 3px #FBBC05, 0 -3px #FBBC05, 3px 3px #FBBC05, -3px -3px #FBBC05, 3px -3px #FBBC05, -3px 3px #FBBC05'
-                        : ''
-                  }"
-                  >{{ purify?.level?.toUpperCase() }}</span
-                >
+          <img
+            *ngIf="purify?.image || purify?.preview"
+            [src]="purify?.image || purify?.preview"
+            [alt]="purify?.name || '???'"
+            class="rounded-[36px]"
+          />
+          <div
+            class="frame absolute top-0 right-0 bottom-0 left-0 border-[1rem] border-[#ffffff] rounded-[36px] flex flex-col justify-between"
+          >
+            <div class="flex">
+              <div
+                class="border-[#ffffff] border-t-0 border-l-0 border-b-[12px] border-r-[6px] rounded-br-[120px] w-full"
+              >
+                <div class="ps-[12px] flex items-center">
+                  <span
+                    class="text-[12px] italic bg-[#ffffff] px-[9px] py-[3px] me-[18px] rounded-full"
+                    >{{ purify?.rarity?.toUpperCase() }}</span
+                  >
+                  <span class="text-shadow text-[32px]">{{
+                    purify?.name || "???"
+                  }}</span>
+                  <span
+                    class="text-shadow text-[32px] text-white italic ms-[10px] font-bold"
+                    [ngStyle]="{
+                      'text-shadow':
+                        purify?.level?.toLowerCase() === 'hiền'
+                          ? '3px 0 #00A959, -3px 0 #00A959, 0 3px #00A959, 0 -3px #00A959, 3px 3px #00A959, -3px -3px #00A959, 3px -3px #00A959, -3px 3px #00A959'
+                          : purify?.level?.toLowerCase() === 'thần'
+                          ? '3px 0 #5D098C, -3px 0 #5D098C, 0 3px #5D098C, 0 -3px #5D098C, 3px 3px #5D098C, -3px -3px #5D098C, 3px -3px #5D098C, -3px 3px #5D098C'
+                          : purify?.level?.toLowerCase() === 'thánh'
+                          ? '3px 0 #EA4335, -3px 0 #EA4335, 0 3px #EA4335, 0 -3px #EA4335, 3px 3px #EA4335, -3px -3px #EA4335, 3px -3px #EA4335, -3px 3px #EA4335'
+                          : purify?.level?.toLowerCase() === 'tiên'
+                          ? '3px 0 #4285F4, -3px 0 #4285F4, 0 3px #4285F4, 0 -3px #4285F4, 3px 3px #4285F4, -3px -3px #4285F4, 3px -3px #4285F4, -3px 3px #4285F4'
+                          : purify?.level?.toLowerCase() === 'phật'
+                          ? '3px 0 #FBBC05, -3px 0 #FBBC05, 0 3px #FBBC05, 0 -3px #FBBC05, 3px 3px #FBBC05, -3px -3px #FBBC05, 3px -3px #FBBC05, -3px 3px #FBBC05'
+                          : ''
+                    }"
+                    >{{ purify?.level?.toUpperCase() }}</span
+                  >
+                </div>
+              </div>
+              <div class="flex items-center px-[9px]">
+                <span class="text-shadow text-[24px]">HP</span>
+                <span class="text-shadow font-semibold text-[32px] mx-[10px]">{{
+                  purify?.hp
+                }}</span>
+                <span *ngIf="purify?.elm"
+                  ><img
+                    [src]="
+                      'assets/game/purify/element/element.' +
+                      purify?.elm +
+                      '.svg'
+                    "
+                    [alt]="purify?.elm"
+                    class="min-h-[48px] min-w-[48px]"
+                /></span>
               </div>
             </div>
-            <div class="flex items-center px-[9px]">
-              <span class="text-shadow text-[24px]">HP</span>
-              <span class="text-shadow font-semibold text-[32px] mx-[10px]">{{
-                purify?.hp
-              }}</span>
-              <span *ngIf="purify?.elm"
-                ><img
-                  [src]="'assets/game/purify/element.' + purify?.elm + '.svg'"
-                  [alt]="purify?.elm"
-                  class="min-h-[48px] min-w-[48px]"
-              /></span>
+            <div class="bottom-section">
+              <div class="flex justify-between">
+                <div class="flex relative text-shadow">
+                  <div class="bg-white me-[60px]">
+                    <div class="flex py-[12px] items-center">
+                      <span class="px-[12px] whitespace-nowrap">khắc chế</span>
+                      <ng-container
+                        *ngFor="let item of purify.defect; let index = index"
+                      >
+                        <span *ngIf="item?.key"
+                          ><img
+                            class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
+                            [src]="
+                              'assets/game/purify/element/element.' +
+                              item?.key +
+                              '.svg'
+                            "
+                            [alt]="item?.key"
+                        /></span>
+                        <span class="px-[12px] font-semibold text-[24px]">{{
+                          item?.value
+                        }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div
+                    class="h-0 w-0 border-b-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-r-[60px] border-r-[transparent] absolute right-0 bottom-0"
+                  ></div>
+                </div>
+                <div class="flex relative w-full">
+                  <div
+                    class="h-0 w-0 border-t-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-l-[60px] border-l-[transparent] absolute left-0 top-0"
+                  ></div>
+                  <div class="bg-white ms-[60px] w-full">
+                    <div class="flex py-[12px] items-center">
+                      <span class="px-[12px]">tốc độ</span>
+                      <span class="px-[12px] font-semibold text-[24px]">{{
+                        purify?.speed
+                      }}</span>
+                      <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
+                      <span class="px-[12px]">chống chịu</span>
+                      <span class="px-[12px] font-semibold text-[24px]">{{
+                        purify?.def
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white p-[12px] text-justify text-[12px]">
+                {{ purify?.story }}
+              </div>
             </div>
           </div>
-          <div class="bottom-section">
-            <div class="flex justify-between">
-              <div class="flex relative text-shadow">
-                <div class="bg-white me-[60px]">
-                  <div class="flex py-[12px] items-center">
-                    <span class="px-[12px] whitespace-nowrap">nhược điểm</span>
-                    <span *ngIf="purify?.defect"
-                      ><img
-                        class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
-                        [src]="
-                          'assets/game/purify/element.' +
-                          purify?.defect +
-                          '.svg'
-                        "
-                        [alt]="purify?.name || '???'"
-                    /></span>
-                    <span class="px-[12px] font-semibold text-[24px]">{{
-                      purify?.defectValue
-                    }}</span>
-                    <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
-                    <span class="px-[12px] whitespace-nowrap">khắc chế</span>
-                    <ng-container
-                      *ngFor="let item of purify.counter; let index = index"
-                    >
-                      <span *ngIf="item?.key"
-                        ><img
-                          class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
-                          [src]="
-                            'assets/game/purify/element.' + item?.key + '.svg'
-                          "
-                          [alt]="item?.key"
-                      /></span>
-                      <span class="px-[12px] font-semibold text-[24px]">{{
-                        item?.value
-                      }}</span>
-                    </ng-container>
-                  </div>
-                </div>
-                <div
-                  class="h-0 w-0 border-b-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-r-[60px] border-r-[transparent] absolute right-0 bottom-0"
-                ></div>
+          <div
+            class="absolute top-0 right-0 bottom-0 left-0 rounded-[36px]"
+            [ngStyle]="{
+              backgroundColor:
+                'rgba(255, 255, 255, ' + (100 - purify?.percent) / 100 + ')',
+              backdropFilter: 'blur(' + (100 - purify?.percent) / 4 + 'px)'
+            }"
+          >
+            <div
+              class="flex h-full w-full justify-center items-center"
+              *ngIf="purify?.percent != 100"
+            >
+              <div
+                class="bg-[#34a853] h-60 w-60 text-7xl rounded-full flex justify-center items-center text-white"
+              >
+                {{ purify?.percent }}%
               </div>
-              <div class="flex relative w-full">
-                <div
-                  class="h-0 w-0 border-t-white border-b-[60px] border-b-[transparent] border-t-[60px] border-t-[transparent] border-l-[60px] border-l-[transparent] absolute left-0 top-0"
-                ></div>
-                <div class="bg-white ms-[60px] w-full">
-                  <div class="flex py-[12px] items-center">
-                    <span class="px-[12px]">tốc độ</span>
-                    <span class="px-[12px] font-semibold text-[24px]">{{
-                      purify?.speed
-                    }}</span>
-                    <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
-                    <span class="px-[12px]">chống chịu</span>
-                    <span class="px-[12px] font-semibold text-[24px]">{{
-                      purify?.def
-                    }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white p-[12px] text-justify text-[12px]">
-              {{ purify?.story }}
             </div>
           </div>
         </div>
-        <div
-          class="absolute top-0 right-0 bottom-0 left-0 rounded-[36px]"
-          [ngStyle]="{
-            backgroundColor:
-              'rgba(255, 255, 255, ' + (100 - purify?.percent) / 100 + ')',
-            backdropFilter: 'blur(' + (100 - purify?.percent) / 4 + 'px)'
-          }"
-        >
-          <div
-            class="flex h-full w-full justify-center items-center"
-            *ngIf="purify?.percent != 100"
-          >
-            <div
-              class="bg-[#34a853] h-60 w-60 text-7xl rounded-full flex justify-center items-center text-white"
-            >
-              {{ purify?.percent }}%
-            </div>
+      </div>
+      <div class="p-3">
+        <div class="flex justify-between items-center">
+          <strong>ID</strong>
+          <div>{{ purify?.key }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Tên</strong>
+          <div>{{ purify?.name }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Hệ</strong>
+          <div>
+            <img
+              [src]="
+                'assets/game/purify/element/element.' + purify?.elm + '.svg'
+              "
+              [alt]="purify?.elm"
+              class="h-[32px] w-[32px]"
+            />
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Máu</strong>
+          <div>{{ purify?.hp }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Chống chịu</strong>
+          <div>{{ purify?.def }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Tốc độ</strong>
+          <div>{{ purify?.speed }}</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <strong>Khắc chế</strong>
+          <div class="flex items-center flex-wrap">
+            <ng-container *ngFor="let item of purify.defect; let index = index">
+              <span *ngIf="item?.key" class="mx-3"
+                ><img
+                  class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
+                  [src]="
+                    'assets/game/purify/element/element.' + item?.key + '.svg'
+                  "
+                  [alt]="item?.key"
+              /></span>
+              <span>{{ item?.value || "???" }}</span>
+            </ng-container>
           </div>
         </div>
       </div>
@@ -184,6 +234,7 @@
       >
         Tải ảnh
       </button>
+      <div #videoFrame></div>
       <div class="flex h-full">
         <textarea
           *ngIf="contentEditable"
