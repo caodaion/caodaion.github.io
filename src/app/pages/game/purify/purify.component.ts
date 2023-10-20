@@ -63,6 +63,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
               if (froundPurify) {
                 const collectRange = item?.congPhu + item?.congQua + item?.congTrinh
                 const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
+                item.percent = 0
                 item.percent = (collected / collectRange) * 100
               }
             })
