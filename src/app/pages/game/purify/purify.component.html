@@ -43,7 +43,7 @@
           >
             <div
               class="absolute h-full bg-[#34a853] rounded-full"
-              [matTooltip]="item?.percent + '%'"
+              [matTooltip]="(item?.percent | number: '1.2-2') + '%'"
               [ngStyle]="{
                 width: item?.percent + '%'
               }"

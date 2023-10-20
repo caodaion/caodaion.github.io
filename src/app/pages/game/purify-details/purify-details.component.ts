@@ -23,6 +23,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   prev: any;
   next: any;
   contentEditable: boolean = false
+  currentKid = <any>{};
 
   constructor(
     private gameService: GameService,
@@ -43,14 +44,38 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
-      this.getPurifyProfile()
-    }
-    if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
-      this.getPurifyProfile()
+    if ((this.authService?.currentUser?.role?.includes('kids') && !this.currentKid?.userName) || (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key)) {
+      if (this.gameService.isActiveKidsList) {
+        if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
+          this.getPurifyProfile()
+          this.cd.detectChanges()
+        }
+      }
     }
     this.getStyleForWrapper()
     this.cd.detectChanges()
+  }
+
+  integrateKidProfile() {
+    this.gameService.getKidByUserName(this.authService?.currentUser?.userName)
+      .subscribe((res: any) => {
+        if (res.code === 200) {
+          this.currentKid = res.data
+          if (typeof this.currentKid?.purify === 'string') {
+            this.currentKid.purify = JSON.parse(this.currentKid?.purify)
+          }
+          if (this.currentKid?.purify) {
+            const froundPurify = this.currentKid.purify[this.purify?.key]
+            if (froundPurify) {
+              const collectRange = this.purify?.congPhu + this.purify?.congQua + this.purify?.congTrinh
+              const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
+              this.purify.percent = (collected / collectRange) * 100
+            }
+          }
+        } else {
+          this.currentKid.userName = this.authService?.currentUser?.userName
+        }
+      })
   }
 
   getPurifyProfile() {
@@ -67,10 +92,14 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             this.prev = purifyList[purifyList.indexOf(foundData) - 1]
             this.next = purifyList[purifyList.indexOf(foundData) + 1]
           }
-          this.purify.percent = 50
           if (this.purify.defect) {
             if (typeof this.purify.defect === 'string') {
               this.purify.defect = JSON.parse(this.purify.defect)
+            }
+          }
+          if (this.purify.skill) {
+            if (typeof this.purify.skill === 'string') {
+              this.purify.skill = JSON.parse(this.purify.skill)
             }
           }
           if (this.purify.preview) {
@@ -84,8 +113,13 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             }
           }
           if (this.purify.video) {
-            this.videoFrame.nativeElement.innerHTML = `<iframe src="${this.purify.video}" style="width: 100%;" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+            setTimeout(() => {
+              if (this.videoFrame) {
+                this.videoFrame.nativeElement.innerHTML = `<iframe src="${this.purify.video}" style="width: 100%; height: 100%" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+              }
+            }, 0)
           }
+          this.integrateKidProfile()
         }
       })
   }

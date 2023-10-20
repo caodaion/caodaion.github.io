@@ -13,6 +13,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
   purifyList = <any>[]
   cols = 6
   contentEditable: boolean = false
+  currentKid = <any>{};
 
   constructor(
     private gameService: GameService,
@@ -38,10 +39,38 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if (this.gameService.isActivePurifyList && this.purifyList?.length === 0) {
-      this.getPurifyList()
-      this.cd.detectChanges()
+    if ((this.authService?.currentUser?.role?.includes('kids') && !this.currentKid?.userName) || (this.gameService.isActivePurifyList && this.purifyList?.length === 0)) {
+      if (this.gameService.isActiveKidsList) {
+        if (this.gameService.isActivePurifyList && this.purifyList?.length === 0) {
+          this.getPurifyList()
+          this.cd.detectChanges()
+        }
+      }
     }
+  }
+
+  integrateKidProfile() {
+    this.gameService.getKidByUserName(this.authService?.currentUser?.userName)
+      .subscribe((res: any) => {
+        if (res.code === 200) {
+          this.currentKid = res.data
+          if (typeof this.currentKid?.purify === 'string') {
+            this.currentKid.purify = JSON.parse(this.currentKid?.purify)
+          }
+          if (this.currentKid?.purify) {
+            this.purifyList?.forEach((item: any) => {
+              const froundPurify = this.currentKid.purify[item?.key]
+              if (froundPurify) {
+                const collectRange = item?.congPhu + item?.congQua + item?.congTrinh
+                const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
+                item.percent = (collected / collectRange) * 100
+              }
+            })
+          }
+        } else {
+          this.currentKid.userName = this.authService?.currentUser?.userName
+        }
+      })
   }
 
   getPurifyList() {
@@ -53,13 +82,13 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             this.purifyList = this.purifyList?.filter((item: any) => item.published)
           }
           this.purifyList.forEach((item: any) => {
-            item.percent = 50
             if (item.preview) {
               if (item.preview.match(/d\/([^\/]+)/)) {
                 item.preview = `https://drive.google.com/uc?export=view&id=${item.preview.match(/d\/([^\/]+)/)[1]}`
               }
             }
           })
+          this.integrateKidProfile()
         }
       })
   }

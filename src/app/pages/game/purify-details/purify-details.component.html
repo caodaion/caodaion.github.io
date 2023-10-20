@@ -1,5 +1,5 @@
 <div
-  class="flex items-center justify-between border-b p-3 sticky top-0 z-10 bg-white"
+  class="flex items-center justify-between border-b p-3 sticky top-0 z-20 bg-white"
 >
   <div
     *ngIf="prev"
@@ -101,6 +101,37 @@
               </div>
             </div>
             <div class="bottom-section">
+              <div class="skill" *ngIf="purify?.skill?.length > 0">
+                <div
+                  *ngFor="let skill of purify?.skill"
+                  class="flex items-center justify-between p-3 pt-0 w-full"
+                >
+                  <div class="flex min-w-[300px]">
+                    <div *ngFor="let element of skill?.element">
+                      <span *ngIf="element"
+                        ><img
+                          [src]="
+                            'assets/game/purify/element/element.' +
+                            element +
+                            '.svg'
+                          "
+                          [alt]="element"
+                          class="min-h-[36px] min-w-[36px] me-3"
+                      /></span>
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-center text-black text-2xl text-shadow w-full font-bold"
+                  >
+                    {{ skill?.description }}
+                  </div>
+                  <div
+                    class="flex items-center text-black text-2xl text-shadow font-bold"
+                  >
+                    {{ skill?.damage }}
+                  </div>
+                </div>
+              </div>
               <div class="flex justify-between">
                 <div class="flex relative text-shadow">
                   <div class="bg-white me-[60px]">
@@ -166,9 +197,9 @@
               *ngIf="purify?.percent != 100"
             >
               <div
-                class="bg-[#34a853] h-60 w-60 text-7xl rounded-full flex justify-center items-center text-white"
+                class="bg-[#34a853] h-60 w-60 text-3xl rounded-full flex justify-center items-center text-white"
               >
-                {{ purify?.percent }}%
+                {{ purify?.percent | number : "1.2-2" }}%
               </div>
             </div>
           </div>
@@ -237,7 +268,6 @@
       >
         Tải ảnh
       </button>
-      <div #videoFrame></div>
       <div class="flex h-full">
         <textarea
           *ngIf="contentEditable"
@@ -252,6 +282,7 @@
           [ngClass]="{ 'lg:w-full': !contentEditable }"
         ></markdown>
       </div>
+      <div #videoFrame class="aspect-video"></div>
     </div>
   </div>
 </div>

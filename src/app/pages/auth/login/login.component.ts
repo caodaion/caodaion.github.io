@@ -46,6 +46,10 @@ export class LoginComponent implements OnInit {
       });
     this.guestAccounts = this.caodaiTitle
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
+    this.guestAccounts = this.guestAccounts.concat([{
+      key: 'kids',
+      name: 'Nhi Đồng'
+    }])
     console.log(this.guestAccounts);
   }
 
