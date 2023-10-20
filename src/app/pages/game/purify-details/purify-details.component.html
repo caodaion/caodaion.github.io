@@ -33,7 +33,7 @@
   <div class="w-full flex flex-wrap py-8 relative">
     <div class="w-full lg:w-1/3">
       <div
-        class="purify-card-wrapper flex justify-center lg:sticky top-0"
+        class="purify-card-wrapper flex justify-center lg:sticky top-[50px]"
         #purifyCardWrapper
         [style]="updatedStyle?.wrapper"
       >
@@ -174,7 +174,10 @@
           </div>
         </div>
       </div>
-      <div class="p-3">
+      <div
+        class="p-3 lg:sticky top-[50px] z-10 bg-white"
+        [style]="updatedStyle?.wrapper"
+      >
         <div class="flex justify-between items-center">
           <strong>ID</strong>
           <div>{{ purify?.key }}</div>

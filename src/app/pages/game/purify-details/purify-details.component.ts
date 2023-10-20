@@ -46,6 +46,9 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
       this.getPurifyProfile()
     }
+    if (this.gameService.isActivePurifyList && this.purifyKey && !this.purify.key) {
+      this.getPurifyProfile()
+    }
     this.getStyleForWrapper()
     this.cd.detectChanges()
   }
