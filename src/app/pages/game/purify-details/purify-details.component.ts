@@ -72,7 +72,25 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
               const rangeCongTrinh = parseInt(this.purify?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
               const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
               const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
-              this.purify.percent = ((collected / collectRange) * 100) || 0
+              if (!this.contentEditable) {
+                this.purify.percent = ((collected / collectRange) * 100) || 0
+              } else {
+                this.purify.percent = 100
+              }
+              if (this.purify.percent >= 100) {
+                if (froundPurify?.hp && froundPurify?.attack && froundPurify?.speed && froundPurify?.def) {
+                  this.purify.hp += parseFloat(froundPurify?.hp)
+                  this.purify.attack += parseFloat(froundPurify?.attack)
+                  this.purify.speed += parseFloat(froundPurify?.speed)
+                  this.purify.def += parseFloat(froundPurify?.def)
+                  this.purify.skill = this.purify?.skill?.filter((item: any) => {
+                    return this.purify?.hp >= parseFloat(item?.required?.hp)
+                      && this.purify?.attack >= parseFloat(item?.required?.attack)
+                      && this.purify?.speed >= parseFloat(item?.required?.speed)
+                      && this.purify?.def >= parseFloat(item?.required?.def)
+                  })?.sort((a: any, b: any) => { return parseFloat(a?.damage) > parseFloat(b?.damage) || a?.element?.length > b?.element?.length ? 1 : -1 })
+                }
+              }
             }
           }
         } else {

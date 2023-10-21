@@ -59,14 +59,18 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           }
           if (this.currentKid?.purify) {
             this.purifyList?.forEach((item: any) => {
-              const froundPurify = this.currentKid.purify[item?.key]
+              const froundPurify = this.currentKid?.purify[item?.key]
               if (froundPurify) {
                 const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
                 const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
                 const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
                 const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
                 const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
-                item.percent = ((collected / collectRange) * 100) || 0
+                if (!this.contentEditable) {
+                  item.percent = ((collected / collectRange) * 100) || 0
+                } else {
+                  item.percent = 100
+                }
               }
             })
           }
