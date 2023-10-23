@@ -57,6 +57,19 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           if (typeof this.currentKid?.purify === 'string') {
             this.currentKid.purify = JSON.parse(this.currentKid?.purify)
           }
+          if (this.currentKid?.userName === 'caodaion') {
+            this.contentEditable = true
+            this.purifyList?.forEach((item: any) => {
+              item.hp += 999999999999
+              item.attack += 999999999999
+              item.speed += 999999999999
+              item.def += 999999999999
+              item.percent = 100
+            })
+          }
+          if (!this.contentEditable) {
+            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
+          }
           if (this.currentKid?.purify) {
             this.purifyList?.forEach((item: any) => {
               const froundPurify = this.currentKid?.purify[item?.key]
@@ -71,11 +84,22 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
                 } else {
                   item.percent = 100
                 }
+                if (item.percent >= 100) {
+                  if (froundPurify?.hp && froundPurify?.attack && froundPurify?.speed && froundPurify?.def) {
+                    item.hp += parseFloat(froundPurify?.hp)
+                    item.attack += parseFloat(froundPurify?.attack)
+                    item.speed += parseFloat(froundPurify?.speed)
+                    item.def += parseFloat(froundPurify?.def)
+                  }
+                }
               }
             })
           }
         } else {
           this.currentKid.userName = this.authService?.currentUser?.userName
+          if (!this.contentEditable) {
+            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
+          }
         }
       })
   }
@@ -85,9 +109,6 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.purifyList = res.data
-          if (!this.contentEditable) {
-            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
-          }
           this.purifyList.forEach((item: any) => {
             item.percent = 0
             if (item.preview) {
@@ -99,5 +120,9 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           this.integrateKidProfile()
         }
       })
+  }
+
+  getElementValue(name: any) {
+    return this.gameService.element[name]?.name || '??'
   }
 }

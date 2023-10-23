@@ -1,9 +1,7 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { NgxCaptureService } from 'ngx-capture';
-import { tap } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { CommonService } from 'src/app/shared/services/common/common.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
@@ -13,12 +11,10 @@ import { GameService } from 'src/app/shared/services/game/game.service';
 })
 export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
 
-  @ViewChild('purifyCardWrapper') purifyCardWrapper: any;
-  @ViewChild('purifyCard') purifyCard: any;
   @ViewChild('videoFrame') videoFrame: any;
+  @ViewChild('saveCardDialog') saveCardDialog!: any;
 
   purify = <any>{}
-  updatedStyle = <any>{}
   purifyKey: any;
   prev: any;
   next: any;
@@ -28,8 +24,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute,
-    private commonService: CommonService,
-    private captureService: NgxCaptureService,
+    private matDialog: MatDialog,
     private authService: AuthService,
     private cd: ChangeDetectorRef
   ) {
@@ -52,8 +47,6 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         }
       }
     }
-    this.getStyleForWrapper()
-    this.cd.detectChanges()
   }
 
   integrateKidProfile() {
@@ -61,6 +54,23 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.currentKid = res.data
+          if (this.currentKid?.userName === 'caodaion') {
+            this.contentEditable = true
+            this.purify.hp += 999999999999
+            this.purify.attack += 999999999999
+            this.purify.speed += 999999999999
+            this.purify.def += 999999999999
+            this.purify.percent = 100
+          }
+          let purifyList = this.gameService?.purifyList
+          if (!this.contentEditable) {
+            purifyList = purifyList?.filter((item: any) => item.published == true)
+          }
+          const foundData = purifyList?.find((item: any) => item.key === this.purifyKey)
+          if (purifyList?.length > 0) {
+            this.prev = purifyList[purifyList.indexOf(foundData) - 1]
+            this.next = purifyList[purifyList.indexOf(foundData) + 1]
+          }
           if (typeof this.currentKid?.purify === 'string') {
             this.currentKid.purify = JSON.parse(this.currentKid?.purify)
           }
@@ -95,15 +105,6 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           }
         } else {
           this.currentKid.userName = this.authService?.currentUser?.userName
-        }
-      })
-  }
-
-  getPurifyProfile() {
-    this.gameService.getPurifyByKey(this.purifyKey)
-      .subscribe((res: any) => {
-        if (res.code === 200) {
-          this.purify = res.data
           let purifyList = this.gameService?.purifyList
           if (!this.contentEditable) {
             purifyList = purifyList?.filter((item: any) => item.published == true)
@@ -113,6 +114,15 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
             this.prev = purifyList[purifyList.indexOf(foundData) - 1]
             this.next = purifyList[purifyList.indexOf(foundData) + 1]
           }
+        }
+      })
+  }
+
+  getPurifyProfile() {
+    this.gameService.getPurifyByKey(this.purifyKey)
+      .subscribe((res: any) => {
+        if (res.code === 200) {
+          this.purify = res.data
           if (this.purify.defect) {
             if (typeof this.purify.defect === 'string') {
               this.purify.defect = JSON.parse(this.purify.defect)
@@ -146,58 +156,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       })
   }
 
-  getStyleForWrapper(): any {
-    let value = this.purifyCard?.nativeElement?.offsetWidth / this.purifyCardWrapper?.nativeElement?.offsetWidth
-    if (this.purifyCard?.nativeElement?.offsetWidth > this.purifyCardWrapper?.nativeElement?.offsetWidth) {
-      value = this.purifyCardWrapper?.nativeElement?.offsetWidth / this.purifyCard?.nativeElement?.offsetWidth
-    }
-    this.updatedStyle = {
-      card: `transform: scale(${((value) * 100) / 100})`,
-      wrapper: `height: ${this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100)}px`
-    }
-  }
-
-  private convertBase64ToBlob(Base64Image: string) {
-    // split into two parts
-    const parts = Base64Image.split(";base64,")
-    // hold the content type
-    const imageType = parts[0].split(":")[1]
-    // decode base64 string
-    const decodedData = window.atob(parts[1])
-    // create unit8array of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length)
-    // insert all character code into uint8array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i)
-    }
-    // return blob image after conversion
-    return new Blob([uInt8Array], { type: imageType })
-  }
-
-  downloading: boolean = false
-  saveAsImage(element: any) {
-    setTimeout(() => {
-      this.downloading = true
-      const saveItem = this.purifyCard?.nativeElement
-      this.captureService
-        //@ts-ignore
-        .getImage(saveItem, true)
-        .pipe(
-          tap((img) => {
-            // converts base 64 encoded image to blobData
-            let blobData = this.convertBase64ToBlob(img)
-            // saves as image
-            const blob = new Blob([blobData], { type: "image/png" })
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement("a")
-            link.href = url
-            // name of the file
-            link.download = this.commonService.generatedSlug(`${this.purify.key}. ${this.purify.name}`)
-            link.click()
-            this.downloading = false
-          })
-        )
-        .subscribe();
-    }, 0)
+  saveCard() {
+    const matDialog = this.matDialog.open(this.saveCardDialog)
   }
 }

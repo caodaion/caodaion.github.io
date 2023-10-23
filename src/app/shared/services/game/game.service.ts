@@ -14,6 +14,29 @@ export class GameService {
   readonly kidsWorkbook: any;
   readonly purifyList = <any>[];
   readonly kidsList = <any>[];
+  readonly element = <any>{
+    "iron": {
+      name: 'kim loại'
+    },
+    "water": {
+      name: 'nước'
+    },
+    "electricity": {
+      name: 'sét'
+    },
+    "fire": {
+      name: 'lửa'
+    },
+    "power": {
+      name: 'sức mạnh'
+    },
+    "plant": {
+      name: 'thực vật'
+    },
+    "bug": {
+      name: 'côn trùng'
+    }
+  };
   isActivePurifyList: boolean = false;
   isActiveKidsList: boolean = false;
   countSettingValueColIndex = 2

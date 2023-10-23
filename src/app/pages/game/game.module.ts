@@ -12,13 +12,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MarkdownModule } from 'ngx-markdown';
 import { FormsModule } from '@angular/forms';
+import { PurifyCardComponent } from './purify/purify-card/purify-card.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
     GameComponent,
     PurifyComponent,
-    PurifyDetailsComponent
+    PurifyDetailsComponent,
+    PurifyCardComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatIconModule,
     MarkdownModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ]
 })
 export class GameModule { }

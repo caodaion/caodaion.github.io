@@ -32,11 +32,20 @@
         <input
           matInput
           [(ngModel)]="loginUser.password"
-          type="password"
+          [type]="hide ? 'password' : 'text'"
           autocomplete="new-password"
           (input)="enterLoginInformation()"
           (keyup.enter)="login()"
         />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Ẩn mật khẩu'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
       </mat-form-field>
       <div class="text-[red]" *ngIf="message">{{ message }}</div>
       <div class="w-100 d-flex justify-content-between button-group">

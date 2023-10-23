@@ -1,0 +1,10 @@
+.text-shadow {
+  text-shadow: 3px 0 #fff, -3px 0 #fff, 0 3px #fff, 0 -3px #fff, 3px 3px #fff,
+    -3px -3px #fff, 3px -3px #fff, -3px 3px #fff;
+}
+
+::ng-deep {
+  .mat-mdc-dialog-container .mdc-dialog__content {
+    line-height: normal;
+  }
+}

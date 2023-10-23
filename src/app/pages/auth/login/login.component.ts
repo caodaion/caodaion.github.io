@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
   caodaiTitle = CAODAI_TITLE.data
   kids = <any>[]
   message: any;
+  hide: boolean = true
 
   constructor(
     private breakpointObserver: BreakpointObserver,

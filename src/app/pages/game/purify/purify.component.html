@@ -8,13 +8,14 @@
         <div class="w-full flex justify-center items-end">
           <span class="leading-none">HP</span
           ><span class="font-semibold text-2xl mx-2 leading-none">{{
-            item?.hp || '???'
+            item?.hp || "???"
           }}</span
           ><span>
             <img
               class="w-[32px] h-[32px]"
               [src]="'assets/game/purify/element/element.' + item?.elm + '.svg'"
               [alt]="item?.elm"
+              [matTooltip]="'hệ ' + getElementValue(item?.elm)"
             />
           </span>
         </div>
@@ -36,14 +37,14 @@
           ></div>
         </div>
         <div class="w-full text-center">
-          <div class="mb-4">{{ item?.key }}. {{ item?.name || '???' }}</div>
+          <div class="mb-4">{{ item?.key }}. {{ item?.name || "???" }}</div>
           <div
             class="relative h-[5px] w-full bg-[#d9d9d9] rounded-full"
             [matTooltip]="'thu phục'"
           >
             <div
               class="absolute h-full bg-[#34a853] rounded-full"
-              [matTooltip]="(item?.percent | number: '1.2-2') + '%'"
+              [matTooltip]="(item?.percent | number : '1.2-2') + '%'"
               [ngStyle]="{
                 width: item?.percent + '%'
               }"
