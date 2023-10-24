@@ -216,6 +216,7 @@
             class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
             [src]="'assets/game/purify/element/element.' + item?.key + '.svg'"
             [alt]="item?.key"
+            [matTooltip]="'năng lượng ' + getElementValue(item?.key)"
         /></span>
         <span>{{ item?.value || "???" }}</span>
       </ng-container>
