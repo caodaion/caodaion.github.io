@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { FormsModule } from '@angular/forms';
 import { PurifyCardComponent } from './purify/purify-card/purify-card.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatIconModule,
     MarkdownModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    QRCodeModule
   ]
 })
 export class GameModule { }

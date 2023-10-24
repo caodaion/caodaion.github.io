@@ -16,6 +16,7 @@ export class PurifyCardComponent implements AfterViewChecked {
   @ViewChild('purifyCardWrapper') purifyCardWrapper: any;
   @ViewChild('purifyCard') purifyCard: any;
   updatedStyle = <any>{}
+  qrData: any;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -30,13 +31,15 @@ export class PurifyCardComponent implements AfterViewChecked {
     this.cd.detectChanges()
   }
   getStyleForWrapper(): any {
+    this.qrData = location.href
     let value = this.purifyCard?.nativeElement?.offsetWidth / this.purifyCardWrapper?.nativeElement?.offsetWidth
     if (this.purifyCard?.nativeElement?.offsetWidth > this.purifyCardWrapper?.nativeElement?.offsetWidth) {
       value = this.purifyCardWrapper?.nativeElement?.offsetWidth / this.purifyCard?.nativeElement?.offsetWidth
     }
     this.updatedStyle = {
       card: `transform: scale(${((value) * 100) / 100})`,
-      wrapper: `height: ${this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100)}px`
+      wrapper: `height: ${this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100)}px`,
+      qrCode: this.purifyCard?.nativeElement?.offsetHeight * (((value) * 100) / 100),
     }
   }
 

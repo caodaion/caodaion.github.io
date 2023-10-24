@@ -174,7 +174,7 @@
 <div
   *ngIf="!saveCard"
   class="p-3 lg:sticky top-[50px] z-10 bg-white"
-  [style]="updatedStyle?.wrapper"
+  [style]="'min-' + updatedStyle?.wrapper"
 >
   <div class="flex justify-between items-start">
     <strong>ID</strong>
@@ -237,4 +237,21 @@
     <strong>Công trình</strong>
     <div class="text-right">{{ purify?.congTrinh }}</div>
   </div>
+  <ng-container *ngIf="qrData">
+    <qrcode
+      #parent
+      [qrdata]="qrData"
+      [width]="updatedStyle?.qrCode"
+      [imageHeight]="75"
+      [imageWidth]="75"
+      [cssClass]="'text-center'"
+      [errorCorrectionLevel]="'M'"
+      [colorDark]="'#000000ff'"
+      [colorLight]="'#ffffffff'"
+      [elementType]="'canvas'"
+      [margin]="4"
+      [scale]="128"
+      [imageSrc]="'assets/icons/assets/circle-logo.svg'"
+    ></qrcode>
+  </ng-container>
 </div>
