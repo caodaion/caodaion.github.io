@@ -83,7 +83,15 @@ export class ProfileComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.authService.getCurrentUser()
-    const qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
+    let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
+    if (typeof this.currentUser?.role === 'string') {
+      this.currentUser.role = JSON.parse(this.currentUser?.role)
+    }
+    if (this.currentUser?.role?.length === 1) {
+      if (this.currentUser?.role[0] === 'kids') {
+        qrData = `${location.origin}@${this.currentUser?.userName}`
+      }
+    }
     if (qrData?.length >= 350) {
       try {
         this.tinyUrlService.shortenUrl(qrData)

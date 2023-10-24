@@ -36,7 +36,10 @@ export class AuthService {
     if (this.currentUser?.role?.length > 0) {
       this.pushedModules = []
       this.mainModuleKey = []
-      this.currentUser.role = [... new Set(this.currentUser?.role.map((item: any) => {
+      if (typeof this.currentUser?.role === 'string') {
+        this.currentUser.role = JSON.parse(this.currentUser.role)
+      }
+      this.currentUser.role = [... new Set(this.currentUser?.role?.map((item: any) => {
         if (item?.includes('pho-quan-ly-')) {
           return item?.replace('pho-quan-ly-', '')
         }

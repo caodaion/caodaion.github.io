@@ -131,6 +131,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           if (this.purify.skill) {
             if (typeof this.purify.skill === 'string') {
               this.purify.skill = JSON.parse(this.purify.skill)
+              this.purify.skill = this.purify.skill?.sort((a: any, b: any) => { return parseFloat(a?.damage) > parseFloat(b?.damage) || a?.element?.length > b?.element?.length ? 1 : -1 })
             }
           }
           if (this.purify.preview) {
