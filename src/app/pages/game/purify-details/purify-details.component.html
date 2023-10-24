@@ -35,25 +35,114 @@
       <app-purify-card [purify]="purify" (click)="saveCard()"></app-purify-card>
     </div>
     <div class="w-full lg:w-2/3 lg:sticky top-0">
-      <div class="flex h-full">
-        <textarea
-          *ngIf="contentEditable"
-          class="variable-textarea w-1/2 h-full p-3"
-          [(ngModel)]="purify.article"
-          placeholder="Update the article content"
-        ></textarea>
-        <markdown
-          *ngIf="purify.article"
-          class="variable-binding w-full lg:w-1/2 p-3 text-justify bg-white"
-          [data]="purify.article"
-          [ngClass]="{ 'lg:w-full': !contentEditable }"
-        ></markdown>
+      <div class="flex h-full flex-col">
+        <div class="flex">
+          <textarea
+            *ngIf="contentEditable"
+            class="variable-textarea w-1/2 h-full p-3"
+            [(ngModel)]="purify.article"
+            placeholder="Update the article content"
+          ></textarea>
+          <markdown
+            *ngIf="purify.article"
+            class="variable-binding w-full lg:w-1/2 p-3 text-justify bg-white"
+            [data]="purify.article"
+            [ngClass]="{ 'lg:w-full': !contentEditable }"
+          ></markdown>
+        </div>
+        <div #videoFrame class="aspect-video"></div>
       </div>
-      <div #videoFrame class="aspect-video"></div>
     </div>
   </div>
 </div>
 
+<div class="container-fluid" *ngIf="contentEditable">
+  <cp-qr-scanner (qrData)="scanComplete($event)"></cp-qr-scanner>
+</div>
+
 <ng-template #saveCardDialog>
   <app-purify-card [purify]="purify" [saveCard]="true"></app-purify-card>
+</ng-template>
+
+<ng-template #updatePurifyForKidDialog>
+  <div mat-dialog-title>
+    Cập nhật Purify <strong>{{ purify?.name }}</strong> cho<strong>
+      {{ matchedPurifyKid?.kid?.name }}</strong
+    >
+  </div>
+  <mat-dialog-content>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Công Quả</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.congQua"
+        />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Công Phu</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.congPhu"
+        />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Công Trình</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.congTrinh"
+        />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Máu</mat-label>
+        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.hp" />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Tấn công</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.attack"
+        />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Tốc độ</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.speed"
+        />
+      </mat-form-field>
+    </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Chống chịu</mat-label>
+        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.def" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button [matDialogClose]="true">Tắt</button>
+    <button
+      mat-flat-button
+      [matDialogClose]="true"
+      [color]="'primary'"
+      (click)="saveUpdatedPurify()"
+    >
+      Lưu
+    </button>
+  </mat-dialog-actions>
 </ng-template>

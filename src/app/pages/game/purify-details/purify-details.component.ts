@@ -13,6 +13,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('videoFrame') videoFrame: any;
   @ViewChild('saveCardDialog') saveCardDialog!: any;
+  @ViewChild('updatePurifyForKidDialog') updatePurifyForKidDialog!: any;
 
   purify = <any>{}
   purifyKey: any;
@@ -20,6 +21,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   next: any;
   contentEditable: boolean = false
   currentKid = <any>{};
+  matchedPurifyKid = <any>{};
 
   constructor(
     private gameService: GameService,
@@ -159,5 +161,33 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
 
   saveCard() {
     const matDialog = this.matDialog.open(this.saveCardDialog)
+  }
+
+  scanComplete(event: any) {
+    if (event?.includes('@')) {
+      const matDialog = this.matDialog.open(this.updatePurifyForKidDialog)
+      const foundKid = this.gameService.kidsList?.find((item: any) => item?.userName === event?.split('@')[1])
+      if (foundKid?.purify && typeof foundKid?.purify === 'string') {
+        foundKid.purify = JSON.parse(foundKid?.purify)
+      }
+      const foundPurify: any = foundKid.purify[this.purify?.key]
+      if (foundPurify) {
+        foundPurify.congPhu = parseFloat(foundPurify?.congPhu)
+        foundPurify.congQua = parseFloat(foundPurify?.congQua)
+        foundPurify.congTrinh = parseFloat(foundPurify?.congTrinh)
+        foundPurify.hp = parseFloat(foundPurify?.hp) || 0
+        foundPurify.attack = parseFloat(foundPurify?.attack) || 0
+        foundPurify.speed = parseFloat(foundPurify?.speed) || 0
+        foundPurify.def = parseFloat(foundPurify?.def) || 0
+      }
+      this.matchedPurifyKid = {
+        kid: foundKid,
+        purify: foundPurify
+      }
+    }
+  }
+
+  saveUpdatedPurify() {
+    console.log(this.matchedPurifyKid);
   }
 }

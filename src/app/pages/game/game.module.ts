@@ -15,6 +15,9 @@ import { FormsModule } from '@angular/forms';
 import { PurifyCardComponent } from './purify/purify-card/purify-card.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { QRCodeModule } from 'angularx-qrcode';
+import { CpQrScannerModule } from 'src/app/components/cp-qr-scanner/cp-qr-scanner.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -35,7 +38,10 @@ import { QRCodeModule } from 'angularx-qrcode';
     MarkdownModule,
     FormsModule,
     MatDialogModule,
-    QRCodeModule
+    QRCodeModule,
+    CpQrScannerModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class GameModule { }
