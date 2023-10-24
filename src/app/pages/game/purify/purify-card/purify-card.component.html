@@ -172,70 +172,71 @@
   </div>
 </div>
 <div
-  *ngIf="!saveCard"
-  class="p-3 lg:sticky top-[50px] z-10 bg-white"
+  class="lg:sticky top-[50px] z-10 bg-white"
   [style]="'min-' + updatedStyle?.wrapper"
 >
-  <div class="flex justify-between items-start">
-    <strong>ID</strong>
-    <div>{{ purify?.key }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Tên</strong>
-    <div>{{ purify?.name }}</div>
-  </div>
-  <div class="flex justify-between items-center">
-    <strong>Hệ</strong>
-    <div>
-      <img
-        [src]="'assets/game/purify/element/element.' + purify?.elm + '.svg'"
-        [alt]="purify?.elm"
-        class="h-[32px] w-[32px]"
-        [matTooltip]="'hệ ' + getElementValue(purify?.elm)"
-      />
+  <div *ngIf="!saveCard" class="p-3">
+    <div class="flex justify-between items-start">
+      <strong>ID</strong>
+      <div>{{ purify?.key }}</div>
     </div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Máu</strong>
-    <div>{{ purify?.hp }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Chống chịu</strong>
-    <div>{{ purify?.def }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Tốc độ</strong>
-    <div>{{ purify?.speed }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Khắc chế</strong>
-    <div class="flex items-center flex-wrap">
-      <ng-container *ngFor="let item of purify.defect; let index = index">
-        <span *ngIf="item?.key" class="mx-3"
-          ><img
-            class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
-            [src]="'assets/game/purify/element/element.' + item?.key + '.svg'"
-            [alt]="item?.key"
-            [matTooltip]="'năng lượng ' + getElementValue(item?.key)"
-        /></span>
-        <span>{{ item?.value || "???" }}</span>
-      </ng-container>
+    <div class="flex justify-between items-start">
+      <strong>Tên</strong>
+      <div>{{ purify?.name }}</div>
     </div>
-  </div>
-  <div class="flex justify-between items-start">
-    <h4>Cách thu phục</h4>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Công phu</strong>
-    <div class="text-right">{{ purify?.congPhu }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Công quả</strong>
-    <div class="text-right">{{ purify?.congQua }}</div>
-  </div>
-  <div class="flex justify-between items-start">
-    <strong>Công trình</strong>
-    <div class="text-right">{{ purify?.congTrinh }}</div>
+    <div class="flex justify-between items-center">
+      <strong>Hệ</strong>
+      <div>
+        <img
+          [src]="'assets/game/purify/element/element.' + purify?.elm + '.svg'"
+          [alt]="purify?.elm"
+          class="h-[32px] w-[32px]"
+          [matTooltip]="'hệ ' + getElementValue(purify?.elm)"
+        />
+      </div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Máu</strong>
+      <div>{{ purify?.hp }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Chống chịu</strong>
+      <div>{{ purify?.def }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Tốc độ</strong>
+      <div>{{ purify?.speed }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Khắc chế</strong>
+      <div class="flex items-center flex-wrap">
+        <ng-container *ngFor="let item of purify.defect; let index = index">
+          <span *ngIf="item?.key" class="mx-3"
+            ><img
+              class="min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px]"
+              [src]="'assets/game/purify/element/element.' + item?.key + '.svg'"
+              [alt]="item?.key"
+              [matTooltip]="'năng lượng ' + getElementValue(item?.key)"
+          /></span>
+          <span>{{ item?.value || "???" }}</span>
+        </ng-container>
+      </div>
+    </div>
+    <div class="flex justify-between items-start">
+      <h4>Cách thu phục</h4>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Công phu</strong>
+      <div class="text-right">{{ purify?.congPhu }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Công quả</strong>
+      <div class="text-right">{{ purify?.congQua }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Công trình</strong>
+      <div class="text-right">{{ purify?.congTrinh }}</div>
+    </div>
   </div>
   <ng-container *ngIf="qrData">
     <qrcode
