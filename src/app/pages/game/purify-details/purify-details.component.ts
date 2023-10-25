@@ -1,5 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
@@ -28,7 +29,8 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private matDialog: MatDialog,
     private authService: AuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private snackBar: MatSnackBar
   ) {
 
   }
@@ -170,15 +172,24 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       if (foundKid?.purify && typeof foundKid?.purify === 'string') {
         foundKid.purify = JSON.parse(foundKid?.purify)
       }
-      const foundPurify: any = foundKid.purify[this.purify?.key]
+      let foundPurify: any = foundKid.purify ? foundKid.purify[this.purify?.key] : <any>{}
       if (foundPurify) {
-        foundPurify.congPhu = parseFloat(foundPurify?.congPhu)
-        foundPurify.congQua = parseFloat(foundPurify?.congQua)
-        foundPurify.congTrinh = parseFloat(foundPurify?.congTrinh)
-        foundPurify.hp = parseFloat(foundPurify?.hp) || 0
-        foundPurify.attack = parseFloat(foundPurify?.attack) || 0
-        foundPurify.speed = parseFloat(foundPurify?.speed) || 0
-        foundPurify.def = parseFloat(foundPurify?.def) || 0
+        foundPurify.congPhu = parseFloat(foundPurify?.congPhu) || "0"
+        foundPurify.congQua = parseFloat(foundPurify?.congQua) || "0"
+        foundPurify.congTrinh = parseFloat(foundPurify?.congTrinh) || "0"
+        foundPurify.hp = parseFloat(foundPurify?.hp) || "0"
+        foundPurify.attack = parseFloat(foundPurify?.attack) || "0"
+        foundPurify.speed = parseFloat(foundPurify?.speed) || "0"
+        foundPurify.def = parseFloat(foundPurify?.def) || "0"
+      } else {
+        foundPurify = <any>{}
+        foundPurify.congPhu = "0"
+        foundPurify.congQua = "0"
+        foundPurify.congTrinh = "0"
+        foundPurify.hp = "0"
+        foundPurify.attack = "0"
+        foundPurify.speed = "0"
+        foundPurify.def = "0"
       }
       this.matchedPurifyKid = {
         kid: foundKid,
@@ -188,6 +199,16 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   }
 
   saveUpdatedPurify() {
-    console.log(this.matchedPurifyKid);
+    const foundKid = this.gameService.kidsList?.find((item: any) => item?.userName === this.matchedPurifyKid?.kid?.userName) || <any>{}
+    if (foundKid?.purify) {
+      if (typeof foundKid?.purify === 'string') {
+        foundKid.purify = JSON.parse(foundKid?.purify)
+      }
+    } else {
+      foundKid.purify = <any>{}
+    }
+    foundKid.purify[this.purify?.key] = this.matchedPurifyKid?.purify
+    navigator.clipboard.writeText(JSON.stringify(foundKid.purify));
+    this.snackBar.open(`Đã sao chép nội dung cập nhật Purify ${this.purify?.name} cho ${this.matchedPurifyKid?.kid?.name}. Cập nhật nội dung cho người dùng ${this.matchedPurifyKid?.kid?.userName}`)
   }
 }
