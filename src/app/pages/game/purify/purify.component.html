@@ -2,41 +2,6 @@
   <mat-tab-group class="flex-[1] max-h-full">
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon>leaderboard</mat-icon>
-        Bảng xếp hạng
-      </ng-template>
-      <div class="container-fluid py-8">
-        <h1 class="text-center">Bảng xếp hạng</h1>
-        <div>
-          <mat-list>
-            <mat-list-item
-              *ngFor="let item of kids; let index = index"
-              class="!h-auto !min-h-[32px] border-b"
-            >
-              <mat-icon matListItemIcon>{{
-                index === 0
-                  ? "emoji_events"
-                  : index > 0 && index <= 3
-                  ? "thumb_up"
-                  : "star"
-              }}</mat-icon>
-              <div matListItemTitle class="flex items-center">
-                <mat-icon
-                  class="!text-[30px] !h-[30px] !w-[30px] me-3"
-                  [ngStyle]="{ color: item?.color }"
-                  >{{ item?.avatar }}</mat-icon
-                ><strong>{{ item?.name }}</strong>
-              </div>
-              <div matListItemLine>
-                EXP: {{ item?.experience | number : "0.2-2" }}
-              </div>
-            </mat-list-item>
-          </mat-list>
-        </div>
-      </div>
-    </mat-tab>
-    <mat-tab>
-      <ng-template mat-tab-label>
         <mat-icon>pets</mat-icon>
         Purify
       </ng-template>
@@ -105,6 +70,40 @@
             </div>
           </mat-grid-tile>
         </mat-grid-list>
+      </div> </mat-tab
+    ><mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>leaderboard</mat-icon>
+        Bảng xếp hạng
+      </ng-template>
+      <div class="container-fluid py-8">
+        <h1 class="text-center">Bảng xếp hạng</h1>
+        <div>
+          <mat-list>
+            <mat-list-item
+              *ngFor="let item of kids; let index = index"
+              class="!h-auto !min-h-[32px] border-b"
+            >
+              <mat-icon matListItemIcon>{{
+                index === 0
+                  ? "emoji_events"
+                  : index > 0 && index <= 3
+                  ? "thumb_up"
+                  : "star"
+              }}</mat-icon>
+              <div matListItemTitle class="flex items-center">
+                <mat-icon
+                  class="!text-[30px] !h-[30px] !w-[30px] me-3"
+                  [ngStyle]="{ color: item?.color }"
+                  >{{ item?.avatar }}</mat-icon
+                ><strong>{{ item?.name }}</strong>
+              </div>
+              <div matListItemLine>
+                EXP: {{ item?.experience | number : "0.2-2" }}
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
