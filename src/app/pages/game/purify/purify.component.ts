@@ -11,6 +11,7 @@ import { GameService } from 'src/app/shared/services/game/game.service';
 export class PurifyComponent implements OnInit, AfterViewChecked {
 
   purifyList = <any>[]
+  kids = <any>[]
   cols = 6
   contentEditable: boolean = false
   currentKid = <any>{};
@@ -50,6 +51,32 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
   }
 
   integrateKidProfile() {
+    const kids = JSON.parse(JSON.stringify(this.gameService.kidsList))
+
+    this.kids = kids?.filter((item: any) => item?.userName !== 'caodaion')
+    this.kids?.forEach((item: any) => {
+      item.experience = 0
+      if (typeof item?.purify === 'string') {
+        item.purify = JSON.parse(item?.purify) || <any>{}
+      }
+      if (item?.purify) {
+        if (Object?.keys(item?.purify)?.length > 0) {
+          Object?.keys(item?.purify)?.forEach((p: any) => {
+            item.experience += parseFloat(item.purify[p]?.congPhu) || 0
+            item.experience += parseFloat(item.purify[p]?.congQua) || 0
+            item.experience += parseFloat(item.purify[p]?.congTrinh) || 0
+            item.experience += parseFloat(item.purify[p]?.hp) || 0
+            item.experience += parseFloat(item.purify[p]?.attack) || 0
+            item.experience += parseFloat(item.purify[p]?.speed) || 0
+            item.experience += parseFloat(item.purify[p]?.def) || 0
+            item.experience += parseFloat(item.purify[p]?.point) || 0
+          })
+        }
+      }
+    })
+    console.log(this.gameService.kidsList);
+    console.log(this.kids);
+    this.kids = this.kids?.sort((a: any, b: any) => a?.experience < b?.experience ? 1 : -1)
     this.gameService.getKidByUserName(this.authService?.currentUser?.userName)
       .subscribe((res: any) => {
         if (res.code === 200) {

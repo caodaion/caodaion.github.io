@@ -1,57 +1,111 @@
-<div class="container-fluid py-8">
-  <h1 class="text-center">Purify</h1>
-  <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
-    <mat-grid-tile *ngFor="let item of purifyList" [routerLink]="item?.key">
-      <div
-        class="flex flex-col justify-between items-center h-full w-full cursor-pointer"
-      >
-        <div class="w-full flex justify-center items-end">
-          <span class="leading-none">HP</span
-          ><span class="font-semibold text-2xl mx-2 leading-none">{{
-            item?.hp || "???"
-          }}</span
-          ><span>
-            <img
-              class="w-[32px] h-[32px]"
-              [src]="'assets/game/purify/element/element.' + item?.elm + '.svg'"
-              [alt]="item?.elm"
-              [matTooltip]="'hệ ' + getElementValue(item?.elm)"
-            />
-          </span>
-        </div>
-        <div
-          class="h-[60px] lg:h-[100px] w-[60px] lg:w-[100px] bg-[#d9d9d9] rounded-full overflow-hidden relative"
-        >
-          <img
-            [src]="item?.preview"
-            [alt]="item?.name || '???'"
-            class="w-full h-full object-cover"
-          />
-          <div
-            class="mask absolute top-0 left-0 h-full w-full rounded-full"
-            [ngStyle]="{
-              backgroundColor:
-                'rgba(255, 255, 255, ' + (100 - item?.percent) / 100 + ')',
-              backdropFilter: 'blur(' + (100 - item?.percent) / 4 + 'px)'
-            }"
-          ></div>
-        </div>
-        <div class="w-full text-center">
-          <div class="mb-4">{{ item?.key }}. {{ item?.name || "???" }}</div>
-          <div
-            class="relative h-[5px] w-full bg-[#d9d9d9] rounded-full"
-            [matTooltip]="'thu phục'"
-          >
-            <div
-              class="absolute h-full bg-[#34a853] rounded-full"
-              [matTooltip]="(item?.percent | number : '1.2-2') + '%'"
-              [ngStyle]="{
-                width: item?.percent + '%'
-              }"
-            ></div>
-          </div>
+<div class="flex flex-col h-full max-h-full overflow-hidden">
+  <mat-tab-group class="flex-[1] max-h-full">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>leaderboard</mat-icon>
+        Bảng xếp hạng
+      </ng-template>
+      <div class="container-fluid py-8">
+        <h1 class="text-center">Bảng xếp hạng</h1>
+        <div>
+          <mat-list>
+            <mat-list-item
+              *ngFor="let item of kids; let index = index"
+              class="!h-auto !min-h-[32px] border-b"
+            >
+              <mat-icon matListItemIcon>{{
+                index === 0
+                  ? "emoji_events"
+                  : index > 0 && index <= 3
+                  ? "thumb_up"
+                  : "star"
+              }}</mat-icon>
+              <div matListItemTitle class="flex items-center">
+                <mat-icon
+                  class="!text-[30px] !h-[30px] !w-[30px] me-3"
+                  [ngStyle]="{ color: item?.color }"
+                  >{{ item?.avatar }}</mat-icon
+                ><strong>{{ item?.name }}</strong>
+              </div>
+              <div matListItemLine>
+                EXP: {{ item?.experience | number : "0.2-2" }}
+              </div>
+            </mat-list-item>
+          </mat-list>
         </div>
       </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>pets</mat-icon>
+        Purify
+      </ng-template>
+      <div class="container-fluid py-8">
+        <h1 class="text-center">Purify</h1>
+        <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+          <mat-grid-tile
+            *ngFor="let item of purifyList"
+            [routerLink]="item?.key"
+          >
+            <div
+              class="flex flex-col justify-between items-center h-full w-full cursor-pointer"
+            >
+              <div class="w-full flex justify-center items-end">
+                <span class="leading-none">HP</span
+                ><span class="font-semibold text-2xl mx-2 leading-none">{{
+                  item?.hp || "???"
+                }}</span
+                ><span>
+                  <img
+                    class="w-[32px] h-[32px]"
+                    [src]="
+                      'assets/game/purify/element/element.' + item?.elm + '.svg'
+                    "
+                    [alt]="item?.elm"
+                    [matTooltip]="'hệ ' + getElementValue(item?.elm)"
+                  />
+                </span>
+              </div>
+              <div
+                class="h-[60px] lg:h-[100px] w-[60px] lg:w-[100px] bg-[#d9d9d9] rounded-full overflow-hidden relative"
+              >
+                <img
+                  [src]="item?.preview"
+                  [alt]="item?.name || '???'"
+                  class="w-full h-full object-cover"
+                />
+                <div
+                  class="mask absolute top-0 left-0 h-full w-full rounded-full"
+                  [ngStyle]="{
+                    backgroundColor:
+                      'rgba(255, 255, 255, ' +
+                      (100 - item?.percent) / 100 +
+                      ')',
+                    backdropFilter: 'blur(' + (100 - item?.percent) / 4 + 'px)'
+                  }"
+                ></div>
+              </div>
+              <div class="w-full text-center">
+                <div class="mb-4">
+                  {{ item?.key }}. {{ item?.name || "???" }}
+                </div>
+                <div
+                  class="relative h-[5px] w-full bg-[#d9d9d9] rounded-full"
+                  [matTooltip]="'thu phục'"
+                >
+                  <div
+                    class="absolute h-full bg-[#34a853] rounded-full"
+                    [matTooltip]="(item?.percent | number : '1.2-2') + '%'"
+                    [ngStyle]="{
+                      width: item?.percent + '%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

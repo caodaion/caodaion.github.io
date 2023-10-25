@@ -133,6 +133,12 @@
         <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.def" />
       </mat-form-field>
     </div>
+    <div class="p-3 w-full">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Điểm tích lũy</mat-label>
+        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.point" />
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button [matDialogClose]="true">Hủy</button>

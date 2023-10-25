@@ -181,6 +181,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         foundPurify.attack = parseFloat(foundPurify?.attack) || "0"
         foundPurify.speed = parseFloat(foundPurify?.speed) || "0"
         foundPurify.def = parseFloat(foundPurify?.def) || "0"
+        foundPurify.point = parseFloat(foundPurify?.point) || "0"
       } else {
         foundPurify = <any>{}
         foundPurify.congPhu = "0"
@@ -190,6 +191,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         foundPurify.attack = "0"
         foundPurify.speed = "0"
         foundPurify.def = "0"
+        foundPurify.point = "0"
       }
       this.matchedPurifyKid = {
         kid: foundKid,

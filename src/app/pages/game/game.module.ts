@@ -18,6 +18,8 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { CpQrScannerModule } from 'src/app/components/cp-qr-scanner/cp-qr-scanner.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { MatInputModule } from '@angular/material/input';
     QRCodeModule,
     CpQrScannerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTabsModule,
+    MatListModule
   ]
 })
 export class GameModule { }
