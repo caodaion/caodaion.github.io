@@ -74,8 +74,6 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
         }
       }
     })
-    console.log(this.gameService.kidsList);
-    console.log(this.kids);
     this.kids = this.kids?.sort((a: any, b: any) => a?.experience < b?.experience ? 1 : -1)
     this.gameService.getKidByUserName(this.authService?.currentUser?.userName)
       .subscribe((res: any) => {
