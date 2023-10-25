@@ -20,6 +20,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
+import { PurifyVsComponent } from './purify/purify-vs/purify-vs.component';
+import { ChallengerComponent } from './purify/purify-vs/challenger/challenger.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { MatListModule } from '@angular/material/list';
     GameComponent,
     PurifyComponent,
     PurifyDetailsComponent,
-    PurifyCardComponent
+    PurifyCardComponent,
+    PurifyVsComponent,
+    ChallengerComponent
   ],
   imports: [
     CommonModule,

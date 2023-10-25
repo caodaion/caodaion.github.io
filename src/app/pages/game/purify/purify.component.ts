@@ -133,7 +133,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
     this.gameService.getPurifyList()
       .subscribe((res: any) => {
         if (res.code === 200) {
-          this.purifyList = res.data
+          this.purifyList = JSON.parse(JSON.stringify(res.data))
           this.purifyList.forEach((item: any) => {
             item.percent = 0
             if (item.preview) {

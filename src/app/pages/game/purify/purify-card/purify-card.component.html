@@ -70,6 +70,7 @@
           <div
             *ngFor="let skill of purify?.skill"
             class="flex items-center justify-between p-3 pt-0 w-full"
+            (click)="onAttack(skill)"
           >
             <div class="flex min-w-[300px]">
               <div *ngFor="let element of skill?.element">
@@ -144,7 +145,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-white p-[12px] text-justify text-[12px]">
+        <div class="bg-white p-[12px] text-justify text-[12px] whitespace-break-spaces">
           {{ purify?.story }}
         </div>
       </div>
@@ -172,6 +173,7 @@
   </div>
 </div>
 <div
+  *ngIf="!saveCard"
   class="lg:sticky top-[50px] z-10 bg-white"
   [style]="'min-' + updatedStyle?.wrapper"
 >
@@ -238,7 +240,7 @@
       <div class="text-right">{{ purify?.congTrinh }}</div>
     </div>
   </div>
-  <ng-container *ngIf="qrData">
+  <ng-container *ngIf="!saveCard && qrData">
     <qrcode
       #parent
       [qrdata]="qrData"

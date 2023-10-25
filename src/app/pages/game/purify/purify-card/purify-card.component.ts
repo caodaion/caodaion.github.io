@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common/common.service';
@@ -15,6 +15,9 @@ export class PurifyCardComponent implements AfterViewChecked {
 
   @ViewChild('purifyCardWrapper') purifyCardWrapper: any;
   @ViewChild('purifyCard') purifyCard: any;
+
+  @Output() attack = new EventEmitter();
+
   updatedStyle = <any>{}
   qrData: any;
 
@@ -28,6 +31,11 @@ export class PurifyCardComponent implements AfterViewChecked {
   }
   ngAfterViewChecked(): void {
     this.getStyleForWrapper()
+    if (this.purify?.preview) {
+      if (this.purify?.preview.match(/d\/([^\/]+)/)) {
+        this.purify.preview = `https://drive.google.com/uc?export=view&id=${this.purify.preview.match(/d\/([^\/]+)/)[1]}`
+      }
+    }
     this.cd.detectChanges()
   }
   getStyleForWrapper(): any {
@@ -90,5 +98,9 @@ export class PurifyCardComponent implements AfterViewChecked {
 
   getElementValue(name: any) {
     return this.gameService.element[name]?.name || '??'
+  }
+
+  onAttack(skill: any) {
+    this.attack.emit(skill)
   }
 }
