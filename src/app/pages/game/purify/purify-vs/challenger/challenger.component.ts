@@ -12,6 +12,7 @@ export class ChallengerComponent {
   @Input() youTurn: boolean = false
 
   @Output() setUser = new EventEmitter();
+  @Output() attack = new EventEmitter();
 
   kid = <any>{}
   fightingPurify = <any>{}
@@ -46,6 +47,7 @@ export class ChallengerComponent {
               if (data?.purify?.init && typeof data?.purify?.init === 'string') {
                 data.purify.init = JSON.parse(data?.purify?.init)
               }
+              data.purify.attackPercent = (((parseFloat(foundKid.purify[p]?.attack) || 0) + data.purify.attack) / data.purify.attack) * 100
               data.purify.hp += parseFloat(foundKid.purify[p]?.hp) || 0
               data.purify.attack += parseFloat(foundKid.purify[p]?.attack) || 0
               data.purify.speed += parseFloat(foundKid.purify[p]?.speed) || 0
@@ -94,11 +96,22 @@ export class ChallengerComponent {
     this.fightingPurify = <any>{}
     this.fightingPurify = item
     this.fightingPurify.purify.deducted = JSON.parse(JSON.stringify(item.purify.hp))
-    console.log(this.fightingPurify);
   }
 
   onAttack(skill: any) {
+    console.log(this.fightingPurify);
     console.log(skill);
+    skill?.element?.forEach((item: any) => {
+      const foundElement = this.fightingPurify.purify.init?.find((init: any) => item === init)
+      if (foundElement) {
+        this.fightingPurify.purify.init.splice(this.fightingPurify.purify.init.indexOf(foundElement), 1)
+      }
+    })
+    skill.totalDamage = (parseFloat(skill?.damage) * this.fightingPurify.purify?.attackPercent) / 100
+    this.attack.emit({
+      from: this.position,
+      skill: skill
+    })
   }
 
   getElementValue(name: any) {

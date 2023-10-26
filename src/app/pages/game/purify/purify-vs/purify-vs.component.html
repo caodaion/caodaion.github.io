@@ -6,6 +6,7 @@
         [fighting]="fighting"
         (setUser)="challengerLeft = $event"
         [youTurn]="turn === 'left'"
+        (attack)="onAttack($event)"
       ></app-challenger>
     </div>
     <div class="w-2/12 flex justify-center items-center">
@@ -47,6 +48,7 @@
         *ngIf="challengerLeft?.userName"
         (setUser)="challengerRight = $event"
         [youTurn]="turn === 'right'"
+        (attack)="onAttack($event)"
       ></app-challenger>
     </div>
   </div>
@@ -82,4 +84,17 @@
     [class]="'turn-' + turnAnimation?.to"
     >{{ turnAnimation?.turn?.avatar }}</mat-icon
   >
+</div>
+
+<div
+  *ngIf="attacking?.skill"
+  class="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
+>
+  <div class="flex flex-col container">
+    <h1 class="text-center">{{ attacking?.skill?.description }}</h1>
+    <div class="flex">
+      <div class="w-1/2 cursor-pointer border p-3 rounded-lg" (click)="onRepsonse('cc')">Chống chịu</div>
+      <div class="w-1/2 cursor-pointer border p-3 rounded-lg" (click)="onRepsonse('nd')">Né đòn</div>
+    </div>
+  </div>
 </div>

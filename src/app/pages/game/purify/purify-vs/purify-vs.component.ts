@@ -12,6 +12,7 @@ export class PurifyVsComponent implements OnInit {
   loading: boolean = false
   turn: any;
   turnAnimation: any;
+  attacking: any;
 
   ngOnInit(): void {
     this.loading = true
@@ -44,8 +45,24 @@ export class PurifyVsComponent implements OnInit {
     }
     setTimeout(() => {
       this.turnAnimation = null
-      console.log(this.turn);
-
     }, 1000);
+  }
+
+  onAttack(event: any) {
+    this.attacking = event
+    console.log(event);
+    if (event.from === 'start') {
+      this.turn = 'right'
+      this.switchTurn()
+    }
+    if (event.from === 'end') {
+      this.turn = 'left'
+      this.switchTurn()
+    }
+
+  }
+
+  onRepsonse(choosed: any) {
+    this.attacking = null
   }
 }

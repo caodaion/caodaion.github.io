@@ -141,11 +141,18 @@
                 <span class="px-[12px] font-semibold text-[24px]">{{
                   purify?.def
                 }}</span>
+                <div class="w-[1px] h-[36px] bg-black mx-[12px]"></div>
+                <span class="px-[12px]">tấn công</span>
+                <span class="px-[12px] font-semibold text-[24px]">{{
+                  purify?.attack
+                }}</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="bg-white p-[12px] text-justify text-[12px] whitespace-break-spaces">
+        <div
+          class="bg-white p-[12px] text-justify text-[12px] whitespace-break-spaces"
+        >
           {{ purify?.story }}
         </div>
       </div>
@@ -208,6 +215,10 @@
     <div class="flex justify-between items-start">
       <strong>Tốc độ</strong>
       <div>{{ purify?.speed }}</div>
+    </div>
+    <div class="flex justify-between items-start">
+      <strong>Tấn công</strong>
+      <div>{{ purify?.acctack }}</div>
     </div>
     <div class="flex justify-between items-start">
       <strong>Khắc chế</strong>
