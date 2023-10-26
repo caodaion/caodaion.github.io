@@ -1,3 +1,12 @@
+<audio
+  #gameWinSound
+  src="assets/audios/sound-effect/mixkit-video-game-win-2016.wav"
+></audio>
+<audio
+  #gameStartSound
+  src="assets/audios/sound-effect/mixkit-race-countdown-1953.wav"
+></audio>
+
 <div class="container-fluid h-full">
   <div class="flex justify-between h-full">
     <div class="w-5/12">
@@ -11,7 +20,12 @@
     </div>
     <div class="w-2/12 flex justify-center items-center">
       <button
-        *ngIf="fighting && !turn"
+        *ngIf="
+          fighting &&
+          !turn &&
+          challengerLeft?.fighting &&
+          challengerRight?.fighting
+        "
         class="bg-transparent border-0 text-[#34a853] animate-pulse"
         (click)="randomFirstTurn()"
       >
@@ -93,8 +107,24 @@
   <div class="flex flex-col container">
     <h1 class="text-center">{{ attacking?.skill?.description }}</h1>
     <div class="flex">
-      <div class="w-1/2 cursor-pointer border p-3 rounded-lg" (click)="onRepsonse('cc')">Chống chịu</div>
-      <div class="w-1/2 cursor-pointer border p-3 rounded-lg" (click)="onRepsonse('nd')">Né đòn</div>
+      <div
+        class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
+        (click)="onRepsonse(responseData?.defense)"
+      >
+        <strong>Chống chịu</strong>
+        <div class="text-center">
+          -{{ responseData?.defense | number : "0.2-2" }}
+        </div>
+      </div>
+      <div
+        class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
+        (click)="onRepsonse(responseData?.avoid)"
+      >
+        <strong>Né đòn</strong>
+        <div class="text-center">
+          -{{ responseData?.avoid | number : "0.2-2" }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

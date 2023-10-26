@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-purify-vs',
@@ -8,11 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class PurifyVsComponent implements OnInit {
   challengerLeft = <any>{}
   challengerRight = <any>{}
+  responseData = <any>[]
   fighting: boolean = false
   loading: boolean = false
   turn: any;
   turnAnimation: any;
   attacking: any;
+  @ViewChild('gameWinSound') gameWinSound!: ElementRef;
+  @ViewChild('gameStartSound') gameStartSound!: ElementRef;
+
 
   ngOnInit(): void {
     this.loading = true
@@ -28,9 +32,10 @@ export class PurifyVsComponent implements OnInit {
   toggleFighting() {
     this.fighting = !this.fighting
     this.loading = true
+    this.gameStartSound?.nativeElement?.play()
     setTimeout(() => {
       this.loading = false
-    }, 1000)
+    }, 3000)
   }
 
   randomFirstTurn() {
@@ -45,24 +50,41 @@ export class PurifyVsComponent implements OnInit {
     }
     setTimeout(() => {
       this.turnAnimation = null
+      this.checkResult()
     }, 1000);
   }
 
+  checkResult() {
+    if (this.gameWinSound) {
+      this.gameWinSound?.nativeElement?.play()
+    }
+  }
   onAttack(event: any) {
     this.attacking = event
-    console.log(event);
+    this.responseData = JSON.parse(JSON.stringify(event))
     if (event.from === 'start') {
       this.turn = 'right'
-      this.switchTurn()
+      this.responseData.avoid = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerRight?.fighting?.purify?.speed / (event?.skill?.totalDamage + this.challengerRight?.fighting?.purify?.speed)) * 100) / 100
+      this.responseData.defense = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerRight?.fighting?.purify?.def / (event?.skill?.totalDamage + this.challengerRight?.fighting?.purify?.def)) * 100) / 100
     }
     if (event.from === 'end') {
       this.turn = 'left'
-      this.switchTurn()
+      this.responseData.avoid = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerLeft?.fighting?.purify?.speed / (event?.skill?.totalDamage + this.challengerLeft?.fighting?.purify?.speed)) * 100) / 100
+      this.responseData.defense = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerLeft?.fighting?.purify?.def / (event?.skill?.totalDamage + this.challengerLeft?.fighting?.purify?.def)) * 100) / 100
     }
-
   }
 
-  onRepsonse(choosed: any) {
+  onRepsonse(damage: any) {
     this.attacking = null
+    if (this.responseData?.from === 'start') {
+      this.challengerRight.fighting.purify.deducted -= damage
+      this.challengerRight.fighting.purify.deducted = this.challengerRight.fighting.purify.deducted > 0 ? this.challengerRight.fighting.purify.deducted : 0
+      this.switchTurn()
+    }
+    if (this.responseData?.from === 'end') {
+      this.challengerLeft.fighting.purify.deducted -= damage
+      this.challengerLeft.fighting.purify.deducted = this.challengerLeft.fighting.purify.deducted > 0 ? this.challengerLeft.fighting.purify.deducted : 0
+      this.switchTurn()
+    }
   }
 }

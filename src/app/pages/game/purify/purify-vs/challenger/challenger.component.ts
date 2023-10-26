@@ -19,6 +19,8 @@ export class ChallengerComponent {
   purifyList = <any>[]
   totalScore = 0
   deducted = 0
+  halfElement: any;
+  sumElement = <any>[];
 
   constructor(private gameService: GameService) {
   }
@@ -93,28 +95,55 @@ export class ChallengerComponent {
   }
 
   chooseFightingPurify(item: any) {
+    this.sumElement = <any>[]
     this.fightingPurify = <any>{}
     this.fightingPurify = item
     this.fightingPurify.purify.deducted = JSON.parse(JSON.stringify(item.purify.hp))
+    this.kid.fighting = this.fightingPurify
+    this.kid.fighting?.purify?.skill?.forEach((skill: any) => {
+      this.sumElement = this.sumElement.concat(skill?.element)
+    })
+    this.sumElement = [...new Set(this.sumElement)]
+    this.setUser.emit(this.kid)
   }
 
   onAttack(skill: any) {
-    console.log(this.fightingPurify);
-    console.log(skill);
+    const sumElement = [...new Set(skill?.element)]
     skill?.element?.forEach((item: any) => {
       const foundElement = this.fightingPurify.purify.init?.find((init: any) => item === init)
       if (foundElement) {
         this.fightingPurify.purify.init.splice(this.fightingPurify.purify.init.indexOf(foundElement), 1)
       }
     })
+    if (!this.fightingPurify.return) {
+      this.fightingPurify.return = 0
+    }
+    this.fightingPurify.return += skill?.element?.length / 2
+    if (this.fightingPurify.return > 0) {
+      if (sumElement?.length === 1) {
+        this.halfElement = sumElement[0]
+        for (let index = 0; index < Math.floor(this.fightingPurify.return); index++) {
+          this.fightingPurify.purify.init.push(sumElement[0])
+        }
+        this.fightingPurify.return -= Math.floor(this.fightingPurify.return)
+      }
+    }
     skill.totalDamage = (parseFloat(skill?.damage) * this.fightingPurify.purify?.attackPercent) / 100
     this.attack.emit({
       from: this.position,
-      skill: skill
+      skill: skill,
     })
   }
 
   getElementValue(name: any) {
     return this.gameService.element[name]?.name || '??'
+  }
+
+  borrowOneElement(element: any) {
+    this.fightingPurify.purify.init.push(element)
+    if (!this.kid.loan) {
+      this.kid.loan = []
+    }
+    this.kid.loan.push(element)
   }
 }

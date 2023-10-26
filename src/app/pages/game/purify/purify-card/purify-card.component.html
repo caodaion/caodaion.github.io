@@ -1,3 +1,8 @@
+<audio
+  *ngIf="fightingMode"
+  #failSound
+  src="assets/audios/sound-effect/mixkit-system-beep-buzzer-fail-2964.wav"
+></audio>
 <div
   class="purify-card-wrapper flex justify-center lg:sticky top-[50px] cursor-pointer"
   #purifyCardWrapper
@@ -69,9 +74,17 @@
         <div class="skill" *ngIf="purify?.skill?.length > 0">
           <div
             *ngFor="let skill of purify?.skill"
-            class="flex items-center justify-between p-3 pt-0 w-full"
-            (click)="onAttack(skill)"
+            class="flex items-center justify-between p-3 pt-0 w-full relative"
+            (click)="onAttack(skill, disabledSkill(skill))"
           >
+            <div
+              *ngIf="disabledSkill(skill)"
+              class="absolute top-0 right-16 bottom-3 left-3 rounded-lg"
+              [ngStyle]="{
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backdropFilter: 'blur(10px)'
+              }"
+            ></div>
             <div class="flex min-w-[300px]">
               <div *ngFor="let element of skill?.element">
                 <span *ngIf="element"

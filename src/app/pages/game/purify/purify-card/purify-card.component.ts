@@ -1,4 +1,5 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common/common.service';
@@ -12,10 +13,11 @@ import { GameService } from 'src/app/shared/services/game/game.service';
 export class PurifyCardComponent implements AfterViewChecked {
   @Input() purify: any;
   @Input() saveCard: boolean = false;
+  @Input() fightingMode: boolean = false;
 
   @ViewChild('purifyCardWrapper') purifyCardWrapper: any;
   @ViewChild('purifyCard') purifyCard: any;
-
+  @ViewChild('failSound') failSound!: ElementRef;
   @Output() attack = new EventEmitter();
 
   updatedStyle = <any>{}
@@ -25,7 +27,8 @@ export class PurifyCardComponent implements AfterViewChecked {
     private cd: ChangeDetectorRef,
     private commonService: CommonService,
     private captureService: NgxCaptureService,
-    private gameService: GameService
+    private gameService: GameService,
+    private _snackBar: MatSnackBar
   ) {
 
   }
@@ -100,7 +103,26 @@ export class PurifyCardComponent implements AfterViewChecked {
     return this.gameService.element[name]?.name || '??'
   }
 
-  onAttack(skill: any) {
-    this.attack.emit(skill)
+  onAttack(skill: any, nowAllowed: boolean = false) {
+    if (nowAllowed) {
+      if (this.failSound && this.failSound.nativeElement) {
+        this.failSound.nativeElement.play()
+      }
+      this._snackBar.open('Khổng thể chọn chiêu này!', 'Đóng');
+    } else {
+      this.attack.emit(skill)
+    }
+  }
+
+  disabledSkill(skill: any) {
+    if (this.fightingMode) {
+      const sumElement = [...new Set(skill?.element)]
+      const disabled = sumElement?.filter((se: any): any => {
+        const foundLementCount = this.purify?.init?.filter((init: any) => init === se)?.length
+        return foundLementCount < skill?.element?.filter((elm: any) => elm === se)?.length
+      })
+      return disabled?.length > 0
+    }
+    return false
   }
 }

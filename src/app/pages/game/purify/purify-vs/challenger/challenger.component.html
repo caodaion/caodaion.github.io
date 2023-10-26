@@ -33,7 +33,9 @@
             [ngStyle]="{ width: (deducted / totalScore) * 100 + '%' }"
           ></div>
           <div class="absolute w-full h-5 text-center">
-            {{ deducted }}/{{ totalScore }}
+            {{ deducted | number : "0.2-2" }}/{{
+              totalScore | number : "0.2-2"
+            }}
           </div>
         </div>
         <ng-container *ngIf="position === 'start'">
@@ -127,6 +129,15 @@
                     fill="currentColor"
                   />
                 </svg>
+                <img
+                  *ngIf="fightingPurify.return === 0.5"
+                  [src]="
+                    'assets/game/purify/element/element.' + halfElement + '.svg'
+                  "
+                  [alt]="halfElement"
+                  class="h-[36px] w-[18px] object-cover mb-3 object-right"
+                  [matTooltip]="getElementValue(halfElement)"
+                />
                 <ng-container
                   *ngFor="let initElement of fightingPurify?.purify?.init"
                 >
@@ -143,7 +154,10 @@
                 </ng-container>
               </div>
             </ng-container>
-            <div class="w-11/12">
+            <div
+              class="w-11/12"
+              [ngClass]="{ 'cursor-not-allowed pointer-events-none': !youTurn }"
+            >
               <div class="flex">
                 <div
                   class="relative bg-[#d9d9d9] w-full h-5 overflow-hidden rounded-full"
@@ -159,14 +173,53 @@
                     }"
                   ></div>
                   <div class="absolute w-full h-5 text-center">
-                    {{ fightingPurify?.purify?.deducted }}/{{
-                      fightingPurify?.purify?.hp
+                    {{ fightingPurify?.purify?.deducted | number : "0.2-2" }}/{{
+                      fightingPurify?.purify?.hp | number : "0.2-2"
                     }}
                   </div>
                 </div>
               </div>
+              <div class="flex justify-between">
+                <ng-container *ngIf="position === 'end'">
+                  <div class="flex">
+                    <img
+                      *ngFor="let elm of kid.loan"
+                      [src]="
+                        'assets/game/purify/element/element.' + elm + '.svg'
+                      "
+                      [alt]="elm"
+                      class="h-[36px] w-[36px] me-3 cursor-pointer"
+                      [matTooltip]="'đã vay 1 ' + getElementValue(elm)"
+                    />
+                  </div>
+                </ng-container>
+                <div class="flex">
+                  <img
+                    *ngFor="let elm of sumElement"
+                    [src]="'assets/game/purify/element/element.' + elm + '.svg'"
+                    [alt]="elm"
+                    class="h-[36px] w-[36px] me-3 cursor-pointer"
+                    [matTooltip]="'vay 1 ' + getElementValue(elm)"
+                    (click)="borrowOneElement(elm)"
+                  />
+                </div>
+                <ng-container *ngIf="position === 'start'">
+                  <div class="flex">
+                    <img
+                      *ngFor="let elm of kid.loan"
+                      [src]="
+                        'assets/game/purify/element/element.' + elm + '.svg'
+                      "
+                      [alt]="elm"
+                      class="h-[36px] w-[36px] me-3 cursor-pointer"
+                      [matTooltip]="'đã vay 1 ' + getElementValue(elm)"
+                    />
+                  </div>
+                </ng-container>
+              </div>
               <app-purify-card
                 [saveCard]="true"
+                [fightingMode]="true"
                 [purify]="fightingPurify?.purify"
                 (attack)="onAttack($event)"
               ></app-purify-card>
@@ -187,6 +240,15 @@
                     fill="currentColor"
                   />
                 </svg>
+                <img
+                  *ngIf="fightingPurify.return === 0.5"
+                  [src]="
+                    'assets/game/purify/element/element.' + halfElement + '.svg'
+                  "
+                  [alt]="halfElement"
+                  class="h-[36px] w-[18px] object-cover mb-3 object-left"
+                  [matTooltip]="getElementValue(halfElement)"
+                />
                 <ng-container
                   *ngFor="let initElement of fightingPurify?.purify?.init"
                 >
