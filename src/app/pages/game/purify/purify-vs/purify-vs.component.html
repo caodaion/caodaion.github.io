@@ -5,13 +5,22 @@
         [position]="'start'"
         [fighting]="fighting"
         (setUser)="challengerLeft = $event"
+        [youTurn]="turn === 'left'"
       ></app-challenger>
     </div>
     <div class="w-2/12 flex justify-center items-center">
       <button
+        *ngIf="fighting && !turn"
+        class="bg-transparent border-0 text-[#34a853] animate-pulse"
+        (click)="randomFirstTurn()"
+      >
+        <mat-icon class="!text-[100px] !h-[100px] !w-[100px]">shuffle</mat-icon>
+      </button>
+      <button
         class="bg-transparent border-0"
         [disabled]="disabledFight()"
         (click)="toggleFighting()"
+        *ngIf="!fighting"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +46,7 @@
         [fighting]="fighting"
         *ngIf="challengerLeft?.userName"
         (setUser)="challengerRight = $event"
+        [youTurn]="turn === 'right'"
       ></app-challenger>
     </div>
   </div>
@@ -58,4 +68,18 @@
       fill="currentColor"
     />
   </svg>
+</div>
+
+<div
+  *ngIf="turnAnimation?.turn"
+  class="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
+>
+  <mat-icon
+    class="!text-[500px] !h-[500px] !w-[500px]"
+    [ngStyle]="{
+      color: turnAnimation?.turn?.color
+    }"
+    [class]="'turn-' + turnAnimation?.to"
+    >{{ turnAnimation?.turn?.avatar }}</mat-icon
+  >
 </div>

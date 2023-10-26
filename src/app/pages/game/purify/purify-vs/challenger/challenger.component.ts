@@ -9,6 +9,7 @@ import { GameService } from 'src/app/shared/services/game/game.service';
 export class ChallengerComponent {
   @Input() position: any;
   @Input() fighting: boolean = false
+  @Input() youTurn: boolean = false
 
   @Output() setUser = new EventEmitter();
 
@@ -75,6 +76,7 @@ export class ChallengerComponent {
 
   updateSelectedPurify(selectedPurify: any) {
     const fightingPurify = <any>[]
+    this.totalScore = 0
     selectedPurify.selectedOptions.selected?.forEach((item: any) => {
       this.totalScore += this.purifyList?.find((p: any) => p?.purify?.key === item.value)?.purify?.totalScore
       fightingPurify.push(this.purifyList?.find((p: any) => p?.purify?.key === item.value))
