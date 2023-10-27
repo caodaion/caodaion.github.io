@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
@@ -14,11 +14,13 @@ export class ChallengerComponent {
   @Output() setUser = new EventEmitter();
   @Output() attack = new EventEmitter();
 
+  @ViewChild('loanSound') loanSound!: ElementRef;
+  @ViewChild('selectSound') selectSound!: ElementRef;
+  @ViewChild('chooseSound') chooseSound!: ElementRef;
+
   kid = <any>{}
   fightingPurify = <any>{}
   purifyList = <any>[]
-  totalScore = 0
-  deducted = 0
   halfElement: any;
   sumElement = <any>[];
 
@@ -65,9 +67,6 @@ export class ChallengerComponent {
               })
               data.purify.totalScore = 0
               data.purify.totalScore += data.purify.hp || 0
-              data.purify.totalScore += data.purify.attack || 0
-              data.purify.totalScore += data.purify.speed || 0
-              data.purify.totalScore += data.purify.def || 0
               this.purifyList.push(data)
             })
           }
@@ -80,13 +79,17 @@ export class ChallengerComponent {
 
   updateSelectedPurify(selectedPurify: any) {
     const fightingPurify = <any>[]
-    this.totalScore = 0
     selectedPurify.selectedOptions.selected?.forEach((item: any) => {
-      this.totalScore += this.purifyList?.find((p: any) => p?.purify?.key === item.value)?.purify?.totalScore
       fightingPurify.push(this.purifyList?.find((p: any) => p?.purify?.key === item.value))
     })
-    this.deducted = JSON.parse(JSON.stringify(this.totalScore))
     this.kid.fightingPurify = fightingPurify
+    this.kid.totalScore = 0
+    this.kid.deducted = 0
+    this.kid.fightingPurify?.forEach((item: any) => {
+      this.kid.totalScore += item?.purify?.hp
+      this.kid.deducted += item?.purify?.hp
+    })
+    this.selectSound?.nativeElement?.play()
     this.setUser.emit(this.kid)
   }
 
@@ -104,6 +107,7 @@ export class ChallengerComponent {
       this.sumElement = this.sumElement.concat(skill?.element)
     })
     this.sumElement = [...new Set(this.sumElement)]
+    this.chooseSound?.nativeElement?.play()
     this.setUser.emit(this.kid)
   }
 
@@ -145,5 +149,6 @@ export class ChallengerComponent {
       this.kid.loan = []
     }
     this.kid.loan.push(element)
+    this.loanSound?.nativeElement?.play()
   }
 }

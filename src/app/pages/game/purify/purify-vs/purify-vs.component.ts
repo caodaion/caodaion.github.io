@@ -8,6 +8,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class PurifyVsComponent implements OnInit {
   challengerLeft = <any>{}
   challengerRight = <any>{}
+  winner = <any>{}
   responseData = <any>[]
   fighting: boolean = false
   loading: boolean = false
@@ -55,9 +56,19 @@ export class PurifyVsComponent implements OnInit {
   }
 
   checkResult() {
-    if (this.gameWinSound) {
-      this.gameWinSound?.nativeElement?.play()
+    if (this.challengerRight.deducted === 0 || this.challengerLeft.deducted === 0) {
+      if (this.gameWinSound) {
+        this.gameWinSound?.nativeElement?.play()
+        if (this.challengerRight.deducted === 0) {
+          this.winner = this.challengerLeft
+        }
+        if (this.challengerLeft.deducted === 0) {
+          this.winner = this.challengerRight
+        }
+      }
     }
+    console.log(this.winner);
+
   }
   onAttack(event: any) {
     this.attacking = event
@@ -77,11 +88,25 @@ export class PurifyVsComponent implements OnInit {
   onRepsonse(damage: any) {
     this.attacking = null
     if (this.responseData?.from === 'start') {
+      const deducted = this.challengerRight.fighting.purify.deducted - damage
+      if (deducted >= 0) {
+        this.challengerRight.deducted -= damage
+      } else {
+        this.challengerRight.deducted -= this.challengerRight.fighting.purify.deducted
+      }
+      this.challengerRight.deducted = this.challengerRight.deducted < 0 ? 0 : this.challengerRight.deducted
       this.challengerRight.fighting.purify.deducted -= damage
       this.challengerRight.fighting.purify.deducted = this.challengerRight.fighting.purify.deducted > 0 ? this.challengerRight.fighting.purify.deducted : 0
       this.switchTurn()
     }
     if (this.responseData?.from === 'end') {
+      const deducted = this.challengerLeft.fighting.purify.deducted - damage
+      if (deducted > 0) {
+        this.challengerLeft.deducted -= damage
+      } else {
+        this.challengerLeft.deducted -= this.challengerLeft.fighting.purify.deducted
+      }
+      this.challengerLeft.deducted = this.challengerLeft.deducted < 0 ? 0 : this.challengerLeft.deducted
       this.challengerLeft.fighting.purify.deducted -= damage
       this.challengerLeft.fighting.purify.deducted = this.challengerLeft.fighting.purify.deducted > 0 ? this.challengerLeft.fighting.purify.deducted : 0
       this.switchTurn()

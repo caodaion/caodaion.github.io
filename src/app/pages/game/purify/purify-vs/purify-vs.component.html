@@ -6,7 +6,6 @@
   #gameStartSound
   src="assets/audios/sound-effect/mixkit-race-countdown-1953.wav"
 ></audio>
-
 <div class="container-fluid h-full">
   <div class="flex justify-between h-full">
     <div class="w-5/12">
@@ -70,7 +69,7 @@
 
 <div
   *ngIf="loading"
-  class="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
+  class="z-50 absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +87,7 @@
 
 <div
   *ngIf="turnAnimation?.turn"
-  class="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
+  class="z-50 absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
 >
   <mat-icon
     class="!text-[500px] !h-[500px] !w-[500px]"
@@ -102,7 +101,7 @@
 
 <div
   *ngIf="attacking?.skill"
-  class="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
+  class="z-50 absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center overflow-hidden bg-white"
 >
   <div class="flex flex-col container">
     <h1 class="text-center">{{ attacking?.skill?.description }}</h1>
@@ -126,5 +125,21 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div
+  class="absolute top-0 right-0 bottom-0 left-0 bg-white z-50"
+  *ngIf="winner?.purify"
+>
+  <div class="flex h-full w-full flex-col justify-center items-center">
+    <p class="text-4xl">WINNER</p>
+    <h1>{{ winner?.name }}</h1>
+    <mat-icon
+      class="!text-[300px] !h-[300px] !w-[300px]"
+      [ngStyle]="{
+        color: winner?.color
+      }"
+      >{{ winner?.avatar }}</mat-icon
+    >
   </div>
 </div>

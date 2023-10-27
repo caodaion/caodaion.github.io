@@ -52,7 +52,6 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
 
   integrateKidProfile() {
     const kids = JSON.parse(JSON.stringify(this.gameService.kidsList))
-
     this.kids = kids?.filter((item: any) => item?.userName !== 'caodaion')
     this.kids?.forEach((item: any) => {
       item.experience = 0
@@ -70,7 +69,10 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             item.experience += parseFloat(item.purify[p]?.speed) || 0
             item.experience += parseFloat(item.purify[p]?.def) || 0
             item.experience += parseFloat(item.purify[p]?.point) || 0
+
           })
+          item.experience += parseFloat(item.wins) || 0
+          item.experience += parseFloat(item.losses) || 0
         }
       }
     })
