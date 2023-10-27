@@ -14,9 +14,15 @@ export class PurifyVsComponent implements OnInit {
   loading: boolean = false
   turn: any;
   turnAnimation: any;
+  deducted: any;
   attacking: any;
   @ViewChild('gameWinSound') gameWinSound!: ElementRef;
   @ViewChild('gameStartSound') gameStartSound!: ElementRef;
+  @ViewChild('dodgeAttackSound') dodgeAttackSound!: ElementRef;
+  @ViewChild('player1Sound') player1Sound!: ElementRef;
+  @ViewChild('player1WinsSound') player1WinsSound!: ElementRef;
+  @ViewChild('player2Sound') player2Sound!: ElementRef;
+  @ViewChild('player2WinsSound') player2WinsSound!: ElementRef;
 
 
   ngOnInit(): void {
@@ -57,18 +63,29 @@ export class PurifyVsComponent implements OnInit {
 
   checkResult() {
     if (this.challengerRight.deducted === 0 || this.challengerLeft.deducted === 0) {
-      if (this.gameWinSound) {
-        this.gameWinSound?.nativeElement?.play()
-        if (this.challengerRight.deducted === 0) {
-          this.winner = this.challengerLeft
+      setTimeout(() => {
+        if (this.gameWinSound) {
+          if (this.challengerRight.deducted === 0) {
+            this.winner = this.challengerLeft
+            this.player1WinsSound?.nativeElement?.play()
+          }
+          if (this.challengerLeft.deducted === 0) {
+            this.winner = this.challengerRight
+            this.player2WinsSound?.nativeElement?.play()
+          }
+          setTimeout(() => {
+            this.gameWinSound?.nativeElement?.play()
+          }, 1500);
         }
-        if (this.challengerLeft.deducted === 0) {
-          this.winner = this.challengerRight
-        }
+      }, 2000)
+    } else {
+      if (this.turn === 'left') {
+        this.player1Sound?.nativeElement?.play()
+      }
+      if (this.turn === 'right') {
+        this.player2Sound?.nativeElement?.play()
       }
     }
-    console.log(this.winner);
-
   }
   onAttack(event: any) {
     this.attacking = event
@@ -85,7 +102,17 @@ export class PurifyVsComponent implements OnInit {
     }
   }
 
-  onRepsonse(damage: any) {
+  onRepsonse(damage: any, effect: any) {
+    if (effect === 'avoid') {
+      this.dodgeAttackSound?.nativeElement?.play()
+    }
+    if (effect === 'defense') {
+      if (this.responseData?.skill?.sound?.match(/d\/([^\/]+)/)) {
+        this.responseData.skill.sound = `https://drive.google.com/uc?export=view&id=${this.responseData?.skill?.sound.match(/d\/([^\/]+)/)[1]}`
+      }
+      const audio = new Audio(this.responseData?.skill?.sound);
+      audio?.play();
+    }
     this.attacking = null
     if (this.responseData?.from === 'start') {
       const deducted = this.challengerRight.fighting.purify.deducted - damage
@@ -111,5 +138,18 @@ export class PurifyVsComponent implements OnInit {
       this.challengerLeft.fighting.purify.deducted = this.challengerLeft.fighting.purify.deducted > 0 ? this.challengerLeft.fighting.purify.deducted : 0
       this.switchTurn()
     }
+    setTimeout(() => {
+      this.deducted = {
+        user: this.responseData?.from,
+        damage: damage
+      }
+      setTimeout(() => {
+        this.deducted = null
+      }, 1000);
+    }, 1500);
+  }
+
+  onRefresh() {
+    location.reload()
   }
 }

@@ -110,6 +110,11 @@ export class PurifyCardComponent implements AfterViewChecked {
       }
       this._snackBar.open('Khổng thể chọn chiêu này!', 'Đóng');
     } else {
+      if (skill?.sound) {
+        if (skill?.sound.match(/d\/([^\/]+)/)) {
+          skill.sound = `https://drive.google.com/uc?export=view&id=${skill.sound.match(/d\/([^\/]+)/)[1]}`
+        }
+      }
       this.attack.emit(skill)
     }
   }

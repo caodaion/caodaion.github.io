@@ -16,7 +16,8 @@ export class ChallengerComponent {
 
   @ViewChild('loanSound') loanSound!: ElementRef;
   @ViewChild('selectSound') selectSound!: ElementRef;
-  @ViewChild('chooseSound') chooseSound!: ElementRef;
+  @ViewChild('player1ReadySound') player1ReadySound!: ElementRef;
+  @ViewChild('player2ReadySound') player2ReadySound!: ElementRef;
 
   kid = <any>{}
   fightingPurify = <any>{}
@@ -71,6 +72,12 @@ export class ChallengerComponent {
             })
           }
         }
+        if (this.position === 'start') {
+          this.player1ReadySound?.nativeElement?.play()
+        }
+        if (this.position === 'end') {
+          this.player2ReadySound?.nativeElement?.play()
+        }
       }
       this.kid = foundKid
       this.setUser.emit(foundKid)
@@ -107,11 +114,13 @@ export class ChallengerComponent {
       this.sumElement = this.sumElement.concat(skill?.element)
     })
     this.sumElement = [...new Set(this.sumElement)]
-    this.chooseSound?.nativeElement?.play()
+    this.selectSound?.nativeElement?.play()
     this.setUser.emit(this.kid)
   }
 
   onAttack(skill: any) {
+    const audio = new Audio(skill.sound);
+    audio?.play();
     const sumElement = [...new Set(skill?.element)]
     skill?.element?.forEach((item: any) => {
       const foundElement = this.fightingPurify.purify.init?.find((init: any) => item === init)

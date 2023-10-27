@@ -6,9 +6,37 @@
   #gameStartSound
   src="assets/audios/sound-effect/mixkit-race-countdown-1953.wav"
 ></audio>
+<audio
+  #dodgeAttackSound
+  src="assets/audios/sound-effect/soundscrate-woosh-4.mp3"
+></audio>
+<audio
+  #player1Sound
+  src="assets/audios/sound-effect/player1.m4a"
+></audio>
+<audio
+  #player2Sound
+  src="assets/audios/sound-effect/player2.m4a"
+></audio>
+<audio
+  #player1WinsSound
+  src="assets/audios/sound-effect/player1-wins.mp3"
+></audio>
+<audio
+  #player2WinsSound
+  src="assets/audios/sound-effect/player2-wins.mp3"
+></audio>
 <div class="container-fluid h-full">
   <div class="flex justify-between h-full">
-    <div class="w-5/12">
+    <div class="w-5/12 relative">
+      <div
+        class="z-10 absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center"
+        *ngIf="deducted?.damage && deducted?.user === 'end'"
+      >
+        <div class="text-5xl animate-pulse text-[red] font-bold">
+          -{{ deducted?.damage }}
+        </div>
+      </div>
       <app-challenger
         [position]="'start'"
         [fighting]="fighting"
@@ -54,7 +82,15 @@
         </svg>
       </button>
     </div>
-    <div class="w-5/12">
+    <div class="w-5/12 relative">
+      <div
+        class="z-10 absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center"
+        *ngIf="deducted?.damage && deducted?.user === 'start'"
+      >
+        <div class="text-5xl animate-pulse text-[red] font-bold">
+          -{{ deducted?.damage }}
+        </div>
+      </div>
       <app-challenger
         [position]="'end'"
         [fighting]="fighting"
@@ -108,7 +144,7 @@
     <div class="flex">
       <div
         class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
-        (click)="onRepsonse(responseData?.defense)"
+        (click)="onRepsonse(responseData?.defense, 'defense')"
       >
         <strong>Chống chịu</strong>
         <div class="text-center">
@@ -117,7 +153,7 @@
       </div>
       <div
         class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
-        (click)="onRepsonse(responseData?.avoid)"
+        (click)="onRepsonse(responseData?.avoid, 'avoid')"
       >
         <strong>Né đòn</strong>
         <div class="text-center">
@@ -141,5 +177,8 @@
       }"
       >{{ winner?.avatar }}</mat-icon
     >
+    <button mat-flat-button [color]="'primary'" (click)="onRefresh()">
+      Trận đấu mới
+    </button>
   </div>
 </div>
