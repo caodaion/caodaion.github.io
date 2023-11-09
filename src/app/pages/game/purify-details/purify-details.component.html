@@ -71,72 +71,164 @@
     >
   </div>
   <mat-dialog-content>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Công Quả</mat-label>
         <input
           type="text"
           matInput
           [(ngModel)]="matchedPurifyKid.purify.congQua"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Công Quả</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.congQua"
+          (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Công Phu</mat-label>
         <input
           type="text"
           matInput
           [(ngModel)]="matchedPurifyKid.purify.congPhu"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Công Phu</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.congPhu"
+          (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Công Trình</mat-label>
         <input
           type="text"
           matInput
           [(ngModel)]="matchedPurifyKid.purify.congTrinh"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Công Trình</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.congTrinh"
+          (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Máu</mat-label>
-        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.hp" />
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.hp"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Máu</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.hp"
+          (input)="updatePurifyOfKid()"
+        />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Tấn công</mat-label>
         <input
           type="text"
           matInput
           [(ngModel)]="matchedPurifyKid.purify.attack"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Tấn công</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.attack"
+          (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Tốc độ</mat-label>
         <input
           type="text"
           matInput
           [(ngModel)]="matchedPurifyKid.purify.speed"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Tốc độ</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.speed"
+          (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Chống chịu</mat-label>
-        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.def" />
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.def"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Chống chịu</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.def"
+          (input)="updatePurifyOfKid()"
+        />
       </mat-form-field>
     </div>
-    <div class="p-3 w-full">
-      <mat-form-field class="w-full" [appearance]="'outline'">
+    <div class="p-3 w-full flex flex-wrap">
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Điểm tích lũy</mat-label>
-        <input type="text" matInput [(ngModel)]="matchedPurifyKid.purify.point" />
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="matchedPurifyKid.purify.point"
+          disabled
+        />
+      </mat-form-field>
+      <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
+        <mat-label>Cộng thêm Điểm tích lũy</mat-label>
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="kidPurifyData.purify.point"
+          (input)="updatePurifyOfKid()"
+        />
       </mat-form-field>
     </div>
   </mat-dialog-content>

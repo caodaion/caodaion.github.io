@@ -23,6 +23,8 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
   contentEditable: boolean = false
   currentKid = <any>{};
   matchedPurifyKid = <any>{};
+  kidPurifyData = <any>{};
+  kidPurifyOriginData = <any>{};
 
   constructor(
     private gameService: GameService,
@@ -197,6 +199,19 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         kid: foundKid,
         purify: foundPurify
       }
+      this.kidPurifyOriginData = JSON.parse(JSON.stringify(this.matchedPurifyKid))
+      this.kidPurifyData = {
+        kid: foundKid,
+        purify: JSON.parse(JSON.stringify(foundPurify))
+      }
+      this.kidPurifyData.purify.congPhu = 0
+      this.kidPurifyData.purify.congQua = 0
+      this.kidPurifyData.purify.congTrinh = 0
+      this.kidPurifyData.purify.hp = 0
+      this.kidPurifyData.purify.attack = 0
+      this.kidPurifyData.purify.speed = 0
+      this.kidPurifyData.purify.def = 0
+      this.kidPurifyData.purify.point = 0
     }
   }
 
@@ -212,5 +227,16 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     foundKid.purify[this.purify?.key] = this.matchedPurifyKid?.purify
     navigator.clipboard.writeText(JSON.stringify(foundKid.purify));
     this.snackBar.open(`Đã sao chép nội dung cập nhật Purify ${this.purify?.name} cho ${this.matchedPurifyKid?.kid?.name}. Cập nhật nội dung cho người dùng ${this.matchedPurifyKid?.kid?.userName}`)
+  }
+
+  updatePurifyOfKid() {
+    this.matchedPurifyKid.purify.congPhu = parseFloat(this.kidPurifyOriginData.purify.congPhu) + parseFloat(this.kidPurifyData.purify.congPhu)
+    this.matchedPurifyKid.purify.congQua = parseFloat(this.kidPurifyOriginData.purify.congQua) + parseFloat(this.kidPurifyData.purify.congQua)
+    this.matchedPurifyKid.purify.congTrinh = parseFloat(this.kidPurifyOriginData.purify.congTrinh) + parseFloat(this.kidPurifyData.purify.congTrinh)
+    this.matchedPurifyKid.purify.hp = parseFloat(this.kidPurifyOriginData.purify.hp) + parseFloat(this.kidPurifyData.purify.hp)
+    this.matchedPurifyKid.purify.attack = parseFloat(this.kidPurifyOriginData.purify.attack) + parseFloat(this.kidPurifyData.purify.attack)
+    this.matchedPurifyKid.purify.speed = parseFloat(this.kidPurifyOriginData.purify.speed) + parseFloat(this.kidPurifyData.purify.speed)
+    this.matchedPurifyKid.purify.def = parseFloat(this.kidPurifyOriginData.purify.def) + parseFloat(this.kidPurifyData.purify.def)
+    this.matchedPurifyKid.purify.point = parseFloat(this.kidPurifyOriginData.purify.point) + parseFloat(this.kidPurifyData.purify.point)
   }
 }
