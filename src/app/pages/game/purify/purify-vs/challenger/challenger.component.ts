@@ -73,10 +73,26 @@ export class ChallengerComponent {
           }
         }
         if (this.position === 'start') {
-          this.player1ReadySound?.nativeElement?.play()
+          const playPromise = this.player1ReadySound?.nativeElement?.play()
+          if (playPromise !== undefined) {
+            playPromise.then(function () {
+              // Automatic playback started!
+            }).catch((e: any) => {
+              // Automatic playback failed.
+              // Show a UI element to let the user manually start playback.
+            });
+          }
         }
         if (this.position === 'end') {
-          this.player2ReadySound?.nativeElement?.play()
+          const playPromise = this.player2ReadySound?.nativeElement?.play()
+          if (playPromise !== undefined) {
+            playPromise.then(function () {
+              // Automatic playback started!
+            }).catch((e: any) => {
+              // Automatic playback failed.
+              // Show a UI element to let the user manually start playback.
+            });
+          }
         }
       }
       this.kid = foundKid

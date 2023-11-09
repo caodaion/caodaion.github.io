@@ -1,17 +1,21 @@
 <audio
   #loanSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/mixkit-player-boost-recharging-2040.wav"
 ></audio>
 <audio
   #selectSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/mixkit-player-select-notification-2037.mp3"
 ></audio>
 <audio
   #player1ReadySound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player1-ready.m4a"
 ></audio>
 <audio
   #player2ReadySound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player2-ready.m4a"
 ></audio>
 <div class="wrapper-container">
@@ -218,7 +222,7 @@
               </div>
               <div class="flex justify-between">
                 <ng-container *ngIf="position === 'end'">
-                  <div class="flex">
+                  <div class="flex flex-wrap items-center">
                     <img
                       *ngFor="let elm of kid.loan"
                       [src]="
@@ -228,9 +232,10 @@
                       class="h-[36px] w-[36px] me-3 cursor-pointer"
                       [matTooltip]="'đã vay 1 ' + getElementValue(elm)"
                     />
+                    <span>đã vay</span>
                   </div>
                 </ng-container>
-                <div class="flex">
+                <div class="flex flex-wrap">
                   <img
                     *ngFor="let elm of sumElement"
                     [src]="'assets/game/purify/element/element.' + elm + '.svg'"
@@ -241,7 +246,8 @@
                   />
                 </div>
                 <ng-container *ngIf="position === 'start'">
-                  <div class="flex">
+                  <div class="flex flex-wrap items-center">
+                    <span class="me-3">đã vay</span>
                     <img
                       *ngFor="let elm of kid.loan"
                       [src]="

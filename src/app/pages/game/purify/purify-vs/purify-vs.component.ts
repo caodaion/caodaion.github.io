@@ -91,12 +91,10 @@ export class PurifyVsComponent implements OnInit {
     this.attacking = event
     this.responseData = JSON.parse(JSON.stringify(event))
     if (event.from === 'start') {
-      this.turn = 'right'
       this.responseData.avoid = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerRight?.fighting?.purify?.speed / (event?.skill?.totalDamage + this.challengerRight?.fighting?.purify?.speed)) * 100) / 100
       this.responseData.defense = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerRight?.fighting?.purify?.def / (event?.skill?.totalDamage + this.challengerRight?.fighting?.purify?.def)) * 100) / 100
     }
     if (event.from === 'end') {
-      this.turn = 'left'
       this.responseData.avoid = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerLeft?.fighting?.purify?.speed / (event?.skill?.totalDamage + this.challengerLeft?.fighting?.purify?.speed)) * 100) / 100
       this.responseData.defense = event?.skill?.totalDamage - (event?.skill?.totalDamage * (this.challengerLeft?.fighting?.purify?.def / (event?.skill?.totalDamage + this.challengerLeft?.fighting?.purify?.def)) * 100) / 100
     }
@@ -115,6 +113,7 @@ export class PurifyVsComponent implements OnInit {
     }
     this.attacking = null
     if (this.responseData?.from === 'start') {
+      this.turn = 'right'
       const deducted = this.challengerRight.fighting.purify.deducted - damage
       if (deducted >= 0) {
         this.challengerRight.deducted -= damage
@@ -127,6 +126,7 @@ export class PurifyVsComponent implements OnInit {
       this.switchTurn()
     }
     if (this.responseData?.from === 'end') {
+      this.turn = 'left'
       const deducted = this.challengerLeft.fighting.purify.deducted - damage
       if (deducted > 0) {
         this.challengerLeft.deducted -= damage

@@ -1,34 +1,41 @@
 <audio
   #gameWinSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/mixkit-video-game-win-2016.wav"
 ></audio>
 <audio
   #gameStartSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/mixkit-race-countdown-1953.wav"
 ></audio>
 <audio
   #dodgeAttackSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/soundscrate-woosh-4.mp3"
 ></audio>
 <audio
   #player1Sound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player1.m4a"
 ></audio>
 <audio
   #player2Sound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player2.m4a"
 ></audio>
 <audio
   #player1WinsSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player1-wins.mp3"
 ></audio>
 <audio
   #player2WinsSound
+  crossOrigin="anonymous"
   src="assets/audios/sound-effect/player2-wins.mp3"
 ></audio>
 <div class="container-fluid h-full">
-  <div class="flex justify-between h-full">
-    <div class="w-5/12 relative">
+  <div class="flex flex-wrap justify-between h-full">
+    <div class="w-full lg:w-5/12 relative">
       <div
         class="z-10 absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center"
         *ngIf="deducted?.damage && deducted?.user === 'end'"
@@ -45,7 +52,7 @@
         (attack)="onAttack($event)"
       ></app-challenger>
     </div>
-    <div class="w-2/12 flex justify-center items-center">
+    <div class="w-full lg:w-2/12 flex justify-center items-center lg:h-screen">
       <button
         *ngIf="
           fighting &&
@@ -82,7 +89,7 @@
         </svg>
       </button>
     </div>
-    <div class="w-5/12 relative">
+    <div class="w-full lg:w-5/12 relative">
       <div
         class="z-10 absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center"
         *ngIf="deducted?.damage && deducted?.user === 'start'"
@@ -141,9 +148,9 @@
 >
   <div class="flex flex-col container">
     <h1 class="text-center">{{ attacking?.skill?.description }}</h1>
-    <div class="flex">
+    <div class="flex flex-wrap">
       <div
-        class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
+        class="w-full lg:w-1/2 cursor-pointer border p-3 rounded-lg text-center"
         (click)="onRepsonse(responseData?.defense, 'defense')"
       >
         <strong>Chống chịu</strong>
@@ -152,12 +159,21 @@
         </div>
       </div>
       <div
-        class="w-1/2 cursor-pointer border p-3 rounded-lg text-center"
+        class="w-full lg:w-1/2 cursor-pointer border p-3 rounded-lg text-center"
         (click)="onRepsonse(responseData?.avoid, 'avoid')"
       >
         <strong>Né đòn</strong>
         <div class="text-center">
           -{{ responseData?.avoid | number : "0.2-2" }}
+        </div>
+      </div>
+      <div
+        class="w-full cursor-pointer border border-[#ea4335] p-3 rounded-lg text-center"
+        (click)="attacking = null"
+      >
+        <strong>Hủy tấn công</strong>
+        <div class="text-center">
+          -0
         </div>
       </div>
     </div>
