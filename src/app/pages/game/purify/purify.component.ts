@@ -12,6 +12,7 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
 
   purifyList = <any>[]
   kids = <any>[]
+  ranking = <any>[]
   cols = 6
   contentEditable: boolean = false
   currentKid = <any>{};
@@ -68,10 +69,10 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             item.experience += parseFloat(item.purify[p]?.attack) || 0
             item.experience += parseFloat(item.purify[p]?.speed) || 0
             item.experience += parseFloat(item.purify[p]?.def) || 0
-            item.experience += parseFloat(item.purify[p]?.point) || 0
+            item.experience += parseFloat(item.point) || 0
 
           })
-          item.experience += parseFloat(item.wins) || 0
+          item.experience += ((parseFloat(item.wins) || 0) * 2)
           item.experience += parseFloat(item.losses) || 0
         }
       }
@@ -129,6 +130,8 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
           }
         }
       })
+
+    this.ranking = this.kids?.filter((item: any) => !item.key?.includes('test'))
   }
 
   getPurifyList() {
