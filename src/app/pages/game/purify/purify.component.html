@@ -24,9 +24,22 @@
       </ng-template>
       <div class="container-fluid py-8">
         <h1 class="text-center">Purify</h1>
+        <mat-form-field class="w-full">
+          <mat-label>Xem của</mat-label>
+          <mat-select
+            [(ngModel)]="currentKidUserName"
+            (ngModelChange)="integrateKidProfile()"
+          >
+            <mat-option
+              *ngFor="let kidOption of kids"
+              [value]="kidOption?.userName"
+              >{{ kidOption?.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
         <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
           <mat-grid-tile
-            *ngFor="let item of purifyList"
+            *ngFor="let item of filteredPurifyList"
             [routerLink]="item?.key"
           >
             <div

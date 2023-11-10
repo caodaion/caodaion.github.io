@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { PurifyVsComponent } from './purify/purify-vs/purify-vs.component';
 import { ChallengerComponent } from './purify/purify-vs/challenger/challenger.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ChallengerComponent } from './purify/purify-vs/challenger/challenger.co
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ]
 })
 export class GameModule { }

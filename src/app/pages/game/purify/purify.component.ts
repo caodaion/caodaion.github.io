@@ -11,11 +11,13 @@ import { GameService } from 'src/app/shared/services/game/game.service';
 export class PurifyComponent implements OnInit, AfterViewChecked {
 
   purifyList = <any>[]
+  filteredPurifyList = <any>[]
   kids = <any>[]
   ranking = <any>[]
   cols = 6
   contentEditable: boolean = false
   currentKid = <any>{};
+  currentKidUserName: any
 
   constructor(
     private gameService: GameService,
@@ -38,6 +40,11 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
         }
       });
     this.contentEditable = this.authService.contentEditable
+    this.currentKid = this.authService?.currentUser
+    this.currentKidUserName = this.authService?.currentUser?.userName
+    if (typeof this.currentKid?.purify === 'string') {
+      this.currentKid.purify = JSON.parse(this.currentKid?.purify)
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -53,7 +60,19 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
 
   integrateKidProfile() {
     const kids = JSON.parse(JSON.stringify(this.gameService.kidsList))
-    this.kids = kids?.filter((item: any) => item?.userName !== 'caodaion')
+    if (this.currentKidUserName) {
+      this.currentKid = kids?.find((item: any) => item?.userName === this.currentKidUserName)
+    }
+    if (typeof this.currentKid?.purify === 'string') {
+      this.currentKid.purify = JSON.parse(this.currentKid?.purify)
+    }
+    if (this.currentKid?.userName === 'caodaion') {
+      this.contentEditable = true
+    }
+    this.kids = kids
+    if (!this.contentEditable) {
+      this.kids = kids?.filter((item: any) => item?.userName !== 'caodaion')
+    }
     this.kids?.forEach((item: any) => {
       item.experience = 0
       if (typeof item?.purify === 'string') {
@@ -70,7 +89,6 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             item.experience += parseFloat(item.purify[p]?.speed) || 0
             item.experience += parseFloat(item.purify[p]?.def) || 0
             item.experience += parseFloat(item.point) || 0
-
           })
           item.experience += ((parseFloat(item.wins) || 0) * 2)
           item.experience += parseFloat(item.losses) || 0
@@ -78,59 +96,42 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
       }
     })
     this.kids = this.kids?.sort((a: any, b: any) => a?.experience < b?.experience ? 1 : -1)
-    this.gameService.getKidByUserName(this.authService?.currentUser?.userName)
-      .subscribe((res: any) => {
-        if (res.code === 200) {
-          this.currentKid = res.data
-          if (typeof this.currentKid?.purify === 'string') {
-            this.currentKid.purify = JSON.parse(this.currentKid?.purify)
-          }
-          if (this.currentKid?.userName === 'caodaion') {
-            this.contentEditable = true
-            this.purifyList?.forEach((item: any) => {
-              item.hp += 999999999999
-              item.attack += 999999999999
-              item.speed += 999999999999
-              item.def += 999999999999
-              item.percent = 100
-            })
-          }
-          if (!this.contentEditable) {
-            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
-          }
-          if (this.currentKid?.purify) {
-            this.purifyList?.forEach((item: any) => {
-              const froundPurify = this.currentKid?.purify[item?.key]
-              if (froundPurify) {
-                const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
-                const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
-                const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
-                const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
-                const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
-                if (!this.contentEditable) {
-                  item.percent = ((collected / collectRange) * 100) || 0
-                } else {
-                  item.percent = 100
-                }
-                if (item.percent >= 100) {
-                  if (froundPurify?.hp && froundPurify?.attack && froundPurify?.speed && froundPurify?.def) {
-                    item.hp += parseFloat(froundPurify?.hp)
-                    item.attack += parseFloat(froundPurify?.attack)
-                    item.speed += parseFloat(froundPurify?.speed)
-                    item.def += parseFloat(froundPurify?.def)
-                  }
-                }
-              }
-            })
-          }
-        } else {
-          this.currentKid.userName = this.authService?.currentUser?.userName
-          if (!this.contentEditable) {
-            this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
+    if (typeof this.currentKid?.purify === 'string') {
+      this.currentKid.purify = JSON.parse(this.currentKid?.purify)
+    }
+    if (!this.contentEditable) {
+      this.purifyList = this.purifyList?.filter((item: any) => item.published == true)
+    }
+    this.filteredPurifyList = <any>[]
+    if (this.currentKid?.purify) {
+      this.filteredPurifyList = JSON.parse(JSON.stringify(this.purifyList))
+      this.filteredPurifyList?.forEach((item: any) => {
+        const froundPurify = this.currentKid?.purify[item?.key]
+        if (froundPurify) {
+          const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+          const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
+          const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
+          item.percent = ((collected / collectRange) * 100) || 0
+          if (item.percent >= 100) {
+            if (froundPurify?.hp && froundPurify?.attack && froundPurify?.speed && froundPurify?.def) {
+              item.hp += parseFloat(froundPurify?.hp)
+              item.attack += parseFloat(froundPurify?.attack)
+              item.speed += parseFloat(froundPurify?.speed)
+              item.def += parseFloat(froundPurify?.def)
+            }
           }
         }
       })
-
+    } else {
+      this.filteredPurifyList = JSON.parse(JSON.stringify(this.purifyList))
+      if (this.currentKid?.userName === 'caodaion') {
+        this.filteredPurifyList?.forEach((item: any) => {
+          item.percent = 100
+        })
+      }
+    }
     this.ranking = this.kids?.filter((item: any) => !item.key?.includes('test'))
   }
 
