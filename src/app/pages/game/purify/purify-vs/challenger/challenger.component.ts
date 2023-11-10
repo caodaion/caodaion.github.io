@@ -16,6 +16,7 @@ export class ChallengerComponent {
 
   @ViewChild('loanSound') loanSound!: ElementRef;
   @ViewChild('selectSound') selectSound!: ElementRef;
+  @ViewChild('chooseSound') chooseSound!: ElementRef;
   @ViewChild('player1ReadySound') player1ReadySound!: ElementRef;
   @ViewChild('player2ReadySound') player2ReadySound!: ElementRef;
 
@@ -130,7 +131,7 @@ export class ChallengerComponent {
       this.sumElement = this.sumElement.concat(skill?.element)
     })
     this.sumElement = [...new Set(this.sumElement)]
-    this.selectSound?.nativeElement?.play()
+    this.chooseSound?.nativeElement?.play()
     this.setUser.emit(this.kid)
   }
 

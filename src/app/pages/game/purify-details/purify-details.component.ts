@@ -183,7 +183,6 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         foundPurify.attack = parseFloat(foundPurify?.attack) || "0"
         foundPurify.speed = parseFloat(foundPurify?.speed) || "0"
         foundPurify.def = parseFloat(foundPurify?.def) || "0"
-        foundPurify.point = parseFloat(foundPurify?.point) || "0"
       } else {
         foundPurify = <any>{}
         foundPurify.congPhu = "0"
@@ -193,15 +192,18 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
         foundPurify.attack = "0"
         foundPurify.speed = "0"
         foundPurify.def = "0"
-        foundPurify.point = "0"
       }
+      console.log(foundKid);
+
       this.matchedPurifyKid = {
         kid: foundKid,
+        point: foundKid?.point,
         purify: foundPurify
       }
       this.kidPurifyOriginData = JSON.parse(JSON.stringify(this.matchedPurifyKid))
       this.kidPurifyData = {
         kid: foundKid,
+        point: foundKid?.point,
         purify: JSON.parse(JSON.stringify(foundPurify))
       }
       this.kidPurifyData.purify.congPhu = 0
@@ -211,7 +213,7 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
       this.kidPurifyData.purify.attack = 0
       this.kidPurifyData.purify.speed = 0
       this.kidPurifyData.purify.def = 0
-      this.kidPurifyData.purify.point = 0
+      this.kidPurifyData.point = 0
     }
   }
 
@@ -237,6 +239,11 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
     this.matchedPurifyKid.purify.attack = parseFloat(this.kidPurifyOriginData.purify.attack) + parseFloat(this.kidPurifyData.purify.attack)
     this.matchedPurifyKid.purify.speed = parseFloat(this.kidPurifyOriginData.purify.speed) + parseFloat(this.kidPurifyData.purify.speed)
     this.matchedPurifyKid.purify.def = parseFloat(this.kidPurifyOriginData.purify.def) + parseFloat(this.kidPurifyData.purify.def)
-    this.matchedPurifyKid.purify.point = parseFloat(this.kidPurifyOriginData.purify.point) + parseFloat(this.kidPurifyData.purify.point)
+    this.matchedPurifyKid.point = parseFloat(this.kidPurifyOriginData.point) + parseFloat(this.kidPurifyData.point)
+  }
+
+  updatePoint(data: any) {
+    navigator.clipboard.writeText(JSON.stringify(data));
+    this.snackBar.open(`Đã sao chép ${data} điểm tích lũy của ${this.matchedPurifyKid?.kid?.name}`)
   }
 }

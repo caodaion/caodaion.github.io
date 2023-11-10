@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-purify-vs',
@@ -23,6 +24,9 @@ export class PurifyVsComponent implements OnInit {
   @ViewChild('player1WinsSound') player1WinsSound!: ElementRef;
   @ViewChild('player2Sound') player2Sound!: ElementRef;
   @ViewChild('player2WinsSound') player2WinsSound!: ElementRef;
+
+  constructor(private _snackBar: MatSnackBar) {
+  }
 
 
   ngOnInit(): void {
@@ -66,12 +70,22 @@ export class PurifyVsComponent implements OnInit {
       setTimeout(() => {
         if (this.gameWinSound) {
           if (this.challengerRight.deducted === 0) {
+            this.challengerLeft.wins = (this.challengerLeft.wins ? this.challengerLeft.wins : 0) + 1
+            this.challengerRight.losses = (this.challengerRight.losses ? this.challengerRight.losses : 0) + 1
             this.winner = this.challengerLeft
             this.player1WinsSound?.nativeElement?.play()
           }
           if (this.challengerLeft.deducted === 0) {
+            this.challengerRight.wins = (this.challengerRight.wins ? this.challengerRight.wins : 0) + 1
+            this.challengerLeft.losses = (this.challengerLeft.losses ? this.challengerLeft.losses : 0) + 1
             this.winner = this.challengerRight
             this.player2WinsSound?.nativeElement?.play()
+          }
+          if (this.challengerLeft.loan?.length > 0) {
+            this.challengerLeft.point = (this.challengerLeft.point ? parseFloat(this.challengerLeft.point) : 0) - this.challengerLeft.loan?.length
+          }
+          if (this.challengerRight.loan?.length > 0) {
+            this.challengerRight.point = (this.challengerRight.point ? parseFloat(this.challengerRight.point) : 0) - this.challengerRight.loan?.length
           }
           setTimeout(() => {
             this.gameWinSound?.nativeElement?.play()
@@ -151,5 +165,10 @@ export class PurifyVsComponent implements OnInit {
 
   onRefresh() {
     location.reload()
+  }
+
+  updateData(data: any) {
+    navigator.clipboard.writeText(JSON.stringify(data));
+    this._snackBar.open(`Đã sao chép ${data}`, 'Đóng');
   }
 }

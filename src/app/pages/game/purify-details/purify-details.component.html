@@ -217,16 +217,22 @@
         <input
           type="text"
           matInput
-          [(ngModel)]="matchedPurifyKid.purify.point"
+          [(ngModel)]="matchedPurifyKid.point"
           disabled
         />
+        <mat-icon
+          class="cursor-pointer"
+          matSuffix
+          (click)="updatePoint(matchedPurifyKid.point)"
+          >save</mat-icon
+        >
       </mat-form-field>
       <mat-form-field class="w-full lg:w-1/2" [appearance]="'outline'">
         <mat-label>Cộng thêm Điểm tích lũy</mat-label>
         <input
           type="number"
           matInput
-          [(ngModel)]="kidPurifyData.purify.point"
+          [(ngModel)]="kidPurifyData.point"
           (input)="updatePurifyOfKid()"
         />
       </mat-form-field>
