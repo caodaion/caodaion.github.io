@@ -88,10 +88,10 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
             item.experience += parseFloat(item.purify[p]?.attack) || 0
             item.experience += parseFloat(item.purify[p]?.speed) || 0
             item.experience += parseFloat(item.purify[p]?.def) || 0
-            item.experience += parseFloat(item.point) || 0
           })
           item.experience += ((parseFloat(item.wins) || 0) * 2)
           item.experience += parseFloat(item.losses) || 0
+          item.experience += parseFloat(item.point) || 0
         }
       }
     })
