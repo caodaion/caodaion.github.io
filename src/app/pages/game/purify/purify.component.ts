@@ -107,13 +107,16 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
       this.filteredPurifyList = JSON.parse(JSON.stringify(this.purifyList))
       this.filteredPurifyList?.forEach((item: any) => {
         const froundPurify = this.currentKid?.purify[item?.key]
+        const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+        const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+        const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+        const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
         if (froundPurify) {
-          const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
-          const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
-          const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
-          const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
           const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
           item.percent = ((collected / collectRange) * 100) || 0
+          if (collectRange === 0) {
+            item.percent = 100
+          }
           if (item.percent >= 100) {
             if (froundPurify?.hp && froundPurify?.attack && froundPurify?.speed && froundPurify?.def) {
               item.hp += parseFloat(froundPurify?.hp)
@@ -122,6 +125,10 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
               item.def += parseFloat(froundPurify?.def)
             }
           }
+        } else {
+          if (collectRange === 0) {
+            item.percent = 100
+          }
         }
       })
     } else {
@@ -129,6 +136,16 @@ export class PurifyComponent implements OnInit, AfterViewChecked {
       if (this.currentKid?.userName === 'caodaion') {
         this.filteredPurifyList?.forEach((item: any) => {
           item.percent = 100
+        })
+      } else {
+        this.filteredPurifyList?.forEach((item: any) => {
+          const rangeCongPhu = parseInt(item?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongQua = parseInt(item?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongTrinh = parseInt(item?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+          const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
+          if (collectRange === 0) {
+            item.percent = 100
+          }
         })
       }
     }

@@ -82,14 +82,17 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           }
           if (this.currentKid?.purify) {
             const froundPurify = this.currentKid.purify[this.purify?.key]
+            const rangeCongPhu = parseInt(this.purify?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+            const rangeCongQua = parseInt(this.purify?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+            const rangeCongTrinh = parseInt(this.purify?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+            const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
             if (froundPurify) {
-              const rangeCongPhu = parseInt(this.purify?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
-              const rangeCongQua = parseInt(this.purify?.congQua?.match(/\{(\d+)\}/)[1]) || 0
-              const rangeCongTrinh = parseInt(this.purify?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
-              const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
               const collected = parseFloat(froundPurify?.congPhu) + parseFloat(froundPurify?.congQua) + parseFloat(froundPurify?.congTrinh)
               if (!this.contentEditable) {
                 this.purify.percent = ((collected / collectRange) * 100) || 0
+                if (collectRange === 0) {
+                  this.purify.percent = 100
+                }
               } else {
                 this.purify.percent = 100
               }
@@ -107,6 +110,10 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
                   })?.sort((a: any, b: any) => { return parseFloat(a?.damage) > parseFloat(b?.damage) || a?.element?.length > b?.element?.length ? 1 : -1 })
                 }
               }
+            } else {
+              if (collectRange === 0) {
+                this.purify.percent = 100
+              }
             }
           }
         } else {
@@ -119,6 +126,13 @@ export class PurifyDetailsComponent implements OnInit, AfterViewChecked {
           if (purifyList?.length > 0) {
             this.prev = purifyList[purifyList.indexOf(foundData) - 1]
             this.next = purifyList[purifyList.indexOf(foundData) + 1]
+          }
+          const rangeCongPhu = parseInt(this.purify?.congPhu?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongQua = parseInt(this.purify?.congQua?.match(/\{(\d+)\}/)[1]) || 0
+          const rangeCongTrinh = parseInt(this.purify?.congTrinh?.match(/\{(\d+)\}/)[1]) || 0
+          const collectRange = rangeCongPhu + rangeCongQua + rangeCongTrinh
+          if (collectRange === 0) {
+            this.purify.percent = 100
           }
         }
       })

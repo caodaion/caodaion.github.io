@@ -35,6 +35,9 @@ export class GameService {
     },
     "bug": {
       name: 'côn trùng'
+    },
+    "snow": {
+      name: 'tuyết'
     }
   };
   isActivePurifyList: boolean = false;
