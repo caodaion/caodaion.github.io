@@ -38,6 +38,9 @@ export class GameService {
     },
     "snow": {
       name: 'tuyết'
+    },
+    "food": {
+      name: 'thực phẩm'
     }
   };
   isActivePurifyList: boolean = false;
