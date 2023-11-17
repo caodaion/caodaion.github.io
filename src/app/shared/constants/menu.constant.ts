@@ -135,18 +135,18 @@ export const MENU = [
     ]
   },
   {
-    key: 'game',
-    url: 'game',
-    label: 'Trò chơi',
-    icon: 'videogame_asset',
+    key: 'kids',
+    url: 'kids',
+    label: 'Nhi đồng',
+    icon: 'toys',
     fullAssess: true,
     released: true,
     children: [
       {
-        key: 'game.purify',
-        url: 'purify',
-        label: 'Purify',
-        icon: 'pets',
+        key: 'kids.vuon-trai',
+        url: 'vuon-trai',
+        label: 'Vườn trái',
+        icon: 'agriculture',
         fullAssess: true,
         released: true,
         voViWorkspace: true,

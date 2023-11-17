@@ -32,7 +32,7 @@ export class GameComponent {
           this.drawerMode = 'side';
         }
       });
-    this.menu = MENU.find((item: any) => item.key === 'game')?.children
+    this.menu = MENU.find((item: any) => item.key === 'kids')?.children
   }
 
   onToggleDrawer() {

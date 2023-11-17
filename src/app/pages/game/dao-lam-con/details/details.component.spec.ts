@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PurifyVsComponent } from './purify-vs.component';
+import { DetailsComponent } from './details.component';
 
-describe('PurifyVsComponent', () => {
-  let component: PurifyVsComponent;
-  let fixture: ComponentFixture<PurifyVsComponent>;
+describe('DetailsComponent', () => {
+  let component: DetailsComponent;
+  let fixture: ComponentFixture<DetailsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PurifyVsComponent]
+      declarations: [DetailsComponent]
     });
-    fixture = TestBed.createComponent(PurifyVsComponent);
+    fixture = TestBed.createComponent(DetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

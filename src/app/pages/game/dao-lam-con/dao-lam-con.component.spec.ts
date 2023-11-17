@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PurifyComponent } from './purify.component';
+import { DaoLamConComponent } from './dao-lam-con.component';
 
-describe('PurifyComponent', () => {
-  let component: PurifyComponent;
-  let fixture: ComponentFixture<PurifyComponent>;
+describe('DaoLamConComponent', () => {
+  let component: DaoLamConComponent;
+  let fixture: ComponentFixture<DaoLamConComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PurifyComponent]
+      declarations: [DaoLamConComponent]
     });
-    fixture = TestBed.createComponent(PurifyComponent);
+    fixture = TestBed.createComponent(DaoLamConComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

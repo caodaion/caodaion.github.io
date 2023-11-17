@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PurifyComponent } from './purify/purify.component';
-import { PurifyDetailsComponent } from './purify-details/purify-details.component';
+import { VuonTraiComponent } from './vuon-trai/vuon-trai.component';
+import { DetailsComponent } from './dao-lam-con/details/details.component';
 
 const routes: Routes = [
   {
@@ -9,11 +9,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'purify',
+        redirectTo: 'vuon-trai',
         pathMatch: 'full'
       },
-      { path: 'purify', component: PurifyComponent },
-      { path: 'purify/:key', component: PurifyDetailsComponent }
+      {
+        path: 'vuon-trai',
+        component: VuonTraiComponent
+      },
+      {
+        path: 'vuon-trai/:key',
+        component: DetailsComponent
+      }
     ]
   },
 ];

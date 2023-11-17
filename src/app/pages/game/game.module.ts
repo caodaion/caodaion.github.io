@@ -3,16 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game.component';
-import { PurifyComponent } from './purify/purify.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PurifyDetailsComponent } from './purify-details/purify-details.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MarkdownModule } from 'ngx-markdown';
 import { FormsModule } from '@angular/forms';
-import { PurifyCardComponent } from './purify/purify-card/purify-card.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { QRCodeModule } from 'angularx-qrcode';
 import { CpQrScannerModule } from 'src/app/components/cp-qr-scanner/cp-qr-scanner.module';
@@ -20,19 +17,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
-import { PurifyVsComponent } from './purify/purify-vs/purify-vs.component';
-import { ChallengerComponent } from './purify/purify-vs/challenger/challenger.component';
 import { MatSelectModule } from '@angular/material/select';
+import { VuonTraiComponent } from './vuon-trai/vuon-trai.component';
+import { DaoLamConComponent } from './dao-lam-con/dao-lam-con.component';
+import { DetailsComponent } from './dao-lam-con/details/details.component';
 
 
 @NgModule({
   declarations: [
     GameComponent,
-    PurifyComponent,
-    PurifyDetailsComponent,
-    PurifyCardComponent,
-    PurifyVsComponent,
-    ChallengerComponent
+    VuonTraiComponent,
+    DaoLamConComponent,
+    DetailsComponent
   ],
   imports: [
     CommonModule,
