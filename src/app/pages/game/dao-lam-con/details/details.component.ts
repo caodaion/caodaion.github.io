@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,8 @@ import { GameService } from 'src/app/shared/services/game/game.service';
   styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent {
+
+  @ViewChild('videoFrame') videoFrame: any;
 
   contentEditable: boolean = false;
   articleKey: any;
@@ -53,6 +55,30 @@ export class DetailsComponent {
             if (this.article.preview.match(/d\/([^\/]+)/)) {
               this.article.preview = `https://drive.google.com/uc?export=view&id=${this.article.preview.match(/d\/([^\/]+)/)[1]}`
             }
+          }
+          if (typeof this.article?.images === 'string') {
+            this.article.images = JSON.parse(this.article?.images)
+          }
+          this.article.images = this.article.images?.map((item: any) => {
+            const data = <any>{}
+            if (item.match(/d\/([^\/]+)/)) {
+              data.ready = true
+              data.src = `https://drive.google.com/uc?export=view&id=${item.match(/d\/([^\/]+)/)[1]}`
+              this.cd.detectChanges()
+            }
+            return data
+          })
+          if (this.article.audio) {
+            if (this.article.audio.match(/d\/([^\/]+)/)) {
+              this.article.audio = `https://drive.google.com/uc?export=view&id=${this.article.audio.match(/d\/([^\/]+)/)[1]}`
+            }
+          }
+          if (this.article.video) {
+            setTimeout(() => {
+              if (this.videoFrame) {
+                this.videoFrame.nativeElement.innerHTML = `<iframe src="${this.article.video}" style="width: 100%; height: 100%" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+              }
+            }, 0)
           }
           let quaList = this.gameService?.purifyList
           if (!this.contentEditable) {

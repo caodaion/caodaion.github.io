@@ -21,13 +21,32 @@
 </div>
 <div class="container-fluid">
   <h1 class="text-center">{{ article?.subject }}</h1>
+  <audio
+    [src]="article?.audio"
+    [controls]="true"
+    class="w-100"
+    [autoplay]="true"
+  ></audio>
   <div class="flex flex-col lg:flex-row">
     <div class="p-3 w-full lg:w-1/2 relative lg:sticky top-0 h-fit">
-      <img
-        [src]="article?.preview"
-        [alt]="article?.subject"
-        class="w-full object-contain"
-      />
+      <div class="preview">
+        <img
+          [src]="article?.preview"
+          [alt]="article?.subject"
+          class="w-full object-contain"
+        />
+        <div class="flex flex-wrap">
+          <ng-container *ngFor="let item of article?.images">
+            <img
+              [src]="item.src"
+              [alt]="article?.subject"
+              class="w-1/6 lg:w-1/12 border-[3px] cursor-pointer rounded border-transparent"
+              (click)="article.preview = item.src"
+              [ngClass]="{'!border-[#4285f4]': article.preview === item.src}"
+            />
+          </ng-container>
+        </div>
+      </div>
     </div>
     <div class="flex w-full lg:w-1/2 relative lg:sticky top-0 h-fit">
       <textarea
@@ -44,4 +63,5 @@
       ></markdown>
     </div>
   </div>
+  <div #videoFrame class="aspect-video"></div>
 </div>
