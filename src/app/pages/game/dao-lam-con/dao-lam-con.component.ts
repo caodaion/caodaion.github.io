@@ -32,6 +32,9 @@ export class DaoLamConComponent implements AfterViewChecked, OnInit {
       }
     });
     this.contentEditable = this.authService.contentEditable
+    if (this.authService.currentUser?.userName === 'caodaion') {
+      this.contentEditable = true
+    }
   }
   ngAfterViewChecked(): void {
     if (this.gameService.isActiveKidsList) {
