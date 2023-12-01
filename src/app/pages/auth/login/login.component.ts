@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     if (this.gameService.isActiveKidsList && this.kids?.length === 0) {
-      this.getKidsList()
+      // this.getKidsList()
     }
   }
 

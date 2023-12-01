@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../../shared/services/auth/auth.service";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { KinhService } from "../../../shared/services/kinh/kinh.service";
 import { EventService } from "../../../shared/services/event/event.service";
 import { Title } from "@angular/platform-browser";
+import { JwtHelperService } from '@auth0/angular-jwt';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-kinh-content',
@@ -31,8 +33,10 @@ export class KinhContentComponent implements OnInit {
     me: '',
     e: ''
   }
-
+  fontSize: any = 18;
   kinhList = <any>[]
+  fontSizeRange = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
+
   constructor(
     private kinhService: KinhService,
     public eventService: EventService,
@@ -40,7 +44,8 @@ export class KinhContentComponent implements OnInit {
     public authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private titleService: Title,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef,
   ) {
   }
 
@@ -68,7 +73,55 @@ export class KinhContentComponent implements OnInit {
         }
       );
     })
+    const settingFontSize = localStorage.getItem('token')
+    if (settingFontSize) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(settingFontSize)
+      this.fontSize = decodedToken?.fontSize || 18
+      console.log(decodedToken);
+
+      this.cd.detectChanges();
+    }
     this.contentEditable = this.authService.contentEditable
+  }
+
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
+  }
+
+
+  updateFontSize() {
+    const users = JSON.parse(localStorage.getItem('users') || '{}')
+    const token = localStorage.getItem('token')
+    if (token) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(token)
+      decodedToken.fontSize = this.fontSize
+      if (users[decodedToken.userName]) {
+        users[decodedToken.userName] = this.generaToken(decodedToken)
+        localStorage.setItem('users', JSON.stringify(users))
+        localStorage.setItem('token', JSON.stringify(this.generaToken(decodedToken)))
+      }
+    }
   }
 
   getKinhContent(key?: any) {

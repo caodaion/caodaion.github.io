@@ -25,13 +25,29 @@
     (touchstart)="swipe($event, 'start')"
     (touchend)="swipe($event, 'end')"
   >
-    <div *ngIf="content" class="h-100 overflow-auto">
+    <div *ngIf="content" class="h-100 overflow-auto relative">
+      <div class="sticky top-0 w-full">
+        <mat-form-field class="w-full">
+          <mat-label>Cỡ chữ</mat-label>
+          <mat-select
+            [(ngModel)]="fontSize"
+            (ngModelChange)="updateFontSize()"
+          >
+            <mat-option *ngFor="let item of fontSizeRange" [value]="item">{{
+              item
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <div class="p-3">
         <markdown
           *ngIf="content.data"
           class="variable-binding w-full lg:w-1/2 text-justify"
           [data]="content.data"
           [ngClass]="{ 'lg:w-full': !contentEditable }"
+          [ngStyle]="{
+            fontSize: fontSize + 'px'
+          }"
         ></markdown>
       </div>
     </div>
