@@ -52,10 +52,11 @@ export class AppComponent implements OnInit {
     this.kinhService.getKinhList()
       .subscribe((res: any) => {
         if (res) {
-          this.kinhService.kinhList = res.data;
+          this.kinhService.kinhList = res;
           fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
           this.kinhService.kinhList.forEach((item: any) => {
-            this.kinhService.getKinhContent(item.key).subscribe()
+            this.kinhService.getKinhContent(item.key)
+            .subscribe()
           })
           this.eventService.getEventList()
           this.gettingCommonData = false

@@ -13,7 +13,7 @@ import { Title } from "@angular/platform-browser";
 })
 export class KinhContentComponent implements OnInit {
   rootContent: any;
-  content: any;
+  content = <any>{};
   isLoading: boolean = false;
   contentEditable: boolean = false;
   nowContent: any;
@@ -31,6 +31,8 @@ export class KinhContentComponent implements OnInit {
     me: '',
     e: ''
   }
+
+  kinhList = <any>[]
   constructor(
     private kinhService: KinhService,
     public eventService: EventService,
@@ -72,17 +74,12 @@ export class KinhContentComponent implements OnInit {
   getKinhContent(key?: any) {
     this.isLoading = true
     this.kinhService.getKinhContent(key).subscribe((res: any) => {
-      if (res.data) {
-        this.rootContent = res.data
-        this.content = res.data
-        if (!this.content.formGroup || this.content.formGroup.length == 0) {
-          this.content.formGroup = []
-        }
-        this.updateForm()
-        console.log(this.content)
-        this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
+      if (res) {
+        this.content.key = key
+        this.content.data = res
         this.isLoading = false
-        this.getEventList()
+        // this.getEventList()
+        this.getKinhList()
         setTimeout(() => {
           this.breakpointObserver
             .observe(['(max-width: 600px)'])
@@ -106,21 +103,32 @@ export class KinhContentComponent implements OnInit {
               }
             });
         }, 0)
-        if (location.hash) {
-          if (location.pathname.includes('kinh')) {
-            setTimeout(() => {
-              // @ts-ignore
-              const targetedContent = document.getElementById(`${location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', '')}${location.hash.replace('#', '')}`)
-              // @ts-ignore
-              targetedContent.style.color = '#4285f4';
-              const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
-              // @ts-ignore
-              contentCreatorWrapper.scroll({ top: targetedContent.offsetTop })
-            }, 0)
-          }
-        }
       }
     })
+  }
+
+  getKinhList() {
+    this.kinhService.getKinhList()
+      .subscribe((res: any) => {
+        if (res) {
+          this.kinhList = res
+          const foundKinhIndex = this.kinhList.findIndex((item: any) => item?.key == this.kinhKey)
+          const filteredKinhList = this.kinhList.filter((item: any) => item.group == this.kinhList[foundKinhIndex]?.group)
+          const filteredFoundKinhIndex = filteredKinhList.findIndex((item: any) => item?.key == this.kinhKey)
+          this.content.name = filteredKinhList[filteredFoundKinhIndex]?.name
+          this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
+          if (filteredKinhList[filteredFoundKinhIndex - 1]) {
+            this.navigate.prev.link = `${location.pathname.replace(this.kinhKey, '')}${filteredKinhList[filteredFoundKinhIndex - 1]?.key}`
+          } else {
+            this.navigate.prev.link = `/`
+          }
+          if (filteredKinhList[filteredFoundKinhIndex + 1]) {
+            this.navigate.next.link = `${location.pathname.replace(this.kinhKey, '')}${filteredKinhList[filteredFoundKinhIndex + 1]?.key}`
+          } else {
+            this.navigate.next.link = `/`
+          }
+        }
+      });
   }
 
   onSaveContent() {
@@ -134,6 +142,8 @@ export class KinhContentComponent implements OnInit {
   }
 
   private getEventList() {
+
+    this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
     const currentMainEvent = this.eventList.find((item: any) => item.key == (this.queryParams.me || this.rootContent?.event))
     const currentEvent = currentMainEvent.event.find((item: any) => item.key == (this.queryParams.e || this.rootContent?.event))
     if (currentEvent.kinh[currentEvent.kinh.findIndex((item: any) => item == this.kinhKey) - 1]) {
@@ -208,9 +218,9 @@ export class KinhContentComponent implements OnInit {
         if (link !== '/') {
           // Do whatever you want with swipe
           this.router
-          .navigate([link], {
-            queryParams: this.queryParams,
-          })
+            .navigate([link], {
+              queryParams: this.queryParams,
+            })
         }
       }
     }

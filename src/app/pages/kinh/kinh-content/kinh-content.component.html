@@ -6,25 +6,45 @@
     }"
   >
     <div class="kinh-header">
-      <app-header-title>{{content?.name}}</app-header-title
-      ><app-header-sub-title>{{getFormValue('ten-khac-phan-loai') ? ' - ' + getFormValue('ten-khac-phan-loai') : ''}}</app-header-sub-title>
+      <app-header-title>{{ content?.name }}</app-header-title
+      ><app-header-sub-title>{{
+        getFormValue("ten-khac-phan-loai")
+          ? " - " + getFormValue("ten-khac-phan-loai")
+          : ""
+      }}</app-header-sub-title>
       <div class="header-description">
-        <app-header-description>{{getFormValue('giong-doc')}}</app-header-description>
+        <app-header-description>{{
+          getFormValue("giong-doc")
+        }}</app-header-description>
       </div>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-  <div class="kinh-container-wrapper"
-  (touchstart)="swipe($event, 'start')"
-  (touchend)="swipe($event, 'end')">
-    <div *ngIf="content" class="h-100">
-      <cp-content-creator
-      [contentEditable]="contentEditable"
-      [data]="content" (save)="onSaveContent()"></cp-content-creator>
+  <div
+    class="kinh-container-wrapper"
+    (touchstart)="swipe($event, 'start')"
+    (touchend)="swipe($event, 'end')"
+  >
+    <div *ngIf="content" class="h-100 overflow-auto">
+      <div class="p-3">
+        <markdown
+          *ngIf="content.data"
+          class="variable-binding w-full lg:w-1/2 text-justify"
+          [data]="content.data"
+          [ngClass]="{ 'lg:w-full': !contentEditable }"
+        ></markdown>
+      </div>
     </div>
   </div>
-  <app-bottom-navigator *ngIf="!authService.contentEditable || content?.type == 'block'"
-                        [prev]="{ text: 'Trước đó', navigate: {link: navigate.prev.link, queryParams: queryParams} }"
-                        [next]="{ text: 'Tiếp theo', navigate: {link: navigate.next.link, queryParams: queryParams} }"
+  <app-bottom-navigator
+    *ngIf="!authService.contentEditable || content?.type == 'block'"
+    [prev]="{
+      text: 'Trước đó',
+      navigate: { link: navigate.prev.link, queryParams: queryParams }
+    }"
+    [next]="{
+      text: 'Tiếp theo',
+      navigate: { link: navigate.next.link, queryParams: queryParams }
+    }"
   ></app-bottom-navigator>
 </div>
