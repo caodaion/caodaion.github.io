@@ -44,6 +44,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   monthSelectValue: any = this.selectedDate.solar?.getMonth();
   time = this.commonService.time;
   tuThoiZone: any[] = [];
+  filter = <any>{
+    six: true,
+    event: true
+  };
 
   constructor(
     private calendarService: CalendarService,
@@ -212,7 +216,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     let tuthoi: any[] = [];
     let yearlyMonthlySpecial: any[] = [];
     let yearlySpecialSpecial: any[] = [];
-
     this.eventList.forEach((item: any) => {
       item.event.forEach((event: any) => {
         // yearly-monthly-daily
@@ -241,7 +244,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       )
     }
     );
-
     let comparedTime = new Date();
     if (new Date().getHours() > 22) {
       comparedTime = new Date(new Date().setDate(new Date().getDate() + 1));
@@ -272,7 +274,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         if (foundSolaryearlyMonthlySpecial?.length > 0) {
           date.event = foundSolaryearlyMonthlySpecial;
         }
-
         let foundLunaryearlySpecialSpecial = yearlySpecialSpecial.filter(
           (item: any) =>
             parseInt(item.event.date.split('-')[1]) ===
@@ -284,7 +285,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         if (foundLunaryearlySpecialSpecial?.length > 0) {
           date.event = foundLunaryearlySpecialSpecial;
         }
-
         let foundSolaryearlySpecialSpecial = yearlySpecialSpecial.filter(
           (item: any) =>
             parseInt(item.event.date.split('-')[1]) ===
@@ -294,6 +294,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         );
         if (foundSolaryearlySpecialSpecial?.length > 0) {
           date.event = foundSolaryearlySpecialSpecial;
+        }
+        if (date.event?.length > 0 && date.event[0]) {
+          if (date.event[0]?.mainEventKey !== 'cung-tu-thoi') {
+            date.six = true
+            date.ten = true
+            date.fifteen = true
+          }
         }
       });
     }
@@ -335,7 +342,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       if (foundLunaryearlySpecialSpecial?.length > 0) {
         this.selectedDate.event = foundLunaryearlySpecialSpecial;
       }
-
       let foundSolaryearlySpecialSpecial = yearlySpecialSpecial.filter(
         (item: any) =>
           parseInt(item.event.date.split('-')[1]) ===

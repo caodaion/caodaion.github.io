@@ -58,6 +58,52 @@
         {{ selectedDate.solar.getFullYear() }}</span
       >
     </div>
+    <div class="flex flex-wrap w-full justify-end">
+      <div
+        (click)="filter.event = !filter.event"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        [ngClass]="{
+          'bg-transparent': !filter.event,
+          'text-[#34a853]': !filter.event
+        }"
+        [matTooltip]="'Hiển thị sự kiện'"
+      >
+        SK
+      </div>
+      <div
+        (click)="filter.six = !filter.six"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        [ngClass]="{
+          'bg-transparent': !filter.six,
+          'text-[#34a853]': !filter.six
+        }"
+        [matTooltip]="'Hiển thị lục trai'"
+      >
+        6
+      </div>
+      <div
+        (click)="filter.ten = !filter.ten"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        [ngClass]="{
+          'bg-transparent': !filter.ten,
+          'text-[#34a853]': !filter.ten
+        }"
+        [matTooltip]="'Hiển thị thập trai'"
+      >
+        10
+      </div>
+      <div
+        (click)="filter.fifteen = !filter.fifteen"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        [ngClass]="{
+          'bg-transparent': !filter.fifteen,
+          'text-[#34a853]': !filter.fifteen
+        }"
+        [matTooltip]="'Hiển thị thiên ngươn'"
+      >
+        15
+      </div>
+    </div>
   </mat-toolbar>
   <mat-divider></mat-divider>
   <div
@@ -90,27 +136,53 @@
               : 'calc(100%/' + 5 + ')'
         }"
       >
-        <button
-          mat-flat-button
-          [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
-          (click)="onChangeCalendarMode('day', date)"
-        >
-          <div class="solar-date">{{ date?.solar?.getDate() }}</div>
-          <div class="lunar-date">
-            <span
-              *ngIf="!!date?.lunar?.convertSolar2Lunar?.lunarLeap"
-              [matTooltip]="
-                'Nhuận tháng ' + date?.lunar?.convertSolar2Lunar?.lunarMonth
-              "
-              >NH</span
+        <div class="w-full flex justify-between">
+          <button
+            mat-flat-button
+            class="!px-4"
+            [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
+            (click)="onChangeCalendarMode('day', date)"
+          >
+            <div class="solar-date">{{ date?.solar?.getDate() }}</div>
+            <div class="lunar-date">
+              <span
+                *ngIf="!!date?.lunar?.convertSolar2Lunar?.lunarLeap"
+                [matTooltip]="
+                  'Nhuận tháng ' + date?.lunar?.convertSolar2Lunar?.lunarMonth
+                "
+                >NH</span
+              >
+              {{ date?.lunar?.convertSolar2Lunar?.lunarDay }}/{{
+                date?.lunar?.convertSolar2Lunar?.lunarMonth
+              }}
+            </div>
+          </button>
+          <div class="w-full flex flex-col lg:flex-row">
+            <div
+              class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
+              *ngIf="date?.six && filter.six"
+              [matTooltip]="'lục trai'"
             >
-            {{ date?.lunar?.convertSolar2Lunar?.lunarDay }}/{{
-              date?.lunar?.convertSolar2Lunar?.lunarMonth
-            }}
+              6
+            </div>
+            <div
+              class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
+              *ngIf="date?.ten && filter.ten"
+              [matTooltip]="'thập trai'"
+            >
+              10
+            </div>
+            <div
+              class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
+              *ngIf="date?.fifteen && filter.fifteen"
+              [matTooltip]="'thiên ngươn'"
+            >
+              15
+            </div>
           </div>
-        </button>
+        </div>
         <div class="flex-1 date-event w-100">
-          <mat-list>
+          <mat-list *ngIf="filter.event">
             <mat-list-item
               class="date-event-item"
               matRipple
@@ -217,7 +289,9 @@
             : ''
         }"
       >
-        <div class="time-now text-[#eb4132]">{{ time.time | async | date : "HH:mm:ss" }}</div>
+        <div class="time-now text-[#eb4132]">
+          {{ time.time | async | date : "HH:mm:ss" }}
+        </div>
         <div class="clock"></div>
       </div>
       <div
@@ -327,7 +401,7 @@
         (click)="syncToGoogleCalendar()"
         [mat-dialog-close]="true"
       >
-      <mat-icon>cloud_sync</mat-icon>
+        <mat-icon>cloud_sync</mat-icon>
         Đồng bộ lên Google Calendar
       </button>
     </mat-dialog-actions>

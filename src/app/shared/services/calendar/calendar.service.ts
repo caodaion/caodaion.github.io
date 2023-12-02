@@ -448,6 +448,7 @@ export class CalendarService {
       if (day !== 1) date.setHours(-24 * (day - 1));
       return date;
     };
+    let selectedMonthCount = <any>{}
     for (
       let d = getMonday(new Date(`${comparedYear}-${comparedMonth}-01`));
       d <=
@@ -459,11 +460,143 @@ export class CalendarService {
       );
       d.setDate(d.getDate() + 1)
     ) {
-      selectedMonth.push({
+      const pushedData = <any>{
         solar: new Date(d),
         lunar: this.getConvertedFullDate(d),
-      });
+        d: this.datePipe.transform(d, 'yyyy-MM-dd'),
+      }
+      switch (this.getConvertedFullDate(d).convertSolar2Lunar.lunarDay) {
+        case 1:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 4:
+          pushedData.fifteen = true
+          break;
+        case 6:
+          pushedData.fifteen = true
+          break;
+        case 8:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 9:
+          pushedData.fifteen = true
+          break;
+        case 14:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 15:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 16:
+          pushedData.fifteen = true
+          break;
+        case 18:
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 19:
+          pushedData.fifteen = true
+          break;
+        case 23:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 24:
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 25:
+          pushedData.fifteen = true
+          break;
+        default: break;
+      }
+      if (!selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth] || selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth]?.length === 0) {
+        selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth] = []
+      }
+      selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth].push(pushedData)
+      selectedMonth.push(pushedData);
     }
+    Object.keys(selectedMonthCount).forEach((smc: any) => {
+      const lastDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 1]
+      const lastOneDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 2]
+      const lastTwoDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 3]
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 30) {
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).six = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar).fifteen = true
+        }
+      }
+      const dValue = new Date(lastDate.d)
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 29) {
+        const nextDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 1)))
+        if (nextDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).six = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).ten = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar).fifteen = true
+          }
+        }
+        if (nextDate.convertSolar2Lunar.lunarDay === 30) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+        }
+      }
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 28) {
+        const nexTwotDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 2)))
+        if (nexTwotDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+        }
+      }
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 27) {
+        const nexThreetDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 3)))
+        if (nexThreetDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+          }
+        }
+      }
+    })
     console.log(selectedMonth);
     return selectedMonth;
   }
