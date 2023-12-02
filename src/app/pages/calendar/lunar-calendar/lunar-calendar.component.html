@@ -72,10 +72,10 @@
       </div>
       <div
         (click)="filter.six = !filter.six"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-[#34a853] rounded px-3 transition"
         [ngClass]="{
           'bg-transparent': !filter.six,
-          'text-[#34a853]': !filter.six
+          'text-white': !filter.six
         }"
         [matTooltip]="'Hiển thị lục trai'"
       >
