@@ -61,10 +61,10 @@
     <div class="flex flex-wrap w-full justify-end">
       <div
         (click)="filter.event = !filter.event"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-[#34a853] rounded px-3 transition"
         [ngClass]="{
           'bg-transparent': !filter.event,
-          'text-[#34a853]': !filter.event
+          'text-white': filter.event
         }"
         [matTooltip]="'Hiển thị sự kiện'"
       >
@@ -75,7 +75,7 @@
         class="cursor-pointer bg-[#34a853] border border-[#34a853] text-[#34a853] rounded px-3 transition"
         [ngClass]="{
           'bg-transparent': !filter.six,
-          'text-white': !filter.six
+          'text-white': filter.six
         }"
         [matTooltip]="'Hiển thị lục trai'"
       >
@@ -83,10 +83,10 @@
       </div>
       <div
         (click)="filter.ten = !filter.ten"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-[#34a853] rounded px-3 transition"
         [ngClass]="{
           'bg-transparent': !filter.ten,
-          'text-[#34a853]': !filter.ten
+          'text-white': filter.ten
         }"
         [matTooltip]="'Hiển thị thập trai'"
       >
@@ -94,10 +94,10 @@
       </div>
       <div
         (click)="filter.fifteen = !filter.fifteen"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] rounded text-white px-3 transition"
+        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-[#34a853] rounded px-3 transition"
         [ngClass]="{
           'bg-transparent': !filter.fifteen,
-          'text-[#34a853]': !filter.fifteen
+          'text-white': filter.fifteen
         }"
         [matTooltip]="'Hiển thị thiên ngươn'"
       >
