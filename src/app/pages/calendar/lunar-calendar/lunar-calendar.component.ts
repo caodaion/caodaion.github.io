@@ -105,6 +105,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           ? '0' + (this.selectedDate.solar?.getMonth() + 1)
           : (this.selectedDate.solar?.getMonth() + 1).toString();
     });
+    console.log(this.selectedDate);
+
   }
 
   ngAfterViewInit(): void {
