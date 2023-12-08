@@ -317,8 +317,6 @@ export class CalendarService {
       if (lunarMonth >= 11 && diff < 4) {
         lunarYear -= 1;
       }
-      const canChiMonth = ['Giáp Tý', 'Ất Sửu', 'Bính Dần', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi']
-      const lunarMonthName = canChiMonth[(((lunarYear % 10) * 2 + lunarMonth) % 10)]
       const lunarTime = this.commonService.getTimeLunarTime(calDate)
       const cans = [
         'Tân',
@@ -351,6 +349,35 @@ export class CalendarService {
       const canDay = Math.floor(JDN % 10)
       const chiDay = Math.floor((JDN + 1) % 12)
       const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
+      let lunarMonthName = ''
+      switch (lunarYear % 10) {
+        case 3:
+        case 8:
+          const canchiMonthMauQuy = ['Giáp Dần', 'Ất Mão', 'Bính Thìn', 'Đinh Tỵ', 'Mậu Ngọ', 'Kỷ Mùi', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi', 'Giáp Tý', 'Ất Sửu'];
+          lunarMonthName = canchiMonthMauQuy[lunarMonth - 1]
+          break;
+        case 4:
+        case 9:
+          const canchiMonthGiapKy = ['Bính Dần', 'Đinh Mão', 'Mậu Thìn', 'Kỷ Tỵ', 'Canh Ngọ', 'Tân Mùi', 'Nhâm Thân', 'Quý Dậu', 'Giáp Tuất', 'Ất Hợi', 'Bính Tý', 'Đinh Sửu'];
+          lunarMonthName = canchiMonthGiapKy[lunarMonth - 1]
+          break;
+        case 5:
+        case 0:
+          const canchiMonthAtCanh = ['Mậu Dần', 'Kỷ Mão', 'Canh Thìn', 'Tân Tỵ', 'Nhâm Ngọ', 'Quý Mùi', 'Giáp Thân', 'Ất Dậu', 'Bính Tuất', 'Đinh Hợi', 'Mậu Tý', 'Kỷ Sửu'];
+          lunarMonthName = canchiMonthAtCanh[lunarMonth - 1]
+          break;
+        case 6:
+        case 1:
+          const canchiMonthBinhTan = ['Canh Dần', 'Tân Mão', 'Nhâm Thìn', 'Quý Tỵ', 'Giáp Ngọ', 'Ất Mùi', 'Bính Thân', 'Đinh Dậu', 'Mậu Tuất', 'Kỷ Hợi', 'Canh Tý', 'Tân Sửu'];
+          lunarMonthName = canchiMonthBinhTan[lunarMonth - 1]
+          break;
+        case 7:
+        case 2:
+          const canchiMonthDinhNham = ['Nhâm Dần', 'Quý Mão', 'Giáp Thìn', 'Ất Tỵ', 'Bính Ngọ', 'Đinh Mùi', 'Mậu Thân', 'Kỷ Dậu', 'Canh Tuất', 'Tân Hợi', 'Nhâm Tý', 'Quý Sửu'];
+          lunarMonthName = canchiMonthDinhNham[lunarMonth - 1]
+          break;
+        default: break;
+      }
 
       return {
         lunarDay,
