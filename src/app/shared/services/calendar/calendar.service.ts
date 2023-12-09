@@ -319,8 +319,6 @@ export class CalendarService {
       }
       const lunarTime = this.commonService.getTimeLunarTime(calDate)
       const cans = [
-        'Tân',
-        'Nhâm',
         'Quý',
         'Giáp',
         'Ất',
@@ -328,8 +326,11 @@ export class CalendarService {
         'Đinh',
         'Mậu',
         'Kỷ',
-        'Canh']
+        'Canh',
+        'Tân',
+        'Nhâm',]
       const chis = [
+        'Hợi',
         'Tý',
         'Sửu',
         'Dần',
@@ -340,13 +341,13 @@ export class CalendarService {
         'Mùi',
         'Thân',
         'Dậu',
-        'Tuất',
-        'Hợi']
-      const a = (14 - mm) % 12
-      const y = yy + 4800 - a
-      const m = mm + 12 * a - 3
-      const JDN = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045
-      const canDay = Math.floor(JDN % 10)
+        'Tuất',]
+
+      let a = (14 - mm) / 12
+      let yv = yy + 4800 - a
+      let mv = mm + 12 * a - 3
+      let JDN = dd + (153 * mv + 2) / 5 + 365 * yv + yv / 4 - yv / 100 + yv / 400 - 32045
+      const canDay = Math.floor((JDN + 9) % 10)
       const chiDay = Math.floor((JDN + 1) % 12)
       const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
       let lunarMonthName = ''
