@@ -153,7 +153,7 @@
               : 'calc(100%/' + 5 + ')'
         }"
       >
-        <div class="w-full flex justify-between">
+        <div class="w-full flex justify-between flex-wrap">
           <button
             mat-flat-button
             class="!px-4"
@@ -174,10 +174,10 @@
               }}
             </div>
           </button>
-          <span class="text-xs whitespace-nowrap" *ngIf="filter.cn">{{
+          <span class="text-xs whitespace-nowrap p-1" *ngIf="filter.cn">{{
             date?.lunar?.convertSolar2Lunar?.lunarDayName
           }}</span>
-          <div class="w-full flex flex-col lg:flex-row">
+          <div class="w-full flex">
             <div
               class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
               *ngIf="date?.six && filter.six"
