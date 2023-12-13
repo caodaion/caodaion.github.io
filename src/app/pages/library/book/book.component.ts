@@ -143,6 +143,8 @@ export class BookComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           item.content = res
+          console.log(res);
+
         }
       })
   }

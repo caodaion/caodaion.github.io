@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { API_PARAMS } from '../../constants/api.constant';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +16,8 @@ export class LibraryService {
   }
 
   getBookFromLibrary(): Observable<any> {
-    const user = 'caodaion-library'
-    const repo = 'caodaion-library.github.io'
     return new Observable((observable) => {
-      this.http.get(`https://api.github.com/repos/${user}/${repo}/contents/${'library'}.json`)
+      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${'library'}.json${!environment.production ? '?ref=dev' : ''}`)
         .subscribe((res: any) => {
           observable.next(JSON.parse(decodeURIComponent(escape(atob(res.content)))))
           observable.complete()
@@ -29,10 +29,8 @@ export class LibraryService {
     if (isStatic) {
       return this.http.get(`assets/documents/library/${key}/${'table-content'}.json`)
     }
-    const user = 'caodaion-library'
-    const repo = 'caodaion-library.github.io'
     return new Observable((observable) => {
-      this.http.get(`https://api.github.com/repos/${user}/${repo}/contents/${key}/${'table-content'}.json`)
+      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${key}/${'table-content'}.json${!environment.production ? '?ref=dev' : ''}`)
         .subscribe((res: any) => {
           observable.next(JSON.parse(decodeURIComponent(escape(atob(res.content)))))
           observable.complete()
@@ -44,10 +42,8 @@ export class LibraryService {
     if (isStatic) {
       return this.http.get(`assets/documents/library/${key}/${key}.txt`, {responseType: 'text'})
     }
-    const user = 'caodaion-library'
-    const repo = 'caodaion-library.github.io'
     return new Observable((observable) => {
-      this.http.get(`https://api.github.com/repos/${user}/${repo}/contents/${key}/${key}.md`)
+      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${key}/${key}.md${!environment.production ? '?ref=dev' : ''}`)
         .subscribe((res: any) => {
           observable.next(decodeURIComponent(escape(atob(res.content))))
           observable.complete()
@@ -59,10 +55,8 @@ export class LibraryService {
     if (isStatic) {
       return this.http.get(`assets/documents/library/${path}.txt`, {responseType: 'text'})
     }
-    const user = 'caodaion-library'
-    const repo = 'caodaion-library.github.io'
     return new Observable((observable) => {
-      this.http.get(`https://api.github.com/repos/${user}/${repo}/contents/${path}.md`)
+      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${path}.md${!environment.production ? '?ref=dev' : ''}`)
         .subscribe((res: any) => {
           observable.next(decodeURIComponent(escape(atob(res.content))))
           observable.complete()

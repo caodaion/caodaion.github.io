@@ -7,5 +7,12 @@ export const API_PATH = {
   },
   kinh: {
     root: `${API_ROOT}/kinh`
+  },
+}
+
+export const API_PARAMS = {
+  caodaionLibrady: {
+    user: 'caodaion-library',
+    repo: 'caodaion-library.github.io'
   }
 }
