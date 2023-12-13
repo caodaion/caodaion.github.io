@@ -30,6 +30,15 @@ export class BooksComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.getBooks()
+  }
+
+  getBooks() {
+    this.books.forEach((item: any) => {
+      if (!item.isStatic) {
+        item.image = `https://raw.githubusercontent.com/caodaion-library/caodaion-library.github.io/main/${item.key}/cover.png`
+      }
+    })
     this.getForYouBooks()
   }
 
@@ -39,5 +48,6 @@ export class BooksComponent implements OnInit, OnChanges {
 
   getForYouBooks() {
     this.forYouBooks = this.books?.filter((item: any) => item?.published)
+    console.log(this.forYouBooks);
   }
 }

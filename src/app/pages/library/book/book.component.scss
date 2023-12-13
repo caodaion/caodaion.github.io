@@ -6,7 +6,7 @@
     max-height: 100%;
     overflow: hidden;
 
-    .mat-expansion-panel-header[aria-disabled=true] {
+    .mat-expansion-panel-header[aria-disabled="true"] {
       color: unset;
     }
 
@@ -42,6 +42,20 @@
       button {
         margin-bottom: 1rem;
       }
+    }
+    blockquote {
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 40px;
+      margin-inline-end: 40px;
+    }
+    p {
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
     }
   }
 }

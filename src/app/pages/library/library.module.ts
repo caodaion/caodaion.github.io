@@ -21,6 +21,9 @@ import { CpContentCreatorModule } from "../../components/cp-content-creator/cp-c
 import { BottomNavigatorModule } from "../../components/bottom-navigator/bottom-navigator.module";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
+import { MarkdownModule } from 'ngx-markdown';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -48,7 +51,10 @@ import { MatListModule } from '@angular/material/list';
         CpContentCreatorModule,
         BottomNavigatorModule,
         MatExpansionModule,
-        MatListModule
+        MatListModule,
+        MarkdownModule,
+        MatSelectModule,
+        MatTooltipModule
     ]
 })
 export class LibraryModule { }

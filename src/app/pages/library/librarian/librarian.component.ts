@@ -12,7 +12,7 @@ import { LibraryService } from 'src/app/shared/services/library/library.service'
 export class LibrarianComponent implements OnInit {
   previewingItem: any;
   mode: any;
-  staticBooks = <any>[];
+  library = <any>[];
   contentEditable: boolean = false;
 
   constructor(
@@ -45,16 +45,29 @@ export class LibrarianComponent implements OnInit {
   getStaticBooks() {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
-        this.staticBooks = res.data
+        this.library = this.library.concat(res.data)
+        this.getBookFromLibrary()
         this.getReadingBooks()
         this.changeDetector.detectChanges()
       }
     })
   }
 
+  getBookFromLibrary() {
+    this.libraryService.getBookFromLibrary()
+      .subscribe({
+        next: (res: any) => {
+          this.getReadingBooks()
+          if (res.data) {
+            this.library = this.library.concat(res.data)
+          }
+        }
+      })
+  }
+
   getReadingBooks() {
     const readingBooks = JSON.parse(localStorage.getItem('reading') || '[]')
-    this.staticBooks.forEach((item: any) => {
+    this.library.forEach((item: any) => {
       const foundReading = readingBooks.find((rb: any) => rb?.key === item?.key)
       if (foundReading) {
         item.reading = foundReading
@@ -64,7 +77,7 @@ export class LibrarianComponent implements OnInit {
 
   saveSettings() {
     const data = {
-      data: this.staticBooks.map((item: any) => {
+      data: this.library.map((item: any) => {
         return {
           name: item?.name,
           image: item?.image,
@@ -80,20 +93,14 @@ export class LibrarianComponent implements OnInit {
   }
 
 
-  onRead(path: any, isTableContent: boolean = false) {
+  onRead(item: any, isTableContent: boolean = false) {
     if (isTableContent) {
-      this.router.navigate([path.replace(location.origin, '')], {
-        queryParams: {
-          tableContent: true
-        }
-      })
-    } else {
-      this.router.navigateByUrl(path.replace(location.origin, ''))
+      this.router.navigate([`trang-chu/thu-vien/${item.key?.replace(location.origin, '')}`])
     }
   }
 
   addNewSettings() {
-    this.staticBooks.push({})
+    this.library.push({})
   }
 
   onItemFocus(event: any, libradianDrawer: any) {

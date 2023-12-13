@@ -3,7 +3,7 @@
     <mat-tab-group>
       <mat-tab label="Sách">
         <librarian-books
-          [books]="staticBooks"
+          [books]="library"
           (onItemFocus)="onItemFocus($event, libradianDrawer)"
         ></librarian-books>
       </mat-tab>
@@ -20,7 +20,7 @@
               Save
             </button>
           </div>
-          <div *ngFor="let item of staticBooks">
+          <div *ngFor="let item of library">
             <div class="d-flex flex-wrap">
               <div class="form-group">
                 <mat-label>Published</mat-label>
@@ -122,18 +122,9 @@
       <button
         mat-flat-button
         [color]="'primary'"
-        *ngIf="!!previewingItem?.reading?.key"
-        (click)="onRead(previewingItem?.reading?.location)"
-        style="margin-bottom: 1rem;"
+        (click)="onRead(previewingItem, true)"
       >
-        ĐỌC TIẾP
-      </button>
-      <button
-        mat-flat-button
-        [color]="'primary'"
-        (click)="onRead(previewingItem?.path, true)"
-      >
-        XEM MỤC LỤC
+        ĐỌC SÁCH
       </button>
     </div>
   </mat-drawer>

@@ -3,87 +3,75 @@
     class="header"
     [prevPage]="{
       navigate: {
-        link: getBackLink(),
-        queryParams: navigate.prev.queryParams
+        link: getBackLink()
       }
     }"
   >
     <div class="book-header">
-      <app-header-title>{{ content?.name }}</app-header-title>
+      <app-header-title>{{ contentName }}</app-header-title>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="book-container-wrapper" *ngIf="!isShowTableContent">
-    <div *ngIf="content" class="h-100">
-      <cp-content-creator
-        [data]="content"
-        [rootContent]="rootContent"
-        [contentEditable]="contentEditable"
-        (save)="onSaveContent()"
-        (nextContent)="onNextContent()"
-      ></cp-content-creator>
-    </div>
-  </div>
-  <div class="book-table-content-container-wrapper" *ngIf="isShowTableContent">
-    <div class="container-fluid">
-      <div class="reading-section" *ngIf="reading?.name">
-        <h2>Bạn đang đọc: <span style="font-weight: 400;">{{ reading?.name }}</span></h2>
-        <p *ngIf="reading?.stopAt">
-          <strong>Đoạn: </strong>{{ reading?.stopAt }}
-        </p>
-        <button
-          mat-flat-button
-          [color]="'primary'"
-          class="w-100"
-          (click)="continueReading()"
-        >
-          ĐỌC TIẾP
-        </button>
-        <button
-          mat-flat-button
-          [color]="'primary'"
-          class="w-100"
-          (click)="continueReading(true)"
-          *ngIf="reading?.currentTime"
-        >
-          ĐỌC TIẾP VÀ NGHE
-        </button>
-      </div>
-    </div>
-    <mat-accordion multi>
-      <mat-expansion-panel disabled hideToggle [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h3 class="content-name">{{ content?.name }}</h3></mat-panel-title>
-          <div class="d-flex align-items-center">
-            <button mat-stroked-button (click)="onReadNow()">Đọc</button>
-          </div>
-        </mat-expansion-panel-header>
-        <div>
-          <mat-accordion multi>
-            <mat-expansion-panel *ngFor="let q of content?.content" hideToggle [expanded]="false">
-              <mat-expansion-panel-header>
-                <mat-panel-title><h6 class="content-name">{{getContentName(q)}}</h6></mat-panel-title>
-                <div class="d-flex align-items-center">
-                  <button mat-stroked-button (click)="readContent(q)">Đọc</button>
-                </div>
-              </mat-expansion-panel-header>
-              <div>
-                <mat-list>
-                  <mat-list-item *ngFor="let p of q?.content">
-                    <div class="w-100 d-flex justify-content-between align-items-center">
-                      <div class="content-name">{{getContentName(p)}}</div>
-                      <div class="d-flex align-items-center">
-                        <button mat-stroked-button (click)="readContent(p)">Đọc</button>
-                      </div>
-                    </div>
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
+    <mat-drawer-container>
+      <mat-drawer-content>
+        <div class="w-full sticky top-0 flex items-center">
+          <mat-form-field class="w-full">
+            <mat-label>Cỡ chữ</mat-label>
+            <mat-select
+              [(ngModel)]="fontSize"
+              (ngModelChange)="updateFontSize()"
+            >
+              <mat-option *ngFor="let item of fontSizeRange" [value]="item">{{
+                item
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button
+            mat-flat-button
+            (click)="libradianDrawer.toggle()"
+            [matTooltip]="'Mục lục'"
+            [color]="'primary'"
+          >
+            <mat-icon>list</mat-icon>
+          </button>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+        <div
+          *ngIf="content"
+          class="h-100 px-3"
+          [ngStyle]="{
+            fontSize: fontSize + 'px'
+          }"
+        >
+          <markdown
+            *ngIf="content"
+            class="variable-binding w-full text-justify bg-white select-text"
+            [data]="content"
+          ></markdown>
+          <ng-container *ngFor="let item of tableContent">
+            <markdown
+              *ngIf="item?.content"
+              class="variable-binding w-full text-justify bg-white select-text"
+              [data]="item?.content"
+              [id]="item?.key"
+            ></markdown>
+            <mat-divider class="!my-11"></mat-divider>
+          </ng-container>
+        </div>
+      </mat-drawer-content>
+      <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
+        <ul>
+          <li *ngFor="let item of tableContent">
+            <a
+              [href]="'trang-chu/thu-vien/' + key + '#' + item?.key"
+              class="block p-3"
+            >
+              {{ item?.description }}
+            </a>
+          </li>
+        </ul>
+      </mat-drawer>
+    </mat-drawer-container>
   </div>
   <app-bottom-navigator
     *ngIf="content?.type == 'block'"
