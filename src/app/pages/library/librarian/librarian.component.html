@@ -122,9 +122,17 @@
       <button
         mat-flat-button
         [color]="'primary'"
-        (click)="onRead(previewingItem, true)"
+        (click)="onRead(previewingItem, false)"
       >
         ĐỌC SÁCH
+      </button>
+      <button
+        class="mt-3"
+        mat-flat-button
+        [color]="'primary'"
+        (click)="onRead(previewingItem, true)"
+      >
+        XEM MỤC LỤC
       </button>
     </div>
   </mat-drawer>

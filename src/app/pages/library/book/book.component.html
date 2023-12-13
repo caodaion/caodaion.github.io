@@ -48,34 +48,69 @@
             class="variable-binding w-full text-justify bg-white select-text"
             [data]="content"
           ></markdown>
-          <ng-container *ngFor="let item of tableContent">
-            <markdown
-              *ngIf="item?.content"
-              class="variable-binding w-full text-justify bg-white select-text"
-              [data]="item?.content"
-              [id]="item?.key"
-            ></markdown>
-            <mat-divider class="!my-11"></mat-divider>
+          <ng-container *ngIf="!level">
+            <ng-container *ngFor="let item of tableContent">
+              <markdown
+                *ngIf="item?.content"
+                class="variable-binding w-full text-justify bg-white select-text"
+                [data]="item?.content"
+                [id]="item?.key"
+              ></markdown>
+              <mat-divider class="!my-11"></mat-divider>
+            </ng-container>
           </ng-container>
         </div>
       </mat-drawer-content>
       <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
-        <ul>
-          <li *ngFor="let item of tableContent">
-            <a
-              [href]="'trang-chu/thu-vien/' + key + '#' + item?.key"
-              class="block p-3"
-            >
-              {{ item?.description }}
-            </a>
-          </li>
-        </ul>
+        <ng-container *ngFor="let item of tableContent">
+          <a
+            [href]="'trang-chu/thu-vien/' + key + '/' + item?.key"
+            class="block p-3"
+            matRipple
+          >
+            {{ item?.description }}
+          </a>
+          <mat-divider></mat-divider>
+        </ng-container>
+        <a
+          [href]="'trang-chu/thu-vien/' + key + '?tableContent=true'"
+          class="w-full"
+          mat-flat-button
+          [color]="'primary'"
+        >
+          Xem Mục Lục
+        </a>
       </mat-drawer>
     </mat-drawer-container>
   </div>
+  <div class="book-container-wrapper" *ngIf="isShowTableContent">
+    <a
+      [href]="'trang-chu/thu-vien/' + key"
+      mat-flat-button
+      [color]="'primary'"
+      class="w-full"
+    >
+      Đọc hết
+    </a>
+    <ng-container *ngFor="let item of tableContent">
+      <a
+        [href]="'trang-chu/thu-vien/' + key + '/' + item?.key"
+        class="w-full block p-3"
+        matRipple
+        >{{ item.description }}</a
+      >
+      <mat-divider></mat-divider>
+    </ng-container>
+  </div>
   <app-bottom-navigator
-    *ngIf="content?.type == 'block'"
-    [prev]="{ text: 'Trước đó', navigate: { link: navigate.prev.link } }"
-    [next]="{ text: 'Tiếp theo', navigate: { link: navigate.next.link } }"
+    *ngIf="isNavigation"
+    [prev]="{
+      text: navigate?.prev?.text,
+      navigate: { link: navigate?.prev?.link }
+    }"
+    [next]="{
+      text: navigate?.next?.text,
+      navigate: { link: navigate?.next?.link }
+    }"
   ></app-bottom-navigator>
 </div>

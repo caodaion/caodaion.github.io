@@ -59,7 +59,7 @@ export class LibrarianComponent implements OnInit {
         next: (res: any) => {
           this.getReadingBooks()
           if (res.data) {
-            this.library = this.library.concat(res.data)
+            this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
           }
         }
       })
@@ -95,6 +95,12 @@ export class LibrarianComponent implements OnInit {
 
   onRead(item: any, isTableContent: boolean = false) {
     if (isTableContent) {
+      this.router.navigate([`trang-chu/thu-vien/${item.key?.replace(location.origin, '')}`], {
+        queryParams: {
+          tableContent: true
+        }
+      })
+    } else {
       this.router.navigate([`trang-chu/thu-vien/${item.key?.replace(location.origin, '')}`])
     }
   }

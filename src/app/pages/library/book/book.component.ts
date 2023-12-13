@@ -17,21 +17,13 @@ export class BookComponent implements OnInit {
   content: any;
   contentName: any;
   isLoading: boolean = false;
+  isNavigation: boolean = false;
   isShowTableContent: boolean = false;
   contentEditable: boolean = false;
   nowContent: any;
   key: any;
   level: any;
-  navigate = {
-    prev: {
-      link: undefined,
-      queryParams: {}
-    },
-    next: {
-      link: undefined,
-      queryParams: {}
-    }
-  };
+  navigate = <any>{};
   reading: any;
   fontSize: number = 18;
   fontSizeRange = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
@@ -51,7 +43,31 @@ export class BookComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isNavigation = false
     this.getBooks()
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: true,
+                isHideBottomNavBar: true,
+              })
+            );
+          } else {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: false,
+                isHideBottomNavBar: false,
+              })
+            );
+          }
+        });
+    }, 0)
   }
 
 
@@ -70,16 +86,21 @@ export class BookComponent implements OnInit {
           this.isShowTableContent = query.params['tableContent']
         })
         this.route.params.subscribe((query) => {
+          this.key = query['key']
           if (query['key'] && !query['level']) {
-            this.getContent(query['key'], query['level'])
+            if (!this.isShowTableContent) {
+              this.getContent(query['key'], query['level'])
+            }
           }
           if (query['key'] && query['level']) {
-            this.getContent(query['key'], query['level'])
             this.level = query['level']
-            this.router.navigate(
-              ['.'],
-              { relativeTo: this.route, fragment: location.hash.replace('#', '') }
-            );
+            if (!this.isShowTableContent) {
+              this.getContent(query['key'], query['level'])
+              this.router.navigate(
+                ['.'],
+                { relativeTo: this.route, fragment: location.hash.replace('#', '') }
+              );
+            }
           }
         })
         this.authService.getCurrentUser()
@@ -96,6 +117,12 @@ export class BookComponent implements OnInit {
           this.getReadingBooks()
           if (res.data) {
             this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
+          }
+        },
+        complete: () => {
+          if (this.isShowTableContent) {
+            const foundContent = this.library.find((item: any) => item.key === this.key)
+            this.getTableContentByKey(this.key, foundContent?.isStatic)
           }
         }
       })
@@ -115,7 +142,6 @@ export class BookComponent implements OnInit {
     this.isLoading = true
     const foundContent = this.library.find((item: any) => item.key === key)
     this.contentName = foundContent?.name
-    this.key = key
     this.libraryService.getBookByKey(key, foundContent?.isStatic)
       .subscribe((res: any) => {
         if (res) {
@@ -131,9 +157,14 @@ export class BookComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.tableContent = res.data
-          this.tableContent?.forEach((item: any) => {
-            this.getDataOfTableContent(key, item, isStatic)
-          })
+          this.getNavigateLink()
+          if (this.level) {
+            this.getDataOfTableContent(key, { key: this.level }, isStatic)
+          } else {
+            this.tableContent?.forEach((item: any) => {
+              this.getDataOfTableContent(key, item, isStatic)
+            })
+          }
         }
       })
   }
@@ -142,9 +173,11 @@ export class BookComponent implements OnInit {
     this.libraryService.getDataOfTableContent(`${key}/${item.key}`, isStatic)
       .subscribe((res: any) => {
         if (res) {
-          item.content = res
-          console.log(res);
-
+          if (this.level) {
+            this.content = res
+          } else {
+            item.content = res
+          }
         }
       })
   }
@@ -177,14 +210,25 @@ export class BookComponent implements OnInit {
       array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
       return result;
     }
-    if (!this.isShowTableContent) {
-      this.navigate.prev.queryParams = {
-        tableContent: !this.isShowTableContent
+    if (!this.isShowTableContent && this.level) {
+      const foundContent = this.tableContent.find((item: any) => item.key === this.level)
+      const foundContentInex = this.tableContent.indexOf(foundContent)
+      this.navigate.prev = <any>{}
+      if (this.tableContent[foundContentInex - 1]) {
+        this.isNavigation = true
+        this.navigate.prev.text = `${this.tableContent[foundContentInex - 1].description}`
+        this.navigate.prev.link = `trang-chu/thu-vien/${this.key}/${this.tableContent[foundContentInex - 1].key}`
+      } else {
+        this.navigate.prev.link = `/`
       }
-      this.navigate.prev.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) - 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.hash) || '/'
-      this.navigate.next.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) + 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.hash) || '/'
-    } else {
-      this.navigate.prev.queryParams = {}
+      this.navigate.next = <any>{}
+      if (this.tableContent[foundContentInex + 1]) {
+        this.isNavigation = true
+        this.navigate.next.text = `${this.tableContent[foundContentInex + 1].description}`
+        this.navigate.next.link = `trang-chu/thu-vien/${this.key}/${this.tableContent[foundContentInex + 1].key}`
+      } else {
+        this.navigate.next.link = `/`
+      }
     }
   }
 

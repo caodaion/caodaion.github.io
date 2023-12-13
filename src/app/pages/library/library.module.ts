@@ -24,6 +24,7 @@ import { MatListModule } from '@angular/material/list';
 import { MarkdownModule } from 'ngx-markdown';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRippleModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatListModule,
         MarkdownModule,
         MatSelectModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatRippleModule
     ]
 })
 export class LibraryModule { }
