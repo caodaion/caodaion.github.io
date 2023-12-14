@@ -21,10 +21,10 @@ import { CpContentCreatorModule } from "../../components/cp-content-creator/cp-c
 import { BottomNavigatorModule } from "../../components/bottom-navigator/bottom-navigator.module";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
-import { MarkdownModule } from 'ngx-markdown';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
+import { CpMarkdownModule } from 'src/app/components/cp-markdown/cp-markdown.module';
 
 
 @NgModule({
@@ -53,7 +53,7 @@ import { MatRippleModule } from '@angular/material/core';
         BottomNavigatorModule,
         MatExpansionModule,
         MatListModule,
-        MarkdownModule,
+        CpMarkdownModule,
         MatSelectModule,
         MatTooltipModule,
         MatRippleModule

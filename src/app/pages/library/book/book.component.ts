@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -12,7 +12,7 @@ import * as CryptoJS from "crypto-js";
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss']
 })
-export class BookComponent implements OnInit {
+export class BookComponent implements OnInit, OnChanges {
   rootContent: any;
   content: any;
   contentName: any;
@@ -45,6 +45,15 @@ export class BookComponent implements OnInit {
   ngOnInit(): void {
     this.isNavigation = false
     this.getBooks()
+    this.updateLayout()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateLayout()
+    this.changeDetector.detectChanges()
+  }
+
+  updateLayout() {
     setTimeout(() => {
       this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -66,6 +75,7 @@ export class BookComponent implements OnInit {
               })
             );
           }
+          this.changeDetector.detectChanges()
         });
     }, 0)
   }
@@ -73,6 +83,7 @@ export class BookComponent implements OnInit {
 
 
   getBooks() {
+    this.updateLayout()
     this.getStaticBooks()
   }
 
@@ -153,12 +164,15 @@ export class BookComponent implements OnInit {
   }
 
   getTableContentByKey(key: any, isStatic: any) {
+    this.isLoading = true
     this.libraryService.getTableContentByKey(key, isStatic)
       .subscribe((res: any) => {
         if (res) {
           this.tableContent = res.data
+          this.isLoading = false
           this.getNavigateLink()
           if (this.level) {
+            this.updateLayout()
             this.getDataOfTableContent(key, { key: this.level }, isStatic)
           } else {
             this.tableContent?.forEach((item: any) => {

@@ -43,19 +43,19 @@
             fontSize: fontSize + 'px'
           }"
         >
-          <markdown
+          <app-cp-markdown
             *ngIf="content"
             class="variable-binding w-full text-justify bg-white select-text"
             [data]="content"
-          ></markdown>
+          ></app-cp-markdown>
           <ng-container *ngIf="!level">
             <ng-container *ngFor="let item of tableContent">
-              <markdown
+              <app-cp-markdown
                 *ngIf="item?.content"
                 class="variable-binding w-full text-justify bg-white select-text"
                 [data]="item?.content"
                 [id]="item?.key"
-              ></markdown>
+              ></app-cp-markdown>
               <mat-divider class="!my-11"></mat-divider>
             </ng-container>
           </ng-container>
@@ -74,7 +74,7 @@
         </ng-container>
         <a
           [href]="'trang-chu/thu-vien/' + key + '?tableContent=true'"
-          class="w-full"
+          class="w-full mt-4"
           mat-flat-button
           [color]="'primary'"
         >
@@ -84,6 +84,7 @@
     </mat-drawer-container>
   </div>
   <div class="book-container-wrapper" *ngIf="isShowTableContent">
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <a
       [href]="'trang-chu/thu-vien/' + key"
       mat-flat-button
