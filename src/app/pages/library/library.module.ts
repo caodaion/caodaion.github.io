@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { CpMarkdownModule } from 'src/app/components/cp-markdown/cp-markdown.module';
+import { SharedModule } from "../../shared/shared.module";
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { CpMarkdownModule } from 'src/app/components/cp-markdown/cp-markdown.mod
         CpMarkdownModule,
         MatSelectModule,
         MatTooltipModule,
-        MatRippleModule
+        MatRippleModule,
+        SharedModule
     ]
 })
 export class LibraryModule { }

@@ -13,75 +13,94 @@
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="book-container-wrapper" *ngIf="!isShowTableContent">
-    <mat-drawer-container>
-      <mat-drawer-content>
-        <div class="w-full sticky top-0 flex items-center">
-          <mat-form-field class="w-full">
-            <mat-label>Cỡ chữ</mat-label>
-            <mat-select
-              [(ngModel)]="fontSize"
-              (ngModelChange)="updateFontSize()"
+    <mat-tab-group
+      class="h-full"
+      (selectedIndexChange)="selectedIndex = $event"
+    >
+      <mat-tab [label]="'Nội dung'">
+        <mat-drawer-container>
+          <mat-drawer-content>
+            <div class="w-full sticky top-0 flex items-center">
+              <mat-form-field class="w-full">
+                <mat-label>Cỡ chữ</mat-label>
+                <mat-select
+                  [(ngModel)]="fontSize"
+                  (ngModelChange)="updateFontSize()"
+                >
+                  <mat-option
+                    *ngFor="let item of fontSizeRange"
+                    [value]="item"
+                    >{{ item }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <button
+                mat-flat-button
+                (click)="libradianDrawer.toggle()"
+                [matTooltip]="'Mục lục'"
+                [color]="'primary'"
+              >
+                <mat-icon>list</mat-icon>
+              </button>
+            </div>
+            <div
+              *ngIf="content"
+              class="h-100 px-3"
+              [ngStyle]="{
+                fontSize: fontSize + 'px'
+              }"
             >
-              <mat-option *ngFor="let item of fontSizeRange" [value]="item">{{
-                item
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button
-            mat-flat-button
-            (click)="libradianDrawer.toggle()"
-            [matTooltip]="'Mục lục'"
-            [color]="'primary'"
-          >
-            <mat-icon>list</mat-icon>
-          </button>
-        </div>
-        <div
-          *ngIf="content"
-          class="h-100 px-3"
-          [ngStyle]="{
-            fontSize: fontSize + 'px'
-          }"
-        >
-          <app-cp-markdown
-            *ngIf="content"
-            class="variable-binding w-full text-justify bg-white select-text"
-            [data]="content"
-          ></app-cp-markdown>
-          <ng-container *ngIf="!level">
-            <ng-container *ngFor="let item of tableContent">
               <app-cp-markdown
-                *ngIf="item?.content"
+                *ngIf="content"
                 class="variable-binding w-full text-justify bg-white select-text"
-                [data]="item?.content"
-                [id]="item?.key"
+                [data]="content"
               ></app-cp-markdown>
-              <mat-divider class="!my-11"></mat-divider>
+              <ng-container *ngIf="!level">
+                <ng-container *ngFor="let item of tableContent">
+                  <app-cp-markdown
+                    *ngIf="item?.content"
+                    class="variable-binding w-full text-justify bg-white select-text"
+                    [data]="item?.content"
+                    [id]="item?.key"
+                  ></app-cp-markdown>
+                  <mat-divider class="!my-11"></mat-divider>
+                </ng-container>
+              </ng-container>
+            </div>
+          </mat-drawer-content>
+          <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
+            <ng-container *ngFor="let item of tableContent">
+              <a
+                [href]="'trang-chu/thu-vien/' + key + '/' + item?.key"
+                class="block p-3"
+                matRipple
+              >
+                {{ item?.description }}
+              </a>
+              <mat-divider></mat-divider>
             </ng-container>
-          </ng-container>
-        </div>
-      </mat-drawer-content>
-      <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
-        <ng-container *ngFor="let item of tableContent">
-          <a
-            [href]="'trang-chu/thu-vien/' + key + '/' + item?.key"
-            class="block p-3"
-            matRipple
-          >
-            {{ item?.description }}
-          </a>
-          <mat-divider></mat-divider>
-        </ng-container>
-        <a
-          [href]="'trang-chu/thu-vien/' + key + '?tableContent=true'"
-          class="w-full mt-4"
-          mat-flat-button
-          [color]="'primary'"
-        >
-          Xem Mục Lục
-        </a>
-      </mat-drawer>
-    </mat-drawer-container>
+            <a
+              [href]="'trang-chu/thu-vien/' + key + '?tableContent=true'"
+              class="w-full mt-4"
+              mat-flat-button
+              [color]="'primary'"
+            >
+              Xem Mục Lục
+            </a>
+          </mat-drawer>
+        </mat-drawer-container>
+      </mat-tab>
+      <mat-tab *ngIf="origin" [label]="'Tài liệu gốc'">
+        <iframe
+          [src]="
+            'https://docs.google.com/gview?url=' + origin + '&embedded=true'
+              | safe
+          "
+          class="w-full h-full"
+          frameborder="0"
+        ></iframe>
+      </mat-tab>
+    </mat-tab-group>
   </div>
   <div class="book-container-wrapper" *ngIf="isShowTableContent">
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>

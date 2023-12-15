@@ -38,14 +38,17 @@ export class LibraryService {
     })
   }
 
-  getBookByKey(key: any, isStatic: boolean = false): Observable<any> {
+  getBookByKey(key: any, isStatic: boolean = false, fetchOrigin: boolean = false): Observable<any> {
     if (isStatic) {
-      return this.http.get(`assets/documents/library/${key}/${key}.txt`, {responseType: 'text'})
+      return this.http.get(`assets/documents/library/${key}/${key}.txt`, { responseType: 'text' })
     }
     return new Observable((observable) => {
       this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${key}/${key}.md${!environment.production ? '?ref=dev' : ''}`)
         .subscribe((res: any) => {
-          observable.next(decodeURIComponent(escape(atob(res.content))))
+          const resposne = <any>{}
+          resposne.data = decodeURIComponent(escape(atob(res.content)))
+          resposne.origin = res.download_url?.replace(`${key}.md`, 'origin.pdf')
+          observable.next(resposne)
           observable.complete()
         });
     })
@@ -53,7 +56,7 @@ export class LibraryService {
 
   getDataOfTableContent(path: any, isStatic: boolean = false): Observable<any> {
     if (isStatic) {
-      return this.http.get(`assets/documents/library/${path}.txt`, {responseType: 'text'})
+      return this.http.get(`assets/documents/library/${path}.txt`, { responseType: 'text' })
     }
     return new Observable((observable) => {
       this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${path}.md${!environment.production ? '?ref=dev' : ''}`)
