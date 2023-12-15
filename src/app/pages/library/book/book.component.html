@@ -90,16 +90,6 @@
           </mat-drawer>
         </mat-drawer-container>
       </mat-tab>
-      <mat-tab *ngIf="origin" [label]="'Tài liệu gốc'">
-        <iframe
-          [src]="
-            'https://docs.google.com/gview?url=' + origin + '&embedded=true'
-              | safe
-          "
-          class="w-full h-full"
-          frameborder="0"
-        ></iframe>
-      </mat-tab>
     </mat-tab-group>
   </div>
   <div class="book-container-wrapper" *ngIf="isShowTableContent">
