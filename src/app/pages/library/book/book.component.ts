@@ -89,6 +89,27 @@ export class BookComponent implements OnInit, OnChanges {
     this.getStaticBooks()
   }
 
+  getBook() {
+    this.route.params.subscribe((query) => {
+      this.key = query['key']
+      if (query['key'] && !query['level']) {
+        if (!this.isShowTableContent) {
+          this.getContent(query['key'], query['level'])
+        }
+      }
+      if (query['key'] && query['level']) {
+        this.level = query['level']
+        if (!this.isShowTableContent) {
+          this.getContent(query['key'], query['level'])
+          this.router.navigate(
+            ['.'],
+            { relativeTo: this.route, fragment: location.hash.replace('#', '') }
+          );
+        }
+      }
+    })
+  }
+
   getStaticBooks() {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
@@ -98,24 +119,7 @@ export class BookComponent implements OnInit, OnChanges {
         this.route.queryParamMap.subscribe((query: any) => {
           this.isShowTableContent = query.params['tableContent']
         })
-        this.route.params.subscribe((query) => {
-          this.key = query['key']
-          if (query['key'] && !query['level']) {
-            if (!this.isShowTableContent) {
-              this.getContent(query['key'], query['level'])
-            }
-          }
-          if (query['key'] && query['level']) {
-            this.level = query['level']
-            if (!this.isShowTableContent) {
-              this.getContent(query['key'], query['level'])
-              this.router.navigate(
-                ['.'],
-                { relativeTo: this.route, fragment: location.hash.replace('#', '') }
-              );
-            }
-          }
-        })
+        this.getBook()
         this.authService.getCurrentUser()
         this.contentEditable = this.authService.contentEditable
         this.changeDetector.detectChanges()
@@ -130,6 +134,7 @@ export class BookComponent implements OnInit, OnChanges {
           this.getReadingBooks()
           if (res.data) {
             this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
+            this.getBook()
           }
         },
         complete: () => {
@@ -155,6 +160,8 @@ export class BookComponent implements OnInit, OnChanges {
     this.isLoading = true
     this.origin = null
     const foundContent: any = this.library.find((item: any) => item.key === key)
+    this.contentName = foundContent?.name;
+    this.changeDetector.detectChanges();
     this.libraryService.getBookByKey(key, foundContent?.isStatic, foundContent?.origin)
       .subscribe((res: any) => {
         if (res) {
@@ -247,19 +254,6 @@ export class BookComponent implements OnInit, OnChanges {
         this.navigate.next.link = `/`
       }
     }
-  }
-
-  getContentName(item: any) {
-    if (!item?.name) {
-      let name = ''
-      item?.content[0]?.content.forEach((text: any) => {
-        if (text.type == 'text') {
-          name += text?.text
-        }
-      })
-      return name
-    }
-    return item?.name
   }
 
   readContent(item: any) {
