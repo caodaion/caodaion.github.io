@@ -2,6 +2,7 @@
 @use "sass:map";
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 body {
   user-select: none;
