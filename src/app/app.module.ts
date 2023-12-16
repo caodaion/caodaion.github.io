@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -63,7 +63,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatDatepickerModule,
     MatNativeDateModule,
     MatGridListModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot({sanitize: SecurityContext.NONE})
   ],
   providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService,
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },

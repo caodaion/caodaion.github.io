@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -12,7 +12,7 @@ import * as CryptoJS from "crypto-js";
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss']
 })
-export class BookComponent implements OnInit, OnChanges {
+export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   rootContent: any;
   content: any;
   contentName: any;
@@ -21,6 +21,7 @@ export class BookComponent implements OnInit, OnChanges {
   isNavigation: boolean = false;
   isShowTableContent: boolean = false;
   contentEditable: boolean = false;
+  isPhone: boolean = false;
   nowContent: any;
   key: any;
   level: any;
@@ -55,11 +56,16 @@ export class BookComponent implements OnInit, OnChanges {
     this.changeDetector.detectChanges()
   }
 
+  ngAfterViewChecked(): void {
+    this.getTableContentByKey()
+  }
+
   updateLayout() {
     setTimeout(() => {
       this.breakpointObserver
         .observe(['(max-width: 600px)'])
         .subscribe((state: BreakpointState) => {
+          this.isPhone = state.matches
           if (state.matches) {
             localStorage.setItem(
               'currentLayout',
@@ -140,7 +146,7 @@ export class BookComponent implements OnInit, OnChanges {
         complete: () => {
           if (this.isShowTableContent) {
             const foundContent = this.library.find((item: any) => item.key === this.key)
-            this.getTableContentByKey(this.key, foundContent?.isStatic)
+            this.getTableContentByKey()
           }
         }
       })
@@ -168,42 +174,25 @@ export class BookComponent implements OnInit, OnChanges {
           this.content = res.data
           this.origin = res.origin
           this.isLoading = false
-          this.getTableContentByKey(key, foundContent?.isStatic)
+          this.getTableContentByKey()
         }
       })
   }
 
-  getTableContentByKey(key: any, isStatic: any) {
-    this.isLoading = true
-    this.libraryService.getTableContentByKey(key, isStatic)
-      .subscribe((res: any) => {
-        if (res) {
-          this.tableContent = res.data
-          this.isLoading = false
-          this.getNavigateLink()
-          if (this.level) {
-            this.updateLayout()
-            this.getDataOfTableContent(key, { key: this.level }, isStatic)
-          } else {
-            this.tableContent?.forEach((item: any) => {
-              this.getDataOfTableContent(key, item, isStatic)
-            })
-          }
+  getTableContentByKey() {
+    if (this.tableContent?.length === 0) {
+      const content = document.getElementById('markdownContent')
+      content?.childNodes.forEach((node: any) => {
+        if (node.id) {
+          this.tableContent.push({
+            key: node.id,
+            description: node.textContent
+          })
         }
+        this.tableContent = [...new Set(this.tableContent)]
+        this.changeDetector.detectChanges();
       })
-  }
-
-  getDataOfTableContent(key: any, item: any, isStatic: any) {
-    this.libraryService.getDataOfTableContent(`${key}/${item.key}`, isStatic)
-      .subscribe((res: any) => {
-        if (res) {
-          if (this.level) {
-            this.content = res
-          } else {
-            item.content = res
-          }
-        }
-      })
+    }
   }
 
   onSaveContent() {
