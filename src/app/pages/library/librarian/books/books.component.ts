@@ -49,6 +49,5 @@ export class BooksComponent implements OnInit, OnChanges {
 
   getForYouBooks() {
     this.forYouBooks = this.books?.filter((item: any) => item?.published)
-    console.log(this.forYouBooks);
   }
 }
