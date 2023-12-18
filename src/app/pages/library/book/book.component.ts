@@ -168,11 +168,11 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     const foundContent: any = this.library.find((item: any) => item.key === key)
     this.contentName = foundContent?.name;
     this.changeDetector.detectChanges();
-    this.libraryService.getBookByKey(key, foundContent?.isStatic, foundContent?.origin)
+    this.libraryService.getBookByKey(key, foundContent?.isStatic)
       .subscribe((res: any) => {
         if (res) {
           this.content = res.data
-          this.origin = res.origin
+          this.origin = foundContent?.origin
           this.isLoading = false
           this.getTableContentByKey()
         }

@@ -38,7 +38,7 @@ export class LibraryService {
     })
   }
 
-  getBookByKey(key: any, isStatic: boolean = false, fetchOrigin: boolean = false): Observable<any> {
+  getBookByKey(key: any, isStatic: boolean = false): Observable<any> {
     if (isStatic) {
       return this.http.get(`assets/documents/library/${key}/${key}.txt`, { responseType: 'text' })
     }
@@ -47,7 +47,6 @@ export class LibraryService {
         .subscribe((res: any) => {
           const resposne = <any>{}
           resposne.data = decodeURIComponent(escape(atob(res.content)))
-          resposne.origin = res.download_url?.replace(`${key}.md`, 'origin.pdf')
           observable.next(resposne)
           observable.complete()
         });

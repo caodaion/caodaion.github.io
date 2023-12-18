@@ -74,6 +74,14 @@
           </mat-drawer>
         </mat-drawer-container>
       </mat-tab>
+      <mat-tab [label]="'Tài liệu gốc'">
+        <iframe
+          *ngIf="selectedIndex === 1"
+          [src]="'https://drive.google.com/file/d/' + origin + '/preview' | safe"
+          class="w-full h-full"
+          allow="autoplay"
+        ></iframe>
+      </mat-tab>
     </mat-tab-group>
   </div>
   <div class="book-container-wrapper" *ngIf="isShowTableContent">
