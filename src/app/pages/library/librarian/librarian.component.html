@@ -94,9 +94,24 @@
           <div class="preview-image-wrapper">
             <img
               mat-card-image
+              *ngIf="previewingItem?.cover"
               [src]="previewingItem?.image"
               [alt]="previewingItem?.name"
             />
+            <div
+              mat-card-image
+              *ngIf="!previewingItem?.cover"
+              class="h-full w-full flex items-center justify-center"
+            >
+              <mat-icon
+                [ngStyle]="{
+                  fontSize: '170px',
+                  height: '170px',
+                  width: '170px'
+                }"
+                >receipt_long</mat-icon
+              >
+            </div>
           </div>
           <h3 class="text-center">{{ previewingItem?.name }}</h3>
           <p class="text-center">{{ previewingItem?.subtitle }}</p>
