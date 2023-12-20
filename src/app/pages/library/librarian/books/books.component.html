@@ -20,7 +20,26 @@
           >
             <mat-grid-tile [colspan]="1" [rowspan]="1">
               <div [ngClass]="{ 'card-image-wrapper': gridForYouCols == 2 }">
-                <img mat-card-image [src]="item?.image" [alt]="item?.name" />
+                <img
+                  mat-card-image
+                  *ngIf="item?.cover"
+                  [src]="item?.image"
+                  [alt]="item?.name"
+                />
+                <div
+                  mat-card-image
+                  *ngIf="!item?.cover"
+                  class="h-full w-full flex items-center justify-center"
+                >
+                  <mat-icon
+                    [ngStyle]="{
+                      fontSize: '170px',
+                      height: '170px',
+                      width: '170px'
+                    }"
+                    >receipt_long</mat-icon
+                  >
+                </div>
               </div>
             </mat-grid-tile>
             <mat-grid-tile
@@ -34,7 +53,13 @@
                   <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <div class="card-description">{{ item?.description?.length > 290 ? (item?.description?.substring(0, 290) + '...') : item?.description }}</div>
+                  <div class="card-description">
+                    {{
+                      item?.description?.length > 290
+                        ? item?.description?.substring(0, 290) + "..."
+                        : item?.description
+                    }}
+                  </div>
                 </mat-card-content>
               </div>
             </mat-grid-tile>
@@ -44,7 +69,13 @@
             <mat-card-subtitle>{{ item?.subtitle }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content *ngIf="gridForYouCols == 1">
-            <div class="card-description">{{ item?.description?.length > 290 ? (item?.description?.substring(0, 290) + '...') : item?.description }}</div>
+            <div class="card-description">
+              {{
+                item?.description?.length > 290
+                  ? item?.description?.substring(0, 290) + "..."
+                  : item?.description
+              }}
+            </div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

@@ -36,7 +36,7 @@ export class BooksComponent implements OnInit, OnChanges {
 
   getBooks() {
     this.books.forEach((item: any) => {
-      if (!item.isStatic) {
+      if (!item.isStatic && item.cover) {
         item.image = `https://raw.githubusercontent.com/caodaion-library/caodaion-library.github.io/${!environment.production ? 'dev' : 'main'}/${item.key}/cover.png${!environment.production ? '?ref=dev' : ''}`
       }
     })
