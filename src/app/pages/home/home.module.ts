@@ -12,6 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { BaiThuongYeuComponent } from './bai-thuong-yeu/bai-thuong-yeu.component';
 import { TimeComponent } from './time/time.component';
 import { MatButtonModule } from '@angular/material/button';
+import { LoiKhuyenCanYeuComponent } from './loi-khuyen-can-yeu/loi-khuyen-can-yeu.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
     WelcomeComponent,
     ActionComponent,
     BaiThuongYeuComponent,
-    TimeComponent
+    TimeComponent,
+    LoiKhuyenCanYeuComponent
   ],
   imports: [
     CommonModule,

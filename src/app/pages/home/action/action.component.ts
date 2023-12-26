@@ -35,11 +35,6 @@ export class ActionComponent {
       icon: 'calculate',
       label: 'Tính tuần cửu'
     },
-    {
-      link: '/trang-chu/hanh-trinh',
-      icon: 'trip_origin',
-      label: 'Hành trình'
-    },
   ]
 
   constructor (
