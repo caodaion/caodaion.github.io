@@ -97,6 +97,54 @@ export class SoanSoService {
           lunarTime: 'NGỌ',
         }
       },
+      'so-le-via-duc-phat-to-thoi-ty': {
+        name: 'Sớ Lễ Vía Đức Phật Tổ (Thời Tý)',
+        eventLunar: {
+          lunarDay: 8,
+          lunarMonth: 4,
+          lunarTime: 'TÝ',
+        }
+      },
+      'so-le-via-duc-phat-to-thoi-ngo': {
+        name: 'Sớ Lễ Vía Đức Phật Tổ (Thời NGỌ)',
+        eventLunar: {
+          lunarDay: 8,
+          lunarMonth: 4,
+          lunarTime: 'NGỌ',
+        }
+      },
+      'so-le-ky-niem-sanh-nhat-duc-giao-tong-thoi-ty': {
+        name: 'Sớ Lễ Kỷ Niệm Sanh Nhật Đức Giáo Tông (Thời Tý)',
+        eventLunar: {
+          lunarDay: 26,
+          lunarMonth: 5,
+          lunarTime: 'TÝ',
+        }
+      },
+      'so-le-ky-niem-sanh-nhat-duc-giao-tong-thoi-ngo': {
+        name: 'Sớ Lễ Kỷ Niệm Sanh Nhật Đức Giáo Tông (Thời NGỌ)',
+        eventLunar: {
+          lunarDay: 26,
+          lunarMonth: 5,
+          lunarTime: 'NGỌ',
+        }
+      },
+      'so-le-trung-nguon-thoi-ty': {
+        name: 'Sớ Lễ Trung Ngươn (Thời Tý)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 7,
+          lunarTime: 'TÝ',
+        }
+      },
+      'so-le-trung-nguon-thoi-ngo': {
+        name: 'Sớ Lễ Trung Ngươn (Thời NGỌ)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 7,
+          lunarTime: 'NGỌ',
+        }
+      },
       'so-le-via-duc-dieu-tri-kim-mau-thoi-ty': {
         name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Tý)',
         eventLunar: {
@@ -121,6 +169,46 @@ export class SoanSoService {
           lunarTime: 'NGỌ',
         }
       },
+      'so-le-ha-nguon-thoi-ngo-cau-sieu': {
+        name: 'Sớ Lễ Hạ Ngươn (Thời NGỌ (Cầu siêu chư vong linh tiền vãng))',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 10,
+          lunarTime: 'NGỌ',
+        }
+      },
+      'so-le-ha-nguon-thoi-ty': {
+        name: 'Sớ Lễ Hạ Ngươn (Thời Tý)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 10,
+          lunarTime: 'TÝ',
+        }
+      },
+      'so-le-ha-nguon-thoi-ngo': {
+        name: 'Sớ Lễ Hạ Ngươn (Thời NGỌ)',
+        eventLunar: {
+          lunarDay: 15,
+          lunarMonth: 10,
+          lunarTime: 'NGỌ',
+        }
+      },
+      // 'so-le-sanh-nhut-duc-gia-to-giao-chu-thoi-ty': {
+      //   name: 'Sớ Lễ Sanh Nhựt Đức Gia Tô Giáo Chủ (Thời Tý)',
+      //   eventLunar: {
+      //     lunarDay: 15,
+      //     lunarMonth: 10,
+      //     lunarTime: 'TÝ',
+      //   }
+      // },
+      // 'so-le-sanh-nhut-duc-gia-to-giao-chu-thoi-ngo': {
+      //   name: 'Sớ Lễ Sanh Nhựt Đức Gia Tô Giáo Chủ (Thời NGỌ)',
+      //   eventLunar: {
+      //     lunarDay: 15,
+      //     lunarMonth: 10,
+      //     lunarTime: 'NGỌ',
+      //   }
+      // },
     },
     'tam-tran': {
       'so-cau-sieu': {

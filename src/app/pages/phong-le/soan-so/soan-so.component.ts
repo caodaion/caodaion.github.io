@@ -125,7 +125,7 @@ export class SoanSoComponent implements OnInit {
               // @ts-ignore
               data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`${this.editData.soTemplate}`)))
               this.previewContent = data
-              // this.applyForm()
+              this.applyForm()
             } else {
               initNewContent()
             }
@@ -253,7 +253,12 @@ export class SoanSoComponent implements OnInit {
   applyDefaultForm() {
     const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
     if (namDaoFound) {
-      this.applyData('nam-dao', this.commonService.convertNumberToText(new Date().getFullYear() - 1926 + 1).toLowerCase())
+      const convertDateV = this.calendarService.getConvertedFullDate(new Date())
+      let calculatedDate = new Date().getFullYear() - 1926 + 1
+      if (convertDateV.convertSolar2Lunar.lunarMonth > 10 || convertDateV.convertSolar2Lunar.lunarMonth === 10 && convertDateV.convertSolar2Lunar.lunarDay >= 15) {
+        calculatedDate++
+      }
+      this.applyData('nam-dao', this.commonService.convertNumberToText(calculatedDate).toLowerCase())
     }
     if (this.editData.eventLunar.lunarYearName) {
       const date = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar

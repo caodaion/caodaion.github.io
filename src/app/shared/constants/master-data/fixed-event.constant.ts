@@ -1303,8 +1303,8 @@ export const FIXED_EVENT = {
           ]
         },
         {
-          "key": "thoi-ngo-le-ky-niem-duc-giao-tong-dac-dao",
-          "name": "Thời Mẹo | ĐẠI LỄ VÍA ĐỨC THÁI THƯỢNG LÃO QUÂN",
+          "key": "thoi-meo-le-ky-niem-duc-giao-tong-dac-dao",
+          "name": "Thời Mẹo | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
           "dateType": "lunar",
           "date": "yearly-02-25",
           "time": [
