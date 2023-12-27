@@ -17,6 +17,14 @@ export class SoanSoService {
           lunarTime: 'TÝ',
         }
       },
+      'so-le-via-duc-ngoc-hoang-thuong-de-thoi-ty': {
+        name: 'Sớ Lễ Vía Đức Ngọc-Hoàng Thượng Đế (Thời Tý)',
+        eventLunar: {
+          lunarDay: 9,
+          lunarMonth: 1,
+          lunarTime: 'TÝ',
+        }
+      },
       'so-le-via-duc-dieu-tri-kim-mau-thoi-ty': {
         name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Tý)',
         eventLunar: {

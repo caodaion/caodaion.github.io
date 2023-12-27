@@ -77,7 +77,7 @@ export class AuthService {
       })
       this.currentUser.children = this.mainModuleKey
     }
-    // this.contentEditable = true;
+    this.contentEditable = true;
     return this.currentUser;
   }
 
