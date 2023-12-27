@@ -81,6 +81,22 @@ export class SoanSoService {
           lunarTime: 'NGỌ',
         }
       },
+      'so-le-ky-niem-duc-giao-tong-tho-phong-thoi-ty': {
+        name: 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Thọ Phong (Thời Tý)',
+        eventLunar: {
+          lunarDay: 13,
+          lunarMonth: 3,
+          lunarTime: 'TÝ',
+        }
+      },
+      'so-le-ky-niem-duc-giao-tong-tho-phong-thoi-ngo': {
+        name: 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Thọ Phong (Thời NGỌ)',
+        eventLunar: {
+          lunarDay: 13,
+          lunarMonth: 3,
+          lunarTime: 'NGỌ',
+        }
+      },
       'so-le-via-duc-dieu-tri-kim-mau-thoi-ty': {
         name: 'Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Tý)',
         eventLunar: {
