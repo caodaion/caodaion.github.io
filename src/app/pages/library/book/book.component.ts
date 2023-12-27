@@ -230,7 +230,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
       if (this.tableContent[foundContentInex - 1]) {
         this.isNavigation = true
         this.navigate.prev.text = `${this.tableContent[foundContentInex - 1].description}`
-        this.navigate.prev.link = `trang-chu/thu-vien/${this.key}/${this.tableContent[foundContentInex - 1].key}`
+        this.navigate.prev.link = `thu-vien/${this.key}/${this.tableContent[foundContentInex - 1].key}`
       } else {
         this.navigate.prev.link = `/`
       }
@@ -238,7 +238,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
       if (this.tableContent[foundContentInex + 1]) {
         this.isNavigation = true
         this.navigate.next.text = `${this.tableContent[foundContentInex + 1].description}`
-        this.navigate.next.link = `trang-chu/thu-vien/${this.key}/${this.tableContent[foundContentInex + 1].key}`
+        this.navigate.next.link = `thu-vien/${this.key}/${this.tableContent[foundContentInex + 1].key}`
       } else {
         this.navigate.next.link = `/`
       }
@@ -268,7 +268,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   }
 
   getBackLink() {
-    return 'trang-chu/thu-vien'
+    return 'thu-vien'
   }
 
   continueReading(isAutoPlay: boolean = false) {

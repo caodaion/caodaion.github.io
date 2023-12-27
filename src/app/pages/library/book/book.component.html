@@ -62,7 +62,7 @@
           <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
             <ng-container *ngFor="let item of tableContent">
               <a
-                [href]="'trang-chu/thu-vien/' + key + '#' + item?.key"
+                [href]="'thu-vien/' + key + '#' + item?.key"
                 class="block p-3"
                 matRipple
                 (click)="isPhone ? libradianDrawer.toggle() : ''"
@@ -87,7 +87,7 @@
   <div class="book-container-wrapper" *ngIf="isShowTableContent">
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <a
-      [href]="'trang-chu/thu-vien/' + key"
+      [href]="'thu-vien/' + key"
       mat-flat-button
       [color]="'primary'"
       class="w-full"
@@ -96,7 +96,7 @@
     </a>
     <ng-container *ngFor="let item of tableContent">
       <a
-        [href]="'trang-chu/thu-vien/' + key + '/' + item?.key"
+        [href]="'thu-vien/' + key + '/' + item?.key"
         class="w-full block p-3"
         matRipple
         >{{ item.description }}</a

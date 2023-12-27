@@ -93,7 +93,7 @@ export class TnhtContentComponent implements OnInit {
             return result;
           }
           // @ts-ignore
-          this.content = find(res.data.content, location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', ''))
+          this.content = find(res.data.content, location.pathname.slice(0, location.pathname.length).split('/').slice(0).join('-').replaceAll('-', ''))
           this.titleService.setTitle(`${this.content.name} | ${this.rootContent.name} | CaoDaiON`)
           this.isLoading = false
           this.getNavigateLink()

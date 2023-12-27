@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes, UrlSegment} from '@angular/router';
 import {PagenotfoundComponent} from '../pagenotfound/pagenotfound.component';
 import {FullLayoutComponent} from './full-layout.component';
-import {AuthGuard} from "../../shared/guards/auth.guard";
 import {ReleasedGuard} from "../../shared/guards/released.guard";
 
 
@@ -25,13 +24,6 @@ const routes: Routes = [
         },
         loadChildren: () =>
           import('../../modules/profile/profile.module').then((m) => m.ProfileModule),
-        canActivate: [ReleasedGuard]
-      },
-      {path: '', redirectTo: 'trang-chu', pathMatch: 'full'},
-      {
-        path: 'trang-chu',
-        loadChildren: () =>
-          import('../../modules/main/main.module').then((m) => m.MainModule),
         canActivate: [ReleasedGuard]
       },
       {
@@ -72,6 +64,12 @@ const routes: Routes = [
         path: 'qr',
         loadChildren: () =>
           import('../../modules/qr/qr.module').then((m) => m.QrModule),
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../../modules/main/main.module').then((m) => m.MainModule),
+        canActivate: [ReleasedGuard]
       },
       {path: '**', pathMatch: 'full', component: PagenotfoundComponent},
     ],

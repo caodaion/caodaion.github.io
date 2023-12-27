@@ -95,13 +95,13 @@ export class LibrarianComponent implements OnInit {
 
   onRead(item: any, isTableContent: boolean = false) {
     if (isTableContent) {
-      this.router.navigate([`trang-chu/thu-vien/${item.key?.replace(location.origin, '')}`], {
+      this.router.navigate([`thu-vien/${item.key?.replace(location.origin, '')}`], {
         queryParams: {
           tableContent: true
         }
       })
     } else {
-      this.router.navigate([`trang-chu/thu-vien/${item.key?.replace(location.origin, '')}`])
+      this.router.navigate([`thu-vien/${item.key?.replace(location.origin, '')}`])
     }
   }
 

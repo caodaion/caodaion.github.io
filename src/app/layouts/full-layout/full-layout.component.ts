@@ -117,7 +117,6 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // });
     this.mainMenu = this.authService.getMenu(MENU)
     this.currentUser = this.authService.getCurrentUser()
-
   }
 
   clearUnread() {

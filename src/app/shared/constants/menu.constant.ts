@@ -1,7 +1,7 @@
 export const MENU = [
   {
     key: 'trang-chu',
-    url: 'trang-chu',
+    url: '',
     label: 'Trang chủ',
     icon: 'home',
     fullAssess: true,
