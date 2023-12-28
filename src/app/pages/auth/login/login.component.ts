@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
             localStorage.setItem('token', this.generaToken(foundKid))
             this.authService.getCurrentUser()
             location.reload()
-            location.href = 'trang-chu'
+            location.href = ''
             this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
               duration: this.durationInSeconds * 1000,
               horizontalPosition: this.horizontalPosition,
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
               localStorage.setItem('token', localStorageUser[this.loginUser.userName])
               this.authService.getCurrentUser()
               location.reload()
-              location.href = 'trang-chu'
+              location.href = ''
               this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
                 duration: this.durationInSeconds * 1000,
                 horizontalPosition: this.horizontalPosition,
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
         }
         this.authService.getCurrentUser()
         location.reload()
-        location.href = 'trang-chu'
+        location.href = ''
       }
     }
   }

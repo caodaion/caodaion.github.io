@@ -11,17 +11,17 @@ export class ActionComponent {
   cols: number = 2;
   actionList = [
     {
-      link: '/trang-chu/kinh',
+      link: '/kinh',
       icon: 'menu_book',
       label: 'Đọc Kinh'
     },
     {
-      link: '/trang-chu/thanh-ngon-hiep-tuyen',
+      link: '/thanh-ngon-hiep-tuyen',
       icon: 'auto_stories',
       label: 'Thánh Ngôn Hiệp Tuyển'
     },
     {
-      link: '/trang-chu/thu-vien',
+      link: '/thu-vien',
       icon: 'library_books',
       label: 'Xem thư viện'
     },
