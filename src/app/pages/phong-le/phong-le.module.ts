@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 
 import { PhongLeRoutingModule } from './phong-le-routing.module';
 import { PhongLeMainComponent } from './phong-le-main/phong-le-main.component';
@@ -56,6 +56,9 @@ import { LongSoComponent } from './phong-le-main/components/tap-so-van/long-so/l
     MatInputModule,
     MatExpansionModule,
     MatCheckboxModule
+  ],
+  providers: [
+    DecimalPipe
   ]
 })
 export class PhongLeModule { }

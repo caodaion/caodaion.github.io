@@ -17,6 +17,9 @@
           class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
           matRipple
           [routerLink]="[item?.link]"
+          [ngClass]="{
+            '!border-[#ea4335] relative': item?.upComming
+          }"
         >
           <mat-card-header class="w-100">
             <mat-card-title class="w-100 text-center"
@@ -30,9 +33,18 @@
                 ? "Thời " + item?.eventLunar?.lunarTime
                 : ""
             }}
+            {{
+              item?.eventSolar
+                ? ("Dương Lịch" + item?.eventSolar | date : "dd/MM/yyyy")
+                : ""
+            }}
             ngày {{ item?.eventLunar?.lunarDay | number : "2.0-0" }} tháng
             {{ item?.eventLunar?.lunarMonth | number : "2.0-0" }}
           </mat-card-content>
+          <span
+            *ngIf="item?.upComming"
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"
+          ></span>
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>

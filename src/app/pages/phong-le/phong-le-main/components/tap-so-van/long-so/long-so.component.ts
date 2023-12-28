@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 import * as CryptoJS from "crypto-js";
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-long-so',
@@ -20,7 +21,8 @@ export class LongSoComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private soanSoService: SoanSoService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private decimalPipe: DecimalPipe
   ) {
 
   }
@@ -68,16 +70,34 @@ export class LongSoComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.longSoList = Object.keys(res).map((item: any) => {
+            if (res[item].eventLunar) {
+              res[item].eventLunar.lunarYear = new Date().getFullYear()
+            }
+            if (!res[item]?.eventLunar && res[item]?.eventSolar) {
+              res[item].eventLunar = <any>{}
+              res[item].eventLunar = this.calendarService.getConvertedFullDate(res[item]?.eventSolar).convertSolar2Lunar
+              res[item].eventLunar.lunarTime = res[item].lunarTime
+            }
             const data = <any>{
               key: item,
               name: res[item]?.name,
               chi: res[item]?.chi,
+              eventSolar: res[item]?.eventSolar,
               eventLunar: res[item]?.eventLunar
             }
             return data
           })
           const newDate = new Date()
           this.longSoList.forEach((item: any) => {
+            if (item?.eventLunar) {
+              const convertDate = this.calendarService.getConvertedFullDate(item?.eventLunar).convertLunar2Solar
+              const eventSolarDate = new Date(`${convertDate[2]}-${this.decimalPipe.transform(convertDate[1], '2.0-0')}-${this.decimalPipe.transform(convertDate[0], '2.0-0')}`)
+              if (newDate < eventSolarDate) {
+                if (newDate > new Date(eventSolarDate.setDate(eventSolarDate.getDate() - 14))) {
+                  item.upComming = true
+                }
+              }
+            }
             const tokenData = <any>{
               longSo: this.longSo,
               soTemplate: item.key,
