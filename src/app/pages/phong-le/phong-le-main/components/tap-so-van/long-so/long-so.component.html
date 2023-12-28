@@ -1,4 +1,45 @@
 <div class="container-fluid">
+  <div class="pb-4" *ngIf="upCommingLongSoList?.length > 0">
+    <h2>Sớ áp dụng sắp tới</h2>
+    <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
+      <mat-grid-tile *ngFor="let item of upCommingLongSoList">
+        <mat-card
+          appearance="outlined"
+          class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+          matRipple
+          [routerLink]="[item?.link]"
+          [ngClass]="{
+            '!border-[#ea4335] relative': item?.upComming
+          }"
+        >
+          <mat-card-header class="w-100">
+            <mat-card-title class="w-100 text-center"
+              >Soạn Sớ {{ item?.name }}</mat-card-title
+            >
+          </mat-card-header>
+          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center">
+            Diễn ra lúc:
+            {{
+              item?.eventLunar?.lunarTime
+                ? "Thời " + item?.eventLunar?.lunarTime
+                : ""
+            }}
+            {{
+              item?.eventSolar
+                ? ("Dương Lịch" + item?.eventSolar | date : "dd/MM/yyyy")
+                : ""
+            }}
+            ngày {{ item?.eventLunar?.lunarDay | number : "2.0-0" }} tháng
+            {{ item?.eventLunar?.lunarMonth | number : "2.0-0" }}
+          </mat-card-content>
+          <span
+            *ngIf="item?.upComming"
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"
+          ></span>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
   <div class="pb-4">
     <h2>
       Soạn sớ theo lòng sớ

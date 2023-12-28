@@ -125,7 +125,7 @@ export class SoanSoComponent implements OnInit {
               // @ts-ignore
               data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`${this.editData.soTemplate}`)))
               this.previewContent = data
-              // this.applyForm()
+              this.applyForm()
             } else {
               initNewContent()
             }
@@ -138,8 +138,20 @@ export class SoanSoComponent implements OnInit {
   }
 
   applyForm() {
+    this.applySocVong()
     this.applyCauSieuForm()
     this.applyDefaultForm()
+  }
+
+  applySocVong() {
+    if (this.editData.soTemplate.includes('so-soc-vong')) {
+      if (this.editData?.eventLunar?.lunarDay === 1) {
+        this.applyData('socvong', 'Sóc')
+      }
+      if (this.editData?.eventLunar?.lunarDay === 15) {
+        this.applyData('socvong', 'Vọng')
+      }
+    }
   }
 
   applyCauSieuForm() {

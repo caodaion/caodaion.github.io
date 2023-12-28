@@ -17,6 +17,7 @@ export class LongSoComponent implements OnInit {
 
   cols: any;
   longSoList: any;
+  upCommingLongSoList: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -83,20 +84,36 @@ export class LongSoComponent implements OnInit {
               name: res[item]?.name,
               chi: res[item]?.chi,
               eventSolar: res[item]?.eventSolar,
+              lunarTime: res[item]?.lunarTime,
               eventLunar: res[item]?.eventLunar
             }
             return data
           })
           const newDate = new Date()
           this.longSoList.forEach((item: any) => {
-            if (item?.eventLunar) {
-              const convertDate = this.calendarService.getConvertedFullDate(item?.eventLunar).convertLunar2Solar
-              const eventSolarDate = new Date(`${convertDate[2]}-${this.decimalPipe.transform(convertDate[1], '2.0-0')}-${this.decimalPipe.transform(convertDate[0], '2.0-0')}`)
-              if (newDate < eventSolarDate) {
-                if (newDate > new Date(eventSolarDate.setDate(eventSolarDate.getDate() - 14))) {
-                  item.upComming = true
-                }
-              }
+            const tokenData = <any>{
+              longSo: this.longSo,
+              soTemplate: item.key,
+              eventName: `${item?.name?.replace('Sớ ', '')} ${item?.chi ? 'chi ' + item?.chi : ''}`,
+              eventLunar: item?.eventLunar ? item?.eventLunar : this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
+            }
+            this.generateToken(tokenData)
+              .subscribe((tk: any) => {
+                item.link = `soan-so/${tk}`
+              })
+          })
+          this.upCommingLongSoList = <any>[]
+          const nowLunar = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+          const socVongSo = this.longSoList.filter((item: any) => item.key.includes('so-soc-vong'))
+          this.upCommingLongSoList = this.upCommingLongSoList.concat(socVongSo)
+          this.upCommingLongSoList.forEach((item: any) => {
+            const localNowLunar = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
+            const nextMonth = localNowLunar.lunarMonth + 1
+            item.eventLunar = {
+              lunarDay: nowLunar.lunarDay > 15 ? 1 : 15,
+              lunarMonth: nowLunar.lunarDay > 15 ? nextMonth : localNowLunar.lunarMonth,
+              lunarTime: item.lunarTime,
+              lunarYear: nextMonth > 12 ? ((new Date().getFullYear()) + 1) : new Date().getFullYear()
             }
             const tokenData = <any>{
               longSo: this.longSo,
@@ -109,6 +126,19 @@ export class LongSoComponent implements OnInit {
                 item.link = `soan-so/${tk}`
               })
           })
+          this.longSoList.forEach((item: any) => {
+            if (item?.eventLunar) {
+              const convertDate = this.calendarService.getConvertedFullDate(item?.eventLunar).convertLunar2Solar
+              const eventSolarDate = new Date(`${convertDate[2]}-${this.decimalPipe.transform(convertDate[1], '2.0-0')}-${this.decimalPipe.transform(convertDate[0], '2.0-0')}`)
+              if (newDate < eventSolarDate) {
+                if (newDate > new Date(eventSolarDate.setDate(eventSolarDate.getDate() - 14))) {
+                  item.upComming = true
+                }
+              }
+            }
+          })
+          this.upCommingLongSoList = [...new Set(this.upCommingLongSoList.concat(this.longSoList.filter((item: any) => item.upComming)))]
+          this.upCommingLongSoList = this.upCommingLongSoList.sort((a: any, b: any) => a.eventLunar.lunarMonth < b.eventLunar.lunarMonth || a.eventLunar.lunarDay < b.eventLunar.lunarDay ? -1 : 1)
         }
       })
   }
