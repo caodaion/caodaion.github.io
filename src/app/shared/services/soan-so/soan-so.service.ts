@@ -217,6 +217,14 @@ export class SoanSoService {
       'so-an-vi': {
         name: 'An Vị'
       },
+      'so-soc-vong-thoi-ty': {
+        name: 'Sóc Vọng (Thời Tý)',
+        lunarTime: 'TÝ'
+      },
+      'so-soc-vong-thoi-ngo': {
+        name: 'Sóc Vọng (Thời NGỌ)',
+        lunarTime: 'NGỌ'
+      },
     },
     'tam-tran': {
       'so-cau-sieu': {
