@@ -462,7 +462,7 @@
       "name": "Kinh",
       "short_name": "Kinh",
       "description": "Kinh cúng tứ thời và quan, hôn, tang, tế",
-      "url": "/trang-chu/kinh",
+      "url": "/kinh",
       "icons": [{ "src": "assets/icons/assets/menu_book.svg", "sizes": "192x192" }]
     },
     {
@@ -476,7 +476,7 @@
       "name": "Thánh Ngôn Hiệp Tuyển",
       "short_name": "Thánh Ngôn Hiệp Tuyển",
       "description": "Thánh Ngôn Hiệp Tuyển",
-      "url": "/trang-chu/thanh-ngon-hiep-tuyen",
+      "url": "/thanh-ngon-hiep-tuyen",
       "icons": [{ "src": "assets/icons/assets/auto_stories.svg", "sizes": "192x192" }]
     }
   ]

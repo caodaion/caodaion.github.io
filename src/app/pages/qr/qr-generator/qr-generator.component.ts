@@ -152,12 +152,12 @@ export class QrGeneratorComponent implements OnInit {
     let checkInData: any = null
     let checkInQrData = `${location?.origin}`
     if (this.checkInType == 'addMore' && this.addedMoreLocation) {
-      checkInQrData += `/trang-chu/hanh-trinh?l=${this.generaToken(this.addedMoreLocation)}`
+      checkInQrData += `/hanh-trinh?l=${this.generaToken(this.addedMoreLocation)}`
     } else {
       if (this.checkInType == 'tuGia') {
-        checkInQrData += `/trang-chu/hanh-trinh?l=${this.checkInType}`
+        checkInQrData += `/hanh-trinh?l=${this.checkInType}`
       } else {
-        checkInQrData += `/trang-chu/hanh-trinh?l=${this.generaToken(this.checkInType)}`
+        checkInQrData += `/hanh-trinh?l=${this.generaToken(this.checkInType)}`
       }
     }
     if (checkInQrData?.length <= 350) {

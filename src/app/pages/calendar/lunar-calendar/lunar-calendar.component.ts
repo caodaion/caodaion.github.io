@@ -435,7 +435,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   onGetKinhFromSummaryEvent() {
-    this.router.navigate(['/trang-chu/kinh'], {
+    this.router.navigate(['/kinh'], {
       queryParams: {
         me: this.shownDate.event.mainEventKey,
         e: this.shownDate.event.event.key,

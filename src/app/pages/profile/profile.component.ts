@@ -229,7 +229,7 @@ export class ProfileComponent implements OnInit {
             verticalPosition: this.verticalPosition,
           })
           location.reload()
-          location.href = 'trang-chu'
+          location.href = ''
         } else {
           this.currentUser.password = ''
           const passworddialog = this.matDiaLog.open(this.passwordDialog, {
