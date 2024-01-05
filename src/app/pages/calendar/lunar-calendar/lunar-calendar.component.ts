@@ -679,8 +679,20 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         let solar: any;
         let lunar: any;
         let eventLunar: any;
+        let longSo: any;
+        let soTemplate: any;
+        let subject: any;
         if (item.eventKind.includes('Kỷ Niệm')) {
+          longSo = 'tam-tran'
+          soTemplate = 'so-cau-sieu'
           let holyName = ''
+          if (foundTitle?.isHolyNameRequired) {
+            if (item?.gender == 'Nam') {
+              holyName = `${item.color} ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]} Thanh`
+            } else {
+              holyName = `Hương ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]}`
+            }
+          }
           if (!item?.isSolarEvent) {
             const newYearTime = this.calendarService.getConvertedFullDate({
               "lunarDay": 1,
@@ -704,12 +716,26 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
               solar = new Date(solar.setHours(startDate.split('-')[1]))
             }
             lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
-          }
-          if (foundTitle?.isHolyNameRequired) {
-            if (item?.gender == 'Nam') {
-              holyName = `${item.color} ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]} Thanh`
-            } else {
-              holyName = `Hương ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]}`
+            console.log(item);
+            if (item?.deadYearSolar) {
+              subject = {
+                date: {
+                  year: item?.deadYearSolar,
+                  month: item?.deadMonth,
+                  date: item?.deadDay,
+                  lunarTime: item?.deadThoi,
+                },
+                details: {
+                  name: item.eventTargetName,
+                  age: item.eventTargetAge,
+                  sex: item.gender == 'Name' ? 'male' : 'female',
+                  holyName: holyName,
+                  title: foundTitle?.key,
+                  subTitle: null,
+                  color: this.commonService.generatedSlug(item.color),
+                },
+                key: item['Timestamp']
+              }
             }
           }
           name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.jobType ? item?.jobType : (item?.title.includes('Chưa có Đạo') ? '' : item?.title)} ${holyName || item.eventTargetName}`
@@ -719,9 +745,15 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           name: name,
           solar: solar?.toISOString(),
           lunar: lunar,
-          parent: this.selectedThanhSo
+          parent: this.selectedThanhSo,
+          eventLunar: lunar,
+          longSo: longSo,
+          soTemplate: soTemplate,
+          eventName: name,
+          subject: subject
         }
       })
+      console.log(data);
       this.selectedMonth.forEach((date: any) => {
         const foundEvent = data?.find((item: any) => {
           return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
