@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -15,7 +16,7 @@ import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 })
 export class SoanSoComponent implements OnInit {
 
-  isPhongLeAccessible: boolean = false
+  isPhongLeAccessible: boolean = true
   currentUser: any;
   message: any;
   buttonSettings = <any>{};
@@ -39,28 +40,29 @@ export class SoanSoComponent implements OnInit {
     private soanSoService: SoanSoService,
     private calendarService: CalendarService,
     private locationService: LocationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private decimal: DecimalPipe
   ) {
 
   }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser()
-    if (this.currentUser) {
-      if (this.currentUser.role.indexOf('phong-le') !== -1) {
-        this.isPhongLeAccessible = true
-      } else {
-        this.isPhongLeAccessible = false
-        this.message = 'Bạn cần cập nhật nhiệm vụ hành chánh có chứa PHÒNG LỄ trong cài đặt tài khoản thì mới được dùng tính năng này'
-        this.buttonSettings.label = 'CẬP NHẬT NGAY'
-        this.buttonSettings.link = `/@${this.currentUser.userName}`
-      }
-    } else {
-      this.isPhongLeAccessible = false
-      this.message = 'Bạn cần phải đăng nhập tài khoản có phân quyền PHÒNG LỄ mới được dùng tính năng này'
-      this.buttonSettings.label = 'ĐĂNG NHẬP NGAY'
-      this.buttonSettings.link = '/auth/dang-nhap'
-    }
+    // this.currentUser = this.authService.getCurrentUser()
+    // if (this.currentUser) {
+    //   if (this.currentUser.role.indexOf('phong-le') !== -1) {
+    //     this.isPhongLeAccessible = true
+    //   } else {
+    //     this.isPhongLeAccessible = false
+    //     this.message = 'Bạn cần cập nhật nhiệm vụ hành chánh có chứa PHÒNG LỄ trong cài đặt tài khoản thì mới được dùng tính năng này'
+    //     this.buttonSettings.label = 'CẬP NHẬT NGAY'
+    //     this.buttonSettings.link = `/@${this.currentUser.userName}`
+    //   }
+    // } else {
+    //   this.isPhongLeAccessible = false
+    //   this.message = 'Bạn cần phải đăng nhập tài khoản có phân quyền PHÒNG LỄ mới được dùng tính năng này'
+    //   this.buttonSettings.label = 'ĐĂNG NHẬP NGAY'
+    //   this.buttonSettings.link = '/auth/dang-nhap'
+    // }
     this.route.params.subscribe((query) => {
       if (query['token']) {
         const token = query['token']
@@ -266,7 +268,16 @@ export class SoanSoComponent implements OnInit {
     const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
     if (namDaoFound) {
       const convertDateV = this.calendarService.getConvertedFullDate(new Date())
+      const newYearTime = this.calendarService.getConvertedFullDate({
+        "lunarDay": 1,
+        "lunarMonth": 1,
+        "lunarYear": new Date().getFullYear(),
+      }).convertLunar2Solar
+      const newYear = new Date(`${newYearTime[2]}-${this.decimal.transform(newYearTime[1], '2.0-0')}-${this.decimal.transform(newYearTime[0], '2.0-0')}`)
       let calculatedDate = new Date().getFullYear() - 1926 + 1
+      if (new Date() < newYear) {
+        calculatedDate -= 1
+      }
       if (convertDateV.convertSolar2Lunar.lunarMonth > 10 || convertDateV.convertSolar2Lunar.lunarMonth === 10 && convertDateV.convertSolar2Lunar.lunarDay >= 15) {
         calculatedDate++
       }

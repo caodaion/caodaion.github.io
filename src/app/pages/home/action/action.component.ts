@@ -35,6 +35,11 @@ export class ActionComponent {
       icon: 'calculate',
       label: 'Tính tuần cửu'
     },
+    {
+      link: '/tac-vu/phong-le',
+      icon: 'receipt_long',
+      label: 'Soạn sớ'
+    },
   ]
 
   constructor (
