@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
@@ -39,10 +40,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   eventList = this.eventService.eventList;
   eventSummaryDialogRef: any;
   shownDate: any;
+  currentUser: any;
   calendarMode = 'month';
   viewPortMode = 'desktop';
   expaned = false;
   refresh = true;
+  updateThanhSoEvent = false;
+  allowToUpdateMember: any;
   commonDateTimeValue = this.commonService.commonDates;
   monthSelectValue: any = this.selectedDate.solar?.getMonth();
   time = this.commonService.time;
@@ -66,7 +70,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     private titleService: Title,
     private changeDetector: ChangeDetectorRef,
     private datePipe: DatePipe,
-    private decimal: DecimalPipe
+    private decimal: DecimalPipe,
+    private authService: AuthService
   ) {
   }
 
@@ -88,6 +93,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       .subscribe((res: any) => {
         if (res.code === 200) {
           this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
+          this.currentUser = this.authService.getCurrentUser()
+          this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
         }
       })
   }

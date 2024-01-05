@@ -27,37 +27,39 @@ import { ButtonShareModule } from 'src/app/components/button-share/button-share.
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SynchronizedComponent } from './synchronized/synchronized.component';
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
-  declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
-  imports: [
-    CommonModule,
-    CalendarRoutingModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatSelectModule,
-    MatGridListModule,
-    MatCardModule,
-    MatButtonModule,
-    MatListModule,
-    MatRippleModule,
-    MatTooltipModule,
-    MatDialogModule,
-    FormsModule,
-    MatTabsModule,
-    MatTableModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatRadioModule,
-    MatMenuModule,
-    MatSnackBarModule,
-    ButtonShareModule,
-    QRCodeModule,
-    NgxMatTimepickerModule
-  ],
-  providers: [DatePipe, DecimalPipe]
+    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
+    providers: [DatePipe, DecimalPipe],
+    imports: [
+        CommonModule,
+        CalendarRoutingModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatSelectModule,
+        MatGridListModule,
+        MatCardModule,
+        MatButtonModule,
+        MatListModule,
+        MatRippleModule,
+        MatTooltipModule,
+        MatDialogModule,
+        FormsModule,
+        MatTabsModule,
+        MatTableModule,
+        MatInputModule,
+        MatExpansionModule,
+        MatRadioModule,
+        MatMenuModule,
+        MatSnackBarModule,
+        ButtonShareModule,
+        QRCodeModule,
+        NgxMatTimepickerModule,
+        SharedModule
+    ]
 })
 export class CalendarModule {}

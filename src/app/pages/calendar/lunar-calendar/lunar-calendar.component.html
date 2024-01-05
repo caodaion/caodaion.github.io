@@ -137,21 +137,46 @@
         </button>
       </div>
       <mat-divider *ngIf="expaned"></mat-divider>
-      <div *ngIf="expaned && isActiveMoreInformation">
+      <div *ngIf="expaned && isActiveMoreInformation" class="w-full">
         <div class="text-xl my-3">Bổ sung hiển thị</div>
-        <mat-form-field>
-          <mat-label>Thánh Sở</mat-label>
-          <mat-select
-            [(ngModel)]="selectedThanhSo"
-            (ngModelChange)="updateSelectedThanhSo()"
-          >
-            <mat-option
-              *ngFor="let thanhSo of memberThanhSo"
-              [value]="thanhSo?.key"
-              >{{ thanhSo?.thanhSo }}</mat-option
+        <div class="w-full flex flex-col">
+          <mat-form-field class="w-full">
+            <mat-label>Thánh Sở</mat-label>
+            <mat-select
+              [(ngModel)]="selectedThanhSo"
+              (ngModelChange)="updateSelectedThanhSo()"
             >
-          </mat-select>
-        </mat-form-field>
+              <mat-option
+                *ngFor="let thanhSo of memberThanhSo"
+                [value]="thanhSo?.key"
+                >{{ thanhSo?.thanhSo }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <button
+            mat-flat-button
+            [color]="'primary'"
+            *ngIf="allowToUpdateMember?.form"
+            (click)="updateThanhSoEvent = !updateThanhSoEvent"
+            class="w-full"
+          >
+            Cập nhật
+          </button>
+          <iframe
+            *ngIf="allowToUpdateMember?.form && updateThanhSoEvent"
+            [src]="
+              'https://docs.google.com/forms/d/e/' +
+                allowToUpdateMember?.form +
+                '/viewform?embedded=true' | safe
+            "
+            class="w-full"
+            height="520"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            >Loading…</iframe
+          >
+        </div>
       </div>
     </div>
   </mat-toolbar>
