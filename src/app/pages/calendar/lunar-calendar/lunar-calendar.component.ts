@@ -1,6 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -28,7 +29,7 @@ import { EventService } from 'src/app/shared/services/event/event.service';
     './styles/dates.selected-month.lunar-calendar.component.scss',
   ]
 })
-export class LunarCalendarComponent implements OnInit, AfterViewInit {
+export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewChecked {
   selectedDate = new DateFormatModel();
   selectedMonth: any[] = [];
   currentDate = {
@@ -40,14 +41,19 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   shownDate: any;
   calendarMode = 'month';
   viewPortMode = 'desktop';
+  expaned = false;
+  refresh = true;
   commonDateTimeValue = this.commonService.commonDates;
   monthSelectValue: any = this.selectedDate.solar?.getMonth();
   time = this.commonService.time;
   tuThoiZone: any[] = [];
+  memberThanhSo: any[] = [];
+  selectedThanhSoEvents: any[] = [];
   filter = <any>{
     six: true,
     event: true
   };
+  selectedThanhSo: any = null;
 
   constructor(
     private calendarService: CalendarService,
@@ -59,8 +65,31 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     private titleService: Title,
     private changeDetector: ChangeDetectorRef,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private decimal: DecimalPipe
   ) {
+  }
+
+
+
+  ngAfterViewChecked(): void {
+    if (this.eventService.isActiveMemberThanhSoList && this.memberThanhSo?.length === 0) {
+      this.getMemberThanhSo()
+    }
+    if (this.selectedThanhSo) {
+      if (this.eventService.isActiveSelectedThanhSo && this.selectedThanhSoEvents?.length === 0 && this.refresh) {
+        this.getThanhSoEvent()
+      }
+    }
+  }
+
+  getMemberThanhSo() {
+    this.eventService.getMemberThanhSo()
+      .subscribe((res: any) => {
+        if (res.code === 200) {
+          this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
+        }
+      })
   }
 
   ngOnInit(): void {
@@ -106,7 +135,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           : (this.selectedDate.solar?.getMonth() + 1).toString();
     });
     console.log(this.selectedDate);
-
   }
 
   ngAfterViewInit(): void {
@@ -411,7 +439,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       event.event.name = event?.event?.eventName
     }
     if (!event?.event?.date) {
-      event.event.date = `${event?.event?.day} ngày ${event?.event?.lunar?.lunarDay} tháng ${event?.event?.lunar?.lunarMonth} năm ${event?.event?.lunar?.lunarYearName} (${this.datePipe.transform(event?.event?.solar, 'dd/MM/YYYY')})`
+      event.event.date = `${event?.event?.day || ''} ngày ${event?.event?.lunar?.lunarDay} tháng ${event?.event?.lunar?.lunarMonth} năm ${event?.event?.lunar?.lunarYearName} (${this.datePipe.transform(event?.event?.solar, 'dd/MM/YYYY')})`
     }
     this.shownDate = { date, event };
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
@@ -599,6 +627,99 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
         }
       }
+    }
+  }
+
+  isActiveMoreInformation(): boolean {
+    if (this.memberThanhSo?.length > 0) {
+      return true
+    }
+    return false
+  }
+
+  updateSelectedThanhSo() {
+    if (this.selectedThanhSo == 'null') {
+      this.refresh = false
+      this.selectedThanhSoEvents = []
+      this.onChangeSelectedCalendar('month');
+      this.mergeThanhSoEvent()
+    } else {
+      this.getThanhSoEvent()
+    }
+  }
+
+  getThanhSoEvent() {
+    if (this.selectedThanhSo) {
+      this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
+        .subscribe((res: any) => {
+          if (res.code === 200) {
+            this.selectedThanhSoEvents = res.data
+            this.refresh = true
+            this.mergeThanhSoEvent()
+          }
+        })
+    }
+  }
+
+  mergeThanhSoEvent() {
+    if (this.calendarMode === 'month') {
+      const data = this.selectedThanhSoEvents.map((item: any) => {
+        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.name == item?.title)
+        let name = ''
+        let solar: any;
+        let lunar: any;
+        let eventLunar: any;
+        if (item.eventKind.includes('Kỷ Niệm')) {
+          let holyName = ''
+          if (!item?.isSolarEvent) {
+            const newYearTime = this.calendarService.getConvertedFullDate({
+              "lunarDay": 1,
+              "lunarMonth": 1,
+              "lunarYear": new Date().getFullYear(),
+            }).convertLunar2Solar
+            let operationYear = new Date().getFullYear()
+            if (new Date() < new Date(`${newYearTime[2]}-${this.decimal.transform(newYearTime[1], '2.0-0')}-${this.decimal.transform(newYearTime[0], '2.0-0')}`)) {
+              operationYear -= 1
+            }
+            eventLunar = {
+              "lunarDay": item?.date,
+              "lunarMonth": item?.month,
+              "lunarYear": operationYear,
+            }
+            const convertLunar2Solar = this.calendarService.getConvertedFullDate(eventLunar).convertLunar2Solar
+            solar = new Date(`${convertLunar2Solar[2]}-${this.decimal.transform(convertLunar2Solar[1], '2.0-0')}-${this.decimal.transform(convertLunar2Solar[0], '2.0-0')}`)?.toISOString()
+            lunar = this.calendarService.getConvertedFullDate(new Date(solar)).convertSolar2Lunar
+          }
+          if (foundTitle?.isHolyNameRequired) {
+            if (item?.gender == 'Nam') {
+              holyName = `${item.color} ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]} Thanh`
+            } else {
+              holyName = `Hương ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]}`
+            }
+          }
+          name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.jobType ? item?.jobType : (item?.title.includes('Chưa có Đạo') ? '' : item?.title)} ${holyName || item.eventTargetName}`
+        }
+        return {
+          key: item['Timestamp'],
+          name: name,
+          solar: solar,
+          lunar: lunar,
+          parent: this.selectedThanhSo
+        }
+      })
+      this.selectedMonth.forEach((date: any) => {
+        const foundEvent = data?.find((item: any) => {
+          return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
+            new Date(item?.solar).getMonth() == new Date(date?.solar).getMonth() &&
+            new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
+        })
+        if (foundEvent) {
+          if (!date.event || date.event?.length == 0) {
+            date.event = []
+          }
+          date.event.push({ event: foundEvent })
+        }
+      })
     }
   }
 }

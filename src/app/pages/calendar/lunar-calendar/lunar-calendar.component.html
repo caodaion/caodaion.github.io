@@ -1,124 +1,157 @@
 <div class="wrapper-container lunar-calendar-container">
-  <mat-toolbar class="lunar-calendar-toolbar justify-content-between !h-auto">
-    <div class="d-flex align-items-center w-100">
-      <div
-        class="d-flex align-items-center justify-content-between"
-        [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''"
-      >
-        <div *ngIf="viewPortMode === 'mobile'">
-          <mat-select
-            [(ngModel)]="monthSelectValue"
-            (selectionChange)="
-              onChangeSelectedCalendar(calendarMode, monthSelectValue)
-            "
+  <mat-toolbar class="lunar-calendar-toolbar !h-auto">
+    <div class="!h-auto w-full">
+      <div class="d-flex justify-content-between !h-auto w-full">
+        <div class="d-flex align-items-center w-100">
+          <div
+            class="d-flex align-items-center justify-content-between"
+            [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''"
           >
-            <mat-option
-              *ngFor="let item of commonDateTimeValue.month"
-              [value]="item?.key"
-              >{{ item?.name }}</mat-option
+            <div *ngIf="viewPortMode === 'mobile'">
+              <mat-select
+                [(ngModel)]="monthSelectValue"
+                (selectionChange)="
+                  onChangeSelectedCalendar(calendarMode, monthSelectValue)
+                "
+              >
+                <mat-option
+                  *ngFor="let item of commonDateTimeValue.month"
+                  [value]="item?.key"
+                  >{{ item?.name }}</mat-option
+                >
+              </mat-select>
+            </div>
+            <button
+              mat-stroked-button
+              (click)="onChangeSelectedCalendar('current')"
+              [matTooltip]="
+                currentDate.solar.getDate() +
+                ' tháng ' +
+                currentDate.solar.getMonth() +
+                ' năm ' +
+                currentDate.solar.getFullYear()
+              "
             >
-          </mat-select>
+              Hôm nay
+            </button>
+          </div>
+          <button
+            *ngIf="viewPortMode === 'desktop'"
+            mat-icon-button
+            (click)="onChangeSelectedCalendar('before')"
+            [matTooltip]="calendarMode === 'day' ? 'ngày trước' : 'tháng trước'"
+          >
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          <button
+            *ngIf="viewPortMode === 'desktop'"
+            mat-icon-button
+            (click)="onChangeSelectedCalendar('next')"
+            [matTooltip]="calendarMode === 'day' ? 'ngày sau' : 'tháng sau'"
+          >
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+          <span class="selected-date" *ngIf="viewPortMode === 'desktop'">
+            {{
+              calendarMode === "day" || calendarMode === "month"
+                ? "tháng " + (selectedDate.solar?.getMonth() + 1)
+                : ""
+            }}
+            {{ selectedDate.solar.getFullYear() }} ({{
+              calendarMode === "day"
+                ? selectedDate.lunar.convertSolar2Lunar.lunarDayName + "/"
+                : ""
+            }}{{ selectedDate.lunar.convertSolar2Lunar.lunarMonthName }}/{{
+              selectedDate.lunar.convertSolar2Lunar.lunarYearName
+            }})</span
+          >
+        </div>
+        <div class="flex flex-wrap w-full align-items-center justify-center">
+          <div
+            (click)="filter.cn = !filter.cn"
+            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.cn,
+              'text-white': filter.cn
+            }"
+            [matTooltip]="'Hiển thị Can Chi mỗi ngày'"
+          >
+            CN
+          </div>
+          <div
+            (click)="filter.event = !filter.event"
+            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.event,
+              'text-white': filter.event
+            }"
+            [matTooltip]="'Hiển thị sự kiện'"
+          >
+            SK
+          </div>
+          <div
+            (click)="filter.six = !filter.six"
+            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.six,
+              'text-white': filter.six
+            }"
+            [matTooltip]="'Hiển thị lục trai'"
+          >
+            6
+          </div>
+          <div
+            (click)="filter.ten = !filter.ten"
+            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.ten,
+              'text-white': filter.ten
+            }"
+            [matTooltip]="'Hiển thị thập trai'"
+          >
+            10
+          </div>
+          <div
+            (click)="filter.fifteen = !filter.fifteen"
+            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.fifteen,
+              'text-white': filter.fifteen
+            }"
+            [matTooltip]="'Hiển thị thiên ngươn'"
+          >
+            15
+          </div>
         </div>
         <button
-          mat-stroked-button
-          (click)="onChangeSelectedCalendar('current')"
+          mat-icon-button
           [matTooltip]="
-            currentDate.solar.getDate() +
-            ' tháng ' +
-            currentDate.solar.getMonth() +
-            ' năm ' +
-            currentDate.solar.getFullYear()
+            expaned ? 'Đóng mục bổ sung hiển thị' : 'Mở mục bổ sung hiển thị'
           "
+          class="transition-all"
+          (click)="expaned = !expaned"
+          [ngClass]="{ 'rotate-180': expaned }"
+          *ngIf="isActiveMoreInformation"
         >
-          Hôm nay
+          <mat-icon>expand_circle_down</mat-icon>
         </button>
       </div>
-      <button
-        *ngIf="viewPortMode === 'desktop'"
-        mat-icon-button
-        (click)="onChangeSelectedCalendar('before')"
-        [matTooltip]="calendarMode === 'day' ? 'ngày trước' : 'tháng trước'"
-      >
-        <mat-icon>navigate_before</mat-icon>
-      </button>
-      <button
-        *ngIf="viewPortMode === 'desktop'"
-        mat-icon-button
-        (click)="onChangeSelectedCalendar('next')"
-        [matTooltip]="calendarMode === 'day' ? 'ngày sau' : 'tháng sau'"
-      >
-        <mat-icon>navigate_next</mat-icon>
-      </button>
-      <span class="selected-date" *ngIf="viewPortMode === 'desktop'">
-        {{
-          calendarMode === "day" || calendarMode === "month"
-            ? "tháng " + (selectedDate.solar?.getMonth() + 1)
-            : ""
-        }}
-        {{ selectedDate.solar.getFullYear() }} ({{
-          calendarMode === "day"
-            ? selectedDate.lunar.convertSolar2Lunar.lunarDayName + "/"
-            : ""
-        }}{{ selectedDate.lunar.convertSolar2Lunar.lunarMonthName }}/{{
-          selectedDate.lunar.convertSolar2Lunar.lunarYearName
-        }})</span
-      >
-    </div>
-    <div class="flex flex-wrap w-full justify-end">
-      <div
-        (click)="filter.cn = !filter.cn"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-        [ngClass]="{
-          'bg-transparent': !filter.cn,
-          'text-white': filter.cn
-        }"
-        [matTooltip]="'Hiển thị Can Chi mỗi ngày'"
-      >
-        CN
-      </div>
-      <div
-        (click)="filter.event = !filter.event"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-        [ngClass]="{
-          'bg-transparent': !filter.event,
-          'text-white': filter.event
-        }"
-        [matTooltip]="'Hiển thị sự kiện'"
-      >
-        SK
-      </div>
-      <div
-        (click)="filter.six = !filter.six"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-        [ngClass]="{
-          'bg-transparent': !filter.six,
-          'text-white': filter.six
-        }"
-        [matTooltip]="'Hiển thị lục trai'"
-      >
-        6
-      </div>
-      <div
-        (click)="filter.ten = !filter.ten"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-        [ngClass]="{
-          'bg-transparent': !filter.ten,
-          'text-white': filter.ten
-        }"
-        [matTooltip]="'Hiển thị thập trai'"
-      >
-        10
-      </div>
-      <div
-        (click)="filter.fifteen = !filter.fifteen"
-        class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-        [ngClass]="{
-          'bg-transparent': !filter.fifteen,
-          'text-white': filter.fifteen
-        }"
-        [matTooltip]="'Hiển thị thiên ngươn'"
-      >
-        15
+      <mat-divider *ngIf="expaned"></mat-divider>
+      <div *ngIf="expaned && isActiveMoreInformation">
+        <div class="text-xl my-3">Bổ sung hiển thị</div>
+        <mat-form-field>
+          <mat-label>Thánh Sở</mat-label>
+          <mat-select
+            [(ngModel)]="selectedThanhSo"
+            (ngModelChange)="updateSelectedThanhSo()"
+          >
+            <mat-option
+              *ngFor="let thanhSo of memberThanhSo"
+              [value]="thanhSo?.key"
+              >{{ thanhSo?.thanhSo }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </mat-toolbar>
