@@ -51,7 +51,7 @@ export class ActionComponent {
         if (state.matches) {
           this.cols = 2;
         } else {
-          this.cols = 6;
+          this.cols = 8;
         }
       });
   }
