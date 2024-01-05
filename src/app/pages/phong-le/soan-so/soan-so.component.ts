@@ -163,11 +163,12 @@ export class SoanSoComponent implements OnInit {
     if (this.editData?.subject?.details?.age) {
       this.applyData('tuoi', this.commonService.convertNumberToText(this.editData?.subject?.details?.age, true))
     }
-    if (this.editData?.subject?.date?.year && this.editData?.subject?.date?.date && this.editData?.subject?.date?.month) {
+    if ((this.editData?.subject?.date?.year && this.editData?.subject?.date?.date && this.editData?.subject?.date?.month) ||
+      (this.editData?.subject?.date?.lunarYear && this.editData?.subject?.date?.lunarDay && this.editData?.subject?.date?.lunarMonth)) {
       const lunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.editData?.subject?.date?.year}-${this.editData?.subject?.date?.month < 10 ? '0' + this.editData?.subject?.date?.month : this.editData?.subject?.date?.month}-${this.editData?.subject?.date?.date < 10 ? '0' + this.editData?.subject?.date?.date : this.editData?.subject?.date?.date}`)).convertSolar2Lunar
-      this.applyData('nam-tu-tran', lunarDate.lunarYearName)
-      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarMonth, true).toLowerCase())
-      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(lunarDate.lunarDay, true).toLowerCase())
+      this.applyData('nam-tu-tran', this.editData?.subject?.date?.lunarYear ? this.editData?.subject?.date?.lunarYear : lunarDate.lunarYearName)
+      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarMonth ? this.editData?.subject?.date?.lunarMonth : lunarDate.lunarMonth, true).toLowerCase())
+      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarDay ? this.editData?.subject?.date?.lunarDay : lunarDate.lunarDay, true).toLowerCase())
     }
     if (this.editData?.subject?.date?.lunarTime) {
       this.applyData('gio-tu-tran', this.editData?.subject?.date?.lunarTime.split('|')[0].trim())
@@ -177,6 +178,9 @@ export class SoanSoComponent implements OnInit {
     }
     if (this.editData?.subject?.details?.holyName) {
       this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.holyName}`)
+    }
+    if (!this.editData?.subject?.details?.holyName) {
+      this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.name}`)
     }
     if (this.editData?.subject?.details?.province) {
       const find = (array: any, key: any) => {

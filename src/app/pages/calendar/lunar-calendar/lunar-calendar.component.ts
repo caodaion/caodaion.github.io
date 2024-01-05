@@ -12,6 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
@@ -19,6 +20,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-lunar-calendar',
@@ -678,6 +680,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         let name = ''
         let solar: any;
         let lunar: any;
+        let eventName: any;
         let eventLunar: any;
         let longSo: any;
         let soTemplate: any;
@@ -716,13 +719,12 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
               solar = new Date(solar.setHours(startDate.split('-')[1]))
             }
             lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
-            console.log(item);
             if (item?.deadYearSolar) {
               subject = {
                 date: {
-                  year: item?.deadYearSolar,
-                  month: item?.deadMonth,
-                  date: item?.deadDay,
+                  lunarYear: item?.deadYear,
+                  lunarMonth: item?.deadMonth,
+                  lunarDay: item?.deadDay,
                   lunarTime: item?.deadThoi,
                 },
                 details: {
@@ -732,12 +734,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
                   holyName: holyName,
                   title: foundTitle?.key,
                   subTitle: null,
-                  color: this.commonService.generatedSlug(item.color),
+                  color: this.commonService.generatedSlug(item.color || ''),
                 },
                 key: item['Timestamp']
               }
             }
           }
+          eventName = `Kỷ Niệm chi nhựt`
           name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.jobType ? item?.jobType : (item?.title.includes('Chưa có Đạo') ? '' : item?.title)} ${holyName || item.eventTargetName}`
         }
         return {
@@ -749,11 +752,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           eventLunar: lunar,
           longSo: longSo,
           soTemplate: soTemplate,
-          eventName: name,
+          eventName: eventName,
           subject: subject
         }
       })
-      console.log(data);
       this.selectedMonth.forEach((date: any) => {
         const foundEvent = data?.find((item: any) => {
           return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
@@ -768,6 +770,39 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         }
       })
     }
+  }
+
+  onOpenSoanSo() {
+    const data = this.shownDate?.event?.event
+    this.generateToken(data)
+      .subscribe((tk: any) => {
+        this.router.navigateByUrl(`/tac-vu/phong-le/soan-so/${tk}`)
+      })
+  }
+
+  generateToken(item: any) {
+    return new Observable((observable: any) => {
+      const base64url = (source: any) => {
+        let encodedSource = CryptoJS.enc.Base64.stringify(source);
+        encodedSource = encodedSource.replace(/=+$/, '');
+        encodedSource = encodedSource.replace(/\+/g, '-');
+        encodedSource = encodedSource.replace(/\//g, '_');
+        return encodedSource;
+      }
+      const header = {
+        "alg": "HS256",
+        "typ": "JWT"
+      };
+      const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+      const encodedHeader = base64url(stringifiedHeader);
+      const data = item;
+      const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+      const encodedData = base64url(stringifiedData);
+      const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+      const encodedSignature = btoa(signature);
+      const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+      observable.next(token)
+    })
   }
 }
 

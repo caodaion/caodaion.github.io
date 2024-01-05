@@ -476,6 +476,15 @@
       <button
         mat-flat-button
         [color]="'primary'"
+        (click)="onOpenSoanSo()"
+        [mat-dialog-close]="true"
+        *ngIf="shownDate?.event?.event?.subject"
+      >
+        Soạn sớ
+      </button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
         (click)="onGetKinhFromSummaryEvent()"
         [mat-dialog-close]="true"
       >
