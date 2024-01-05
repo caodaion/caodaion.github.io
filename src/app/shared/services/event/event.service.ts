@@ -22,14 +22,69 @@ export class EventService {
   isActiveMemberThanhSoList: boolean = false;
   isActiveSelectedThanhSo: boolean = false;
   countSettingValueColIndex = 2
+
+  constructor() {
     this.fetchWorkbook()
     if (this.thanhSoSheetId) {
       this.fetchThanhSoWorkbook()
     }
+  }
 
   getEventList() {
     this.eventList = FIXED_EVENT.data
   }
+
+  fetchThanhSoWorkbook() {
+    if (!this.selectedThanhSoWorkbook) {
+      const ref: Mutable<this> = this;
+      const sheetUrl = this.sheetUrl.replace('{id}', this.thanhSoSheetId)
+      fetch(sheetUrl)
+        .then((res: any) => res.arrayBuffer())
+        .then((req => {
+          const workbook = read(req)
+          ref.selectedThanhSoWorkbook = workbook
+          this.isActiveSelectedThanhSo = true
+          this.getSelectedThanhSo({ key: this.thanhSoSheetId })
+            .subscribe()
+        }))
+    }
+  }
+
+  fetchWorkbook() {
+    if (!this.memberThanhSoWorkbook) {
+      const ref: Mutable<this> = this;
+      const sheetUrl = this.sheetUrl.replace('{id}', this.sheetId)
+      fetch(sheetUrl)
+        .then((res: any) => res.arrayBuffer())
+        .then((req => {
+          const workbook = read(req)
+          ref.memberThanhSoWorkbook = workbook
+          this.isActiveMemberThanhSoList = true
+          this.getMemberThanhSo()
+            .subscribe()
+        }))
+    }
+  }
+
+  private decodeRawSheetData(data: any, slice: any = 1, header?: any) {
+    const column = [...new Set(Object.keys(data).map((col: any) => {
+      let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
+      if (returnData) {
+        if (!parseFloat(returnData['v'])) {
+          return returnData['v']
+        } else {
+          return new Date(returnData['v']).toString() !== 'Invalid Date' ? returnData['v'] : new Date(returnData['w']).getTime()
+        }
+      }
+    }))]?.filter((col: any) => !!col)
+    const responseData = utils.sheet_to_json<any>(data, {
+      header: header || column
+    })?.slice(slice);
+    responseData.forEach((item: any) => {
+      if (item?.option?.includes('||')) {
+        item.options = item?.option?.split('||')
+      }
+    })
     return responseData
   }
 
