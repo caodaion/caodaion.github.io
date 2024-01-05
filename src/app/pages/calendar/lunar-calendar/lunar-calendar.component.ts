@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
@@ -415,7 +416,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       });
     }
     this.mergeLocalStorageEvents()
-    console.log(this.dateEvents);
+    if (this.selectedThanhSoEvents?.length > 0) {
+      this.mergeThanhSoEvent()
+    }
   }
 
   mergeLocalStorageEvents() {
@@ -694,8 +697,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
               "lunarYear": operationYear,
             }
             const convertLunar2Solar = this.calendarService.getConvertedFullDate(eventLunar).convertLunar2Solar
-            solar = new Date(`${convertLunar2Solar[2]}-${this.decimal.transform(convertLunar2Solar[1], '2.0-0')}-${this.decimal.transform(convertLunar2Solar[0], '2.0-0')}`)?.toISOString()
-            lunar = this.calendarService.getConvertedFullDate(new Date(solar)).convertSolar2Lunar
+            solar = new Date(`${convertLunar2Solar[2]}-${this.decimal.transform(convertLunar2Solar[1], '2.0-0')}-${this.decimal.transform(convertLunar2Solar[0], '2.0-0')}`)
+            if (item?.thoi) {
+              const foundThoi = TIME_TYPE.data.find((tt: any) => tt.name.includes(item?.thoi))?.key
+              const startDate = `${JSON.parse(JSON.stringify(foundThoi)).split('-')[0]}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(0, 2)}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(-2)}`
+              solar = new Date(solar.setHours(startDate.split('-')[1]))
+            }
+            lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
           }
           if (foundTitle?.isHolyNameRequired) {
             if (item?.gender == 'Nam') {
@@ -709,7 +717,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         return {
           key: item['Timestamp'],
           name: name,
-          solar: solar,
+          solar: solar?.toISOString(),
           lunar: lunar,
           parent: this.selectedThanhSo
         }
