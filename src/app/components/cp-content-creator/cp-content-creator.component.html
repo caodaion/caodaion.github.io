@@ -62,6 +62,7 @@
       [contentEditable]="contentEditable"
       [data]="data"
       (save)="saveData()"
+      (reset)="reset.emit()"
     ></cp-content-creator-toolbar>
   </mat-drawer>
 </mat-drawer-container>

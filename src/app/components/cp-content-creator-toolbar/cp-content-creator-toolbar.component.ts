@@ -14,6 +14,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() focusedBlock: any;
   @Input() contentEditable: boolean = false;
   @Output() save = new EventEmitter();
+  @Output() reset = new EventEmitter();
 
 
   addedFormField = <any>{}

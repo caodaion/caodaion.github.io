@@ -8,6 +8,14 @@
     >
       <mat-icon>save</mat-icon>Lưu
     </button>
+    <button
+      *ngIf="contentEditable"
+      (click)="reset.emit()"
+      mat-stroked-button
+      color="primary"
+    >
+      <mat-icon>refresh</mat-icon>Tải lại
+    </button>
   </div>
   <div class="toolbar-content">
     <mat-tab-group>

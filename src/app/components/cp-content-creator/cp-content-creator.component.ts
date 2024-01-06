@@ -20,6 +20,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   @Input() isShowFontSizeSelect: boolean = true;
   @Input() isShowController: any = undefined;
   @Output() save = new EventEmitter();
+  @Output() reset = new EventEmitter();
   @Output() nextContent = new EventEmitter();
   @Output() nextFontSize = new EventEmitter();
   isAutoPlay: boolean = false;
