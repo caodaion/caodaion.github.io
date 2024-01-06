@@ -76,7 +76,7 @@ export class SoanSoService {
       'so-le-ky-niem-duc-giao-tong-dac-dao-thoi-ngo': {
         name: 'Lễ Kỷ Niệm Đức Giáo Tông Đắc Đạo (Thời NGỌ)',
         eventLunar: {
-          lunarDay: 15,
+          lunarDay: 25,
           lunarMonth: 2,
           lunarTime: 'NGỌ',
         }
