@@ -227,12 +227,19 @@ export class SoanSoService {
       },
     },
     'tam-tran': {
+      'so-cao-hoang-thien-hau-tho': {
+        name: 'Cáo Hoàng Thiên Hậu Thổ'
+      },
       'so-cau-sieu': {
         name: 'Cầu Siêu',
         chi: 'nhựt'
       },
-      'so-cao-hoang-thien-hau-tho': {
-        name: 'Cáo Hoàng Thiên Hậu Thổ'
+      'so-cau-lanh-benh': {
+        name: 'Cầu Lành Bệnh',
+        chi: 'nhựt'
+      },
+      'so-cau-an-van-gia-ba-tanh': {
+        name: 'Cầu An Vạn Gia Bá Tánh'
       }
     }
   }
