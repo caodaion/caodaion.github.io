@@ -21,6 +21,7 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 import * as CryptoJS from "crypto-js";
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-lunar-calendar',
@@ -78,10 +79,12 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   ) {
   }
 
-
-
   ngAfterViewChecked(): void {
     if (this.eventService.isActiveMemberThanhSoList && this.memberThanhSo?.length === 0) {
+      const memberThanhSo = localStorage.getItem('memberThanhSo')
+      if (memberThanhSo !== 'null') {
+        this.selectedThanhSo = memberThanhSo
+      }
       this.getMemberThanhSo()
     }
     if (this.selectedThanhSo) {
@@ -98,6 +101,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
           this.currentUser = this.authService.getCurrentUser()
           this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
+          if (this.selectedThanhSo) {
+            this.getThanhSoEvent()
+          }
         }
       })
   }
@@ -658,6 +664,11 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     } else {
       this.getThanhSoEvent()
     }
+    this.updateUserInfor()
+  }
+
+  updateUserInfor() {
+    localStorage.setItem('memberThanhSo', this.selectedThanhSo)
   }
 
   getThanhSoEvent() {
