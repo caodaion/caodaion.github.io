@@ -474,13 +474,13 @@
     <mat-dialog-actions>
       <button mat-button mat-dialog-close>Đóng</button>
       <button
-        mat-flat-button
+        mat-stroked-button
         [color]="'primary'"
         (click)="onOpenSoanSo()"
         [mat-dialog-close]="true"
         *ngIf="shownDate?.event?.event?.subject"
       >
-        Soạn sớ
+        <mat-icon>receipt_long</mat-icon>Soạn sớ
       </button>
       <button
         mat-flat-button
