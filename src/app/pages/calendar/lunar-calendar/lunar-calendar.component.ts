@@ -768,16 +768,18 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         }
       })
       this.selectedMonth.forEach((date: any) => {
-        const foundEvent = data?.find((item: any) => {
+        const foundEvent = data?.filter((item: any) => {
           return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
             new Date(item?.solar).getMonth() == new Date(date?.solar).getMonth() &&
             new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
         })
-        if (foundEvent) {
-          if (!date.event || date.event?.length == 0) {
-            date.event = []
-          }
-          date.event.push({ event: foundEvent })
+        if (foundEvent?.length > 0) {
+          foundEvent?.forEach((fe: any) => {
+            if (!date.event || date.event?.length == 0) {
+              date.event = []
+            }
+            date.event.push({ event: fe })
+          })
         }
       })
     }
