@@ -687,7 +687,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   mergeThanhSoEvent() {
     if (this.calendarMode === 'month') {
       const data = this.selectedThanhSoEvents.map((item: any) => {
-        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.name == item?.title)
+        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.name == item?.eventTargetTitle)
         let name = ''
         let solar: any;
         let lunar: any;
@@ -696,7 +696,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         let longSo: any;
         let soTemplate: any;
         let subject: any;
-        if (item.eventKind.includes('Kỷ Niệm')) {
+        if (item.eventType.includes('Kỷ Niệm')) {
           longSo = 'tam-tran'
           soTemplate = 'so-cau-sieu'
           let holyName = ''
@@ -730,25 +730,24 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
               solar = new Date(solar.setHours(startDate.split('-')[1]))
             }
             lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
-            if (item?.deadYearSolar) {
-              subject = {
-                date: {
-                  lunarYear: item?.deadYear,
-                  lunarMonth: item?.deadMonth,
-                  lunarDay: item?.deadDay,
-                  lunarTime: item?.deadThoi,
-                },
-                details: {
-                  name: item.eventTargetName,
-                  age: item.eventTargetAge,
-                  sex: item.gender == 'Name' ? 'male' : 'female',
-                  holyName: holyName,
-                  title: foundTitle?.key,
-                  subTitle: null,
-                  color: this.commonService.generatedSlug(item.color || ''),
-                },
-                key: item['Timestamp']
-              }
+            subject = {
+              date: {
+                lunarYear: item?.eventTargetYear || '',
+                lunarMonth: item?.eventTargetMonth || '',
+                lunarDay: item?.eventTargetDate || '',
+                lunarTime: item?.eventTargetThoi?.split(' |')[0] || '',
+                solarYear: item?.eventTargetYearSolar || '',
+              },
+              details: {
+                name: item.eventTargetName,
+                age: item.eventTargetAge,
+                sex: item.gender == 'Name' ? 'male' : 'female',
+                holyName: holyName,
+                title: foundTitle?.key,
+                subTitle: null,
+                color: this.commonService.generatedSlug(item.color || ''),
+              },
+              key: item['Timestamp']
             }
           }
           eventName = `Kỷ Niệm chi nhựt`
