@@ -893,16 +893,16 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
 
   onOpenSoanSo() {
     const data = this.shownDate?.event?.event
-    if (this.shownDate?.event?.event.key.includes('thoi-ngo')) {
+    if (this.shownDate?.event?.event?.key?.includes('thoi-ngo')) {
       this.shownDate.event.event.eventLunar.lunarTime = 'NGỌ'
     }
-    if (this.shownDate?.event?.event.key.includes('thoi-ty')) {
+    if (this.shownDate?.event?.event?.key?.includes('thoi-ty')) {
       this.shownDate.event.event.eventLunar.lunarTime = 'TÝ'
     }
-    if (this.shownDate?.event?.event.key.includes('thoi-meo')) {
+    if (this.shownDate?.event?.event?.key?.includes('thoi-meo')) {
       this.shownDate.event.event.eventLunar.lunarTime = 'MẸO'
     }
-    if (this.shownDate?.event?.event.key.includes('thoi-dau')) {
+    if (this.shownDate?.event?.event?.key?.includes('thoi-dau')) {
       this.shownDate.event.event.eventLunar.lunarTime = 'DẬU'
     }
     this.generateToken(data)
