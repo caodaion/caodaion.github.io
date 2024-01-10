@@ -68,7 +68,7 @@
         </div>
         <div class="flex flex-wrap w-full align-items-center justify-center">
           <div
-            (click)="filter.cn = !filter.cn"
+            (click)="filter.cn = !filter.cn; updatefliter()"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
               'bg-transparent': !filter.cn,
@@ -76,32 +76,104 @@
             }"
             [matTooltip]="'Hiển thị Can Chi mỗi ngày'"
           >
-            CN
+            Can chi
           </div>
           <div
-            (click)="filter.event = !filter.event"
+            [matMenuTriggerFor]="filterEventMenu"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
-              'bg-transparent': !filter.event,
-              'text-white': filter.event
+              'bg-transparent':
+                !filter.red && !filter.blue && !filter.yellow && !filter.white,
+              'text-white':
+                filter.red || filter.blue || filter.yellow || filter.white,
             }"
             [matTooltip]="'Hiển thị sự kiện'"
           >
-            SK
+            Sự kiện
           </div>
+          <mat-menu #filterEventMenu="matMenu">
+            <button
+              mat-menu-item
+              class="!text-[#ea4335]"
+              [ngClass]="{
+                '!bg-[#ea4335] !text-white': filter.red
+              }"
+              (click)="filter.red = !filter.red; updatefliter()"
+            >
+              Sự kiện quan trọng
+            </button>
+            <button
+              mat-menu-item
+              class="!text-[#4285f4]"
+              [ngClass]="{
+                '!bg-[#4285f4] !text-white': filter.blue
+              }"
+              (click)="filter.blue = !filter.blue; updatefliter()"
+            >
+              Sự kiện sóc vọng
+            </button>
+            <button
+              mat-menu-item
+              class="!text-[#fbbc05]"
+              [ngClass]="{
+                '!bg-[#fbbc05] !text-black': filter.yellow
+              }"
+              (click)="filter.yellow = !filter.yellow; updatefliter()"
+            >
+              Sự kiện quan hôn tang tế
+            </button>
+            <button
+              mat-menu-item
+              class="!text-black"
+              [ngClass]="{
+                '!bg-[#eaf1fb] !text-black': filter.white
+              }"
+              (click)="filter.white = !filter.white; updatefliter()"
+            >
+              Cúng tứ thời
+            </button>
+          </mat-menu>
           <div
-            (click)="filter.six = !filter.six"
+            [matMenuTriggerFor]="veganMenu"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
-              'bg-transparent': !filter.six,
-              'text-white': filter.six
+              'bg-transparent': !filter.six && !filter.ten && !filter.fifteen,
+              'text-white': filter.six || filter.ten || filter.fifteen
             }"
-            [matTooltip]="'Hiển thị lục trai'"
+            [matTooltip]="'Hiển thị ngày ăn chay'"
           >
-            6
+            Ăn chay
           </div>
-          <div
-            (click)="filter.ten = !filter.ten"
+          <mat-menu #veganMenu="matMenu">
+            <button
+              mat-menu-item
+              [ngClass]="{
+                '!bg-[#34a853] !text-white': filter.six
+              }"
+              (click)="filter.six = !filter.six; updatefliter()"
+            >
+              Lục trai (6 Ngày)
+            </button>
+            <button
+              mat-menu-item
+              [ngClass]="{
+                '!bg-[#34a853] !text-white': filter.ten
+              }"
+              (click)="filter.ten = !filter.ten; updatefliter()"
+            >
+              Thập trai (10 Ngày)</button
+            ><button
+              mat-menu-item
+              [ngClass]="{
+                '!bg-[#34a853] !text-white': filter.fifteen
+              }"
+              (click)="filter.fifteen = !filter.fifteen; updatefliter()"
+            >
+              Thiên ngươn (15 Ngày)
+            </button>
+          </mat-menu>
+          <!-- <div
+            (click)="filter.ten = !filter.ten; updatefliter()"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
               'bg-transparent': !filter.ten,
@@ -112,7 +184,7 @@
             10
           </div>
           <div
-            (click)="filter.fifteen = !filter.fifteen"
+            (click)="filter.fifteen = !filter.fifteen; updatefliter()"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
               'bg-transparent': !filter.fifteen,
@@ -121,7 +193,7 @@
             [matTooltip]="'Hiển thị thiên ngươn'"
           >
             15
-          </div>
+          </div> -->
         </div>
         <button
           mat-icon-button
@@ -260,7 +332,7 @@
           </div>
         </div>
         <div class="flex-1 date-event w-100">
-          <mat-list *ngIf="filter.event">
+          <mat-list>
             <mat-list-item
               class="date-event-item"
               matRipple
@@ -478,7 +550,7 @@
         [color]="'primary'"
         (click)="onOpenSoanSo()"
         [mat-dialog-close]="true"
-        *ngIf="shownDate?.event?.event?.subject"
+        *ngIf="shownDate?.event?.event?.soTemplate"
       >
         <mat-icon>receipt_long</mat-icon>Soạn sớ
       </button>

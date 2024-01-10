@@ -59,7 +59,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   selectedThanhSoEvents: any[] = [];
   filter = <any>{
     six: true,
-    event: true
+    red: true,
+    blue: true,
+    yellow: true,
+    white: true,
   };
   selectedThanhSo: any = null;
 
@@ -87,7 +90,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       }
       this.getMemberThanhSo()
     }
-    if (this.selectedThanhSo) {
+    if (this.selectedThanhSo && this.filter?.yellow) {
       if (this.eventService.isActiveSelectedThanhSo && this.selectedThanhSoEvents?.length === 0 && this.refresh) {
         this.getThanhSoEvent()
       }
@@ -140,6 +143,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         );
       }
       this.calendarService.calendarViewMode = this.calendarMode;
+      const calendarFilter = JSON.parse(localStorage.getItem('calendarFilter') || 'null')
+      if (calendarFilter) {
+        this.filter = calendarFilter
+      }
       this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
       this.getCalendarEvent();
       if (new Date().getHours() > 22) {
@@ -150,7 +157,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           ? '0' + (this.selectedDate.solar?.getMonth() + 1)
           : (this.selectedDate.solar?.getMonth() + 1).toString();
     });
-    console.log(this.selectedDate);
   }
 
   ngAfterViewInit(): void {
@@ -262,6 +268,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     let tuthoi: any[] = [];
     let yearlyMonthlySpecial: any[] = [];
     let yearlySpecialSpecial: any[] = [];
+    let comparedTime = new Date();
     this.eventList.forEach((item: any) => {
       item.event.forEach((event: any) => {
         // yearly-monthly-daily
@@ -288,29 +295,47 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         }
       }
       )
-    }
-    );
-    let comparedTime = new Date();
+    });
     if (new Date().getHours() > 22) {
       comparedTime = new Date(new Date().setDate(new Date().getDate() + 1));
     }
     if (this.calendarMode === 'month') {
       this.selectedMonth.forEach((date: any) => {
-        if (
-          date.solar.getDate() === comparedTime.getDate() &&
-          date.solar.getMonth() === comparedTime.getMonth() &&
-          date.solar.getFullYear() === comparedTime.getFullYear()
-        ) {
-          date.event = tuthoi;
+        if (this.filter?.white) {
+          if (
+            date.solar.getDate() === comparedTime.getDate() &&
+            date.solar.getMonth() === comparedTime.getMonth() &&
+            date.solar.getFullYear() === comparedTime.getFullYear()
+          ) {
+            date.event = tuthoi;
+          }
         }
-        let foundLunaryearlyMonthlySpecial = yearlyMonthlySpecial.filter(
-          (item: any) =>
-            parseInt(item.event.date.split('-')[2]) ===
-            date.lunar.convertSolar2Lunar.lunarDay &&
-            item.event.dateType === 'lunar'
-        );
-        if (foundLunaryearlyMonthlySpecial?.length > 0) {
-          date.event = foundLunaryearlyMonthlySpecial;
+        if (this.filter?.blue) {
+
+          let foundLunaryearlyMonthlySpecial = yearlyMonthlySpecial.filter(
+            (item: any) =>
+              parseInt(item.event.date.split('-')[2]) ===
+              date.lunar.convertSolar2Lunar.lunarDay &&
+              item.event.dateType === 'lunar'
+          );
+          if (foundLunaryearlyMonthlySpecial?.length > 0) {
+            if (date?.lunar?.convertSolar2Lunar?.lunarDay === 1 || date?.lunar?.convertSolar2Lunar?.lunarDay === 15) {
+              foundLunaryearlyMonthlySpecial?.forEach((flms: any) => {
+                const soTemplate = flms?.event.key.includes('thoi-ty') ? 'so-soc-vong-thoi-ty' : flms?.event.key.includes('thoi-ngo') ? 'so-soc-vong-thoi-ngo' : ''
+                const eventName = flms?.event.key.includes('thoi-ty') ? 'Sớ Sóc Vọng (Thời Tý)' : flms?.event.key.includes('thoi-ngo') ? 'Sớ Sóc Vọng (Thời Ngọ)' : ''
+                if (soTemplate) {
+                  if (flms?.event.key.includes('thoi-ngo')) {
+                    date.lunar.convertSolar2Lunar.lunarTime = 'NGỌ'
+                  }
+                  flms.event.longSo = 'tam-giao';
+                  flms.event.soTemplate = soTemplate;
+                  flms.event.eventName = eventName;
+                  flms.event.eventLunar = date?.lunar?.convertSolar2Lunar;
+                }
+              })
+            }
+            date.event = foundLunaryearlyMonthlySpecial;
+          }
         }
         let foundSolaryearlyMonthlySpecial = yearlyMonthlySpecial.filter(
           (item: any) =>
@@ -320,26 +345,104 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         if (foundSolaryearlyMonthlySpecial?.length > 0) {
           date.event = foundSolaryearlyMonthlySpecial;
         }
-        let foundLunaryearlySpecialSpecial = yearlySpecialSpecial.filter(
-          (item: any) =>
-            parseInt(item.event.date.split('-')[1]) ===
-            date.lunar.convertSolar2Lunar.lunarMonth &&
-            parseInt(item.event.date.split('-')[2]) ===
-            date.lunar.convertSolar2Lunar.lunarDay &&
-            item.event.dateType === 'lunar'
-        );
-        if (foundLunaryearlySpecialSpecial?.length > 0) {
-          date.event = foundLunaryearlySpecialSpecial;
-        }
-        let foundSolaryearlySpecialSpecial = yearlySpecialSpecial.filter(
-          (item: any) =>
-            parseInt(item.event.date.split('-')[1]) ===
-            date.solar.getUTCMonth() + 1 &&
-            parseInt(item.event.date.split('-')[2]) === date.solar.getDate() &&
-            item.event.dateType === 'solar'
-        );
-        if (foundSolaryearlySpecialSpecial?.length > 0) {
-          date.event = foundSolaryearlySpecialSpecial;
+        if (this.filter?.red) {
+          let foundLunaryearlySpecialSpecial = yearlySpecialSpecial.filter(
+            (item: any) =>
+              parseInt(item.event.date.split('-')[1]) ===
+              date.lunar.convertSolar2Lunar.lunarMonth &&
+              parseInt(item.event.date.split('-')[2]) ===
+              date.lunar.convertSolar2Lunar.lunarDay &&
+              item.event.dateType === 'lunar'
+          );
+          if (foundLunaryearlySpecialSpecial?.length > 0) {
+            foundLunaryearlySpecialSpecial.forEach((flyss: any) => {
+              let soTemplate = '';
+              let eventName = '';
+              switch (flyss?.event.date) {
+                case 'yearly-01-01':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-nguon-dan-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-nguon-dan-thoi-ty' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Ngươn Đán (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Ngươn Đán (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-01-09':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-via-duc-ngoc-hoang-thuong-de-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-via-duc-ngoc-hoang-thuong-de-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Vía Đức Ngọc-Hoàng Thượng Đế (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Vía Đức Ngọc-Hoàng Thượng Đế (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-01-15':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-thuong-nguon-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-thuong-nguon-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Thượng Ngươn (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Thượng Ngươn (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-02-15':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-via-duc-thai-thuong-lao-quan-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-via-duc-thai-thuong-lao-quan-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Vía Đức Thái Thượng Lão Quân (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Vía Đức Thái Thượng Lão Quân (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-02-25':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-ky-niem-duc-giao-tong-dac-dao-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-ky-niem-duc-giao-tong-dac-dao-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Đắc Đạo (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Đắc Đạo (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-04-08':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-via-duc-phat-to-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-via-duc-phat-to-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Vía Đức Phật Tổ (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Vía Đức Phật Tổ (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-05-26':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-ky-niem-sanh-nhat-duc-giao-tong-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-ky-niem-sanh-nhat-duc-giao-tong-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Kỷ Niệm Sanh Nhật Đức Giáo Tông (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Kỷ Niệm Sanh Nhật Đức Giáo Tông (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-07-15':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-trung-nguon-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-trung-nguon-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Trung Ngươn (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Trung Ngươn (Thời Ngọ)' : '';
+                  break;
+                case 'yearly-08-15':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-via-duc-dieu-tri-kim-mau-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-via-duc-dieu-tri-kim-mau-thoi-ngo-cung-cac-thanh-that' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Vía Đức Diêu Trì Kim Mẫu (Thời Ngọ) (Cúng các Thánh Thất) ' : '';
+                  break;
+                case 'yearly-10-15':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-ha-nguon-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-ha-nguon-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Hạ Ngươn (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Hạ Ngươn (Thời Ngọ)' : '';
+                  break;
+                default:
+                  break;
+              }
+              if (soTemplate) {
+                flyss.event.longSo = 'tam-giao';
+                flyss.event.soTemplate = soTemplate;
+                flyss.event.eventName = eventName;
+                flyss.event.eventLunar = date?.lunar?.convertSolar2Lunar;
+                if (flyss?.event.key.includes('thoi-ngo')) {
+                  flyss.event.eventLunar.lunarTime = 'NGỌ'
+                }
+                if (flyss?.event.key.includes('thoi-ty')) {
+                  flyss.event.eventLunar.lunarTime = 'TÝ'
+                }
+              }
+            })
+            date.event = foundLunaryearlySpecialSpecial;
+          }
+          let foundSolaryearlySpecialSpecial = yearlySpecialSpecial.filter(
+            (item: any) =>
+              parseInt(item.event.date.split('-')[1]) ===
+              date.solar.getUTCMonth() + 1 &&
+              parseInt(item.event.date.split('-')[2]) === date.solar.getDate() &&
+              item.event.dateType === 'solar'
+          );
+          if (foundSolaryearlySpecialSpecial?.length > 0) {
+            date.event = foundSolaryearlySpecialSpecial;
+            foundSolaryearlySpecialSpecial?.forEach((fsyss: any) => {
+              const soTemplate = fsyss?.event.key.includes('thoi-ty') ? 'so-le-sanh-nhut-duc-gia-to-giao-chu-thoi-ty' : fsyss?.event.key.includes('thoi-ngo') ? 'so-le-sanh-nhut-duc-gia-to-giao-chu-thoi-ngo' : '';
+              const eventName = fsyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Sanh Nhựt Đức Gia Tô Giáo Chủ (Thời Tý)' : fsyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Sanh Nhựt Đức Gia Tô Giáo Chủ (Thời Ngọ)' : '';
+              if (soTemplate) {
+                fsyss.event.longSo = 'tam-giao';
+                fsyss.event.soTemplate = soTemplate;
+                fsyss.event.eventName = eventName;
+                fsyss.event.eventLunar = date?.lunar?.convertSolar2Lunar;
+                if (fsyss?.event.key.includes('thoi-ngo')) {
+                  fsyss.event.eventLunar.lunarTime = 'NGỌ'
+                }
+                if (fsyss?.event.key.includes('thoi-ty')) {
+                  fsyss.event.eventLunar.lunarTime = 'TÝ'
+                }
+              }
+            })
+          }
         }
         if (date.event?.length > 0 && date.event[0]) {
           if (date.event[0]?.mainEventKey !== 'cung-tu-thoi') {
@@ -538,6 +641,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       queryParams: { m: mode, s: this.selectedDate.solar.toDateString() },
       queryParamsHandling: 'merge',
     });
+    this.getCalendarEvent()
   }
 
   private swipeCoord?: [number, number];
@@ -662,6 +766,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       this.onChangeSelectedCalendar('month');
       this.mergeThanhSoEvent()
     } else {
+      this.filter.yellow = true;
       this.getThanhSoEvent()
     }
     this.updateUserInfor()
@@ -777,7 +882,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
             if (!date.event || date.event?.length == 0) {
               date.event = []
             }
-            date.event.push({ event: fe })
+            if (!date.event?.find((de: any) => de.event.key == fe.key)) {
+              date.event.push({ event: fe })
+            }
           })
         }
       })
@@ -786,6 +893,18 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
 
   onOpenSoanSo() {
     const data = this.shownDate?.event?.event
+    if (this.shownDate?.event?.event.key.includes('thoi-ngo')) {
+      this.shownDate.event.event.eventLunar.lunarTime = 'NGỌ'
+    }
+    if (this.shownDate?.event?.event.key.includes('thoi-ty')) {
+      this.shownDate.event.event.eventLunar.lunarTime = 'TÝ'
+    }
+    if (this.shownDate?.event?.event.key.includes('thoi-meo')) {
+      this.shownDate.event.event.eventLunar.lunarTime = 'MẸO'
+    }
+    if (this.shownDate?.event?.event.key.includes('thoi-dau')) {
+      this.shownDate.event.event.eventLunar.lunarTime = 'DẬU'
+    }
     this.generateToken(data)
       .subscribe((tk: any) => {
         this.router.navigateByUrl(`/tac-vu/phong-le/soan-so/${tk}`)
@@ -815,6 +934,13 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
       observable.next(token)
     })
+  }
+
+  updatefliter() {
+    this.refresh = this.filter?.yellow
+    this.selectedThanhSoEvents = []
+    localStorage.setItem('calendarFilter', JSON.stringify(this.filter));
+    this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
   }
 }
 
