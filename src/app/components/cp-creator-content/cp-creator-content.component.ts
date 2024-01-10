@@ -312,7 +312,7 @@ export class CpCreatorContentComponent implements OnChanges {
     switch (value.mode) {
       case 'PpDdWwA':
         value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-          province?.division_type : ''
+          province?.division_type?.replace('trung ương', '') : ''
           }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
             district?.division_type : ''
           }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +

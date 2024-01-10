@@ -449,7 +449,7 @@ export class SoanSoComponent implements OnInit {
       value = this.content.formGroup.find((item: any) => item.key === id).value
       comboLocation?.setAttribute('value', JSON.stringify(value))
       if (comboLocation) {
-        const country = value.country
+        const country = value?.country
         const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
         const district = this.districts.find((item: any) => item.code == parseInt(value.district))
         const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
@@ -458,7 +458,7 @@ export class SoanSoComponent implements OnInit {
         switch (value.mode) {
           case 'PpDdWwA':
             value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-              province?.division_type : ''
+              province?.division_type?.replace('trung ương', '') : ''
               }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
                 district?.division_type : ''
               }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
@@ -507,10 +507,27 @@ export class SoanSoComponent implements OnInit {
   onChangeSelectedIndex(event: any) {
     if (event === 1) {
       this.contentEditable = false
+      this.updateCauSieuEditData()
     }
     if (event === 0) {
       this.contentEditable = true
-      // this.getCotnent()
+      this.getCotnent()
+    }
+  }
+
+  updateCauSieuEditData() {
+    const diaChi = this.content.formGroup?.find((item: any) => item.key === 'que-quan')
+    if (diaChi?.value?.province) {
+      this.editData.subject.details.province = diaChi?.value?.province
+    }
+    if (diaChi?.value?.district) {
+      this.editData.subject.details.district = diaChi?.value?.district
+    }
+    if (diaChi?.value?.ward) {
+      this.editData.subject.details.ward = diaChi?.value?.ward
+    }
+    if (diaChi?.value?.village) {
+      this.editData.subject.details.address = diaChi?.value?.village
     }
   }
 

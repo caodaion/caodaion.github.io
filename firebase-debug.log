@@ -1,0 +1,167 @@
+[debug] [2024-01-10T03:42:02.723Z] ----------------------------------------------------------------------
+[debug] [2024-01-10T03:42:02.726Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-01-10T03:42:02.727Z] CLI Version:   11.19.0
+[debug] [2024-01-10T03:42:02.727Z] Platform:      win32
+[debug] [2024-01-10T03:42:02.727Z] Node Version:  v20.9.0
+[debug] [2024-01-10T03:42:02.727Z] Time:          Wed Jan 10 2024 10:42:02 GMT+0700 (Indochina Time)
+[debug] [2024-01-10T03:42:02.727Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-01-10T03:42:02.735Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-01-10T03:42:02.736Z] > authorizing via signed-in user (caodaion@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\caodaion.github.io
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-01-10T03:42:11.545Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-01-10T03:42:12.412Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-01-10T03:42:12.412Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project caodaion-5c203 (caodaion) 
+[info] 
+=== Hosting Setup
+[debug] [2024-01-10T03:42:28.059Z] Error: Cannot find module 'vite'
+Require stack:
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\controller.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\commandUtils.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\database-get.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1048:15)
+    at Function.resolve (node:internal/modules/helpers:136:19)
+    at relativeRequire (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:51:30)
+    at getConfig (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:88:55)
+    at discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:53:68)
+    at async C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:37:55
+    at async discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:77:32)
+    at async doSetup (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\hosting\index.js:20:11)
+    at async init (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:36:9)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-01-10T03:43:04.894Z] ----------------------------------------------------------------------
+[debug] [2024-01-10T03:43:04.897Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-01-10T03:43:04.897Z] CLI Version:   11.19.0
+[debug] [2024-01-10T03:43:04.897Z] Platform:      win32
+[debug] [2024-01-10T03:43:04.898Z] Node Version:  v20.9.0
+[debug] [2024-01-10T03:43:04.898Z] Time:          Wed Jan 10 2024 10:43:04 GMT+0700 (Indochina Time)
+[debug] [2024-01-10T03:43:04.898Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-01-10T03:43:04.905Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-01-10T03:43:04.905Z] > authorizing via signed-in user (caodaion@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\caodaion.github.io
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-01-10T03:43:14.958Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-01-10T03:43:15.651Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-01-10T03:43:15.652Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project caodaion-5c203 (caodaion) 
+[info] 
+=== Hosting Setup
+[debug] [2024-01-10T03:43:27.373Z] Error: Cannot find module 'vite'
+Require stack:
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\controller.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\commandUtils.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\database-get.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1048:15)
+    at Function.resolve (node:internal/modules/helpers:136:19)
+    at relativeRequire (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:51:30)
+    at getConfig (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:88:55)
+    at discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:53:68)
+    at async C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:37:55
+    at async discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:77:32)
+    at async doSetup (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\hosting\index.js:20:11)
+    at async init (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:36:9)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-01-10T03:44:00.724Z] ----------------------------------------------------------------------
+[debug] [2024-01-10T03:44:00.728Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-01-10T03:44:00.728Z] CLI Version:   11.19.0
+[debug] [2024-01-10T03:44:00.729Z] Platform:      win32
+[debug] [2024-01-10T03:44:00.729Z] Node Version:  v20.9.0
+[debug] [2024-01-10T03:44:00.729Z] Time:          Wed Jan 10 2024 10:44:00 GMT+0700 (Indochina Time)
+[debug] [2024-01-10T03:44:00.729Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-01-10T03:44:00.828Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-01-10T03:44:00.828Z] > authorizing via signed-in user (caodaion@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\caodaion.github.io
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-01-10T03:44:07.764Z] Using project from CLI flag: caodaion-5c203
+[debug] [2024-01-10T03:44:07.766Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/caodaion-5c203 [none]
+[debug] [2024-01-10T03:44:08.250Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/caodaion-5c203 200
+[debug] [2024-01-10T03:44:08.250Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/caodaion-5c203 {"projectId":"caodaion-5c203","projectNumber":"415271346393","displayName":"caodaion","name":"projects/caodaion-5c203","resources":{"hostingSite":"caodaion-5c203"},"state":"ACTIVE","etag":"1_81c06cfe-3360-4cdd-8839-5880bc6bf86d"}
+[info] i  Using project caodaion-5c203 (caodaion) 
+[info] 
+=== Hosting Setup
+[debug] [2024-01-10T03:44:17.486Z] Error: Cannot find module 'vite'
+Require stack:
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\controller.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\commandUtils.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\database-get.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\index.js
+- C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1048:15)
+    at Function.resolve (node:internal/modules/helpers:136:19)
+    at relativeRequire (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:51:30)
+    at getConfig (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:88:55)
+    at discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:53:68)
+    at async C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\vite\index.js:37:55
+    at async discover (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:77:32)
+    at async doSetup (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\hosting\index.js:20:11)
+    at async init (C:\Users\nhann\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:36:9)
+[error] 
+[error] Error: An unexpected error has occurred.
