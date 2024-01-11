@@ -172,28 +172,6 @@
               Thiên ngươn (15 Ngày)
             </button>
           </mat-menu>
-          <!-- <div
-            (click)="filter.ten = !filter.ten; updatefliter()"
-            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-            [ngClass]="{
-              'bg-transparent': !filter.ten,
-              'text-white': filter.ten
-            }"
-            [matTooltip]="'Hiển thị thập trai'"
-          >
-            10
-          </div>
-          <div
-            (click)="filter.fifteen = !filter.fifteen; updatefliter()"
-            class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
-            [ngClass]="{
-              'bg-transparent': !filter.fifteen,
-              'text-white': filter.fifteen
-            }"
-            [matTooltip]="'Hiển thị thiên ngươn'"
-          >
-            15
-          </div> -->
         </div>
         <button
           mat-icon-button
@@ -225,6 +203,15 @@
               >
             </mat-select>
           </mat-form-field>
+          <div *ngIf="!allowToUpdateMember?.form" class="w-full whitespace-normal text-justify">
+            Liện hệ CaoDaiON trên Facebook để đăng ký sử dụng tính năng hiển thị
+            lịch hành đạo của bạn lên ứng dụng lịch của CaoDaiON
+            <br />
+            Facebook:
+            <a href="https://www.facebook.com/caodaion" class="underline" target="_blank"
+              >facebook.com/caodaion</a
+            >
+          </div>
           <button
             mat-flat-button
             [color]="'primary'"
@@ -544,23 +531,15 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button mat-dialog-close>Đóng</button>
       <button
         mat-stroked-button
         [color]="'primary'"
         (click)="onOpenSoanSo()"
         [mat-dialog-close]="true"
         *ngIf="shownDate?.event?.event?.soTemplate"
+        class="w-full lg:w-auto"
       >
         <mat-icon>receipt_long</mat-icon>Soạn sớ
-      </button>
-      <button
-        mat-flat-button
-        [color]="'primary'"
-        (click)="onGetKinhFromSummaryEvent()"
-        [mat-dialog-close]="true"
-      >
-        Xem kinh
       </button>
       <button
         mat-button
@@ -571,6 +550,16 @@
         <mat-icon>cloud_sync</mat-icon>
         Đồng bộ lên Google Calendar
       </button>
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        (click)="onGetKinhFromSummaryEvent()"
+        [mat-dialog-close]="true"
+        class="w-full lg:w-auto"
+      >
+        Xem kinh
+      </button>
+      <button mat-button mat-dialog-close class="w-full lg:w-auto">Đóng</button>
     </mat-dialog-actions>
   </div>
 </ng-template>
