@@ -186,7 +186,8 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
         if (node.id) {
           this.tableContent.push({
             key: node.id,
-            description: node.textContent
+            description: node.textContent,
+            tagName: node.tagName
           })
         }
         this.tableContent = [...new Set(this.tableContent)]

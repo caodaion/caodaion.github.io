@@ -62,12 +62,32 @@
           <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
             <ng-container *ngFor="let item of tableContent">
               <a
-                [href]="'thu-vien/' + key + '#' + item?.key"
+                [href]="'thu-vien/' + key + '/' + item?.key"
                 class="block p-3"
                 matRipple
                 (click)="isPhone ? libradianDrawer.toggle() : ''"
               >
-                {{ item?.description }}
+                <span class="font-black" *ngIf="item?.tagName == 'H1'">
+                  -{{ item.description }}
+                </span>
+                <span class="pl-1 font-bold" *ngIf="item?.tagName == 'H2'">
+                  --{{ item.description }}
+                </span>
+                <span class="" *ngIf="item?.tagName == 'H3'">
+                  ---{{ item.description }}
+                </span>
+                <span class="" *ngIf="item?.tagName == 'H4'">
+                  ----{{ item.description }}
+                </span>
+                <span class="" *ngIf="item?.tagName == 'H5'">
+                  -----{{ item.description }}
+                </span>
+                <span class="" *ngIf="item?.tagName == 'H6'">
+                  -------{{ item.description }}
+                </span>
+                <span class="" *ngIf="!item?.tagName">{{
+                  item.description
+                }}</span>
               </a>
               <mat-divider></mat-divider>
             </ng-container>
@@ -77,7 +97,9 @@
       <mat-tab [label]="'Tài liệu gốc'" *ngIf="origin">
         <iframe
           *ngIf="selectedIndex === 1"
-          [src]="'https://drive.google.com/file/d/' + origin + '/preview' | safe"
+          [src]="
+            'https://drive.google.com/file/d/' + origin + '/preview' | safe
+          "
           class="w-full h-full"
           allow="autoplay"
         ></iframe>
@@ -99,8 +121,27 @@
         [href]="'thu-vien/' + key + '/' + item?.key"
         class="w-full block p-3"
         matRipple
-        >{{ item.description }}</a
       >
+        <h1 *ngIf="item?.tagName == 'H1'">
+          {{ item.description }}
+        </h1>
+        <h2 *ngIf="item?.tagName == 'H2'">
+          {{ item.description }}
+        </h2>
+        <h3 *ngIf="item?.tagName == 'H3'">
+          {{ item.description }}
+        </h3>
+        <h4 *ngIf="item?.tagName == 'H4'">
+          {{ item.description }}
+        </h4>
+        <h5 *ngIf="item?.tagName == 'H5'">
+          {{ item.description }}
+        </h5>
+        <h6 *ngIf="item?.tagName == 'H6'">
+          {{ item.description }}
+        </h6>
+        <span *ngIf="!item?.tagName">{{ item.description }}</span>
+      </a>
       <mat-divider></mat-divider>
     </ng-container>
   </div>

@@ -43,7 +43,7 @@ export class LibraryService {
       return this.http.get(`assets/documents/library/${key}/${key}.txt`, { responseType: 'text' })
     }
     return new Observable((observable) => {
-      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${key}/${key}.md${!environment.production ? '?ref=dev' : ''}`)
+      this.http.get(`https://api.github.com/repos/${API_PARAMS.caodaionLibrady.user}/${API_PARAMS.caodaionLibrady.repo}/contents/${key}/${key}.md${!environment.production ? '?ref=draft/' + key + '' : ''}`)
         .subscribe((res: any) => {
           const resposne = <any>{}
           resposne.data = decodeURIComponent(escape(atob(res.content)))
