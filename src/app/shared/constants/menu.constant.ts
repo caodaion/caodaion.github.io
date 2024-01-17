@@ -127,22 +127,14 @@ export const MENU = [
     ]
   },
   {
-    key: 'kids',
-    url: 'kids',
-    label: 'Nhi đồng',
-    icon: 'toys',
+    key: 'qr',
+    url: 'qr',
+    label: 'Quét Mã QR',
+    icon: 'qr_code_2',
     fullAssess: true,
     released: true,
     children: [
-      {
-        key: 'kids.vuon-trai',
-        url: 'vuon-trai',
-        label: 'Vườn trái',
-        icon: 'agriculture',
-        fullAssess: true,
-        released: true,
-        voViWorkspace: true,
-      },
+
     ]
   },
 ]

@@ -301,6 +301,7 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
           subject: subject,
           link: item?.link,
         }
-      })
+      })?.sort((a: any, b: any) => a.eventLunar.lunarMonth < b.eventLunar.lunarMonth || a.eventLunar.lunarDay < b.eventLunar.lunarDay ? -1 : 1)
+      ?.filter((item: any) => item.eventLunar.lunarMonth < 12 ? (item.eventLunar.lunarMonth >= this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar?.lunarMonth) : (item.eventLunar.lunarMonth === 12 || item.eventLunar.lunarMonth === 1))
   }
 }

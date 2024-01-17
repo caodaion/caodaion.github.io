@@ -13,7 +13,7 @@ export class ActionComponent {
     {
       link: '/kinh',
       icon: 'menu_book',
-      label: 'Đọc Kinh'
+      label: 'Các bài Kinh'
     },
     {
       link: '/thanh-ngon-hiep-tuyen',

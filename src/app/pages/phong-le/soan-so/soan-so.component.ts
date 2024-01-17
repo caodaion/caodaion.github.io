@@ -167,8 +167,8 @@ export class SoanSoComponent implements OnInit {
       (this.editData?.subject?.date?.lunarYear && this.editData?.subject?.date?.lunarDay && this.editData?.subject?.date?.lunarMonth)) {
       const lunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.editData?.subject?.date?.year}-${this.editData?.subject?.date?.month < 10 ? '0' + this.editData?.subject?.date?.month : this.editData?.subject?.date?.month}-${this.editData?.subject?.date?.date < 10 ? '0' + this.editData?.subject?.date?.date : this.editData?.subject?.date?.date}`)).convertSolar2Lunar
       this.applyData('nam-tu-tran', this.editData?.subject?.date?.lunarYear ? this.editData?.subject?.date?.lunarYear : lunarDate.lunarYearName)
-      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarMonth ? this.editData?.subject?.date?.lunarMonth : lunarDate.lunarMonth, true).toLowerCase())
-      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarDay ? this.editData?.subject?.date?.lunarDay : lunarDate.lunarDay, true).toLowerCase())
+      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarMonth ? this.editData?.subject?.date?.lunarMonth : lunarDate.lunarMonth, true, {type: 'month'}).toLowerCase())
+      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarDay ? this.editData?.subject?.date?.lunarDay : lunarDate.lunarDay, true, {type: 'month'}).toLowerCase())
     }
     if (this.editData?.subject?.date?.lunarTime) {
       this.applyData('gio-tu-tran', this.editData?.subject?.date?.lunarTime.split('|')[0].trim())
@@ -295,10 +295,10 @@ export class SoanSoComponent implements OnInit {
       this.applyData('nam-am-lich', date.lunarYearName)
     }
     if (this.editData.eventLunar.lunarMonth) {
-      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true).toLowerCase())
+      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true, {type: 'month'}).toLowerCase())
     }
     if (this.editData.eventLunar.lunarDay) {
-      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true).toLowerCase())
+      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true, {type: 'date'}).toLowerCase())
     }
     if (this.editData.eventLunar.lunarTime) {
       this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())

@@ -192,7 +192,7 @@ export class CommonService {
     };
   }
 
-  convertNumberToText(n: any, ignoreDeSe: boolean = false) {
+  convertNumberToText(n: any, ignoreDeSe: boolean = false, option?: any) {
     const convertSplitToText = (num: any) => {
       let lunar = ''
       switch (num) {
@@ -249,7 +249,7 @@ export class CommonService {
           returnValue = (index === 0 ? '' : noNeedDeSe ? '' : decimalSeparator[index]) + ' ' + value + ' ' + returnValue
         }
       } else {
-        returnValue = convertSplitToText(parseInt(splitValue[0]))
+        returnValue = option?.type == 'month' && parseInt(splitValue[0]) == 1 ? 'Chánh' : option?.type == 'date' && parseInt(splitValue[0]) < 10 ? 'sơ ' + convertSplitToText(parseInt(splitValue[0])) : convertSplitToText(parseInt(splitValue[0]))
       }
       return returnValue.split(/\s+/).join(' ').trim();
     }

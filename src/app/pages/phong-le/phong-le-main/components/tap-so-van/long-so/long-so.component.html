@@ -3,7 +3,7 @@
     class="pb-4"
     *ngIf="longSo === 'tam-giao' && upCommingLongSoList?.length > 0"
   >
-    <h2>Sớ áp dụng sắp tới</h2>
+    <h2 class="mt-5">Sớ áp dụng sắp tới</h2>
     <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
       <mat-grid-tile *ngFor="let item of upCommingLongSoList">
         <mat-card
@@ -16,11 +16,11 @@
           }"
         >
           <mat-card-header class="w-100">
-            <mat-card-title class="w-100 text-center"
+            <mat-card-title class="w-100 text-center !text-2xl !mb-4 !font-bold"
               >Soạn Sớ {{ item?.name }}</mat-card-title
             >
           </mat-card-header>
-          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center">
+          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center text-xl">
             Diễn ra lúc:
             {{
               item?.eventLunar?.lunarTime
@@ -47,7 +47,7 @@
     class="pb-4"
     *ngIf="longSo === 'tam-tran' && thanhSoTamTranEvent?.length > 0"
   >
-    <h2>Sớ áp dụng sắp tới</h2>
+    <h2 class="mt-5">Sớ áp dụng sắp tới</h2>
     <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
       <mat-grid-tile *ngFor="let item of thanhSoTamTranEvent">
         <mat-card
@@ -60,11 +60,11 @@
           }"
         >
           <mat-card-header class="w-100">
-            <mat-card-title class="w-100 text-center"
+            <mat-card-title class="w-100 text-center !text-2xl !mb-4 !font-bold"
               >Soạn Sớ {{ item?.name }}</mat-card-title
             >
           </mat-card-header>
-          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center">
+          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center text-xl">
             Diễn ra lúc:
             {{
               item?.eventLunar?.lunarTime
@@ -88,7 +88,7 @@
     </mat-grid-list>
   </div>
   <div class="pb-4">
-    <h2>
+    <h2 class="mt-5">
       Soạn sớ theo lòng sớ
       {{
         longSo === "tam-giao"
@@ -110,11 +110,11 @@
           }"
         >
           <mat-card-header class="w-100">
-            <mat-card-title class="w-100 text-center"
+            <mat-card-title class="w-100 text-center !text-2xl !mb-4 !font-bold"
               >Soạn Sớ {{ item?.name }}</mat-card-title
             >
           </mat-card-header>
-          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center">
+          <mat-card-content *ngIf="item?.eventLunar" class="w-100 text-center text-xl">
             Diễn ra lúc:
             {{
               item?.eventLunar?.lunarTime

@@ -6,8 +6,8 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 import { KinhService } from 'src/app/shared/services/kinh/kinh.service';
-import {CONSTANT} from "../../../shared/constants/constants.constant";
-import {Title} from "@angular/platform-browser";
+import { CONSTANT } from "../../../shared/constants/constants.constant";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-kinh-list',
@@ -23,6 +23,7 @@ export class KinhListComponent implements OnInit {
   cols: number = 1;
   selectedIndex: number = 0;
   contentEditable: any;
+  mode: any = 'list';
   isLoading: boolean = false;
   eventList = this.eventService.eventList;
   @ViewChild('filterExansionPannel', { static: true, read: MatExpansionPanel })
@@ -37,7 +38,7 @@ export class KinhListComponent implements OnInit {
     private route: ActivatedRoute,
     private titleSerVice: Title,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getKinhList();
@@ -51,7 +52,7 @@ export class KinhListComponent implements OnInit {
           this.nowKinh.filter.e = params['e'];
         }
       }
-      this.selectedIndex = this.kinhFilter.findIndex(({key}) => key === this.nowKinh.filter.me)
+      this.selectedIndex = this.kinhFilter.findIndex(({ key }) => key === this.nowKinh.filter.me)
     });
     this.contentEditable = this.authService.contentEditable;
     this.breakpointObserver
@@ -63,6 +64,7 @@ export class KinhListComponent implements OnInit {
           this.cols = 6;
         }
       });
+    this.mode = localStorage.getItem('kinhViewMode') || 'list'
   }
 
   getKinhList() {
@@ -124,15 +126,13 @@ export class KinhListComponent implements OnInit {
         this.nowKinh.filterRequired = false;
         this.filterExansionPannel.expanded = false;
         this.nowKinh.selectedEvent = now.event;
-        this.nowKinh.filterdMessage = `Đã lọc kinh ${
-          this.nowKinh.selectedEvent?.name
-        } diễn ra lúc ${
-          this.commonTimes
+        this.nowKinh.filterdMessage = `Đã lọc kinh ${this.nowKinh.selectedEvent?.name
+          } diễn ra lúc ${this.commonTimes
             .find(
               (item: any) => item.key === this.nowKinh.selectedEvent?.time[0]
             )
             ?.name.split('|')[1]
-        }`;
+          }`;
       }
     };
 
@@ -232,6 +232,10 @@ export class KinhListComponent implements OnInit {
       relativeTo: this.route,
       queryParams: { me: this.nowKinh.filter.me, e: this.nowKinh.filter.e },
     });
+  }
+
+  updateViewMode() {
+    localStorage.setItem('kinhViewMode', this.mode);
   }
 }
 

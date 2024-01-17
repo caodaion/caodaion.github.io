@@ -22,6 +22,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import {CpContentCreatorModule} from "../../components/cp-content-creator/cp-content-creator.module";
 import { MarkdownModule } from 'ngx-markdown';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [KinhListComponent, KinhContentComponent],
@@ -46,7 +48,9 @@ import { MarkdownModule } from 'ngx-markdown';
     MatListModule,
     MatSelectModule,
     CpContentCreatorModule,
-    MarkdownModule
+    MarkdownModule,
+    MatButtonToggleModule,
+    MatTooltipModule
   ],
 })
 export class KinhModule {}

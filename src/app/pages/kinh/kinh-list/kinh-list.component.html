@@ -107,20 +107,66 @@
       </mat-accordion>
     </mat-tab> -->
     <mat-tab *ngFor="let filter of kinhFilter" [label]="filter?.name">
-      <mat-grid-list [cols]="cols" rowHeight="1:1">
-        <mat-grid-tile *ngFor="let kinh of filter?.kinh">
-          <mat-card
-            appearance="outlined"
-            (click)="nowKinh.filter.me = filter?.key; nowKinh.filter.e = filter?.key; onOpenKinhContent(kinh)"
-            class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+      <div class="sticky top-0 z-10 w-full bg-white">
+        <mat-button-toggle-group
+          [(ngModel)]="mode"
+          class="!rounded-full"
+          (ngModelChange)="updateViewMode()"
+        >
+          <mat-button-toggle
+            value="list"
+            [matTooltip]="'hiển thị kiểu danh sách'"
+            ><mat-icon *ngIf="mode === 'list'">check</mat-icon
+            ><mat-icon>list</mat-icon></mat-button-toggle
+          >
+          <mat-button-toggle value="gird" [matTooltip]="'hiển thị kiểu lưới'"
+            ><mat-icon *ngIf="mode === 'gird'">check</mat-icon
+            ><mat-icon>grid_view</mat-icon></mat-button-toggle
+          >
+        </mat-button-toggle-group>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div *ngIf="mode === 'list'">
+        <mat-list>
+          <mat-list-item
+            *ngFor="let kinh of filter?.kinh; let index = index"
+            (click)="
+              nowKinh.filter.me = filter?.key;
+              nowKinh.filter.e = filter?.key;
+              onOpenKinhContent(kinh)
+            "
             matRipple
           >
-            <mat-card-header class="w-100">
-              <mat-card-title>{{ kinh?.name }}</mat-card-title>
-            </mat-card-header>
-          </mat-card>
-        </mat-grid-tile>
-      </mat-grid-list>
+            <div class="w-full h-full flex flex-col justify-between">
+              <div class="h-full flex items-center text-xl font-bold px-4">
+                {{ kinh?.name }}
+              </div>
+              <mat-divider></mat-divider>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div *ngIf="mode === 'gird'">
+        <mat-grid-list [cols]="cols" rowHeight="1:1">
+          <mat-grid-tile *ngFor="let kinh of filter?.kinh">
+            <mat-card
+              appearance="outlined"
+              (click)="
+                nowKinh.filter.me = filter?.key;
+                nowKinh.filter.e = filter?.key;
+                onOpenKinhContent(kinh)
+              "
+              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+              matRipple
+            >
+              <mat-card-header class="w-100">
+                <mat-card-title>{{ kinh?.name }}</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
     </mat-tab>
     <mat-tab [label]="'CÀI ĐẶT'" *ngIf="contentEditable">
       <mat-accordion multi>
