@@ -32,6 +32,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/phong-le/phong-le.module').then((m) => m.PhongLeModule)
       },
+      {
+        path: 'hanh-le',
+        loadChildren: () =>
+          import('../../pages/hanh-le/hanh-le.module').then((m) => m.HanhLeModule)
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },

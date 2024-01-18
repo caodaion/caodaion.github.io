@@ -1,0 +1,28 @@
+<div class="wrapper-container">
+  <app-header
+    class="header"
+    [prevPage]="{
+      navigate: { link: 'tac-vu/hanh-le' }
+    }"
+  >
+    <div class="kinh-header">
+      <app-header-title>{{ nghiTiet?.name }}</app-header-title>
+    </div>
+  </app-header>
+  <div class="flex-1">
+    <div class="p-4 wrapper-container">
+      <div class="flex justify-center items-center">
+        Lướt qua <mat-icon>navigate_next</mat-icon>
+      </div>
+      <div class="flex-1">
+        <swiper-container class="h-full">
+          <swiper-slide *ngFor="let item of nghiTiet?.steps">
+            <div class="h-full w-full flex items-center justify-center">
+              <div class="text-3xl text-center">{{ item?.xuong }}</div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+    </div>
+  </div>
+</div>

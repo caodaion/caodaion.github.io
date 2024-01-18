@@ -1,4 +1,4 @@
-import { NgModule, SecurityContext } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,6 +33,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ErrorStateMatcher, MAT_DATE_LOCALE, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MarkdownModule } from 'ngx-markdown';
+import { register } from 'swiper/element/bundle';
+register();
 
 @NgModule({
   declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, SignupComponent],
@@ -70,5 +72,6 @@ import { MarkdownModule } from 'ngx-markdown';
     {provide: MAT_DATE_LOCALE, useValue: 'vi-VN'},
   ],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

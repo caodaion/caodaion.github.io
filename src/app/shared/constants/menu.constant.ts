@@ -101,6 +101,14 @@ export const MENU = [
         released: true,
       },
       {
+        key: 'tac-vu.hanh-le',
+        url: 'hanh-le',
+        label: 'Hành lễ',
+        icon: 'circle',
+        fullAssess: true,
+        released: true,
+      },
+      {
         key: 'tac-vu.phong-tho',
         url: 'phong-tho',
         label: 'Phòng Thơ',
