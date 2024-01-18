@@ -29,7 +29,8 @@ export class HanhLeComponent implements OnInit {
     },
     {
       key: 'nghi-thanh-phuc',
-      name: 'Nghi thành phục'
+      name: 'Nghi thành phục',
+      published: true,
     },
     {
       key: 'nghi-dieu-te',
@@ -41,7 +42,8 @@ export class HanhLeComponent implements OnInit {
     },
     {
       key: 'nghi-tien-biet',
-      name: 'Nghi tiển biệt'
+      name: 'Nghi tiển biệt',
+      published: true,
     },
     {
       key: 'nghi-phat-hanh',

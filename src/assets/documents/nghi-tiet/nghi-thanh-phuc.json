@@ -1,6 +1,6 @@
 {
   "data": {
-    "name": "Nghi tiển biệt",
+    "name": "Nghi thành phục",
     "activeToggle": true,
     "steps": [
       {
@@ -18,6 +18,10 @@
       {
         "xuong": "Nhạc sanh khởi nhạc",
         "description": ""
+      },
+      {
+        "xuong": "Ngũ phục chi nhơn các phục kỳ phục",
+        "description": "Người trong gia quyến thọ phục 5 bực tang (Kể ra sau), nếu không đủ ngũ phục, con cháu ít thì xuống: Các phục chi nhơn giai thọ kỳ phục"
       },
       {
         "xuong": "Tự lập",

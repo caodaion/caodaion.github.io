@@ -40,6 +40,11 @@ export class ActionComponent {
       icon: 'receipt_long',
       label: 'Soạn sớ'
     },
+    {
+      link: '/tac-vu/hanh-le',
+      icon: 'receipt_long',
+      label: 'Hành Lễ'
+    },
   ]
 
   constructor (

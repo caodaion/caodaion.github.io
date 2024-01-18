@@ -10,12 +10,17 @@ import { NghiTietComponent } from './nghi-tiet/nghi-tiet.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { HeaderModule } from 'src/app/components/header/header.module';
-
+import { SwiperDirective } from './directive/swiperDirective';
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     HanhLeComponent,
-    NghiTietComponent
+    NghiTietComponent,
+    SwiperDirective
   ],
   imports: [
     CommonModule,
@@ -25,7 +30,11 @@ import { HeaderModule } from 'src/app/components/header/header.module';
     MatButtonModule,
     MatGridListModule,
     MatCardModule,
-    HeaderModule
+    HeaderModule,
+    MatRadioModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -2,21 +2,23 @@
   <mat-tab [label]="'Nghi tiết'">
     <div class="p-4">
       <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
-        <mat-grid-tile *ngFor="let item of nghiTiet">
-          <mat-card
-            appearance="outlined"
-            class="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
-            matRipple
-            [routerLink]="[item?.key]"
-          >
-            <mat-card-header class="w-100">
-              <mat-card-title
-                class="w-100 text-center !text-2xl !mb-4 !font-bold"
-                >{{ item?.name }}</mat-card-title
-              >
-            </mat-card-header>
-          </mat-card>
-        </mat-grid-tile>
+        <ng-container *ngFor="let item of nghiTiet">
+          <mat-grid-tile *ngIf="item?.published">
+            <mat-card
+              appearance="outlined"
+              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+              matRipple
+              [routerLink]="[item?.key]"
+            >
+              <mat-card-header class="w-100">
+                <mat-card-title
+                  class="w-100 text-center !text-2xl !mb-4 !font-bold"
+                  >{{ item?.name }}</mat-card-title
+                >
+              </mat-card-header>
+            </mat-card>
+          </mat-grid-tile>
+        </ng-container>
       </mat-grid-list>
     </div>
   </mat-tab>

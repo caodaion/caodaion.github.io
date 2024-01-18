@@ -37,7 +37,14 @@ import { register } from 'swiper/element/bundle';
 register();
 
 @NgModule({
-  declarations: [AppComponent, PagenotfoundComponent, OfflineSnackbarComponent, AuthComponent, LoginComponent, SignupComponent],
+  declarations: [
+    AppComponent,
+    PagenotfoundComponent,
+    OfflineSnackbarComponent,
+    AuthComponent,
+    LoginComponent,
+    SignupComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -65,11 +72,11 @@ register();
     MatDatepickerModule,
     MatNativeDateModule,
     MatGridListModule,
-    MarkdownModule.forRoot({sanitize: SecurityContext.NONE})
+    MarkdownModule.forRoot({ sanitize: SecurityContext.NONE })
   ],
   providers: [AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService,
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-    {provide: MAT_DATE_LOCALE, useValue: 'vi-VN'},
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
