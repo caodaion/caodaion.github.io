@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -41,7 +42,8 @@ export class SoanSoComponent implements OnInit {
     private calendarService: CalendarService,
     private locationService: LocationService,
     private authService: AuthService,
-    private decimal: DecimalPipe
+    private decimal: DecimalPipe,
+    private breakpointObserver: BreakpointObserver
   ) {
 
   }
@@ -79,6 +81,30 @@ export class SoanSoComponent implements OnInit {
     this.getWards()
     this.getDefaultLocation()
     this.getCotnent()
+
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: true,
+                isHideBottomNavBar: true,
+              })
+            );
+          } else {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: false,
+                isHideBottomNavBar: false,
+              })
+            );
+          }
+        });
+    }, 0)
   }
 
   getDefaultLocation() {

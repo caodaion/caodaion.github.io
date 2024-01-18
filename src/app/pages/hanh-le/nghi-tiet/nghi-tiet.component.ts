@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TacVuService } from 'src/app/shared/services/tac-vu/tac-vu.service';
@@ -19,7 +20,8 @@ export class NghiTietComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private tacVuService: TacVuService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private breakpointObserver: BreakpointObserver
   ) {
 
   }
@@ -31,6 +33,29 @@ export class NghiTietComponent implements OnInit {
         this.getNghiTiet()
       }
     })
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: true,
+                isHideBottomNavBar: true,
+              })
+            );
+          } else {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: false,
+                isHideBottomNavBar: false,
+              })
+            );
+          }
+        });
+    }, 0)
   }
 
   getNghiTiet() {
