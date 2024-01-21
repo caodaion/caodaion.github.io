@@ -1,0 +1,27 @@
+::ng-deep {
+  .no-children text {
+    text-anchor: end !important;
+    transform: translateX(65px);
+  }
+  [lcn="ig"].belinda text {
+    text-anchor: start !important;
+    transform: translateX(-65px);
+    display: none;
+  }
+
+  [data-l-id*="Timing"] path {
+    stroke: #ffca28 !important ;
+  }
+
+  [data-l-id*="Stakeholders"] path {
+    stroke: #039be5 !important ;
+  }
+
+  [data-l-id*="Content"] path {
+    stroke: #f57c00 !important ;
+  }
+
+  [data-l-id*="Go big ideas"] path {
+    stroke: #33b864 !important ;
+  }
+}
