@@ -1,6 +1,6 @@
 {
   "data": {
-    "name": "Nghi thành phục",
+    "name": "Nghi tiển biệt",
     "activeToggle": true,
     "steps": [
       {
@@ -21,7 +21,7 @@
       },
       {
         "xuong": "Ngũ phục chi nhơn các phục kỳ phục",
-        "description": "Người trong gia quyến thọ phục 5 bực tang (Kể ra sau), nếu không đủ ngũ phục, con cháu ít thì xuống: Các phục chi nhơn giai thọ kỳ phục"
+        "description": " Người trong gia quyến thọ phục 5 bực tang (Kể ra sau), nếu không đủ ngũ phục, con cháu ít thì xuống: Các phục chi nhơn giai thọ kỳ phục"
       },
       {
         "xuong": "Tự lập",
@@ -98,14 +98,6 @@
       {
         "xuong": "Hiến thời trân",
         "description": "Lễ cung tay đứng dậy đổi bước, người tiếp lễ lấy bình bông để lên bàn vong."
-      },
-      {
-        "xuong": "Phụng thỉnh vong linh chứng hưởng",
-        "description": "Đồng-nhi đọc bài Tiễn-biệt (Kinh triêu tịch (Thay triêu tịch thời thành tiễn biệt thời )) \"Nơi biển khổ tưng bừng sóng bủa, ...\""
-      },
-      {
-        "xuong": "Cúc cung bái",
-        "description": "2 lạy, Hưng bình thân."
       },
       {
         "xuong": "Nghệ đọc chúc sở",
@@ -202,10 +194,6 @@
         "description": "Nhạc đổ ba hồi lễ cung tay lên điện."
       },
       {
-        "xuong": "Huyền ca hiệp vận",
-        "description": "Đồng nhi thài từ câu cho lễ-sĩ đi vô đến Nội-nghi."
-      },
-      {
         "xuong": "Quì",
         "description": "Lễ day vô quì xuống."
       },
@@ -246,6 +234,14 @@
         "xuong": "Cúc cung bái",
         "description": "2 lạy, Hưng bình thân.",
         "toggle": "up"
+      },
+      {
+        "xuong": "Phụng thỉnh vong linh chứng hưởng",
+        "description": "Đồng nhi đọc kinh"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân."
       },
       {
         "xuong": "Nghệ điểm trà sở",

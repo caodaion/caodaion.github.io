@@ -13,8 +13,9 @@ export class NghiTietComponent implements OnInit {
   nghiTietKey: any;
   fontSize: any = 16;
   nghiTiet: any;
+  isShowGuide: boolean = false;
   filteredNghiTiet = <any>{};
-  nghiTietToggle: any = 'up';
+  nghiTietToggle: any = 'down';
   fontSizeRange = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
 
   constructor(
@@ -98,6 +99,13 @@ export class NghiTietComponent implements OnInit {
     printTab?.document.close(); // necessary for IE >= 10
     printTab?.focus(); // necessary for IE >= 10*/
     printTab?.print();
+  }
+
+  showGuide() {
+    this.isShowGuide = true;
+    setTimeout(() => {
+      this.isShowGuide = false;
+    }, 3000);
   }
 
 }

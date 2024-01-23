@@ -45,6 +45,11 @@ export class ActionComponent {
       icon: 'receipt_long',
       label: 'Hành Lễ'
     },
+    {
+      link: '/caodai100',
+      icon: 'money',
+      label: '100'
+    },
   ]
 
   constructor (

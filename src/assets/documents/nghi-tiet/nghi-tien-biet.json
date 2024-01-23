@@ -190,10 +190,6 @@
         "description": "Nhạc đổ ba hồi lễ cung tay lên điện."
       },
       {
-        "xuong": "Huyền ca hiệp vận",
-        "description": "Đồng nhi thài từ câu cho lễ-sĩ đi vô đến Nội-nghi."
-      },
-      {
         "xuong": "Quì",
         "description": "Lễ day vô quì xuống."
       },
@@ -234,6 +230,14 @@
         "xuong": "Cúc cung bái",
         "description": "2 lạy, Hưng bình thân.",
         "toggle": "up"
+      },
+      {
+        "xuong": "Phụng thỉnh vong linh chứng hưởng",
+        "description": "Đồng nhi đọc kinh"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân."
       },
       {
         "xuong": "Nghệ điểm trà sở",

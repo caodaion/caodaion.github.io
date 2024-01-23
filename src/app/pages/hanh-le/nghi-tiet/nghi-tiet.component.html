@@ -12,7 +12,6 @@
   <div class="flex-1 max-h-full overflow-hidden">
     <div class="wrapper-container">
       <div class="flex flex-col justify-center items-center">
-        Lướt qua <mat-icon>navigate_next</mat-icon>
         <mat-radio-group
           *ngIf="nghiTiet?.activeToggle"
           [(ngModel)]="nghiTietToggle"
@@ -25,21 +24,76 @@
       <div class="flex-1 overflow-hidden">
         <mat-tab-group class="h-full">
           <mat-tab [label]="'Bổn xướng'">
-            <swiper-container class="h-full" appSwiper>
-              <swiper-slide
-                *ngFor="let item of filteredNghiTiet?.steps; let index = index"
+            <div class="h-full wrapper-container">
+              <div
+                class="flex justify-center items-center p-4"
+                [ngClass]="{ 'animate-bounce': isShowGuide }"
               >
-                <div
-                  class="h-full w-full flex items-center justify-center flex-col"
+                <mat-icon>expand_less</mat-icon><span>Lướt lên</span><mat-icon>expand_less</mat-icon>
+              </div>
+              <div class="flex-1 overflow-hidden" (click)="showGuide()">
+                <swiper-container
+                  class="h-full"
+                  appSwiper
+                  [config]="{ direction: 'vertical' }"
+                  #swiper
                 >
-                  <div class="text-center">
-                    {{ index + 1 | number : "2.0-0" }}
-                  </div>
-                  <div class="text-3xl text-center">{{ item?.xuong }}</div>
-                  <div class="text-center">{{ item?.description }}</div>
-                </div>
-              </swiper-slide>
-            </swiper-container>
+                  <swiper-slide
+                    *ngFor="
+                      let item of filteredNghiTiet?.steps;
+                      let index = index
+                    "
+                  >
+                    <div
+                      class="h-full w-full flex items-center justify-center flex-col px-4"
+                    >
+                      <ng-container *ngIf="filteredNghiTiet?.steps[index - 1]">
+                        <div class="text-center text-gray-300">
+                          {{ index - 1 | number : "2.0-0" }}
+                        </div>
+                        <div class="text-lg text-center text-gray-300">
+                          {{ filteredNghiTiet?.steps[index - 1]?.xuong }}
+                        </div>
+                        <mat-icon class="text-gray-300">expand_less</mat-icon>
+                      </ng-container>
+                      <mat-divider class="w-full"></mat-divider>
+                      <div class="text-center mt-4">
+                        {{ index + 1 | number : "2.0-0" }} /
+                        {{ filteredNghiTiet?.steps?.length | number : "2.0-0" }}
+                      </div>
+                      <div class="text-5xl text-center mb-4">
+                        {{ item?.xuong }}
+                      </div>
+                      <mat-divider class="w-full"></mat-divider>
+                      <ng-container *ngIf="filteredNghiTiet?.steps[index + 1]">
+                        <mat-icon class="text-gray-500">expand_more</mat-icon>
+                        <div class="text-center text-gray-500">
+                          {{ index + 2 | number : "2.0-0" }}
+                        </div>
+                        <div class="text-2xl text-center text-gray-500">
+                          {{ filteredNghiTiet?.steps[index + 1]?.xuong }}
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="filteredNghiTiet?.steps[index + 2]">
+                        <mat-icon class="text-gray-400">expand_more</mat-icon>
+                        <div class="text-center text-gray-400">
+                          {{ index + 3 | number : "2.0-0" }}
+                        </div>
+                        <div class="text-xl text-center text-gray-400">
+                          {{ filteredNghiTiet?.steps[index + 2]?.xuong }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </swiper-slide>
+                </swiper-container>
+              </div>
+              <div
+                class="flex justify-center items-center p-4"
+                [ngClass]="{ 'animate-bounce': isShowGuide }"
+              >
+                <mat-icon>expand_less</mat-icon><span>Lướt lên</span><mat-icon>expand_less</mat-icon>
+              </div>
+            </div>
           </mat-tab>
           <mat-tab [label]="'In'">
             <mat-form-field class="w-full">

@@ -8,7 +8,33 @@ import OrgChart from "src/assets/orgchart";
 })
 export class HomeComponent implements OnInit {
 
+  messages = [
+    `SỰ THƯƠNG YÊU LÀ GIỀNG BẢO SANH CỦA CÀN KHÔN THẾ GIỚI.`,
+    `Đạo gốc bởi lòng thành tín hiệp`,
+    `Trong Tam Giáo có lời khuyến dạy
+Gốc bởi lòng làm phải làm lành`,
+    `Một cội sanh ba nhánh in nhau`,
+    `Nam Mô:
+    Nhứt nguyện: Đại Đạo hoằng khai.
+    Nhì nguyện: Phổ độ chúng sanh.
+    Tam nguyện: Xá tội đệ tử.
+    Tứ nguyện: Thiên hạ thái bình.
+    Ngũ nguyện: Thánh Thất an ninh.`,
+    `Muôn kiếp có Ta nắm chủ quyền,
+Vui lòng tu niệm hưởng ân Thiên.
+Đạo màu rưới khắp nơi trần thế,
+Ngàn tuổi muôn tên giữ trọn biên.`,
+  ]
+  message = this.messages[0]
+
   ngOnInit(): void {
+    const getContent = () => {
+      this.message = this.messages[Math.floor(Math.random() * this.messages.length)]
+      setTimeout(() => {
+        getContent()
+      }, 12000)
+    }
+    getContent();
     this.initChart()
   }
 
@@ -46,7 +72,7 @@ export class HomeComponent implements OnInit {
         template: "mindMap",
         nodeMouseClick: OrgChart.action.details,
         enableSearch: true,
-        miniMap: true,
+        // miniMap: true,
         enablePan: true,
         levelSeparation: 120,
         orientation: OrgChart.orientation.top,

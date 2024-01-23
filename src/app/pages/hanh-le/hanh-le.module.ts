@@ -15,6 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatRadioModule,
     FormsModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDividerModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
