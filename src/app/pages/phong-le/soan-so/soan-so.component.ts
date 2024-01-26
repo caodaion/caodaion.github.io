@@ -206,7 +206,8 @@ export class SoanSoComponent implements OnInit {
       this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.holyName}`)
     }
     if (!this.editData?.subject?.details?.holyName) {
-      this.applyData('thanh-danhten', `${CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)?.name} ${this.editData?.subject?.details?.name}`)
+      const foundTitle = CAODAI_TITLE.data.find((item: any) => item.key === this.editData?.subject?.details?.title)
+      this.applyData('thanh-danhten', `${this.editData?.subject?.details?.job ? this.editData?.subject?.details?.job : foundTitle?.name} ${this.editData?.subject?.details?.name}`)
     }
     if (this.editData?.subject?.details?.province) {
       const find = (array: any, key: any) => {

@@ -849,7 +849,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
                 sex: item.gender == 'Name' ? 'male' : 'female',
                 holyName: holyName,
                 title: foundTitle?.key,
-                subTitle: null,
+                job: item?.job,
                 color: this.commonService.generatedSlug(item.color || ''),
               },
               key: item['Timestamp']
@@ -893,6 +893,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
 
   onOpenSoanSo() {
     const data = this.shownDate?.event?.event
+    console.log(data);
+
     if (this.shownDate?.event?.event?.key && typeof this.shownDate?.event?.event?.key === 'string') {
       if (this.shownDate?.event?.event?.key?.includes('thoi-ngo')) {
         this.shownDate.event.event.eventLunar.lunarTime = 'NGỌ'

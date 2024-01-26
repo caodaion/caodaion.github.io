@@ -286,7 +286,7 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
               })
           }
           eventName = `Kỷ Niệm chi nhựt`
-          name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.jobType ? item?.jobType : (item?.eventTargetTitle?.includes('Chưa có Đạo') ? '' : item?.eventTargetTitle)} ${holyName || item.eventTargetName}`
+          name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.job ? item?.job : (item?.eventTargetTitle?.includes('Chưa có Đạo') ? '' : item?.eventTargetTitle)} ${holyName || item.eventTargetName}`
         }
         return {
           key: item['Timestamp'],
