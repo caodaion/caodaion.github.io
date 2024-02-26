@@ -76,9 +76,9 @@ export class SoanSoComponent implements OnInit {
         console.log(this.editData);
       }
     })
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
     this.getDefaultLocation()
     this.getCotnent()
 
@@ -153,7 +153,7 @@ export class SoanSoComponent implements OnInit {
               // @ts-ignore
               data = JSON.parse(JSON.stringify(data).replaceAll(data.content[0].key.split('-')[0], this.commonService.generatedSlug(`${this.editData.soTemplate}`)))
               this.previewContent = data
-              this.applyForm()
+              // this.applyForm()
             } else {
               initNewContent()
             }

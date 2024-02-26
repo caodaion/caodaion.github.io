@@ -25,6 +25,7 @@
         </mat-form-field>
       </div>
     </div>
+    <div style="text-align: right; " *ngIf="topGuide"><i><small>{{topGuide}}</small></i></div>
     <div
       class="cp-creator-block-group"
       [ngClass]="{ contentEditable: isShowController }"
@@ -44,6 +45,7 @@
           #creatorContent
           *ngIf="block?.type == 'contentBlock'"
           [data]="block"
+          [topGuide]="topGuide"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
           [isShowFontSizeSelect]="isShowFontSizeSelect"

@@ -15,6 +15,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   [x: string]: any;
   @Input() data: any;
+  @Input() topGuide?: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
   @Input() isShowFontSizeSelect: boolean = true;
@@ -147,9 +148,9 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   getLocationSettings() {
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
   }
 
   getId(block: any) {

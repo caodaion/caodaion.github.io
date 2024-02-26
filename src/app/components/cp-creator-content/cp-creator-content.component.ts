@@ -16,6 +16,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;
+  @Input() topGuide?: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
   @Input() isShowFontSizeSelect: boolean = true;
@@ -122,9 +123,9 @@ export class CpCreatorContentComponent implements OnChanges {
         ]
       }
     }
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
   }
 
   getLink(data: any) {

@@ -55,9 +55,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         key: ''
       }
     }
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
   }
 
   saveData() {

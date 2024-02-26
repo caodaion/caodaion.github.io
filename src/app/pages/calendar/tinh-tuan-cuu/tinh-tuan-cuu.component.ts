@@ -166,9 +166,9 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       }
     })
     this.titleService.setTitle(`Tính Tuần Cửu | ${CONSTANT.page.name}`)
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
   }
 
   ngAfterViewInit(): void {
