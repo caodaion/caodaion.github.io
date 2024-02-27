@@ -563,7 +563,7 @@
             {
                 "key": "dia-diem",
                 "label": "Địa điểm",
-                "value": "",
+                "value": "Thánh Thất",
                 "required": false,
                 "type": "text",
                 "dots": 12
