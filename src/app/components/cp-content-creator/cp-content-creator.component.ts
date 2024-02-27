@@ -389,22 +389,22 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
       const district = this.districts.find((item: any) => item.code === parseInt(this.addedComboLocation.district))
       const ward = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))
       const wardName = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-      switch (this.addedComboLocation.mode) {
-        case 'PpDdWwA':
-          this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-            (province?.division_type?.replace('trung ương', '')) : ''
-            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-              district?.division_type : ''
-            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-              ward?.division_type : ''
-            }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
-          break;
-        case 'pPdDwWA':
-          this.addedComboLocation.text = this.addedComboLocation.title
-          break;
-        default:
-          break;
-      }
+      // switch (this.addedComboLocation.mode) {
+      //   case 'PpDdWwA':
+      //     this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+      //       (province?.division_type?.replace('trung ương', '')) : ''
+      //       }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+      //         district?.division_type : ''
+      //       }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+      //         ward?.division_type : ''
+      //       }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
+      //     break;
+      //   case 'pPdDwWA':
+      //     this.addedComboLocation.text = this.addedComboLocation.title
+      //     break;
+      //   default:
+      //     break;
+      // }
       comboLocation.innerHTML = this.addedComboLocation.text
       const data = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key)
       if (data) {

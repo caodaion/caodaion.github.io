@@ -401,7 +401,7 @@
                         "content": [
                             {
                                 "type": "text",
-                                "text": " PHỤC VỌNG:",
+                                "text": "PHỤC VỌNG:",
                                 "attrs": {
                                     "fontWeight": "bold"
                                 }
