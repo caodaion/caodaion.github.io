@@ -102,7 +102,7 @@
                                 "value": "",
                                 "label": "Năm âm lịch",
                                 "key": "nam-am-lich",
-                                "dots": 10
+                                "dots": 12
                             },
                             {
                                 "type": "text",

@@ -110,7 +110,7 @@
                                 "value": "",
                                 "label": "Năm âm lịch",
                                 "key": "nam-am-lich",
-                                "dots": 10
+                                "dots": 12
                             },
                             {
                                 "type": "text",
@@ -574,7 +574,7 @@
                 "key": "thien-phong",
                 "label": "Thiên-phong",
                 "value": "",
-                "required": false,
+                "required": true,
                 "type": "checkbox"
             },
             {
@@ -588,7 +588,7 @@
             {
                 "key": "dien-tienthien-ban",
                 "label": "Điện tiền/Thiên Bàn",
-                "value": "",
+                "value": "Điện tiền",
                 "required": false,
                 "type": "text",
                 "dots": 12
