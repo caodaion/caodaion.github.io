@@ -115,7 +115,7 @@
       </mat-form-field> -->
       <mat-form-field [appearance]="'outline'" class="w-full">
         <mat-label>Nhập tay</mat-label>
-        <textarea matInput [(ngModel)]="addedComboLocation.text"></textarea>
+        <textarea [cols]="100" matInput [(ngModel)]="addedComboLocation.text"></textarea>
       </mat-form-field>
     </div>
   </mat-dialog-content>
