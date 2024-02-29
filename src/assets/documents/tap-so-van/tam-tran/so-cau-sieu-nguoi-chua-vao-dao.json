@@ -1,10 +1,10 @@
 {
     "data": {
         "type": "block",
-        "key": "so-cau-lanh-benh",
+        "key": "so-cau-sieu-nguoi-chua-vao-dao",
         "content": [
             {
-                "key": "so-cau-lanh-benh-0",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-0",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -20,13 +20,13 @@
                                 }
                             }
                         ],
-                        "key": "so-cau-lanh-benh-0p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-0p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-1",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-1",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -59,13 +59,13 @@
                                 "text": "Tam-Giáo Quy-Nguyên Ngũ-Chi Hiệp-Nhứt\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-1p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-1p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-2",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-2",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -81,13 +81,13 @@
                                 }
                             }
                         ],
-                        "key": "so-cau-lanh-benh-2p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-2p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-3",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-3",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -178,13 +178,13 @@
                                 "text": " chi trung.\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-3p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-3p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-4",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-4",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -222,7 +222,7 @@
                             },
                             {
                                 "type": "text",
-                                "text": " công đồng chư Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng quỳ tại "
+                                "text": " công đồng chư Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng lãnh đái hiếu quyến quỳ tại "
                             },
                             {
                                 "type": "form-control",
@@ -237,13 +237,13 @@
                                 "text": " thành tâm trình tấu.\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-4p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-4p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-5",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-5",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -263,13 +263,13 @@
                                 "text": "\nHuyền-Khung Cao-Thượng-Đế Ngọc-Hoàng Đại-Thiên-Tôn."
                             }
                         ],
-                        "key": "so-cau-lanh-benh-5p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-5p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-6",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-6",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -279,13 +279,13 @@
                                 "text": "\t\t\tViết:\tCao-Đài Tiên-Ông Đại-Bồ-Tát Ma-Ha-Tát.\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-6p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-6p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-7",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-7",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -301,13 +301,13 @@
                                 }
                             }
                         ],
-                        "key": "so-cau-lanh-benh-7p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-7p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-8",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-8",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -317,20 +317,40 @@
                                 "text": "\t\t\tThường-Cư Nam-Hãi Quan-Âm Như-Lai.\n\t\t\tLý-Đại Tiên-Trưởng Thái-Bạch Kim-Tinh.\n\t\t\tHiệp-Thiên-Đại-Đế Quan-Thánh Đế-Quân.\n\t\t\tChư Phật, Tiên, Thánh, Thần liên đài chi hạ.\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-8p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-8p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-9",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-9",
                 "type": "contentBlock",
                 "content": [
                     {
                         "content": [
                             {
                                 "type": "text",
-                                "text": "\t\t\n\t\tKim vì "
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\n"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "Kim vì "
                             },
                             {
                                 "type": "form-control",
@@ -342,7 +362,7 @@
                             },
                             {
                                 "type": "text",
-                                "text": " niên canh ư "
+                                "text": " bổn mạng ư "
                             },
                             {
                                 "type": "form-control",
@@ -354,30 +374,122 @@
                             },
                             {
                                 "type": "text",
-                                "text": " tuế. cư tại "
+                                "text": " tuế. Thọ sanh tại "
                             },
                             {
                                 "type": "form-control",
                                 "formType": "comboLocation",
-                                "text": "   Quê quán   ",
+                                "text": " Quê quán ",
                                 "value": "",
                                 "label": "Quê quán",
                                 "mode": "PpDdWwA",
                                 "key": "que-quan",
-                                "dots": 45
+                                "dots": 42
                             },
                             {
                                 "type": "text",
-                                "text": ". \n\t\tThọ khổ lâm nàn hành thân phạt thể, tư thỉnh cầu Chư Chức-sắc hiệp giữ Thiện-nam Tín-nữ đẳng, nghiêm thiết Đàn tràng hương, đăng, hoa, trà, quả thanh chước vi nghi thành tâm phụng hiến.\n"
+                                "text": ". Hạnh ngộ Tam-Kỳ giáo hóa dỉ quy giác lộ chơn truyền bất hạnh ư "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Năm từ trần",
+                                "key": "nam-tu-tran",
+                                "dots": 13
+                            },
+                            {
+                                "type": "text",
+                                "text": " niên, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Tháng từ trần",
+                                "key": "thang-tu-tran",
+                                "dots": 10
+                            },
+                            {
+                                "type": "text",
+                                "text": " ngoạt, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Ngày từ trần",
+                                "key": "ngay-tu-tran",
+                                "dots": 10
+                            },
+                            {
+                                "type": "text",
+                                "text": " nhựt, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Giờ từ trần",
+                                "key": "gio-tu-tran",
+                                "dots": 6
+                            },
+                            {
+                                "type": "text",
+                                "text": " thời khí thế mạng chung."
+                            },
+                            {
+                                "type": "text",
+                                "text": "\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-9p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-9p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-10",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-10",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\tKim bửu quyến Hạnh ngộ Tam-Kỳ giáo hóa dỉ quy giác lộ chơn truyền phổ-độ chúng sanh lập công bồi đức báo bổ nghĩa trọng thâm ân tư chí"
+                            },
+                            {
+                                "type": "text",
+                                "text": " "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Tên đàn cúng",
+                                "key": "ten-dan-cung",
+                                "dots": 18
+                            },
+                            {
+                                "type": "text",
+                                "text": " bửu quyến thỉnh cầu chư Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng nghiêm thiết đàn tràng hương, đăng, hoa, trà, quả thanh chước vi nghi thành tâm phụng hiến khẩn cầu siêu độ."
+                            },
+                            {
+                                "type": "text",
+                                "text": "\n"
+                            }
+                        ],
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-10p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-11",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -393,40 +505,53 @@
                                 }
                             }
                         ],
-                        "key": "so-cau-lanh-benh-10p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-11p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-11",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-12",
                 "type": "contentBlock",
                 "content": [
                     {
                         "content": [
                             {
                                 "type": "text",
-                                "text": "\t\tVô-trung Từ-Phụ phát hạ thâm ân xá giữ "
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "Vô trung Từ-Phụ phát hạ thâm ân xá giữ linh hồn "
                             },
                             {
                                 "type": "form-control",
                                 "formType": "text",
                                 "value": "",
-                                "label": "Thánh danh/Tên",
-                                "key": "thanh-danhten"
+                                "label": "Tên",
+                                "key": "thanh-danhten",
+                                "dots": 21
                             },
                             {
                                 "type": "text",
-                                "text": " hung tai thối vị huyết khí điều hoà, tật bịnh thuyên giảm, lập công bồi đức, dỉ thục tai khiên.\n"
+                                "text": " thoát ly u khổ siêu thăng thượng giới tự tại tiêu diêu."
+                            },
+                            {
+                                "type": "text",
+                                "text": "\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-11p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-12p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-12",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-13",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -439,13 +564,13 @@
                                 "text": "\t\tThiên-phong giữ thiện tín đẳng\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-12p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-13p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-13",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-14",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -461,13 +586,13 @@
                                 }
                             }
                         ],
-                        "key": "so-cau-lanh-benh-13p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-14p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-14",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-15",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -477,13 +602,13 @@
                                 "text": "\t\tThiên-ân bất thăng khẩn khất chi chí cẩn biểu khấu bái\n"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-14p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-15p0",
                         "type": "paragraph"
                     }
                 ]
             },
             {
-                "key": "so-cau-lanh-benh-15",
+                "key": "so-cau-sieu-nguoi-chua-vao-dao-16",
                 "type": "contentBlock",
                 "content": [
                     {
@@ -496,7 +621,7 @@
                                 "text": "THƯỢNG-TẤU\t\t-\t\tDĨ-VĂN"
                             }
                         ],
-                        "key": "so-cau-lanh-benh-15p0",
+                        "key": "so-cau-sieu-nguoi-chua-vao-dao-16p0",
                         "type": "paragraph"
                     }
                 ]
@@ -517,7 +642,7 @@
                 "value": "",
                 "required": false,
                 "type": "text",
-                "dots": 12
+                "dots": 10
             },
             {
                 "key": "thang-am-lich",
@@ -617,28 +742,32 @@
                 "label": "Năm từ trần",
                 "value": "",
                 "required": false,
-                "type": "text"
+                "type": "text",
+                "dots": 13
             },
             {
                 "key": "thang-tu-tran",
                 "label": "Tháng từ trần",
                 "value": "",
                 "required": false,
-                "type": "text"
+                "type": "text",
+                "dots": 10
             },
             {
                 "key": "ngay-tu-tran",
                 "label": "Ngày từ trần",
                 "value": "",
                 "required": false,
-                "type": "text"
+                "type": "text",
+                "dots": 10
             },
             {
                 "key": "gio-tu-tran",
                 "label": "Giờ từ trần",
                 "value": "",
                 "required": false,
-                "type": "text"
+                "type": "text",
+                "dots": 6
             },
             {
                 "key": "ten-dan-cung",
@@ -675,6 +804,6 @@
                 "dots": 42
             }
         ],
-        "name": "Sớ Cầu Lành Bệnh chi nhựt"
+        "name": "Sớ Cầu Siêu Người Chưa Vào Đạo Bữu Quyến Có Đạo"
     }
 }

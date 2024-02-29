@@ -326,7 +326,7 @@ export class CpCreatorContentComponent implements OnChanges {
     //   default:
     //     break;
     // }
-    return value.text
+    return value.text != value.title ? value.text : ''
   }
 
   getAllDivisions() {

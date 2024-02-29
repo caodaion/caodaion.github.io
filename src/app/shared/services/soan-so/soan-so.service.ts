@@ -240,6 +240,15 @@ export class SoanSoService {
       },
       'so-cau-an-van-gia-ba-tanh': {
         name: 'Cầu An Vạn Gia Bá Tánh'
+      },
+      'so-cau-phuoc': {
+        name: 'Cầu Phước'
+      },
+      'so-cau-sieu-nguoi-chua-vao-dao': {
+        name: 'Cầu Siêu Người Chưa Vào Đạo Bữu Quyến Có Đạo'
+      },
+      'so-cau-an': {
+        name: 'Cầu An Tư Gia'
       }
     }
   }
