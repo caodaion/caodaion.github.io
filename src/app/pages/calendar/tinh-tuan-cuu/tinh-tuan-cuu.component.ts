@@ -111,15 +111,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.breakpointObserver
-      .observe(['(min-width: 800px)'])
-      .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.isShowDownLoadImage = true
-        } else {
-          this.isShowDownLoadImage = false;
-        }
-      });
     this.getYearOptions()
     const now = new Date()
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
