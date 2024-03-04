@@ -422,7 +422,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     <div style="float: left; width: 50%">
     <p><strong>Truy Cập</strong> <a href="https://www.caodaion.com">https://www.caodaion.com</a> để tính lịch cúng tuần cửu tự động</p>
     <p style="text-align: center">hoặc</p>
-    <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng cửu của ${item?.name}</p>
+    <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng ${item?.name}</p>
     </div>
     <div style="float: right; width: 50%; text-align: right">
     <img src="${parentElement}" height="300px" width="300px" />
