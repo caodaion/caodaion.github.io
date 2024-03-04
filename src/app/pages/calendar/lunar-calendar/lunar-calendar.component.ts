@@ -148,7 +148,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         this.filter = calendarFilter
       }
       this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
-      this.getCalendarEvent();
       if (new Date().getHours() > 22) {
         this.currentDate?.solar.setDate(this.currentDate?.solar.getDate() + 1);
       }
@@ -526,7 +525,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
         }
       });
     }
-    this.mergeLocalStorageEvents()
+    if (this.filter?.yellow) {
+      this.mergeLocalStorageEvents()
+    }
     if (this.selectedThanhSoEvents?.length > 0) {
       this.mergeThanhSoEvent()
     }
@@ -548,7 +549,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
             if (!date.event || date.event?.length == 0) {
               date.event = []
             }
-            date.event.push({ event: foundEvent })
+            if (!date.event?.find((de: any) => de.name == foundEvent.eventName)) {
+              date.event.push({ event: foundEvent })
+            }
           }
         })
       }
@@ -781,7 +784,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
         .subscribe((res: any) => {
           if (res.code === 200) {
-            this.selectedThanhSoEvents = res.data
+            this.selectedThanhSoEvents = res.data            
             this.refresh = true
             this.mergeThanhSoEvent()
           }
@@ -870,14 +873,14 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           eventName: eventName,
           subject: subject
         }
-      })
+      })     
       this.selectedMonth.forEach((date: any) => {
         const foundEvent = data?.filter((item: any) => {
           return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
             new Date(item?.solar).getMonth() == new Date(date?.solar).getMonth() &&
             new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
         })
-        if (foundEvent?.length > 0) {
+        if (foundEvent?.length > 0) {          
           foundEvent?.forEach((fe: any) => {
             if (!date.event || date.event?.length == 0) {
               date.event = []
