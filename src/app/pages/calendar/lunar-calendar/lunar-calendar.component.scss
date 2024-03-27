@@ -43,4 +43,12 @@
       }
     }
   }
+  .cdk-overlay-pane {
+    width: auto !important;
+  }
+  #month {
+    .mat-mdc-select-arrow-wrapper {
+      visibility: hidden;
+    }
+  }
 }

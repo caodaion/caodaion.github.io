@@ -33,7 +33,7 @@ export class CalendarService {
   constructor(private http: HttpClient, private commonService: CommonService, private datePipe: DatePipe) { }
 
   getConvertedFullDate(date?: any) {
-    let comparedDate = null;
+    let comparedDate: any = null;
     if (date) {
       comparedDate = date;
     } else {
@@ -319,7 +319,6 @@ export class CalendarService {
       }
       const lunarTime = this.commonService.getTimeLunarTime(calDate)
       const cans = [
-        'Quý',
         'Giáp',
         'Ất',
         'Bính',
@@ -328,9 +327,9 @@ export class CalendarService {
         'Kỷ',
         'Canh',
         'Tân',
-        'Nhâm',]
+        'Nhâm',
+        'Quý',]
       const chis = [
-        'Hợi',
         'Tý',
         'Sửu',
         'Dần',
@@ -341,12 +340,64 @@ export class CalendarService {
         'Mùi',
         'Thân',
         'Dậu',
-        'Tuất',]
+        'Tuất',
+        'Hợi',]
+      const getDaysInMonth = (month: any, year: any) => {
+        switch (month) {
+          case 1:
+          case 3:
+          case 5:
+          case 7:
+          case 8:
+          case 10:
+          case 12:
+            return 31;
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            return 30;
+          case 2:
+            return isLeapYear(year) ? 29 : 28;
+        }
+        return 0;
+      }
+      const getJulianDay = (date: any) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+      
+        // Tính số ngày trong năm dương lịch
+        let daysInYear = 365 * year;
+        if (isLeapYear(year)) {
+          daysInYear += 1;
+        }
+      
+        // Tính số ngày trong các tháng trước
+        let daysInMonths: any = 0;
+        for (let i = 1; i < month; i++) {
+          daysInMonths += getDaysInMonth(i, year);
+        }
+      
+        // Tính tổng số ngày
+        const julianDay = daysInYear + daysInMonths + day - 1;
+      
+        return julianDay;
+      }
+      const isLeapYear = (year: any) => {
+        return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+      }
 
-      let a = (14 - mm) / 12
-      let yv = yy + 4800 - a
-      let mv = mm + 12 * a - 3
-      let JDN = dd + (153 * mv + 2) / 5 + 365 * yv + yv / 4 - yv / 100 + yv / 400 - 32045
+      function calculateJDN(day: any, month: any, year: any) {
+        const a = Math.floor((14 - month) / 12);
+        const y = year + 4800 - a;
+        const m = month + 12 * a - 3;
+      
+        const JDN = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+        return JDN;
+      }          
+      let JDN = calculateJDN(dd, mm, yy)
+
       const canDay = Math.floor((JDN + 9) % 10)
       const chiDay = Math.floor((JDN + 1) % 12)
       const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
