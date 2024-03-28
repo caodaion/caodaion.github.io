@@ -1,0 +1,634 @@
+{
+    "data": {
+        "type": "block",
+        "key": "so-nguon-dan-thoi-ty",
+        "content": [
+            {
+                "key": "so-nguon-dan-thoi-ty-0",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "ĐẠI-ĐẠO TAM-KỲ PHỔ-ĐỘ",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-0p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-1",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Đệ "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Năm Đạo",
+                                "key": "nam-dao",
+                                "dots": 12
+                            },
+                            {
+                                "type": "text",
+                                "text": " niên"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\n"
+                            },
+                            {
+                                "type": "text",
+                                "text": "Tam-Giáo Quy-Nguyên Ngũ-Chi Hiệp-Nhứt"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-1p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-2",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "THỜI DUY",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-2p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-3",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "Thiên vận "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Năm âm lịch",
+                                "key": "nam-am-lich",
+                                "dots": 12
+                            },
+                            {
+                                "type": "text",
+                                "text": " niên, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "chánh",
+                                "label": "Tháng âm lịch",
+                                "key": "thang-am-lich",
+                                "dots": 10
+                            },
+                            {
+                                "type": "text",
+                                "text": " ngoạt, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "sơ nhứt",
+                                "label": "Ngày âm lịch",
+                                "key": "ngay-am-lich",
+                                "dots": 10
+                            },
+                            {
+                                "type": "text",
+                                "text": " nhựt, "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Thời",
+                                "key": "thoi",
+                                "dots": 6
+                            },
+                            {
+                                "type": "text",
+                                "text": " thời. Hiện tại "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "comboLocation",
+                                "value": "{\"title\":\"Địa chỉ\",\"key\":\"dia-chi\",\"mode\":\"PpDdWwA\",\"country\":\"Việt Nam\"}",
+                                "label": "Địa chỉ",
+                                "mode": "PpDdWwA",
+                                "key": "dia-chi",
+                                "dots": 42
+                            },
+                            {
+                                "type": "text",
+                                "text": " cư trụ "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "Thánh Thất",
+                                "label": "Địa điểm",
+                                "key": "dia-diem",
+                                "dots": 12
+                            },
+                            {
+                                "type": "text",
+                                "text": " chi trung.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-3p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-4",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "\t"
+                            },
+                            {
+                                "type": "text",
+                                "text": "Kim hữu "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "checkbox",
+                                "value": true,
+                                "label": "Thiên-phong",
+                                "key": "thien-phong"
+                            },
+                            {
+                                "type": "text",
+                                "text": " đệ tử thọ Thiên-ân "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "",
+                                "label": "Chức sắc chứng đàn",
+                                "key": "chuc-sac-chung-dan",
+                                "dots": 26
+                            },
+                            {
+                                "type": "text",
+                                "text": " công đồng chư Chức-sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng, quỳ tại "
+                            },
+                            {
+                                "type": "form-control",
+                                "formType": "text",
+                                "value": "Điện tiền",
+                                "label": "Điện tiền/Thiên Bàn",
+                                "key": "dien-tienthien-ban"
+                            },
+                            {
+                                "type": "text",
+                                "text": " thành tâm trình tấu.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-4p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-5",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "HUỲNH-KIM-KHUYẾT NỘI:",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "text": "\nHuyền-Khung Cao-Thượng-Đế Ngọc-Hoàng Đại-Thiên-Tôn."
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-5p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-6",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\t\tViết:\tCao-Đài Tiên-Ông Đại-Bồ-Tát Ma-Ha-Tát.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-6p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-7",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Diêu-Trì Kim-Mẫu vô cực Đại-Từ-Tôn."
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-7p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-8",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "TAM TÔNG CHƠN-GIÁO",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-8p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-9",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\t\tTây-Phương Giáo-Chủ Thích-Ca Mâu-Ni thế tôn.\n\t\t\tThái-Thượng Đạo-Tổ Tam-Thanh ứng hóa Thiên-tôn.\n\t\t\tKhổng-Thánh Tiên-sư Hưng-Nho thạnh thế Thiên-tôn.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-9p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-10",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "TAM-KỲ PHỔ-ĐỘ TAM-TRẤN OAI-NGHI",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-10p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-11",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\t\tThường-Cư Nam-Hãi Quan-Âm Như-Lai.\n\t\t\tLý-Đại Tiên-Trưởng Thái-Bạch Kim-Tinh.\n\t\t\tHiệp-Thiên-Đại-Đế Quan-Thánh Đế-Quân.\n\t\t\tGia-Tô Giáo-chủ cứu thế Thiên-Tôn.\n\t\t\tThái-Công Tướng-Phụ Quản-Pháp Thiên-Tôn.\n\t\t\tĐại-Đạo Tam-Kỳ Phổ-Độ Lý-Giáo-Tông từ-bi cứu thế Thiên-Tôn.\n\t\t\tTam-Châu bác-bộ Hộ-Pháp Thiên-Tôn.\n\t\t\tChư Phật, Tiên, Thánh, Thần liên đài chi hạ.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-11p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-12",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\tKim vì thời tế Ngươn-Đán Sóc kiết triều hạ, Thiên-ngươn Cổ Phật Thánh-Đạo vô cương, chư thiên chúng Thánh, điện kỷ tăng-hoàng, thiết duy Từ-Phụ bác-ái chí-tâm, giục đắc phổ-thông Thiên-Đạo, bố cực tứ phương độ tận nhơn sanh thoát chư nghiệt chướng, khuyến chúng hồi đầu tùng lương cải ác.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-12p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-13",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "TƯ TRỊ:",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-13p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-14",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\tNgươn-Đán Sóc-kiết, Cổ Phật Thánh-Đán giai kỳ, chư Thiên hạ giới lương thần.\n\t\tChư Thiên-phong Chức-sắc hiệp giũ Thiện-Nam Tín-Nữ đẳng nghiêm thiết Đàn tràng hương, đăng, hoa, trà, quả thanh chước vi nghi chí tâm triều lễ.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-14p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-15",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "PHỤC VỌNG",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-15p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-16",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\tVô trung Từ-Phụ phát hạ thâm ân, thưởng tứ đệ tử vạn sự như ý, chúng hiệp nhơn hòa, đạo tâm hưng-long, nguyên nhơn tảo hội\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-16p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-17",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\tThiên-phong giữ thiện tín đẳng.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-17p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-18",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "THIỆT-TRIÊM",
+                                "attrs": {
+                                    "fontWeight": "bold"
+                                }
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-18p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-19",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "\t\tThiên-ân bất thăng khẩn khất chi chí cẩn biểu khấu bái.\n"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-19p0",
+                        "type": "paragraph"
+                    }
+                ]
+            },
+            {
+                "key": "so-nguon-dan-thoi-ty-20",
+                "type": "contentBlock",
+                "content": [
+                    {
+                        "attrs": {
+                            "textAlign": "center"
+                        },
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "THƯỢNG-TẤU\t\t-\t\tDĨ-VĂN"
+                            }
+                        ],
+                        "key": "so-nguon-dan-thoi-ty-20p0",
+                        "type": "paragraph"
+                    }
+                ]
+            }
+        ],
+        "formGroup": [
+            {
+                "key": "nam-dao",
+                "label": "Năm Đạo",
+                "value": "",
+                "required": false,
+                "type": "text",
+                "dots": 12
+            },
+            {
+                "key": "nam-am-lich",
+                "label": "Năm âm lịch",
+                "value": "",
+                "required": false,
+                "type": "text",
+                "dots": 12
+            },
+            {
+                "key": "thang-am-lich",
+                "label": "Tháng âm lịch",
+                "value": "chánh",
+                "required": false,
+                "type": "text",
+                "dots": 10
+            },
+            {
+                "key": "ngay-am-lich",
+                "label": "Ngày âm lịch",
+                "value": "sơ nhứt",
+                "required": false,
+                "type": "text",
+                "dots": 10
+            },
+            {
+                "key": "thoi",
+                "label": "Thời",
+                "value": "",
+                "required": false,
+                "type": "text"
+            },
+            {
+                "key": "dia-chi",
+                "label": "Địa chỉ",
+                "value": {
+                    "title": "Địa chỉ",
+                    "key": "dia-chi",
+                    "mode": "PpDdWwA",
+                    "country": "Việt Nam",
+                    "text": "Việt Nam quốc,"
+                },
+                "required": false,
+                "type": "comboLocation",
+                "dots": 42
+            },
+            {
+                "key": "dia-diem",
+                "label": "Địa điểm",
+                "value": "",
+                "required": false,
+                "type": "text",
+                "dots": 12
+            },
+            {
+                "key": "thien-phong",
+                "label": "Thiên-phong",
+                "value": "",
+                "required": true,
+                "type": "checkbox"
+            },
+            {
+                "key": "chuc-sac-chung-dan",
+                "label": "Chức sắc chứng đàn",
+                "value": "",
+                "required": false,
+                "type": "text",
+                "dots": 26
+            },
+            {
+                "key": "dien-tienthien-ban",
+                "label": "Điện tiền/Thiên Bàn",
+                "value": "Điện tiền",
+                "required": false,
+                "type": "text"
+            }
+        ],
+        "name": "Sớ Ngươn Đán (Thời Tý/Ngọ) "
+    }
+}

@@ -1,0 +1,288 @@
+{
+  "data": {
+    "name": "Nghi tiển biệt",
+    "activeToggle": true,
+    "steps": [
+      {
+        "xuong": "Tang môn tự lập",
+        "description": "Trong tang quyến ra đứng có thứ tự"
+      },
+      {
+        "xuong": "Chấp sự giả các tư kỳ sự",
+        "description": ""
+      },
+      {
+        "xuong": "Khai chung cổ",
+        "description": ""
+      },
+      {
+        "xuong": "Nhạc sanh khởi nhạc",
+        "description": ""
+      },
+      {
+        "xuong": "Ngũ phục chi nhơn các phục kỳ phục",
+        "description": " Người trong gia quyến thọ phục 5 bực tang (Kể ra sau), nếu không đủ ngũ phục, con cháu ít thì xuống: Các phục chi nhơn giai thọ kỳ phục"
+      },
+      {
+        "xuong": "Tự lập",
+        "description": "Ai đứng chỗ nào lại đứng chỗ nấy cho có thứ tự"
+      },
+      {
+        "xuong": "Nghệ hương án tiền",
+        "description": "Tang chủ đến chỗ mình quì mà đứng. Còn Ngoại-nghi, thì Lễ-sĩ bưng đèn, đài lên."
+      },
+      {
+        "xuong": "Giai quì",
+        "description": "Tất cả tang gia đều quì xuống, nhạc đổ ba hồi Lễ-sĩ cung tay lên quì xuống."
+      },
+      {
+        "xuong": "Phần hương",
+        "description": "Nhạc đánh thét, người quì Ngoại nghi đốt hương để lên đài cho Lễ-sĩ. Lễ cung tay lên đứng dậy."
+      },
+      {
+        "xuong": "Điện hương",
+        "description": "Nhạc đổ 3 hồi xây đờn bài Ngũ đối hạ. Lễ cung tay lên, đi từng bước tới Nội-nghi"
+      },
+      {
+        "xuong": "Quì",
+        "description": "Lễ-sĩ quì xuống."
+      },
+      {
+        "xuong": "Niệm hương",
+        "description": "Người quì Nội-nghi niệm hương, vái tên họ người chết về chứng lễ"
+      },
+      {
+        "xuong": "Thượng hương",
+        "description": "Lễ-sĩ đứng dậy đổi bước người tiếp lễ nhang cấm vào lư hương nơi bàn vong."
+      },
+      {
+        "xuong": "Phụng thỉnh vong linh chứng hưởng",
+        "description": "Đồng nhu đọc bài: Thỉnh vong \"Mừng thay rảnh đặng cuộc trần, ...\" đờn đưa hơi theo."
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân: Nhạc đánh lớp tư."
+      },
+      {
+        "xuong": "Sơ hiến lễ",
+        "description": "Lễ đi tuần trước (tuần bông)."
+      },
+      {
+        "xuong": "Nghệ tấn thời trân sở",
+        "description": "Lễ sĩ đi lên chỗ ngoại nghi."
+      },
+      {
+        "xuong": "Quì",
+        "description": "Nhạc đổ ba hồi Lễ cung tay lên rồi quì xuống."
+      },
+      {
+        "xuong": "Chỉnh thời trần",
+        "description": "Người quì ngoại nghi sửa soạn bình bông, nhạc đánh thét. Lễ cung tay đứng dậy day vô linh cửu rồi hạ xuống. Nhạc xây đờn Nam-ai."
+      },
+      {
+        "xuong": "Điện thời trân",
+        "description": "Nhạc đổ ba hồi lễ cung tay lên điện."
+      },
+      {
+        "xuong": "Huyền ca hiệp vận",
+        "description": "Đồng nhi thài từ câu cho lễ-sĩ đi vô đến Nội-nghi."
+      },
+      {
+        "xuong": "Quì",
+        "description": "Lễ day vô quì xuống."
+      },
+      {
+        "xuong": "Tế thời trân",
+        "description": "Người tang chủ quì Nội-nghi, nâng 2 bình bông lên nguyện rồi để lại lên đài cho lễ-sĩ."
+      },
+      {
+        "xuong": "Hiến thời trân",
+        "description": "Lễ cung tay đứng dậy đổi bước, người tiếp lễ lấy bình bông để lên bàn vong."
+      },
+      {
+        "xuong": "Nghệ đọc chúc sở",
+        "description": "Người chấp sự và cập Lễ đăng vào Nội-nghi đọc văn.",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Quì",
+        "description": "Nhạc đổ 1 hồi. vị chấp sự và Lễ quì xuống (Phía tay mặt).",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Chuyển chúc",
+        "description": "Dở lá văn ra.",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Đọc chúc",
+        "description": "Nhạc đánh thét dứt rồi khởi đọc văn.",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Phủ phục hưng bình thân",
+        "description": "Vị chấp sự và Lễ-sĩ đứng dậy, day vô xá hai xá, rồi day ra đi về chỗ cũ. (Nếu từ Lế-Sanh đổ xuống tuần sơ rồi đọc văn, nếu trên Lễ Sanh thì tuần chung rồi đọc văn).",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân.",
+        "toggle": "down"
+      },
+      {
+        "xuong": "Á hiến lễ",
+        "description": "Là lễ tuần giữa (dâng trái)."
+      },
+      {
+        "xuong": "Nghệ tấn thời trân sở",
+        "description": "Lễ sĩ lên chỗ Ngoại nghi"
+      },
+      {
+        "xuong": "Quì",
+        "description": "Nhạc đổ lên quì."
+      },
+      {
+        "xuong": "Chỉnh thời trân",
+        "description": "Người quì ngoại nghi sửa soạn trái cây, nhạc đánh thét. Lễ cung tay đứng dậy day vô linh cửu rồi hạ xuống. Nhạc xây đờn Nam-ai."
+      },
+      {
+        "xuong": "Điện thời trân",
+        "description": "Nhạc đổ ba hồi lễ cung tay lên điện."
+      },
+      {
+        "xuong": "Huyền ca hiệp vận",
+        "description": "Đồng nhi thài từ câu cho lễ-sĩ đi vô đến Nội-nghi."
+      },
+      {
+        "xuong": "Quì",
+        "description": "Lễ day vô quì xuống."
+      },
+      {
+        "xuong": "Tế thời trân",
+        "description": "Người tang chủ quì Nội-nghi, nâng trái cây lên nguyện rồi để lại lên đài cho lễ-sĩ."
+      },
+      {
+        "xuong": "Hiến thời trân",
+        "description": "Lễ cung tay đứng dậy đổi bước, người tiếp lễ lấy trái cây để lên bàn vong."
+      },
+      {
+        "xuong": "Phụng thỉnh vong linh chứng hưởng",
+        "description": "Đồng nhi đọc kinh"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân."
+      },
+      {
+        "xuong": "Chung hiến lễ",
+        "description": "Là lễ tuần chót (dâng rượu)."
+      },
+      {
+        "xuong": "Nghệ chú trát tiền",
+        "description": "Lễ sĩ lên chỗ Ngoại nghi"
+      },
+      {
+        "xuong": "Quì",
+        "description": "Nhạc đổ lên quì."
+      },
+      {
+        "xuong": "Châm tửu",
+        "description": "Người quì ngoại nghi rót rượu, nhạc đánh thét. Lễ cung tay đứng dậy day vô linh cửu rồi hạ xuống. Nhạc xây đờn Nam-ai."
+      },
+      {
+        "xuong": "Điện tửu",
+        "description": "Nhạc đổ ba hồi lễ cung tay lên điện."
+      },
+      {
+        "xuong": "Quì",
+        "description": "Lễ day vô quì xuống."
+      },
+      {
+        "xuong": "Tế tửu",
+        "description": "Người tang chủ quì Nội-nghi, nâng rượu lên nguyện rồi để lại lên đài cho lễ-sĩ."
+      },
+      {
+        "xuong": "Hiến tửu",
+        "description": "Lễ cung tay đứng dậy đổi bước, người tiếp lễ lấy rượu để lên bàn vong."
+      },
+      {
+        "xuong": "Nghệ đọc chúc sở",
+        "description": "Người chấp sự và cập Lễ đăng vào Nội-nghi đọc văn.",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Quì",
+        "description": "Nhạc đổ 1 hồi. vị chấp sự và Lễ quì xuống (Phía tay mặt).",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Chuyển chúc",
+        "description": "Dở lá văn ra.",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Đọc chúc",
+        "description": "Nhạc đánh thét dứt rồi khởi đọc văn.",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Phủ phục hưng bình thân",
+        "description": "Vị chấp sự và Lễ-sĩ đứng dậy, day vô xá hai xá, rồi day ra đi về chỗ cũ. (Nếu từ Lế-Sanh đổ xuống tuần sơ rồi đọc văn, nếu trên Lễ Sanh thì tuần chung rồi đọc văn).",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân.",
+        "toggle": "up"
+      },
+      {
+        "xuong": "Phụng thỉnh vong linh chứng hưởng",
+        "description": "Đồng nhi đọc kinh"
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân."
+      },
+      {
+        "xuong": "Nghệ điểm trà sở",
+        "description": "Lễ-sĩ lên chỗ Ngoại-nghi."
+      },
+      {
+        "xuong": "Điểm trà",
+        "description": "Vị ngoại nghi rót trà, nhạc đờn Ngũ-điểm, Lễ theo nhịp đờn đi vô tới Nội-nghi."
+      },
+      {
+        "xuong": "Quì",
+        "description": "Lễ sĩ quì xuống day vô bàn linh, người tiếp lễ để lên bàn vong Lễ đứng dậy về chỗ cũ."
+      },
+      {
+        "xuong": "Tuyên chúc giả bổng chúc nghệ liệu sở",
+        "description": "Người đọc văn lên chỗ đốt lá văn, một cặp Lễ-sĩ bưng đèn lên Nội-nghi đưa lá văn cho tang chủ"
+      },
+      {
+        "xuong": "Vọng liệu",
+        "description": "Chong hai cái đèn lên, nhạc đánh thét, Lễ-sĩ cung lên lên day vô"
+      },
+      {
+        "xuong": "Phần chúc",
+        "description": "Người tang chủ đốt lá văn."
+      },
+      {
+        "xuong": "Phủ phục hưng bình thân",
+        "description": "Lễ đứng dậy day vô bàn vong xá hai xá rồi đi xuống."
+      },
+      {
+        "xuong": "Cúc cung bái",
+        "description": "2 lạy, Hưng bình thân."
+      },
+      {
+        "xuong": "Phục vì",
+        "description": "Tang chủ xá một xá bước ra ngoài."
+      },
+      {
+        "xuong": "Lễ tất",
+        "description": "Lễ rồi."
+      }
+    ]
+  }
+}
