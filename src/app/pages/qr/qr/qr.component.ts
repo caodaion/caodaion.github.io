@@ -28,7 +28,7 @@ export class QrComponent implements OnInit {
   URLHandle() {
     this.endPath = this.url
     if (this.url.includes(location.origin)) {
-      location.href = this.endPath
+      window.location.href = `${this.endPath}`;
     } else {
       this.countDown = timer(0, 1000).pipe(
         map(n => (this.seconds - n) * 1000),
@@ -36,13 +36,13 @@ export class QrComponent implements OnInit {
       )
       this.countDown?.subscribe((n: any) => {
         if (n === 0) {
-          location.href = this.endPath
+          window.location.href = `${this.endPath}`;
         }
       })
     }
   }
 
   goToEndUrl() {
-    location.href = this.endPath
+    window.location.href = `${this.endPath}`;
   }
 }
