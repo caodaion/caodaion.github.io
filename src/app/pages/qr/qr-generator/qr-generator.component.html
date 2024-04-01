@@ -27,6 +27,15 @@
             [(ngModel)]="data"
             (change)="onChangeData()"
           />
+          <button
+            mat-icon-button
+            matSuffix
+            [matTooltip]="'Làm trống nội dung'"
+            *ngIf="data"
+            (click)="data = ''"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
         <p class="text-center" *ngIf="error">{{ error }}</p>
         <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
@@ -39,7 +48,7 @@
             [width]="300"
             [imageHeight]="75"
             [imageWidth]="75"
-            [cssClass]="'text-center'"
+            [cssClass]="'flex justify-center'"
             [errorCorrectionLevel]="'M'"
             [colorDark]="'#000000ff'"
             [colorLight]="'#ffffffff'"
@@ -112,7 +121,7 @@
             [width]="300"
             [imageHeight]="75"
             [imageWidth]="75"
-            [cssClass]="'text-center'"
+            [cssClass]="'flex justify-center'"
             [errorCorrectionLevel]="'M'"
             [colorDark]="'#000000ff'"
             [colorLight]="'#ffffffff'"
@@ -177,7 +186,7 @@
             [width]="300"
             [imageHeight]="75"
             [imageWidth]="75"
-            [cssClass]="'text-center'"
+            [cssClass]="'flex justify-center'"
             [errorCorrectionLevel]="'M'"
             [colorDark]="'#000000ff'"
             [colorLight]="'#ffffffff'"

@@ -107,7 +107,11 @@ export class QrGeneratorComponent implements OnInit {
 
   onChangeData() {
     if (this.data?.length <= 350) {
-      this.qrData = this.data
+      if (this.data.includes(location.origin)) {
+        this.qrData = this.data
+      } else {        
+        this.qrData = `${location.origin}/qr/${encodeURIComponent(this.data)}`        
+      }
     } else {
       this.qrData = ''
       this.error = ''
