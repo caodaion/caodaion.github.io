@@ -71,8 +71,7 @@ export class QrComponent implements OnInit {
       return !!pattern.test(str);
     }
     if (validURL(this.endPath)) {
-      // location.href = `${this.endPath}`;
-      window.open(`${this.endPath}`)
+      location.href = `${this.endPath}`;
     }
   }
 }
