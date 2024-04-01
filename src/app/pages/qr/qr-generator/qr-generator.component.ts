@@ -110,7 +110,7 @@ export class QrGeneratorComponent implements OnInit {
       if (this.data.includes(location.origin)) {
         this.qrData = this.data
       } else {        
-        this.qrData = `${location.origin}/qr/${encodeURIComponent(this.data)}`        
+        this.qrData = `${location.origin}/qr/${this.generaToken(JSON.parse(JSON.stringify(this.data)))}`        
       }
     } else {
       this.qrData = ''

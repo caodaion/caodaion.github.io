@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeWhile, timer } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-qr',
@@ -26,9 +27,26 @@ export class QrComponent implements OnInit {
   }
 
   URLHandle() {
-    this.endPath = this.url
+    const fixedURL = (url: any) => {
+      if (url?.includes('http')) {
+        if (!url?.includes('://')) {
+          url = url?.replace(':/', '://')
+        }
+      }
+      return url;
+    }
+    try {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(this.url)
+      this.url = fixedURL(decodedToken)
+    } catch (e) {
+      console.log(e);
+    }
+    if (this.url?.includes('http')) {
+      this.endPath = this.url
+    }
     if (this.url.includes(location.origin)) {
-      window.location.href = `${this.endPath}`;
+      this.goToEndUrl()
     } else {
       this.countDown = timer(0, 1000).pipe(
         map(n => (this.seconds - n) * 1000),
@@ -36,13 +54,24 @@ export class QrComponent implements OnInit {
       )
       this.countDown?.subscribe((n: any) => {
         if (n === 0) {
-          window.location.href = `${this.endPath}`;
+          this.goToEndUrl()
         }
       })
     }
   }
 
   goToEndUrl() {
-    window.location.href = `${this.endPath}`;
+    function validURL(str: any) {
+      var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+      return !!pattern.test(str);
+    }
+    if (validURL(this.endPath)) {
+      window.location.href = `${this.endPath}`;
+    }
   }
 }
