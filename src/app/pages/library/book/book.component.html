@@ -68,24 +68,24 @@
                 (click)="isPhone ? libradianDrawer.toggle() : ''"
               >
                 <span class="font-black" *ngIf="item?.tagName == 'H1'">
-                  -{{ item.description }}
+                  {{ item.description }}
                 </span>
-                <span class="pl-1 font-bold" *ngIf="item?.tagName == 'H2'">
-                  --{{ item.description }}
+                <span class="ps-1" *ngIf="item?.tagName == 'H2'">
+                  {{ item.description }}
                 </span>
-                <span class="" *ngIf="item?.tagName == 'H3'">
-                  ---{{ item.description }}
+                <span class="ps-2" *ngIf="item?.tagName == 'H3'">
+                  {{ item.description }}
                 </span>
-                <span class="" *ngIf="item?.tagName == 'H4'">
-                  ----{{ item.description }}
+                <span class="ps-3" *ngIf="item?.tagName == 'H4'">
+                  {{ item.description }}
                 </span>
-                <span class="" *ngIf="item?.tagName == 'H5'">
-                  -----{{ item.description }}
+                <span class="ps-4" *ngIf="item?.tagName == 'H5'">
+                  {{ item.description }}
                 </span>
-                <span class="" *ngIf="item?.tagName == 'H6'">
-                  -------{{ item.description }}
+                <span class="ps-5" *ngIf="item?.tagName == 'H6'">
+                  {{ item.description }}
                 </span>
-                <span class="" *ngIf="!item?.tagName">{{
+                <span class="ps-6" *ngIf="!item?.tagName">{{
                   item.description
                 }}</span>
               </a>
