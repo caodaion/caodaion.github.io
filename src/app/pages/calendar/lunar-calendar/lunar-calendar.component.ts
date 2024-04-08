@@ -1027,7 +1027,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     if (!this.shareItem.id) {
       this.shareItem.id = this.shownDate.event.event.key
     }
-    console.log(this.shareItem);
   }
   downloading: boolean = false
 
@@ -1036,7 +1035,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     navigator.clipboard.writeText(content || '')
     setTimeout(() => {
       this.downloading = true
-      const saveItem = document.getElementById(element.id)
+      const saveItem = document.getElementById(element.id?.replace('.', '_'))
       this.captureService
         //@ts-ignore
         .getImage(saveItem, true)
