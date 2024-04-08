@@ -8,11 +8,12 @@ import {
   ElementRef,
   HostListener,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, findIndex, tap } from 'rxjs';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
@@ -22,6 +23,8 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 import * as CryptoJS from "crypto-js";
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { NgxCaptureService } from 'ngx-capture';
 
 @Component({
   selector: 'app-lunar-calendar',
@@ -65,6 +68,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     white: true,
   };
   selectedThanhSo: any = null;
+  lunarTimeZone = TIME_TYPE.data
 
   constructor(
     private calendarService: CalendarService,
@@ -78,6 +82,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     private changeDetector: ChangeDetectorRef,
     private datePipe: DatePipe,
     private decimal: DecimalPipe,
+    private matBottomSheet: MatBottomSheet,
+    private captureService: NgxCaptureService,
     private authService: AuthService
   ) {
   }
@@ -550,7 +556,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
               date.event = []
             }
             if (!date.event?.find((de: any) => de.name == foundEvent.eventName)) {
-              date.event.push({ event: foundEvent })
+              date.event.push({ event: foundEvent, details: tuanCuu?.details, date: tuanCuu?.date })
             }
           }
         })
@@ -566,6 +572,21 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       event.event.date = `${event?.event?.day || ''} ngày ${event?.event?.lunar?.lunarDay} tháng ${event?.event?.lunar?.lunarMonth} năm ${event?.event?.lunar?.lunarYearName} (${this.datePipe.transform(event?.event?.solar, 'dd/MM/YYYY')})`
     }
     this.shownDate = { date, event };
+    if (!event?.event?.soTemplate) {
+      if (event.event.name?.includes('Cầu Siêu')) {
+        event.event.soTemplate = 'so-cau-sieu'
+        event.event.longSo = 'tam-tran'
+        event.event.eventLunar = event.event.lunar
+        if (event.event.name?.includes('Cửu')) {
+          const split = event.event.name?.split(' ')
+          const cuuIndex = split.indexOf('Cửu')
+          event.event.eventName = `${split[cuuIndex - 1]} chi tuần`
+        }
+        event.event.subject = <any>{}
+        event.event.subject.details = event?.details
+        event.event.subject.date = event?.date
+      }
+    }
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
   }
 
@@ -784,7 +805,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
         .subscribe((res: any) => {
           if (res.code === 200) {
-            this.selectedThanhSoEvents = res.data            
+            this.selectedThanhSoEvents = res.data
             this.refresh = true
             this.mergeThanhSoEvent()
           }
@@ -873,14 +894,14 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
           eventName: eventName,
           subject: subject
         }
-      })     
+      })
       this.selectedMonth.forEach((date: any) => {
         const foundEvent = data?.filter((item: any) => {
           return new Date(item?.solar).getDate() == new Date(date?.solar).getDate() &&
             new Date(item?.solar).getMonth() == new Date(date?.solar).getMonth() &&
             new Date(item?.solar).getFullYear() == new Date(date?.solar).getFullYear()
         })
-        if (foundEvent?.length > 0) {          
+        if (foundEvent?.length > 0) {
           foundEvent?.forEach((fe: any) => {
             if (!date.event || date.event?.length == 0) {
               date.event = []
@@ -948,6 +969,103 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     this.selectedThanhSoEvents = []
     localStorage.setItem('calendarFilter', JSON.stringify(this.filter));
     this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
+  }
+  shareItem = <any>{}
+  shareBottomSheetRef: any;
+  @ViewChild('shareBottomSheet') shareBottomSheet!: any;
+  showShareImage() {
+    this.shareItem = <any>{}
+    this.shareItem.traiGioi = true
+    console.log(this.shownDate);
+    this.updateShareInformation()
+
+
+    this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
+  }
+
+  updateShareInformation() {
+    this.shareItem.date = this.shownDate?.date
+    this.shareItem.name = this.shownDate.event?.event?.name
+    if (!this.shareItem.time) this.shareItem.time = this.shownDate?.event?.date
+    if (this.shareItem.time) {
+      if (typeof this.shareItem.time == 'string') {
+        this.shareItem.id = this.shareItem.time
+      }
+      const selectedEvent = this.shareItem.options?.find((item: any) => item.key == this.shareItem.time)
+      this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name
+      this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.shareItem.time?.lunarTime} (${this.shareItem.time?.time})`
+      if (selectedEvent?.data?.name.includes(this.shareItem.name)) {
+        this.shareItem.targetEvent = null
+      }
+    } else {
+      if (this.shownDate?.event?.mainEventKey) {
+        this.shareItem.event = <any>{}
+        this.shareItem.event.date = 'yearly-'
+        this.shareItem.id = this.shownDate?.event?.mainEventKey
+        const nameSplit = this.shownDate?.event?.event?.name?.split('|')?.length > 1 ? this.shownDate?.event?.event?.name?.split('|')[1] : this.shownDate?.event?.event?.name?.split('thời')[0]
+        this.shareItem.name = nameSplit
+        if (this.shownDate?.event?.mainEventKey.includes('soc') || this.shownDate?.event?.mainEventKey.includes('vong')) {
+          if (this.shownDate.event.event.eventLunar?.lunarMonth) {
+            this.shareItem.name += `tháng ${this.decimal.transform(this.shownDate.event.event.eventLunar?.lunarMonth, '2.0-0')}`
+          }
+          this.shareItem.event.date = 'yearly-monthly-'
+        }
+        this.shareItem.options = this.shownDate?.date?.event?.map((item: any) => {
+          return {
+            key: item?.event?.key,
+            data: item?.event,
+          }
+        })
+      }
+    }
+    if (!this.shareItem.id) {
+      this.shareItem.id = this.shownDate.event.event.key
+    }
+    console.log(this.shareItem);
+  }
+  downloading: boolean = false
+
+  saveAsImage(element: any) {
+    setTimeout(() => {
+      this.downloading = true
+      const saveItem = document.getElementById(element.id)
+      this.captureService
+        //@ts-ignore
+        .getImage(saveItem, true)
+        .pipe(
+          tap((img: string) => {
+            // converts base 64 encoded image to blobData
+            let blobData = this.convertBase64ToBlob(img)
+            // saves as image
+            const blob = new Blob([blobData], { type: "image/png" })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            link.href = url
+            // name of the file
+            link.download = `${element.id}`
+            link.click()
+            this.downloading = false
+          })
+        )
+        .subscribe();
+    }, 0)
+  }
+
+  private convertBase64ToBlob(Base64Image: string) {
+    // split into two parts
+    const parts = Base64Image.split(";base64,")
+    // hold the content type
+    const imageType = parts[0].split(":")[1]
+    // decode base64 string
+    const decodedData = window.atob(parts[1])
+    // create unit8array of size same as row data length
+    const uInt8Array = new Uint8Array(decodedData.length)
+    // insert all character code into uint8array
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
+    }
+    // return blob image after conversion
+    return new Blob([uInt8Array], { type: imageType })
   }
 }
 

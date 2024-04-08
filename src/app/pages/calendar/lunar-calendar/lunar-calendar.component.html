@@ -190,10 +190,12 @@
               }}
             </div>
           </button>
-          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 15" class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]"
-            src="assets/icons/assets/full-moon.svg" alt="full-moon">
-          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1" class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]"
-            src="assets/icons/assets/moon.svg" alt="moon">
+          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 15"
+            class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/full-moon.svg"
+            alt="full-moon">
+          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1"
+            class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/moon.svg"
+            alt="moon">
           <div class="text-xs p-1" *ngIf="filter.cn">
             {{
             date?.lunar?.convertSolar2Lunar?.lunarDayName
@@ -380,6 +382,14 @@
         </div>
       </mat-dialog-content>
       <mat-dialog-actions>
+        <button mat-icon-button [color]="'primary'" (click)="showShareImage()" [mat-dialog-close]="true"
+          *ngIf="viewPortMode !== 'mobile'" [matTooltip]="'Tải ảnh chia sẻ'">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-stroked-button color="primary" (click)="showShareImage()" [mat-dialog-close]="true"
+          *ngIf="viewPortMode === 'mobile'" class="w-full lg:w-auto">
+          <mat-icon>download</mat-icon> Tải ảnh chia sẻ
+        </button>
         <button mat-stroked-button [color]="'primary'" (click)="onOpenSoanSo()" [mat-dialog-close]="true"
           *ngIf="shownDate?.event?.event?.soTemplate" class="w-full lg:w-auto">
           <mat-icon>receipt_long</mat-icon>Soạn sớ
@@ -394,5 +404,80 @@
         </button>
         <button mat-button mat-dialog-close class="w-full lg:w-auto">Đóng</button>
       </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+  <ng-template #shareBottomSheet>
+    <h3>Tải ảnh chia sẻ</h3>
+    <div class="container-fluid">
+      <div class="flex flex-wrap">
+        <mat-checkbox [(ngModel)]="shareItem.traiGioi">Hiển thị trai giới</mat-checkbox>
+      </div>
+      <div *ngIf="shareItem.options?.length > 0">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+          <mat-label>Thời gian</mat-label>
+          <mat-select [(ngModel)]="shareItem.time" (ngModelChange)="updateShareInformation()">
+            <mat-option *ngFor="let item of shareItem.options" [value]="item?.key">{{item?.data?.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="!shareItem.time && (!shareItem.options || shareItem.options?.length == 0)">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+          <mat-label>Thời gian</mat-label>
+          <mat-select [(ngModel)]="shareItem.targetEvent">
+            <mat-option *ngFor="let item of lunarTimeZone" [value]="item?.name">{{item?.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div #shareImage class="p-8 min-w-[1200px]" [id]="shareItem.id">
+        <div class="h-3 w-full mb-8" [ngClass]="
+        shareItem?.event?.date === 'yearly-monthly-daily'
+          ? 'yearly-monthly-daily'
+          : shareItem?.event?.date !== 'yearly-monthly-daily' &&
+            shareItem?.event?.date?.includes('yearly-monthly-')
+          ? 'bg-[#4285f4]'
+          : shareItem?.event?.date !== 'yearly-monthly-daily' &&
+            !shareItem?.event?.date?.includes('yearly-monthly-') &&
+            shareItem?.event?.date?.includes('yearly-')
+          ? 'bg-[#ea4335]'
+          : 'bg-[#fbbc05]'
+      "></div>
+        <h1 class="text-2xl font-bold text-center mb-8">{{shareItem.name}}</h1>
+        <p class="text-center text-xl font-bold mb-8">
+          {{ shareItem?.date?.day }}
+          Ngày {{ shareItem?.date?.lunar?.convertSolar2Lunar?.lunarDay | number : "2.0-0" }} tháng
+          {{ shareItem?.date?.lunar?.convertSolar2Lunar?.lunarMonth | number : "2.0-0" }}
+          {{ shareItem?.date?.lunar?.convertSolar2Lunar?.lunarLeap ? "nhuận" : "" }}
+          năm {{ shareItem?.date?.lunar?.convertSolar2Lunar?.lunarYearName }} ({{
+          shareItem?.date?.solar | date : "dd/MM/yyyy"
+          }})
+        </p>
+        <p class="text-center text-xl font-bold" *ngIf="shareItem.targetEvent">THỜI {{ (shareItem.targetEvent || '')}}
+        </p>
+        <div class="text-right mt-8 text-xs">
+          <span *ngIf="shareItem.traiGioi && (shareItem.date?.six || shareItem.date?.ten || shareItem.date?.fifteen)">Ăn
+            chay: </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.six">6. </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.ten">10. </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.fifteen">15.</span>
+        </div>
+        <div class="h-3 w-full mb-8" [ngClass]="
+        shareItem?.event?.date === 'yearly-monthly-daily'
+          ? 'yearly-monthly-daily'
+          : shareItem?.event?.date !== 'yearly-monthly-daily' &&
+            shareItem?.event?.date?.includes('yearly-monthly-')
+          ? 'bg-[#4285f4]'
+          : shareItem?.event?.date !== 'yearly-monthly-daily' &&
+            !shareItem?.event?.date?.includes('yearly-monthly-') &&
+            shareItem?.event?.date?.includes('yearly-')
+          ? 'bg-[#ea4335]'
+          : 'bg-[#fbbc05]'
+      "></div>
+      </div>
+      <div class="text-center">
+        <button mat-raised-button color="primary" (click)="saveAsImage(shareItem)" [disabled]="downloading">
+          <mat-icon>download</mat-icon> Tải ảnh chia sẻ
+        </button>
+      </div>
     </div>
   </ng-template>

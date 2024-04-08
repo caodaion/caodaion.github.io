@@ -28,6 +28,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SynchronizedComponent } from './synchronized/synchronized.component';
 import { SharedModule } from "../../shared/shared.module";
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
@@ -59,7 +60,8 @@ import { SharedModule } from "../../shared/shared.module";
     ButtonShareModule,
     QRCodeModule,
     NgxMatTimepickerModule,
-    SharedModule
+    SharedModule,
+    MatCheckboxModule
   ]
 })
 export class CalendarModule { }
