@@ -384,6 +384,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
                   soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-ky-niem-duc-giao-tong-dac-dao-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-ky-niem-duc-giao-tong-dac-dao-thoi-ngo' : '';
                   eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Đắc Đạo (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Đắc Đạo (Thời Ngọ)' : '';
                   break;
+                case 'yearly-03-13':
+                  soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-ky-niem-duc-giao-tong-tho-phong-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-ky-niem-duc-giao-tong-tho-phong-thoi-ngo' : '';
+                  eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Thọ Phong (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Kỷ Niệm Đức Giáo Tông Thọ Phong (Thời NGỌ)' : '';
+                  break;
                 case 'yearly-04-08':
                   soTemplate = flyss?.event.key.includes('thoi-ty') ? 'so-le-via-duc-phat-to-thoi-ty' : flyss?.event.key.includes('thoi-ngo') ? 'so-le-via-duc-phat-to-thoi-ngo' : '';
                   eventName = flyss?.event.key.includes('thoi-ty') ? 'Sớ Lễ Vía Đức Phật Tổ (Thời Tý)' : flyss?.event.key.includes('thoi-ngo') ? 'Sớ Lễ Vía Đức Phật Tổ (Thời Ngọ)' : '';
@@ -588,6 +592,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
       }
     }
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
+    console.log(event);
+    
   }
 
   getTimes(time: any): Array<any> {
@@ -1026,6 +1032,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   downloading: boolean = false
 
   saveAsImage(element: any) {
+    const content = document.getElementById(element.id)?.textContent
+    navigator.clipboard.writeText(content || '')
     setTimeout(() => {
       this.downloading = true
       const saveItem = document.getElementById(element.id)

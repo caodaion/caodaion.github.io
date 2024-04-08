@@ -1361,6 +1361,125 @@ export const FIXED_EVENT = {
       ]
     },
     {
+      "name": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+      "description": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+      "key": "le-ky-niem-duc-giao-tong-tho-phong",
+      "event": [
+        {
+          "key": "thoi-ty-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Tý | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "ty-2301"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-meo-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Mẹo | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "meo-0507"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-ngo-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Ngọ | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "ngo-1113"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-dau-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Dậu | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "dau-1719"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        }
+      ]
+    },
+    {
       "name": "ĐẠI LỄ VÍA ĐỨC THÍCH CA",
       "description": "ĐẠI LỄ VÍA ĐỨC THÍCH CA",
       "key": "dai-le-via-duc-thich-ca",
