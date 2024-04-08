@@ -417,6 +417,7 @@
         <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Thời gian</mat-label>
           <mat-select [(ngModel)]="shareItem.time" (ngModelChange)="updateShareInformation()">
+            <mat-option [value]="undefined">Tất cả</mat-option>
             <mat-option *ngFor="let item of shareItem.options" [value]="item?.key">{{item?.data?.name}}</mat-option>
           </mat-select>
         </mat-form-field>
