@@ -982,10 +982,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   showShareImage() {
     this.shareItem = <any>{}
     this.shareItem.traiGioi = true
-    console.log(this.shownDate);
     this.updateShareInformation()
-
-
     this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
   }
 
@@ -1035,7 +1032,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     navigator.clipboard.writeText(content || '')
     setTimeout(() => {
       this.downloading = true
-      const saveItem = document.getElementById(element.id?.replace('.', '_'))
+      const saveItem = document.getElementById(element.id)
       this.captureService
         //@ts-ignore
         .getImage(saveItem, true)
@@ -1049,7 +1046,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
             const link = document.createElement("a")
             link.href = url
             // name of the file
-            link.download = `${element.id}`
+            link.download = `${element?.id?.toString()?.replace('.', '_')}`
             link.click()
             this.downloading = false
           })
