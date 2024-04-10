@@ -27,6 +27,7 @@ export class QrGeneratorComponent implements OnInit {
   syncTypes = SYNCTYPES;
   syncType: any;
   loadingData: boolean = false;
+  caodaionAd: boolean = true;
   selectedIndex: any;
   addedMoreLocation: any;
 
@@ -109,8 +110,12 @@ export class QrGeneratorComponent implements OnInit {
     if (this.data?.length <= 350) {
       if (this.data.includes(location.origin)) {
         this.qrData = this.data
-      } else {        
-        this.qrData = `${location.origin}/qr/${this.generaToken(JSON.parse(JSON.stringify(this.data)))}`        
+      } else {
+        if (this.caodaionAd) {
+          this.qrData = `${location.origin}/qr/${this.generaToken(JSON.parse(JSON.stringify(this.data)))}`
+        } else {
+          this.qrData = this.data
+        }
       }
     } else {
       this.qrData = ''
