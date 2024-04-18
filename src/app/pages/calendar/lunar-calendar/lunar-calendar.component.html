@@ -203,15 +203,15 @@
           </div>
           <div class="w-full flex">
             <div class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
-              *ngIf="date?.six && filter.six" [matTooltip]="'lục trai'">
+              *ngIf="date?.six && filter.six" [matTooltip]="'lục trai'" (click)="shareVegetarianDay(date)">
               6
             </div>
             <div class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
-              *ngIf="date?.ten && filter.ten" [matTooltip]="'thập trai'">
+              *ngIf="date?.ten && filter.ten" [matTooltip]="'thập trai'" (click)="shareVegetarianDay(date)">
               10
             </div>
             <div class="m-0 lg:m-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
-              *ngIf="date?.fifteen && filter.fifteen" [matTooltip]="'thiên ngươn'">
+              *ngIf="date?.fifteen && filter.fifteen" [matTooltip]="'thiên ngươn'" (click)="shareVegetarianDay(date)">
               15
             </div>
           </div>
@@ -477,6 +477,39 @@
       </div>
       <div class="text-center">
         <button mat-raised-button color="primary" (click)="saveAsImage(shareItem)" [disabled]="downloading">
+          <mat-icon>download</mat-icon> Tải ảnh chia sẻ
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #vegetarianBottomSheet>
+    <h3>Tải ảnh chia sẻ ngày ăn chay</h3>
+    <div class="container-fluid text-center">
+      <div #shareVegetarian [id]="vegetarianDay.d" class="min-w-[1200px] relative">
+        <img src="/assets/images/vegetarianDayFrame.png" alt="vegetarianDay">
+        <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center flex-col">
+          <div class="w-full">
+            <h5 class="text-left ml-[33%]">Bạn đừng quên </h5>
+            <h6 class="text-left ml-[33%]">Ngày {{vegetarianDay?.lunar?.convertSolar2Lunar?.lunarDay |
+              number: '2.0-0'}} tháng
+              {{vegetarianDay?.lunar?.convertSolar2Lunar?.lunarMonth | number: '2.0-0'}}
+              {{vegetarianDay?.lunar?.convertSolar2Lunar?.lunarLeap ? 'Nhuận' : ''}} năm
+              {{vegetarianDay?.lunar?.convertSolar2Lunar?.lunarYearName}} {{vegetarianDay?.solar | date:
+              '(dd/MM/YYYY)'}}</h6>
+          </div>
+          <h6>Bậc trai giới</h6>
+          <h4 class="text-[#01855d]">{{vegetarianDay?.six ? 'Lục trai . ' : ''}}{{vegetarianDay?.ten ? 'Thập trai . ' :
+            ''}}
+            {{vegetarianDay?.fifteen ? 'Thiên Ngươn' : ''}}</h4>
+          <h2 class="text-[#01855d]">ĂN CHAY</h2>
+          <div class="w-full">
+            <h3 class="text-right mr-[35%]">nhé!🥦🫑🥬</h3>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button mat-raised-button color="primary" (click)="saveAsImage(shareVegetarian)" [disabled]="downloading">
           <mat-icon>download</mat-icon> Tải ảnh chia sẻ
         </button>
       </div>

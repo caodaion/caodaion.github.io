@@ -979,6 +979,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
   shareItem = <any>{}
   shareBottomSheetRef: any;
   @ViewChild('shareBottomSheet') shareBottomSheet!: any;
+  vegetarianBottomSheetRef: any;
+  @ViewChild('vegetarianBottomSheet') vegetarianBottomSheet!: any;
   showShareImage() {
     this.shareItem = <any>{}
     this.shareItem.traiGioi = true
@@ -1070,6 +1072,15 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit, AfterViewC
     }
     // return blob image after conversion
     return new Blob([uInt8Array], { type: imageType })
+  }
+
+  vegetarianDay: any;
+
+  shareVegetarianDay(item: any) {
+    this.vegetarianDay = item;
+    console.log(this.vegetarianDay);
+    
+    this.vegetarianBottomSheetRef = this.matBottomSheet.open(this.vegetarianBottomSheet)
   }
 }
 
