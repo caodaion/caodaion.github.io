@@ -303,5 +303,10 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
         }
       })?.sort((a: any, b: any) => a.eventLunar.lunarMonth < b.eventLunar.lunarMonth || a.eventLunar.lunarDay < b.eventLunar.lunarDay ? -1 : 1)
       ?.filter((item: any) => item.eventLunar.lunarMonth < 12 ? (item.eventLunar.lunarMonth >= this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar?.lunarMonth) : (item.eventLunar.lunarMonth === 12 || item.eventLunar.lunarMonth === 1))
+    const lunar = this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar
+    this.thanhSoTamTranEvent = this.thanhSoTamTranEvent?.filter((item: any) => {
+      return item?.lunar?.lunarDay >= lunar?.lunarDay && ((item?.lunar?.lunarMonth === lunar?.lunarMonth) || (item?.lunar?.lunarMonth === lunar?.lunarMonth + 1))
+    })
+
   }
 }
