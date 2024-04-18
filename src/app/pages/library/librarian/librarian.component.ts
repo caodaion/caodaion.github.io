@@ -13,6 +13,7 @@ export class LibrarianComponent implements OnInit, AfterViewChecked {
   previewingItem: any;
   mode: any;
   library = <any>[];
+  tabs = <any>[];
   contentEditable: boolean = false;
 
   constructor(
@@ -39,8 +40,8 @@ export class LibrarianComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if (this.library?.length === 0) {
-      this.getBookFromLibrary()
+    if (this.tabs?.length === 0) {
+      this.getTabLibrary()
     }
   }
 
@@ -52,22 +53,35 @@ export class LibrarianComponent implements OnInit, AfterViewChecked {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
         // this.library = this.library.concat(res.data)
-        this.getBookFromLibrary()
+        this.getTabLibrary()
         this.getReadingBooks()
         this.changeDetector.detectChanges()
       }
     })
   }
 
-  getBookFromLibrary() {
+  getTabLibrary() {
+    this.tabs = <any>[];
+    try {
+      this.tabs = this.libraryService.libraryList?.map((item: any) => { return { tab: item } })
+      if (this.tabs?.length > 0) {
+        this.tabs?.forEach((item: any) => {
+          this.getBookFromLibrary(item);
+        })
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  getBookFromLibrary(item: any) {
     this.library = <any>[];
     try {
-      this.libraryService.getBookFromLibrary()
+      this.libraryService.getBookFromLibrary({ tab: item?.tab })
         .subscribe((res: any) => {
           this.getReadingBooks()
           if (res.code === 200) {
-            this.library = this.library.concat(res.data)?.filter((item: any) => item.published && item?.googleDocId)
-            console.log(this.library);
+            item.library = res?.data?.filter((item: any) => item.published && item?.googleDocId)
           }
         })
     } catch (err) {

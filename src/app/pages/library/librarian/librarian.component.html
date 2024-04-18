@@ -1,120 +1,39 @@
 <mat-drawer-container class="librarian-container">
   <mat-drawer-content>
     <mat-tab-group>
-      <mat-tab label="Sách">
-        <librarian-books
-          [books]="library"
-          (onItemFocus)="onItemFocus($event, libradianDrawer)"
-        ></librarian-books>
-      </mat-tab>
-      <!-- <mat-tab label="Audio"></mat-tab> -->
-      <mat-tab label="Settings" *ngIf="contentEditable">
-        <div class="container-fluid">
-          <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Settings</h2>
-            <button
-              mat-flat-button
-              [color]="'primary'"
-              (click)="saveSettings()"
-            >
-              Save
-            </button>
-          </div>
-          <div *ngFor="let item of library">
-            <div class="d-flex flex-wrap">
-              <div class="form-group">
-                <mat-label>Published</mat-label>
-                <mat-checkbox [(ngModel)]="item.published"></mat-checkbox>
-              </div>
-              <div class="form-group">
-                <mat-form-field [appearance]="'outline'">
-                  <mat-label>Key</mat-label>
-                  <input type="text" matInput [(ngModel)]="item.key" />
-                </mat-form-field>
-              </div>
-              <div class="form-group">
-                <mat-form-field [appearance]="'outline'">
-                  <mat-label>Tên</mat-label>
-                  <input type="text" matInput [(ngModel)]="item.name" />
-                </mat-form-field>
-              </div>
-              <div class="form-group">
-                <mat-form-field [appearance]="'outline'">
-                  <mat-label>Subtitle</mat-label>
-                  <input type="text" matInput [(ngModel)]="item.subtitle" />
-                </mat-form-field>
-              </div>
-              <div class="form-group">
-                <mat-form-field [appearance]="'outline'">
-                  <mat-label>Path</mat-label>
-                  <input type="text" matInput [(ngModel)]="item.path" />
-                </mat-form-field>
-              </div>
-              <div class="form-group">
-                <div class="d-flex">
-                  <img [src]="item.image" [alt]="item.name" width="150px" />
-                  <div>
-                    <mat-form-field [appearance]="'outline'">
-                      <mat-label>Hình ảnh</mat-label>
-                      <input type="text" matInput [(ngModel)]="item.image" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group w-100" style="margin-top: 1rem">
-                <mat-form-field [appearance]="'outline'" class="w-100">
-                  <mat-label>Mô tả</mat-label>
-                  <textarea
-                    [(ngModel)]="item.description"
-                    matInput
-                    resize
-                  ></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-          </div>
-          <button mat-flat-button (click)="addNewSettings()">+ Add new</button>
-        </div>
-      </mat-tab>
+      <ng-container *ngFor="let item of tabs">
+        <mat-tab [label]="item?.tab">
+          <librarian-books [library]="item" (onItemFocus)="onItemFocus($event, libradianDrawer)"></librarian-books>
+        </mat-tab>
+      </ng-container>
     </mat-tab-group>
   </mat-drawer-content>
   <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
     <div class="container-fluid">
       <div class="preview-area">
-        <button
-          mat-icon-button
-          class="preview-close"
-          (click)="libradianDrawer.close()"
-        >
+        <button mat-icon-button class="preview-close" (click)="libradianDrawer.close()" matTooltip="Đóng">
           <mat-icon>close</mat-icon>
         </button>
         <div class="d-flex align-items-center flex-column">
           <h2 class="text-center">Tóm tắt</h2>
           <div class="preview-image-wrapper">
-            <img
-              mat-card-image
-              *ngIf="previewingItem?.cover"
-              [src]="previewingItem?.image"
-              [alt]="previewingItem?.name"
-            />
-            <div
-              mat-card-image
-              *ngIf="!previewingItem?.cover"
-              class="h-full w-full flex items-center justify-center"
-            >
-              <mat-icon
-                [ngStyle]="{
-                  fontSize: '170px',
-                  height: '170px',
-                  width: '170px'
-                }"
-                >receipt_long</mat-icon
-              >
+            <img mat-card-image *ngIf="previewingItem?.cover" [src]="previewingItem?.image"
+              [alt]="previewingItem?.name" />
+            <div mat-card-image *ngIf="!previewingItem?.cover"
+              class="h-full w-full flex items-center justify-center bg-[#f6f8fc] rounded-2xl">
+              <img src="/assets/icons/assets/book-bookmark-minimalistic-svgrepo-com.svg" class="!object-contain" />
             </div>
           </div>
           <h3 class="text-center">{{ previewingItem?.name }}</h3>
           <p class="text-center">{{ previewingItem?.subtitle }}</p>
+          <div class="w-100">
+            <h4>Trạng Thái:</h4>
+            <p *ngIf="previewingItem?.finished">Hoàn thành <mat-icon matTooltip="Hoàn thành"
+                class="text-[#01855d]">check_circle</mat-icon></p>
+            <p *ngIf="!previewingItem?.finished">Đang viết <mat-icon matTooltip="Đang viết"
+                class="text-[#4758b8]">history_edu</mat-icon></p>
+            <mat-divider></mat-divider>
+          </div>
           <div class="w-100" *ngIf="!!previewingItem?.description">
             <h4>Mô tả:</h4>
             <p>{{ previewingItem?.description }}</p>
@@ -134,11 +53,7 @@
       </div>
     </div>
     <div class="read-now-button">
-      <button
-        mat-flat-button
-        [color]="'primary'"
-        (click)="onRead(previewingItem, false)"
-      >
+      <button mat-flat-button [color]="'primary'" (click)="onRead(previewingItem, false)">
         ĐỌC SÁCH
       </button>
     </div>

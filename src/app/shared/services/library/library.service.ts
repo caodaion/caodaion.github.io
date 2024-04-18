@@ -16,6 +16,7 @@ export class LibraryService {
   readonly sheetId = `2PACX-1vTsCA5rwuatpvDRWVRURaUJX74WoYG22AWBFsDN1J55IEZYTlYC4xsNdgHR6NDvdTzbMmWIRNKdxE23`
   readonly libraryWorkbook: any;
   readonly library: any;
+  readonly libraryList = <any>[];
   isActiveLibraryWorkBook: boolean = false
 
   constructor(private http: HttpClient) {
@@ -31,6 +32,7 @@ export class LibraryService {
         .then((req => {
           const workbook = read(req)
           ref.libraryWorkbook = workbook
+          ref.libraryList = this.libraryWorkbook?.SheetNames
           this.isActiveLibraryWorkBook = true
           this.getBookFromLibrary().subscribe()
         }))
@@ -61,9 +63,9 @@ export class LibraryService {
 
   getBookFromLibrary(request?: any): Observable<any> {
     return new Observable((observable) => {
-      let querySheet = 'library'
-      if (request?.subject && request?.time) {
-        querySheet = request.subject
+      let querySheet = 'Sách'      
+      if (request?.tab) {
+        querySheet = request.tab
       }
       const ref: Mutable<this> = this;
       if (this.libraryWorkbook) {

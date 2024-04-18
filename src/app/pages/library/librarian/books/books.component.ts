@@ -12,7 +12,7 @@ export class BooksComponent implements OnInit, OnChanges {
   gridForYouCols: number = 3
   forYouBooks = <any>[]
   @Output() onItemFocus = new EventEmitter()
-  @Input() books: any;
+  @Input() library: any;
 
   constructor(private breakpointObserver: BreakpointObserver) {
 
@@ -35,7 +35,7 @@ export class BooksComponent implements OnInit, OnChanges {
   }
 
   getBooks() {
-    this.books.forEach((item: any) => {
+    this.library?.library?.forEach((item: any) => {
       if (!item.isStatic && item.cover) {
         item.image = `https://lh3.google.com/u/0/d/${item?.cover}`
       }
@@ -51,6 +51,6 @@ export class BooksComponent implements OnInit, OnChanges {
   }
 
   getForYouBooks() {
-    this.forYouBooks = this.books?.filter((item: any) => item?.published)?.sort((a: any, b: any) => a?.name < b?.name ? -1 : 1)
+    this.forYouBooks = this.library?.library?.filter((item: any) => item?.published)?.sort((a: any, b: any) => a?.name < b?.name ? -1 : 1)
   }
 }

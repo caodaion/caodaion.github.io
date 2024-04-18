@@ -26,6 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { CpMarkdownModule } from 'src/app/components/cp-markdown/cp-markdown.module';
 import { SharedModule } from "../../shared/shared.module";
+import { SearchBookByKeyWordPipe } from './librarian/books/searchBookByKeyWord.pipe';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { SharedModule } from "../../shared/shared.module";
         MatSelectModule,
         MatTooltipModule,
         MatRippleModule,
-        SharedModule
+        SharedModule,
+        SearchBookByKeyWordPipe
     ]
 })
 export class LibraryModule { }
