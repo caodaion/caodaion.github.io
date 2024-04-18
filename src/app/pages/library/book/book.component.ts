@@ -16,6 +16,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   rootContent: any;
   content: any;
   contentName: any;
+  author: any;
   origin: any;
   isLoading: boolean = false;
   isNavigation: boolean = false;
@@ -166,6 +167,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     this.origin = null
     const foundContent: any = this.library.find((item: any) => item.key === key)
     this.contentName = foundContent?.name;
+    this.author = foundContent?.author;
     this.changeDetector.detectChanges();
     this.content = `${foundContent?.googleDocId}`
     if (this.content) {

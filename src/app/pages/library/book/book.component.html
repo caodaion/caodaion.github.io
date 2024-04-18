@@ -6,6 +6,7 @@
     }">
     <div class="book-header">
       <app-header-title>{{ contentName }}</app-header-title>
+      <app-header-sub-title *ngIf="author">{{author}}</app-header-sub-title>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
