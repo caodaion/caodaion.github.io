@@ -27,8 +27,6 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   level: any;
   navigate = <any>{};
   reading: any;
-  fontSize: number = 18;
-  fontSizeRange = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
   library = <any>[];
   tableContent = <any>[];
   selectedIndex = 0
@@ -57,7 +55,9 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.getTableContentByKey()
+    if (this.library?.length === 0) {
+      this.getBookFromLibrary()
+    }
   }
 
   updateLayout() {
@@ -146,7 +146,6 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
         complete: () => {
           if (this.isShowTableContent) {
             const foundContent = this.library.find((item: any) => item.key === this.key)
-            this.getTableContentByKey()
           }
         }
       })
@@ -168,36 +167,10 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     const foundContent: any = this.library.find((item: any) => item.key === key)
     this.contentName = foundContent?.name;
     this.changeDetector.detectChanges();
-    this.libraryService.getBookByKey(key, foundContent?.isStatic)
-      .subscribe((res: any) => {
-        if (res) {
-          this.content = res.data
-          this.origin = foundContent?.origin
-          this.isLoading = false
-          this.getTableContentByKey()
-        }
-      })
-  }
-
-  getTableContentByKey() {
-    if (this.tableContent?.length === 0) {
-      const content = document.getElementById('markdownContent')
-      content?.childNodes.forEach((node: any) => {
-        if (node.id) {
-          this.tableContent.push({
-            key: node.id,
-            description: node.textContent,
-            tagName: node.tagName
-          })
-        }
-        this.tableContent = [...new Set(this.tableContent)]
-        this.changeDetector.detectChanges();
-      })
+    this.content = `${foundContent?.googleDocId}`
+    if (this.content) {
+      this.isLoading = false
     }
-  }
-
-  onSaveContent() {
-    navigator.clipboard.writeText(JSON.stringify({ data: this.rootContent }));
   }
 
   onNextContent() {
@@ -243,14 +216,6 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
       } else {
         this.navigate.next.link = `/`
       }
-    }
-  }
-
-  readContent(item: any) {
-    if (item?.attrs?.hash?.includes('#')) {
-      this.router.navigate([item?.attrs?.pathname], { fragment: item?.attrs?.hash.replace('#', '') })
-    } else {
-      this.router.navigate([`${item?.attrs?.pathname}${item?.attrs?.hash || ''}`])
     }
   }
 
@@ -302,20 +267,5 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     return token
-  }
-
-  updateFontSize() {
-    const users = JSON.parse(localStorage.getItem('users') || '{}')
-    const token = localStorage.getItem('token')
-    if (token) {
-      const jwtHelper = new JwtHelperService()
-      const decodedToken = jwtHelper.decodeToken(token)
-      decodedToken.fontSize = this.fontSize
-      if (users[decodedToken.userName]) {
-        users[decodedToken.userName] = this.generaToken(decodedToken)
-        localStorage.setItem('users', JSON.stringify(users))
-        localStorage.setItem('token', JSON.stringify(this.generaToken(decodedToken)))
-      }
-    }
   }
 }

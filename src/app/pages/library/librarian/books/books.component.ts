@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BooksComponent implements OnInit, OnChanges {
 
-  gridForYouCols: number = 2
+  gridForYouCols: number = 3
   forYouBooks = <any>[]
   @Output() onItemFocus = new EventEmitter()
   @Input() books: any;
@@ -25,7 +25,7 @@ export class BooksComponent implements OnInit, OnChanges {
         if (state.matches) {
           this.gridForYouCols = 1
         } else {
-          this.gridForYouCols = 2
+          this.gridForYouCols = 3
         }
       });
   }
@@ -37,7 +37,10 @@ export class BooksComponent implements OnInit, OnChanges {
   getBooks() {
     this.books.forEach((item: any) => {
       if (!item.isStatic && item.cover) {
-        item.image = `https://raw.githubusercontent.com/caodaion-library/caodaion-library.github.io/${!environment.production ? 'dev' : 'main'}/${item.key}/cover.png${!environment.production ? '?ref=dev' : ''}`
+        item.image = `https://lh3.google.com/u/0/d/${item?.cover}`
+      }
+      if (item?.author) {
+        item.subtitle = item?.author
       }
     })
     this.getForYouBooks()
@@ -48,6 +51,6 @@ export class BooksComponent implements OnInit, OnChanges {
   }
 
   getForYouBooks() {
-    this.forYouBooks = this.books?.filter((item: any) => item?.published)
+    this.forYouBooks = this.books?.filter((item: any) => item?.published)?.sort((a: any, b: any) => a?.name < b?.name ? -1 : 1)
   }
 }

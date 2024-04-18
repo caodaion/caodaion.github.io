@@ -1,72 +1,34 @@
 <div class="wrapper-container book-content-container">
-  <app-header
-    class="header"
-    [prevPage]="{
+  <app-header class="header" [prevPage]="{
       navigate: {
         link: getBackLink()
       }
-    }"
-  >
+    }">
     <div class="book-header">
       <app-header-title>{{ contentName }}</app-header-title>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="book-container-wrapper" *ngIf="!isShowTableContent">
-    <mat-tab-group
-      class="h-full"
-      (selectedIndexChange)="selectedIndex = $event"
-    >
+    <mat-tab-group class="h-full" (selectedIndexChange)="selectedIndex = $event">
       <mat-tab [label]="'Nội dung'">
         <mat-drawer-container>
           <mat-drawer-content>
             <div class="flex flex-col overflow-hidden h-full">
-              <div class="w-full flex items-center">
-                <mat-form-field class="w-full">
-                  <mat-label>Cỡ chữ</mat-label>
-                  <mat-select
-                    [(ngModel)]="fontSize"
-                    (ngModelChange)="updateFontSize()"
-                  >
-                    <mat-option
-                      *ngFor="let item of fontSizeRange"
-                      [value]="item"
-                      >{{ item }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
-                <button
-                  mat-flat-button
-                  (click)="libradianDrawer.toggle()"
-                  [matTooltip]="'Mục lục'"
-                  [color]="'primary'"
-                >
-                  <mat-icon>list</mat-icon>
-                </button>
-              </div>
-              <div
-                *ngIf="content"
-                class="h-100 px-3 flex-1 overflow-auto"
-                [ngStyle]="{
-                  fontSize: fontSize + 'px'
-                }"
-              >
-                <app-cp-markdown
-                  *ngIf="content"
-                  class="variable-binding w-full text-justify bg-white select-text"
-                  [data]="content"
-                ></app-cp-markdown>
+              <div *ngIf="content" class="h-100 flex-1 overflow-auto bg-white" [ngClass]="{'ps-4': !isPhone}">
+                <iframe [src]="
+                'https://docs.google.com/document/d/e/' +
+                  content +
+                  '/pub?embedded=true' | safe
+              " frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen class="w-full h-full"
+                  #googleDocContent></iframe>
               </div>
             </div>
           </mat-drawer-content>
           <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
             <ng-container *ngFor="let item of tableContent">
-              <a
-                [href]="'thu-vien/' + key + '#' + item?.key"
-                class="block p-3"
-                matRipple
-                (click)="isPhone ? libradianDrawer.toggle() : ''"
-              >
+              <a [href]="'thu-vien/' + key + '#' + item?.key" class="block p-3" matRipple
+                (click)="isPhone ? libradianDrawer.toggle() : ''">
                 <span class="font-black" *ngIf="item?.tagName == 'H1'">
                   {{ item.description }}
                 </span>
@@ -87,7 +49,7 @@
                 </span>
                 <span class="ps-6" *ngIf="!item?.tagName">{{
                   item.description
-                }}</span>
+                  }}</span>
               </a>
               <mat-divider></mat-divider>
             </ng-container>
@@ -95,65 +57,17 @@
         </mat-drawer-container>
       </mat-tab>
       <mat-tab [label]="'Tài liệu gốc'" *ngIf="origin">
-        <iframe
-          *ngIf="selectedIndex === 1"
-          [src]="
+        <iframe *ngIf="selectedIndex === 1" [src]="
             'https://drive.google.com/file/d/' + origin + '/preview' | safe
-          "
-          class="w-full h-full"
-          allow="autoplay"
-        ></iframe>
+          " class="w-full h-full" allow="autoplay"></iframe>
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div class="book-container-wrapper" *ngIf="isShowTableContent">
-    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-    <a
-      [href]="'thu-vien/' + key"
-      mat-flat-button
-      [color]="'primary'"
-      class="w-full"
-    >
-      Đọc hết
-    </a>
-    <ng-container *ngFor="let item of tableContent">
-      <a
-        [href]="'thu-vien/' + key + '#' + item?.key"
-        class="w-full block p-3"
-        matRipple
-      >
-        <h1 *ngIf="item?.tagName == 'H1'">
-          {{ item.description }}
-        </h1>
-        <h2 *ngIf="item?.tagName == 'H2'">
-          {{ item.description }}
-        </h2>
-        <h3 *ngIf="item?.tagName == 'H3'">
-          {{ item.description }}
-        </h3>
-        <h4 *ngIf="item?.tagName == 'H4'">
-          {{ item.description }}
-        </h4>
-        <h5 *ngIf="item?.tagName == 'H5'">
-          {{ item.description }}
-        </h5>
-        <h6 *ngIf="item?.tagName == 'H6'">
-          {{ item.description }}
-        </h6>
-        <span *ngIf="!item?.tagName">{{ item.description }}</span>
-      </a>
-      <mat-divider></mat-divider>
-    </ng-container>
-  </div>
-  <app-bottom-navigator
-    *ngIf="isNavigation"
-    [prev]="{
+  <app-bottom-navigator *ngIf="isNavigation" [prev]="{
       text: navigate?.prev?.text,
       navigate: { link: navigate?.prev?.link }
-    }"
-    [next]="{
+    }" [next]="{
       text: navigate?.next?.text,
       navigate: { link: navigate?.next?.link }
-    }"
-  ></app-bottom-navigator>
+    }"></app-bottom-navigator>
 </div>

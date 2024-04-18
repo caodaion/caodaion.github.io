@@ -3,8 +3,8 @@
     <h2>Dành cho bạn</h2>
     <mat-grid-list
       [cols]="gridForYouCols"
-      [rowHeight]="gridForYouCols === 2 ? '5:2' : '4:5'"
-      gutterSize="30"
+      [rowHeight]="gridForYouCols === 3 ? '5:2' : '4:5'"
+      gutterSize="16"
     >
       <mat-grid-tile *ngFor="let item of forYouBooks">
         <mat-card
@@ -14,12 +14,12 @@
           (click)="onCardClick(item)"
         >
           <mat-grid-list
-            [cols]="gridForYouCols === 2 ? 4 : 1"
-            [gutterSize]="gridForYouCols === 2 ? '16' : '0'"
-            [rowHeight]="gridForYouCols === 2 ? '100%' : '2:1'"
+            [cols]="gridForYouCols === 3 ? 4 : 1"
+            [gutterSize]="gridForYouCols === 3 ? '16' : '0'"
+            [rowHeight]="gridForYouCols === 3 ? '100%' : '2:1'"
           >
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-              <div [ngClass]="{ 'card-image-wrapper': gridForYouCols == 2 }">
+              <div [ngClass]="{ 'card-image-wrapper': gridForYouCols === 3 }" class="">
                 <img
                   mat-card-image
                   *ngIf="item?.cover"
@@ -43,9 +43,9 @@
               </div>
             </mat-grid-tile>
             <mat-grid-tile
-              [colspan]="gridForYouCols === 2 ? 3 : 1"
+              [colspan]="gridForYouCols === 3 ? 3 : 1"
               [rowspan]="1"
-              *ngIf="gridForYouCols === 2"
+              *ngIf="gridForYouCols === 3"
             >
               <div class="h-100 w-100">
                 <mat-card-header>

@@ -44,7 +44,7 @@
     class="full-layout-drawer-content"
     [ngClass]="isHideToolbar ? 'hide-bottom-navbar' : ''"
   >
-    <div class="main-drawer-content d-flex flex-column w-100 h-100">
+    <div class="main-drawer-content d-flex flex-column w-100 h-100 min-h-full">
       <mat-toolbar
         class="main-toolbar justify-content-between"
         *ngIf="!isHideToolbar"

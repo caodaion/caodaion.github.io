@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LibraryService } from 'src/app/shared/services/library/library.service';
@@ -9,7 +9,7 @@ import { LibraryService } from 'src/app/shared/services/library/library.service'
   templateUrl: './librarian.component.html',
   styleUrls: ['./librarian.component.scss']
 })
-export class LibrarianComponent implements OnInit {
+export class LibrarianComponent implements OnInit, AfterViewChecked {
   previewingItem: any;
   mode: any;
   library = <any>[];
@@ -38,6 +38,12 @@ export class LibrarianComponent implements OnInit {
     this.getBooks()
   }
 
+  ngAfterViewChecked(): void {
+    if (this.library?.length === 0) {
+      this.getBookFromLibrary()
+    }
+  }
+
   getBooks() {
     this.getStaticBooks()
   }
@@ -45,7 +51,7 @@ export class LibrarianComponent implements OnInit {
   getStaticBooks() {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
-        this.library = this.library.concat(res.data)
+        // this.library = this.library.concat(res.data)
         this.getBookFromLibrary()
         this.getReadingBooks()
         this.changeDetector.detectChanges()
@@ -54,15 +60,19 @@ export class LibrarianComponent implements OnInit {
   }
 
   getBookFromLibrary() {
-    this.libraryService.getBookFromLibrary()
-      .subscribe({
-        next: (res: any) => {
+    this.library = <any>[];
+    try {
+      this.libraryService.getBookFromLibrary()
+        .subscribe((res: any) => {
           this.getReadingBooks()
-          if (res.data) {
-            this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
+          if (res.code === 200) {
+            this.library = this.library.concat(res.data)?.filter((item: any) => item.published && item?.googleDocId)
+            console.log(this.library);
           }
-        }
-      })
+        })
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   getReadingBooks() {
