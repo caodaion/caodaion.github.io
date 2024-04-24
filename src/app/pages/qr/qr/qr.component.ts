@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, takeWhile, timer } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 
 @Component({
   selector: 'app-qr',
@@ -14,9 +15,47 @@ export class QrComponent implements OnInit {
   endPath: any
   countDown: any
   seconds: any = 5
+  setting = <any>{}
+  shorts = <any>[]
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private tinyUrlService: TinyUrlService) {
 
+  }
+
+  ngAfterViewChecked(): void {
+    // if (!this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {
+    //   this.getShortLinkSetting()
+    // }
+  }
+
+  getShortLinkSetting() {
+
+    const returnData = () => {
+      const foundData = this.shorts?.find((item: any) => item?.id == this.url)
+      if (foundData?.data) {
+        this.endPath = foundData?.data
+        this.countDown = timer(0, 1000).pipe(
+          map(n => (this.seconds - n) * 1000),
+          takeWhile(n => n >= 0),
+        )
+        this.countDown?.subscribe((n: any) => {
+          if (n === 0) {
+            this.goToEndUrl()
+          }
+        })
+      }
+    }
+    if (this.setting?.googleForms && this.setting?.id && this.setting?.data && this.shorts?.length > 0) {
+      returnData()
+    } else {
+      this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
+        if (res.code === 200) {
+          this.setting = res.data?.setting
+          this.shorts = res.data?.data
+          returnData()
+        }
+      })
+    }
   }
 
   ngOnInit(): void {
@@ -40,7 +79,7 @@ export class QrComponent implements OnInit {
       const decodedToken = jwtHelper.decodeToken(this.url)
       this.url = fixedURL(decodedToken)
     } catch (e) {
-      console.log(e);
+      this.getShortLinkSetting()
     }
     if (this.url?.includes('http')) {
       this.endPath = this.url
@@ -48,28 +87,17 @@ export class QrComponent implements OnInit {
     if (this.url.includes(location.origin)) {
       this.goToEndUrl()
     } else {
-      this.countDown = timer(0, 1000).pipe(
-        map(n => (this.seconds - n) * 1000),
-        takeWhile(n => n >= 0),
-      )
-      this.countDown?.subscribe((n: any) => {
-        if (n === 0) {
-          this.goToEndUrl()
-        }
-      })
     }
   }
 
   goToEndUrl() {
     function validURL(str: any) {
-      var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-      return !!pattern.test(str);
+      try { return Boolean(new URL(str)); }
+      catch (e) { return false; }
     }
+    console.log(this.endPath);
+    console.log(validURL(this.endPath));
+
     if (validURL(this.endPath)) {
       location.href = `${this.endPath}`;
     }

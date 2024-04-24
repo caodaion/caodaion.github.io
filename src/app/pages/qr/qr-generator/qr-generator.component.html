@@ -15,6 +15,7 @@
           </button>
         </mat-form-field>
         <mat-checkbox [(ngModel)]="caodaionAd" (change)="onChangeData()">CaoDaoON Ad</mat-checkbox>
+        <mat-checkbox [(ngModel)]="minimalList" (change)="onChangeData()">Cắt ngắn</mat-checkbox>
         <mat-form-field class="w-100">
           <mat-label>Nội dung tạo mã</mat-label>
           <input type="text" matInput [(ngModel)]="data" (change)="onChangeData()" />
@@ -26,21 +27,69 @@
         <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
           <mat-spinner></mat-spinner>
         </div>
-        <div *ngIf="!error && qrData">
-          <qrcode #parent [qrdata]="qrData" [width]="300" [imageHeight]="75" [imageWidth]="75"
-            [cssClass]="'flex justify-center'" [errorCorrectionLevel]="'M'" [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="4" [scale]="128"
-            [imageSrc]="'assets/icons/assets/circle-logo.svg'"></qrcode>
+        <ng-container *ngIf="googleFormsPath">
+          <button class="w-full" mat-stroked-button [color]="'primary'" (click)="googleFormsPath = ''">Đóng biểu
+            mẫu</button>
+          <div><strong class="text-[red]">LƯU Ý:</strong> Hãy Ấn nút "Gửi" hoặc "Submit" trong Biễu Mẫu bên dưới 👇👇👇
+            thì bạn mới hoàn thành việc đăng ký nhé!</div>
+          <div><strong class="text-[red]">LƯU Ý:</strong> Mỗi khi hoàn thành việc tạo bạn nhớ ấn nút "Đóng biểu mẫu để
+            làm
+            mới nhé!"</div>
+          <iframe [src]="googleFormsPath | safe" class="w-full min-h-[300px]" frameborder="0"></iframe>
+          <div><strong class="text-[red]">LƯU Ý:</strong> Hãy Ấn nút "Gửi" hoặc "Submit" trong Biễu Mẫu bên trên 👆👆👆
+            thì bạn mới hoàn thành việc đăng ký nhé!</div>
+          <div><strong class="text-[red]">LƯU Ý:</strong> Mỗi khi hoàn thành việc tạo bạn nhớ ấn nút "Đóng biểu mẫu để
+            làm
+            mới nhé!"</div>
+        </ng-container>
+        <div *ngIf="!error && qrData" class="flex justify-center flex-col items-center">
+          <div class="h-fit w-fit" #parentQR [id]="'CaoDaiON_QR'">
+            <div class="h-fit w-fit border-[5px] rounded-2xl border-[black] mb-2">
+              <qrcode #parent [qrdata]="qrData" [width]="300" [imageHeight]="75" [imageWidth]="75"
+                 [errorCorrectionLevel]="'M'"
+                [colorDark]="'#000000ff'" [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2"
+                [scale]="128" [ngStyle]="{borderRadius: '1rem', display: 'block', overflow: 'hidden'}"></qrcode>
+            </div>
+            <div class="flex items-center justify-center flex-col pb-2">
+              <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)"
+                  fill="#4285F4" />
+                <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z" fill="#FBBC05" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z"
+                  fill="#EA4335" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z"
+                  fill="#FBBC05" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z"
+                  fill="#4285F4" />
+                <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4" />
+                <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
+                <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
+                <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
+                <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
+                <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
+                <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335" />
+                <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
+              </svg>
+              www.caodaion.com
+            </div>
+          </div>
           <div class="text-center">
-            <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
-              <mat-icon>download</mat-icon>
-              Tải Mã QR
+            <button mat-raised-button color="primary" (click)="saveAsImage(parentQR)" [disabled]="downloading">
+              <mat-icon *ngIf="!downloading">download</mat-icon>
+              <div class="flex items-center">
+                <mat-spinner *ngIf="downloading" [diameter]="24"></mat-spinner>
+                Tải Mã QR
+              </div>
             </button>
           </div>
         </div>
+        <div *ngIf="isExisting">Mã cắt ngắn đã tồn tại. Bạn không cần phải tạo mã mới. Hãy dùng mã đã tạo ra ở trên nhé!👆👆👆</div>
       </div>
     </mat-tab>
-    <mat-tab [label]="'TẠO MÃ QR CHECK-IN'">
+    <!-- <mat-tab [label]="'TẠO MÃ QR CHECK-IN'">
       <div class="container-fluid">
         <h2>Tạo mã QR check-in</h2>
         <mat-form-field class="w-100">
@@ -70,8 +119,7 @@
         <div *ngIf="!checkInError && checkInQRData">
           <qrcode #checkIn [qrdata]="checkInQRData" [width]="300" [imageHeight]="75" [imageWidth]="75"
             [cssClass]="'flex justify-center'" [errorCorrectionLevel]="'M'" [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="4" [scale]="128"
-            [imageSrc]="'assets/icons/assets/circle-logo.svg'"></qrcode>
+            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2" [scale]="128"></qrcode>
           <div class="text-center">
             <button mat-raised-button color="primary" (click)="saveAsImage(checkIn)">
               <mat-icon>download</mat-icon>
@@ -80,7 +128,7 @@
           </div>
         </div>
       </div>
-    </mat-tab>
+    </mat-tab> -->
     <mat-tab [label]="'TẠO MÃ QR ĐỒNG BỘ DỮ LIỆU CÁ NHÂN'">
       <div class="container-fluid">
         <h2>Tạo mã QR đồng bộ dữ liệu</h2>
@@ -108,8 +156,7 @@
         <div *ngIf="!syncError && syncQRData">
           <qrcode #sync [qrdata]="syncQRData" [width]="300" [imageHeight]="75" [imageWidth]="75"
             [cssClass]="'flex justify-center'" [errorCorrectionLevel]="'M'" [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="4" [scale]="128"
-            [imageSrc]="'assets/icons/assets/circle-logo.svg'"></qrcode>
+            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2" [scale]="128"></qrcode>
           <div class="text-center">
             <button mat-raised-button color="primary" (click)="saveAsImage(sync)">
               <mat-icon>download</mat-icon>

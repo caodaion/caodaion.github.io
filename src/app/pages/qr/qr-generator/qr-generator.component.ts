@@ -5,6 +5,8 @@ import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
+import { NgxCaptureService } from 'ngx-capture';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-qr-generator',
@@ -27,14 +29,19 @@ export class QrGeneratorComponent implements OnInit {
   syncTypes = SYNCTYPES;
   syncType: any;
   loadingData: boolean = false;
+  minimalList: boolean = false;
+  isExisting: boolean = false;
   caodaionAd: boolean = true;
   selectedIndex: any;
   addedMoreLocation: any;
+  setting: any;
+  shorts = <any>[];
 
   constructor(
     private tinyUrlService: TinyUrlService,
     private _snackBar: MatSnackBar,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private captureService: NgxCaptureService
   ) {
   }
 
@@ -43,6 +50,47 @@ export class QrGeneratorComponent implements OnInit {
       this.selectedIndex = parseInt(window.history.state.selectedIndex)
     }
     this.mergeLocalstorageVariable()
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.minimalList && !this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {
+      this.getShortLinkSetting()
+    }
+  }
+
+  getShortLinkSetting() {
+    const convertData = () => {
+      this.isExisting = false
+      const foundshort = this.shorts?.find((item: any) => item?.data == this.data)
+      if (foundshort) {
+        this.qrData = `${location.origin}/qr/${foundshort?.id}`
+        this.isExisting = true
+      } else {
+        const id = `${Date.now()}`
+        this.qrData = `${location.origin}/qr/${id}`
+        if (this.setting?.googleForms && this.setting?.id && this.setting?.data) {
+          if (this.setting?.googleForms) {
+            if (this.setting?.googleForms?.includes('http')) {
+              this.setting.googleForms = this.setting?.googleForms?.split('e/')[1]?.split('/')[0]
+            }
+          }
+          this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleForms}/viewform?${this.setting?.id}=${id}&${this.setting?.data}=${encodeURIComponent(this.data)}`
+        }
+      }
+    }
+    if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
+      convertData()
+    } else {
+      this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
+        if (res.code === 200) {
+          this.setting = res.data?.setting
+          this.shorts = res.data?.data
+          if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
+            convertData()
+          }
+        }
+      })
+    }
   }
 
   mergeLocalstorageVariable() {
@@ -77,24 +125,31 @@ export class QrGeneratorComponent implements OnInit {
     // return blob image after conversion
     return new Blob([uInt8Array], { type: imageType })
   }
-
-  saveAsImage(parent: any) {
-    let parentElement = null
-    parentElement = parent.qrcElement.nativeElement
-      .querySelector("canvas")
-      .toDataURL("image/png")
-    if (parentElement) {
-      // converts base 64 encoded image to blobData
-      let blobData = this.convertBase64ToBlob(parentElement)
-      // saves as image
-      const blob = new Blob([blobData], { type: "image/png" })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      // name of the file
-      link.download = this.commonService.generatedSlug(`caodaion-qr-${this.selectedIndex === 0 ? '0' : this.selectedIndex === 1 ? ('checkin-' + this.addedMoreLocation || this.checkInType) : this.selectedIndex === 2 ? 'sync' : ''}`)
-      link.click()
-    }
+  downloading = false
+  saveAsImage(element: any) {
+    setTimeout(() => {
+      this.downloading = true
+      const saveItem = document.getElementById(element?.id)
+      this.captureService
+        //@ts-ignore
+        .getImage(saveItem, true)
+        .pipe(
+          tap((img: string) => {
+            // converts base 64 encoded image to blobData
+            let blobData = this.convertBase64ToBlob(img)
+            // saves as image
+            const blob = new Blob([blobData], { type: "image/png" })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            link.href = url
+            // name of the file            
+            link.download = `${element?.id?.toString()?.replace('.', '_')}`
+            link.click()
+            this.downloading = false
+          })
+        )
+        .subscribe();
+    }, 0)
   }
 
   copyLink(data: any) {
@@ -105,32 +160,22 @@ export class QrGeneratorComponent implements OnInit {
       verticalPosition: this.verticalPosition,
     });
   }
-
+  googleFormsPath: any;
   onChangeData() {
-    if (this.data?.length <= 350) {
+    this.googleFormsPath = ''
+    if (this.minimalList) {
+      this.caodaionAd = true
+      this.getShortLinkSetting()
+    } else {
       if (this.data.includes(location.origin)) {
         this.qrData = this.data
       } else {
         if (this.caodaionAd) {
           this.qrData = `${location.origin}/qr/${this.generaToken(JSON.parse(JSON.stringify(this.data)))}`
         } else {
+          this.minimalList = false
           this.qrData = this.data
         }
-      }
-    } else {
-      this.qrData = ''
-      this.error = ''
-      try {
-        this.loadingData = true
-        this.tinyUrlService.shortenUrl(this.data)
-          .subscribe((res: any) => {
-            this.qrData = res?.data?.tiny_url;
-            this.loadingData = false
-          });
-      } catch (e) {
-        console.log(e)
-        this.loadingData = false
-        this.error = 'Khô thể tạo mã QR vì dữ liệu của bạn quá dài và không có kết nối mạng'
       }
     }
   }
@@ -211,8 +256,6 @@ export class QrGeneratorComponent implements OnInit {
       }
       syncQrData += `?token=${this.generaToken(syncData)}`
     }
-    console.log(syncQrData);
-
     if (syncQrData?.length <= 350) {
       this.syncQRData = syncQrData
     } else {

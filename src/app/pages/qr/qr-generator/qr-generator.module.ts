@@ -13,27 +13,29 @@ import {MatButtonModule} from "@angular/material/button";
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SharedModule } from "../../../shared/shared.module";
 
 
 
 @NgModule({
-  declarations: [
-    QrGeneratorComponent
-  ],
-  imports: [
-    CommonModule,
-    QRGeneratorRoutingModule,
-    QRCodeModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    MatInputModule,
-    MatButtonModule,
-    MatTabsModule,
-    MatSelectModule,
-    MatCheckboxModule
-  ]
+    declarations: [
+        QrGeneratorComponent
+    ],
+    imports: [
+        CommonModule,
+        QRGeneratorRoutingModule,
+        QRCodeModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatInputModule,
+        MatButtonModule,
+        MatTabsModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        SharedModule
+    ]
 })
 export class QrGeneratorModule { }

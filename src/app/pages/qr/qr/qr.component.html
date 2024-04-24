@@ -23,12 +23,12 @@
             <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
         </svg>
     </div>
-    <div class="text-center mt-4">
+    <div class="text-center mt-4" *ngIf="endPath">
         <a class="underline" href="/">CaoDaiON</a> sẽ tự động chuyển bạn đến trang đích:
         <br>
         <a class="underline" [href]="endPath">{{endPath}}</a>
     </div>
-    <div class="flex items-center mt-4">
+    <div class="flex items-center mt-4" *ngIf="countDown">
         <span>sau</span>
         <span class="text-6xl mx-3">{{countDown | async | date: 'ss'}}</span>
         <span>giây</span>

@@ -8,7 +8,7 @@ const routes: Routes = [
     component: QrComponent,
     children: [
       {
-        path: 'quet-ma',
+        path: '',
         loadChildren: () => import('../../pages/qr/qr-scanner/qr-scanner.module').then((m) => m.QrScannerModule),
       },
       {
@@ -21,7 +21,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'quet-ma',
+        redirectTo: '',
         pathMatch: 'full'
       }
     ]
