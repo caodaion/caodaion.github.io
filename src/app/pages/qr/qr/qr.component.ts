@@ -42,9 +42,9 @@ export class QrComponent implements OnInit {
       returnData()
     } else {
       this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
-        if (res.code === 200) {
-          this.setting = res.data?.setting
-          this.shorts = res.data?.data
+        if (res.status === 200) {
+          this.setting = res.setting
+          this.shorts = res.shorts
           returnData()
         }
       })

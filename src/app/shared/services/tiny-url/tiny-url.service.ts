@@ -4,6 +4,7 @@ import { rejects } from 'assert';
 import { resolve } from 'dns';
 import { Observable } from 'rxjs';
 import { read, utils } from 'xlsx';
+import { SheetService } from '../sheet/sheet.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -12,86 +13,64 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 })
 export class TinyUrlService {
 
-  readonly sheetUrl = `https://docs.google.com/spreadsheets/d/e/{id}/pub?output=xlsx`
   readonly sheetId = `2PACX-1vTYV0g4h3Mm8ivzpvKSdjB6MjAvqQeP-TkAFohZjmuNtLuLJI5dc6c1aj8HDBTVWR0acUXnToQJnQTO`
   readonly shortWorkbook: any;
+  readonly shortListSheet = 'Form Responses 1';
+  readonly shortSettingSheet = 'setting';
   readonly shortList = <any>[];
   shortSetting = <any>{};
   isActiveShortWorkBook: boolean = false
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sheetService: SheetService) { }
 
   fetchShort(): Observable<any> {
+    const ref: Mutable<this> = this;
     return new Observable((observable) => {
       const returnData = () => {
-        const ref: Mutable<this> = this;
-        let settingQuerySheet = 'setting'
-        let shrotsQuerySheet = 'Form Responses 1'
-        const settingList = this.shortWorkbook.Sheets[settingQuerySheet]
-        const shortList = this.shortWorkbook.Sheets[shrotsQuerySheet]
-        let settingRawData = this.decodeRawSheetData(settingList)
-        let shortRawData = this.decodeRawSheetData(shortList)
-        let settingData = <any>{}
-        settingRawData?.forEach((item: any) => {
-          settingData[item?.field] = item?.trigger
-        })
-        ref.shortSetting = settingData
-        ref.shortList = shortRawData
-        const response = {
-          code: settingRawData?.length > 0 ? 200 : 404,
-          data: {
-            setting: settingData,
-            data: shortRawData
-          }
-        }
-        observable.next(response)
-        observable.complete()
+        let response = <any>{}
+        console.log(ref.shortWorkbook.Sheets[this.shortSettingSheet]);
+        
+        this.sheetService.decodeRawSheetData(ref.shortWorkbook.Sheets[this.shortSettingSheet])
+          .subscribe((res: any) => {
+            
+            const setting = res;
+            console.log(setting);
+            setting?.forEach((item: any) => {
+              this.shortSetting[item?.filed] = item?.trigger
+            })
+            if (setting?.length > 0) {
+              response.status = 200;
+              response.setting = setting
+            } else {
+              response.status = 400;
+            }
+            this.sheetService.decodeRawSheetData(ref.shortWorkbook.Sheets[this.shortListSheet])
+              .subscribe((res: any) => {
+                ref.shortList = res;
+                response.shorts = ref.shortList
+                observable.next(response)
+                observable.complete()
+              })
+          })
       }
-      if (!this.shortWorkbook) {
-        const ref: Mutable<this> = this;
-        const sheetUrl = this.sheetUrl.replace('{id}', this.sheetId)
-        const fetchPromise = new Promise((resolve, rejects) => {
-          fetch(sheetUrl)
-            .then((res: any) => res.arrayBuffer())
-            .then((req => {
-              const workbook = read(req)
-              resolve(workbook)
-            }))
-        })
-        fetchPromise.then((value: any) => {
-          ref.shortWorkbook = value
-          if (this.shortWorkbook) {
-            this.isActiveShortWorkBook = true
-            returnData()
-          }
-        })
+      if (!ref.shortWorkbook) {
+        try {
+          this.sheetService.fetchSheet(this.sheetId)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.shortWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
       } else {
         returnData()
       }
     })
-
-  }
-
-  private decodeRawSheetData(data: any, slice: any = 1, header?: any) {
-    const column = [...new Set(Object.keys(data).map((col: any) => {
-      let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
-      if (returnData) {
-        if (!parseFloat(returnData['v'])) {
-          return returnData['v']
-        } else {
-          return new Date(returnData['v']).toString() !== 'Invalid Date' ? returnData['v'] : new Date(returnData['w']).getTime()
-        }
-      }
-    }))]?.filter((col: any) => !!col)
-    const responseData = utils.sheet_to_json<any>(data, {
-      header: header || column
-    })?.slice(slice);
-    responseData.forEach((item: any) => {
-      if (item?.option?.includes('||')) {
-        item.options = item?.option?.split('||')
-      }
-    })
-    return responseData
   }
 
   shortenUrl(url: any) {
