@@ -27,20 +27,16 @@ export class TinyUrlService {
     const ref: Mutable<this> = this;
     return new Observable((observable) => {
       const returnData = () => {
-        let response = <any>{}
-        console.log(ref.shortWorkbook.Sheets[this.shortSettingSheet]);
-        
+        let response = <any>{}        
         this.sheetService.decodeRawSheetData(ref.shortWorkbook.Sheets[this.shortSettingSheet])
           .subscribe((res: any) => {
-            
             const setting = res;
-            console.log(setting);
             setting?.forEach((item: any) => {
-              this.shortSetting[item?.filed] = item?.trigger
+              this.shortSetting[item?.field] = item?.trigger
             })
             if (setting?.length > 0) {
               response.status = 200;
-              response.setting = setting
+              response.setting = this.shortSetting
             } else {
               response.status = 400;
             }

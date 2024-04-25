@@ -79,9 +79,9 @@ export class QrGeneratorComponent implements OnInit {
       convertData()
     } else {      
       this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
-        if (res.code === 200) {
-          this.setting = res.data?.setting
-          this.shorts = res.data?.data          
+        if (res.status === 200) {
+          this.setting = res.setting
+          this.shorts = res.shorts                 
           if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
             convertData()
           }
