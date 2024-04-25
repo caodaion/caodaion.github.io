@@ -22,14 +22,7 @@ export class QrComponent implements OnInit {
 
   }
 
-  ngAfterViewChecked(): void {
-    // if (!this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {
-    //   this.getShortLinkSetting()
-    // }
-  }
-
   getShortLinkSetting() {
-
     const returnData = () => {
       const foundData = this.shorts?.find((item: any) => item?.id == this.url)
       if (foundData?.data) {
@@ -95,9 +88,6 @@ export class QrComponent implements OnInit {
       try { return Boolean(new URL(str)); }
       catch (e) { return false; }
     }
-    console.log(this.endPath);
-    console.log(validURL(this.endPath));
-
     if (validURL(this.endPath)) {
       location.href = `${this.endPath}`;
     }

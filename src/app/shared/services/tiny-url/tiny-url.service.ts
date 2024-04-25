@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { rejects } from 'assert';
+import { resolve } from 'dns';
 import { Observable } from 'rxjs';
 import { read, utils } from 'xlsx';
 
@@ -48,16 +50,21 @@ export class TinyUrlService {
       if (!this.shortWorkbook) {
         const ref: Mutable<this> = this;
         const sheetUrl = this.sheetUrl.replace('{id}', this.sheetId)
-        fetch(sheetUrl)
-          .then((res: any) => res.arrayBuffer())
-          .then((req => {
-            const workbook = read(req)
-            ref.shortWorkbook = workbook
-            if (this.shortWorkbook) {
-              returnData()
-            }
+        const fetchPromise = new Promise((resolve, rejects) => {
+          fetch(sheetUrl)
+            .then((res: any) => res.arrayBuffer())
+            .then((req => {
+              const workbook = read(req)
+              resolve(workbook)
+            }))
+        })
+        fetchPromise.then((value: any) => {
+          ref.shortWorkbook = value
+          if (this.shortWorkbook) {
             this.isActiveShortWorkBook = true
-          }))
+            returnData()
+          }
+        })
       } else {
         returnData()
       }

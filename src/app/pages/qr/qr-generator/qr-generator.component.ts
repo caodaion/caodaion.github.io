@@ -50,10 +50,7 @@ export class QrGeneratorComponent implements OnInit {
       this.selectedIndex = parseInt(window.history.state.selectedIndex)
     }
     this.mergeLocalstorageVariable()
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.minimalList && !this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {
+    if (!this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {      
       this.getShortLinkSetting()
     }
   }
@@ -80,11 +77,11 @@ export class QrGeneratorComponent implements OnInit {
     }
     if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
       convertData()
-    } else {
+    } else {      
       this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
         if (res.code === 200) {
           this.setting = res.data?.setting
-          this.shorts = res.data?.data
+          this.shorts = res.data?.data          
           if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
             convertData()
           }

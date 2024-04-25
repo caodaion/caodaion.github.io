@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActionModule } from "../../home/action/action.module";
 import { WelcomeModule } from "../../home/welcome/welcome.module";
 import { BaiThuongYeuModule } from '../../home/bai-thuong-yeu/bai-thuong-yeu.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { BaiThuongYeuModule } from '../../home/bai-thuong-yeu/bai-thuong-yeu.mod
         MatButtonModule,
         ActionModule,
         WelcomeModule,
-        BaiThuongYeuModule
+        BaiThuongYeuModule,
+        MatProgressBarModule
     ]
 })
 export class QrModule { }
