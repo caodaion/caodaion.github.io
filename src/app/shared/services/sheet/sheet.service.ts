@@ -35,7 +35,7 @@ export class SheetService {
     })
   }
 
-  fetchSheet(id: any, querySheet?: any, decode?: any): Observable<any> {
+  fetchSheet(sheetId: any, querySheet?: any, decode?: any): Observable<any> {
     return new Observable((observable) => {
       let workbook: any;
       const returnData = (workbook: any) => {
@@ -54,7 +54,7 @@ export class SheetService {
         observable.complete()
       }
       if (!workbook) {
-        const sheetUrl = this.sheetUrl.replace('{id}', id)
+        const sheetUrl = this.sheetUrl.replace('{id}', sheetId)
         const fetchPromise = new Promise((resolve, rejects) => {
           fetch(sheetUrl)
             .then((res: any) => res.arrayBuffer())

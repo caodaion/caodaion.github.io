@@ -12,13 +12,13 @@ import * as CryptoJS from "crypto-js";
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss']
 })
-export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
+export class BookComponent implements OnInit, OnChanges {
   rootContent: any;
   content: any;
   contentName: any;
   author: any;
   origin: any;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   isNavigation: boolean = false;
   isShowTableContent: boolean = false;
   contentEditable: boolean = false;
@@ -31,6 +31,11 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   library = <any>[];
   tableContent = <any>[];
   selectedIndex = 0
+  cols = 4
+  books = <any>[];
+  setting = <any>{};
+  labels = <any>[];
+  selectedChips = <any>[];
 
   constructor(
     private router: Router,
@@ -48,17 +53,21 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     this.isNavigation = false
     this.getBooks()
     this.updateLayout()
+
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.cols = 1
+        } else {
+          this.cols = 4
+        }
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.updateLayout()
     this.changeDetector.detectChanges()
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.library?.length === 0) {
-      this.getBookFromLibrary()
-    }
   }
 
   updateLayout() {
@@ -99,21 +108,6 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
   getBook() {
     this.route.params.subscribe((query) => {
       this.key = query['key']
-      if (query['key'] && !query['level']) {
-        if (!this.isShowTableContent) {
-          this.getContent(query['key'], query['level'])
-        }
-      }
-      if (query['key'] && query['level']) {
-        this.level = query['level']
-        if (!this.isShowTableContent) {
-          this.getContent(query['key'], query['level'])
-          this.router.navigate(
-            ['.'],
-            { relativeTo: this.route, fragment: location.hash.replace('#', '') }
-          );
-        }
-      }
     })
   }
 
@@ -121,7 +115,7 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
         this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
-        this.getBookFromLibrary()
+        this.getLibrary()
         this.getReadingBooks()
         this.route.queryParamMap.subscribe((query: any) => {
           this.isShowTableContent = query.params['tableContent']
@@ -134,22 +128,31 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     })
   }
 
-  getBookFromLibrary() {
-    this.libraryService.getBookFromLibrary()
-      .subscribe({
-        next: (res: any) => {
-          this.getReadingBooks()
-          if (res.data) {
-            this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
-            this.getBook()
+  getLibrary() {
+    try {
+      this.libraryService.fetchLibrary()
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            this.books = res.data
+            this.setting = res.setting
+            this.labels = res.labels
+            const foundData = this.books?.find((item: any) => item?.key === this.key)
+            if (foundData) {
+              this.isLoading = true
+              this.contentName = foundData?.name;
+              this.author = foundData?.author;
+              this.selectedChips = foundData?.labels;
+              this.changeDetector.detectChanges();
+              this.content = `${foundData?.googleDocId}`
+              if (this.content) {
+                this.isLoading = false
+              }
+            }
           }
-        },
-        complete: () => {
-          if (this.isShowTableContent) {
-            const foundContent = this.library.find((item: any) => item.key === this.key)
-          }
-        }
-      })
+        })
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   getReadingBooks() {
@@ -160,19 +163,6 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
         item.reading = foundReading
       }
     })
-  }
-
-  getContent(key?: any, level?: any) {
-    this.isLoading = true
-    this.origin = null
-    const foundContent: any = this.library.find((item: any) => item.key === key)
-    this.contentName = foundContent?.name;
-    this.author = foundContent?.author;
-    this.changeDetector.detectChanges();
-    this.content = `${foundContent?.googleDocId}`
-    if (this.content) {
-      this.isLoading = false
-    }
   }
 
   onNextContent() {
@@ -269,5 +259,9 @@ export class BookComponent implements OnInit, OnChanges, AfterViewChecked {
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     return token
+  }
+
+  onItemFocus(item: any) {
+    window.location.href = `${location.origin}/thu-vien/${item.key?.replace(location.origin, '')}`
   }
 }

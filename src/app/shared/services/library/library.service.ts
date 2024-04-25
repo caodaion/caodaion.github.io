@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { API_PARAMS } from '../../constants/api.constant';
 import { environment } from 'src/environments/environment';
 import { read, utils } from 'xlsx';
+import { SheetService } from '../sheet/sheet.service';
+import { CommonService } from '../common/common.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -12,73 +14,54 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 })
 export class LibraryService {
 
-  readonly sheetUrl = `https://docs.google.com/spreadsheets/d/e/{id}/pub?output=xlsx`
   readonly sheetId = `2PACX-1vTsCA5rwuatpvDRWVRURaUJX74WoYG22AWBFsDN1J55IEZYTlYC4xsNdgHR6NDvdTzbMmWIRNKdxE23`
   readonly libraryWorkbook: any;
   readonly library: any;
+  readonly librarySetting = <any>{};
   readonly libraryList = <any>[];
-  isActiveLibraryWorkBook: boolean = false
+  readonly labels = <any>[];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private sheetService: SheetService, private commonService: CommonService) {
     this.fetchLibrary()
   }
 
-  fetchLibrary() {
-    if (!this.libraryWorkbook) {
-      const ref: Mutable<this> = this;
-      const sheetUrl = this.sheetUrl.replace('{id}', this.sheetId)
-      fetch(sheetUrl)
-        .then((res: any) => res.arrayBuffer())
-        .then((req => {
-          const workbook = read(req)
-          ref.libraryWorkbook = workbook
-          ref.libraryList = this.libraryWorkbook?.SheetNames
-          this.isActiveLibraryWorkBook = true
-          this.getBookFromLibrary().subscribe()
-        }))
-    }
-  }
-
-  private decodeRawSheetData(data: any, slice: any = 1, header?: any) {
-    const column = [...new Set(Object.keys(data).map((col: any) => {
-      let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
-      if (returnData) {
-        if (!parseFloat(returnData['v'])) {
-          return returnData['v']
-        } else {
-          return new Date(returnData['v']).toString() !== 'Invalid Date' ? returnData['v'] : new Date(returnData['w']).getTime()
-        }
-      }
-    }))]?.filter((col: any) => !!col)
-    const responseData = utils.sheet_to_json<any>(data, {
-      header: header || column
-    })?.slice(slice);
-    responseData.forEach((item: any) => {
-      if (item?.option?.includes('||')) {
-        item.options = item?.option?.split('||')
-      }
-    })
-    return responseData
-  }
-
-  getBookFromLibrary(request?: any): Observable<any> {
+  fetchLibrary(): Observable<any> {
+    const ref: Mutable<this> = this;
     return new Observable((observable) => {
-      let querySheet = 'Sách'      
-      if (request?.tab) {
-        querySheet = request.tab
-      }
-      const ref: Mutable<this> = this;
-      if (this.libraryWorkbook) {
-        const quizList = this.libraryWorkbook.Sheets[querySheet]
-        let data = this.decodeRawSheetData(quizList)
-        ref.library = data       
-        const response = {
-          code: data?.length > 0 ? 200 : 404,
-          data: data
-        }
-        observable.next(response)
-        observable.complete()
-      }
+      let response = <any>{}
+      this.sheetService.fetchSheet(this.sheetId)
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            if (res?.workbook) {
+              ref.libraryWorkbook = res.workbook
+              response.status = 200
+              this.sheetService.decodeRawSheetData(ref.libraryWorkbook?.Sheets['settings'])
+                ?.subscribe((res: any) => {
+                  res?.forEach((item: any) => {
+                    ref.librarySetting[item?.field] = item?.trigger
+                  })
+                  response.setting = ref.librarySetting
+                  this.sheetService.decodeRawSheetData(ref.libraryWorkbook?.Sheets['Form Responses 1'])
+                    ?.subscribe((res: any) => {
+                      ref.libraryList = <any>[];
+                      res?.forEach((item: any) => {
+                        item.labels = JSON.parse(item?.labels || '[]')
+                        ref.libraryList?.push(item)
+                        const itemLabels = item?.labels
+                        ref.labels = [...new Set(ref.labels.concat(itemLabels))]
+                      })
+                      response.data = ref.libraryList
+                      response.labels = ref.labels
+                      response.setting = ref.librarySetting
+                      observable.next(response)
+                      observable.complete()
+                    })
+                  observable.next(response)
+                  observable.complete()
+                })
+            }
+          }
+        })
     })
   }
 

@@ -12,9 +12,9 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 */
 @Pipe({
     standalone: true,
-    name: 'searchBookByKeyWord'
+    name: 'labelFilter'
 })
-export class SearchBookByKeyWordPipe implements PipeTransform {
+export class LabelFilterPipe implements PipeTransform {
 
     constructor(private commonService: CommonService) {
 
@@ -26,9 +26,7 @@ export class SearchBookByKeyWordPipe implements PipeTransform {
         return value?.filter((ch: any) => {
             return (this.commonService.generatedSlug(`${searchText}`)?.split('-')
                 .every((x) => {
-                    return this.commonService.generatedSlug(`${ch.name}`)?.includes(x) || this.commonService.generatedSlug(`${ch.author}`)?.includes(x)
-                })) || (`${searchText}`?.split(' ').every((x) => {
-                    return ch.name?.includes(x) || ch.author?.includes(x)
+                    return this.commonService.generatedSlug(`${ch}`)?.includes(x)
                 }))
         })
     }

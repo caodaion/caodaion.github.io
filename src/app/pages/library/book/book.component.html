@@ -25,6 +25,43 @@
                   #googleDocContent></iframe>
               </div>
             </div>
+            <div class="p-4 mt-4" *ngIf="(books | searchBookByKeyWord: {selectedChips: selectedChips})?.length > 1">
+              <div class="text-2xl">Bài viết cùng loại:</div>
+              <mat-chip-set aria-label="label selection">
+                <mat-chip *ngFor="let chip of selectedChips">{{chip}}</mat-chip>
+              </mat-chip-set>
+              <div class="flex flex-wrap my-4">
+                <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}"
+                  *ngFor="let item of books | searchBookByKeyWord: {selectedChips: selectedChips}">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-icon mat-card-avatar *ngIf="!item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                        matTooltip="Đang viết" class="text-[#4758b8]">history_edu</mat-icon>
+                      <mat-icon mat-card-avatar *ngIf="item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                        matTooltip="Hoàn thành" class="text-[#01855d]">check_circle</mat-icon>
+                      <mat-card-title (click)="onItemFocus(item)"
+                        class="hover:underline cursor-pointer">{{item?.name}}</mat-card-title>
+                      <mat-card-subtitle class="hover:underline cursor-pointer">{{item?.author}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image *ngIf="item?.cover" [src]="item?.cover" [alt]="item?.name"
+                      (click)="onItemFocus(item)" class="object-cover h-40 w-full cursor-pointer mt-3" />
+                    <img mat-card-image *ngIf="!item?.cover" (click)="onItemFocus(item)"
+                      src="/assets/icons/assets/book-bookmark-minimalistic-svgrepo-com.svg"
+                      class="object-contain h-40 w-full cursor-pointer mt-3" [alt]="item?.name" />
+                    <mat-card-content>
+                      <div class="my-3">{{item?.description}}</div>
+                      <mat-chip-set aria-label="label selection">
+                        <mat-chip *ngFor="let chip of item?.labels">{{chip}}</mat-chip>
+                      </mat-chip-set>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button (click)="onItemFocus(item)"> <mat-icon>visibility</mat-icon> ĐỌC
+                        SÁCH</button>
+                    </mat-card-actions>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
           </mat-drawer-content>
           <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
             <ng-container *ngFor="let item of tableContent">

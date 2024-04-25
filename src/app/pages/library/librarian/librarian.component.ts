@@ -3,45 +3,59 @@ import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LibraryService } from 'src/app/shared/services/library/library.service';
-
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 @Component({
   selector: 'app-librarian',
   templateUrl: './librarian.component.html',
   styleUrls: ['./librarian.component.scss']
 })
-export class LibrarianComponent implements OnInit, AfterViewChecked {
+export class LibrarianComponent implements OnInit {
   previewingItem: any;
   mode: any;
+  googleFormsPath: any;
+  user: any;
   library = <any>[];
-  tabs = <any>[];
+  books = <any>[];
+  labels = <any>[];
+  selectedChips = <any>[];
   contentEditable: boolean = false;
+  loading: boolean = false;
+  allowEdit: boolean = false;
+  cols = 4;
+  setting = <any>{}
+  newBook = <any>{}
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private libraryService: LibraryService,
     private changeDetector: ChangeDetectorRef,
     private authService: AuthService,
+    private commonService: CommonService,
     private router: Router
   ) {
     this.contentEditable = this.authService.contentEditable
   }
 
   ngOnInit(): void {
+    this.loading = true
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
           this.mode = 'over'
+          this.cols = 1
         } else {
           this.mode = 'side'
+          this.cols = 4
         }
       });
     this.getBooks()
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.tabs?.length === 0) {
-      this.getTabLibrary()
+    const token = localStorage.getItem('token')
+    if (token) {
+      const jwtHelper = new JwtHelperService()
+      const decodedToken = jwtHelper.decodeToken(token)
+      this.user = decodedToken
     }
   }
 
@@ -52,40 +66,32 @@ export class LibrarianComponent implements OnInit, AfterViewChecked {
   getStaticBooks() {
     this.libraryService.getStaticBooks().subscribe((res: any) => {
       if (res.data) {
-        // this.library = this.library.concat(res.data)
-        this.getTabLibrary()
+        if (this.books?.length === 0) {
+          this.getLibrary()
+        }
         this.getReadingBooks()
         this.changeDetector.detectChanges()
       }
     })
   }
 
-  getTabLibrary() {
-    this.tabs = <any>[];
+  getLibrary() {
     try {
-      this.tabs = this.libraryService.libraryList?.map((item: any) => { return { tab: item } })
-      if (this.tabs?.length > 0) {
-        this.tabs?.forEach((item: any) => {
-          this.getBookFromLibrary(item);
-        })
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  getBookFromLibrary(item: any) {
-    this.library = <any>[];
-    try {
-      this.libraryService.getBookFromLibrary({ tab: item?.tab })
+      this.libraryService.fetchLibrary()
         .subscribe((res: any) => {
-          this.getReadingBooks()
-          if (res.code === 200) {
-            item.library = res?.data?.filter((item: any) => item.published && item?.googleDocId)
+          if (res.status === 200) {
+            this.books = res.data
+            this.setting = res.setting
+            this.labels = res.labels
+            this.loading = false
+            this.allowEdit = !!this.setting[this.user?.userName]
+          } else {
+            this.loading = false
           }
         })
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.error(e);
+      this.loading = false
     }
   }
 
@@ -140,5 +146,53 @@ export class LibrarianComponent implements OnInit, AfterViewChecked {
       this.previewingItem = event
       libradianDrawer.open()
     }
+  }
+
+  updateNewBookTitle() {
+    this.newBook.key = this.commonService.generatedSlug(this.newBook?.name)
+  }
+
+  addNewBook(isClear: boolean = false) {
+    if (isClear) {
+      this.googleFormsPath = ''
+      this.newBook = <any>{}
+    } else {
+      if (this.newBook.key && this.newBook.name && this.newBook.googleDocId) {
+        this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
+        this.googleFormsPath += `?${this.setting?.key}=${encodeURIComponent(this.newBook.key)}`
+        this.googleFormsPath += `&${this.setting?.name}=${encodeURIComponent(this.newBook.name)}`
+        this.googleFormsPath += `&${this.setting?.googleDocId}=${encodeURIComponent(this.newBook.googleDocId)}`
+        if (this.newBook.author) {
+          this.googleFormsPath += `&${this.setting?.author}=${encodeURIComponent(this.newBook.author)}`
+        }
+        if (this.newBook.finished) {
+          this.googleFormsPath += `&${this.setting?.finished}=${encodeURIComponent(this.newBook.finished)}`
+        }
+        if (this.newBook.cover) {
+          this.googleFormsPath += `&${this.setting?.cover}=${encodeURIComponent(this.newBook.cover)}`
+        }
+        if (this.newBook.description) {
+          this.googleFormsPath += `&${this.setting?.description}=${encodeURIComponent(this.newBook.description)}`
+        }
+        if (this.newBook.labels) {
+          this.googleFormsPath += `&${this.setting?.labels}=${encodeURIComponent(JSON.stringify(this.newBook.labels))}`
+        }
+      }
+    }
+  }
+
+  onPress(event: any) {
+    if (event?.keyCode == 32) {
+      event['target']['value'] = event['target']['value'] + ' '
+    }
+  }
+
+  onClickChip(chip: any) {
+    if (this.selectedChips.indexOf(chip) != -1) {
+      this.selectedChips[this.selectedChips.indexOf(chip)] = null
+    } else {
+      this.selectedChips?.push(chip)
+    }
+    this.selectedChips = [... new Set(this.selectedChips)]?.filter((item: any) => !!item)
   }
 }

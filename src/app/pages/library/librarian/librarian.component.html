@@ -1,12 +1,121 @@
 <mat-drawer-container class="librarian-container">
   <mat-drawer-content>
-    <mat-tab-group>
-      <ng-container *ngFor="let item of tabs">
-        <mat-tab [label]="item?.tab">
-          <librarian-books [library]="item" (onItemFocus)="onItemFocus($event, libradianDrawer)"></librarian-books>
-        </mat-tab>
-      </ng-container>
-    </mat-tab-group>
+    <div class="p-4">
+      <mat-form-field class="w-full mt-3" [appearance]="'outline'">
+        <mat-label>Tìm kiếm <mat-icon>search</mat-icon></mat-label>
+        <input type="text" #searchBox matInput />
+      </mat-form-field>
+      <mat-chip-set>
+        <mat-chip *ngFor="let chip of labels" [ngClass]="{'!bg-[#fbbc05]': selectedChips?.indexOf(chip) != -1}"
+          (click)="onClickChip(chip)">{{chip}}</mat-chip>
+      </mat-chip-set>
+      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+      <mat-expansion-panel *ngIf="allowEdit">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Thêm Sách</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="flex flex-wrap justify-between">
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Mã sách</mat-label>
+              <input type="text" matInput required disabled [(ngModel)]="newBook.key" />
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Tiêu đề sách</mat-label>
+              <input type="text" matInput required [(ngModel)]="newBook.name" (input)="updateNewBookTitle()" />
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Mã file trên Google Drive</mat-label>
+              <input type="text" matInput required [(ngModel)]="newBook.googleDocId" />
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Tác giả</mat-label>
+              <input type="text" matInput [(ngModel)]="newBook.author" />
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Ảnh bìa</mat-label>
+              <input type="text" matInput [(ngModel)]="newBook.cover" />
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Label</mat-label>
+              <mat-select [multiple]="true" [(ngModel)]="newBook.labels">
+                <input type="text" #labelfilter class="w-full" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+                  (keydown)="onPress($event)">
+                <mat-option *ngIf="(labels | labelFilter: labelfilter['value'])?.length === 0"
+                  [value]="labelfilter['value']" (click)="labels.push(labelfilter['value'])">Tạo
+                  {{labelfilter['value']}}</mat-option>
+                <mat-option *ngFor="let chip of labels | labelFilter: labelfilter['value']"
+                  [value]="chip">{{chip}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
+            <mat-form-field class="w-full">
+              <mat-label>Trạng thái</mat-label>
+              <mat-select class="w-full" [(ngModel)]="newBook.finished">
+                <mat-option>Đang viết</mat-option>
+                <mat-option [value]="true">Hoàn thành</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="p-2 w-full">
+            <mat-form-field class="w-full">
+              <mat-label>Mô tả ngắn</mat-label>
+              <textarea matInput [(ngModel)]="newBook.description"></textarea>
+            </mat-form-field>
+          </div>
+          <button class="w-full" [disabled]="!newBook.key || !newBook.name || !newBook.googleDocId" mat-flat-button
+            [color]="'primary'" (click)="addNewBook(!!googleFormsPath)">
+            <mat-icon *ngIf="!googleFormsPath">add</mat-icon>
+            <mat-icon *ngIf="googleFormsPath">close</mat-icon>
+            {{googleFormsPath ? 'Đóng' : 'Bổ sung'}}
+          </button>
+          <iframe *ngIf="googleFormsPath" [src]="googleFormsPath | safe" class="w-full min-h-[300px]"
+            frameborder="0"></iframe>
+        </div>
+      </mat-expansion-panel>
+      <div class="flex flex-wrap my-4">
+        <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}"
+          *ngFor="let item of books | searchBookByKeyWord: {searchText: searchBox['value'], selectedChips: selectedChips}">
+          <mat-card>
+            <mat-card-header>
+              <mat-icon mat-card-avatar *ngIf="!item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                matTooltip="Đang viết" class="text-[#4758b8]">history_edu</mat-icon>
+              <mat-icon mat-card-avatar *ngIf="item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                matTooltip="Hoàn thành" class="text-[#01855d]">check_circle</mat-icon>
+              <mat-card-title (click)="onItemFocus(item, libradianDrawer)"
+                class="hover:underline cursor-pointer">{{item?.name}}</mat-card-title>
+              <mat-card-subtitle class="hover:underline cursor-pointer">{{item?.author}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image *ngIf="item?.cover" [src]="item?.cover" [alt]="item?.name"
+              (click)="onItemFocus(item, libradianDrawer)" class="object-cover h-40 w-full cursor-pointer mt-3" />
+            <img mat-card-image *ngIf="!item?.cover" (click)="onItemFocus(item, libradianDrawer)"
+              src="/assets/icons/assets/book-bookmark-minimalistic-svgrepo-com.svg"
+              class="object-contain h-40 w-full cursor-pointer mt-3" [alt]="item?.name" />
+            <mat-card-content>
+              <div class="my-3">{{item?.description}}</div>
+              <mat-chip-set aria-label="label selection">
+                <mat-chip *ngFor="let chip of item?.labels" (click)="onClickChip(chip)">{{chip}}</mat-chip>
+              </mat-chip-set>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button (click)="onItemFocus(item, libradianDrawer)"> <mat-icon>visibility</mat-icon> ĐỌC
+                SÁCH</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
   </mat-drawer-content>
   <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
     <div class="container-fluid">
@@ -17,7 +126,7 @@
         <div class="d-flex align-items-center flex-column">
           <h2 class="text-center">Tóm tắt</h2>
           <div class="preview-image-wrapper">
-            <img mat-card-image *ngIf="previewingItem?.cover" [src]="previewingItem?.image"
+            <img mat-card-image *ngIf="previewingItem?.cover" [src]="previewingItem?.cover"
               [alt]="previewingItem?.name" />
             <div mat-card-image *ngIf="!previewingItem?.cover"
               class="h-full w-full flex items-center justify-center bg-[#f6f8fc] rounded-2xl">
@@ -25,7 +134,10 @@
             </div>
           </div>
           <h3 class="text-center">{{ previewingItem?.name }}</h3>
-          <p class="text-center">{{ previewingItem?.subtitle }}</p>
+          <p class="text-center">{{ previewingItem?.author }}</p>
+          <mat-chip-set aria-label="label selection">
+            <mat-chip *ngFor="let chip of previewingItem?.labels">{{chip}}</mat-chip>
+          </mat-chip-set>
           <div class="w-100">
             <h4>Trạng Thái:</h4>
             <p *ngIf="previewingItem?.finished">Hoàn thành <mat-icon matTooltip="Hoàn thành"
