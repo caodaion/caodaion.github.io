@@ -29,39 +29,41 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SynchronizedComponent } from './synchronized/synchronized.component';
 import { SharedModule } from "../../shared/shared.module";
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 
 @NgModule({
-  declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
-  providers: [DatePipe, DecimalPipe],
-  imports: [
-    CommonModule,
-    CalendarRoutingModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatSelectModule,
-    MatGridListModule,
-    MatCardModule,
-    MatButtonModule,
-    MatListModule,
-    MatRippleModule,
-    MatTooltipModule,
-    MatDialogModule,
-    FormsModule,
-    MatTabsModule,
-    MatTableModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatRadioModule,
-    MatMenuModule,
-    MatSnackBarModule,
-    ButtonShareModule,
-    QRCodeModule,
-    NgxMatTimepickerModule,
-    SharedModule,
-    MatCheckboxModule
-  ]
+    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
+    providers: [DatePipe, DecimalPipe],
+    imports: [
+        CommonModule,
+        CalendarRoutingModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatSelectModule,
+        MatGridListModule,
+        MatCardModule,
+        MatButtonModule,
+        MatListModule,
+        MatRippleModule,
+        MatTooltipModule,
+        MatDialogModule,
+        FormsModule,
+        MatTabsModule,
+        MatTableModule,
+        MatInputModule,
+        MatExpansionModule,
+        MatRadioModule,
+        MatMenuModule,
+        MatSnackBarModule,
+        ButtonShareModule,
+        QRCodeModule,
+        NgxMatTimepickerModule,
+        SharedModule,
+        MatCheckboxModule,
+        DivisionFilterPipe
+    ]
 })
 export class CalendarModule { }

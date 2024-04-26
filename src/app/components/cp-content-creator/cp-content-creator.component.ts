@@ -88,8 +88,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(typeof this.isShowController);
-
     if (typeof this.isShowController === 'undefined') {
       this.isShowController = true
       this.breakpointObserver
@@ -148,9 +146,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   getLocationSettings() {
-    // this.getAllDivisions()
-    // this.getDistricts()
-    // this.getWards()
+    this.getAllDivisions()
   }
 
   getId(block: any) {
@@ -326,58 +322,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
-        .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
-          }
-        })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-              this.filteredDistricts = res?.filter((item: any) => item.province_code === this.addedComboLocation?.province)
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.addedComboLocation.province)
-    }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-              this.filteredWards = res?.filter((item: any) => item.district_code === this.addedComboLocation?.district)
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.addedComboLocation.district)
-    }
+    this.commonService.fetchProvinceData()
+      .subscribe((res: any) => {
+        if (res?.status == 200) {
+          this.provinces = res.provinces
+          this.districts = res.districts
+          this.wards = res.wards
+        }
+      })
   }
 
   addComboLocation() {
@@ -385,26 +337,26 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     comboLocation?.setAttribute('value', JSON.stringify(this.addedComboLocation))
     if (comboLocation) {
       const country = this.isShowCountry ? this.addedComboLocation.country : ''
-      const province = this.provinces.find((item: any) => item.code === parseInt(this.addedComboLocation.province))
-      const district = this.districts.find((item: any) => item.code === parseInt(this.addedComboLocation.district))
-      const ward = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))
-      const wardName = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-      // switch (this.addedComboLocation.mode) {
-      //   case 'PpDdWwA':
-      //     this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-      //       (province?.division_type?.replace('trung ương', '')) : ''
-      //       }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-      //         district?.division_type : ''
-      //       }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-      //         ward?.division_type : ''
-      //       }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
-      //     break;
-      //   case 'pPdDwWA':
-      //     this.addedComboLocation.text = this.addedComboLocation.title
-      //     break;
-      //   default:
-      //     break;
-      // }
+      const province = this.provinces.find((item: any) => item.id == this.addedComboLocation.province)
+      const district = this.districts.find((item: any) => item.id == this.addedComboLocation.district)
+      const ward = this.wards.find((item: any) => item.id == this.addedComboLocation.ward)
+      const wardName = this.wards.find((item: any) => item.id == this.addedComboLocation.ward)?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+      switch (this.addedComboLocation.mode) {
+        case 'PpDdWwA':
+          this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+            (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
+            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+              (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
+            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+              (ward?.level)?.toLowerCase() : ''
+            }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
+          break;
+        case 'pPdDwWA':
+          this.addedComboLocation.text = this.addedComboLocation.title
+          break;
+        default:
+          break;
+      }
       comboLocation.innerHTML = this.addedComboLocation.text
       const data = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key)
       if (data) {
@@ -413,6 +365,7 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
         this.saveData()
       }
     }
+    console.log(this.addedComboLocation);    
   }
 
   onBlur() {
@@ -467,5 +420,11 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
     printTab?.document.close(); // necessary for IE >= 10
     printTab?.focus(); // necessary for IE >= 10*/
     printTab?.print();
+  }
+
+  onPress(event: any) {
+    if (event?.keyCode == 32) {
+      event['target']['value'] = event['target']['value'] + ' '
+    }
   }
 }

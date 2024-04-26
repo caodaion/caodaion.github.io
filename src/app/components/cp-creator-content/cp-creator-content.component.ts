@@ -305,81 +305,39 @@ export class CpCreatorContentComponent implements OnChanges {
     let value = <any>{}
     value = this.rootContent.formGroup.find((item: any) => item.key === text?.key)?.value || {}    
     const country = value?.country
-    const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
-    const district = this.districts.find((item: any) => item.code == parseInt(value.district))
-    const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
-    const wardName = this.wards.find((item: any) => item.code == parseInt(value.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+    const province = this.provinces.find((item: any) => item.id == value.province)    
+    const district = this.districts.find((item: any) => item.id == value.district)
+    const ward = this.wards.find((item: any) => item.id == value.ward)
+    const wardName = this.wards.find((item: any) => item.id == value.ward)?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
     value.mode = text?.mode
-    // switch (value.mode) {
-    //   case 'PpDdWwA':
-    //     value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-    //       province?.division_type?.replace('trung ương', '') : ''
-    //       }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-    //         district?.division_type : ''
-    //       }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-    //         ward?.division_type : ''
-    //       }${value.village ? ', ' + value.village : ''}`.trim()
-    //     break;
-    //   case 'pPdDwWA':
-    //     value.text = value.title
-    //     break;
-    //   default:
-    //     break;
-    // }
+    switch (value.mode) {
+      case 'PpDdWwA':
+        value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+        (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
+          }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+          (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
+          }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+            (ward?.level)?.toLowerCase() : ''
+          }${value.village ? ', ' + value.village : ''}`.trim()
+        break;
+      case 'pPdDwWA':
+        value.text = value.title
+        break;
+      default:
+        break;
+    }
     return value.text != value.title ? value.text : ''
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
-        .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
-          }
-        })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
-    }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
-    }
+    this.commonService.fetchProvinceData()
+      .subscribe((res: any) => {
+        if (res?.status == 200) {
+          this.provinces = res.provinces
+          this.districts = res.districts
+          this.wards = res.wards
+        }
+      })
   }
 
   showContentMenu(event: any) {

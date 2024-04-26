@@ -25,40 +25,42 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LongSoComponent } from './phong-le-main/components/tap-so-van/long-so/long-so.component';
+import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 
 @NgModule({
-  declarations: [
-    PhongLeMainComponent,
-    TapSoVanComponent,
-    SoanSoComponent,
-    TuanCuuComponent,
-    SettingsComponent,
-    LongSoComponent
-  ],
-  imports: [
-    CommonModule,
-    PhongLeRoutingModule,
-    MatTabsModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatCardModule,
-    MatRippleModule,
-    NgxMatTimepickerModule,
-    HeaderModule,
-    MatProgressBarModule,
-    CpContentCreatorModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatCheckboxModule
-  ],
-  providers: [
-    DecimalPipe
-  ]
+    declarations: [
+        PhongLeMainComponent,
+        TapSoVanComponent,
+        SoanSoComponent,
+        TuanCuuComponent,
+        SettingsComponent,
+        LongSoComponent
+    ],
+    providers: [
+        DecimalPipe
+    ],
+    imports: [
+        CommonModule,
+        PhongLeRoutingModule,
+        MatTabsModule,
+        MatDividerModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatCardModule,
+        MatRippleModule,
+        NgxMatTimepickerModule,
+        HeaderModule,
+        MatProgressBarModule,
+        CpContentCreatorModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        FormsModule,
+        MatInputModule,
+        MatExpansionModule,
+        MatCheckboxModule,
+        DivisionFilterPipe
+    ]
 })
 export class PhongLeModule { }

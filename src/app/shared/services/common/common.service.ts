@@ -6,6 +6,9 @@ import { DatePipe } from '@angular/common';
 import { TIME_TYPE } from '../../constants/master-data/time-type.constant'
 import { LOCATION_TYPE } from '../../constants/master-data/location-type.constant';
 import { DATE_TYPE } from '../../constants/master-data/date-type.constant';
+import { SheetService } from '../sheet/sheet.service';
+
+type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +17,17 @@ export class CommonService {
   commonTimes: any[] = [];
   commonLocationTypes: any[] = [];
   commonDates: any;
+  readonly provinceWorkbook: any;
+  readonly provinces: any[] = [];
+  readonly districts: any[] = [];
+  readonly wards: any[] = [];
+  readonly provinceSheet: any = 'Sheet1';
+  readonly sheetId: any = '2PACX-1vTuBg5iLvvvpcufTuOghQ4H1INXABXCtUaRaeBd8-9h5Gp2Ju2MFURK6cZAMvtU9Q';
 
   constructor(
     private http: HttpClient,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private sheetService: SheetService
   ) {
     this.commonTimes = TIME_TYPE.data
     this.commonLocationTypes = LOCATION_TYPE.data
@@ -306,5 +316,54 @@ export class CommonService {
     slug = '@' + slug + '@';
     slug = slug?.replace(/\@\-|\-\@|\@/gi, '');
     return slug
+  }
+
+  fetchProvinceData(): Observable<any> {
+    const ref: Mutable<this> = this;
+    return new Observable((observable) => {
+      const returnData = () => {
+        let response = <any>{}
+        this.sheetService.decodeRawSheetData(ref.provinceWorkbook.Sheets[this.provinceSheet])
+          .subscribe((res: any) => {
+            const provinceData = res;
+            if (provinceData?.length > 0) {
+              response.status = 200
+              provinceData?.forEach((item: any) => {
+                if (!ref.provinces?.find((p: any) => p?.id == item?.provinceId)) {
+                  ref.provinces?.push({ id: item?.provinceId, name: item?.province })
+                }
+                if (!ref.districts?.find((p: any) => p?.id == item?.districtId)) {
+                  ref.districts?.push({ id: item?.districtId, name: item?.district, provinceId: item?.provinceId })
+                }
+                if (!ref.wards?.find((p: any) => p?.id == item?.wardId)) {
+                  ref.wards?.push({ id: item?.wardId, name: item?.ward, level: item?.level, provinceId: item?.provinceId, districtId: item?.districtId })
+                }
+              })
+              response.provinces = ref.provinces
+              response.districts = ref.districts
+              response.wards = ref.wards
+              observable.next(response)
+              observable.complete()
+            }
+          })
+      }
+      if (!ref.provinceWorkbook) {
+        try {
+          this.sheetService.fetchSheet(this.sheetId)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.provinceWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        returnData()
+      }
+    })
   }
 }

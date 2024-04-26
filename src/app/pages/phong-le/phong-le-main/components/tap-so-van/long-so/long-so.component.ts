@@ -73,17 +73,17 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
   }
 
   getMemberThanhSo() {
-    this.eventService.getMemberThanhSo()
-      .subscribe((res: any) => {
-        if (res.code === 200) {
-          this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
-          this.currentUser = this.authService.getCurrentUser()
-          this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
-          if (this.selectedThanhSo) {
-            this.getThanhSoEvent()
-          }
-        }
-      })
+    // this.eventService.getMemberThanhSo()
+    //   .subscribe((res: any) => {
+    //     if (res.code === 200) {
+    //       this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
+    //       this.currentUser = this.authService.getCurrentUser()
+    //       this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
+    //       if (this.selectedThanhSo) {
+    //         this.getThanhSoEvent()
+    //       }
+    //     }
+    //   })
   }
 
   generateToken(item: any) {
@@ -189,16 +189,16 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
   }
 
   getThanhSoEvent() {
-    if (this.selectedThanhSo) {
-      this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
-        .subscribe((res: any) => {
-          if (res.code === 200) {
-            this.selectedThanhSoEvents = res.data
-            this.refresh = true
-            this.mergeThanhSoEvent()
-          }
-        })
-    }
+    // if (this.selectedThanhSo) {
+    //   this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
+    //     .subscribe((res: any) => {
+    //       if (res.code === 200) {
+    //         this.selectedThanhSoEvents = res.data
+    //         this.refresh = true
+    //         this.mergeThanhSoEvent()
+    //       }
+    //     })
+    // }
   }
 
   mergeThanhSoEvent() {

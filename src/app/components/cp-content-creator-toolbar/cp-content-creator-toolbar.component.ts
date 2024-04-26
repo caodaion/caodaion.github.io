@@ -326,56 +326,14 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
-        .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
-          }
-        })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
-    }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
-    }
+    this.commonService.fetchProvinceData()
+      .subscribe((res: any) => {
+        if (res?.status == 200) {
+          this.provinces = res.provinces
+          this.districts = res.districts
+          this.wards = res.wards
+        }
+      })
   }
 }
 

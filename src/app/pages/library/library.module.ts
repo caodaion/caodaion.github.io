@@ -27,7 +27,7 @@ import { CpMarkdownModule } from 'src/app/components/cp-markdown/cp-markdown.mod
 import { SharedModule } from "../../shared/shared.module";
 import { SearchBookByKeyWordPipe } from './librarian/searchBookByKeyWord.pipe';
 import { MatChipsModule } from '@angular/material/chips';
-import { LabelFilterPipe } from "./librarian/labelFilter.pipe copy";
+import { LabelFilterPipe } from "./librarian/labelFilter.pipe";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 

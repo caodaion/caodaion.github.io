@@ -72,51 +72,49 @@
   <div mat-dialog-title>Cập nhật {{ addedComboLocation.title }}</div>
   <mat-dialog-content>
     <div class="pt-8">
-      <!-- <mat-checkbox [(ngModel)]="isShowCountry">Hiển thị quốc gia</mat-checkbox>
+      <mat-checkbox [(ngModel)]="isShowCountry">Hiển thị quốc gia</mat-checkbox>
       <mat-form-field *ngIf="isShowCountry" [appearance]="'outline'">
         <mat-label>Quốc gia</mat-label>
         <input type="text" matInput [(ngModel)]="addedComboLocation.country" />
       </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tỉnh/Thành phố</mat-label>
-        <mat-select
-          [(ngModel)]="addedComboLocation.province"
-          (ngModelChange)="getDistricts()"
-        >
-          <mat-option *ngFor="let item of provinces" [value]="item.code">{{
-            item.name
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
-        <mat-label>Quận/Huyện</mat-label>
-        <mat-select
-          [(ngModel)]="addedComboLocation.district"
-          (ngModelChange)="getWards()"
-        >
+        <mat-select [(ngModel)]="addedComboLocation.province">
+          <input type="text" #provinceFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
           <mat-option
-            *ngFor="let item of filteredDistricts"
-            [value]="item.code"
-            >{{ item.name }}</mat-option
-          >
+            *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Quận/Huyện</mat-label>
+        <mat-select [(ngModel)]="addedComboLocation.district">
+          <input type="text" #districtFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
+          <mat-option
+            *ngFor="let item of districts | divisionFilter: {level: 'district', parent: addedComboLocation.province, searchText: districtFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Phường/Xã</mat-label>
         <mat-select [(ngModel)]="addedComboLocation.ward">
-          <mat-option *ngFor="let item of filteredWards" [value]="item.code">{{
-            item.name
-          }}</mat-option>
+          <input type="text" #wardFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
+          <mat-option
+            *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: addedComboLocation.district, searchText: wardFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field [appearance]="'outline'">
         <mat-label>Thôn/Lộ</mat-label>
         <input type="text" matInput [(ngModel)]="addedComboLocation.village" />
-      </mat-form-field> -->
-      <mat-form-field [appearance]="'outline'" class="w-full">
+      </mat-form-field>
+      <!-- <mat-form-field [appearance]="'outline'" class="w-full">
         <mat-label>Nhập tay</mat-label>
         <textarea [cols]="100" matInput [(ngModel)]="addedComboLocation.text"></textarea>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

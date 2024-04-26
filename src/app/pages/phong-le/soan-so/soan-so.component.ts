@@ -76,9 +76,7 @@ export class SoanSoComponent implements OnInit {
         console.log(this.editData);
       }
     })
-    // this.getAllDivisions()
-    // this.getDistricts()
-    // this.getWards()
+    this.getAllDivisions()
     this.getDefaultLocation()
     this.getCotnent()
 
@@ -193,8 +191,8 @@ export class SoanSoComponent implements OnInit {
       (this.editData?.subject?.date?.lunarYear && this.editData?.subject?.date?.lunarDay && this.editData?.subject?.date?.lunarMonth)) {
       const lunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.editData?.subject?.date?.year}-${this.editData?.subject?.date?.month < 10 ? '0' + this.editData?.subject?.date?.month : this.editData?.subject?.date?.month}-${this.editData?.subject?.date?.date < 10 ? '0' + this.editData?.subject?.date?.date : this.editData?.subject?.date?.date}`)).convertSolar2Lunar
       this.applyData('nam-tu-tran', this.editData?.subject?.date?.lunarYear ? this.editData?.subject?.date?.lunarYear : lunarDate.lunarYearName)
-      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarMonth ? this.editData?.subject?.date?.lunarMonth : lunarDate.lunarMonth, true, {type: 'month'}).toLowerCase())
-      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarDay ? this.editData?.subject?.date?.lunarDay : lunarDate.lunarDay, true, {type: 'month'}).toLowerCase())
+      this.applyData('thang-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarMonth ? this.editData?.subject?.date?.lunarMonth : lunarDate.lunarMonth, true, { type: 'month' }).toLowerCase())
+      this.applyData('ngay-tu-tran', this.commonService.convertNumberToText(this.editData?.subject?.date?.lunarDay ? this.editData?.subject?.date?.lunarDay : lunarDate.lunarDay, true, { type: 'month' }).toLowerCase())
     }
     if (this.editData?.subject?.date?.lunarTime) {
       this.applyData('gio-tu-tran', this.editData?.subject?.date?.lunarTime.split('|')[0].trim())
@@ -322,10 +320,10 @@ export class SoanSoComponent implements OnInit {
       this.applyData('nam-am-lich', date.lunarYearName)
     }
     if (this.editData.eventLunar.lunarMonth) {
-      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true, {type: 'month'}).toLowerCase())
+      this.applyData('thang-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarMonth, true, { type: 'month' }).toLowerCase())
     }
     if (this.editData.eventLunar.lunarDay) {
-      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true, {type: 'date'}).toLowerCase())
+      this.applyData('ngay-am-lich', this.commonService.convertNumberToText(this.editData.eventLunar.lunarDay, true, { type: 'date' }).toLowerCase())
     }
     if (this.editData.eventLunar.lunarTime) {
       this.applyData('thoi', this.editData.eventLunar.lunarTime.split('|')[0].trim())
@@ -463,9 +461,7 @@ export class SoanSoComponent implements OnInit {
       if (this.defaultLocation?.eventLeader) {
         this.applyData('chuc-sac-chung-dan', this.defaultLocation?.eventLeader)
       }
-      if (this.defaultLocation?.isThienPhong) {
-        this.applyData('thien-phong', this.defaultLocation?.isThienPhong)
-      }
+      this.applyData('thien-phong', this.defaultLocation?.isThienPhong)
     }
   }
 
@@ -477,19 +473,19 @@ export class SoanSoComponent implements OnInit {
       comboLocation?.setAttribute('value', JSON.stringify(value))
       if (comboLocation) {
         const country = value?.country
-        const province = this.provinces.find((item: any) => item.code == parseInt(value.province))
-        const district = this.districts.find((item: any) => item.code == parseInt(value.district))
-        const ward = this.wards.find((item: any) => item.code == parseInt(value.ward))
-        const wardName = this.wards.find((item: any) => item.code == parseInt(value.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
+        const province = this.provinces.find((item: any) => item.id == value.province)
+        const district = this.districts.find((item: any) => item.id == value.district)
+        const ward = this.wards.find((item: any) => item.id == value.ward)
+        const wardName = this.wards.find((item: any) => item.id == value.ward)?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
         value.mode = comboLocation.classList.contains('PpDdWwA') ? 'PpDdWwA' : comboLocation.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
         switch (value.mode) {
           case 'PpDdWwA':
             value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-              province?.division_type?.replace('trung ương', '') : ''
+              (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
               }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-                district?.division_type : ''
+                (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
               }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-                ward?.division_type : ''
+                (ward?.level)?.toLowerCase() : ''
               }${value.village ? ', ' + value.village : ''}`.trim()
             break;
           case 'pPdDwWA':
@@ -574,56 +570,27 @@ export class SoanSoComponent implements OnInit {
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
-        .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
+    this.commonService.fetchProvinceData()
+      .subscribe((res: any) => {
+        if (res?.status == 200) {
+          this.provinces = res.provinces
+          this.districts = res.districts
+          this.wards = res.wards
+          const find = (array: any, key: any) => {
+            let result: any;
+            array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+            return result;
           }
-        })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
-    }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
-    }
+          const foundComboLocation = find(this.content.content, 'dia-chi')
+          if (foundComboLocation) {
+            this.applyLocation('dia-chi')
+          }
+          const foundQueQuan = find(this.content.content, 'que-quan')
+          if (foundQueQuan) {
+            this.applyLocation('que-quan')
+          }
+        }
+      })
   }
 
   updateFontSize(event: any) {

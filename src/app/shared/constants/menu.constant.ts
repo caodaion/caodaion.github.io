@@ -68,7 +68,7 @@ export const MENU = [
       {
         key: 'lich.dong-bo',
         url: 'dong-bo',
-        label: 'Đồng bộ cloud',
+        label: 'Đăng ký thông báo',
         icon: 'cloud_sync',
         fullAssess: true,
         released: true,
