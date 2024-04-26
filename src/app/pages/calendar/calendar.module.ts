@@ -30,6 +30,7 @@ import { SynchronizedComponent } from './synchronized/synchronized.component';
 import { SharedModule } from "../../shared/shared.module";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
+import { UpdateEventModule } from "./update-event/update-event.module";
 
 @NgModule({
     declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
@@ -63,7 +64,8 @@ import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
         NgxMatTimepickerModule,
         SharedModule,
         MatCheckboxModule,
-        DivisionFilterPipe
+        DivisionFilterPipe,
+        UpdateEventModule
     ]
 })
 export class CalendarModule { }

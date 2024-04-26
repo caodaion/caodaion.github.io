@@ -1,0 +1,111 @@
+<div><strong>Mô tả vắn tắt thông tin:</strong> {{newEvent.data.eventSummary}}</div>
+<div class="w-full flex flex-wrap">
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+            <mat-label>Thời tổ chức {{newEvent?.eventType?.name}}</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.eventTime" (ngModelChange)="onUpdateInfomation()">
+                <mat-option *ngFor="let item of timeZone" [value]="item.name">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Ngày tổ chức {{newEvent?.eventType?.name}} (âm lịch)</mat-label>
+            <input type="number" matInput [(ngModel)]="newEvent.data.eventDate"
+                (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tháng tổ chức {{newEvent?.eventType?.name}} (âm lịch)</mat-label>
+            <input type="number" matInput [(ngModel)]="newEvent.data.eventMonth"
+                (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/2 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Họ và Tên vị được {{newEvent?.eventType?.name}}</mat-label>
+            <input type="text" matInput required [(ngModel)]="newEvent.data.name"
+                (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-label>Giới tính</mat-label>
+        <div>
+            <mat-radio-group [(ngModel)]="newEvent.data.sex" (ngModelChange)="onUpdateInfomation()">
+                <mat-radio-button [value]="'male'">Nam</mat-radio-button>
+                <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chức Đạo</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.title" (ngModelChange)="onUpdateInfomation()">
+                <mat-option *ngFor="let item of caoDaiTitle" [value]="item.key">{{ item.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2" *ngIf="subTitles?.length > 0">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chức Vụ</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.subTitle" (ngModelChange)="onUpdateInfomation()">
+                <mat-option *ngFor="let item of subTitles" [value]="item.key">{{ item.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2" *ngIf="
+          newEvent.data.sex === 'male' && isHolyNameRequired
+        ">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Sắc phái</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.color" (ngModelChange)="onUpdateInfomation()">
+                <mat-option *ngFor="let item of colors" [value]="item.key" [ngStyle]="{ background: item.color }">{{
+                    item.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2" *ngIf="isHolyNameRequired">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Thánh Danh</mat-label>
+            <input type="text" matInput [required]="isHolyNameRequired" [(ngModel)]="newEvent.data.holyName"
+                (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Tuổi</mat-label>
+            <input type="number" matInput [(ngModel)]="newEvent.data.age" (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+            <mat-label>Thời gian mất</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.time" (ngModelChange)="onUpdateInfomation()">
+                <mat-option *ngFor="let item of timeZone" [value]="item.name">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Ngày mất(âm lịch)</mat-label>
+            <input type="number" matInput [(ngModel)]="newEvent.data.date" (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tháng mất(âm lịch)</mat-label>
+            <input type="number" matInput [(ngModel)]="newEvent.data.month" (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Năm mất(âm lịch)</mat-label>
+            <input type="text" matInput [(ngModel)]="newEvent.data.year" (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
+</div>

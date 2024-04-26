@@ -127,29 +127,7 @@
       <div *ngIf="expaned && isActiveMoreInformation" class="w-full">
         <div class="text-xl my-3">Bổ sung hiển thị</div>
         <div class="w-full flex flex-col">
-          <mat-form-field class="w-full">
-            <mat-label>Thánh Sở</mat-label>
-            <mat-select [(ngModel)]="selectedThanhSo" (ngModelChange)="updateSelectedThanhSo()">
-              <mat-option *ngFor="let thanhSo of memberThanhSo" [value]="thanhSo?.key">{{ thanhSo?.thanhSo
-                }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div *ngIf="!allowToUpdateMember?.form" class="w-full whitespace-normal text-justify">
-            Liện hệ CaoDaiON trên Facebook để đăng ký sử dụng tính năng hiển thị
-            lịch hành đạo của bạn lên ứng dụng lịch của CaoDaiON
-            <br />
-            Facebook:
-            <a href="https://www.facebook.com/caodaion" class="underline" target="_blank">facebook.com/caodaion</a>
-          </div>
-          <button mat-flat-button [color]="'primary'" *ngIf="allowToUpdateMember?.form"
-            (click)="updateThanhSoEvent = !updateThanhSoEvent" class="w-full">
-            Cập nhật
-          </button>
-          <iframe *ngIf="allowToUpdateMember?.form && updateThanhSoEvent" [src]="
-              'https://docs.google.com/forms/d/e/' +
-                allowToUpdateMember?.form +
-                '/viewform?embedded=true' | safe
-            " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)"></app-update-event>
         </div>
       </div>
     </div>

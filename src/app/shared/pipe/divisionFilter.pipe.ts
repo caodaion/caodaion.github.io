@@ -20,8 +20,6 @@ export class DivisionFilterPipe implements PipeTransform {
 
     }
     transform(value: any, option: any): any {
-        console.log(value);
-        console.log(option);
         if (!option?.searchText && !option?.level) {
             return value;
         }

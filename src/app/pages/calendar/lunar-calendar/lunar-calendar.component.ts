@@ -50,7 +50,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   currentUser: any;
   calendarMode = 'month';
   viewPortMode = 'desktop';
-  expaned = false;
+  expaned = true;
   refresh = true;
   updateThanhSoEvent = false;
   allowToUpdateMember: any;
@@ -570,7 +570,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     }
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
     console.log(event);
-    
+
   }
 
   getTimes(time: any): Array<any> {
@@ -766,7 +766,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     return false
   }
 
-  updateSelectedThanhSo() {
+  updateSelectedThanhSo(event: any) {
+    this.selectedThanhSo = event
     if (this.selectedThanhSo == 'null') {
       this.refresh = false
       this.selectedThanhSoEvents = []
@@ -1056,7 +1057,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   shareVegetarianDay(item: any) {
     this.vegetarianDay = item;
     console.log(this.vegetarianDay);
-    
+
     this.vegetarianBottomSheetRef = this.matBottomSheet.open(this.vegetarianBottomSheet)
   }
 }
