@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
@@ -41,18 +42,21 @@ export class UpdateEventComponent implements OnInit {
   ]
   isEditor: boolean = false
   @Output('updateSelectedThanhSo') updateSelectedThanhSo = new EventEmitter()
+  @Input('selectedThanhSoSetting') selectedThanhSoSetting?: any;
+  @Input('selectedThanhSoEvents') selectedThanhSoEvents?: any;
 
   constructor(
     private commonService: CommonService,
     private eventService: EventService,
     private authService: AuthService,
+    private matDialog: MatDialog,
   ) {
 
   }
 
   ngOnInit(): void {
-    // this.fetchRegisteredMember()
-    // this.getAllDivisions()
+    this.fetchRegisteredMember()
+    this.getAllDivisions()
   }
 
   fetchRegisteredMember() {
@@ -73,10 +77,12 @@ export class UpdateEventComponent implements OnInit {
     if (foundData) {
       this.selectedThanhSo = foundData
       this.isEditor = true
+      this.onUpdateSelectedThanhSo()
     }
   }
 
   onUpdateSelectedThanhSo() {
+    this.isEditor = !!this.selectedThanhSo
     this.updateSelectedThanhSo.emit(this.selectedThanhSo?.thanhSoSheet)
   }
 
@@ -107,6 +113,7 @@ export class UpdateEventComponent implements OnInit {
   }
 
   getAllDivisions() {
+    if (this.commonService.provinces?.length === 0) {
     this.commonService.fetchProvinceData()
       .subscribe((res: any) => {
         if (res?.status == 200) {
@@ -115,15 +122,33 @@ export class UpdateEventComponent implements OnInit {
           this.wards = res.wards
         }
       })
+    } else {
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
+    }
   }
-
-  onRunNewEvent(isClear: boolean = false) {
-    if (isClear) {
+  duplicateFound: any;
+  onRunNewEvent(data: any, duplicateDialog: any) {
+    this.duplicateFound = null
+    if (data == true) {
       this.newEvent = <any>{};
       this.googleFormsPath = ''
     } else {
-      console.log(this.newEvent);
-    }  
+      if (this.selectedThanhSoSetting?.googleFormsId) {
+        const foundData = this.selectedThanhSoEvents?.find((item: any) => item?.key == data?.key)
+        this.duplicateFound = foundData
+        if (this.duplicateFound) {
+          const duplicateDialogRef = this.matDialog.open(duplicateDialog);
+        } else {
+          this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.selectedThanhSoSetting?.googleFormsId}/viewform`
+          this.googleFormsPath += `?${this.selectedThanhSoSetting?.key}=${encodeURIComponent(data.key)}`
+          this.googleFormsPath += `&${this.selectedThanhSoSetting?.eventName}=${encodeURIComponent(data.eventName)}`
+          this.googleFormsPath += `&${this.selectedThanhSoSetting?.eventType}=${encodeURIComponent(data.eventType)}`
+          this.googleFormsPath += `&${this.selectedThanhSoSetting?.data}=${encodeURIComponent(JSON.stringify(data.data))}`
+        }
+      }
+    }
   }
 
   onRunRegistration(isClear: boolean = false) {

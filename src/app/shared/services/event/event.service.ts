@@ -39,7 +39,6 @@ export class EventService {
         this.sheetService.decodeRawSheetData(ref.memberThanhSoWorkbook.Sheets[this.thanhSoSettingSheet])
           .subscribe((res: any) => {
             const settingData = res;
-            console.log(settingData);
             if (settingData?.length > 0) {
               response.status = 200
               response.setting = <any>{}
@@ -63,6 +62,50 @@ export class EventService {
               if (res.status == 200) {
                 if (res?.workbook) {
                   ref.memberThanhSoWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        returnData()
+      }
+    })
+  }
+
+  fetchThanhSoEvent(id: any): Observable<any> {
+    const ref: Mutable<this> = this;
+    return new Observable((observable) => {
+      const returnData = () => {
+        let response = <any>{}
+        this.sheetService.decodeRawSheetData(ref.selectedThanhSoWorkbook.Sheets['setting'])
+          .subscribe((res: any) => {
+            const settingData = res;
+            if (settingData?.length > 0) {
+              response.status = 200
+              response.setting = <any>{}
+              settingData?.forEach((item: any) => {
+                response.setting[item?.field] = item?.trigger
+              })
+              this.sheetService.decodeRawSheetData(ref.selectedThanhSoWorkbook.Sheets['Form Responses 1'])
+                .subscribe((res: any) => {
+                  const data = res;
+                  response.data = data
+                  observable.next(response)
+                  observable.complete()
+                })
+            }
+          })
+      }
+      if (!ref.selectedThanhSoWorkbook) {
+        try {
+          this.sheetService.fetchSheet(id)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.selectedThanhSoWorkbook = res?.workbook
                   returnData()
                 }
               }

@@ -13,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UpdateKyNiemComponent } from './update-ky-niem/update-ky-niem.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -36,7 +38,9 @@ import { MatRadioModule } from '@angular/material/radio';
         DivisionFilterPipe,
         MatIconModule,
         MatProgressBarModule,
-        MatRadioModule
+        MatRadioModule,
+        MatCheckboxModule,
+        MatDialogModule
     ]
 })
 export class UpdateEventModule { }

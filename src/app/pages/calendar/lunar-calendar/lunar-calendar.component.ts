@@ -1,12 +1,9 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {
-  AfterViewChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
-  HostListener,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -50,7 +47,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   currentUser: any;
   calendarMode = 'month';
   viewPortMode = 'desktop';
-  expaned = true;
+  guestMessage = '';
+  expaned = false;
   refresh = true;
   updateThanhSoEvent = false;
   allowToUpdateMember: any;
@@ -69,6 +67,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   };
   selectedThanhSo: any = null;
   lunarTimeZone = TIME_TYPE.data
+  suggetExpand: boolean = false;
+  setting = <any>{};
 
   constructor(
     private calendarService: CalendarService,
@@ -89,6 +89,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.guestMessage = 'Bổ sung lịch'
     this.titleService.setTitle(`Lịch | ${CONSTANT.page.name}`)
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
@@ -138,7 +139,16 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   getThanhSoInMember() {
-    // this.eventService.
+    if (this.filter?.yellow) {
+      if (!localStorage?.getItem('memberThanhSo')) {
+        this.expaned = true
+        this.guestMessage = 'Bạn có thể chọn Thánh Sở để hiển thị lịch hành đạo và các sự kiện tại Thánh Sở của bạn tại đây. Nếu bạn chưa thấy Thánh Sở của bạn. Hãy Đăng ký thành viên lịch để các sự kiện tại Thánh Sở của bạn sẽ hiển thị trên lịch của CaoDaiON nhé!'
+        this.suggetExpand = true
+      } else {
+        this.selectedThanhSo = localStorage?.getItem('memberThanhSo')
+        this.getThanhSoEvent()
+      }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -569,8 +579,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       }
     }
     this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
-    console.log(event);
-
   }
 
   getTimes(time: any): Array<any> {
@@ -768,7 +776,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
 
   updateSelectedThanhSo(event: any) {
     this.selectedThanhSo = event
-    if (this.selectedThanhSo == 'null') {
+    if (!this.selectedThanhSo) {
       this.refresh = false
       this.selectedThanhSoEvents = []
       this.onChangeSelectedCalendar('month');
@@ -781,27 +789,37 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   updateUserInfor() {
-    localStorage.setItem('memberThanhSo', this.selectedThanhSo)
+    localStorage.setItem('memberThanhSo', this.selectedThanhSo || '')
   }
 
+  selectedThanhSoSetting = <any>{}
   getThanhSoEvent() {
-    // if (this.selectedThanhSo) {
-    //   this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
-    //     .subscribe((res: any) => {
-    //       if (res.code === 200) {
-    //         this.selectedThanhSoEvents = res.data
-    //         this.refresh = true
-    //         this.mergeThanhSoEvent()
-    //       }
-    //     })
-    // }
+    if (this.selectedThanhSo) {
+      this.eventService.fetchThanhSoEvent(this.selectedThanhSo)
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            this.selectedThanhSoSetting = res.setting
+            this.selectedThanhSoEvents = res.data
+            this.refresh = true
+            this.mergeThanhSoEvent()
+          }
+        })
+    } else {
+      this.selectedThanhSoSetting = <any>{}
+      this.selectedThanhSoEvents = <any>[]
+      this.changeDetector.detectChanges()
+    }
   }
 
   mergeThanhSoEvent() {
     if (this.calendarMode === 'month') {
       const data = this.selectedThanhSoEvents.map((item: any) => {
-        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.name == item?.eventTargetTitle)
+        if (typeof item?.data == 'string') {
+          item.data = JSON.parse(item?.data)
+        }        
+        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.key == item?.data?.title)        
         let name = ''
+        let eventAddress: any;
         let solar: any;
         let lunar: any;
         let eventName: any;
@@ -809,17 +827,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         let longSo: any;
         let soTemplate: any;
         let subject: any;
-        if (item.eventType?.includes('Kỷ Niệm')) {
+        if (item.eventType?.includes('ky-niem')) {
           longSo = 'tam-tran'
           soTemplate = 'so-cau-sieu'
-          let holyName = ''
-          if (foundTitle?.isHolyNameRequired) {
-            if (item?.gender == 'Nam') {
-              holyName = `${item.color} ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]} Thanh`
-            } else {
-              holyName = `Hương ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]}`
-            }
-          }
           if (!item?.isSolarEvent) {
             const newYearTime = this.calendarService.getConvertedFullDate({
               "lunarDay": 1,
@@ -831,8 +841,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
               operationYear -= 1
             }
             eventLunar = {
-              "lunarDay": item?.date,
-              "lunarMonth": item?.month,
+              "lunarDay": item?.data.eventDate,
+              "lunarMonth": item?.data.eventMonth,
               "lunarYear": operationYear,
             }
             const convertLunar2Solar = this.calendarService.getConvertedFullDate(eventLunar).convertLunar2Solar
@@ -843,28 +853,33 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
               solar = new Date(solar.setHours(startDate.split('-')[1]))
             }
             lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
+            lunar.lunarTime = item?.data?.eventTime
             subject = {
               date: {
-                lunarYear: item?.eventTargetYear || '',
-                lunarMonth: item?.eventTargetMonth || '',
-                lunarDay: item?.eventTargetDate || '',
-                lunarTime: item?.eventTargetThoi?.split(' |')[0] || '',
-                solarYear: item?.eventTargetYearSolar || '',
+                lunarYear: item?.data?.year || '',
+                lunarMonth: item?.data?.month || '',
+                lunarDay: item?.data?.date || '',
+                lunarTime: item?.data?.time?.split(' |')[0] || '',
               },
               details: {
-                name: item.eventTargetName,
-                age: item.eventTargetAge,
-                sex: item.gender == 'Name' ? 'male' : 'female',
-                holyName: holyName,
+                name: item?.data?.name,
+                age: item?.data?.age,
+                sex: item?.data?.sex,
+                holyName: item?.data?.holyName,
                 title: foundTitle?.key,
-                job: item?.job,
-                color: this.commonService.generatedSlug(item.color || ''),
+                job: item?.data?.job,
+                color: this.commonService.generatedSlug(item?.data?.color || ''),
+                province: item?.data?.address?.province,
+                district: item?.data?.address?.district,
+                ward: item?.data?.address?.ward,
+                address: item?.data?.address?.address,
               },
               key: item['Timestamp']
             }
           }
           eventName = `Kỷ Niệm chi nhựt`
-          name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.job ? item?.job : (item?.eventTargetTitle?.includes('Chưa có Đạo') ? '' : item?.eventTargetTitle)} ${holyName || item.eventTargetName}`
+          name = item?.eventName
+          eventAddress = item?.data?.eventAddress
         }
         return {
           key: item['Timestamp'],
@@ -876,6 +891,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           longSo: longSo,
           soTemplate: soTemplate,
           eventName: eventName,
+          eventAddress: eventAddress,
           subject: subject
         }
       })

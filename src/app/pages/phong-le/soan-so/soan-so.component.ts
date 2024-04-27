@@ -1,6 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
@@ -43,7 +43,8 @@ export class SoanSoComponent implements OnInit {
     private locationService: LocationService,
     private authService: AuthService,
     private decimal: DecimalPipe,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private cd: ChangeDetectorRef
   ) {
 
   }
@@ -353,7 +354,7 @@ export class SoanSoComponent implements OnInit {
         this.applyLocation('dia-chi')
       }
     }
-    if (this.defaultLocation?.province) {
+    if (this.editData.eventAddress?.province) {
       const find = (array: any, key: any) => {
         let result: any;
         array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
@@ -368,101 +369,161 @@ export class SoanSoComponent implements OnInit {
             foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
           }
         }
-        foundComboLocation.value.province = this.defaultLocation?.province
+        if (this.editData.eventAddress?.province) {
+          foundComboLocation.value.province = this.editData.eventAddress?.province
+        }
+        if (this.editData.eventAddress?.district) {
+          foundComboLocation.value.district = this.editData.eventAddress?.district
+        }
+        if (this.editData.eventAddress?.ward) {
+          foundComboLocation.value.ward = this.editData.eventAddress?.ward
+        }
+        if (this.editData.eventAddress?.address) {
+          foundComboLocation.value.village = this.editData.eventAddress?.address
+        }
         if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
           if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
             this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+            this.previewContent.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
           }
-          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.defaultLocation?.province
-        }
-        this.applyLocation('dia-chi')
-      }
-    }
-    if (this.defaultLocation?.district) {
-      const find = (array: any, key: any) => {
-        let result: any;
-        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
-        return result;
-      }
-      const foundComboLocation = find(this.content.content, 'dia-chi')
-      if (foundComboLocation) {
-        if (!foundComboLocation.value) {
-          foundComboLocation.value = <any>{}
-        } else {
-          if (typeof foundComboLocation.value === 'string') {
-            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          if (this.editData.eventAddress?.province) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.editData.eventAddress?.province
+            this.previewContent.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.editData.eventAddress?.province
           }
-        }
-        foundComboLocation.value.district = this.defaultLocation?.district
-        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
-          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
-            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          if (this.editData.eventAddress?.district) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.editData.eventAddress?.district
+            this.previewContent.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.editData.eventAddress?.district
           }
-          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.defaultLocation?.district
-        }
-        this.applyLocation('dia-chi')
-      }
-    }
-    if (this.defaultLocation?.ward) {
-      const find = (array: any, key: any) => {
-        let result: any;
-        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
-        return result;
-      }
-      const foundComboLocation = find(this.content.content, 'dia-chi')
-      if (foundComboLocation) {
-        if (!foundComboLocation.value) {
-          foundComboLocation.value = <any>{}
-        } else {
-          if (typeof foundComboLocation.value === 'string') {
-            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+          if (this.editData.eventAddress?.ward) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.editData.eventAddress?.ward
+            this.previewContent.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.editData.eventAddress?.ward
           }
-        }
-        foundComboLocation.value.ward = this.defaultLocation?.ward
-        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
-          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
-            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+          if (this.editData.eventAddress?.address) {
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.editData.eventAddress?.address
+            this.previewContent.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.editData.eventAddress?.address
           }
-          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.defaultLocation?.ward
-        }
-        this.applyLocation('dia-chi')
-      }
-    }
-    if (this.defaultLocation?.village) {
-      const find = (array: any, key: any) => {
-        let result: any;
-        array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
-        return result;
-      }
-      const foundComboLocation = find(this.content.content, 'dia-chi')
-      if (foundComboLocation) {
-        if (!foundComboLocation.value) {
-          foundComboLocation.value = <any>{}
-        } else {
-          if (typeof foundComboLocation.value === 'string') {
-            foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
-          }
-        }
-        foundComboLocation.value.village = this.defaultLocation?.village
-        if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
-          if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
-            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
-          }
-          this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.defaultLocation?.village
         }
         this.applyLocation('dia-chi')
       }
       if (this.defaultLocation?.called) {
-        this.applyData('dia-diem', this.defaultLocation?.called)
+        this.applyData('dia-diem', 'Gia đường')
       }
       if (this.defaultLocation?.target) {
-        this.applyData('dien-tienthien-ban', this.defaultLocation?.target)
+        this.applyData('dien-tienthien-ban', 'Thiên bàn')
+      }
+    } else {
+      if (this.defaultLocation?.province) {
+        const find = (array: any, key: any) => {
+          let result: any;
+          array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+          return result;
+        }
+        const foundComboLocation = find(this.content.content, 'dia-chi')
+        if (foundComboLocation) {
+          if (!foundComboLocation.value) {
+            foundComboLocation.value = <any>{}
+          } else {
+            if (typeof foundComboLocation.value === 'string') {
+              foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+            }
+          }
+          foundComboLocation.value.province = this.defaultLocation?.province
+          if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+            if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+              this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+            }
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.province = this.defaultLocation?.province
+          }
+          this.applyLocation('dia-chi')
+        }
+      }
+      if (this.defaultLocation?.district) {
+        const find = (array: any, key: any) => {
+          let result: any;
+          array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+          return result;
+        }
+        const foundComboLocation = find(this.content.content, 'dia-chi')
+        if (foundComboLocation) {
+          if (!foundComboLocation.value) {
+            foundComboLocation.value = <any>{}
+          } else {
+            if (typeof foundComboLocation.value === 'string') {
+              foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+            }
+          }
+          foundComboLocation.value.district = this.defaultLocation?.district
+          if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+            if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+              this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+            }
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.district = this.defaultLocation?.district
+          }
+          this.applyLocation('dia-chi')
+        }
+      }
+      if (this.defaultLocation?.ward) {
+        const find = (array: any, key: any) => {
+          let result: any;
+          array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+          return result;
+        }
+        const foundComboLocation = find(this.content.content, 'dia-chi')
+        if (foundComboLocation) {
+          if (!foundComboLocation.value) {
+            foundComboLocation.value = <any>{}
+          } else {
+            if (typeof foundComboLocation.value === 'string') {
+              foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+            }
+          }
+          foundComboLocation.value.ward = this.defaultLocation?.ward
+          if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+            if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+              this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+            }
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.ward = this.defaultLocation?.ward
+          }
+          this.applyLocation('dia-chi')
+        }
+      }
+      if (this.defaultLocation?.village) {
+        const find = (array: any, key: any) => {
+          let result: any;
+          array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+          return result;
+        }
+        const foundComboLocation = find(this.content.content, 'dia-chi')
+        if (foundComboLocation) {
+          if (!foundComboLocation.value) {
+            foundComboLocation.value = <any>{}
+          } else {
+            if (typeof foundComboLocation.value === 'string') {
+              foundComboLocation.value = JSON.parse(foundComboLocation.value || '{}')
+            }
+          }
+          foundComboLocation.value.village = this.defaultLocation?.village
+          if (this.content.formGroup.find((item: any) => item.key === 'dia-chi')) {
+            if (!this.content.formGroup.find((item: any) => item.key === 'dia-chi').value) {
+              this.content.formGroup.find((item: any) => item.key === 'dia-chi').value = <any>{}
+            }
+            this.content.formGroup.find((item: any) => item.key === 'dia-chi').value.village = this.defaultLocation?.village
+          }
+          this.applyLocation('dia-chi')
+        }
+        if (this.defaultLocation?.called) {
+          this.applyData('dia-diem', this.defaultLocation?.called)
+        }
+        if (this.defaultLocation?.target) {
+          this.applyData('dien-tienthien-ban', this.defaultLocation?.target)
+        }
       }
       if (this.defaultLocation?.eventLeader) {
         this.applyData('chuc-sac-chung-dan', this.defaultLocation?.eventLeader)
       }
       this.applyData('thien-phong', this.defaultLocation?.isThienPhong)
     }
+    this.cd.detectChanges()
   }
 
   applyLocation(id: any, prefix?: any) {
@@ -477,24 +538,26 @@ export class SoanSoComponent implements OnInit {
         const district = this.districts.find((item: any) => item.id == value.district)
         const ward = this.wards.find((item: any) => item.id == value.ward)
         const wardName = this.wards.find((item: any) => item.id == value.ward)?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-        value.mode = comboLocation.classList.contains('PpDdWwA') ? 'PpDdWwA' : comboLocation.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
-        switch (value.mode) {
-          case 'PpDdWwA':
-            value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-              (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
-              }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-                (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
-              }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-                (ward?.level)?.toLowerCase() : ''
-              }${value.village ? ', ' + value.village : ''}`.trim()
-            break;
-          case 'pPdDwWA':
-            value.text = value.title
-            break;
-          default:
-            break;
+        if (typeof value != 'string') {
+          value.mode = comboLocation.classList.contains('PpDdWwA') ? 'PpDdWwA' : comboLocation.classList.contains('pPdDwWA') ? 'pPdDwWA' : ''
+          switch (value.mode) {
+            case 'PpDdWwA':
+              value.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
+                (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
+                }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
+                  (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
+                }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
+                  (ward?.level)?.toLowerCase() : ''
+                }${value.village ? ', ' + value.village : ''}`.trim()
+              break;
+            case 'pPdDwWA':
+              value.text = value.title
+              break;
+            default:
+              break;
+          }
+          comboLocation.innerHTML = `${prefix || ''} ${value.text}`
         }
-        comboLocation.innerHTML = `${prefix || ''} ${value.text}`
       }
     }, 0)
   }
@@ -570,27 +633,37 @@ export class SoanSoComponent implements OnInit {
   }
 
   getAllDivisions() {
-    this.commonService.fetchProvinceData()
-      .subscribe((res: any) => {
-        if (res?.status == 200) {
-          this.provinces = res.provinces
-          this.districts = res.districts
-          this.wards = res.wards
-          const find = (array: any, key: any) => {
-            let result: any;
-            array.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
-            return result;
+    const applyLocation = () => {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array?.some((o: any) => result = o.key === key && o.type === 'form-control' ? o : find(o.content || [], key));
+        return result;
+      }
+      const foundComboLocation = find(this.content.content, 'dia-chi')
+      if (foundComboLocation) {
+        this.applyLocation('dia-chi')
+      }
+      const foundQueQuan = find(this.content.content, 'que-quan')
+      if (foundQueQuan) {
+        this.applyLocation('que-quan')
+      }
+    }
+    if (this.commonService.provinces?.length === 0) {
+      this.commonService.fetchProvinceData()
+        .subscribe((res: any) => {
+          if (res?.status == 200) {
+            this.provinces = res.provinces
+            this.districts = res.districts
+            this.wards = res.wards
+            applyLocation()
           }
-          const foundComboLocation = find(this.content.content, 'dia-chi')
-          if (foundComboLocation) {
-            this.applyLocation('dia-chi')
-          }
-          const foundQueQuan = find(this.content.content, 'que-quan')
-          if (foundQueQuan) {
-            this.applyLocation('que-quan')
-          }
-        }
-      })
+        })
+    } else {
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
+      applyLocation()
+    }
   }
 
   updateFontSize(event: any) {

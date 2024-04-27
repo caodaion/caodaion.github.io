@@ -24,6 +24,55 @@
                 (ngModelChange)="onUpdateInfomation()" />
         </mat-form-field>
     </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-label>Tổ chức {{newEvent?.eventType?.name}} tại {{selectedThanhSo?.thanhSo}}</mat-label>
+        <mat-checkbox [(ngModel)]="newEvent.data.atThanhSo" (ngModelChange)="onUpdateInfomation()"></mat-checkbox>
+    </div>
+    <ng-container *ngIf="!newEvent.data.atThanhSo">
+        <div class="w-full lg:w-1/4 p-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tổ chức tại Tỉnh/Thành phố</mat-label>
+                <mat-select [(ngModel)]="newEvent.data.eventAddress.province" (ngModelChange)="onUpdateInfomation()">
+                    <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                    <mat-option
+                        *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
+                        [value]="item?.id">{{ item?.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tổ chức tại Quận/Huyện</mat-label>
+                <mat-select [(ngModel)]="newEvent.data.eventAddress.district" (ngModelChange)="onUpdateInfomation()">
+                    <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                    <mat-option
+                        *ngFor="let item of districts | divisionFilter: {level: 'district', parent: newEvent.data.eventAddress.province, searchText: districtFilter['value']}"
+                        [value]="item?.id">{{ item?.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tổ chức tại Phường/Xã</mat-label>
+                <mat-select [(ngModel)]="newEvent.data.eventAddress.ward" (ngModelChange)="onUpdateInfomation()">
+                    <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                    <mat-option
+                        *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: newEvent.data.eventAddress.district, searchText: wardFilter['value']}"
+                        [value]="item?.id">{{ item?.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tổ chức tại Địa chỉ (thôn/đường)</mat-label>
+                <input type="text" [(ngModel)]="newEvent.data.eventAddress.address" matInput
+                    (ngModelChange)="onUpdateInfomation()" />
+            </mat-form-field>
+        </div>
+    </ng-container>
     <div class="w-full lg:w-1/2 p-2">
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>Họ và Tên vị được {{newEvent?.eventType?.name}}</mat-label>
@@ -108,4 +157,51 @@
             <input type="text" matInput [(ngModel)]="newEvent.data.year" (ngModelChange)="onUpdateInfomation()" />
         </mat-form-field>
     </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Sinh tại Tỉnh/Thành phố</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.address.province" (ngModelChange)="onUpdateInfomation()">
+                <input type="text" #homeTownprovinceFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                <mat-option
+                    *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: homeTownprovinceFilter['value']}"
+                    [value]="item?.id">{{ item?.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Sinh tại Quận/Huyện</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.address.district" (ngModelChange)="onUpdateInfomation()">
+                <input type="text" #homeTowndistrictFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                <mat-option
+                    *ngFor="let item of districts | divisionFilter: {level: 'district', parent: newEvent.data.address.province, searchText: homeTowndistrictFilter['value']}"
+                    [value]="item?.id">{{ item?.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Sinh tại Phường/Xã</mat-label>
+            <mat-select [(ngModel)]="newEvent.data.address.ward" (ngModelChange)="onUpdateInfomation()">
+                <input type="text" #homeTownwardFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                <mat-option
+                    *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: newEvent.data.address.district, searchText: homeTownwardFilter['value']}"
+                    [value]="item?.id">{{ item?.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Sinh tại Địa chỉ (thôn/đường)</mat-label>
+            <input type="text" [(ngModel)]="newEvent.data.address.address" matInput
+                (ngModelChange)="onUpdateInfomation()" />
+        </mat-form-field>
+    </div>
 </div>
+
+<button class="w-full mb-4" mat-flat-button *ngIf="showSaveButton" (click)="updateNewEvent()" [color]="'primary'">
+    <mat-icon>save</mat-icon>Lưu sự kiện
+</button>

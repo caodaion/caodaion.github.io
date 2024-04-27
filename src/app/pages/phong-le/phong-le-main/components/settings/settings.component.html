@@ -6,7 +6,7 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Tỉnh/Thành phố</mat-label>
           <mat-select [(ngModel)]="defaultLocation.province" (ngModelChange)="updateDefaultLocation()">
-            <input type="text" #provinceFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
               (keydown)="onPress($event)">
             <mat-option
               *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
@@ -18,7 +18,7 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Quận/Huyện</mat-label>
           <mat-select [(ngModel)]="defaultLocation.district" (ngModelChange)="updateDefaultLocation()">
-            <input type="text" #districtFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
               (keydown)="onPress($event)">
             <mat-option
               *ngFor="let item of districts | divisionFilter: {level: 'district', parent: defaultLocation.province, searchText: districtFilter['value']}"
@@ -30,7 +30,7 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Phường/Xã</mat-label>
           <mat-select [(ngModel)]="defaultLocation.ward" (ngModelChange)="updateDefaultLocation()">
-            <input type="text" #wardFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
               (keydown)="onPress($event)">
             <mat-option
               *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: defaultLocation.district, searchText: wardFilter['value']}"

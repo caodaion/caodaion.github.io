@@ -1,14 +1,15 @@
 <mat-form-field appearance="outline" class="w-full">
     <mat-label>Thánh Sở</mat-label>
     <mat-select [(ngModel)]="selectedThanhSo" (ngModelChange)="onUpdateSelectedThanhSo()">
+        <mat-option [value]="''">Chọn Thánh Sở</mat-option>
         <mat-option *ngFor="let thanhSo of memberThanhSo" [value]="thanhSo">
             {{ thanhSo?.thanhSo }}
         </mat-option>
     </mat-select>
 </mat-form-field>
 <mat-progress-bar *ngIf="!setting?.googleFormsId" [mode]="'indeterminate'"></mat-progress-bar>
-<!-- <mat-accordion *ngIf="setting?.googleFormsId">
-    <mat-expansion-panel [expanded]="isEditor" *ngIf="isEditor && memberThanhSo?.length > 0">
+<mat-accordion *ngIf="setting?.googleFormsId">
+    <mat-expansion-panel [expanded]="isEditor" [disabled]="!(isEditor && memberThanhSo?.length > 0)">
         <mat-expansion-panel-header>
             <mat-panel-title>Cập nhật sự kiện</mat-panel-title>
             <mat-panel-description>Cập nhật sự kiện cho {{selectedThanhSo?.thanhSo}}</mat-panel-description>
@@ -35,13 +36,20 @@
             <div class="w-full lg:w-1/2 p-2">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Tên sự kiện</mat-label>
-                    <input type="text" matInput required [(ngModel)]="newEvent.name" />
+                    <input type="text" matInput required [(ngModel)]="newEvent.eventName" />
                     <mat-hint>Tên sự kiện tạo tự động hoặc nhập vào</mat-hint>
                 </mat-form-field>
             </div>
         </div>
         <ng-container *ngIf="newEvent.eventType?.key?.includes('ky-niem')">
-            <app-update-ky-niem [newEvent]="newEvent"></app-update-ky-niem>
+            <app-update-ky-niem [newEvent]="newEvent" [selectedThanhSo]="selectedThanhSo"
+                [showSaveButton]="!googleFormsPath && selectedThanhSoSetting?.googleFormsId"
+                (onRunNewEvent)="onRunNewEvent($event, duplicateDialog)"></app-update-ky-niem>
+            <button mat-flat-button [color]="'primary'" *ngIf="googleFormsPath"
+                (click)="onRunNewEvent(!!googleFormsPath, duplicateDialog)" class="w-full mb-4">
+                <mat-icon>close</mat-icon>
+                Đóng
+            </button>
         </ng-container>
         <p>
             <strong class="text-[red] font-bold underline">LƯU Ý:</strong>
@@ -54,7 +62,7 @@
               googleFormsPath | safe
             " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
     </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="!isEditor">
+    <mat-expansion-panel [expanded]="!isEditor" [disabled]="(isEditor && memberThanhSo?.length > 0)">
         <mat-expansion-panel-header>
             <mat-panel-title>Đăng ký thành viên lịch</mat-panel-title>
             <mat-panel-description>
@@ -96,8 +104,8 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Tỉnh/Thành phố</mat-label>
                     <mat-select [(ngModel)]="newRegister.address.province">
-                        <input type="text" #provinceFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                            (keydown)="onPress($event)">
+                        <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                            [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                         <mat-option
                             *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
                             [value]="item?.id">{{ item?.name }}</mat-option>
@@ -108,8 +116,8 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Quận/Huyện</mat-label>
                     <mat-select [(ngModel)]="newRegister.address.district">
-                        <input type="text" #districtFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                            (keydown)="onPress($event)">
+                        <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                            [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                         <mat-option
                             *ngFor="let item of districts | divisionFilter: {level: 'district', parent: newRegister.address.province, searchText: districtFilter['value']}"
                             [value]="item?.id">{{ item?.name }}</mat-option>
@@ -120,8 +128,8 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Phường/Xã</mat-label>
                     <mat-select [(ngModel)]="newRegister.address.ward">
-                        <input type="text" #wardFilter class="w-full p-2" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                            (keydown)="onPress($event)">
+                        <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                            [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                         <mat-option
                             *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: newRegister.address.district, searchText: wardFilter['value']}"
                             [value]="item?.id">{{ item?.name }}</mat-option>
@@ -150,7 +158,7 @@
         </p>
         <div class="w-full">
             <button mat-flat-button [color]="'primary'" [disabled]="!newRegister?.userName || !newRegister?.thanhSoKey"
-                (click)="onRunRegistration(!!registrationGoogleFormsPath)" class="w-full">
+                (click)="onRunRegistration(!!registrationGoogleFormsPath)" class="w-full mb-4">
                 <mat-icon *ngIf="!registrationGoogleFormsPath">save</mat-icon>
                 <mat-icon *ngIf="registrationGoogleFormsPath">close</mat-icon>
                 {{registrationGoogleFormsPath ? 'Đóng' : 'Lưu Đăng Ký'}}
@@ -160,52 +168,14 @@
               registrationGoogleFormsPath | safe
             " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
     </mat-expansion-panel>
-</mat-accordion> -->
-<mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-            <mat-panel-title>Cập nhật sự kiện</mat-panel-title>
-            <mat-panel-description>Cập nhật sự kiện cho {{selectedThanhSo?.thanhSo}}</mat-panel-description>
-        </mat-expansion-panel-header>
-        <div class="w-full flex justify-between flex-wrap">
-            <div class="w-full lg:w-1/4 p-2">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Mã sự kiện</mat-label>
-                    <input type="text" matInput [disabled]="true" required [(ngModel)]="newEvent.key" />
-                </mat-form-field>
-            </div>
-            <div class="w-full lg:w-1/4 p-2">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Loại sự kiện</mat-label>
-                    <mat-select [(ngModel)]="newEvent.eventType">
-                        <mat-optgroup *ngFor="let item of eventTypes" [label]="item?.group">
-                            <mat-option *ngFor="let op of item?.data" [value]="op">
-                                {{ op?.name}}
-                            </mat-option>
-                        </mat-optgroup>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="w-full lg:w-1/2 p-2">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Tên sự kiện</mat-label>
-                    <input type="text" matInput required [(ngModel)]="newEvent.name" />
-                    <mat-hint>Tên sự kiện tạo tự động hoặc viết tay</mat-hint>
-                </mat-form-field>
-            </div>
-        </div>
-        <ng-container *ngIf="newEvent.eventType?.key?.includes('ky-niem')">
-            <app-update-ky-niem [newEvent]="newEvent"></app-update-ky-niem>
-        </ng-container>
-        <p>
-            <strong class="text-[red] font-bold underline">LƯU Ý:</strong>
-            Hãy liên hệ chúng mình tại để được hỗ trợ tốt nhất bạn nhé!
-            <br />
-            Facebook:
-            <a href="https://www.facebook.com/caodaion" class="underline" target="_blank">facebook.com/caodaion</a>
-        </p>
-        <iframe *ngIf="googleFormsPath" [src]="
-              googleFormsPath | safe
-            " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-    </mat-expansion-panel>
 </mat-accordion>
+
+<ng-template #duplicateDialog>
+    <div mat-dialog-title>Trùng sự kiện</div>
+    <mat-dialog-content>
+        Sự kiện {{duplicateFound?.eventName}} đã được thêm.
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-flat-button [matDialogClose]="true">OK</button>
+    </mat-dialog-actions>
+</ng-template>

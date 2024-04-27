@@ -326,6 +326,7 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   }
 
   getAllDivisions() {
+    if (this.commonService.provinces?.length === 0) {
     this.commonService.fetchProvinceData()
       .subscribe((res: any) => {
         if (res?.status == 200) {
@@ -334,6 +335,11 @@ export class CpContentCreatorToolbarComponent implements OnInit {
           this.wards = res.wards
         }
       })
+    } else {
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
+    }
   }
 }
 

@@ -16,7 +16,7 @@ import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.consta
   templateUrl: './long-so.component.html',
   styleUrls: ['./long-so.component.scss']
 })
-export class LongSoComponent implements OnInit, AfterViewChecked {
+export class LongSoComponent implements OnInit {
 
   @Input() longSo: any;
 
@@ -55,35 +55,27 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
         }
       });
     this.getLongSoList()
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.eventService.isActiveMemberThanhSoList && this.memberThanhSo?.length === 0) {
+    if (this.memberThanhSo?.length === 0) {
       const memberThanhSo = localStorage.getItem('memberThanhSo')
       if (memberThanhSo !== 'null') {
         this.selectedThanhSo = memberThanhSo
       }
       this.getMemberThanhSo()
     }
-    if (this.selectedThanhSo) {
-      if (this.eventService.isActiveSelectedThanhSo && this.selectedThanhSoEvents?.length === 0 && this.refresh) {
-        this.getThanhSoEvent()
-      }
-    }
   }
 
   getMemberThanhSo() {
-    // this.eventService.getMemberThanhSo()
-    //   .subscribe((res: any) => {
-    //     if (res.code === 200) {
-    //       this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
-    //       this.currentUser = this.authService.getCurrentUser()
-    //       this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
-    //       if (this.selectedThanhSo) {
-    //         this.getThanhSoEvent()
-    //       }
-    //     }
-    //   })
+    this.eventService.fetchRegisteredMember()
+      .subscribe((res: any) => {
+        if (res.status === 200) {
+          this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
+          this.currentUser = this.authService.getCurrentUser()
+          this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
+          if (this.selectedThanhSo) {
+            this.getThanhSoEvent()
+          }
+        }
+      })
   }
 
   generateToken(item: any) {
@@ -189,124 +181,118 @@ export class LongSoComponent implements OnInit, AfterViewChecked {
   }
 
   getThanhSoEvent() {
-    // if (this.selectedThanhSo) {
-    //   this.eventService.getSelectedThanhSo({ key: this.selectedThanhSo })
-    //     .subscribe((res: any) => {
-    //       if (res.code === 200) {
-    //         this.selectedThanhSoEvents = res.data
-    //         this.refresh = true
-    //         this.mergeThanhSoEvent()
-    //       }
-    //     })
-    // }
+    if (this.selectedThanhSo) {
+      this.eventService.fetchThanhSoEvent(this.selectedThanhSo)
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            this.selectedThanhSoEvents = res.data
+            this.refresh = true
+            this.mergeThanhSoEvent()
+          }
+        })
+    }
   }
 
   mergeThanhSoEvent() {
     const newDate = new Date();
-    this.thanhSoTamTranEvent = this.selectedThanhSoEvents
-      ?.filter((item: any) => item.eventType?.includes('Kỷ Niệm'))
-      ?.map((item: any) => {
-        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.name == item?.eventTargetTitle)
-        let name = ''
-        let solar: any;
-        let lunar: any;
-        let eventName: any;
-        let eventLunar: any;
-        let longSo: any;
-        let soTemplate: any;
-        let subject: any;
-        if (item.eventType?.includes('Kỷ Niệm')) {
-          longSo = 'tam-tran'
-          soTemplate = 'so-cau-sieu'
-          let holyName = ''
-          if (foundTitle?.isHolyNameRequired) {
-            if (item?.gender == 'Nam') {
-              holyName = `${item.color} ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]} Thanh`
-            } else {
-              holyName = `Hương ${item?.eventTargetName.split(' ')[item?.eventTargetName.split(' ').length - 1]}`
-            }
+    const data = this.selectedThanhSoEvents.map((item: any) => {
+      if (typeof item?.data == 'string') {
+        item.data = JSON.parse(item?.data)
+      }
+      const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.key == item?.data?.title)
+      let name = ''
+      let eventAddress: any;
+      let solar: any;
+      let lunar: any;
+      let eventName: any;
+      let eventLunar: any;
+      let longSo: any;
+      let soTemplate: any;
+      let subject: any;
+      if (item.eventType?.includes('ky-niem')) {
+        longSo = 'tam-tran'
+        soTemplate = 'so-cau-sieu'
+        if (!item?.isSolarEvent) {
+          const newYearTime = this.calendarService.getConvertedFullDate({
+            "lunarDay": 1,
+            "lunarMonth": 1,
+            "lunarYear": new Date().getFullYear(),
+          }).convertLunar2Solar
+          let operationYear = new Date().getFullYear()
+          if (new Date() < new Date(`${newYearTime[2]}-${this.decimal.transform(newYearTime[1], '2.0-0')}-${this.decimal.transform(newYearTime[0], '2.0-0')}`)) {
+            operationYear -= 1
           }
-          if (!item?.isSolarEvent) {
-            const newYearTime = this.calendarService.getConvertedFullDate({
-              "lunarDay": 1,
-              "lunarMonth": 1,
-              "lunarYear": new Date().getFullYear(),
-            }).convertLunar2Solar
-            let operationYear = new Date().getFullYear()
-            if (new Date() < new Date(`${newYearTime[2]}-${this.decimal.transform(newYearTime[1], '2.0-0')}-${this.decimal.transform(newYearTime[0], '2.0-0')}`)) {
-              operationYear -= 1
-            }
-            eventLunar = {
-              "lunarDay": item?.date,
-              "lunarMonth": item?.month,
-              "lunarYear": operationYear,
-              "lunarTime": item?.thoi
-            }
-            const convertLunar2Solar = this.calendarService.getConvertedFullDate(eventLunar).convertLunar2Solar
-            solar = new Date(`${convertLunar2Solar[2]}-${this.decimal.transform(convertLunar2Solar[1], '2.0-0')}-${this.decimal.transform(convertLunar2Solar[0], '2.0-0')}`)
-            if (item?.thoi) {
-              const foundThoi = TIME_TYPE.data.find((tt: any) => tt.name.includes(item?.thoi))?.key
-              const startDate = `${JSON.parse(JSON.stringify(foundThoi)).split('-')[0]}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(0, 2)}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(-2)}`
-              solar = new Date(solar.setHours(startDate.split('-')[1]))
-            }
-            lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
-            subject = {
-              date: {
-                lunarYear: item?.eventTargetYear || '',
-                lunarMonth: item?.eventTargetMonth || '',
-                lunarDay: item?.eventTargetDate || '',
-                lunarTime: item?.eventTargetThoi?.split(' |')[0] || '',
-                solarYear: item?.eventTargetYearSolar || '',
-              },
-              details: {
-                name: item.eventTargetName,
-                age: item.eventTargetAge,
-                sex: item.gender == 'Name' ? 'male' : 'female',
-                holyName: holyName,
-                title: foundTitle?.key,
-                subTitle: null,
-                color: this.commonService.generatedSlug(item.color || ''),
-              },
-              key: item['Timestamp'],
-            }
-            item.chi = 'Nhựt'
-            item.name = 'Kỷ niệm'
-
-            const tokenData = <any>{
-              longSo: this.longSo,
-              soTemplate: 'so-cau-sieu',
-              eventName: `${item?.name?.replace('Sớ ', '')} ${item?.chi ? 'chi ' + item?.chi : ''}`,
-              eventLunar: eventLunar ? eventLunar : this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
-              subject: subject
-            }
-
-            this.generateToken(tokenData)
-              .subscribe((tk: any) => {
-                item.link = `soan-so/${tk}`
-              })
+          eventLunar = {
+            "lunarDay": item?.data.eventDate,
+            "lunarMonth": item?.data.eventMonth,
+            "lunarYear": operationYear,
           }
-          eventName = `Kỷ Niệm chi nhựt`
-          name = `${foundTitle?.eventTitle} Kỷ Niệm cho ${item?.job ? item?.job : (item?.eventTargetTitle?.includes('Chưa có Đạo') ? '' : item?.eventTargetTitle)} ${holyName || item.eventTargetName}`
+          const convertLunar2Solar = this.calendarService.getConvertedFullDate(eventLunar).convertLunar2Solar
+          solar = new Date(`${convertLunar2Solar[2]}-${this.decimal.transform(convertLunar2Solar[1], '2.0-0')}-${this.decimal.transform(convertLunar2Solar[0], '2.0-0')}`)
+          if (item?.thoi) {
+            const foundThoi = TIME_TYPE.data.find((tt: any) => tt.name.includes(item?.thoi))?.key
+            const startDate = `${JSON.parse(JSON.stringify(foundThoi)).split('-')[0]}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(0, 2)}-${JSON.parse(JSON.stringify(foundThoi)).split('-')[1].slice(-2)}`
+            solar = new Date(solar.setHours(startDate.split('-')[1]))
+          }
+          lunar = this.calendarService.getConvertedFullDate(solar).convertSolar2Lunar
+          lunar.lunarTime = item?.data?.eventTime
+          subject = {
+            date: {
+              lunarYear: item?.data?.year || '',
+              lunarMonth: item?.data?.month || '',
+              lunarDay: item?.data?.date || '',
+              lunarTime: item?.data?.time?.split(' |')[0] || '',
+            },
+            details: {
+              name: item?.data?.name,
+              age: item?.data?.age,
+              sex: item?.data?.sex,
+              holyName: item?.data?.holyName,
+              title: foundTitle?.key,
+              job: item?.data?.job,
+              color: this.commonService.generatedSlug(item?.data?.color || ''),
+              province: item?.data?.address?.province,
+              district: item?.data?.address?.district,
+              ward: item?.data?.address?.ward,
+              address: item?.data?.address?.address,
+            },
+            key: item['Timestamp']
+          }
         }
-        return {
-          key: item['Timestamp'],
-          name: name,
-          solar: solar?.toISOString(),
-          lunar: lunar,
-          parent: this.selectedThanhSo,
-          eventLunar: lunar,
-          longSo: longSo,
-          soTemplate: soTemplate,
-          eventName: eventName,
-          subject: subject,
-          link: item?.link,
-        }
-      })?.sort((a: any, b: any) => a.eventLunar.lunarMonth < b.eventLunar.lunarMonth || a.eventLunar.lunarDay < b.eventLunar.lunarDay ? -1 : 1)
-      ?.filter((item: any) => item.eventLunar.lunarMonth < 12 ? (item.eventLunar.lunarMonth >= this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar?.lunarMonth) : (item.eventLunar.lunarMonth === 12 || item.eventLunar.lunarMonth === 1))
-    const lunar = this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar
-    this.thanhSoTamTranEvent = this.thanhSoTamTranEvent?.filter((item: any) => {
-      return item?.lunar?.lunarDay >= lunar?.lunarDay && ((item?.lunar?.lunarMonth === lunar?.lunarMonth) || (item?.lunar?.lunarMonth === lunar?.lunarMonth + 1))
+        eventName = `Kỷ Niệm chi nhựt`
+        name = item?.eventName
+        eventAddress = item?.data?.eventAddress
+      }
+      return {
+        key: item['Timestamp'],
+        name: name,
+        solar: solar?.toISOString(),
+        lunar: lunar,
+        parent: this.selectedThanhSo,
+        eventLunar: lunar,
+        longSo: longSo,
+        soTemplate: soTemplate,
+        eventName: eventName,
+        eventAddress: eventAddress,
+        subject: subject
+      }
     })
-
+    this.thanhSoTamTranEvent = data
+      ?.sort((a: any, b: any) => a.eventLunar.lunarMonth < b.eventLunar.lunarMonth || a.eventLunar.lunarDay < b.eventLunar.lunarDay ? -1 : 1)
+      ?.filter((item: any) => item.eventLunar.lunarMonth < 12 ? (item.eventLunar.lunarMonth >= this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar?.lunarMonth) : (item.eventLunar.lunarMonth === 12 || item.eventLunar.lunarMonth === 1))
+    this.thanhSoTamTranEvent?.forEach((item: any) => {
+      const tokenData = <any>{
+        longSo: this.longSo,
+        soTemplate: 'so-cau-sieu',
+        eventName: item?.eventName,
+        eventAddress: item?.eventAddress,
+        eventLunar: item?.eventLunar ? item?.eventLunar : this.calendarService.getConvertedFullDate(newDate).convertSolar2Lunar,
+        subject: item?.subject
+      }
+      this.generateToken(tokenData)
+        .subscribe((tk: any) => {
+          item.link = `soan-so/${tk}`
+        })
+    })
   }
 }

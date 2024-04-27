@@ -1,7 +1,7 @@
 <div class="wrapper-container lunar-calendar-container">
-  <mat-toolbar class="lunar-calendar-toolbar !h-auto">
+  <mat-toolbar class="lunar-calendar-toolbar !h-auto !pr-0">
     <div class="!h-auto w-full">
-      <div class="d-flex justify-content-between !h-auto w-full">
+      <div class="d-flex justify-content-between !h-auto w-full overflow-hidden pr-4">
         <div class="d-flex align-items-center w-100">
           <div class="d-flex align-items-center justify-content-between"
             [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''">
@@ -118,16 +118,19 @@
         </div>
         <button mat-icon-button [matTooltip]="
             expaned ? 'Đóng mục bổ sung hiển thị' : 'Mở mục bổ sung hiển thị'
-          " class="transition-all" (click)="expaned = !expaned" [ngClass]="{ 'rotate-180': expaned }"
+          " class="transition-all relative" (click)="expaned = !expaned" [ngClass]="{ 'rotate-180': expaned }"
           *ngIf="isActiveMoreInformation">
           <mat-icon>expand_circle_down</mat-icon>
+          <span *ngIf="suggetExpand && !expaned"
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75 top-0 left-0"></span>
         </button>
       </div>
       <mat-divider *ngIf="expaned"></mat-divider>
       <div *ngIf="expaned && isActiveMoreInformation" class="w-full">
-        <div class="text-xl my-3">Bổ sung hiển thị</div>
+        <button class="w-full" mat-stroked-button [color]="'primary'" (click)="expaned = false">XEM LỊCH</button>
+        <div class="w-full whitespace-break-spaces text-center my-3">{{guestMessage}}</div>
         <div class="w-full flex flex-col">
-          <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)"></app-update-event>
+          <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)" [selectedThanhSoSetting]="selectedThanhSoSetting"></app-update-event>
         </div>
       </div>
     </div>

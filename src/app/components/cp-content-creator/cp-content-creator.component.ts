@@ -322,14 +322,20 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   getAllDivisions() {
-    this.commonService.fetchProvinceData()
-      .subscribe((res: any) => {
-        if (res?.status == 200) {
-          this.provinces = res.provinces
-          this.districts = res.districts
-          this.wards = res.wards
-        }
-      })
+    if (this.commonService.provinces?.length === 0) {
+      this.commonService.fetchProvinceData()
+        .subscribe((res: any) => {
+          if (res?.status == 200) {
+            this.provinces = res.provinces
+            this.districts = res.districts
+            this.wards = res.wards
+          }
+        })
+    } else {
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
+    }
   }
 
   addComboLocation() {

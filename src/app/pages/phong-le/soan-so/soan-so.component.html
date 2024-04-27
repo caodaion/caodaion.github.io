@@ -1,24 +1,16 @@
 <ng-container *ngIf="!isPhongLeAccessible">
   <div class="flex-1 flex flex-col justify-center items-center">
     <p class="text-center text-3xl my-3">{{ message }}</p>
-    <button
-      mat-flat-button
-      [color]="'primary'"
-      *ngIf="buttonSettings"
-      [routerLink]="buttonSettings?.link"
-    >
+    <button mat-flat-button [color]="'primary'" *ngIf="buttonSettings" [routerLink]="buttonSettings?.link">
       {{ buttonSettings?.label }}
     </button>
   </div>
 </ng-container>
 <ng-container *ngIf="isPhongLeAccessible">
   <div class="wrapper-container soan-so-content-container">
-    <app-header
-      class="header"
-      [prevPage]="{
+    <app-header class="header" [prevPage]="{
         navigate: { link: '/tac-vu/phong-le' }
-      }"
-    >
+      }">
       <div class="soan-so-header">
         <app-header-title>{{ editData?.name }}</app-header-title>
       </div>
@@ -26,31 +18,16 @@
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <div class="soan-so-container-wrapper">
       <div *ngIf="editData" class="h-100">
-        <mat-tab-group
-          class="h-full"
-          (selectedIndexChange)="onChangeSelectedIndex($event)"
-        >
+        <mat-tab-group class="h-full" (selectedIndexChange)="onChangeSelectedIndex($event)">
           <mat-tab [label]="'Chỉnh sửa'">
-            <cp-content-creator
-              #contentCreator
-              [rootContent]="content"
-              [data]="content"
-              (save)="onSaveContent()"
-              (reset)="getCotnent()"
-              [contentEditable]="contentEditable"
-              [isShowFontSizeSelect]="false"
-            ></cp-content-creator>
+            <cp-content-creator #contentCreator [rootContent]="content" [data]="content" (save)="onSaveContent(false)"
+              (reset)="getCotnent()" [contentEditable]="contentEditable"
+              [isShowFontSizeSelect]="false"></cp-content-creator>
           </mat-tab>
           <mat-tab [label]="'Xem trước'">
-            <cp-content-creator
-              [rootContent]="previewContent"
-              [data]="previewContent"
-              [contentEditable]="contentEditable"
-              [isShowController]="false"
-              (nextFontSize)="updateFontSize($event)"
-              [isShowFontSizeSelect]="true"
-              [topGuide]="content.name"
-            ></cp-content-creator>
+            <cp-content-creator [rootContent]="previewContent" [data]="previewContent"
+              [contentEditable]="contentEditable" [isShowController]="false" (nextFontSize)="updateFontSize($event)"
+              [isShowFontSizeSelect]="true" [topGuide]="content.name"></cp-content-creator>
           </mat-tab>
         </mat-tab-group>
       </div>
