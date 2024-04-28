@@ -163,10 +163,12 @@
           <button
             mat-icon-button
             [matMenuTriggerFor]="profileMenu"
-            class="account-logo"
+            class="account-logo relative"
             mat-icon-button
+            [matTooltip]="currentUser?.name || currentUser?.userName"
           >
             <mat-icon>account_circle</mat-icon>
+            <div class="absolute bg-[#34a853] h-3 w-3 rounded-full top-7"></div>
           </button>
           <mat-menu #profileMenu="matMenu">
             <button

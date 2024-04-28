@@ -77,6 +77,7 @@ export class SoanSoComponent implements OnInit {
         console.log(this.editData);
       }
     })
+    this.isLoading = true
     this.getAllDivisions()
     this.getDefaultLocation()
     this.getCotnent()
@@ -647,6 +648,7 @@ export class SoanSoComponent implements OnInit {
       if (foundQueQuan) {
         this.applyLocation('que-quan')
       }
+      this.isLoading = false
     }
     if (this.commonService.provinces?.length === 0) {
       this.commonService.fetchProvinceData()

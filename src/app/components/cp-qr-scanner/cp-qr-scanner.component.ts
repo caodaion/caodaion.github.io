@@ -37,9 +37,9 @@ export class CpQrScannerComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.action.stop()
-    this.action.isReady.pipe(delay(3000)).subscribe(() => {
-      this.action.start();
-    });
+    this.action.start();
+    // this.action.isReady.pipe(delay(3000)).subscribe(() => {
+    // });
   }
 
   ngOnDestroy(): void {
