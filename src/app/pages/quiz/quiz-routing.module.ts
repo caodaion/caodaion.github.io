@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { QuizComponent } from './quiz.component';
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { QuizSectionComponent } from './quiz-section/quiz-section.component';
+import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: ':sectionKey',
         component: QuizSectionComponent
+      },
+      {
+        path: ':sectionKey/:gateKey/:lessonKey',
+        component: QuizLessonComponent
       }
     ]
   }

@@ -1,4 +1,4 @@
-<mat-toolbar class="!bg-[#eaf1fb] sticky top-0">
+<mat-toolbar class="!bg-[#eaf1fb] sticky top-0 z-10">
     <button mat-icon-button [routerLink]="'/tac-vu/quiz'"><mat-icon>arrow_back</mat-icon></button>
     <div class="flex-1"></div>
     <div>{{section?.name}}</div>
@@ -40,9 +40,9 @@
         </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="mt-4 lg:mt-6">
+    <div class="w-full">
         <ng-container *ngFor="let gate of section?.gates">
-            <div class="border rounded-2xl mb-4 lg:mb-6 p-4 lg:p-6">
+            <div class="border rounded-2xl my-4 lg:my-6 p-4 lg:p-6">
                 <div class="text-2xl font-bold mb-4 lg:mb-6">{{gate?.setting?.name}}</div>
                 <ng-container *ngIf="gate?.key !== updatedGate?.key">
                     <div [innerHTML]="gate?.setting?.description"></div>
@@ -54,19 +54,20 @@
                     </mat-form-field>
                 </ng-container>
             </div>
-            <div>
+            <div class="my-4 lg:my-6">
                 <div class="flex flex-wrap justify-around">
-                    <div class="w-1/2 lg:w-1/4 flex flex-col items-center justify-between mt-4 lg:mt-6"
+                    <div class="w-1/2 lg:w-1/4 flex flex-col items-center justify-between mt-4 lg:mt-6 mb-6"
                         *ngFor="let lesson of gate?.lesson">
-                        <div class="w-40 h-40 rounded-full overflow-hidden bg-slate-100"
+                        <div class="w-20 lg:w-40 h-20 lg:h-40 rounded-full overflow-hidden bg-slate-100"
                             [ngClass]="{'bg-transparent': lesson?.setting?.loaded, 'animate-pulse': !lesson?.setting?.loaded}">
                             <img *ngIf="lesson.setting.image" class="w-full h-full object-cover cursor-pointer"
-                                [routerLink]="lesson?.key" [src]="lesson.setting.image" [alt]="lesson?.setting?.name"
-                                [ngStyle]="{
+                                [routerLink]="gate?.key + '/' + lesson?.key" [src]="lesson.setting.image"
+                                [alt]="lesson?.setting?.name" [ngStyle]="{
                                     'opacity': lesson?.setting?.loaded ? '1' : '0'
                                     }" (load)="updatedImage(lesson.setting, $event)">
                         </div>
-                        <div class="text-center pt-4 font-bold cursor-pointer" [routerLink]="lesson?.key">
+                        <div class="text-center pt-4 font-bold cursor-pointer"
+                            [routerLink]="gate?.key + '/' + lesson?.key">
                             {{lesson?.setting?.name}}
                         </div>
                         <mat-form-field *ngIf="section?.setting?.allowToEdit">
@@ -88,6 +89,7 @@
                     </button>
                 </div>
             </div>
+            <mat-divider></mat-divider>
         </ng-container>
     </div>
     <div class="flex flex-wrap mt-6" *ngIf="!updatedGate?.key && section?.setting?.allowToEdit">

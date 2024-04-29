@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,16 +24,39 @@ export class QuizSectionComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private quizService: QuizService,
     private commonService: CommonService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
   ) {
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((query: any) => {
       this.sectionKey = query['sectionKey']
+      setTimeout(() => {
+        this.breakpointObserver
+          .observe(['(max-width: 600px)'])
+          .subscribe((state: BreakpointState) => {
+            if (state.matches) {
+              localStorage.setItem(
+                'currentLayout',
+                JSON.stringify({
+                  isHideToolbar: true,
+                  isHideBottomNavBar: true,
+                })
+              );
+            } else {
+              localStorage.setItem(
+                'currentLayout',
+                JSON.stringify({
+                  isHideToolbar: false,
+                  isHideBottomNavBar: false,
+                })
+              );
+            }
+          });
+      }, 0)
       this.fetchQuiz()
     })
   }
@@ -63,7 +87,6 @@ export class QuizSectionComponent implements OnInit {
   getSection() {
     this.section = this.quiz?.find((item: any) => item?.key === this.sectionKey)
     this.rawSection = JSON.parse(JSON.stringify(this.quiz?.find((item: any) => item?.key === this.sectionKey)))
-    console.log(this.section);
   }
 
   onUpdateGate(gate?: any) {
@@ -88,15 +111,11 @@ export class QuizSectionComponent implements OnInit {
     const setting = <any>{}
     setting.name = lesson.name
     gate.lesson?.push({ key: this.commonService.generatedSlug(lesson.name), setting: setting })
-    console.log(this.section);
   }
 
   saveNewData() {
     this.updatingDataIndex = 0
     this.googleFormsPaths = <any>[]
-    console.log(this.rawSection.gates);
-    console.log(this.section.gates);
-    console.log(this.googleFormsPaths);
     const converData = (params: any) => {
       let path = `https://docs.google.com/forms/d/e/${this.section?.setting?.googleFormsId}/viewform`
       if (params.base) {
@@ -160,10 +179,10 @@ export class QuizSectionComponent implements OnInit {
         this.saveData()
       })
     }
-  }  
+  }
 
   onPress(evt: any) {
-    var charCode = evt.charCode;    
+    var charCode = evt.charCode;
     if (charCode == 46)
       return false;
     return true;

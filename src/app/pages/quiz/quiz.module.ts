@@ -23,13 +23,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from "../../shared/shared.module";
+import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
 
 
 @NgModule({
     declarations: [
         QuizComponent,
         QuizListComponent,
-        QuizSectionComponent
+        QuizSectionComponent,
+        QuizLessonComponent
     ],
     imports: [
         CommonModule,
