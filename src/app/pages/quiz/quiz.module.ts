@@ -24,6 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from "../../shared/shared.module";
 import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -55,6 +57,11 @@ import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
         MatFormFieldModule,
         MatInputModule,
         SharedModule,
+        DecimalPipe,
+        MatProgressBarModule,
+        MatRadioModule
+    ],
+    providers: [
         DecimalPipe
     ]
 })

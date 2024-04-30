@@ -61,9 +61,23 @@ export class QuizService {
                     const foundLesson = res.filter((item: any) => item.base.includes(fglk) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 2)
                     foundLesson?.filter((item: any) => item?.option === 'setting')?.forEach((ls: any) => {
                       lessonSetting[ls?.question] = ls?.answer
-                    })                    
+                    })
                     responeLesson.key = fglk.split('.')[1]
                     responeLesson.setting = lessonSetting
+                    const foundQuestion = res.filter((item: any) => item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
+                    foundQuestion?.forEach((fq: any) => {
+                      const responseQuestion = <any>{}
+                      responseQuestion.key = fq?.key
+                      responseQuestion.answer = fq?.answer
+                      responseQuestion.question = fq?.question
+                      if (typeof fq?.option == 'string') {
+                        responseQuestion.option = JSON.parse(fq?.option)?.map((po: any) => { return { text: po } })
+                      }
+                      if (!responeLesson?.questions) {
+                        responeLesson.questions = <any>[]
+                      }
+                      responeLesson.questions.push(responseQuestion)
+                    })
                     if (!responseGate.lesson) {
                       responseGate.lesson = <any>[]
                     }

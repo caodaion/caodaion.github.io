@@ -25,7 +25,7 @@
                     <img class="w-full lg:w-1/2 h-80 object-contain" [src]="section?.setting?.logo" [ngStyle]="{
                             'opacity': section?.loaded ? '1' : '0',
                             'height': section?.loaded ? '320px' : '0'
-                            }" [alt]="section?.name" (load)="updatedImage(section, 'logo')">
+                            }" [alt]="section?.name" (load)="updatedImage(section, $event)">
                 </div>
             </div>
         </div>
