@@ -4,11 +4,11 @@
             <div class="flex flex-col justify-between w-full lg:w-1/2">
                 <div class="w-full">
                     <div class="text-3xl font-bold mb-4 lg:mb-6">{{section?.name}}</div>
-                    <p class="whitespace-break-spaces" [innerHTML]="section?.setting?.description"></p>
+                    <app-cp-markdown [data]="section?.setting?.description"></app-cp-markdown>
                 </div>
                 <div class="w-full">
-                    <div class="w-full h-8 bg-gray-50 rounded-full relative" *ngIf="section?.gates?.length > 0">
-                        <div class="w-full h-full flex justify-center items-center">/{{section?.gates?.length | number:
+                    <div class="w-full h-8 bg-gray-50 rounded-full relative" *ngIf="section?.xp > 0">
+                        <div class="w-full h-full flex justify-center items-center">00/{{section?.xp | number:
                             '2.0-0'}}</div>
                         <!-- TODO: <div></div> -->
                     </div>

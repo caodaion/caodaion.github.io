@@ -34,6 +34,7 @@ export class QuizService {
             const quiz = <any>{}
             quiz.key = objectKey
             quiz.name = sheetName
+            quiz.xp = 0
             this.sheetService.decodeRawSheetData(ref.quizWorkbook.Sheets[sheetName])
               .subscribe((res: any) => {
                 const rawSetting = res?.filter((item: any) => item.base === 'global' && item?.option === 'setting')
@@ -77,6 +78,7 @@ export class QuizService {
                         responeLesson.questions = <any>[]
                       }
                       responeLesson.questions.push(responseQuestion)
+                      quiz.xp++
                     })
                     if (!responseGate.lesson) {
                       responseGate.lesson = <any>[]

@@ -8,12 +8,12 @@
     <div *ngIf="section" class="mb-4 lg:mb-6 p-4 lg:p-6 border rounded-2xl w-full">
         <div class="flex flex-wrap">
             <div class="flex flex-col justify-between w-full lg:w-1/2">
-                <div class="w-full">
+                <div class="w-full pb-4">
                     <div class="text-3xl font-bold mb-4 lg:mb-6">{{section?.name}}</div>
-                    <p class="whitespace-break-spaces" [innerHTML]="section?.setting?.description"></p>
+                    <app-cp-markdown [data]="section?.setting?.description"></app-cp-markdown>
                 </div>
-                <div class="w-full h-8 bg-gray-50 rounded-full relative" *ngIf="section?.gates?.length > 0">
-                    <div class="w-full h-full flex justify-center items-center">/{{section?.gates?.length | number:
+                <div class="w-full h-8 bg-gray-50 rounded-full relative" *ngIf="section?.xp > 0">
+                    <div class="w-full h-full flex justify-center items-center">00/{{section?.xp | number:
                         '2.0-0'}}
                     </div>
                     <!-- TODO: <div></div> -->
@@ -42,17 +42,27 @@
     <mat-divider></mat-divider>
     <div class="w-full">
         <ng-container *ngFor="let gate of section?.gates">
-            <div class="border rounded-2xl my-4 lg:my-6 p-4 lg:p-6">
-                <div class="text-2xl font-bold mb-4 lg:mb-6">{{gate?.setting?.name}}</div>
-                <ng-container *ngIf="gate?.key !== updatedGate?.key">
-                    <div [innerHTML]="gate?.setting?.description"></div>
-                </ng-container>
-                <ng-container *ngIf="gate?.key === updatedGate?.key">
-                    <mat-form-field class="w-full" appearance="outline">
-                        <mat-label>Mô tả cửa</mat-label>
-                        <textarea matInput [(ngModel)]="updatedGate.setting.description"></textarea>
-                    </mat-form-field>
-                </ng-container>
+            <div class="border rounded-2xl my-4 lg:my-6 relative">
+                <div class="p-2 lg:p-6">
+                    <div class="text-[1.5rem] font-bold mb-4 lg:mb-6"
+                        [ngClass]="{'text-center bg-white !text-[5vw] he cutout p-4 !m-0': !!gate?.setting?.image}">
+                        {{gate?.setting?.name}}
+                    </div>
+                    <div [ngClass]="{'text-center bg-white pb-4': !!gate?.setting?.image}"
+                        [innerHTML]="gate?.setting?.description"></div>
+                    <ng-container *ngIf="gate?.key === updatedGate?.key">
+                        <mat-form-field class="w-full" appearance="outline">
+                            <mat-label>Mô tả cửa</mat-label>
+                            <textarea matInput [(ngModel)]="updatedGate.setting.description"></textarea>
+                        </mat-form-field>
+                        <mat-form-field class="w-full" appearance="outline">
+                            <mat-label>Ảnh bì</mat-label>
+                            <input type="text" matInput [(ngModel)]="updatedGate.setting.image">
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+                <img *ngIf="gate?.setting?.image" [src]="gate?.setting?.image" [alt]="gate?.setting?.name"
+                    class="absolute top-0 right-0 bottom-0 left-0 h-full w-full object-cover object-center z-[-1] rounded-2xl">
             </div>
             <div class="my-4 lg:my-6">
                 <div class="flex flex-wrap justify-around">
@@ -68,10 +78,10 @@
                         </div>
                         <div class="text-center pt-4 font-bold cursor-pointer"
                             [routerLink]="gate?.key + '/' + lesson?.key">
-                            {{lesson?.setting?.name}}
+                            {{lesson?.setting?.name}} ({{lesson?.questions?.length | number: '2.0-0'}})
                         </div>
                         <mat-form-field *ngIf="section?.setting?.allowToEdit">
-                            <mat-label>Ảnh</mat-label>
+                            <mat-label>Ảnh nền</mat-label>
                             <input type="text" matInput [(ngModel)]="lesson.setting.image">
                         </mat-form-field>
                     </div>

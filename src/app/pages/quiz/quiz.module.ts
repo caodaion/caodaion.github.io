@@ -26,6 +26,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
+import { CpMarkdownModule } from "../../components/cp-markdown/cp-markdown.module";
 
 
 @NgModule({
@@ -34,6 +35,9 @@ import { MatRadioModule } from '@angular/material/radio';
         QuizListComponent,
         QuizSectionComponent,
         QuizLessonComponent
+    ],
+    providers: [
+        DecimalPipe
     ],
     imports: [
         CommonModule,
@@ -59,10 +63,8 @@ import { MatRadioModule } from '@angular/material/radio';
         SharedModule,
         DecimalPipe,
         MatProgressBarModule,
-        MatRadioModule
-    ],
-    providers: [
-        DecimalPipe
+        MatRadioModule,
+        CpMarkdownModule
     ]
 })
 export class QuizModule { }

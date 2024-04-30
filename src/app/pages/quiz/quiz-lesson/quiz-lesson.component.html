@@ -35,9 +35,7 @@
                                 (input)="onUpdateQuestion(item, index)"></textarea>
                         </mat-form-field>
                     </ng-container>
-                    <div class="w-full text-center text-lg whitespace-break-spaces my-6 px-2 lg:px-0"
-                        [innerHTML]="item?.question">
-                    </div>
+                    <app-cp-markdown [data]="item.question"></app-cp-markdown>
                     <mat-radio-group [(ngModel)]="item.answer" class="w-full flex flex-wrap justify-around mb-9">
                         <ng-container *ngFor="let asnwer of item?.option; let index = index">
                             <div class="p-2 lg:p-4 w-1/2 lg:w-1/4" (click)="item.selected = asnwer?.text">

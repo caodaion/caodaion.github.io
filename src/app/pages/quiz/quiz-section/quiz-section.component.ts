@@ -160,6 +160,9 @@ export class QuizSectionComponent implements OnInit {
         if (sg?.setting?.description) {
           converData({ base: sg?.key, question: 'description', option: 'setting', answer: sg?.setting?.description, type: 'Mô tả ngắn cửa', key: sg?.key })
         }
+        if (sg?.setting?.image) {
+          converData({ base: sg?.key, question: 'image', option: 'setting', answer: sg?.setting?.image, type: 'Ảnh bì', key: sg?.key })
+        }
         sg?.lesson?.forEach((ss: any) => {
           updateLesson(ss)
         })
