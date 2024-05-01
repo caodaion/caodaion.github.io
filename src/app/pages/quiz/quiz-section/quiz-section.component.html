@@ -1,8 +1,13 @@
 <mat-toolbar class="!bg-[#eaf1fb] sticky top-0 z-10">
     <button mat-icon-button [routerLink]="'/tac-vu/quiz'"><mat-icon>arrow_back</mat-icon></button>
     <div class="flex-1"></div>
-    <div>{{section?.name}}</div>
+    <div class="text-ellipsis overflow-hidden">{{section?.name}}</div>
     <div class="flex-1"></div>
+    <button-share [title]="section?.name">
+        <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'">
+            <mat-icon>share</mat-icon>
+        </button>
+    </button-share>
 </mat-toolbar>
 <div class="p-4 w-full pb-16">
     <div *ngIf="section" class="mb-4 lg:mb-6 p-4 lg:p-6 border rounded-2xl w-full">

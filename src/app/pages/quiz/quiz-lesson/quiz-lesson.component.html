@@ -7,7 +7,7 @@
     <mat-toolbar class="!bg-[#eaf1fb] sticky top-0 z-10">
         <button mat-icon-button [routerLink]="'/tac-vu/quiz/' + section?.key"><mat-icon>arrow_back</mat-icon></button>
         <div class="flex-1"></div>
-        <div>{{lesson?.setting?.name}}</div>
+        <div class="text-ellipsis overflow-hidden">{{lesson?.setting?.name}}</div>
         <div class="flex-1"></div>
         <button-share [title]="lesson?.setting?.name">
             <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'">
