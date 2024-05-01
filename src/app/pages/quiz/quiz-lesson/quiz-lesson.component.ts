@@ -31,6 +31,7 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
   correctlyCount: number = 0
   inCorrectlyCount: number = 0
   message: any;
+  isPhone: any;
 
   @ViewChild('updateContent') updateContent!: any;
   @ViewChild('correctAnswer') correctAnswer!: ElementRef;
@@ -58,6 +59,7 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
         this.breakpointObserver
           .observe(['(max-width: 600px)'])
           .subscribe((state: BreakpointState) => {
+            this.isPhone = state.matches
             if (state.matches) {
               localStorage.setItem(
                 'currentLayout',
@@ -107,7 +109,7 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
     ref.rawGate = JSON.parse(JSON.stringify(this.section?.gates?.find((item: any) => item?.key === this.gateKey)))
     this.gate = JSON.parse(JSON.stringify(ref.rawGate))
     ref.rawLesson = JSON.parse(JSON.stringify(this.gate?.lesson?.find((item: any) => item?.key === this.lessonKey)))
-    this.lesson = JSON.parse(JSON.stringify(ref.rawLesson))
+    this.lesson = JSON.parse(JSON.stringify(ref.rawLesson))    
     if (!this.section?.setting?.allowToEdit) {
       this.reRenderList(this.lesson?.questions, this.rawLesson?.questions)
     }
@@ -136,7 +138,9 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
     if (!this.lesson.questions) {
       this.lesson.questions = <any>[]
     }
-    const newQuestion = <any>{}
+    const newQuestion = <any>{
+      setting: <any>{}
+    }
     this.lesson.questions?.push(newQuestion)
   }
 
@@ -170,10 +174,22 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
       }
       this.googleFormsPaths.push({ path, dialogData: params })
     }
+    if (this.lesson?.setting?.references) {
+      if (this.rawLesson?.setting?.references !== this.lesson?.setting?.references) {
+        converData({ base: `${this.gateKey}.${this.lessonKey}`, key: `${this.gateKey}.${this.lessonKey}`, question: 'references', answer: this.lesson?.setting?.references, option: 'setting' })
+      }
+    }
+
     this.lesson?.questions?.forEach((item: any) => {
       const foundQuestion = this.rawLesson?.questions?.find((lq: any) => lq?.key === item?.key)
       if (!foundQuestion) {
         converData({ base: `${this.sectionKey}.${this.gateKey}.${this.lessonKey}`, key: item?.key, question: item?.question, answer: item?.answer, option: JSON.stringify(item?.option?.map((io: any) => io?.text)?.filter((io: any) => !!io)) })
+        if (item?.setting?.image) {
+          converData({ base: `${this.sectionKey}.${this.gateKey}.${this.lessonKey}`, key: item?.key, question: 'image', answer: item?.setting?.image, option: 'setting' })
+        }
+        if (item?.setting?.youtube) {
+          converData({ base: `${this.sectionKey}.${this.gateKey}.${this.lessonKey}`, key: item?.key, question: 'youtube', answer: item?.setting?.youtube, option: 'setting' })
+        }
       }
     });
     this.saveData()
@@ -240,6 +256,14 @@ export class QuizLessonComponent implements OnInit, OnDestroy {
       this.router
         .navigate([path.join('/')]);
     }, 0)
+  }
+
+  onViewReferences() {
+    window.open(`${this.lesson.setting.references}`, '_blank')
+  }
+
+  updatedImage(item: any, event?: any) {
+    item.loaded = true
   }
 
   ngOnDestroy(): void {

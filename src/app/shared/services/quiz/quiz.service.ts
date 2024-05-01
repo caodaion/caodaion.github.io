@@ -65,12 +65,20 @@ export class QuizService {
                     })
                     responeLesson.key = fglk.split('.')[1]
                     responeLesson.setting = lessonSetting
-                    const foundQuestion = res.filter((item: any) => item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
+                    const foundQuestion = res.filter((item: any) => item?.option !== 'setting' && item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
+                    const foundSetting = res.filter((item: any) => item?.option == 'setting' && item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
                     foundQuestion?.forEach((fq: any) => {
                       const responseQuestion = <any>{}
                       responseQuestion.key = fq?.key
                       responseQuestion.answer = fq?.answer
                       responseQuestion.question = fq?.question
+                      responseQuestion.setting = <any>{}
+                      const foundQuestionSetting = foundSetting?.filter((fqs: any) => fqs.key === fq.key)
+                      if (foundQuestionSetting?.length > 0) {
+                        foundQuestionSetting?.forEach((fqs: any) => {
+                          responseQuestion.setting[fqs?.question] = fqs?.answer
+                        })
+                      }
                       if (typeof fq?.option == 'string') {
                         responseQuestion.option = JSON.parse(fq?.option)?.map((po: any) => { return { text: po } })
                       }

@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class CpMarkdownComponent {
   @Input() data?: any;
+  @Input() classes?: any;
   @Input() id?: any = '';
 }

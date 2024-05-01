@@ -27,6 +27,7 @@ import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { CpMarkdownModule } from "../../components/cp-markdown/cp-markdown.module";
+import { ButtonShareModule } from "../../components/button-share/button-share.module";
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { CpMarkdownModule } from "../../components/cp-markdown/cp-markdown.modul
         DecimalPipe,
         MatProgressBarModule,
         MatRadioModule,
-        CpMarkdownModule
+        CpMarkdownModule,
+        ButtonShareModule
     ]
 })
 export class QuizModule { }

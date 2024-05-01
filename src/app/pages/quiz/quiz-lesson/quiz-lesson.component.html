@@ -9,21 +9,38 @@
         <div class="flex-1"></div>
         <div>{{lesson?.setting?.name}}</div>
         <div class="flex-1"></div>
+        <button-share [title]="lesson?.setting?.name">
+            <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'">
+                <mat-icon>share</mat-icon>
+            </button>
+        </button-share>
     </mat-toolbar>
     <div class="flex-1 flex flex-col justify-between w-full pb-0 max-h-full overflow-auto py-4 px-0 lg:p-4">
         <div class="flex items-center px-2 lg:px-0">
             <div class="w-full h-6 bg-gray-100 rounded-full">
                 <div class="h-full rounded-full bg-[#4285f4]" [ngStyle]="{'width': calculatedProgressBar()}"></div>
             </div>
+            <mat-form-field class="w-full" *ngIf="section?.setting?.allowToEdit">
+                <mat-label>Tài liệu tham khảo</mat-label>
+                <input type="text" matInput [(ngModel)]="lesson.setting.references">
+            </mat-form-field>
+            <button mat-stroked-button [color]="'primary'" *ngIf="lesson?.setting?.references && !isPhone"
+                [matTooltip]="'Đọc tài liệu tham khảo'" (click)="onViewReferences()"
+                class="whitespace-nowrap !min-w-[auto] ml-4"><mat-icon>library_books</mat-icon>
+                <span class="hidden lg:inline-block">Tài liệu</span></button>
+            <button mat-icon-button [color]="'primary'" *ngIf="lesson?.setting?.references && isPhone"
+                [matTooltip]="'Đọc tài liệu tham khảo'" (click)="onViewReferences()"
+                class="whitespace-nowrap !min-w-[auto] ml-4"><mat-icon>library_books</mat-icon>
+            </button>
             <button *ngIf="section?.setting?.allowToEdit" mat-flat-button [color]="'primary'" (click)="updateQuestion()"
-                class="w-full">
+                class="!min-w-[auto]">
                 <mat-icon>add</mat-icon>
                 <span class="whitespace-nowrap">Thêm câu hỏi</span>
             </button>
         </div>
         <ng-container *ngFor="let item of lesson?.questions; let index = index">
             <ng-container *ngIf="answeredIndex === index">
-                <div class="flex-1 flex flex-col items-center max-h-full overflow-auto justify-start lg:justify-center">
+                <div class="flex-1 flex flex-col items-center max-h-full overflow-auto justify-start pt-12">
                     <ng-container *ngIf="section?.setting?.allowToEdit">
                         <mat-form-field [appearance]="'outline'" class="w-full">
                             <mat-label>Mã câu hỏi</mat-label>
@@ -35,7 +52,37 @@
                                 (input)="onUpdateQuestion(item, index)"></textarea>
                         </mat-form-field>
                     </ng-container>
-                    <app-cp-markdown [data]="item.question"></app-cp-markdown>
+                    <ng-container *ngIf="item.question">
+                        <div class="flex flex-wrap justify-around items-center w-full">
+                            <ng-container *ngIf="section?.setting?.allowToEdit">
+                                <div class="w-full lg:w-1/4 p-4">
+                                    <mat-form-field [appearance]="'outline'" class="w-full">
+                                        <mat-label>Câu hỏi hình ảnh</mat-label>
+                                        <input type="text" matInput [(ngModel)]="item.setting.image">
+                                    </mat-form-field>
+                                </div>
+                                <div class="w-full lg:w-1/4 p-4">
+                                    <mat-form-field [appearance]="'outline'" class="w-full">
+                                        <mat-label>Video YouTube</mat-label>
+                                        <input type="text" matInput [(ngModel)]="item.setting.youtube">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <iframe *ngIf="item?.setting?.youtube" class="w-full"
+                            [src]="item?.setting?.youtube | safe" frameborder="0" allowfullscreen></iframe>
+                        <div *ngIf="item?.setting?.image" class="max-h-80 rounded-md bg-slate-100"
+                            [ngClass]="{'bg-transparent': item?.setting?.loaded, 'animate-pulse': !item?.setting?.loaded}">
+                            <img [src]="item.setting.image" [alt]="item.question" [ngStyle]="{
+                                'opacity': item?.setting?.loaded ? '1' : '0'
+                                }" class="max-h-80 w-full object-contain object-center rounded-md"
+                                (load)="updatedImage(item.setting, $event)">
+                        </div>
+
+                    </ng-container>
+                    <div class="p-4">
+                        <app-cp-markdown [data]="item.question" [classes]="'text-center'"></app-cp-markdown>
+                    </div>
                     <mat-radio-group [(ngModel)]="item.answer" class="w-full flex flex-wrap justify-around mb-9">
                         <ng-container *ngFor="let asnwer of item?.option; let index = index">
                             <div class="p-2 lg:p-4 w-1/2 lg:w-1/4" (click)="item.selected = asnwer?.text">
@@ -112,8 +159,8 @@
                                 KIỂM TRA
                             </button>
                             <button mat-flat-button [color]="item.correctly === false ? 'warn' : 'primary'"
-                                (click)="onNext()" [disabled]="!item.selected" *ngIf="
-                                (item.correctly === true || item.correctly === false)
+                                (click)="onNext()" [disabled]="!section?.setting?.allowToEdit && !item.selected" *ngIf="
+                                (item.correctly === true || item.correctly === false) || section?.setting?.allowToEdit
                               " class="w-full lg:w-auto">
                                 TIẾP TỤC
                             </button>

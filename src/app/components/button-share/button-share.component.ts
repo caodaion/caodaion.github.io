@@ -38,6 +38,7 @@ export class ButtonShareComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.sharedUrl = `${window.location.href}`
     this.router.events.subscribe((val: any) => {
       this.sharedUrl = `${window.location.origin}${val.url || window.location.pathname}`
     })
