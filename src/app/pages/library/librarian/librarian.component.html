@@ -15,6 +15,8 @@
           <mat-panel-title>Thêm Sách</mat-panel-title>
         </mat-expansion-panel-header>
         <div class="flex flex-wrap justify-between">
+          <button mat-flat-button class="w-full"
+            (click)="newBook = {}; editGoogleFormsPath = ''; googleFormsPath = ''">Làm mới</button>
           <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}">
             <mat-form-field class="w-full">
               <mat-label>Mã sách</mat-label>
@@ -80,8 +82,26 @@
             <mat-icon *ngIf="googleFormsPath">close</mat-icon>
             {{googleFormsPath ? 'Đóng' : 'Bổ sung'}}
           </button>
-          <iframe *ngIf="googleFormsPath" [src]="googleFormsPath | safe" class="w-full min-h-[300px]"
+          <iframe *ngIf="googleFormsPath" [src]="googleFormsPath | safe" class="w-full min-h-[300px]" id="addFrame"
             frameborder="0"></iframe>
+          <mat-expansion-panel class="w-full" #editFormTokenEx
+            [disabled]="googleFormsPath && (!newBook.key || !newBook.name || !newBook.googleDocId)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Thông tin cập nhật nội dung</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-form-field class="w-full">
+              <mat-label>Mã/Liên kết</mat-label>
+              <input type="text" matInput [(ngModel)]="newBook.editToken" />
+            </mat-form-field>
+            <button class="w-full" mat-flat-button [color]="'primary'"
+              (click)="addEditNewBookToken(!!editGoogleFormsPath, editFormTokenEx);">
+              <mat-icon *ngIf="!editGoogleFormsPath">add</mat-icon>
+              <mat-icon *ngIf="editGoogleFormsPath">close</mat-icon>
+              {{editGoogleFormsPath ? 'Đóng' : 'Bổ sung'}}
+            </button>
+            <iframe *ngIf="editGoogleFormsPath" [src]="editGoogleFormsPath | safe" class="w-full min-h-[300px]"
+              id="addFrame" frameborder="0"></iframe>
+          </mat-expansion-panel>
         </div>
       </mat-expansion-panel>
       <div class="flex flex-wrap my-4">
@@ -105,7 +125,9 @@
             <mat-card-content>
               <div class="my-3">{{item?.description}}</div>
               <mat-chip-set aria-label="label selection">
-                <mat-chip *ngFor="let chip of item?.labels" (click)="onClickChip(chip)">{{chip}}</mat-chip>
+                <mat-chip *ngFor="let chip of item?.labels"
+                  [ngClass]="{'!bg-[#fbbc05]': selectedChips?.indexOf(chip) != -1}"
+                  (click)="onClickChip(chip)">{{chip}}</mat-chip>
               </mat-chip-set>
             </mat-card-content>
             <mat-card-actions>

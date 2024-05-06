@@ -14,6 +14,7 @@ export class LibrarianComponent implements OnInit {
   previewingItem: any;
   mode: any;
   googleFormsPath: any;
+  editGoogleFormsPath: any;
   user: any;
   library = <any>[];
   books = <any>[];
@@ -155,7 +156,6 @@ export class LibrarianComponent implements OnInit {
   addNewBook(isClear: boolean = false) {
     if (isClear) {
       this.googleFormsPath = ''
-      this.newBook = <any>{}
     } else {
       if (this.newBook.key && this.newBook.name && this.newBook.googleDocId) {
         this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
@@ -194,5 +194,34 @@ export class LibrarianComponent implements OnInit {
       this.selectedChips?.push(chip)
     }
     this.selectedChips = [... new Set(this.selectedChips)]?.filter((item: any) => !!item)
+  }
+
+  addEditNewBookToken(isClear: boolean = false, editFormTokenEx: any) {
+    const editKey = () => {
+      let newKey = ''
+      this.newBook.key?.split('-')?.forEach((v: any) => {
+        if (v?.length > 1) {
+          newKey += `${v[0]}${v[v?.length - 1]}`
+        } else {
+          newKey += v
+        }
+        newKey += '-'
+      })
+      newKey += this.newBook.editToken?.match(/edit[0-9]/)
+      return newKey
+    }
+    const editToken = () => {
+      return this.newBook.editToken?.split(this.newBook.editToken?.match(/edit[0-9][=]/))[1]
+    }
+    if (isClear) {
+      this.editGoogleFormsPath = ''
+      editFormTokenEx.expanded = false
+    } else {
+      if (this.newBook.key && this.newBook.editToken) {
+        this.editGoogleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`        
+        this.editGoogleFormsPath += `?${this.setting?.key}=${encodeURIComponent(editKey())}`
+        this.editGoogleFormsPath += `&${this.setting?.googleDocId}=${encodeURIComponent(editToken())}`
+      }
+    }
   }
 }
