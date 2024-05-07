@@ -33,6 +33,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/journey/journey.module').then((m) => m.JourneyModule),
       },
+      {
+        path: 'maps',
+        loadChildren: () =>
+          import('../../pages/maps/maps.module').then((m) => m.MapsModule),
+      },
       { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },

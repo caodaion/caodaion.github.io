@@ -40,16 +40,23 @@
                 "glob": "**/*",
                 "input": "node_modules/ngx-scanner-qrcode/wasm/",
                 "output": "./assets/wasm/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./"
               }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss",
               "node_modules/prismjs/themes/prism-okaidia.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
               "node_modules/prismjs/plugins/command-line/prism-command-line.css",
-              "node_modules/katex/dist/katex.min.css"
+              "node_modules/katex/dist/katex.min.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet.locatecontrol/dist/L.Control.Locate.min.css",
+              "src/styles.scss"
             ],
             "scripts": [
               "src/assets/orgchart.js",
@@ -72,7 +79,8 @@
               "qrcode",
               "crypto-js",
               "html2canvas",
-              "moment"
+              "moment",
+              "leaflet"
             ]
           },
           "configurations": {

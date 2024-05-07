@@ -32,6 +32,14 @@ export const MENU = [
         released: true,
       },
       {
+        key: 'trang-chu.maps',
+        url: 'maps',
+        label: 'Bản đồ',
+        icon: 'map',
+        fullAssess: true,
+        released: true,
+      },
+      {
         key: 'trang-chu.thanh-that', //??
         url: 'thanh-that',
         label: 'Thánh Thất',
