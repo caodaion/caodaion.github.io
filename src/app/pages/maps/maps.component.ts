@@ -3,6 +3,7 @@ import 'leaflet.locatecontrol' // Import plugin
 import * as L from 'leaflet';
 import { PopupComponent } from './popup/popup.component';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-maps',
@@ -14,8 +15,6 @@ export class MapsComponent implements OnInit, AfterViewInit {
   drawerMode: any;
   latitude: any = 11.9861833;
   longitude: any = 108.4376802;
-
-  
 
   thanhSoList = <any>[
     {
@@ -34,9 +33,12 @@ export class MapsComponent implements OnInit, AfterViewInit {
   selectedMap = <any>{}
 
   @ViewChild('infoDrawer') infoDrawer!: any
+  @ViewChild('inforBottomSheet') inforBottomSheet!: any
+  inforBottomSheetRef: any;
 
   constructor(
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private matBottomSheet: MatBottomSheet
   ) {
 
   }
@@ -70,6 +72,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
       L.control.locate({ position: 'topright' }).addTo(this.map);
       this.map.zoomControl.setPosition('topright')
       this.loadMarkers()
+      this.calculateDistance()
     }
     const getPosition = {
       enableHighAccuracy: true,
@@ -89,6 +92,17 @@ export class MapsComponent implements OnInit, AfterViewInit {
     navigator.geolocation.getCurrentPosition(success, error, getPosition)
   }
 
+  calculateDistance(item?: any) {
+    let currentLocation = L.latLng(this.latitude, this.longitude)
+    if (item?.latLng[0] && item?.latLng[1]) {
+      currentLocation = L.latLng(item?.latLng[0], item?.latLng[1])
+    }
+    this.thanhSoList?.forEach((tanhSo: any) => {
+      const thanhSoLatLng = L.latLng(tanhSo.latLng[0], tanhSo.latLng[1])
+      tanhSo.distance = currentLocation.distanceTo(thanhSoLatLng)
+    })
+  }
+
   loadMarkers() {
     const caodaiONMarker = L.marker([this.latitude, this.longitude], { icon: this.getThanhSoIcon('caodaion') })
     caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`)
@@ -100,28 +114,37 @@ export class MapsComponent implements OnInit, AfterViewInit {
 
   getThanhSoIcon(item: any): any {
     if (item === 'caodaion') {
-      const caoDaiONIcon = L.icon({
-        iconUrl: '/assets/icons/assets/caodaion-pin.svg',
+      const caoDaiONIcon = L.divIcon({
+        // iconUrl: '/assets/icons/assets/caodaion-pin.svg',
         iconSize: [40, 40],
         iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        popupAnchor: [0, -40],
+        className: 'caodaion relative',
+        html: `<img src="/assets/icons/assets/caodaion-pin.svg"/>
+        <span class="absolute left-1/2 translate-x-[-50%]">CaoDaiON</span>`
       })
       return caoDaiONIcon
     }
     if (item?.caodaion) {
-      const thanhSoCaoDaiONIcon = L.icon({
-        iconUrl: '/assets/icons/assets/thanhSoCaoDaiON.png',
+      const thanhSoCaoDaiONIcon = L.divIcon({
+        // iconUrl: '/assets/icons/assets/thanhSoCaoDaiON.png',
         iconSize: [40, 40],
         iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        popupAnchor: [0, -40],
+        className: 'caodaion relative',
+        html: `<img class="w-[40px] h-[40px]" src="/assets/icons/assets/thanhSoCaoDaiON.png"/>
+        <span class="absolute left-1/2 translate-x-[-50%] w-max">${item?.name}</span>`
       })
       return thanhSoCaoDaiONIcon
     }
-    const thanhSoIcon = L.icon({
-      iconUrl: '/assets/icons/assets/thanhSo.png',
+    const thanhSoIcon = L.divIcon({
+      // iconUrl: '/assets/icons/assets/thanhSo.png',
       iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40],
+      className: 'caodaion relative',
+      html: `<img class="w-[40px] h-[40px]" src="/assets/icons/assets/thanhSo.png"/>
+      <span class="absolute left-1/2 translate-x-[-50%] w-max">${item?.name}</span>`
     })
     return thanhSoIcon
   }
@@ -138,25 +161,21 @@ export class MapsComponent implements OnInit, AfterViewInit {
       thanhSoMarker.openPopup()
     })
     thanhSoMarker.on('click', () => {
-      if (item.latLng == this.selectedMap.latLng) {
-        this.infoDrawer.toggle();
-      } else {
-        this.infoDrawer.open();
-        this.selectItem(item)
-      }
+      this.infoDrawer.open();
+      this.selectItem(item)
     })
   }
 
   selectItem(item?: any) {
     if (item) {
-      if (item.latLng == this.selectedMap.latLng) {
-        this.infoDrawer.toggle();
-      } else {
-        this.selectedMap = item
-        this.infoDrawer.open();
+      this.selectedMap = item
+      if (this.drawerMode == 'over') {
+        this.infoDrawer.close();
       }
+      this.inforBottomSheetRef = this.matBottomSheet.open(this.inforBottomSheet)
     } else {
       this.selectedMap = <any>{}
+      this.inforBottomSheetRef?.dismiss()
     }
   }
 }

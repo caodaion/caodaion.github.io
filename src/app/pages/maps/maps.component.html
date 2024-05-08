@@ -1,35 +1,28 @@
 <mat-drawer-container>
-    <mat-drawer #infoDrawer [mode]="drawerMode" class="min-w-[300px] max-w-full lg:max-w-[300px] border-0">
+    <mat-drawer #infoDrawer [opened]="drawerMode === 'side'" [mode]="drawerMode"
+        class="lg:min-w-[400px] max-w-full lg:max-w-[400px] border-0">
         <div class="relative">
             <div class="p-4 bg-white w-full sticky top-0 pb-0">
                 <mat-form-field class="rounded-full w-full" [appearance]="'outline'">
                     <mat-label>Tìm kiếm</mat-label>
                     <input type="text" matInput #searchBox>
-                    <button matSuffix mat-icon-button (click)="infoDrawer?.close(); selectItem()">
+                    <button matSuffix mat-icon-button (click)="infoDrawer?.close(); searchBox['value'] = ''">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
             </div>
-            <ng-container *ngIf="selectedMap?.name">
-                <div class="p-4 pb-0">
-                    <p class="text-xl mb-4">{{selectedMap?.name}}</p>
-                    <div class="w-full border-b flex items-center pb-4">
-                        <mat-icon>location_on</mat-icon>
-                        <div class="w-full ps-3">{{selectedMap?.address}}</div>
-                    </div>
-                </div>
-            </ng-container>
             <ng-container>
                 <div class="p-4">
-                    <div class="w-full" *ngIf="selectedMap?.name">
-                        <div class="text-xl pb-4 font-bold px-2">ĐỊA ĐIỂM KHÁC</div>
+                    <div class="w-full">
+                        <div class="text-2xl pb-4 px-2">ĐỊA ĐIỂM {{thanhSoList[0]?.distance ? 'GẦN BẠN' : 'KHÁC'}}</div>
                         <mat-divider></mat-divider>
                     </div>
-                    <div *ngFor="let item of thanhSoList | searchThanhSo: {searchText: searchBox['value'], selected: selectedMap}"
+                    <div *ngFor="let item of thanhSoList | searchThanhSo: {searchText: searchBox['value']}"
                         class="w-full cursor-pointer" (click)="selectItem(item)">
                         <div class="flex flex-wrap p-3">
-                            <div class="w-full font-bold">{{item?.name}}</div>
-                            <div class="w-full">{{item?.address}}</div>
+                            <div class="w-full text-lg font-medium">{{item?.name}}</div>
+                            <div class="w-full text-[#6e73a2]">{{item?.address}}</div>
+                            <div class="w-full text-[#6e73a2]">khoản {{item?.distance | number: '0.0-0'}}km</div>
                         </div>
                         <mat-divider></mat-divider>
                     </div>
@@ -40,10 +33,28 @@
     <mat-drawer-content class="relative">
         <div class="map w-full h-full" #map id="map"></div>
         <div class="cursor-pointer absolute top-1/2 z-[500] rounded-l rounded-b py-6 bg-white shadow-md flex items-center justify-center"
-            [matTooltip]="infoDrawer?.opened ? 'Ẩn thông tin' : 'Hiện thông tin'" (click)="infoDrawer?.toggle()"
-            matRipple>
-            <mat-icon *ngIf="!infoDrawer?.opened">navigate_next</mat-icon>
-            <mat-icon *ngIf="infoDrawer?.opened">navigate_before</mat-icon>
+            [matTooltip]="infoDrawer?.opened ? 'Ẩn' : 'Tìm kiếm'" (click)="infoDrawer?.toggle()" matRipple>
+            <mat-icon *ngIf="!infoDrawer?.opened">search</mat-icon>
+            <mat-icon *ngIf="infoDrawer?.opened">search_off</mat-icon>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
+<ng-template #inforBottomSheet>
+    <div class="w-full text-right">
+        <button mat-icon-button (click)="inforBottomSheetRef?.dismiss(); selectItem()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div class="text-xl mb-4">
+        <span>{{selectedMap?.name}}<img *ngIf="selectedMap?.caodaion" src="/assets/icons/assets/circle-logo.svg"
+                alt="circle-logo" class="h-4 inline-block border rounded-full ml-2"></span>
+    </div>
+    <div class="w-full flex items-center pb-4">
+        <mat-icon class="text-[#4285f4]">location_on</mat-icon>
+        <div class="w-full ps-3">{{selectedMap?.address}}</div>
+    </div>
+    <div class="w-full flex items-center pb-4">
+        <span class="material-symbols-outlined text-[#4285f4]">distance</span>
+        <div class="w-full ps-3">khoản {{selectedMap?.distance | number: '0.0-0'}}km</div>
+    </div>
+</ng-template>
