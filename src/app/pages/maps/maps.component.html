@@ -1,7 +1,8 @@
 <mat-drawer-container>
     <mat-drawer #infoDrawer [opened]="drawerMode === 'side'" [mode]="drawerMode"
         class="lg:min-w-[400px] max-w-full lg:max-w-[400px] border-0">
-        <div class="relative">
+        <div *ngIf="route === null"
+            class="w-full min-h-full relative flex flex-col justify-between overflow-hidden max-h-full">
             <div class="p-4 bg-white w-full sticky top-0 pb-0">
                 <mat-form-field class="rounded-full w-full" [appearance]="'outline'">
                     <mat-label>Tìm kiếm</mat-label>
@@ -10,32 +11,126 @@
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
+                <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
             </div>
-            <ng-container>
-                <div class="p-4">
-                    <div class="w-full">
+            <ng-container *ngIf="thanhSoList?.length > 0">
+                <div class="px-4 min-h-full flex-1 max-h-full overflow-auto relative pb-12">
+                    <div class="w-full bg-white sticky top-0 pt-4 z-10">
                         <div class="text-2xl pb-4 px-2">ĐỊA ĐIỂM {{thanhSoList[0]?.distance ? 'GẦN BẠN' : 'KHÁC'}}</div>
                         <mat-divider></mat-divider>
                     </div>
                     <div *ngFor="let item of thanhSoList | searchThanhSo: {searchText: searchBox['value']}"
-                        class="w-full cursor-pointer" (click)="selectItem(item)">
-                        <div class="flex flex-wrap p-3">
-                            <div class="w-full text-lg font-medium">{{item?.name}}</div>
-                            <div class="w-full text-[#6e73a2]">{{item?.address}}</div>
-                            <div class="w-full text-[#6e73a2]">khoản {{item?.distance | number: '0.0-0'}}km</div>
+                        class="w-full cursor-pointer">
+                        <div class="flex items-center">
+                            <div class="flex flex-wrap p-3 flex-1" (click)="selectItem(item)">
+                                <div class="w-full text-lg font-medium">{{item?.name}}</div>
+                                <div class="w-full text-[#6e73a2]">{{item?.address}}</div>
+                                <div class="w-full text-[#6e73a2]">khoản {{item?.distance | number: '0.0-0'}}km</div>
+                            </div>
+                            <div *ngIf="item?.latLng && item?.latLng[0] && item?.latLng[1]"
+                                class="flex flex-col w-min items-center text-[#4285f4] cursor-pointer"
+                                (click)="addDirection({pointB: item})" [matTooltip]="'Chỉ đường'">
+                                <button mat-icon-button>
+                                    <mat-icon>directions</mat-icon>
+                                </button>
+                                <span class="text-center whitespace-nowrap text-sm">Chỉ đường</span>
+                            </div>
                         </div>
                         <mat-divider></mat-divider>
                     </div>
                 </div>
             </ng-container>
+            <div class="w-full relative p-3" [ngClass]="{'overflow-auto': editting}">
+                <div class="z-10 sticky top-0 text-right">
+                    <button mat-mini-fab [color]="'primary'" aria-label="Cập nhật bản đồ"
+                        [matTooltip]="editting ? 'Đóng + làm mới' : 'Cập nhật bản đồ'" class="!z-10"
+                        (click)="editting = !editting; editting ? addingItem = {} : ''">
+                        <mat-icon *ngIf="!editting">add_location_alt</mat-icon>
+                        <mat-icon *ngIf="editting">close</mat-icon>
+                    </button>
+                </div>
+                <div class="w-full transition-all overflow-hidden h-max" [ngClass]="{'!h-0': !editting}">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Mã</mat-label>
+                        <input type="text" matInput [(ngModel)]="addingItem.key" disabled />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Tên gọi</mat-label>
+                        <input type="text" matInput [(ngModel)]="addingItem.name" (input)="updateItem()" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Địa chỉ</mat-label>
+                        <input type="text" matInput [(ngModel)]="addingItem.address" (input)="updateItem()" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Tọa độ</mat-label>
+                        <input type="text" matInput [(ngModel)]="addingItem.latLng" (input)="updateItem()" />
+                    </mat-form-field>
+                    <div class="w-full">
+                        <mat-label>Đã kích hoạt CaoDaiON?</mat-label>
+                        <mat-checkbox [(ngModel)]="addingItem.caodaion"></mat-checkbox>
+                    </div>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Hội Thánh/Tổ chức</mat-label>
+                        <mat-select [multiple]="true" [(ngModel)]="addingItem.organization"
+                            (click)="organizationFilter['value'] = ''" (ngModelChange)="updateItem()">
+                            <input type="text" #organizationFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                                [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                            <mat-option
+                                *ngIf="(organizations | searchOrganization: {searchText: organizationFilter['value']})?.length === 0"
+                                [value]="organizationFilter['value']"
+                                (click)="organizationFilter['value'] ? organizations.push(organizationFilter['value']) : ''">Tạo
+                                {{organizationFilter['value']}}</mat-option>
+                            <mat-option
+                                *ngFor="let chip of organizations | searchOrganization: {searchText: organizationFilter['value']}"
+                                [value]="chip">{{chip}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input type="text" matInput [(ngModel)]="addingItem.phone" (input)="updateItem()" />
+                    </mat-form-field>
+                    <button class="w-full" mat-flat-button [color]="'primary'" (click)="onSave(!!googleFormsPath)">
+                        <mat-icon *ngIf="!googleFormsPath">save</mat-icon>
+                        <mat-icon *ngIf="googleFormsPath">close</mat-icon>
+                        {{googleFormsPath ? 'Đóng' : 'Lưu'}}
+                    </button>
+                    <iframe *ngIf="googleFormsPath" [src]="googleFormsPath | safe" class="w-full min-h-[300px]"
+                        id="addFrame" frameborder="0"></iframe>
+                    <mat-expansion-panel class="w-full" #editFormTokenEx
+                        [disabled]="googleFormsPath && (!addingItem.key || !addingItem.name || !addingItem.latLng)">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Thông tin cập nhật nội dung</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-form-field class="w-full">
+                            <mat-label>Mã/Liên kết</mat-label>
+                            <input type="text" matInput [(ngModel)]="addingItem.editToken" />
+                        </mat-form-field>
+                        <button class="w-full" mat-flat-button [color]="'primary'"
+                            (click)="addEditNewMapToken(!!editGoogleFormsPath, editFormTokenEx);">
+                            <mat-icon *ngIf="!editGoogleFormsPath">add</mat-icon>
+                            <mat-icon *ngIf="editGoogleFormsPath">close</mat-icon>
+                            {{editGoogleFormsPath ? 'Đóng' : 'Bổ sung'}}
+                        </button>
+                        <iframe *ngIf="editGoogleFormsPath" [src]="editGoogleFormsPath | safe"
+                            class="w-full min-h-[300px]" id="addFrame" frameborder="0"></iframe>
+                    </mat-expansion-panel>
+                </div>
+            </div>
         </div>
+        <ng-container *ngIf="!!route">
+            <app-routing-instructions [route]="route" [infoDrawer]="infoDrawer" (removeWayRouting)="removeWayRouting()"
+                (viewInstruction)="viewInstruction($event)"></app-routing-instructions>
+        </ng-container>
     </mat-drawer>
     <mat-drawer-content class="relative">
         <div class="map w-full h-full" #map id="map"></div>
         <div class="cursor-pointer absolute top-1/2 z-[500] rounded-l rounded-b py-6 bg-white shadow-md flex items-center justify-center"
-            [matTooltip]="infoDrawer?.opened ? 'Ẩn' : 'Tìm kiếm'" (click)="infoDrawer?.toggle()" matRipple>
-            <mat-icon *ngIf="!infoDrawer?.opened">search</mat-icon>
-            <mat-icon *ngIf="infoDrawer?.opened">search_off</mat-icon>
+            [matTooltip]="infoDrawer?.opened ? 'Ẩn' : !infoDrawer?.opened && route == null ? 'Tìm kiếm' : 'Xem chỉ đường'"
+            (click)="infoDrawer?.toggle()" matRipple>
+            <mat-icon *ngIf="!infoDrawer?.opened && route == null">search</mat-icon>
+            <mat-icon *ngIf="!infoDrawer?.opened && route != null">route</mat-icon>
+            <mat-icon *ngIf="infoDrawer?.opened">navigate_before</mat-icon>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
@@ -49,12 +144,87 @@
         <span>{{selectedMap?.name}}<img *ngIf="selectedMap?.caodaion" src="/assets/icons/assets/circle-logo.svg"
                 alt="circle-logo" class="h-4 inline-block border rounded-full ml-2"></span>
     </div>
-    <div class="w-full flex items-center pb-4">
+    <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.address">
         <mat-icon class="text-[#4285f4]">location_on</mat-icon>
         <div class="w-full ps-3">{{selectedMap?.address}}</div>
     </div>
-    <div class="w-full flex items-center pb-4">
+    <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.distance">
         <span class="material-symbols-outlined text-[#4285f4]">distance</span>
         <div class="w-full ps-3">khoản {{selectedMap?.distance | number: '0.0-0'}}km</div>
     </div>
+    <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.phone">
+        <span class="material-symbols-outlined text-[#4285f4]">phone</span>
+        <div class="w-full ps-3">{{selectedMap?.phone}}</div>
+        <a [href]="'tel:'+selectedMap?.phone" [matTooltip]="'Gọi điện thoại'">
+            <button mat-icon-button [color]="'primary'"><mat-icon>phone</mat-icon></button>
+        </a>
+    </div>
+    <div class="w-full flex items-center pb-4 justify-center">
+        <div *ngIf="selectedMap?.latLng && selectedMap?.latLng[0] && selectedMap?.latLng[1]"
+            class="flex flex-col w-min items-center text-[#4285f4] cursor-pointer"
+            (click)="addDirection({pointB: selectedMap})" [matTooltip]="'Chỉ đường'">
+            <button mat-icon-button>
+                <mat-icon>directions</mat-icon>
+            </button>
+            <span class="text-center whitespace-nowrap">Chỉ đường</span>
+        </div>
+    </div>
+    <mat-expansion-panel
+        *ngIf="selectedMap?.latLng && selectedMap?.latLng[0] && selectedMap?.latLng[1] && user?.editable && edittingItem?.editToken">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Cập nhật bản đồ</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="w-full relative p-3">
+            <div class="w-full transition-all">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Mã</mat-label>
+                    <input type="text" matInput [(ngModel)]="edittingItem.key" disabled />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Tên gọi</mat-label>
+                    <input type="text" matInput [(ngModel)]="edittingItem.name" (input)="updateItem()" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Địa chỉ</mat-label>
+                    <input type="text" matInput [(ngModel)]="edittingItem.address" (input)="updateItem()" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Tọa độ</mat-label>
+                    <input type="text" matInput [(ngModel)]="edittingItem.latLng" (input)="updateItem()" />
+                </mat-form-field>
+                <div class="w-full">
+                    <mat-label>Đã kích hoạt CaoDaiON?</mat-label>
+                    <mat-checkbox [(ngModel)]="edittingItem.caodaion"></mat-checkbox>
+                </div>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Hội Thánh/Tổ chức</mat-label>
+                    <mat-select [multiple]="true" [(ngModel)]="edittingItem.organization"
+                        (click)="organizationFilter['value'] = ''" (ngModelChange)="updateItem()">
+                        <input type="text" #organizationFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                            [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                        <mat-option
+                            *ngIf="(organizations | searchOrganization: {searchText: organizationFilter['value']})?.length === 0"
+                            [value]="organizationFilter['value']"
+                            (click)="organizationFilter['value'] ? organizations.push(organizationFilter['value']) : ''">Tạo
+                            {{organizationFilter['value']}}</mat-option>
+                        <mat-option
+                            *ngFor="let chip of organizations | searchOrganization: {searchText: organizationFilter['value']}"
+                            [value]="chip">{{chip}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Số điện thoại</mat-label>
+                    <input type="text" matInput [(ngModel)]="edittingItem.phone" (input)="updateItem()" />
+                </mat-form-field>
+                <button class="w-full" mat-flat-button [color]="'primary'"
+                    (click)="onSaveEditting(!!editingGoogleFormsPath)">
+                    <mat-icon *ngIf="!editingGoogleFormsPath">save</mat-icon>
+                    <mat-icon *ngIf="editingGoogleFormsPath">close</mat-icon>
+                    {{editingGoogleFormsPath ? 'Đóng' : 'Lưu'}}
+                </button>
+                <iframe *ngIf="editingGoogleFormsPath" [src]="editingGoogleFormsPath | safe"
+                    class="w-full min-h-[300px]" id="addFrame" frameborder="0"></iframe>
+            </div>
+        </div>
+    </mat-expansion-panel>
 </ng-template>

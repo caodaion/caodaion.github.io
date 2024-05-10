@@ -22,7 +22,6 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
 import { MessagingService } from './shared/services/messaging/messaging.service';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { MatDividerModule } from '@angular/material/divider';
@@ -34,6 +33,8 @@ import { ErrorStateMatcher, MAT_DATE_LOCALE, MatNativeDateModule, ShowOnDirtyErr
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MarkdownModule } from 'ngx-markdown';
 import { register } from 'swiper/element/bundle';
+
+
 register();
 
 @NgModule({

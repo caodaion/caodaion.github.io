@@ -1,0 +1,26 @@
+<mat-sidenav-container class="w-100" tosize>
+    <mat-sidenav
+      class="sub-sidenav"
+      mode="side"
+      [opened]="viewMissionService.isDrawerOpened"
+      [mode]="drawerMode"
+    >
+      <mat-nav-list class="mat-list-sub-sidenav">
+        <a
+          mat-list-item
+          class="icon-hover"
+          *ngFor="let item of settingsMenu"
+          [routerLink]="item?.url"
+          [routerLinkActive]="'active'"
+          (click)="onToggleDrawer()"
+        >
+          <mat-icon class="sub-sidenav-icon">{{item?.icon}}</mat-icon
+          ><span class="label-large">{{item?.label}}</span></a
+        >
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="sub-sidenav-content" id="subSidenavContent">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

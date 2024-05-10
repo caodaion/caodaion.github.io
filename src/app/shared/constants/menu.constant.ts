@@ -30,22 +30,6 @@ export const MENU = [
         icon: 'library_books',
         fullAssess: true,
         released: true,
-      },
-      {
-        key: 'trang-chu.maps',
-        url: 'maps',
-        label: 'Bản đồ',
-        icon: 'map',
-        fullAssess: true,
-        released: true,
-      },
-      {
-        key: 'trang-chu.thanh-that', //??
-        url: 'thanh-that',
-        label: 'Thánh Thất',
-        icon: 'location_city',
-        fullAssess: true,
-        released: false,
       }
     ]
   },
@@ -143,14 +127,11 @@ export const MENU = [
     ]
   },
   {
-    key: 'qr',
-    url: 'qr',
-    label: 'Quét Mã QR',
-    icon: 'qr_code_2',
+    key: 'maps',
+    url: 'maps',
+    label: 'Bản đồ',
+    icon: 'map',
     fullAssess: true,
     released: true,
-    children: [
-
-    ]
   },
 ]

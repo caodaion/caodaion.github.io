@@ -66,6 +66,11 @@ const routes: Routes = [
           import('../../modules/qr/qr.module').then((m) => m.QrModule),
       },
       {
+        path: 'maps',
+        loadChildren: () =>
+          import('../../modules/maps/maps.module').then((m) => m.MapsModule),
+      },
+      {
         path: '',
         loadChildren: () =>
           import('../../modules/main/main.module').then((m) => m.MainModule),

@@ -1,0 +1,51 @@
+<div class="w-full min-h-full relative flex flex-col justify-between overflow-hidden max-h-full">
+    <div class="p-4 bg-white w-full sticky top-0 pb-0">
+        <div class="flex">
+            <div class="flex flex-col justify-between items-center px-3">
+                <mat-icon>trip_origin</mat-icon>
+                <mat-icon>more_vert</mat-icon>
+                <mat-icon>sports_score</mat-icon>
+                <mat-icon></mat-icon>
+            </div>
+            <div>
+                <mat-form-field class="rounded-full w-full" [appearance]="'outline'">
+                    <mat-label>Bắt đầu</mat-label>
+                    <input type="text" matInput #startBox [value]="route?.inputWaypoints[0]?.name" [disabled]="true">
+                    <button matSuffix mat-icon-button
+                        (click)="startBox['value'] = ''; endBox['value'] = ''; onRemoveWayRouting()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-form-field class="rounded-full w-full" [appearance]="'outline'">
+                    <mat-label>Kết thúc</mat-label>
+                    <input type="text" matInput #endBox [value]="route?.inputWaypoints[1]?.name" [disabled]="true">
+                    <button matSuffix mat-icon-button
+                        (click)="startBox['value'] = ''; endBox['value'] = ''; onRemoveWayRouting()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <button mat-stroked-button [color]="'primary'" (click)="infoDrawer?.toggle()" class="w-full">
+                    <mat-icon>map</mat-icon>Xem bản đồ
+                </button>
+                <button mat-stroked-button [color]="'primary'" *ngIf="route?.googleMapsUrl"
+                    (click)="openWithGoogleMaps()" class="w-full mt-4">
+                    <mat-icon>map</mat-icon>Xem trên Google Maps
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="flex-1 max-h-full overflow-auto relative">
+        <div class="w-full bg-white sticky top-0 pt-4 px-4 z-10 flex justify-between">
+            <div class="text-2xl pb-4">CHỈ ĐƯỜNG</div> <span>khoản {{route?.summary?.totalDistance | number: '0.0-0'}}km</span>
+        </div>
+        <mat-list>
+            <mat-list-item *ngFor="let instruction of route?.instructions" class="!h-max !cursor-pointer"
+                (click)="onViewInstruction(instruction)">
+                <mat-icon matListItemIcon>{{instruction?.icon}}</mat-icon>
+                <div matListItemTitle class="!whitespace-normal !overflow-visible">{{ instruction?.translatedText}}
+                </div>
+                <div matListItemLine class="!whitespace-normal !overflow-visible">{{instruction?.text}}</div>
+            </mat-list-item>
+        </mat-list>
+    </div>
+</div>

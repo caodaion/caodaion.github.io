@@ -61,6 +61,14 @@
             viewMissionService.isDrawerOpened ? "menu_open" : "menu"
           }}</mat-icon>
         </button>
+        <button
+          mat-icon-button
+          class="account-logo relative"
+          disabled
+          *ngIf="viewPortMode === 'mobile'"
+        >
+          <mat-icon></mat-icon>
+        </button>
         <a
           [routerLink]="''"
           class="d-flex align-items-center caodaion-logo"
@@ -159,6 +167,14 @@
             <mat-icon>{{
               viewPortMode === "desktop" ? "install_desktop" : "install_mobile"
             }}</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="account-logo relative"
+            (click)="goToScreen('/qr')"
+            matTooltip="Quét/Tạo mã QR"
+          >
+            <mat-icon>qr_code_2</mat-icon>
           </button>
           <button
             mat-icon-button

@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import * as L from 'leaflet';
+import 'leaflet-routing-machine';
 
 @Component({
   selector: 'app-popup',
@@ -12,8 +14,6 @@ export class PopupComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-      console.log(this.thanhSo);
-      
+  ngOnInit(): void {    
   }
 }
