@@ -41,12 +41,29 @@ export class LibraryService {
                     ref.librarySetting[item?.field] = item?.trigger
                   })
                   response.setting = ref.librarySetting
-                  this.sheetService.decodeRawSheetData(ref.libraryWorkbook?.Sheets['Form Responses 1'])
+                  this.sheetService.decodeRawSheetData(ref.libraryWorkbook?.Sheets['library'])
                     ?.subscribe((res: any) => {
                       ref.libraryList = <any>[];
                       res?.forEach((item: any) => {
-                        item.labels = JSON.parse(item?.labels || '[]')
-                        ref.libraryList?.push(item)
+                        let responseBook = <any>{}
+                        responseBook = item
+                        responseBook.labels = JSON.parse(item?.labels || '[]')
+                        if (responseBook?.name) {
+                          let editKey = ''
+                          responseBook.key?.split('-')?.forEach((v: any) => {
+                            if (v?.length > 1) {
+                              editKey += `${v[0]}${v[v?.length - 1]}`
+                            } else {
+                              editKey += v
+                            }
+                            editKey += '-'
+                          })
+                          const editToken = res?.find((r: any) => r.key?.match(`${editKey}edit[0-9]`))
+                          if (editToken?.googleDocId) {
+                            responseBook.editToken = `?${editToken?.key?.match(`edit[0-9]`)[0]}=${editToken?.googleDocId}`
+                          }
+                          ref.libraryList?.push(responseBook)
+                        }
                         const itemLabels = item?.labels
                         ref.labels = [...new Set(ref.labels.concat(itemLabels))]
                       })

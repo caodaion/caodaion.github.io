@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { INSTRUCTIONS_VI } from './instruction.vi';
 
 @Component({
@@ -11,6 +11,10 @@ export class RoutingInstructionsComponent implements AfterViewChecked {
   @Input('infoDrawer') infoDrawer: any;
   @Output('removeWayRouting') removeWayRouting = new EventEmitter();
   @Output('viewInstruction') viewInstruction = new EventEmitter();
+
+  constructor(private cd: ChangeDetectorRef) {
+
+  }
 
   ngAfterViewChecked(): void {
     this.translate()
@@ -78,6 +82,7 @@ export class RoutingInstructionsComponent implements AfterViewChecked {
             item.icon = INSTRUCTIONS_VI?.icons[item?.type?.trim()?.toLowerCase()]
             break;
         }
+        this.cd.detectChanges()
       }
     })
   }

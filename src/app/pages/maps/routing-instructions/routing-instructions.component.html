@@ -5,7 +5,10 @@
                 <mat-icon>trip_origin</mat-icon>
                 <mat-icon>more_vert</mat-icon>
                 <mat-icon>sports_score</mat-icon>
-                <mat-icon></mat-icon>
+                <button mat-icon-button [color]="'primary'" *ngIf="route?.googleMapsUrl"
+                    matTooltip="Xem trên Google Maps" (click)="openWithGoogleMaps()" class="w-full mt-4">
+                    <img src="/assets/icons/assets/Google_Maps_icon_(2020).svg" alt="Google_Maps_icon">
+                </button>
             </div>
             <div>
                 <mat-form-field class="rounded-full w-full" [appearance]="'outline'">
@@ -27,16 +30,13 @@
                 <button mat-stroked-button [color]="'primary'" (click)="infoDrawer?.toggle()" class="w-full">
                     <mat-icon>map</mat-icon>Xem bản đồ
                 </button>
-                <button mat-stroked-button [color]="'primary'" *ngIf="route?.googleMapsUrl"
-                    (click)="openWithGoogleMaps()" class="w-full mt-4">
-                    <mat-icon>map</mat-icon>Xem trên Google Maps
-                </button>
             </div>
         </div>
     </div>
     <div class="flex-1 max-h-full overflow-auto relative">
         <div class="w-full bg-white sticky top-0 pt-4 px-4 z-10 flex justify-between">
-            <div class="text-2xl pb-4">CHỈ ĐƯỜNG</div> <span>khoản {{route?.summary?.totalDistance | number: '0.0-0'}}km</span>
+            <div class="text-2xl pb-4">CHỈ ĐƯỜNG</div> <span>khoản {{route?.summary?.totalDistance/1000 | number:
+                '0.0-0'}}km</span>
         </div>
         <mat-list>
             <mat-list-item *ngFor="let instruction of route?.instructions" class="!h-max !cursor-pointer"

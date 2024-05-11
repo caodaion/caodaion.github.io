@@ -81,7 +81,7 @@ export class LibrarianComponent implements OnInit {
       this.libraryService.fetchLibrary()
         .subscribe((res: any) => {
           if (res.status === 200) {
-            this.books = res.data
+            this.books = res.data            
             this.setting = res.setting
             this.labels = res.labels
             this.loading = false

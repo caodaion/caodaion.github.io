@@ -109,7 +109,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
     const initMap = () => {
       this.map = L.map('map', {
         center: [this.latitude, this.longitude],
-        zoom: 15
+        zoom: 18
       });
       const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
@@ -129,7 +129,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
       this.latitude = gotPosition.coords.latitude;
       this.longitude = gotPosition.coords.longitude;
       if (this.latitude && this.longitude) {
-        this.map.flyTo(new L.LatLng(this.latitude, this.longitude), 13, {
+        this.map.flyTo(new L.LatLng(this.latitude, this.longitude), 15, {
           duration: 1,
           easeLinearity: 0.5
         });
@@ -224,7 +224,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
       if (this.drawerMode == 'over') {
         this.infoDrawer.close();
       }
-      this.map.flyTo(item?.latLng, 13, {
+      this.map.flyTo(item?.latLng, 15, {
         duration: 1,
         easeLinearity: 0.5
       })
@@ -240,17 +240,17 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   updateItem() {
-    this.edittingItem.key = this.commonService.generatedSlug(this.edittingItem.name)
-    if (this.edittingItem.latLng?.includes('http')) {
-      const decode = decodeURIComponent(this.edittingItem.latLng)
+    this.addingItem.key = this.commonService.generatedSlug(this.addingItem.name)
+    if (this.addingItem.latLng?.includes('http')) {
+      const decode = decodeURIComponent(this.addingItem.latLng)
       const latLng: any = decode.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
       if (latLng[0] && latLng[1] && latLng[2]) {
-        this.edittingItem.latLng = latLng[0]?.replace('@', '')
+        this.addingItem.latLng = latLng[0]?.replace('@', '')
       }
     }
     const editOrganizationKey = () => {
       let newKey = '-'
-      this.commonService.generatedSlug(this.edittingItem?.organization[0])?.split('-')?.forEach((v: any) => {
+      this.commonService.generatedSlug(this.addingItem?.organization[0])?.split('-')?.forEach((v: any) => {
         if (v?.length > 1) {
           newKey += `${v[0]}${v[v?.length - 1]}`
         } else {
@@ -259,11 +259,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
       })
       return newKey
     }
-    if (this.edittingItem?.organization?.length > 1) {
-      this.edittingItem?.organization?.shift();
+    if (this.addingItem?.organization?.length > 1) {
+      this.addingItem?.organization?.shift();
     }
-    if (this.edittingItem?.organization && this.edittingItem?.organization[0]) {
-      this.edittingItem.key += editOrganizationKey()
+    if (this.addingItem?.organization && this.addingItem?.organization[0]) {
+      this.addingItem.key += editOrganizationKey()
     }
   }
 
@@ -277,24 +277,24 @@ export class MapsComponent implements OnInit, AfterViewInit {
     if (isClear) {
       this.googleFormsPath = ''
     } else {
-      if (this.edittingItem.key && this.edittingItem.name && this.edittingItem.latLng) {
+      if (this.addingItem.key && this.addingItem.name && this.addingItem.latLng) {
         this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
-        this.googleFormsPath += `?${this.setting?.key}=${encodeURIComponent(this.edittingItem.key)}`
-        this.googleFormsPath += `&${this.setting?.name}=${encodeURIComponent(this.edittingItem.name)}`
-        if (this.edittingItem.address) {
-          this.googleFormsPath += `&${this.setting?.address}=${encodeURIComponent(this.edittingItem.address)}`
+        this.googleFormsPath += `?${this.setting?.key}=${encodeURIComponent(this.addingItem.key)}`
+        this.googleFormsPath += `&${this.setting?.name}=${encodeURIComponent(this.addingItem.name)}`
+        if (this.addingItem.address) {
+          this.googleFormsPath += `&${this.setting?.address}=${encodeURIComponent(this.addingItem.address)}`
         }
-        if (this.edittingItem.latLng) {
-          this.googleFormsPath += `&${this.setting?.latLng}=${encodeURIComponent(this.edittingItem.latLng)}`
+        if (this.addingItem.latLng) {
+          this.googleFormsPath += `&${this.setting?.latLng}=${encodeURIComponent(this.addingItem.latLng)}`
         }
-        if (this.edittingItem.organization) {
-          this.googleFormsPath += `&${this.setting?.organization}=${encodeURIComponent(this.edittingItem.organization)}`
+        if (this.addingItem.organization) {
+          this.googleFormsPath += `&${this.setting?.organization}=${encodeURIComponent(this.addingItem.organization)}`
         }
-        if (this.edittingItem.caodaion) {
-          this.googleFormsPath += `&${this.setting?.caodaion}=${encodeURIComponent(this.edittingItem.caodaion)}`
+        if (this.addingItem.caodaion) {
+          this.googleFormsPath += `&${this.setting?.caodaion}=${encodeURIComponent(this.addingItem.caodaion)}`
         }
-        if (this.edittingItem.phone) {
-          this.googleFormsPath += `&${this.setting?.phone}=${encodeURIComponent(this.edittingItem.phone)}`
+        if (this.addingItem.phone) {
+          this.googleFormsPath += `&${this.setting?.phone}=${encodeURIComponent(this.addingItem.phone)}`
         }
       }
     }
@@ -303,7 +303,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
   addEditNewMapToken(isClear: boolean = false, editFormTokenEx: any) {
     const editKey = () => {
       let newKey = ''
-      this.edittingItem.key?.split('-')?.forEach((v: any) => {
+      this.addingItem.key?.split('-')?.forEach((v: any) => {
         if (v?.length > 1) {
           newKey += `${v[0]}${v[v?.length - 1]}`
         } else {
@@ -311,17 +311,17 @@ export class MapsComponent implements OnInit, AfterViewInit {
         }
         newKey += '-'
       })
-      newKey += this.edittingItem.editToken?.match(/edit[0-9]/)
+      newKey += this.addingItem.editToken?.match(/edit[0-9]/)
       return newKey
     }
     const editToken = () => {
-      return this.edittingItem.editToken?.split(this.edittingItem.editToken?.match(/edit[0-9][=]/))[1]
+      return this.addingItem.editToken?.split(this.addingItem.editToken?.match(/edit[0-9][=]/))[1]
     }
     if (isClear) {
       this.editGoogleFormsPath = ''
       editFormTokenEx.expanded = false
     } else {
-      if (this.edittingItem.key && this.edittingItem.editToken) {
+      if (this.addingItem.key && this.addingItem.editToken) {
         this.editGoogleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
         this.editGoogleFormsPath += `?${this.setting?.key}=${encodeURIComponent(editKey())}`
         this.editGoogleFormsPath += `&${this.setting?.name}=${encodeURIComponent(editToken())}`
@@ -330,6 +330,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   addDirection(params: any) {
+    this.loading = true
     if (this.drawerMode == 'over') {
       this.infoDrawer?.close();
     }
@@ -357,7 +358,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
           {
             color: '#0f53ff',
             opacity: 0.6,
-            weight: 9
+            weight: 10
           }
         ],
         extendToWaypoints: false,
@@ -366,18 +367,41 @@ export class MapsComponent implements OnInit, AfterViewInit {
     })?.addTo(this.map);
     this.inforBottomSheetRef?.dismiss();
     this.routingControl.on('routeselected', (e: any) => {
-      const route = e.route;
-      this.route = route
+      let route = <any>{};
+      route = e.route
+      route.markers = <any>[]
       if (route?.coordinates?.length > 0) {
+        route?.instructions?.forEach((item: any) => {
+          const markerLatLng = route?.coordinates[item?.index]
+          const marker = L.marker(markerLatLng, {
+            icon: L.divIcon({
+              // iconUrl: '/assets/icons/assets/caodaion-pin.svg',
+              iconSize: [10, 10],
+              iconAnchor: [5, 10],
+              className: 'caodaion relative',
+              html: `<div class="w-[10px] h-[10px] bg-white border-[3px] border-[#0f53ff] rounded-full"></div>`
+            })
+          })
+          if (!route?.markers) {
+            this.route.markers = <any>[];
+          }
+          marker?.bindTooltip(item?.road)
+          marker?.bindPopup(item?.text)
+          marker.addTo(this.map);
+          route?.markers?.push(marker)
+        })
         const routeBounds = this.calculateBounds(route?.coordinates);
         this.map.fitBounds(routeBounds);
         const baseUrl = 'https://www.google.com/maps/dir/';
         const waypoints = [getWaypointObject(params?.pointA)?.latLng, getWaypointObject(params?.pointB)?.latLng]
         const coordinates = waypoints.map(waypoint => `${waypoint.lat},${waypoint.lng}`).join('/');
+        this.route = route
         this.route.googleMapsUrl = baseUrl + coordinates;
+        this.loading = false
       }
     })
   }
+
   calculateBounds(coordinates: L.LatLngExpression[]): L.LatLngBounds {
     let minLat = Infinity;
     let maxLat = -Infinity;
@@ -402,16 +426,12 @@ export class MapsComponent implements OnInit, AfterViewInit {
     return L.latLngBounds(southWest, northEast);
   }
 
-  removeWayRouting() {
+  removeWayRouting() {    
+    this.route?.markers?.forEach((item: any) => {
+      this.map?.removeLayer(item)
+    })
     this.map?.removeControl(this.routingControl)
     this.route = null
-  }
-
-  patToItem(item: any) {
-    this.map?.flyTo(item.latLng, 13, {
-      duration: 1,
-      easeLinearity: 0.5
-    })
   }
 
   viewInstruction(item: any) {
