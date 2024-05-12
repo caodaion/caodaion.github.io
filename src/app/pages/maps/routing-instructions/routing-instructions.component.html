@@ -6,8 +6,10 @@
                 <mat-icon>more_vert</mat-icon>
                 <mat-icon>sports_score</mat-icon>
                 <button mat-icon-button [color]="'primary'" *ngIf="route?.googleMapsUrl"
-                    matTooltip="Xem trên Google Maps" (click)="openWithGoogleMaps()" class="w-full mt-4">
+                    matTooltip="Xem trên Google Maps" (click)="openWithGoogleMaps()" class="w-full mt-4 relative">
                     <img src="/assets/icons/assets/Google_Maps_icon_(2020).svg" alt="Google_Maps_icon">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 top-0 left-0"></span>
                 </button>
             </div>
             <div>

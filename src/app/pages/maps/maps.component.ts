@@ -24,7 +24,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
   thanhSoList = <any>[]
   organizations = <any>[]
   loading: boolean = false
-  editting: boolean = false
+  adding: boolean = false
   viewContainerRef = inject(ViewContainerRef)
   selectedMap = <any>{}
   setting = <any>{}
@@ -470,5 +470,12 @@ export class MapsComponent implements OnInit, AfterViewInit {
         }
       }
     }
+  }
+
+  clearAdding() {
+    this.addingItem = <any>{}
+    this.googleFormsPath = ''
+    this.editGoogleFormsPath = ''
+    this.editingGoogleFormsPath = ''
   }
 }

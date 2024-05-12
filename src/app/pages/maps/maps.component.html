@@ -41,16 +41,16 @@
                     </div>
                 </div>
             </ng-container>
-            <div class="w-full relative p-3" [ngClass]="{'overflow-auto': editting}">
+            <div class="w-full relative p-3 flex-[0_0_100%]" [ngClass]="{'overflow-auto': adding}">
                 <div class="z-10 sticky top-0 text-right">
                     <button mat-mini-fab [color]="'primary'" aria-label="Cập nhật bản đồ"
-                        [matTooltip]="editting ? 'Đóng + làm mới' : 'Cập nhật bản đồ'" class="!z-10"
-                        (click)="editting = !editting; editting ? addingItem = {} : ''">
-                        <mat-icon *ngIf="!editting">add_location_alt</mat-icon>
-                        <mat-icon *ngIf="editting">close</mat-icon>
+                        [matTooltip]="adding ? 'Đóng + làm mới' : 'Cập nhật bản đồ'" class="!z-10"
+                        (click)="adding = !adding; adding ? clearAdding() : ''">
+                        <mat-icon *ngIf="!adding">add_location_alt</mat-icon>
+                        <mat-icon *ngIf="adding">close</mat-icon>
                     </button>
                 </div>
-                <div class="w-full transition-all overflow-hidden h-max" [ngClass]="{'!h-0': !editting}">
+                <div class="w-full transition-all overflow-hidden h-max" [ngClass]="{'!h-0': !adding}">
                     <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Mã</mat-label>
                         <input type="text" matInput [(ngModel)]="addingItem.key" disabled />
