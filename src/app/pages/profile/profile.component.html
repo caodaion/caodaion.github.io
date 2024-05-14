@@ -10,21 +10,8 @@
         <div class="text-lg text-center">
           Quét mã tại trang đăng nhập để đăng nhập nhanh bằng mã QR
         </div>
-        <div *ngIf="qrData" class="w-full flex flex-column items-center">
-          <qrcode
-            #parent
-            [qrdata]="qrData"
-            [width]="300"
-            [imageHeight]="75"
-            [imageWidth]="75"
-            [cssClass]="'flex justify-center'"
-            [errorCorrectionLevel]="'M'"
-            [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'"
-            [elementType]="'canvas'"
-            [margin]="2"
-            [scale]="128"
-          ></qrcode>
+        <div *ngIf="qrData" class="w-full flex flex-col items-center">
+          <img #parent [src]="qrUrl" class="w-[300px] h-[300px]">
           <div class="text-center">
             <button
               mat-raised-button

@@ -7,6 +7,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
+import * as QRCode from 'qrcode'
 
 
 @Component({
@@ -20,6 +21,7 @@ export class ProfileComponent implements OnInit {
   durationInSeconds = 3;
   currentUser = <any>{};
   qrData: any;
+  qrUrl: any;
   caodaiTitle = CAODAI_TITLE.data
   roles = <any>[]
   colors = <any>[
@@ -82,31 +84,45 @@ export class ProfileComponent implements OnInit {
   }
 
   getCurrentUser() {
-    this.currentUser = this.authService.getCurrentUser()
-    let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
-    if (typeof this.currentUser?.role === 'string') {
-      this.currentUser.role = JSON.parse(this.currentUser?.role)
-    }
-    if (this.currentUser?.role?.length === 1) {
-      if (this.currentUser?.role[0] === 'kids') {
-        qrData = `${location.origin}@${this.currentUser?.userName}`
+    const getSharedDataPromise = new Promise<void>((resolve, rejects) => {
+      this.currentUser = this.authService.getCurrentUser()
+      let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
+      if (typeof this.currentUser?.role === 'string') {
+        this.currentUser.role = JSON.parse(this.currentUser?.role)
       }
-    }
-    if (qrData?.length >= 350) {
-      try {
-        this.tinyUrlService.shortenUrl(qrData)
-          .subscribe((res: any) => {
-            if (res.code === 0) {
-              this.qrData = res?.data?.tiny_url
-            }
-          })
-      } catch (e) {
-        console.log(e)
+      if (this.currentUser?.role?.length === 1) {
+        if (this.currentUser?.role[0] === 'kids') {
+          qrData = `${location.origin}@${this.currentUser?.userName}`
+        }
       }
-    } else {
+      if (qrData?.length >= 350) {
+        try {
+          this.tinyUrlService.shortenUrl(qrData)
+            .subscribe((res: any) => {
+              if (res.code === 0) {
+                this.qrData = res?.data?.tiny_url
+                resolve()
+              }
+            })
+        } catch (e) {
+          console.log(e)
+          rejects()
+        }
+      } else {
+        this.qrData = qrData
+        resolve()
+      }
       this.qrData = qrData
-    }
-    this.qrData = qrData
+    })
+    getSharedDataPromise.then(() => {
+      QRCode.toDataURL(this.qrData)
+        .then(url => {
+          this.qrUrl = url;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    })
   }
 
   saveAsImage(parent: any) {

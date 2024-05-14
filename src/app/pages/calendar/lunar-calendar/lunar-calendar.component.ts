@@ -571,7 +571,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         if (event.event.name?.includes('Cửu')) {
           const split = event.event.name?.split(' ')
           const cuuIndex = split.indexOf('Cửu')
-          event.event.eventName = `${split[cuuIndex - 1]} chi tuần`
+          event.event.eventName = `${split[cuuIndex - 1]} Cửu chi tuần`
         }
         event.event.subject = <any>{}
         event.event.subject.details = event?.details

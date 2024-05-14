@@ -15,6 +15,7 @@ import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { LocationService } from 'src/app/shared/services/location/location.service';
+import * as QRCode from 'qrcode'
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -128,17 +129,23 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       if (param['d']) {
         this.selectedDate.date = parseInt(param['d']);
       }
+      if (param['t']) {
+        this.selectedDate.time = param['t'];
+      }
+      console.log(this.selectedDate);
+
       if (param['y'] && param['m'] && param['d']) {
         this.calculateTuanCuu()
         if (param['details']) {
           const jwtHelper = new JwtHelperService()
           const decodedToken = jwtHelper.decodeToken(param['details'])?.split('+')
           this.selectedDate = {
+            time: param['t'],
             date: parseInt(param['d']),
             month: parseInt(param['m']),
             year: parseInt(param['y'])
           }
-          console.log(decodedToken);
+          this.getCalculatedLunarDate()
           this.calculatedTuanCuu.details = {
             name: decodedToken[0] === 'empty' ? '' : decodedToken[0],
             age: decodedToken[1] === 'empty' ? null : decodedToken[1],
@@ -166,14 +173,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   getAllDivisions() {
     if (this.commonService.provinces?.length === 0) {
-    this.commonService.fetchProvinceData()
-      .subscribe((res: any) => {
-        if (res?.status == 200) {
-          this.provinces = res.provinces
-          this.districts = res.districts
-          this.wards = res.wards
-        }
-      })
+      this.commonService.fetchProvinceData()
+        .subscribe((res: any) => {
+          if (res?.status == 200) {
+            this.provinces = res.provinces
+            this.districts = res.districts
+            this.wards = res.wards
+          }
+        })
     } else {
       this.provinces = this.commonService.provinces
       this.districts = this.commonService.districts
@@ -319,7 +326,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     item.token = token
-    item.location = `${location.href}?y=${item?.date?.year}&m=${item?.date?.month}&d=${item?.date?.date}&details=${token}`
+    item.location = `${location.href}?y=${item?.date?.year}&m=${item?.date?.month}&d=${item?.date?.date}&t=${encodeURIComponent(item?.date?.time)}&details=${token}`
     this.cd.detectChanges()
   }
 
@@ -332,14 +339,19 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   onCallPrint(item: any) {
     this.printedInfo = item
+    QRCode.toDataURL(this.printedInfo?.location)
+      .then(url => {
+        this.printedInfo.qrData = url;
+      })
+      .catch(err => {
+        console.error(err);
+      });
     this.printBottomSheetRef = this.matBottomSheet.open(this.printBottomSheet)
   }
 
   onPrint(item: any, parent?: any) {
     let parentElement = null
-    parentElement = parent.qrcElement.nativeElement
-      .querySelector("canvas")
-      .toDataURL("image/png")
+    parentElement = this.printedInfo.location
     let printTab = window.open(
       '',
       'PRINT',
@@ -371,14 +383,14 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     const printContent = document.getElementById(
       `${item?.key}`
     );
-    const caodaiOnInFo = `<div>
+    const caodaiOnInFo = `<div style="display: flex;">
     <div style="float: left; width: 50%">
     <p><strong>Truy Cập</strong> <a href="https://www.caodaion.com">https://www.caodaion.com</a> để tính lịch cúng tuần cửu tự động</p>
     <p style="text-align: center">hoặc</p>
     <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng ${item?.name}</p>
     </div>
     <div style="float: right; width: 50%; text-align: right">
-    <img src="${parentElement}" height="300px" width="300px" />
+    <img src="${parentElement}" style="width: 80%; object-fit: contain" />
     </div>
     </div>`
     const writeContent = document.createElement('DIV');

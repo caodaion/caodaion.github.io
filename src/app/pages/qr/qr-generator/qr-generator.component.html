@@ -42,13 +42,10 @@
             làm
             mới nhé!"</div>
         </ng-container>
-        <div *ngIf="!error && qrData" class="flex justify-center flex-col items-center">
+        <div *ngIf="!error && qrData && qrUrl" class="flex justify-center flex-col items-center">
           <div class="h-fit w-fit" #parentQR [id]="'CaoDaiON_QR'">
             <div class="h-fit w-fit border-[5px] rounded-2xl border-[black] mb-2">
-              <qrcode #parent [qrdata]="qrData" [width]="300" [imageHeight]="75" [imageWidth]="75"
-                 [errorCorrectionLevel]="'M'"
-                [colorDark]="'#000000ff'" [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2"
-                [scale]="128" [ngStyle]="{borderRadius: '1rem', display: 'block', overflow: 'hidden'}"></qrcode>
+            <img #parent [src]="qrUrl" class="w-[300px] h-[300px] rounded-2xl">
             </div>
             <div class="flex items-center justify-center flex-col pb-2">
               <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,83 +84,6 @@
           </div>
         </div>
         <div *ngIf="isExisting">Mã cắt ngắn đã tồn tại. Bạn không cần phải tạo mã mới. Hãy dùng mã đã tạo ra ở trên nhé!👆👆👆</div>
-      </div>
-    </mat-tab>
-    <!-- <mat-tab [label]="'TẠO MÃ QR CHECK-IN'">
-      <div class="container-fluid">
-        <h2>Tạo mã QR check-in</h2>
-        <mat-form-field class="w-100">
-          <mat-label>Nội dung mã</mat-label>
-          <input type="text" matInput [(ngModel)]="checkInQRData" disabled />
-          <button mat-icon-button matSuffix [matTooltip]="'Sao chép liên kết'" *ngIf="checkInQRData"
-            (click)="copyLink(checkInQRData)">
-            <mat-icon>link</mat-icon>
-          </button>
-        </mat-form-field>
-        <mat-form-field class="w-100">
-          <mat-label>Địa điểm check-in</mat-label>
-          <mat-select [(ngModel)]="checkInType" (ngModelChange)="generateCheckInQR()">
-            <mat-option *ngFor="let item of checkInTypes" [value]="item?.key" [disabled]="item?.disabled">{{ item?.label
-              }}</mat-option>
-            <mat-option [value]="'addMore'">Địa điểm mới</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="w-100" [appearance]="'outline'" *ngIf="checkInType == 'addMore'">
-          <mat-label>Địa điểm mới</mat-label>
-          <input type="text" matInput [(ngModel)]="addedMoreLocation" (ngModelChange)="generateCheckInQR()" />
-        </mat-form-field>
-        <p class="text-center" *ngIf="checkInError">{{ checkInError }}</p>
-        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
-          <mat-spinner></mat-spinner>
-        </div>
-        <div *ngIf="!checkInError && checkInQRData">
-          <qrcode #checkIn [qrdata]="checkInQRData" [width]="300" [imageHeight]="75" [imageWidth]="75"
-            [cssClass]="'flex justify-center'" [errorCorrectionLevel]="'M'" [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2" [scale]="128"></qrcode>
-          <div class="text-center">
-            <button mat-raised-button color="primary" (click)="saveAsImage(checkIn)">
-              <mat-icon>download</mat-icon>
-              Tải Mã QR
-            </button>
-          </div>
-        </div>
-      </div>
-    </mat-tab> -->
-    <mat-tab [label]="'TẠO MÃ QR ĐỒNG BỘ DỮ LIỆU CÁ NHÂN'">
-      <div class="container-fluid">
-        <h2>Tạo mã QR đồng bộ dữ liệu</h2>
-        <div>
-          <mat-form-field class="w-100">
-            <mat-label>Nội dung mã</mat-label>
-            <input type="text" matInput [(ngModel)]="syncQRData" disabled />
-            <button mat-icon-button matSuffix [matTooltip]="'Sao chép liên kết'" *ngIf="syncQRData"
-              (click)="copyLink(syncQRData)">
-              <mat-icon>link</mat-icon>
-            </button>
-          </mat-form-field>
-          <mat-form-field class="w-100">
-            <mat-label>Loại đồng bộ</mat-label>
-            <mat-select [(ngModel)]="syncType" (ngModelChange)="generateSyncQR()">
-              <mat-option *ngFor="let item of syncTypes" [value]="item?.key" [disabled]="item?.disabled">{{ item?.label
-                }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <p class="text-center" *ngIf="syncError">{{ syncError }}</p>
-        <div *ngIf="loadingData" class="w-100 d-flex justify-content-center">
-          <mat-spinner></mat-spinner>
-        </div>
-        <div *ngIf="!syncError && syncQRData">
-          <qrcode #sync [qrdata]="syncQRData" [width]="300" [imageHeight]="75" [imageWidth]="75"
-            [cssClass]="'flex justify-center'" [errorCorrectionLevel]="'M'" [colorDark]="'#000000ff'"
-            [colorLight]="'#ffffffff'" [elementType]="'canvas'" [margin]="2" [scale]="128"></qrcode>
-          <div class="text-center">
-            <button mat-raised-button color="primary" (click)="saveAsImage(sync)">
-              <mat-icon>download</mat-icon>
-              Tải Mã QR
-            </button>
-          </div>
-        </div>
       </div>
     </mat-tab>
   </mat-tab-group>

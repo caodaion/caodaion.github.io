@@ -6,7 +6,9 @@ import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.cons
 import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 import { NgxCaptureService } from 'ngx-capture';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import * as QRCode from 'qrcode'
+
 
 @Component({
   selector: 'app-qr-generator',
@@ -15,6 +17,7 @@ import { tap } from 'rxjs';
 })
 export class QrGeneratorComponent implements OnInit {
   qrData = location.href
+  qrUrl = ''
   data = location.href
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -50,9 +53,24 @@ export class QrGeneratorComponent implements OnInit {
       this.selectedIndex = parseInt(window.history.state.selectedIndex)
     }
     this.mergeLocalstorageVariable()
-    if (!this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {      
+    if (!this.setting?.googleForms && !this.setting?.id && !this.setting?.data) {
       this.getShortLinkSetting()
     }
+    this.generateQRCodeDataUrl(this.qrData)?.subscribe((resUrl: any) => {
+      this.qrUrl = resUrl;
+    })
+  }
+
+  generateQRCodeDataUrl(input: any): Observable<any> {
+    return new Observable((observable: any) => {
+      QRCode.toDataURL(input)
+        .then(url => {          
+          observable.next(url)
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    })
   }
 
   getShortLinkSetting() {
@@ -74,14 +92,17 @@ export class QrGeneratorComponent implements OnInit {
           this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleForms}/viewform?${this.setting?.id}=${id}&${this.setting?.data}=${encodeURIComponent(this.data)}`
         }
       }
+      this.generateQRCodeDataUrl(this.qrData)?.subscribe((resUrl: any) => {
+        this.qrUrl = resUrl;
+      })
     }
     if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
       convertData()
-    } else {      
+    } else {
       this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
         if (res.status === 200) {
           this.setting = res.setting
-          this.shorts = res.shorts                 
+          this.shorts = res.shorts
           if (this.minimalList && this.setting?.googleForms && this.setting?.id && this.setting?.data) {
             convertData()
           }
@@ -174,6 +195,9 @@ export class QrGeneratorComponent implements OnInit {
           this.qrData = this.data
         }
       }
+      this.generateQRCodeDataUrl(this.qrData)?.subscribe((resUrl: any) => {
+        this.qrUrl = resUrl;
+      })
     }
   }
 
