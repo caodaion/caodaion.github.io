@@ -24,7 +24,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ButtonShareModule } from 'src/app/components/button-share/button-share.module';
-import { QRCodeModule } from 'angularx-qrcode';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { SynchronizedComponent } from './synchronized/synchronized.component';
 import { SharedModule } from "../../shared/shared.module";
@@ -60,7 +59,6 @@ import { UpdateEventModule } from "./update-event/update-event.module";
         MatMenuModule,
         MatSnackBarModule,
         ButtonShareModule,
-        QRCodeModule,
         NgxMatTimepickerModule,
         SharedModule,
         MatCheckboxModule,

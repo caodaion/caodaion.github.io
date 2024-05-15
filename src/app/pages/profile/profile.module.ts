@@ -4,7 +4,6 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileComponent } from './profile.component';
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {QRCodeModule} from "angularx-qrcode";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +23,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     ProfileRoutingModule,
     MatIconModule,
     MatButtonModule,
-    QRCodeModule,
     MatFormFieldModule,
     FormsModule,
     MatInputModule,

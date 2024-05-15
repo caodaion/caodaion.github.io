@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {QrGeneratorComponent} from "./qr-generator.component";
-import {QRCodeModule} from "angularx-qrcode";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
@@ -24,7 +23,6 @@ import { SharedModule } from "../../../shared/shared.module";
     imports: [
         CommonModule,
         QRGeneratorRoutingModule,
-        QRCodeModule,
         MatFormFieldModule,
         FormsModule,
         MatIconModule,

@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MarkdownModule } from 'ngx-markdown';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { QRCodeModule } from 'angularx-qrcode';
 import { CpQrScannerModule } from 'src/app/components/cp-qr-scanner/cp-qr-scanner.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -41,7 +40,6 @@ import { DetailsComponent } from './dao-lam-con/details/details.component';
     MarkdownModule,
     FormsModule,
     MatDialogModule,
-    QRCodeModule,
     CpQrScannerModule,
     MatFormFieldModule,
     MatInputModule,
