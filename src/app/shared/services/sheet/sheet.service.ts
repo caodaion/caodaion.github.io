@@ -15,15 +15,12 @@ export class SheetService {
       const column = [...new Set(Object.keys(data).map((col: any) => {
         let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
         if (returnData) {
-          if (!parseFloat(returnData['v'])) {
-            return returnData['v']
-          } else {
-            return new Date(returnData['v']).toString() !== 'Invalid Date' ? returnData['v'] : new Date(returnData['w']).getTime()
-          }
+          return returnData['v']
         }
       }))]?.filter((col: any) => !!col)
       const responseData = utils.sheet_to_json<any>(data, {
-        header: header || column
+        header: header || column,
+        raw: false
       })?.slice(slice);
       responseData.forEach((item: any) => {
         if (item?.option?.includes('||')) {
@@ -59,7 +56,7 @@ export class SheetService {
           fetch(sheetUrl)
             .then((res: any) => res.arrayBuffer())
             .then((req => {
-              const workbook = read(req)
+              const workbook = read(req, {dateNF: "DD/MM/YYYY"})
               resolve(workbook)
               rejects()
             }))
