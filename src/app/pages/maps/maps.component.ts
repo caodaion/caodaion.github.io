@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef, inject }
 import 'leaflet.locatecontrol';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
+import 'leaflet.markercluster';
 import { PopupComponent } from './popup/popup.component';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -38,6 +39,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
   @ViewChild('infoDrawer') infoDrawer!: any
   @ViewChild('inforBottomSheet') inforBottomSheet!: any
   inforBottomSheetRef: any;
+  markerCluster = L.markerClusterGroup();
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -159,8 +161,8 @@ export class MapsComponent implements OnInit, AfterViewInit {
     const caodaiONMarker = L.marker([this.latitude, this.longitude], { icon: this.getThanhSoIcon('caodaion') })
     caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`)
     caodaiONMarker.addTo(this.map);
-    this.thanhSoList?.forEach((item: any) => {
-      this.loadThanhSoMarker(item);
+    this.thanhSoList?.forEach((item: any, index: any) => {
+      this.loadThanhSoMarker(item, index);
     })
   }
 
@@ -201,7 +203,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
     return thanhSoIcon
   }
 
-  loadThanhSoMarker(item: any) {
+  loadThanhSoMarker(item: any, index: any) {
     const thanhSoMarker = L.marker(item.latLng, { icon: this.getThanhSoIcon(item) })
     thanhSoMarker.addTo(this.map)
     const popup = this.viewContainerRef.createComponent(PopupComponent)
@@ -216,6 +218,10 @@ export class MapsComponent implements OnInit, AfterViewInit {
       this.infoDrawer.open();
       this.selectItem(item)
     })
+    this.markerCluster.addLayer(thanhSoMarker)
+    if (index === this.thanhSoList?.length - 1) {
+      this.map.addLayer(this.markerCluster);
+    }
   }
 
   selectItem(item?: any) {
@@ -426,7 +432,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
     return L.latLngBounds(southWest, northEast);
   }
 
-  removeWayRouting() {    
+  removeWayRouting() {
     this.route?.markers?.forEach((item: any) => {
       this.map?.removeLayer(item)
     })

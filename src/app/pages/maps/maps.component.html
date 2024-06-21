@@ -160,6 +160,12 @@
             <button mat-icon-button [color]="'primary'"><mat-icon>phone</mat-icon></button>
         </a>
     </div>
+    <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.organization">
+        <span class="material-symbols-outlined text-[#4285f4]">
+            diversity_2
+        </span>
+        <div class="w-full ps-3">{{selectedMap?.organization}}</div>
+    </div>
     <div class="w-full flex items-center pb-4 justify-center">
         <div *ngIf="selectedMap?.latLng && selectedMap?.latLng[0] && selectedMap?.latLng[1]"
             class="flex flex-col w-min items-center text-[#4285f4] cursor-pointer"
