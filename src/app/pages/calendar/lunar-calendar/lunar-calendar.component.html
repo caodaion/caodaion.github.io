@@ -437,11 +437,12 @@
         <p class="text-center text-xl font-bold" *ngIf="shareItem.targetEvent">THỜI {{ (shareItem.targetEvent || '')}}
         </p>
         <div class="text-right mt-8 text-xs">
-          <span *ngIf="shareItem.traiGioi && (shareItem.date?.six || shareItem.date?.ten || shareItem.date?.fifteen)">Ăn
-            chay: </span>
-          <span *ngIf="shareItem.traiGioi && shareItem.date?.six">6. </span>
-          <span *ngIf="shareItem.traiGioi && shareItem.date?.ten">10. </span>
-          <span *ngIf="shareItem.traiGioi && shareItem.date?.fifteen">15.</span>
+          <span *ngIf="shareItem.traiGioi && (shareItem.date?.six || shareItem.date?.ten || shareItem.date?.fifteen)">
+            Trai giới: 
+          </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.six">lục trai. </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.ten">thập trai. </span>
+          <span *ngIf="shareItem.traiGioi && shareItem.date?.fifteen">thiên ngươn.</span>
         </div>
         <div class="h-3 w-full mb-8" [ngClass]="
         shareItem?.event?.date === 'yearly-monthly-daily'
