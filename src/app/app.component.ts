@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
           isHideBottomNavBar: false,
         })
       );
-      this.authService.getCurrentUser();
     });
     this.addTag()
   }

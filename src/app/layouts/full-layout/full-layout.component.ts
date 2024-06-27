@@ -1,6 +1,8 @@
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
+  AfterContentInit,
   AfterViewChecked,
+  AfterViewInit,
   ApplicationRef,
   ChangeDetectorRef,
   Component,
@@ -11,13 +13,13 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
-import {SwPush, SwUpdate} from '@angular/service-worker';
-import {fromEvent, interval, Observable, Subscription} from 'rxjs';
-import {CommonService} from 'src/app/shared/services/common/common.service';
-import {ViewMissionService} from 'src/app/shared/services/view-mission/view-mission.service';
-import {OfflineSnackbarComponent} from '../offline-snackbar/offline-snackbar.component';
-import {AuthService} from "../../shared/services/auth/auth.service";
-import {MENU} from "../../shared/constants/menu.constant";
+import { SwPush, SwUpdate } from '@angular/service-worker';
+import { fromEvent, interval, Observable, Subscription } from 'rxjs';
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
+import { OfflineSnackbarComponent } from '../offline-snackbar/offline-snackbar.component';
+import { AuthService } from "../../shared/services/auth/auth.service";
+import { MENU } from "../../shared/constants/menu.constant";
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,12 +27,12 @@ import { Router } from '@angular/router';
   templateUrl: './full-layout.component.html',
   styleUrls: [
     './full-layout.component.scss',
-  './styles/caodaionlogo.fulllayout.component.scss',
-  './styles/main-drawer.fulllayout.component.scss',
-  './styles/main-toolbar.fulllayout.component.scss',
-],
+    './styles/caodaionlogo.fulllayout.component.scss',
+    './styles/main-drawer.fulllayout.component.scss',
+    './styles/main-toolbar.fulllayout.component.scss',
+  ],
 })
-export class FullLayoutComponent implements OnInit, AfterViewChecked {
+export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewInit {
   offlineEvent?: Observable<Event>;
   onlineEvent?: Observable<Event>;
   subscriptions: Subscription[] = [];
@@ -116,6 +118,9 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     //   //Do something with the error.
     // });
     this.mainMenu = this.authService.getMenu(MENU)
+  }
+
+  ngAfterViewInit(): void {
     this.currentUser = this.authService.getCurrentUser()
   }
 
@@ -221,7 +226,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   notificationClicks() {
-    this.swPush.notificationClicks.subscribe(({action, notification}) => {
+    this.swPush.notificationClicks.subscribe(({ action, notification }) => {
       window.open(notification.data.url)
     })
   }
@@ -247,7 +252,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked {
     // Show the install prompt
     this.deferredPrompt?.prompt();
     // Wait for the user to respond to the prompt
-    const {outcome} = await this.deferredPrompt?.userChoice;
+    const { outcome } = await this.deferredPrompt?.userChoice;
     // Optionally, send analytics event with outcome of user choice
     console.log(`User response to the install prompt: ${outcome}`);
     // We've used the prompt, and can't use it again, throw it away

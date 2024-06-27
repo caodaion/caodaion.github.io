@@ -15,7 +15,9 @@ export class AuthService {
 
   readonly sheetId = `2PACX-1vTVylQUa5KMibyzg_FrMFza-iF8Mk0IrJ9GrCEkNhClDFiO6DTIeB_tmp1JemzEbHh1jfaAt5eqjfUm`
   readonly userWorkbook: any;
+  readonly personalWorkbook: any;
   readonly userSetting: any;
+  readonly personalSetting: any;
 
   constructor(private http: HttpClient, private router: Router, private sheetService: SheetService) {
   }
@@ -86,8 +88,52 @@ export class AuthService {
       })
       this.currentUser.children = this.mainModuleKey
     }
-    // this.contentEditable = true;
+    // this.contentEditable = true;    
+    if (this.currentUser?.sheetId) {
+      this.getUserPersionalData().subscribe((res: any) => {
+        this.currentUser.setting = res.setting
+      });
+    } else {
+    }
     return this.currentUser;
+  }
+
+  getUserPersionalData(): Observable<any> {
+    const ref: Mutable<this> = this;
+    return new Observable((observable) => {
+      const returnData = () => {
+        const response = <any>{}
+        this.sheetService.decodeRawSheetData(ref.personalWorkbook.Sheets['Form Responses 1'])
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              response.status = 200;
+              response.setting = <any>{}
+              const settings = res?.filter((item: any) => item['Timestamp'] === 'setting')
+              response.setting = { data: settings[0]['data'] }
+              ref.personalSetting = response.setting
+            }
+            observable.next(response)
+            observable.complete()
+          })
+      }
+      if (!ref.personalWorkbook) {
+        try {
+          this.sheetService.fetchSheet(this.currentUser.sheetId)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.personalWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        returnData()
+      }
+    })
   }
 
   getMenu(menu: any, mainMenu?: any) {

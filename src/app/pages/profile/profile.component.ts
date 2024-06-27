@@ -303,7 +303,7 @@ export class ProfileComponent implements OnInit {
                 const decodedToken = jwtHelper.decodeToken(item?.data)
                 item.password = decodedToken?.password
                 item.phone = decodedToken?.phone
-                item.username = item?.userName
+                item.userName = item?.userName
                 item.name = decodedToken?.name
                 item.sheetId = decodedToken?.sheetId || ''
                 item.googleFormsId = decodedToken?.googleFormsId || ''
@@ -326,7 +326,14 @@ export class ProfileComponent implements OnInit {
 
   selectedToken: any;
   onChangeSelectedUser() {
-    this.selectedToken = this.generaToken(this.selectedUser);
+    this.selectedToken = this.generaToken({
+      password: this.selectedUser?.password,
+      phone: this.selectedUser?.phone,
+      name: this.selectedUser?.name,
+      sheetId: this.selectedUser?.sheetId || '',
+      googleFormsId: this.selectedUser?.googleFormsId || '',
+
+    });
   }
 
   copyToken() {

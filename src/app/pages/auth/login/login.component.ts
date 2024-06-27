@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
       this.debugDevAdminCount++
     }
   }
-
+  userSetting: any;
   login() {
     if (!this.devAdministratorAction) {
       if (this.kids?.length > 0) {
@@ -101,20 +101,62 @@ export class LoginComponent implements OnInit, AfterViewChecked {
           }
         }
       } else {
+        const localStorageUser = JSON.parse(localStorage.getItem('users') || '{}')
         if (this.loginUser.userName && this.loginUser.password && !this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) && !this.loginUser.userName.split(' ').every((t) => t.includes('vovi.caodaion.administrator'))) {
-          const localStorageUser = JSON.parse(localStorage.getItem('users') || '{}')
-          if (localStorageUser[this.loginUser.userName]) {
-            const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
-            if (decodeUser.password === this.loginUser.password) {
-              localStorage.setItem('token', localStorageUser[this.loginUser.userName])
-              this.authService.getCurrentUser()
-              location.reload()
-              location.href = ''
-              this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
-                duration: this.durationInSeconds * 1000,
-                horizontalPosition: this.horizontalPosition,
-                verticalPosition: this.verticalPosition,
-              })
+          if (!this.userSetting?.googleFormsId) {
+            this.authService.fetchUsers().subscribe({
+              next: (res: any) => {
+                if (res.status == 200) {
+                  this.userSetting = res.setting;
+                  const foundUser = res.users?.find((item: any) => {
+                    const jwtHelper = new JwtHelperService()
+                    const decodedToken = jwtHelper.decodeToken(item?.data)
+                    item.password = decodedToken?.password
+                    item.username = item?.userName
+                    return this.loginUser.userName === item?.userName && this.loginUser.password === decodedToken?.password;
+                  })
+                  if (foundUser) {
+                    localStorage.setItem('token', foundUser.data)
+                    this.authService.getCurrentUser()
+                    location.reload()
+                    location.href = ''
+                    location.reload()
+                    location.href = ''
+                    this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                      duration: this.durationInSeconds * 1000,
+                      horizontalPosition: this.horizontalPosition,
+                      verticalPosition: this.verticalPosition,
+                    })
+                  } else {
+                    localLogIn()
+                  }
+                } else {
+                  localLogIn()
+                }
+              },
+              error(err) {
+                console.log(err);
+                localLogIn()
+              },
+              complete() {
+                console.info('completed');
+              },
+            })
+          }
+          const localLogIn = () => {
+            if (localStorageUser[this.loginUser.userName]) {
+              const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
+              if (decodeUser.password === this.loginUser.password) {
+                localStorage.setItem('token', localStorageUser[this.loginUser.userName])
+                this.authService.getCurrentUser()
+                location.reload()
+                location.href = ''
+                this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                  duration: this.durationInSeconds * 1000,
+                  horizontalPosition: this.horizontalPosition,
+                  verticalPosition: this.verticalPosition,
+                })
+              }
             }
           }
         }
