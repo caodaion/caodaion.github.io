@@ -10,7 +10,7 @@ import { PopupComponent } from './popup/popup.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
 import { MatRippleModule } from '@angular/material/core';
 import { SearchThanhSoPipe } from './pipe/search-thanh-so.pipe';
@@ -21,6 +21,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RoutingInstructionsComponent } from './routing-instructions/routing-instructions.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
     declarations: [
         MapsComponent,
@@ -45,7 +46,9 @@ import { RoutingInstructionsComponent } from './routing-instructions/routing-ins
         MatSelectModule,
         SharedModule,
         MatCheckboxModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule
     ]
 })
 export class MapsModule { }

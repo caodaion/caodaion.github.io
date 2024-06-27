@@ -39,7 +39,9 @@ export class MapsComponent implements OnInit, AfterViewInit {
   @ViewChild('infoDrawer') infoDrawer!: any
   @ViewChild('inforBottomSheet') inforBottomSheet!: any
   inforBottomSheetRef: any;
-  markerCluster = L.markerClusterGroup();
+  markerCluster = L.markerClusterGroup({
+    removeOutsideVisibleBounds: true
+  });
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -158,12 +160,14 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   loadMarkers() {
-    const caodaiONMarker = L.marker([this.latitude, this.longitude], { icon: this.getThanhSoIcon('caodaion') })
-    caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`)
-    caodaiONMarker.addTo(this.map);
+    this.markerCluster.clearLayers();
+    const caodaiONMarker = L.marker([this.latitude, this.longitude], { icon: this.getThanhSoIcon('caodaion') });
+    caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`);
+    this.markerCluster.addLayer(caodaiONMarker);
     this.thanhSoList?.forEach((item: any, index: any) => {
       this.loadThanhSoMarker(item, index);
-    })
+    });
+    this.map.addLayer(this.markerCluster);
   }
 
   getThanhSoIcon(item: any): any {
@@ -204,24 +208,23 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   loadThanhSoMarker(item: any, index: any) {
-    const thanhSoMarker = L.marker(item.latLng, { icon: this.getThanhSoIcon(item) })
-    thanhSoMarker.addTo(this.map)
-    const popup = this.viewContainerRef.createComponent(PopupComponent)
-    popup.instance.thanhSo = item
-    popup.changeDetectorRef.detectChanges()
+    const thanhSoMarker = L.marker(item.latLng, { icon: this.getThanhSoIcon(item) });
+
+    // Set up popup content
+    const popup = this.viewContainerRef.createComponent(PopupComponent);
+    popup.instance.thanhSo = item;
+    popup.changeDetectorRef.detectChanges();
     thanhSoMarker.bindPopup(popup.location.nativeElement);
-    this.viewContainerRef.clear()
-    // thanhSoMarker.on('mouseover', () => {
-    //   thanhSoMarker.openPopup()
-    // })
+    this.viewContainerRef.clear();
+
+    // Add click event for the marker to open a drawer
     thanhSoMarker.on('click', () => {
       this.infoDrawer.open();
-      this.selectItem(item)
-    })
-    this.markerCluster.addLayer(thanhSoMarker)
-    if (index === this.thanhSoList?.length - 1) {
-      this.map.addLayer(this.markerCluster);
-    }
+      this.selectItem(item);
+    });
+
+    // Add the marker to the cluster group
+    this.markerCluster.addLayer(thanhSoMarker);
   }
 
   selectItem(item?: any) {

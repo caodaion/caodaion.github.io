@@ -25,6 +25,7 @@
                             <div class="flex flex-wrap p-3 flex-1" (click)="selectItem(item)">
                                 <div class="w-full text-lg font-medium">{{item?.name}}</div>
                                 <div class="w-full text-[#6e73a2]">{{item?.address}}</div>
+                                <div class="w-full text-[#6e73a2]">{{item?.organization}}</div>
                                 <div class="w-full text-[#6e73a2]">khoản {{item?.distance/1000 | number: '0.0-0'}}km
                                 </div>
                             </div>

@@ -14,17 +14,11 @@ export class SearchThanhSoPipe implements PipeTransform {
     if (!option?.searchText && !option?.selected) {
       return value?.sort((a: any, b: any) => a?.distance < b?.distance ? -1 : 1);
     }
+    const searchContent = this.commonService.generatedSlug(`${option?.searchText}`)
     return value?.filter((ch: any) => {
-      return ((this.commonService.generatedSlug(`${option?.searchText}`)?.split('-')
-        .every((x) => {
-          return this.commonService.generatedSlug(`${ch.name}`)?.includes(x)
-            || this.commonService.generatedSlug(`${ch.address}`)?.includes(x)
-            || this.commonService.generatedSlug(`${ch.organization}`)?.includes(x)
-        })) || (`${option?.searchText}`?.split(' ').every((x) => {
-          return ch.name?.toLowerCase()?.includes(x)
-            || ch.address?.toLowerCase()?.includes(x)
-            || ch.organization?.toLowerCase()?.includes(x)
-        })))
+      return this.commonService.generatedSlug(`${ch.name}`)?.includes(searchContent) ||
+        this.commonService.generatedSlug(`${ch.address}`)?.includes(searchContent) ||
+        this.commonService.generatedSlug(`${ch.organization}`)?.includes(searchContent)
     })?.sort((a: any, b: any) => a?.distance < b?.distance ? -1 : 1)
   }
 
