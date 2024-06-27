@@ -24,9 +24,10 @@ import {CpContentCreatorModule} from "../../components/cp-content-creator/cp-con
 import { MarkdownModule } from 'ngx-markdown';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SearchKinhPipe } from './kinh-list/search-kinh.pipe';
 
 @NgModule({
-  declarations: [KinhListComponent, KinhContentComponent],
+  declarations: [KinhListComponent, KinhContentComponent, SearchKinhPipe],
   imports: [
     CommonModule,
     KinhRoutingModule,

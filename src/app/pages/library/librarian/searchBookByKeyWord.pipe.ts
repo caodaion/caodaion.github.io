@@ -22,16 +22,13 @@ export class SearchBookByKeyWordPipe implements PipeTransform {
     transform(value: any, option: any): any {
         if (!option?.searchText && option?.selectedChips?.length == 0) {
             return value;
-        }        
+        }
+        const searchContent = this.commonService.generatedSlug(`${option?.searchText}`);
         return value?.filter((ch: any) => {
-            return ((this.commonService.generatedSlug(`${option?.searchText}`)?.split('-')
-                .every((x) => {
-                    return this.commonService.generatedSlug(`${ch.name}`)?.includes(x) ||
-                        this.commonService.generatedSlug(`${ch.author}`)?.includes(x) ||
-                        this.commonService.generatedSlug(`${ch.description}`)?.includes(x)
-                })) || (`${option?.searchText}`?.split(' ').every((x) => {
-                    return ch.name?.includes(x) || ch.author?.includes(x) || ch.description?.includes(x)
-                }))) && option?.selectedChips?.every((x: any) => {
+            return (this.commonService.generatedSlug(`${ch.name}`)?.includes(searchContent) ||
+                this.commonService.generatedSlug(`${ch.author}`)?.includes(searchContent) ||
+                this.commonService.generatedSlug(`${ch.description}`)?.includes(searchContent))
+                && option?.selectedChips?.every((x: any) => {
                     return ch?.labels?.includes(x)
                 })
         })

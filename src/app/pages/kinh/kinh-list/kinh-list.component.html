@@ -1,9 +1,6 @@
 <div class="wrapper-container kinh-list-container">
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-  <mat-tab-group
-    [selectedIndex]="selectedIndex"
-    (selectedTabChange)="selectedTabChange($event)"
-  >
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="selectedTabChange($event)">
     <!-- <mat-tab [label]="'ÁP DỤNG BÂY GIỜ'" #tabGroup>
       <mat-accordion multi>
         <mat-expansion-panel
@@ -108,36 +105,32 @@
     </mat-tab> -->
     <mat-tab *ngFor="let filter of kinhFilter" [label]="filter?.name">
       <div class="sticky top-0 z-10 w-full bg-white">
-        <mat-button-toggle-group
-          [(ngModel)]="mode"
-          class="!rounded-full"
-          (ngModelChange)="updateViewMode()"
-        >
-          <mat-button-toggle
-            value="list"
-            [matTooltip]="'hiển thị kiểu danh sách'"
-            ><mat-icon *ngIf="mode === 'list'">check</mat-icon
-            ><mat-icon>list</mat-icon></mat-button-toggle
-          >
-          <mat-button-toggle value="gird" [matTooltip]="'hiển thị kiểu lưới'"
-            ><mat-icon *ngIf="mode === 'gird'">check</mat-icon
-            ><mat-icon>grid_view</mat-icon></mat-button-toggle
-          >
-        </mat-button-toggle-group>
+        <div class="flex pt-3">
+          <mat-form-field class="w-full" [appearance]="'outline'">
+            <mat-label>Tìm kiếm</mat-label>
+            <input type="text" matInput #searchKinhFormField>
+          </mat-form-field>
+          <div>
+            <mat-button-toggle-group [(ngModel)]="mode" class="!rounded-full" (ngModelChange)="updateViewMode()">
+              <mat-button-toggle value="list" [matTooltip]="'hiển thị kiểu danh sách'"><mat-icon
+                  *ngIf="mode === 'list'">check</mat-icon><mat-icon>list</mat-icon></mat-button-toggle>
+              <mat-button-toggle value="gird" [matTooltip]="'hiển thị kiểu lưới'"><mat-icon
+                  *ngIf="mode === 'gird'">check</mat-icon><mat-icon>grid_view</mat-icon></mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
         <mat-divider></mat-divider>
       </div>
 
       <div *ngIf="mode === 'list'">
         <mat-list>
           <mat-list-item
-            *ngFor="let kinh of filter?.kinh; let index = index"
+            *ngFor="let kinh of filter?.kinh | searchKinh: {searchText: searchKinhFormField['value']}; let index = index"
             (click)="
               nowKinh.filter.me = filter?.key;
               nowKinh.filter.e = filter?.key;
               onOpenKinhContent(kinh)
-            "
-            matRipple
-          >
+            " matRipple>
             <div class="w-full h-full flex flex-col justify-between">
               <div class="h-full flex items-center text-xl font-bold px-4">
                 {{ kinh?.name }}
@@ -150,16 +143,11 @@
       <div *ngIf="mode === 'gird'">
         <mat-grid-list [cols]="cols" rowHeight="1:1">
           <mat-grid-tile *ngFor="let kinh of filter?.kinh">
-            <mat-card
-              appearance="outlined"
-              (click)="
+            <mat-card appearance="outlined" (click)="
                 nowKinh.filter.me = filter?.key;
                 nowKinh.filter.e = filter?.key;
                 onOpenKinhContent(kinh)
-              "
-              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
-              matRipple
-            >
+              " class="w-100 h-100 d-flex flex-column align-items-center justify-content-center" matRipple>
               <mat-card-header class="w-100">
                 <mat-card-title>{{ kinh?.name }}</mat-card-title>
               </mat-card-header>
@@ -173,36 +161,23 @@
         <mat-expansion-panel [expanded]="false">
           <mat-expansion-panel-header>
             <mat-panel-title> KINH </mat-panel-title>
-            <mat-panel-description
-              >KINH CÚNG TỨ-THỜI và QUANG-HÔN, TANG-TẾ</mat-panel-description
-            >
+            <mat-panel-description>KINH CÚNG TỨ-THỜI và QUANG-HÔN, TANG-TẾ</mat-panel-description>
           </mat-expansion-panel-header>
           <mat-grid-list [cols]="cols" rowHeight="1:1">
             <mat-grid-tile *ngFor="let kinh of kinhList">
-              <mat-card
-                appearance="outlined"
-                [routerLink]="kinh?.key"
-                class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
-                matRipple
-              >
+              <mat-card appearance="outlined" [routerLink]="kinh?.key"
+                class="w-100 h-100 d-flex flex-column align-items-center justify-content-center" matRipple>
                 <mat-card-header class="w-100">
                   <mat-card-title>{{ kinh?.name }}</mat-card-title>
                   <mat-card-subtitle>{{ kinh?.giongDoc }}</mat-card-subtitle>
                 </mat-card-header>
-                <mat-card-content
-                  class="w-100"
-                  [ngStyle]="{ whiteSpace: 'pre-wrap' }"
-                  >{{ kinh?.goiNho }}</mat-card-content
-                >
+                <mat-card-content class="w-100" [ngStyle]="{ whiteSpace: 'pre-wrap' }">{{ kinh?.goiNho
+                  }}</mat-card-content>
               </mat-card>
             </mat-grid-tile>
             <mat-grid-tile *ngIf="contentEditable">
-              <mat-card
-                appearance="outlined"
-                [routerLink]="'them-moi'"
-                class="w-100 h-100 d-flex align-items-center justify-content-center"
-                matRipple
-              >
+              <mat-card appearance="outlined" [routerLink]="'them-moi'"
+                class="w-100 h-100 d-flex align-items-center justify-content-center" matRipple>
                 <mat-card-header>
                   <mat-card-title>+ THÊM KINH MỚI</mat-card-title>
                 </mat-card-header>
