@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { CommonService } from "../../shared/services/common/common.service";
 import * as CryptoJS from "crypto-js";
@@ -16,7 +16,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewChecked {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   durationInSeconds = 3;
@@ -44,7 +44,11 @@ export class ProfileComponent implements OnInit {
   ]
   userNameRequired: boolean = false
   isHolyNameRequired: boolean = false
+  isInvalidSyncData: boolean = false
   confirmPassword: any = ''
+  provinces = <any>[];
+  districts = <any>[];
+  wards = <any>[];
 
   @ViewChild('passwordDialog') passwordDialog!: any;
   @ViewChild('syncDialog') syncDialog!: any;
@@ -56,14 +60,16 @@ export class ProfileComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private matDiaLog: MatDialog,
     private route: ActivatedRoute,
-    private tinyUrlService: TinyUrlService
+    private tinyUrlService: TinyUrlService,
+    private cd: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
     const token = localStorage.getItem('token')
     if (token) {
-      this.getCurrentUser()
+      this.getAllDivisions()
+      this.getCurrentUser(true)
       this.getRoles()
       this.updateUserProfile()
     } else {
@@ -80,15 +86,27 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  ngAfterViewChecked(): void {
+    this.isInvalidSyncData = this.authService.isInvalidSyncData;
+    this.cd.detectChanges();
+  }
+
   getRoles() {
     this.roles = []
     this.roles = this.caodaiTitle
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
   }
 
-  getCurrentUser() {
+  getCurrentUser(isInit: boolean = false) {
     const getSharedDataPromise = new Promise<void>((resolve, rejects) => {
-      this.currentUser = this.authService.getCurrentUser()
+      this.userSetting = <any>{};
+      this.currentUser = this.authService.getCurrentUser(isInit)
+      this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
+      this.userSetting.sheetId = this.currentUser?.sheetId;
+      this.userSetting.data = this.currentUser?.setting?.data;
+      if (this.currentUser?.googleFormsId && this.currentUser?.setting?.data) {
+        this.currentUser.isCloudSynced = true;
+      }
       let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
       if (typeof this.currentUser?.role === 'string') {
         this.currentUser.role = JSON.parse(this.currentUser?.role)
@@ -276,9 +294,10 @@ export class ProfileComponent implements OnInit {
   admin: boolean = false;
   users: any;
   selectedUser: any;
+  syncData = <any>[];
+
   onStartSyncDatawithRemote() {
     const openModal = () => {
-
       if (this.currentUser?.isCloudSynced) {
         const syncdialog = this.matDiaLog.open(this.syncDialog, {
           disableClose: true
@@ -289,6 +308,8 @@ export class ProfileComponent implements OnInit {
         })
       }
     }
+    console.log(this.userSetting?.googleFormsId);
+
     if (!this.userSetting?.googleFormsId) {
       this.authService.fetchUsers().subscribe({
         next: (res: any) => {
@@ -320,7 +341,24 @@ export class ProfileComponent implements OnInit {
         },
       })
     } else {
-      openModal()
+      console.log('asd');
+
+      this.authService.compareData().subscribe({
+        next: (res: any) => {
+          if (res?.data?.length > 0) {
+            this.syncData = res.data;
+            console.log(this.syncData);
+
+            openModal();
+          }
+        },
+        error(err) {
+          console.log(err);
+        },
+        complete() {
+          console.info('completed');
+        },
+      })
     }
   }
 
@@ -332,7 +370,6 @@ export class ProfileComponent implements OnInit {
       name: this.selectedUser?.name,
       sheetId: this.selectedUser?.sheetId || '',
       googleFormsId: this.selectedUser?.googleFormsId || '',
-
     });
   }
 
@@ -343,6 +380,35 @@ export class ProfileComponent implements OnInit {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
+  }
+  syncGoogleFormPath: any;
+  startSync() {
+    const syncToken = this.syncData?.map((item: any) => { return { key: item?.key, data: item?.data } });
+    this.syncGoogleFormPath = `https://docs.google.com/forms/d/e/${this.userSetting?.googleFormsId}/viewform`
+    this.syncGoogleFormPath += `?${this.userSetting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+  }
+
+  getAllDivisions() {
+    if (this.commonService.provinces?.length === 0) {
+      this.commonService.fetchProvinceData()
+        .subscribe((res: any) => {
+          if (res?.status == 200) {
+            this.provinces = res.provinces
+            this.districts = res.districts
+            this.wards = res.wards
+          }
+        })
+    } else {
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
+    }
+  }
+
+  onPress(event: any) {
+    if (event?.keyCode == 32) {
+      event['target']['value'] = event['target']['value'] + ' '
+    }
   }
 }
 

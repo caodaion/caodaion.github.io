@@ -9,6 +9,8 @@
         [matTooltip]="'Dữ liệu sẽ được đồng bộ trên toàn bộ thiết bị với tài khoản của bạn'">
         <mat-icon>cloud_sync</mat-icon>
         {{currentUser.isCloudSynced ? 'Đồng bộ dữ liệu với máy chủ' : 'Đăng ký đồng bộ với máy chủ'}}
+        <span *ngIf="!isInvalidSyncData"
+          class="animate-ping absolute top-0 left-0 h-full w-full bg-[#ea4335] opacity-75"></span>
       </button>
     </div>
   </div>
@@ -121,6 +123,48 @@
           <input type="text" matInput [(ngModel)]="currentUser.phone" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Tỉnh/Thành phố</mat-label>
+          <mat-select [(ngModel)]="currentUser.province" (ngModelChange)="updateUserProfile()">
+            <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+              (keydown)="onPress($event)">
+            <mat-option
+              *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
+              [value]="item?.id">{{ item?.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Quận/Huyện</mat-label>
+          <mat-select [(ngModel)]="currentUser.district" (ngModelChange)="updateUserProfile()">
+            <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+              (keydown)="onPress($event)">
+            <mat-option
+              *ngFor="let item of districts | divisionFilter: {level: 'district', parent: currentUser.province, searchText: districtFilter['value']}"
+              [value]="item?.id">{{ item?.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Phường/Xã</mat-label>
+          <mat-select [(ngModel)]="currentUser.ward" (ngModelChange)="updateUserProfile()">
+            <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+              (keydown)="onPress($event)">
+            <mat-option
+              *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: currentUser.district, searchText: wardFilter['value']}"
+              [value]="item?.id">{{ item?.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Thôn/Lộ</mat-label>
+          <input type="text" matInput [(ngModel)]="currentUser.village" (ngModelChange)="updateUserProfile()" />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </div>
@@ -165,8 +209,7 @@
       <div class="form-group w-full">
         <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Số điện thoại/Zalo</mat-label>
-          <input type="text" matInput required [(ngModel)]="currentUser.phone"
-            (ngModelChange)="updateUserProfile()" />
+          <input type="text" matInput required [(ngModel)]="currentUser.phone" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
       <div *ngIf="admin" class="w-full">
@@ -225,15 +268,35 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button [matDialogClose]="true">Đóng</button>
+    <button mat-flat-button [matDialogClose]="true" (click)="syncRegistrationGoogleFormPath = ''">Đóng</button>
   </mat-dialog-actions>
 </ng-template>
 
 <ng-template #syncDialog>
   <div mat-dialog-title>Đồng bộ dữ liệu của bạn với máy chủ</div>
   <mat-dialog-content>
+    <p>Những thông tin sau đây sẽ được đồng bộ</p>
+    <table class="w-full text-black">
+      <tbody>
+        <tr *ngFor="let item of syncData">
+          <td>
+            <span class="font-bold">{{item?.label || item?.key}}: </span>
+          </td>
+          <td>
+            <mat-icon>trending_flat</mat-icon>
+          </td>
+          <td>
+            <span>{{item?.displayData || item?.data}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="my-6 w-full" mat-flat-button [color]="'primary'" (click)="startSync()">Bắt đầu đồng bộ</button>
+    <iframe *ngIf="syncGoogleFormPath && !this.admin" [src]="
+      syncGoogleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button [matDialogClose]="true">Đóng</button>
+    <button mat-flat-button [matDialogClose]="true" (click)="syncGoogleFormPath = ''">Đóng</button>
   </mat-dialog-actions>
 </ng-template>

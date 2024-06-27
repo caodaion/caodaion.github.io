@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from "../../shared/shared.module";
+import { MatListModule } from '@angular/material/list';
+import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { SharedModule } from "../../shared/shared.module";
         MatSelectModule,
         MatDialogModule,
         MatTooltipModule,
-        SharedModule
+        SharedModule,
+        MatListModule,
+        DivisionFilterPipe
     ]
 })
 export class ProfileModule { }

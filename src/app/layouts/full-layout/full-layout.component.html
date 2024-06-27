@@ -87,7 +87,13 @@
             [matTooltip]="currentUser?.name || currentUser?.userName">
             <mat-icon>account_circle</mat-icon>
             <ng-container *ngIf="currentUser?.userName">
-              <div class="absolute bg-[#34a853] h-3 w-3 rounded-full top-7"></div>
+              <div class="absolute h-3 w-3 rounded-full top-7"
+                [ngClass]="{'bg-[#34a853]': isInvalidSyncData, 'bg-[#ea4335]': !isInvalidSyncData}">
+                <span
+                *ngIf="!isInvalidSyncData"
+                class="animate-ping absolute top-0 left-0 h-full w-full rounded-full bg-[#ea4335] opacity-75"
+              ></span>
+              </div>
             </ng-container>
           </button>
           <mat-menu #profileMenu="matMenu">

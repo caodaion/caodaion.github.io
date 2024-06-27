@@ -52,6 +52,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
 
   mainMenu = <any>[]
   currentUser: any
+  isInvalidSyncData: any
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -136,6 +137,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
     this.currentLayout = JSON.parse(<string>localStorage.getItem('currentLayout'))
     this.isHideToolbar = this.currentLayout?.isHideToolbar;
     this.isHideBottomNavBar = this.currentLayout?.isHideBottomNavBar;
+    this.isInvalidSyncData = this.authService.isInvalidSyncData;
     this.cd.detectChanges();
   }
 

@@ -5,6 +5,9 @@ import { Router } from "@angular/router";
 import { MENU } from '../../constants/menu.constant';
 import { Observable } from 'rxjs';
 import { SheetService } from '../sheet/sheet.service';
+import { DatePipe } from '@angular/common';
+import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
+import { CommonService } from '../common/common.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -19,16 +22,24 @@ export class AuthService {
   readonly userSetting: any;
   readonly personalSetting: any;
 
-  constructor(private http: HttpClient, private router: Router, private sheetService: SheetService) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private sheetService: SheetService,
+    private datePipe: DatePipe,
+    private commonService: CommonService
+  ) {
   }
 
   public currentUser: any;
+  private currentUserRemote: any;
   public contentEditable: boolean = false;
   jwtHelper = new JwtHelperService();
   mainModuleKey = <any>[]
   pushedModules = <any>[]
+  isInvalidSyncData: boolean = false;
 
-  public getCurrentUser() {
+  public getCurrentUser(isInit: boolean = false) {
     const find = (array: any, key: any) => {
       let result: any;
       array.some((o: any) => result = o.key.includes(key) ? o : find(o.children || [], key));
@@ -90,15 +101,148 @@ export class AuthService {
     }
     // this.contentEditable = true;    
     if (this.currentUser?.sheetId) {
-      this.getUserPersionalData().subscribe((res: any) => {
+      this.getUserPersionalData(isInit).subscribe((res: any) => {
         this.currentUser.setting = res.setting
+        this.currentUserRemote = res.remote;
+        this.isInvalidSyncData = this.checkSyncDataStatus();
       });
-    } else {
     }
     return this.currentUser;
   }
 
-  getUserPersionalData(): Observable<any> {
+  checkSyncDataStatus(): boolean {
+    if (JSON.stringify(this.currentUserRemote)?.length == JSON.stringify(this.currentUser)?.length) {
+      return true;
+    }
+    return false;
+  }
+
+  compareData(): Observable<any> {
+    return new Observable((observable) => {
+      const currentUserKeys = Object.keys((this.currentUser));
+      const response = <any>{};
+      response.data = <any>[]
+      currentUserKeys?.forEach((key: any) => {
+        const startCompare = () => {
+          if (this.currentUserRemote[key]?.toString() != this.currentUser[key]?.toString()) {
+            const comparedData = {
+              key: key,
+              label: this.getCompareData(key, this.currentUser[key])?.label,
+              displayData: this.getCompareData(key, this.currentUser[key])?.displayData,
+              data: this.currentUser[key]
+            }
+            response.data.push(comparedData);
+          }
+        }
+        if (key.includes('province') || key.includes('district') || key.includes('ward')) {
+          if (this.commonService.provinces?.length === 0) {
+            this.commonService.fetchProvinceData()
+              .subscribe((res: any) => {
+                if (res?.status == 200) {
+                  this.provinces = res.provinces
+                  this.districts = res.districts
+                  this.wards = res.wards
+                  startCompare();
+                }
+              })
+          } else {
+            this.provinces = this.commonService.provinces
+            this.districts = this.commonService.districts
+            this.wards = this.commonService.wards
+            startCompare();
+          }
+        } else {
+          startCompare();
+        }
+      })
+      observable.next(response)
+      observable.complete()
+    });
+  }
+
+  provinces: any;
+  districts: any;
+  wards: any;
+
+  getCompareData(key: any, item: any): any {
+    switch (key) {
+      case 'sex': return {
+        label: 'Giới tính',
+        displayData: item === 'male' ? "Nam" : item === 'female' ? "Nữ" : '',
+      }
+      case 'title': return {
+        label: 'Chức Đạo',
+        displayData: CAODAI_TITLE?.data?.find((v: any) => v.key === item)?.name,
+      }
+      case 'birthday': return {
+        label: 'Ngày sinh',
+        displayData: this.datePipe.transform(item, 'dd/MM/YYYY'),
+      }
+      case 'thanhSo': return {
+        label: 'Thánh Sở',
+        displayData: item,
+      }
+      case 'role': {
+        const titles = CAODAI_TITLE?.data?.find((item: any) => item.key === 'chuc-viec')?.subTitle
+        return {
+          label: 'Nhiệm vụ hành chánh',
+          displayData: item?.map((it: any) => titles?.find((t: any) => t.key == it)?.name).join(', '),
+        }
+      }
+      case 'children': {
+        const titles = CAODAI_TITLE?.data?.find((item: any) => item.key === 'chuc-viec')?.subTitle
+        return {
+          label: 'Khả ngăn truy cập',
+          displayData: "Cập nhật dựa theo nhiệm vụ hành chánh của bạn",
+        }
+      }
+      case 'province': {
+        return {
+          label: 'Tỉnh/Thành phố',
+          displayData: this.provinces?.find((p: any) => p?.id == item)?.name,
+        }
+      }
+      case 'district': {
+        return {
+          label: 'Quận/Huyện',
+          displayData: this.districts?.find((p: any) => p?.id == item)?.name,
+        }
+      }
+      case 'ward': {
+        return {
+          label: 'Phường/Xã',
+          displayData: this.wards?.find((p: any) => p?.id == item)?.name,
+        }
+      }
+      case 'village': {
+        return {
+          label: 'Thôn/Lộ',
+          displayData: item,
+        }
+      }
+      case 'phone': {
+        return {
+          label: 'Số điện thoại/Zalo',
+          displayData: item,
+        }
+      }
+      case 'password': {
+        return {
+          label: 'Mật khẩu',
+          displayData: item?.split('')?.map((psw: any) => "*").join(''),
+        }
+      }
+      case 'name': {
+        return {
+          label: 'Họ và Tên',
+          displayData: item,
+        }
+      }
+      default: return '';
+    }
+  }
+
+  getUserPersionalData(isInit: boolean = false): Observable<any> {
     const ref: Mutable<this> = this;
     return new Observable((observable) => {
       const returnData = () => {
@@ -111,9 +255,29 @@ export class AuthService {
               const settings = res?.filter((item: any) => item['Timestamp'] === 'setting')
               response.setting = { data: settings[0]['data'] }
               ref.personalSetting = response.setting
+              response.remote = <any>{
+                userName: this.currentUser?.userName,
+                isCloudSynced: this.currentUser?.isCloudSynced,
+                sheetId: this.currentUser?.sheetId,
+                googleFormsId: this.currentUser?.googleFormsId,
+                setting: response.setting,
+              }
+              res?.forEach((item: any) => {
+                if (item.data && item['Timestamp'] !== 'setting') {
+                  const dataRow = JSON.parse(item.data)
+                  dataRow?.forEach((dr: any) => {
+                    if (dr?.key) {
+                      if (isInit) {
+                        this.currentUser[dr?.key] = dr?.data;
+                      }
+                      response.remote[dr?.key] = dr?.data;
+                    }
+                  })
+                }
+              })
+              observable.next(response)
+              observable.complete()
             }
-            observable.next(response)
-            observable.complete()
           })
       }
       if (!ref.personalWorkbook) {

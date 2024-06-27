@@ -1,14 +1,14 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {Component, OnInit} from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
-import {AuthService} from "../../shared/services/auth/auth.service";
+import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements AfterViewInit {
   profileMenu = <any>[
 
   ]
@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  ngAfterViewInit(): void {
     this.currentUser = this.authService.currentUser
   }
 
