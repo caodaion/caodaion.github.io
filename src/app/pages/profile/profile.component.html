@@ -1,6 +1,17 @@
 <div class="container-fluid" *ngIf="currentUser?.userName">
-  <h1>{{ currentUser?.holyName || currentUser?.name }}</h1>
-  <p>@{{ currentUser?.userName }}</p>
+  <div class="flex items-center justify-between">
+    <div>
+      <h1>{{ currentUser?.holyName || currentUser?.name }}</h1>
+      <p>@{{ currentUser?.userName }}</p>
+    </div>
+    <div>
+      <button mat-button (click)="onStartSyncDatawithRemote()"
+        [matTooltip]="'Dữ liệu sẽ được đồng bộ trên toàn bộ thiết bị với tài khoản của bạn'">
+        <mat-icon>cloud_sync</mat-icon>
+        {{currentUser.isCloudSynced ? 'Đồng bộ dữ liệu với máy chủ' : 'Đăng ký đồng bộ với máy chủ'}}
+      </button>
+    </div>
+  </div>
   <div>
     <div class="block lg:flex" *ngIf="!currentUser.isGuest">
       <div class="w-full">
@@ -13,11 +24,7 @@
         <div *ngIf="qrData" class="w-full flex flex-col items-center">
           <img #parent [src]="qrUrl" class="w-[300px] h-[300px]">
           <div class="text-center">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="saveAsImage(parent)"
-            >
+            <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
               <mat-icon>download</mat-icon>
               Tải Mã QR
             </button>
@@ -26,51 +33,31 @@
       </div>
     </div>
     <div *ngIf="currentUser.isGuest">
-      <button
-        mat-flat-button
-        [color]="'warn'"
-        class="w-full"
-        (click)="activeAccount()"
-      >
+      <button mat-flat-button [color]="'warn'" class="w-full" (click)="activeAccount()">
         KÍCH HOẠT
       </button>
     </div>
     <div class="block lg:flex lg:flex-wrap mx-[-0.5rem] my-8">
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Tên đăng nhập</mat-label>
-          <input
-            [disabled]="!currentUser.isGuest"
-            type="text"
-            matInput
-            [(ngModel)]="currentUser.userName"
-          />
+          <input [disabled]="!currentUser.isGuest" type="text" matInput [(ngModel)]="currentUser.userName" />
         </mat-form-field>
-        <mat-error *ngIf="userNameRequired"
-          >Bạn cần cập nhật Tên đăng nhập mới có thể kích hoạt. Nếu bạn không
+        <mat-error *ngIf="userNameRequired">Bạn cần cập nhật Tên đăng nhập mới có thể kích hoạt. Nếu bạn không
           biết tạo tên gì? Hãy nhập thông tin của bạn, hệ thống sẽ giúp bạn tạo
-          tên đăng nhập tự động.</mat-error
-        >
+          tên đăng nhập tự động.</mat-error>
       </div>
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Họ và Tên</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="currentUser.name"
-            (ngModelChange)="updateUserProfile()"
-          />
+          <input type="text" matInput [(ngModel)]="currentUser.name" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5">
         <div class="w-full">
           <mat-label>Giới tính</mat-label>
           <div>
-            <mat-radio-group
-              [(ngModel)]="currentUser.sex"
-              (ngModelChange)="updateUserProfile()"
-            >
+            <mat-radio-group [(ngModel)]="currentUser.sex" (ngModelChange)="updateUserProfile()">
               <mat-radio-button [value]="'male'">Nam</mat-radio-button>
               <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
             </mat-radio-group>
@@ -78,97 +65,66 @@
         </div>
       </div>
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Ngày sinh</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            [(ngModel)]="currentUser.birthday"
-            (ngModelChange)="updateUserProfile()"
-          />
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="currentUser.birthday"
+            (ngModelChange)="updateUserProfile()" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Chức đạo</mat-label>
-          <mat-select
-            [(ngModel)]="currentUser.title"
-            (ngModelChange)="updateUserProfile()"
-          >
+          <mat-select [(ngModel)]="currentUser.title" (ngModelChange)="updateUserProfile()">
             <mat-option *ngFor="let item of caodaiTitle" [value]="item?.key">{{
               item?.name
-            }}</mat-option>
+              }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div
-        class="form-group w-full lg:w-1/5"
-        *ngIf="currentUser.sex === 'male' && isHolyNameRequired"
-      >
-        <mat-form-field class="w-full">
+      <div class="form-group w-full lg:w-1/5" *ngIf="currentUser.sex === 'male' && isHolyNameRequired">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Sắc phái</mat-label>
-          <mat-select
-            [(ngModel)]="currentUser.color"
-            (ngModelChange)="updateUserProfile()"
-          >
-            <mat-option
-              *ngFor="let item of colors"
-              [value]="item.key"
-              [ngStyle]="{ background: item.color }"
-              >{{ item.name }}</mat-option
-            >
+          <mat-select [(ngModel)]="currentUser.color" (ngModelChange)="updateUserProfile()">
+            <mat-option *ngFor="let item of colors" [value]="item.key" [ngStyle]="{ background: item.color }">{{
+              item.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5" *ngIf="isHolyNameRequired">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Thánh Danh</mat-label>
-          <input
-            type="text"
-            matInput
-            [required]="isHolyNameRequired"
-            [(ngModel)]="currentUser.holyName"
-            (ngModelChange)="updateUserProfile()"
-          />
+          <input type="text" matInput [required]="isHolyNameRequired" [(ngModel)]="currentUser.holyName"
+            (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Thánh Sở</mat-label>
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="currentUser.thanhSo"
-            (ngModelChange)="updateUserProfile()"
-          />
+          <input type="text" matInput [(ngModel)]="currentUser.thanhSo" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Nhiệm vụ hành chánh</mat-label>
-          <mat-select
-            [(ngModel)]="currentUser.role"
-            [multiple]="true"
-            (ngModelChange)="updateUserProfile()"
-          >
+          <mat-select [(ngModel)]="currentUser.role" [multiple]="true" (ngModelChange)="updateUserProfile()">
             <mat-option *ngFor="let item of roles" [value]="item?.key">{{
               item?.name
-            }}</mat-option>
+              }}</mat-option>
           </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+          <mat-label>Số điện thoại/Zalo</mat-label>
+          <input type="text" matInput [(ngModel)]="currentUser.phone" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
     </div>
   </div>
 </div>
-<div
-  class="container-fluid text-center"
-  *ngIf="!currentUser?.isGuest && !currentUser?.userName"
->
+<div class="container-fluid text-center" *ngIf="!currentUser?.isGuest && !currentUser?.userName">
   <h1>Hãy đăng nhập để truy cập thông tin cá nhân.</h1>
   <button mat-flat-button [routerLink]="'/auth/dang-nhap'" [color]="'primary'">
     Đăng nhập
@@ -189,15 +145,88 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button [matDialogClose]="true">Hủy</button>
-    <button
-      mat-flat-button
-      [color]="'primary'"
-      [disabled]="
+    <button mat-flat-button [color]="'primary'" [disabled]="
         currentUser.password && currentUser.password !== confirmPassword
-      "
-      [matDialogClose]="true"
-    >
+      " [matDialogClose]="true">
       Cập nhật
     </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #syncRegistrationDialog>
+  <div mat-dialog-title>Đăng ký đồng bộ dữ liệu của bạn với máy chủ</div>
+  <mat-dialog-content>
+    <p>
+      <strong>LƯU Ý:</strong>
+      Sau khi gửi thông tin đăng ký chúng mình sẽ tiến hành một số cấu hình. Cần liên hệ với bạn vì thế hãy cập nhật đầy
+      đủ thông tin liên hệ bạn nhé!
+    </p>
+    <div class=" pt-3">
+      <div class="form-group w-full">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+          <mat-label>Số điện thoại/Zalo</mat-label>
+          <input type="text" matInput required [(ngModel)]="currentUser.phone"
+            (ngModelChange)="updateUserProfile()" />
+        </mat-form-field>
+      </div>
+      <div *ngIf="admin" class="w-full">
+        <div class="text-2xl mb-3">Hỗ trợ người dùng cập nhật dữ liệu</div>
+        <div class="form-group w-full">
+          <mat-form-field class="w-full" [appearance]="'outline'">
+            <mat-label>Chọn tài khoản</mat-label>
+            <mat-select [(ngModel)]="selectedUser" (ngModelChange)="onChangeSelectedUser()">
+              <mat-option *ngFor="let item of users" [value]="item">
+                {{ item.userName }} | {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="selectedUser">
+          <div class="form-group w-full">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+              <mat-label>Số điện thoại/Zalo</mat-label>
+              <input type="text" matInput required [(ngModel)]="selectedUser.phone"
+                (ngModelChange)="onChangeSelectedUser()" />
+            </mat-form-field>
+          </div>
+          <div class="form-group w-full">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+              <mat-label>Google Forms Id</mat-label>
+              <input type="text" matInput required [(ngModel)]="selectedUser.googleFormsId"
+                (ngModelChange)="onChangeSelectedUser()" />
+            </mat-form-field>
+          </div>
+          <div class="form-group w-full">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+              <mat-label>Google Sheets Id</mat-label>
+              <input type="text" matInput required [(ngModel)]="selectedUser.sheetId"
+                (ngModelChange)="onChangeSelectedUser()" />
+            </mat-form-field>
+          </div>
+          <div class="form-group w-full">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+              <mat-label>Token</mat-label>
+              <textarea matInput [(ngModel)]="selectedToken"></textarea>
+              <button matSuffix mat-icon-button (click)="copyToken()"><mat-icon>content_copy</mat-icon></button>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <iframe *ngIf="syncRegistrationGoogleFormPath && !this.admin" [src]="
+      syncRegistrationGoogleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button [matDialogClose]="true">Đóng</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #syncDialog>
+  <div mat-dialog-title>Đồng bộ dữ liệu của bạn với máy chủ</div>
+  <mat-dialog-content>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button [matDialogClose]="true">Đóng</button>
   </mat-dialog-actions>
 </ng-template>

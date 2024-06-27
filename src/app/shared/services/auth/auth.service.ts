@@ -3,12 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { Router } from "@angular/router";
 import { MENU } from '../../constants/menu.constant';
+import { Observable } from 'rxjs';
+import { SheetService } from '../sheet/sheet.service';
+
+type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {
+
+  readonly sheetId = `2PACX-1vTVylQUa5KMibyzg_FrMFza-iF8Mk0IrJ9GrCEkNhClDFiO6DTIeB_tmp1JemzEbHh1jfaAt5eqjfUm`
+  readonly userWorkbook: any;
+  readonly userSetting: any;
+
+  constructor(private http: HttpClient, private router: Router, private sheetService: SheetService) {
   }
 
   public currentUser: any;
@@ -117,5 +126,51 @@ export class AuthService {
       }
     }
     return result
+  }
+
+  fetchUsers(): Observable<any> {
+    const ref: Mutable<this> = this;
+    return new Observable((observable) => {
+      const returnData = () => {
+        const response = <any>{}
+        this.sheetService.decodeRawSheetData(ref.userWorkbook.Sheets['settings'])
+          .subscribe((res: any) => {
+            if (res?.length > 0) {
+              response.status = 200;
+              response.setting = <any>{}
+              res?.forEach((item: any) => {
+                response.setting[item?.field] = item?.trigger;
+              })
+              ref.userSetting = response.setting
+              this.sheetService.decodeRawSheetData(ref.userWorkbook.Sheets['caodaionUsers'])
+                .subscribe((res: any) => {
+                  response.users = <any>[]
+                  res?.forEach((item: any) => {
+                    response.users.push(item)
+                  })
+                })
+            }
+            observable.next(response)
+            observable.complete()
+          })
+      }
+      if (!ref.userWorkbook) {
+        try {
+          this.sheetService.fetchSheet(this.sheetId)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.userWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        returnData()
+      }
+    })
   }
 }

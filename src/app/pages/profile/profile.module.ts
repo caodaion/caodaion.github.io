@@ -12,28 +12,32 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { SharedModule } from "../../shared/shared.module";
 
 
 @NgModule({
-  declarations: [
-    ProfileComponent
-  ],
-  imports: [
-    CommonModule,
-    ProfileRoutingModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatInputModule,
-    MatRadioModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatDialogModule
-  ],
-  providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'vi-VN'},
-  ],
+    declarations: [
+        ProfileComponent
+    ],
+    providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    ],
+    imports: [
+        CommonModule,
+        ProfileRoutingModule,
+        MatIconModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatInputModule,
+        MatRadioModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatDialogModule,
+        MatTooltipModule,
+        SharedModule
+    ]
 })
 export class ProfileModule { }

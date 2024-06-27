@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 import * as QRCode from 'qrcode'
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Component({
@@ -46,6 +47,8 @@ export class ProfileComponent implements OnInit {
   confirmPassword: any = ''
 
   @ViewChild('passwordDialog') passwordDialog!: any;
+  @ViewChild('syncDialog') syncDialog!: any;
+  @ViewChild('syncRegistrationDialog') syncRegistrationDialog!: any;
 
   constructor(
     private authService: AuthService,
@@ -161,6 +164,7 @@ export class ProfileComponent implements OnInit {
     return new Blob([uInt8Array], { type: imageType })
   }
 
+  syncRegistrationGoogleFormPath: String = '';
   generaToken(data: any) {
     const base64url = (source: any) => {
       let encodedSource = CryptoJS.enc.Base64.stringify(source);
@@ -199,6 +203,17 @@ export class ProfileComponent implements OnInit {
         if (this.currentUser.sex === 'female') {
           this.currentUser.holyName = `Hương ${this.currentUser.name?.split(' ')[this.currentUser.name?.split(' ').length - 1]}`
         }
+      }
+    }
+    if (!this.currentUser?.isCloudSynced) {
+      if (this.currentUser?.phone?.replaceAll(' ', '').trim()?.length === 10) {
+        this.syncRegistrationGoogleFormPath = `https://docs.google.com/forms/d/e/${this.userSetting?.googleFormsId}/viewform`
+        this.syncRegistrationGoogleFormPath += `?${this.userSetting?.userName}=${encodeURIComponent(this.currentUser.userName)}`;
+        this.syncRegistrationGoogleFormPath += `&${this.userSetting?.data}=${encodeURIComponent(this.generaToken({
+          phone: this.currentUser.phone,
+          name: this.currentUser.name,
+          password: this.currentUser.password,
+        }))}`
       }
     }
     if (!this.currentUser.isGuest && new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
@@ -256,6 +271,71 @@ export class ProfileComponent implements OnInit {
         this.userNameRequired = true
       }
     }
+  }
+  userSetting: any;
+  admin: boolean = false;
+  users: any;
+  selectedUser: any;
+  onStartSyncDatawithRemote() {
+    const openModal = () => {
+
+      if (this.currentUser?.isCloudSynced) {
+        const syncdialog = this.matDiaLog.open(this.syncDialog, {
+          disableClose: true
+        })
+      } else {
+        const syncRegistrationDialog = this.matDiaLog.open(this.syncRegistrationDialog, {
+          disableClose: true
+        })
+      }
+    }
+    if (!this.userSetting?.googleFormsId) {
+      this.authService.fetchUsers().subscribe({
+        next: (res: any) => {
+          if (res.status == 200) {
+            this.userSetting = res.setting;
+            this.updateUserProfile();
+            openModal();
+            this.admin = res?.setting?.admin?.includes(this.currentUser.userName);
+            if (this.admin) {
+              this.users = res.users?.map((item: any) => {
+                const jwtHelper = new JwtHelperService()
+                const decodedToken = jwtHelper.decodeToken(item?.data)
+                item.password = decodedToken?.password
+                item.phone = decodedToken?.phone
+                item.username = item?.userName
+                item.name = decodedToken?.name
+                item.sheetId = decodedToken?.sheetId || ''
+                item.googleFormsId = decodedToken?.googleFormsId || ''
+                return item;
+              })
+            }
+          }
+        },
+        error(err) {
+          console.log(err);
+        },
+        complete() {
+          console.info('completed');
+        },
+      })
+    } else {
+      openModal()
+    }
+  }
+
+  selectedToken: any;
+  onChangeSelectedUser() {
+    this.selectedToken = this.generaToken(this.selectedUser);
+  }
+
+  copyToken() {
+    navigator.clipboard.writeText(this.selectedToken);
+    this._snackBar.open('Đã sao chép Token', 'Đóng', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 }
 
