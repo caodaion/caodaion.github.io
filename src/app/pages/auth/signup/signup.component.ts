@@ -61,8 +61,9 @@ export class SignupComponent implements OnInit {
         const userToken = this.generaToken(this.signUpUser)
         localStorageUsers[this.signUpUser.userName] = userToken
         localStorage.setItem('users', JSON.stringify(localStorageUsers))
-        localStorage.setItem('token', JSON.stringify(userToken))
+        localStorage.setItem('token', userToken)
         this.authService.getCurrentUser(true).subscribe((res: any) => {
+          console.log(res);          
           localStorage.setItem('token', this.generaToken(res))
           this._snackBar.open('Đã đăng ký thành công', 'Đóng', {
             duration: this.durationInSeconds * 1000,

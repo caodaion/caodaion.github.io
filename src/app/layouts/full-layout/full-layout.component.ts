@@ -122,7 +122,7 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
   }
 
   ngAfterViewInit(): void {
-    this.authService.getCurrentUser().subscribe((res: any) => {
+    this.authService.getCurrentUser(true).subscribe((res: any) => {
       this.currentUser = res;
     })
   }

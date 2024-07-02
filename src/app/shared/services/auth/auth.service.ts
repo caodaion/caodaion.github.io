@@ -109,6 +109,9 @@ export class AuthService {
           observable.next(this.currentUser);
           observable.complete();
         });
+      } else {
+        observable.next(this.currentUser);
+        observable.complete();
       }
     });
   }
@@ -134,7 +137,7 @@ export class AuthService {
         return "MATCHED";
       }
       return "UN-MATCHED";
-    })    
+    })
     return !(currentUserKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0 ||
       currentUserRemoteKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0);
   }
@@ -151,8 +154,8 @@ export class AuthService {
               const comparedData = {
                 key: key,
                 label: this.getCompareData(key, this.currentUser[key])?.label,
-                currentDisplayData: this.getCompareData(key, this.currentUser[key])?.displayData,
-                remoteDisplayData: this.getCompareData(key, this.currentUserRemote[key])?.displayData,
+                currentDisplayData: this.getCompareData(key, this.currentUser[key])?.displayData || this.currentUser[key],
+                remoteDisplayData: this.getCompareData(key, this.currentUserRemote[key])?.displayData || this.currentUserRemote[key],
                 currentData: this.currentUser[key],
                 remoteData: this.currentUserRemote[key],
                 load: 'upload'
@@ -262,6 +265,19 @@ export class AuthService {
       case 'name': {
         return {
           label: 'Họ và Tên',
+          displayData: item,
+        }
+      }
+      case 'color': {
+        return {
+          label: 'Sắc phái',
+          displayData: item == 'thai' ? 'Thái' : item == 'thuong' ? 'Thượng' : item == 'ngoc' ? 'Ngọc' : '',
+        }
+      }
+      case 'holyName': {
+        console.log(item);
+        return {
+          label: 'Thánh danh',
           displayData: item,
         }
       }

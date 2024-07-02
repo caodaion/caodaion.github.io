@@ -11,8 +11,8 @@ const routes: Routes = [
     component: FullLayoutComponent,
     children: [
       {
-        matcher: (url) => {
-          if (url?.length === 1 && url[0].path.match(/^@[\w]+$/gm)) {
+        matcher: (url) => {          
+          if (url?.length === 1 && url[0].path.match(/(?<=@).*/)) {            
             return {
               consumed: url,
               posParams: {

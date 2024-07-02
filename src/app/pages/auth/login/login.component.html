@@ -11,39 +11,18 @@
         Khi đăng nhập trên thiết bị khác bằng cách đồng bộ thông qua mã QR sẽ
         hiển thị như một tài khoản mới.
       </p>
-      <div
-        class="backad"
-        (click)="countDebugAdmin()"
-        *ngIf="devAdministratorAction"
-      ></div>
+      <div class="backad" (click)="countDebugAdmin()" *ngIf="devAdministratorAction"></div>
       <mat-form-field appearance="fill" class="form-control">
         <mat-label>Tên đăng nhập</mat-label>
-        <input
-          matInput
-          [(ngModel)]="loginUser.userName"
-          type="text"
-          autocomplete="new-password"
-          (input)="enterLoginInformation()"
-          (keyup.enter)="login()"
-        />
+        <input matInput [(ngModel)]="loginUser.userName" type="text" autocomplete="new-password"
+          (input)="enterLoginInformation()" (keyup.enter)="login()" />
       </mat-form-field>
       <mat-form-field appearance="fill" class="form-control">
         <mat-label>Mật khẩu</mat-label>
-        <input
-          matInput
-          [(ngModel)]="loginUser.password"
-          [type]="hide ? 'password' : 'text'"
-          autocomplete="new-password"
-          (input)="enterLoginInformation()"
-          (keyup.enter)="login()"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="hide = !hide"
-          [attr.aria-label]="'Ẩn mật khẩu'"
-          [attr.aria-pressed]="hide"
-        >
+        <input matInput [(ngModel)]="loginUser.password" [type]="hide ? 'password' : 'text'" autocomplete="new-password"
+          (input)="enterLoginInformation()" (keyup.enter)="login()" />
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Ẩn mật khẩu'"
+          [attr.aria-pressed]="hide">
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
@@ -52,24 +31,20 @@
         <button mat-button color="primary" [routerLink]="'/auth/dang-ky'">
           Chưa có tài khoản? Đăng ký.
         </button>
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="!loginUser.userName || !loginUser.password"
+        <button mat-raised-button color="primary" [disabled]="!loginUser.userName || !loginUser.password || isLoggingIn"
           *ngIf="
             !debugDevAdminCount ||
             (debugDevAdminCount >= 12 && debugDevAdminCount % 2 === 0)
-          "
-          (click)="login()"
-        >
-          ĐĂNG NHẬP
+          " (click)="login()">
+          <div class="flex items-center">
+            <mat-spinner *ngIf="isLoggingIn" [diameter]="20"></mat-spinner>
+            ĐĂNG NHẬP
+          </div>
         </button>
       </div>
       <mat-accordion class="w-full">
         <mat-expansion-panel>
-          <mat-expansion-panel-header
-            >Đăng nhập với quyền khách</mat-expansion-panel-header
-          >
+          <mat-expansion-panel-header>Đăng nhập với quyền khách</mat-expansion-panel-header>
           <p class="text-lg">
             <strong class="text-2xl">LƯU Ý:</strong>
             <br />
@@ -84,12 +59,8 @@
             thống.
           </p>
           <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
-            <mat-grid-tile
-              *ngFor="let item of guestAccounts"
-              (click)="logInWithGuest(item?.key)"
-              class="border cursor-pointer rounded"
-              >{{ item?.name }}</mat-grid-tile
-            >
+            <mat-grid-tile *ngFor="let item of guestAccounts" (click)="logInWithGuest(item?.key)"
+              class="border cursor-pointer rounded">{{ item?.name }}</mat-grid-tile>
           </mat-grid-list>
         </mat-expansion-panel>
       </mat-accordion>

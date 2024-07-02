@@ -276,6 +276,10 @@
 <ng-template #syncDialog>
   <div mat-dialog-title>Đồng bộ dữ liệu của bạn với máy chủ</div>
   <mat-dialog-content>
+    <button *ngIf="admin" class="my-6 w-full" mat-flat-button [color]="'primary'"
+      (click)="openSyncRegistrationDialog()">
+      Hỗ trợ người dùng cập nhật dữ liệu
+    </button>
     <p>Những thông tin sau đây sẽ được đồng bộ sau khoản năm phút, nên bạn không cần lo là nội dung chưa đồng bộ lên máy
       chủ nhé</p>
     <table class="w-full text-black">

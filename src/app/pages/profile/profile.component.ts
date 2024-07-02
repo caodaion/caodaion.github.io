@@ -73,6 +73,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       this.getCurrentUser(true)
       this.getRoles()
     } else {
+      this.isFetchingData = false
       this.route.params.subscribe((param: any) => {
         if (param?.username) {
           this.route.queryParams.subscribe((query: any) => {
@@ -98,52 +99,57 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
 
   getCurrentUser(isInit: boolean = false) {
-    if (isInit) {
-      this.isFetchingData = true
-    }
     const getSharedDataPromise = new Promise<void>((resolve, rejects) => {
       this.userSetting = <any>{};
-      this.authService.getCurrentUser().subscribe((res: any) => {
-        if (isInit) {
-          this.isFetchingData = false
-        }
-        this.currentUser = res;
-        this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
-        this.userSetting.sheetId = this.currentUser?.sheetId;
-        this.userSetting.data = this.currentUser?.setting?.data;
-        if (this.currentUser?.googleFormsId && this.currentUser?.setting?.data) {
-          this.currentUser.isCloudSynced = true;
-        }
-        let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
-        if (typeof this.currentUser?.role === 'string') {
-          this.currentUser.role = JSON.parse(this.currentUser?.role)
-        }
-        if (this.currentUser?.role?.length === 1) {
-          if (this.currentUser?.role[0] === 'kids') {
-            qrData = `${location.origin}@${this.currentUser?.userName}`
+      this.authService.getCurrentUser().subscribe({
+        next: (res: any) => {
+          if (isInit) {
+            this.isFetchingData = false
           }
-        }
-        if (qrData?.length >= 350) {
-          try {
-            this.tinyUrlService.shortenUrl(qrData)
-              .subscribe((res: any) => {
-                if (res.code === 0) {
-                  this.qrData = res?.data?.tiny_url
-                  resolve()
-                }
-              })
-          } catch (e) {
-            console.log(e)
-            rejects()
+          this.currentUser = res;
+          this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
+          this.userSetting.sheetId = this.currentUser?.sheetId;
+          this.userSetting.data = this.currentUser?.setting?.data;
+          if (this.currentUser?.googleFormsId && this.currentUser?.setting?.data) {
+            this.currentUser.isCloudSynced = true;
           }
-        } else {
+          let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
+          if (typeof this.currentUser?.role === 'string') {
+            this.currentUser.role = JSON.parse(this.currentUser?.role)
+          }
+          if (this.currentUser?.role?.length === 1) {
+            if (this.currentUser?.role[0] === 'kids') {
+              qrData = `${location.origin}@${this.currentUser?.userName}`
+            }
+          }
+          if (qrData?.length >= 350) {
+            try {
+              this.tinyUrlService.shortenUrl(qrData)
+                .subscribe((res: any) => {
+                  if (res.code === 0) {
+                    this.qrData = res?.data?.tiny_url
+                    resolve()
+                  }
+                })
+            } catch (e) {
+              console.log(e)
+              rejects()
+            }
+          } else {
+            this.qrData = qrData
+            resolve()
+          }
           this.qrData = qrData
-          resolve()
-        }
-        this.qrData = qrData
-        if (isInit) {
-          this.updateUserProfile()
-        }
+          if (isInit) {
+            this.updateUserProfile()
+          }
+        },
+        error: (err) => {
+          this.isFetchingData = false
+        },
+        complete: () => {
+          this.isFetchingData = false
+        },
       })
     })
     getSharedDataPromise.then(() => {
@@ -315,9 +321,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           disableClose: true
         })
       } else {
-        const syncRegistrationDialog = this.matDiaLog.open(this.syncRegistrationDialog, {
-          disableClose: true
-        })
+        this.openSyncRegistrationDialog()
       }
     }
     if (!this.userSetting?.googleFormsId) {
@@ -351,19 +355,44 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         },
       })
     } else {
-      this.authService.compareData().subscribe({
+      this.authService.fetchUsers().subscribe({
         next: (res: any) => {
-          if (res?.data?.length > 0) {
-            this.syncData = res.data;
-            openModal();
+          if (res.status == 200) {
+            this.userSetting = res.setting;
+            this.admin = res?.setting?.admin?.includes(this.currentUser.userName);
+            this.users = res.users?.map((item: any) => {
+              const jwtHelper = new JwtHelperService()
+              const decodedToken = jwtHelper.decodeToken(item?.data)
+              item.password = decodedToken?.password
+              item.phone = decodedToken?.phone
+              item.userName = item?.userName
+              item.name = decodedToken?.name
+              item.sheetId = decodedToken?.sheetId || ''
+              item.googleFormsId = decodedToken?.googleFormsId || ''
+              return item;
+            })
+            this.authService.compareData().subscribe({
+              next: (compareRes: any) => {
+                if (compareRes?.data?.length > 0) {
+                  this.syncData = compareRes.data;
+                  openModal();
+                } else {
+                  if (this.admin) {
+                    this.syncdialog = this.matDiaLog.open(this.syncDialog, {
+                      disableClose: true
+                    })
+                  }
+                }
+              },
+              error(err) {
+                console.log(err);
+              },
+              complete() {
+                console.info('completed');
+              },
+            })
           }
-        },
-        error(err) {
-          console.log(err);
-        },
-        complete() {
-          console.info('completed');
-        },
+        }
       })
     }
   }
@@ -374,6 +403,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       password: this.selectedUser?.password,
       phone: this.selectedUser?.phone,
       name: this.selectedUser?.name,
+      userName: this.selectedUser?.userName,
       sheetId: this.selectedUser?.sheetId || '',
       googleFormsId: this.selectedUser?.googleFormsId || '',
     });
@@ -424,6 +454,12 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     if (event?.keyCode == 32) {
       event['target']['value'] = event['target']['value'] + ' '
     }
+  }
+
+  openSyncRegistrationDialog() {
+    const syncRegistrationDialog = this.matDiaLog.open(this.syncRegistrationDialog, {
+      disableClose: true
+    })
   }
 }
 

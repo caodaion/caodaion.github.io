@@ -81,7 +81,9 @@ export class LoginComponent implements OnInit, AfterViewChecked {
     }
   }
   userSetting: any;
+  isLoggingIn: boolean = false
   login() {
+    this.isLoggingIn = true;
     if (!this.devAdministratorAction) {
       if (this.kids?.length > 0) {
         const foundKid = this.kids?.find((item: any) => item?.userName === this.loginUser.userName)
@@ -90,6 +92,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
             localStorage.setItem('token', this.generaToken(foundKid))
             this.authService.getCurrentUser(true).subscribe((res: any) => {
               localStorage.setItem('token', this.generaToken(res))
+              this.isLoggingIn = false;
               location.reload()
               location.href = ''
               this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
@@ -126,6 +129,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
                         horizontalPosition: this.horizontalPosition,
                         verticalPosition: this.verticalPosition,
                       }).afterOpened().subscribe(() => {
+                        this.isLoggingIn = false;
                         location.reload()
                         location.href = ''
                       })
@@ -158,11 +162,14 @@ export class LoginComponent implements OnInit, AfterViewChecked {
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                   }).afterOpened().subscribe(() => {
+                    this.isLoggingIn = false;
                     location.reload()
                     location.href = ''
                   })
                 })
               }
+            } else {
+              this.isLoggingIn = false;
             }
           }
         }
