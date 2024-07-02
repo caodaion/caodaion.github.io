@@ -20,6 +20,7 @@
     .sub-sidenav-content {
       border-radius: 8px;
       background: white;
+      overflow-x: hidden;
     }
     .sub-sidenav {
       background-color: map.get(variables.$light-theme, "secondary-background");

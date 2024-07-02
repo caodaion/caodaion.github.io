@@ -78,6 +78,12 @@
       </div>
       <div class="form-group w-full lg:w-1/5">
         <mat-form-field class="w-full" [appearance]="'outline'">
+          <mat-label>Thánh Sở</mat-label>
+          <input type="text" matInput [(ngModel)]="currentUser.thanhSo" (ngModelChange)="updateUserProfile()" />
+        </mat-form-field>
+      </div>
+      <div class="form-group w-full lg:w-1/5">
+        <mat-form-field class="w-full" [appearance]="'outline'">
           <mat-label>Chức đạo</mat-label>
           <mat-select [(ngModel)]="currentUser.title" (ngModelChange)="updateUserProfile()">
             <mat-option *ngFor="let item of caodaiTitle" [value]="item?.key">{{
@@ -100,12 +106,6 @@
           <mat-label>Thánh Danh</mat-label>
           <input type="text" matInput [required]="isHolyNameRequired" [(ngModel)]="currentUser.holyName"
             (ngModelChange)="updateUserProfile()" />
-        </mat-form-field>
-      </div>
-      <div class="form-group w-full lg:w-1/5">
-        <mat-form-field class="w-full" [appearance]="'outline'">
-          <mat-label>Thánh Sở</mat-label>
-          <input type="text" matInput [(ngModel)]="currentUser.thanhSo" (ngModelChange)="updateUserProfile()" />
         </mat-form-field>
       </div>
       <div class="form-group w-full lg:w-1/5">
@@ -276,18 +276,33 @@
 <ng-template #syncDialog>
   <div mat-dialog-title>Đồng bộ dữ liệu của bạn với máy chủ</div>
   <mat-dialog-content>
-    <p>Những thông tin sau đây sẽ được đồng bộ</p>
+    <p>Những thông tin sau đây sẽ được đồng bộ sau khoản năm phút, nên bạn không cần lo là nội dung chưa đồng bộ lên máy
+      chủ nhé</p>
     <table class="w-full text-black">
+      <thead>
+        <tr>
+          <th class="text-left">Nội dung</th>
+          <th class="text-left px-3">Hiện tại</th>
+          <th class="text-center">Tải lên/Tải xuống</th>
+          <th class="text-left px-3">Trên máy chủ</th>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let item of syncData">
           <td>
-            <span class="font-bold">{{item?.label || item?.key}}: </span>
+            <span class="font-bold me-3">{{item?.label || item?.key}}: </span>
           </td>
-          <td>
-            <mat-icon>trending_flat</mat-icon>
+          <td class="px-3 rounded transition-all" [ngClass]="{'bg-[#34a853] text-white': item?.load === 'upload'}">
+            <span>{{item?.currentDisplayData}}</span>
           </td>
-          <td>
-            <span>{{item?.displayData || item?.data}}</span>
+          <td class="text-center">
+            <mat-button-toggle-group [(ngModel)]="item.load" *ngIf="item.load" class="!rounded-full">
+              <mat-button-toggle value="upload"><mat-icon>cloud_upload</mat-icon> Tải lên</mat-button-toggle>
+              <mat-button-toggle value="download"><mat-icon>cloud_download</mat-icon> Tải xuống</mat-button-toggle>
+            </mat-button-toggle-group>
+          </td>
+          <td class="px-3 rounded transition-all" [ngClass]="{'bg-[#34a853] text-white': item?.load === 'download'}">
+            <span>{{item?.remoteDisplayData}}</span>
           </td>
         </tr>
       </tbody>

@@ -116,8 +116,7 @@ export class AuthService {
   }
 
   checkSyncDataStatus(): boolean {
-    const deviceInfo = this.deviceDetectorService.getDeviceInfo()
-    if ((this.currentUserRemote?.lastDevice === `${deviceInfo?.os_version}`) && this.checktoUpdate()) {
+    if (this.checktoUpdate()) {
       return true;
     }
     return false;
@@ -127,17 +126,17 @@ export class AuthService {
     let currentUserKeys = Object.keys(this.currentUser);
     let currentUserRemoteKeys = Object.keys(this.currentUserRemote);
     currentUserKeys = currentUserKeys?.map((item: any) => {
-      if (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item])) {
+      if (item == "children" || (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item]))) {
         return "MATCHED";
       }
       return "UN-MATCHED";
     })
     currentUserRemoteKeys = currentUserRemoteKeys?.map((item: any) => {
-      if (JSON.stringify(this.currentUserRemote[item]) == JSON.stringify(this.currentUser[item])) {
+      if (item == "children" || (JSON.stringify(this.currentUserRemote[item]) == JSON.stringify(this.currentUser[item]))) {
         return "MATCHED";
       }
       return "UN-MATCHED";
-    })
+    })    
     return !(currentUserKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0 ||
       currentUserRemoteKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0);
   }
@@ -152,41 +151,48 @@ export class AuthService {
         {
           key: 'lastDevice',
           label: 'Thiết bị cuối',
-          displayData: deviceInfo?.os_version,
-          data: deviceInfo?.os_version,
+          currentDisplayData: deviceInfo?.os_version,
+          remoteDisplayData: this.currentUserRemote['lastDevice'],
+          currentData: deviceInfo?.os_version,
+          remoetData: this.currentUserRemote['lastDevice'],
         }
       )
       currentUserKeys?.forEach((key: any) => {
-        const startCompare = () => {
-          if (this.currentUserRemote[key]?.toString() != this.currentUser[key]?.toString()) {
-            const comparedData = {
-              key: key,
-              label: this.getCompareData(key, this.currentUser[key])?.label,
-              displayData: this.getCompareData(key, this.currentUser[key])?.displayData,
-              data: this.currentUser[key]
+        if (key != 'children') {
+          const startCompare = () => {
+            if (this.currentUserRemote[key]?.toString() != this.currentUser[key]?.toString()) {
+              const comparedData = {
+                key: key,
+                label: this.getCompareData(key, this.currentUser[key])?.label,
+                currentDisplayData: this.getCompareData(key, this.currentUser[key])?.displayData,
+                remoteDisplayData: this.getCompareData(key, this.currentUserRemote[key])?.displayData,
+                currentData: this.currentUser[key],
+                remoteData: this.currentUserRemote[key],
+                load: 'upload'
+              }
+              response.data.push(comparedData);
             }
-            response.data.push(comparedData);
           }
-        }
-        if (key.includes('province') || key.includes('district') || key.includes('ward')) {
-          if (this.commonService.provinces?.length === 0) {
-            this.commonService.fetchProvinceData()
-              .subscribe((res: any) => {
-                if (res?.status == 200) {
-                  this.provinces = res.provinces
-                  this.districts = res.districts
-                  this.wards = res.wards
-                  startCompare();
-                }
-              })
+          if (key.includes('province') || key.includes('district') || key.includes('ward')) {
+            if (this.commonService.provinces?.length === 0) {
+              this.commonService.fetchProvinceData()
+                .subscribe((res: any) => {
+                  if (res?.status == 200) {
+                    this.provinces = res.provinces
+                    this.districts = res.districts
+                    this.wards = res.wards
+                    startCompare();
+                  }
+                })
+            } else {
+              this.provinces = this.commonService.provinces
+              this.districts = this.commonService.districts
+              this.wards = this.commonService.wards
+              startCompare();
+            }
           } else {
-            this.provinces = this.commonService.provinces
-            this.districts = this.commonService.districts
-            this.wards = this.commonService.wards
             startCompare();
           }
-        } else {
-          startCompare();
         }
       })
       observable.next(response)
@@ -303,7 +309,6 @@ export class AuthService {
                     if (dr?.key) {
                       if (isLogIn) {
                         this.currentUser[dr?.key] = dr?.data;
-                        console.log(this.currentUser);
                       }
                       response.remote[dr?.key] = dr?.data;
                     }

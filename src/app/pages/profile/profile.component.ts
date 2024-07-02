@@ -304,13 +304,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   userSetting: any;
   admin: boolean = false;
   users: any;
+  syncdialog: any;
   selectedUser: any;
   syncData = <any>[];
 
   onStartSyncDatawithRemote() {
     const openModal = () => {
       if (this.currentUser?.isCloudSynced) {
-        const syncdialog = this.matDiaLog.open(this.syncDialog, {
+        this.syncdialog = this.matDiaLog.open(this.syncDialog, {
           disableClose: true
         })
       } else {
@@ -388,9 +389,18 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
   syncGoogleFormPath: any;
   startSync() {
-    const syncToken = this.syncData?.map((item: any) => { return { key: item?.key, data: item?.data } });
-    this.syncGoogleFormPath = `https://docs.google.com/forms/d/e/${this.userSetting?.googleFormsId}/viewform`
-    this.syncGoogleFormPath += `?${this.userSetting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+    const syncToken = this.syncData?.filter((item: any) => item?.load == 'upload')?.map((item: any) => { return { key: item?.key, data: item?.currentData } });
+    const downLoadData = this.syncData?.filter((item: any) => item?.load == 'download');
+    downLoadData?.forEach((item: any) => {
+      this.currentUser[item?.key] = item?.remoteData;
+    })
+    this.updateUserProfile();
+    if (this.syncData?.filter((item: any) => item?.load == 'upload')?.length > 0) {
+      this.syncGoogleFormPath = `https://docs.google.com/forms/d/e/${this.userSetting?.googleFormsId}/viewform`
+      this.syncGoogleFormPath += `?${this.userSetting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+    } else {
+      this.syncdialog.close();
+    }
   }
 
   getAllDivisions() {

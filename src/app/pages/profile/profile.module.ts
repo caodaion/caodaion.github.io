@@ -17,6 +17,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { MatListModule } from '@angular/material/list';
 import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         SharedModule,
         MatListModule,
         DivisionFilterPipe,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatButtonToggleModule
     ]
 })
 export class ProfileModule { }
