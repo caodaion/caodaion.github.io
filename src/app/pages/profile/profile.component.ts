@@ -239,7 +239,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     if (!this.currentUser.isGuest && new Date(parseInt(this.currentUser.userName)).toString() === 'Invalid Date') {
       let localStorageUsers = <any>{}
       localStorageUsers = JSON.parse(localStorage.getItem('users') || '{}')
-      console.log(this.currentUser);      
       const userToken = this.generaToken(this.currentUser)
       localStorageUsers[this.currentUser.userName] = userToken
       localStorage.setItem('users', JSON.stringify(localStorageUsers))
