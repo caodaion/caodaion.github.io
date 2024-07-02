@@ -8,7 +8,6 @@ import { SheetService } from '../sheet/sheet.service';
 import { DatePipe } from '@angular/common';
 import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
 import { CommonService } from '../common/common.service';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -28,8 +27,7 @@ export class AuthService {
     private router: Router,
     private sheetService: SheetService,
     private datePipe: DatePipe,
-    private commonService: CommonService,
-    private deviceDetectorService: DeviceDetectorService
+    private commonService: CommonService
   ) {
   }
 
@@ -146,17 +144,6 @@ export class AuthService {
       const currentUserKeys = Object.keys((this.currentUser));
       const response = <any>{};
       response.data = <any>[]
-      const deviceInfo = this.deviceDetectorService.getDeviceInfo()
-      response.data.push(
-        {
-          key: 'lastDevice',
-          label: 'Thiết bị cuối',
-          currentDisplayData: deviceInfo?.os_version,
-          remoteDisplayData: this.currentUserRemote['lastDevice'],
-          currentData: deviceInfo?.os_version,
-          remoetData: this.currentUserRemote['lastDevice'],
-        }
-      )
       currentUserKeys?.forEach((key: any) => {
         if (key != 'children') {
           const startCompare = () => {
