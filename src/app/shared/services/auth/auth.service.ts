@@ -117,12 +117,29 @@ export class AuthService {
 
   checkSyncDataStatus(): boolean {
     const deviceInfo = this.deviceDetectorService.getDeviceInfo()
-    console.log(this.currentUserRemote?.lastDevice, `${deviceInfo?.os_version}`);
-
-    if ((this.currentUserRemote?.lastDevice === `${deviceInfo?.os_version}`) && JSON.stringify(this.currentUserRemote)?.length == JSON.stringify(this.currentUser)?.length) {
+    if ((this.currentUserRemote?.lastDevice === `${deviceInfo?.os_version}`) && this.checktoUpdate()) {
       return true;
     }
     return false;
+  }
+
+  checktoUpdate() {
+    let currentUserKeys = Object.keys(this.currentUser);
+    let currentUserRemoteKeys = Object.keys(this.currentUserRemote);
+    currentUserKeys = currentUserKeys?.map((item: any) => {
+      if (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item])) {
+        return "MATCHED";
+      }
+      return "UN-MATCHED";
+    })
+    currentUserRemoteKeys = currentUserRemoteKeys?.map((item: any) => {
+      if (JSON.stringify(this.currentUserRemote[item]) == JSON.stringify(this.currentUser[item])) {
+        return "MATCHED";
+      }
+      return "UN-MATCHED";
+    })
+    return !(currentUserKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0 ||
+      currentUserRemoteKeys?.filter((item: any) => item == 'UN-MATCHED')?.length > 0);
   }
 
   compareData(): Observable<any> {

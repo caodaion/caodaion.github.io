@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   userNameRequired: boolean = false
   isHolyNameRequired: boolean = false
   isInvalidSyncData: boolean = false
+  isFetchingData: boolean = true
   confirmPassword: any = ''
   provinces = <any>[];
   districts = <any>[];
@@ -69,9 +70,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     const token = localStorage.getItem('token')
     if (token) {
       this.getAllDivisions()
-      this.getCurrentUser()
+      this.getCurrentUser(true)
       this.getRoles()
-      this.updateUserProfile()
     } else {
       this.route.params.subscribe((param: any) => {
         if (param?.username) {
@@ -97,10 +97,16 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
   }
 
-  getCurrentUser() {
+  getCurrentUser(isInit: boolean = false) {
+    if (isInit) {
+      this.isFetchingData = true
+    }
     const getSharedDataPromise = new Promise<void>((resolve, rejects) => {
       this.userSetting = <any>{};
       this.authService.getCurrentUser().subscribe((res: any) => {
+        if (isInit) {
+          this.isFetchingData = false
+        }
         this.currentUser = res;
         this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
         this.userSetting.sheetId = this.currentUser?.sheetId;
@@ -135,6 +141,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           resolve()
         }
         this.qrData = qrData
+        if (isInit) {
+          this.updateUserProfile()
+        }
       })
     })
     getSharedDataPromise.then(() => {
