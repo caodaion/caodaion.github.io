@@ -8,6 +8,7 @@ import { SheetService } from '../sheet/sheet.service';
 import { DatePipe } from '@angular/common';
 import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
 import { CommonService } from '../common/common.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -27,7 +28,8 @@ export class AuthService {
     private router: Router,
     private sheetService: SheetService,
     private datePipe: DatePipe,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private deviceDetectorService: DeviceDetectorService
   ) {
   }
 
@@ -39,79 +41,85 @@ export class AuthService {
   pushedModules = <any>[]
   isInvalidSyncData: boolean = false;
 
-  public getCurrentUser(isInit: boolean = false) {
-    const find = (array: any, key: any) => {
-      let result: any;
-      array.some((o: any) => result = o.key.includes(key) ? o : find(o.children || [], key));
-      return result;
-    }
-    let token: any = localStorage.getItem('token')
-    this.currentUser = this.jwtHelper.decodeToken(token);
-    switch (this.currentUser?.role) {
-      case 'administrator':
-      case 'editor':
-        this.contentEditable = true;
-        break;
-      default:
-        break;
-    }
-    if (this.currentUser?.role?.length > 0) {
-      this.pushedModules = []
-      this.mainModuleKey = []
-      if (typeof this.currentUser?.role === 'string') {
-        this.currentUser.role = JSON.parse(this.currentUser.role)
+  public getCurrentUser(isLogIn: boolean = false): Observable<any> {
+    return new Observable((observable) => {
+      const find = (array: any, key: any) => {
+        let result: any;
+        array.some((o: any) => result = o.key.includes(key) ? o : find(o.children || [], key));
+        return result;
       }
-      this.currentUser.role = [... new Set(this.currentUser?.role?.map((item: any) => {
-        if (item?.includes('pho-quan-ly-')) {
-          return item?.replace('pho-quan-ly-', '')
+      let token: any = localStorage.getItem('token')
+      this.currentUser = this.jwtHelper.decodeToken(token);
+      switch (this.currentUser?.role) {
+        case 'administrator':
+        case 'editor':
+          this.contentEditable = true;
+          break;
+        default:
+          break;
+      }
+      if (this.currentUser?.role?.length > 0) {
+        this.pushedModules = []
+        this.mainModuleKey = []
+        if (typeof this.currentUser?.role === 'string') {
+          this.currentUser.role = JSON.parse(this.currentUser.role)
         }
-        if (item?.includes('quan-ly-')) {
-          return item?.replace('quan-ly-', '')
-        }
-        return item
-      }))]
-      this.currentUser?.role?.forEach((item: any) => {
-        const foundModule = find(MENU, item)
-        if (foundModule && !this.pushedModules?.find((pm: any) => pm?.includes(foundModule?.key))) {
-          this.pushedModules.push(foundModule.key)
-          const foundManiModule = this.mainModuleKey?.length > 0 ? this.mainModuleKey?.find((mmk: any) => mmk?.key === foundModule?.key?.split('.')[0]) : null
-          const foundMainModuleMENU = MENU?.find((mmk: any) => mmk?.key === foundModule?.key?.split('.')[0])
-          if (!foundManiModule) {
-            if (foundMainModuleMENU) {
-              const pushMainMENU = {
-                key: foundMainModuleMENU.key,
-                url: foundMainModuleMENU.url,
-                label: foundMainModuleMENU.label,
-                icon: foundMainModuleMENU.icon,
-                fullAssess: foundMainModuleMENU.fullAssess,
-                released: foundMainModuleMENU.released,
-                children: <any>[]
+        this.currentUser.role = [... new Set(this.currentUser?.role?.map((item: any) => {
+          if (item?.includes('pho-quan-ly-')) {
+            return item?.replace('pho-quan-ly-', '')
+          }
+          if (item?.includes('quan-ly-')) {
+            return item?.replace('quan-ly-', '')
+          }
+          return item
+        }))]
+        this.currentUser?.role?.forEach((item: any) => {
+          const foundModule = find(MENU, item)
+          if (foundModule && !this.pushedModules?.find((pm: any) => pm?.includes(foundModule?.key))) {
+            this.pushedModules.push(foundModule.key)
+            const foundManiModule = this.mainModuleKey?.length > 0 ? this.mainModuleKey?.find((mmk: any) => mmk?.key === foundModule?.key?.split('.')[0]) : null
+            const foundMainModuleMENU = MENU?.find((mmk: any) => mmk?.key === foundModule?.key?.split('.')[0])
+            if (!foundManiModule) {
+              if (foundMainModuleMENU) {
+                const pushMainMENU = {
+                  key: foundMainModuleMENU.key,
+                  url: foundMainModuleMENU.url,
+                  label: foundMainModuleMENU.label,
+                  icon: foundMainModuleMENU.icon,
+                  fullAssess: foundMainModuleMENU.fullAssess,
+                  released: foundMainModuleMENU.released,
+                  children: <any>[]
+                }
+                pushMainMENU.children.push(foundModule)
+                this.mainModuleKey.push(pushMainMENU)
               }
-              pushMainMENU.children.push(foundModule)
-              this.mainModuleKey.push(pushMainMENU)
-            }
-          } else {
-            if (!foundManiModule.children?.find((fmm: any) => fmm.key === foundModule?.key)) {
-              foundManiModule.children.push(foundModule)
+            } else {
+              if (!foundManiModule.children?.find((fmm: any) => fmm.key === foundModule?.key)) {
+                foundManiModule.children.push(foundModule)
+              }
             }
           }
-        }
-      })
-      this.currentUser.children = this.mainModuleKey
-    }
-    // this.contentEditable = true;    
-    if (this.currentUser?.sheetId) {
-      this.getUserPersionalData(isInit).subscribe((res: any) => {
-        this.currentUser.setting = res.setting
-        this.currentUserRemote = res.remote;
-        this.isInvalidSyncData = this.checkSyncDataStatus();
-      });
-    }
-    return this.currentUser;
+        })
+        this.currentUser.children = this.mainModuleKey
+      }
+      // this.contentEditable = true;    
+      if (this.currentUser?.sheetId) {
+        this.getUserPersionalData(isLogIn).subscribe((res: any) => {
+          this.currentUser.setting = res.setting
+          this.currentUserRemote = res.remote;
+          this.isInvalidSyncData = this.checkSyncDataStatus();
+          observable.next(this.currentUser);
+          observable.complete();
+        });
+      }
+    });
   }
 
   checkSyncDataStatus(): boolean {
-    if (JSON.stringify(this.currentUserRemote)?.length == JSON.stringify(this.currentUser)?.length) {
+    const deviceInfo = this.deviceDetectorService.getDeviceInfo()
+    console.log(this.currentUserRemote?.lastDevice, `${deviceInfo?.os_version}`);
+
+    if ((this.currentUserRemote?.lastDevice === `${deviceInfo?.os_version}`) && JSON.stringify(this.currentUserRemote)?.length == JSON.stringify(this.currentUser)?.length) {
       return true;
     }
     return false;
@@ -122,6 +130,15 @@ export class AuthService {
       const currentUserKeys = Object.keys((this.currentUser));
       const response = <any>{};
       response.data = <any>[]
+      const deviceInfo = this.deviceDetectorService.getDeviceInfo()
+      response.data.push(
+        {
+          key: 'lastDevice',
+          label: 'Thiết bị cuối',
+          displayData: deviceInfo?.os_version,
+          data: deviceInfo?.os_version,
+        }
+      )
       currentUserKeys?.forEach((key: any) => {
         const startCompare = () => {
           if (this.currentUserRemote[key]?.toString() != this.currentUser[key]?.toString()) {
@@ -242,7 +259,7 @@ export class AuthService {
     }
   }
 
-  getUserPersionalData(isInit: boolean = false): Observable<any> {
+  getUserPersionalData(isLogIn: boolean = false): Observable<any> {
     const ref: Mutable<this> = this;
     return new Observable((observable) => {
       const returnData = () => {
@@ -267,8 +284,9 @@ export class AuthService {
                   const dataRow = JSON.parse(item.data)
                   dataRow?.forEach((dr: any) => {
                     if (dr?.key) {
-                      if (isInit) {
+                      if (isLogIn) {
                         this.currentUser[dr?.key] = dr?.data;
+                        console.log(this.currentUser);
                       }
                       response.remote[dr?.key] = dr?.data;
                     }

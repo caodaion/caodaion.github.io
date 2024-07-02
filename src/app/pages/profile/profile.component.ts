@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     const token = localStorage.getItem('token')
     if (token) {
       this.getAllDivisions()
-      this.getCurrentUser(true)
+      this.getCurrentUser()
       this.getRoles()
       this.updateUserProfile()
     } else {
@@ -97,43 +97,45 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       ?.find((item: any) => item.key === 'chuc-viec')?.subTitle
   }
 
-  getCurrentUser(isInit: boolean = false) {
+  getCurrentUser() {
     const getSharedDataPromise = new Promise<void>((resolve, rejects) => {
       this.userSetting = <any>{};
-      this.currentUser = this.authService.getCurrentUser(isInit)
-      this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
-      this.userSetting.sheetId = this.currentUser?.sheetId;
-      this.userSetting.data = this.currentUser?.setting?.data;
-      if (this.currentUser?.googleFormsId && this.currentUser?.setting?.data) {
-        this.currentUser.isCloudSynced = true;
-      }
-      let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
-      if (typeof this.currentUser?.role === 'string') {
-        this.currentUser.role = JSON.parse(this.currentUser?.role)
-      }
-      if (this.currentUser?.role?.length === 1) {
-        if (this.currentUser?.role[0] === 'kids') {
-          qrData = `${location.origin}@${this.currentUser?.userName}`
+      this.authService.getCurrentUser().subscribe((res: any) => {
+        this.currentUser = res;
+        this.userSetting.googleFormsId = this.currentUser?.googleFormsId;
+        this.userSetting.sheetId = this.currentUser?.sheetId;
+        this.userSetting.data = this.currentUser?.setting?.data;
+        if (this.currentUser?.googleFormsId && this.currentUser?.setting?.data) {
+          this.currentUser.isCloudSynced = true;
         }
-      }
-      if (qrData?.length >= 350) {
-        try {
-          this.tinyUrlService.shortenUrl(qrData)
-            .subscribe((res: any) => {
-              if (res.code === 0) {
-                this.qrData = res?.data?.tiny_url
-                resolve()
-              }
-            })
-        } catch (e) {
-          console.log(e)
-          rejects()
+        let qrData = `${location.href}?t=${this.generaToken(this.currentUser)}`
+        if (typeof this.currentUser?.role === 'string') {
+          this.currentUser.role = JSON.parse(this.currentUser?.role)
         }
-      } else {
+        if (this.currentUser?.role?.length === 1) {
+          if (this.currentUser?.role[0] === 'kids') {
+            qrData = `${location.origin}@${this.currentUser?.userName}`
+          }
+        }
+        if (qrData?.length >= 350) {
+          try {
+            this.tinyUrlService.shortenUrl(qrData)
+              .subscribe((res: any) => {
+                if (res.code === 0) {
+                  this.qrData = res?.data?.tiny_url
+                  resolve()
+                }
+              })
+          } catch (e) {
+            console.log(e)
+            rejects()
+          }
+        } else {
+          this.qrData = qrData
+          resolve()
+        }
         this.qrData = qrData
-        resolve()
-      }
-      this.qrData = qrData
+      })
     })
     getSharedDataPromise.then(() => {
       QRCode.toDataURL(this.qrData)
@@ -308,8 +310,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         })
       }
     }
-    console.log(this.userSetting?.googleFormsId);
-
     if (!this.userSetting?.googleFormsId) {
       this.authService.fetchUsers().subscribe({
         next: (res: any) => {
@@ -341,14 +341,10 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         },
       })
     } else {
-      console.log('asd');
-
       this.authService.compareData().subscribe({
         next: (res: any) => {
           if (res?.data?.length > 0) {
             this.syncData = res.data;
-            console.log(this.syncData);
-
             openModal();
           }
         },

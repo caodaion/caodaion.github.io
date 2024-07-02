@@ -69,11 +69,13 @@ export class LongSoComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status === 200) {
           this.memberThanhSo = [{ key: 'null', thanhSo: 'Chọn Thánh Sở của bạn' }].concat(res.data)
-          this.currentUser = this.authService.getCurrentUser()
-          this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
-          if (this.selectedThanhSo) {
-            this.getThanhSoEvent()
-          }
+          this.authService.getCurrentUser().subscribe((res: any) => {
+            this.currentUser = res;
+            this.allowToUpdateMember = this.memberThanhSo.find((item: any) => item.updatePremissionFor === this.currentUser?.userName)
+            if (this.selectedThanhSo) {
+              this.getThanhSoEvent()
+            }
+          })
         }
       })
   }

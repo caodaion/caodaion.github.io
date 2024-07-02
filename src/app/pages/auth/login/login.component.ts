@@ -88,13 +88,15 @@ export class LoginComponent implements OnInit, AfterViewChecked {
         if (foundKid) {
           if (foundKid?.password === this.loginUser.password) {
             localStorage.setItem('token', this.generaToken(foundKid))
-            this.authService.getCurrentUser()
-            location.reload()
-            location.href = ''
-            this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
-              duration: this.durationInSeconds * 1000,
-              horizontalPosition: this.horizontalPosition,
-              verticalPosition: this.verticalPosition,
+            this.authService.getCurrentUser(true).subscribe((res: any) => {
+              localStorage.setItem('token', this.generaToken(res))
+              location.reload()
+              location.href = ''
+              this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                duration: this.durationInSeconds * 1000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              })
             })
           } else {
             this.message = 'Tài khoản hoặc mật khẩu không đúng.'
@@ -117,15 +119,16 @@ export class LoginComponent implements OnInit, AfterViewChecked {
                   })
                   if (foundUser) {
                     localStorage.setItem('token', foundUser.data)
-                    this.authService.getCurrentUser()
-                    location.reload()
-                    location.href = ''
-                    location.reload()
-                    location.href = ''
-                    this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
-                      duration: this.durationInSeconds * 1000,
-                      horizontalPosition: this.horizontalPosition,
-                      verticalPosition: this.verticalPosition,
+                    this.authService.getCurrentUser(true).subscribe((res: any) => {
+                      localStorage.setItem('token', this.generaToken(res))
+                      this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                        duration: this.durationInSeconds * 1000,
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                      }).afterOpened().subscribe(() => {
+                        location.reload()
+                        location.href = ''
+                      })
                     })
                   } else {
                     localLogIn()
@@ -148,13 +151,16 @@ export class LoginComponent implements OnInit, AfterViewChecked {
               const decodeUser = this.jwtHelper.decodeToken(localStorageUser[this.loginUser.userName])
               if (decodeUser.password === this.loginUser.password) {
                 localStorage.setItem('token', localStorageUser[this.loginUser.userName])
-                this.authService.getCurrentUser()
-                location.reload()
-                location.href = ''
-                this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
-                  duration: this.durationInSeconds * 1000,
-                  horizontalPosition: this.horizontalPosition,
-                  verticalPosition: this.verticalPosition,
+                this.authService.getCurrentUser(true).subscribe((res: any) => {
+                  localStorage.setItem('token', this.generaToken(res))
+                  this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+                    duration: this.durationInSeconds * 1000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                  }).afterOpened().subscribe(() => {
+                    location.reload()
+                    location.href = ''
+                  })
                 })
               }
             }
@@ -169,9 +175,17 @@ export class LoginComponent implements OnInit, AfterViewChecked {
         if (this.loginUser.userName.split(' ').every((t) => t.includes('dev.caodaion.administrator')) && this.loginUser.password.split(' ').every((t) => t.includes('CaoDaiON'))) {
           localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImRldi5jYW9kYWlvbi5hZG1pbmlzdHJhdG9yIiwibmFtZSI6IkRldiBBZG1pbiIsInJvbGUiOiJkZXYuYWRtaW5pc3RyYXRvciIsInVpZCI6ImRldl9hZG1pbmlzdHJhdG9yIiwiY2hpbGRyZW4iOlt7ImtleSI6ImFueSJ9XSwiZW1haWwiOiJkZXYuY2FvZGFpb24uYWRtaW5pc3RyYXRvckBnbWFpbC5jb20ifQ.VgdJnRU9pRhQ5D5m3YHkCgZ5K--HCGgOFArnSauoN5U')
         }
-        this.authService.getCurrentUser()
-        location.reload()
-        location.href = ''
+        this.authService.getCurrentUser(true).subscribe((res: any) => {
+          localStorage.setItem('token', this.generaToken(res))
+          this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+            duration: this.durationInSeconds * 1000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          }).afterOpened().subscribe(() => {
+            location.reload()
+            location.href = ''
+          })
+        })
       }
     }
   }
@@ -215,13 +229,16 @@ export class LoginComponent implements OnInit, AfterViewChecked {
       isGuest: true
     }
     localStorage.setItem('token', this.generaToken(user))
-    this.authService.getCurrentUser()
-    location.reload()
-    location.href = ''
-    this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
+    this.authService.getCurrentUser(true).subscribe((res: any) => {
+      localStorage.setItem('token', this.generaToken(res))
+      this._snackBar.open('Đã đăng nhập thành công', 'Đóng', {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      }).afterOpened().subscribe(() => {
+        location.reload()
+        location.href = ''
+      })
     })
   }
 }

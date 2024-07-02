@@ -63,7 +63,9 @@ export class MapsComponent implements OnInit, AfterViewInit {
           this.drawerMode = 'side';
         }
       });
-    this.user = this.authService.getCurrentUser()
+    this.authService.getCurrentUser().subscribe((res: any) => {
+      this.user = res;
+    })
   }
 
   ngAfterViewInit(): void {

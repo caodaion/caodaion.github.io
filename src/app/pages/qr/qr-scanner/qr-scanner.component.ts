@@ -55,7 +55,7 @@ export class QrScannerComponent {
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
-    const device = JSON.parse(localStorage.getItem('device') || '')
+    const device = JSON.parse(localStorage.getItem('lastDevice') || '')
     if (device && device?.scanner) {
       this.currentDevice = device?.scanner
     }
@@ -72,7 +72,7 @@ export class QrScannerComponent {
     let device = {
       scanner: this.currentDevice
     }
-    localStorage.setItem('device', JSON.stringify(device))
+    localStorage.setItem('lastDevice', JSON.stringify(device))
   }
 
   onHasPermission(has: boolean) {

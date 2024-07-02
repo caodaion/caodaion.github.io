@@ -121,7 +121,7 @@ export class BookComponent implements OnInit, OnChanges {
           this.isShowTableContent = query.params['tableContent']
         })
         this.getBook()
-        this.authService.getCurrentUser()
+        this.authService.getCurrentUser().subscribe();
         this.contentEditable = this.authService.contentEditable
         this.changeDetector.detectChanges()
       }

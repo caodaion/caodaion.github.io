@@ -62,12 +62,16 @@ export class SignupComponent implements OnInit {
         localStorageUsers[this.signUpUser.userName] = userToken
         localStorage.setItem('users', JSON.stringify(localStorageUsers))
         localStorage.setItem('token', JSON.stringify(userToken))
-        this.authService.getCurrentUser()        
-        window.location.href = '/'
-        this._snackBar.open('Đã đăng ký thành công', 'Đóng', {
-          duration: this.durationInSeconds * 1000,
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
+        this.authService.getCurrentUser(true).subscribe((res: any) => {
+          localStorage.setItem('token', this.generaToken(res))
+          this._snackBar.open('Đã đăng ký thành công', 'Đóng', {
+            duration: this.durationInSeconds * 1000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          }).afterOpened().subscribe(() => {
+            location.reload()
+            location.href = ''
+          })
         })
       }
     }
