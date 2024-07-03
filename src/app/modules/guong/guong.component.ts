@@ -1,15 +1,15 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
-import { AuthService } from "../../shared/services/auth/auth.service";
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-guong',
+  templateUrl: './guong.component.html',
+  styleUrls: ['./guong.component.scss']
 })
-export class ProfileComponent implements AfterViewInit {
+export class GuongComponent {
   profileMenu = <any>[
 
   ]
@@ -35,7 +35,7 @@ export class ProfileComponent implements AfterViewInit {
       });
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void {+
     this.authService.getCurrentUser().subscribe({
       next: (res: any) => {
         this.currentUser = res

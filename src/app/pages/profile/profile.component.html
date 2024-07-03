@@ -1,8 +1,8 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isFetchingData"></mat-progress-bar>
 <div class="container-fluid" *ngIf="!isFetchingData && currentUser?.userName">
-  <div class="flex items-center justify-between">
+  <div class="flex flex-col lg:flex-row items-center justify-between">
     <div>
-      <h1>{{ currentUser?.holyName || currentUser?.name }}</h1>
+      <h1>{{ currentUser?.holyName ? (currentUser?.holyName + ' | ' + currentUser?.name) : currentUser?.name }}</h1>
       <p>@{{ currentUser?.userName }}</p>
     </div>
     <div>

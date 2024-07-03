@@ -1,9 +1,21 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes, UrlSegment} from '@angular/router';
-import {PagenotfoundComponent} from '../pagenotfound/pagenotfound.component';
-import {FullLayoutComponent} from './full-layout.component';
-import {ReleasedGuard} from "../../shared/guards/released.guard";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes, UrlMatchResult, UrlSegment } from '@angular/router';
+import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
+import { FullLayoutComponent } from './full-layout.component';
+import { ReleasedGuard } from "../../shared/guards/released.guard";
 
+// Matcher for the profile screen with format /@{username}
+export function profileMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length === 1 && segments[0].path.startsWith('@')) {
+    return {
+      consumed: segments,
+      posParams: {
+        username: segments[0]  // Capture the username, including the '@'
+      }
+    };
+  }
+  return null;
+}
 
 const routes: Routes = [
   {
@@ -12,18 +24,38 @@ const routes: Routes = [
     children: [
       {
         matcher: (url) => {          
-          if (url?.length === 1 && url[0].path.match(/(?<=@).*/)) {            
-            return {
-              consumed: url,
-              posParams: {
-                username: new UrlSegment(url[0].path.slice(1), {})
-              }
-            };
+          if (url.length === 1 && url[0].path.startsWith('@')) {
+            const username = url[0].path.slice(1); // Remove '@'
+            if (username) { // Ensure there's something after '@'
+              return {
+                consumed: url,
+                posParams: {
+                  username: new UrlSegment(username, {})
+                }
+              };
+            }
           }
-          return null
+          return null;
         },
         loadChildren: () =>
           import('../../modules/profile/profile.module').then((m) => m.ProfileModule),
+        canActivate: [ReleasedGuard]
+      },
+      {
+        matcher: (url) => {          
+          if (url.length === 2 && url[0].path.startsWith('@') && url[1].path === 'guong') {
+            const username = url[0].path.slice(1); // Remove '@'
+            return {
+              consumed: url,
+              posParams: {
+                username: new UrlSegment(username, {})
+              }
+            };
+          }
+          return null;
+        },
+        loadChildren: () =>
+          import('../../modules/guong/guong.module').then((m) => m.GuongModule),
         canActivate: [ReleasedGuard]
       },
       {
@@ -76,7 +108,7 @@ const routes: Routes = [
           import('../../modules/main/main.module').then((m) => m.MainModule),
         canActivate: [ReleasedGuard]
       },
-      {path: '**', pathMatch: 'full', component: PagenotfoundComponent},
+      { path: '**', pathMatch: 'full', component: PagenotfoundComponent },
     ],
   },
 ];
