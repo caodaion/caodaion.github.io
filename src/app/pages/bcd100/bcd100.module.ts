@@ -15,6 +15,8 @@ import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from "../../shared/shared.module";
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import { MatRadioModule } from '@angular/material/radio';
         DivisionFilterPipe,
         MatDividerModule,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
+        MatDialogModule,
+        SharedModule
     ]
 })
 export class Bcd100Module { }

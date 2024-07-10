@@ -1,3 +1,7 @@
+<button class="w-full my-4" mat-flat-button [color]="'primary'" (click)="onSave(submitDialog)">
+    <mat-icon>save</mat-icon>
+    Lưu
+</button>
 <mat-tab-group>
     <mat-tab [label]="'Lý lịch Họ Đạo (Thánh Thất)'">
         <div class="p-3">
@@ -335,7 +339,7 @@
                 <div>
                     <h5>Danh sách 3 Ban nhiệm kỳ VI (2022-2027): Ban Đầu họ, Ban Cai Quản, Ban Trị sự:</h5>
                     <div *ngFor="let worker of thanhSoData?.workers; let index= index">
-                        <h6>{{worker?.role}}</h6>
+                        <h6 class="mt-4">{{worker?.role}}</h6>
                         <div class="flex flex-wrap">
                             <div class="p-3 w-full lg:w-1/5">
                                 <mat-form-field appearance="outline" class="w-full">
@@ -382,10 +386,269 @@
                 </div>
             </div>
             <mat-divider></mat-divider>
-            <button mat-flat-button [color]="'primary'" (click)="onSave()"><mat-icon>save</mat-icon> Lưu</button>
+
+            <div class="py-3">
+                <h4>HIỆN TẠI:</h4>
+                <div>
+                    <h5>Địa bàn hoạt động của Họ Đạo gồm: Xã/phường, quận/huyện, tỉnh/thành phố:</h5>
+                    <div class="p-3 w-full">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Câu trả lời</mat-label>
+                            <textarea matInput [(ngModel)]="thanhSoData.locality"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <h5>Tổng số chức sắc:</h5>
+                    <div class="flex flex-wrap">
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Phối Sư Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.phoiSuMale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Phối Sư Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.phoiSuFemale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Giáo Sư Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.giaoSuMale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Giáo Sư Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.giaoSuFemale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Giáo Hữu Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.giaoHuuMale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Giáo Hữu Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.giaoHuuFemale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Lễ Sanh Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.leSanhMale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Lễ Sanh Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.leSanhFemale" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Chức sắc Hiệp Thiên Đài</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.hiepThienDaiCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="w-full"></div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Chức việc Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.workerMaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Số Chức việc Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.workerFemaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số tín đồ Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.believersMaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số tín đồ Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.believersFemaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số người dưới 18 tuổi Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.under18MaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số người dưới 18 tuổi Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.under18FemaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tín đồ là thương binh Nam</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.veteransMaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tín đồ là thương binh Nữ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.veteransFemaleCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số hộ tín đồ có Đạo</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.familyCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số hộ có bà mẹ Việt nam anh hùng</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.vietnamesesHeroCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số hộ có thương binh, binh bịnh binh</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.sickSoldersCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tổng số hộ là gia dình liệt sĩ</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.martyrsCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Gia đình có công cách mạng trong 2 thời kỳ kháng chiến</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.revolutionaryCount" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Đặc điểm lịch sử của Họ đạo, ngày kỷ niệm riêng của Họ đạo</mat-label>
+                                <textarea [(ngModel)]="thanhSoData.anniversary" matInput></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Giá trị đóng góp qui ra tiền: (ước tính từ năm 1997 cho đến nay)</mat-label>
+                                <input type="number" [(ngModel)]="thanhSoData.Contribution" matInput />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
         </div>
     </mat-tab>
     <mat-tab [label]="'Thông Qui 4 Hạng Chức Sắc'">
-
+        <div class="p-3">
+            <div>
+                <h3>THÔNG QUI BỐN HẠNG CHỨC SẮC</h3>
+                <div *ngFor="let person of thanhSoData?.fourClassOfDignities; let index= index">
+                    <div class="flex flex-wrap">
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Họ và Tên</mat-label>
+                                <input type="text" [(ngModel)]="person.name" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Năm sinh</mat-label>
+                                <input type="text" [(ngModel)]="person.birthday" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Giáo Phẩm (Phái)</mat-label>
+                                <input type="text" [(ngModel)]="person.titleColor" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Tỉnh/Thành phố</mat-label>
+                                <mat-select [(ngModel)]="person.province">
+                                    <input type="text" #personProvinceFilter
+                                        class="w-full p-2 sticky top-0 bg-white z-10"
+                                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                                    <mat-option
+                                        *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: personProvinceFilter['value']}"
+                                        [value]="item?.id">{{ item?.name }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Quận/Huyện</mat-label>
+                                <mat-select [(ngModel)]="person.district">
+                                    <input type="text" #personDistrictFilter
+                                        class="w-full p-2 sticky top-0 bg-white z-10"
+                                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                                    <mat-option
+                                        *ngFor="let item of districts | divisionFilter: {level: 'district', parent: person.province, searchText: personDistrictFilter['value']}"
+                                        [value]="item?.id">{{ item?.name }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Phường/Xã</mat-label>
+                                <mat-select [(ngModel)]="person.ward">
+                                    <input type="text" #personWardFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                                        [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
+                                    <mat-option
+                                        *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: person.district, searchText: personWardFilter['value']}"
+                                        [value]="item?.id">{{ item?.name }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Phận sự</mat-label>
+                                <input type="text" [(ngModel)]="person.job" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="p-3 w-full lg:w-1/4">
+                            <mat-label>4 Hạng chức sắc</mat-label>
+                            <div>
+                                <mat-radio-group [(ngModel)]="person.catering">
+                                    <mat-radio-button [value]="'Hành Chánh'">Hành Chánh</mat-radio-button>
+                                    <mat-radio-button [value]="'Hàm phong'">Hàm phong</mat-radio-button>
+                                    <mat-radio-button [value]="'Cựu chức'">Cựu chức</mat-radio-button>
+                                    <mat-radio-button [value]="'Tạm nghỉ'">Tạm nghỉ</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <div class="p-3 w-full flex justify-end">
+                            <button mat-button
+                                (click)="onRemoveFourPerson(index)"><mat-icon>delete</mat-icon>Xoá</button>
+                        </div>
+                        <div class="w-full">
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+                </div>
+                <button mat-stroked-button class="w-full" [color]="'primary'" (click)="addMoreClassOfDignity()">
+                    <mat-icon>add</mat-icon>Thêm Chức Sắc
+                </button>
+            </div>
+        </div>
     </mat-tab>
 </mat-tab-group>
+
+
+<ng-template #submitDialog>
+    <iframe *ngIf="googleFormsPath" [src]="
+              googleFormsPath | safe
+            " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</ng-template>

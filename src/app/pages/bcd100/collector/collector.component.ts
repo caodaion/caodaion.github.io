@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Bcd100Service } from 'src/app/shared/services/bcd100/bcd100.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
@@ -15,6 +17,9 @@ export class CollectorComponent implements OnInit {
       <any>{}
     ],
     leaders: <any>[
+      <any>{}
+    ],
+    fourClassOfDignities: <any>[
       <any>{}
     ],
     buildings: <any>[
@@ -95,9 +100,13 @@ export class CollectorComponent implements OnInit {
       },
     ]
   }
+  googleFormsPath: any;
+  bcd100Setting: any;
 
   constructor(
-    private commonService: CommonService
+    private commonService: CommonService,
+    private matDialog: MatDialog,
+    private bcd100Service: Bcd100Service
   ) {
 
   }
@@ -150,6 +159,13 @@ export class CollectorComponent implements OnInit {
     this.thanhSoData.workers?.push(<any>{});
   }
 
+  addMoreClassOfDignity() {
+    if (!this.thanhSoData?.fourClassOfDignities || this.thanhSoData?.fourClassOfDignities?.length === 0) {
+      this.thanhSoData.fourClassOfDignities = [];
+    }
+    this.thanhSoData.fourClassOfDignities?.push(<any>{});
+  }
+
   onRemovePerson(index: any) {
     this.thanhSoData.founders[index] = null
     this.thanhSoData.founders = this.thanhSoData.founders?.filter((item: any) => !!item)
@@ -165,7 +181,32 @@ export class CollectorComponent implements OnInit {
     this.thanhSoData.workers = this.thanhSoData.workers?.filter((item: any) => !!item)
   }
 
-  onSave() {
-    console.log(JSON.stringify(this.thanhSoData));
+  generateKey() {    
+    return this.commonService.generatedSlug(`${this.thanhSoData?.currentName || ''} ${this.thanhSoData?.province || ''}${this.thanhSoData?.district || ''}${this.thanhSoData?.ward || ''}${this.thanhSoData?.address || ''}`)
+  }
+
+  onRemoveFourPerson(index: any) {
+    this.thanhSoData.fourClassOfDignities[index] = null
+    this.thanhSoData.fourClassOfDignities = this.thanhSoData.fourClassOfDignities?.filter((item: any) => !!item)
+  }
+
+  onSave(submitDialog: any) {
+    this.bcd100Service.fetchBcd100Data().subscribe({
+      next: (res: any) => {
+        this.bcd100Setting = res.setting;
+        if (this.bcd100Setting?.googleFormsId) {          
+          this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.bcd100Setting?.googleFormsId}/viewform`
+          this.googleFormsPath += `?${this.bcd100Setting?.key}=${encodeURIComponent(this.generateKey())}`
+          this.googleFormsPath += `&${this.bcd100Setting?.data}=${encodeURIComponent(JSON.stringify(this.thanhSoData))}`
+          const submitDialogRef = this.matDialog.open(submitDialog);
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+      complete: () => {
+        console.info('complete');
+      },
+    })
   }
 }
