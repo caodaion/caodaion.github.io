@@ -46,7 +46,7 @@ export class ActionComponent {
       label: 'Hành Lễ'
     },
     {
-      link: '/caodai100',
+      link: '/100',
       icon: 'money',
       label: '100'
     },

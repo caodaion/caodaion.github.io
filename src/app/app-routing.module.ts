@@ -3,6 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '100',
+    loadChildren: () =>
+      import('./pages/bcd100/bcd100.module').then(
+        (m) => m.Bcd100Module
+      )
+  },
+  {
     path: 'caodai100',
     loadChildren: () =>
       import('./pages/caodai100/caodai100.module').then(
