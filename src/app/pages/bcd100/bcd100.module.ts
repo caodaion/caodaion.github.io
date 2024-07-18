@@ -17,12 +17,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from "../../shared/shared.module";
+import { ViewerComponent } from './viewer/viewer.component';
+import { PresentComponent } from './viewer/present/present.component';
 
 
 @NgModule({
     declarations: [
         Bcd100Component,
-        CollectorComponent
+        CollectorComponent,
+        ViewerComponent,
+        PresentComponent
     ],
     imports: [
         CommonModule,

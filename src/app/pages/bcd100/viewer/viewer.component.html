@@ -1,0 +1,6 @@
+<mat-tab-group>
+    <mat-tab [label]="'Trình Chiếu'">
+        <app-present *ngIf="data?.length > 0" [data]="data"></app-present>
+    </mat-tab>
+    <mat-tab [label]="'Báo Cáo'"></mat-tab>
+</mat-tab-group>

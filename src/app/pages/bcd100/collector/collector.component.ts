@@ -181,7 +181,7 @@ export class CollectorComponent implements OnInit {
     this.thanhSoData.workers = this.thanhSoData.workers?.filter((item: any) => !!item)
   }
 
-  generateKey() {    
+  generateKey() {
     return this.commonService.generatedSlug(`${this.thanhSoData?.currentName || ''} ${this.thanhSoData?.province || ''}${this.thanhSoData?.district || ''}${this.thanhSoData?.ward || ''}${this.thanhSoData?.address || ''}`)
   }
 
@@ -191,22 +191,30 @@ export class CollectorComponent implements OnInit {
   }
 
   onSave(submitDialog: any) {
-    this.bcd100Service.fetchBcd100Data().subscribe({
-      next: (res: any) => {
-        this.bcd100Setting = res.setting;
-        if (this.bcd100Setting?.googleFormsId) {          
-          this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.bcd100Setting?.googleFormsId}/viewform`
-          this.googleFormsPath += `?${this.bcd100Setting?.key}=${encodeURIComponent(this.generateKey())}`
-          this.googleFormsPath += `&${this.bcd100Setting?.data}=${encodeURIComponent(JSON.stringify(this.thanhSoData))}`
-          const submitDialogRef = this.matDialog.open(submitDialog);
-        }
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-      complete: () => {
-        console.info('complete');
-      },
-    })
+    const startSave = () => {
+      if (this.bcd100Setting?.googleFormsId) {
+        this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.bcd100Setting?.googleFormsId}/viewform`
+        this.googleFormsPath += `?${this.bcd100Setting?.key}=${encodeURIComponent(this.generateKey())}`
+        this.googleFormsPath += `&${this.bcd100Setting?.data}=${encodeURIComponent(JSON.stringify(this.thanhSoData))}`
+        const submitDialogRef = this.matDialog.open(submitDialog);
+      }
+    }
+    if (this.bcd100Service.bcd100Setting?.googleFormsId) {
+      this.bcd100Setting = this.bcd100Service.bcd100Setting
+      startSave()
+    } else {
+      this.bcd100Service.fetchBcd100Data().subscribe({
+        next: (res: any) => {
+          this.bcd100Setting = res.setting;
+          startSave()
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {
+          console.info('complete');
+        },
+      })
+    }
   }
 }
