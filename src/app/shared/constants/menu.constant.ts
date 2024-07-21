@@ -30,6 +30,14 @@ export const MENU = [
         icon: 'library_books',
         fullAssess: true,
         released: true,
+      },
+      {
+        key: 'trang-chu.english',
+        url: 'english',
+        label: 'Tiếng Anh',
+        icon: 'translate',
+        fullAssess: true,
+        released: true,
       }
     ]
   },
