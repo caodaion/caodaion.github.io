@@ -879,7 +879,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
           eventName = `Kỷ Niệm chi nhựt`
           name = item?.eventName
-          eventAddress = item?.data?.eventAddress
+          eventAddress = item?.data?.eventAddress          
         }
         return {
           key: item['Timestamp'],
@@ -982,17 +982,17 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
   }
 
-  updateShareInformation() {
+  updateShareInformation() {    
     this.shareItem.date = this.shownDate?.date
     this.shareItem.name = this.shownDate.event?.event?.name
     if (!this.shareItem.time) this.shareItem.time = this.shownDate?.event?.date
     if (this.shareItem.time) {
       if (typeof this.shareItem.time == 'string') {
         this.shareItem.id = this.shareItem.time
-      }
+      }      
       const selectedEvent = this.shareItem.options?.find((item: any) => item.key == this.shareItem.time)
       this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name
-      this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.shareItem.time?.lunarTime} (${this.shareItem.time?.time})`
+      this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name} (${this.shareItem.time?.time})`
       if (selectedEvent?.data?.name.includes(this.shareItem.name)) {
         this.shareItem.targetEvent = null
       }
@@ -1015,6 +1015,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
             data: item?.event,
           }
         })
+      } else {
+        if (this.shareItem?.date?.event) {          
+          this.shareItem.targetEvent = this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name
+        }
       }
     }
     if (!this.shareItem.id) {
