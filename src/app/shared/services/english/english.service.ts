@@ -23,14 +23,36 @@ export class EnglishService {
     return new Observable((observable) => {
       const returnData = () => {
         let response = <any>{}
-        this.sheetService.decodeRawSheetData(ref.englishWorkbook.Sheets['Form Responses 1'])
+        this.sheetService.decodeRawSheetData(ref.englishWorkbook.Sheets['english'])
           .subscribe((res: any) => {
             const settings = res?.filter((item: any) => item?.Timestamp === 'setting')
             const englishSetting = <any>{}
             settings.forEach((item: any) => {
               englishSetting[item?.key] = item?.data
             })
-            const data = res?.filter((item: any) => item?.Timestamp !== 'setting')
+            let data = <any>[];
+            res?.forEach((item: any) => {
+              if (item?.Timestamp != 'setting' && item?.data && !item.key?.match(`edit[0-9]`)) {
+                const responseItem: any = item
+                let editKey = ''
+                item.key?.split('-')?.forEach((v: any) => {
+                  if (v?.length > 1) {
+                    editKey += `${v[0]}${v[v?.length - 1]}`
+                  } else {
+                    editKey += v
+                  }
+                  editKey += '-'
+                })
+                const editToken = res?.find((r: any) => r.key?.match(`${editKey}edit[0-9]`))
+                if (editToken?.data && editToken?.data?.match(`edit[0-9]`)?.length > 0) {
+                  responseItem.editToken = `?${editToken?.data?.match(`edit[0-9]`)[0]}=${editToken?.data}`
+                }
+                if (!data) {
+                  data = <any>[]
+                }
+                data.push(responseItem)
+              }
+            })
             response.status = 200
             response.data = data
             ref.englishSetting = englishSetting;

@@ -11,31 +11,106 @@
             </div>
             <div class="w-full lg:w-1/5 px-3">
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Data</mat-label>
-                    <input type="text" [(ngModel)]="addedData.data" matInput>
+                    <mat-label>Mean</mat-label>
+                    <input type="text" [(ngModel)]="addedData.mean" matInput>
                 </mat-form-field>
             </div>
-            <div class="w-full px-3">
+            <div class="w-full lg:w-1/5 px-3">
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Example</mat-label>
-                    <textarea [(ngModel)]="addedData.example" matInput></textarea>
+                    <mat-label>Type</mat-label>
+                    <input type="text" [(ngModel)]="addedData.type" matInput>
                 </mat-form-field>
             </div>
-        </div>
-        <button class="w-full" mat-flat-button (click)="onUpdateData(submitDialog)" [color]="'primary'">Lưu</button>
-    </div>
-    <div *ngFor="let item of englishVocabularies" class="my-3">
-        <div class="p-3">
-            <div class="flex">
-                <div class="w-full font-bold">{{item?.data?.text}}</div>
-                <div class="w-full">{{item?.data?.data}}</div>
+            <div class="w-full lg:w-1/5 px-3">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Video</mat-label>
+                    <input type="text" [(ngModel)]="addedData.video" matInput>
+                </mat-form-field>
+            </div>
+            <div class="w-full lg:w-1/5 px-3">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Image</mat-label>
+                    <input type="text" [(ngModel)]="addedData.image" matInput>
+                </mat-form-field>
+            </div>
+            <div class="w-full">
+                <div class="flex flex-wrap">
+                    <div class="w-full lg:w-1/2 px-3">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Example</mat-label>
+                            <textarea [rows]="15" [(ngModel)]="addedData.example" matInput></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="w-full lg:w-1/2 px-3">
+                        <app-cp-markdown [data]="addedData.example"></app-cp-markdown>
+                    </div>
+                </div>
             </div>
         </div>
-        <mat-divider></mat-divider>
+        <button class="w-full mb-3" mat-flat-button (click)="onUpdateData(submitDialog, isEditting)"
+            [color]="'primary'">Lưu</button>
+        <button class="w-full mb-3" *ngIf="addedData?.key" mat-stroked-button (click)="onClear()">Làm Mới</button>
+        <div class="w-full" *ngIf="addedData?.key">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Token</mat-label>
+                <input type="text" [(ngModel)]="addedData.editToken" matInput>
+            </mat-form-field>
+        </div>
+        <button class="w-full mb-3" *ngIf="addedData?.key" mat-flat-button [color]="'primary'"
+            (click)="updateEditToken(tokenDialog)">Token cập nhật</button>
     </div>
+    <mat-form-field appearance="outline" class="w-full sticky top-0 bg-white z-10">
+        <mat-label>Tìm kiếm</mat-label>
+        <input type="text" matInput #filterVocabularyTextbox>
+    </mat-form-field>
+    <mat-accordion>
+        <mat-expansion-panel
+            *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']">
+            <mat-expansion-panel-header>
+                <mat-panel-title><strong>{{item?.data?.text}}</strong></mat-panel-title>
+                <mat-panel-description>{{item?.data?.mean}}</mat-panel-description>
+            </mat-expansion-panel-header>
+            <div>
+                <div class="py-4">
+                    <strong class="text-5xl">{{item?.data?.text}}</strong>
+                    <p class="italic text-lg" *ngIf="item?.data?.type">/{{item?.data?.type?.toUpperCase()}}/</p>
+                    <p class="text-lg">{{item?.data?.mean}}</p>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="flex flex-wrap py-4">
+                    <div class="w-full lg:w-1/2">
+                        <iframe class="w-full h-full aspect-video" *ngIf="item?.data?.video"
+                            [src]="item?.data?.video | safe" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="w-full lg:w-1/2">
+                        <img *ngIf="item?.data?.image" [src]="item?.data?.image | safe" [alt]="item?.data?.text">
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="py-4">
+                    <div class="font-bold italic text-lg">VÍ DỤ:</div>
+                    <div class="p-4 text-base">
+                        <app-cp-markdown [data]="item?.data?.example"></app-cp-markdown>
+                    </div>
+                </div>
+                <button class="w-full mb-3" *ngIf="editable" mat-flat-button
+                    (click)="isEditting = true; addedData = item" [color]="'primary'">Cập nhật</button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
 </div>
 <ng-template #submitDialog>
     <iframe *ngIf="googleFormsPath" [src]="
               googleFormsPath | safe
-            " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            " class="w-full lg:min-w-[1000px]" height="520" frameborder="0" marginheight="0"
+        marginwidth="0">Loading…</iframe>
+</ng-template>
+
+<ng-template #tokenDialog>
+    <iframe *ngIf="editGoogleFormsPath" [src]="
+    editGoogleFormsPath | safe
+            " class="w-full lg:min-w-[1000px]" height="520" frameborder="0" marginheight="0"
+        marginwidth="0">Loading…</iframe>
 </ng-template>

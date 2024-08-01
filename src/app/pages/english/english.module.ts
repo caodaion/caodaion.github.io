@@ -10,11 +10,15 @@ import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from "../../shared/shared.module";
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { FilterVocabularyPipe } from './filter-vocabulary.pipe';
+import { CpMarkdownModule } from "../../components/cp-markdown/cp-markdown.module";
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
   declarations: [
     EnglishComponent,
+    FilterVocabularyPipe,
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatInputModule,
     SharedModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
+    CpMarkdownModule,
+    MatExpansionModule
 ]
 })
 export class EnglishModule { }
