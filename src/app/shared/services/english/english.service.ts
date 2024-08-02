@@ -43,16 +43,16 @@ export class EnglishService {
                   }
                   editKey += '-'
                 })
-                const editToken = res?.find((r: any) => r.key?.match(`${editKey}edit[0-9]`))
-                if (editToken?.data && editToken?.data?.match(`edit[0-9]`)?.length > 0) {
-                  responseItem.editToken = `?${editToken?.data?.match(`edit[0-9]`)[0]}=${editToken?.data}`
+                const editToken = res?.find((r: any) => r.key?.match(`${editKey}edit[0-9]`))                
+                if (editToken?.data && editToken?.key?.match(`edit[0-9]`)?.length > 0) {
+                  responseItem.editToken = `?${editToken?.key?.match(`edit[0-9]`)[0]}=${editToken?.data}`
                 }
                 if (!data) {
                   data = <any>[]
                 }
                 data.push(responseItem)
               }
-            })
+            })            
             response.status = 200
             response.data = data
             ref.englishSetting = englishSetting;

@@ -20,6 +20,7 @@ export class EnglishComponent implements OnInit {
   editable: boolean = false;
   isEditting: boolean = false;
   addedData: any = <any>{}
+  editToken: any = ''
 
   constructor(
     private englishService: EnglishService,
@@ -34,8 +35,6 @@ export class EnglishComponent implements OnInit {
     this.authService.getCurrentUser().subscribe({
       next: (res: any) => {
         this.currentUser = res;
-        console.log(res);
-
       },
       error: (error: any) => {
         console.log(error);
@@ -67,7 +66,7 @@ export class EnglishComponent implements OnInit {
               }
             })
             this.englishVocabularies = this.englishVocabularies?.sort((a: any, b: any) => a?.data?.text < b?.data?.text ? -1 : 1)
-            this.editable = this.englishSetting.users?.includes(this.currentUser?.userName)
+            this.editable = this.englishSetting.users?.includes(this.currentUser?.userName)            
           }
         },
         error: (error: any) => {
@@ -95,9 +94,9 @@ export class EnglishComponent implements OnInit {
         const submitDialogRef = this.matDialog.open(submitDialog);
       } else {
         this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.englishSetting?.googleFormsId}/viewform`
-        this.googleFormsPath += `${this.addedData.editToken}`
-        this.googleFormsPath += `&${this.englishSetting?.key}=${encodeURIComponent(this.addedData.key)}`
-        this.googleFormsPath += `&${this.englishSetting?.name}=${encodeURIComponent(this.addedData.name)}`
+        this.googleFormsPath += `${this.editToken}`
+        this.googleFormsPath += `&${this.englishSetting?.key}=${encodeURIComponent(this.generateKey())}`
+        this.googleFormsPath += `&${this.englishSetting?.data}=${encodeURIComponent(JSON.stringify(this.addedData))}`
         const submitDialogRef = this.matDialog.open(submitDialog);
         submitDialogRef?.afterClosed().subscribe(() => this.onClear())
       }
@@ -135,5 +134,11 @@ export class EnglishComponent implements OnInit {
       const tokenDialogRef = this.matDialog.open(tokenDialog);
       tokenDialogRef?.afterClosed().subscribe(() => this.onClear());
     }
+  }
+
+  onEdit(item: any) {
+    this.isEditting = true;
+    this.addedData = item?.data
+    this.editToken = item?.editToken
   }
 }

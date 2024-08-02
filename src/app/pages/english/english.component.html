@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <button class="w-full mb-3" *ngIf="editable" mat-flat-button
-                    (click)="isEditting = true; addedData = item" [color]="'primary'">Cập nhật</button>
+                    (click)="onEdit(item)" [color]="'primary'">Cập nhật</button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>
