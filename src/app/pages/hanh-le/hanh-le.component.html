@@ -4,22 +4,74 @@
       <mat-grid-list [cols]="cols" [gutterSize]="'1rem'">
         <ng-container *ngFor="let item of nghiTiet">
           <mat-grid-tile *ngIf="item?.published">
-            <mat-card
-              appearance="outlined"
-              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
-              matRipple
-              [routerLink]="[item?.key]"
-            >
+            <mat-card appearance="outlined"
+              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer" matRipple
+              [routerLink]="[item?.key]">
               <mat-card-header class="w-100">
-                <mat-card-title
-                  class="w-100 text-center !text-2xl !mb-4 !font-bold"
-                  >{{ item?.name }}</mat-card-title
-                >
+                <mat-card-title class="w-100 text-center !text-2xl !mb-4 !font-bold">{{ item?.name }}</mat-card-title>
               </mat-card-header>
             </mat-card>
           </mat-grid-tile>
         </ng-container>
       </mat-grid-list>
+    </div>
+  </mat-tab>
+  <mat-tab [label]="'BÀI KỆ CHUÔNG TRỐNG'">
+    <div class="text-base p-4">
+      <h2>1. CHUÔNG CHỈNH Y</h2>
+      <p style="text-indent: 30px;">Văn chung khấu hướng huệ chưởng Càn Khôn, </p>
+      <p style="text-indent: 30px;">Pháp giái chúng sanh đồng đăng bĩ ngạn,</p>
+      <p style="text-indent: 30px;">Án dà ra Đế dạ ta bà ha.</p>
+      <hr>
+      <h2>2. CHUÔNG NHẬP ĐÀN</h2>
+      <p style="text-indent: 30px;">Khiết vi u ám tất giai văn,</p>
+      <p style="text-indent: 30px;">Nhứt thiết chúng sanh thành chánh giác,</p>
+      <p style="text-indent: 30px;">Án dà ra Đế dạ ta bà ha.</p>
+      <hr>
+      <h2>3. LÔI ÂM CỔ</h2>
+      <p style="text-indent: 30px;">Lôi âm Thánh cổ, triệt Hư không,</p>
+      <p style="text-indent: 30px;">Truyền tấu Càn Khôn Thế giới thông,</p>
+      <p style="text-indent: 30px;">Đạo pháp đương kim dương chánh giáo,</p>
+      <p style="text-indent: 30px;">Linh quang chiếu diệu Ngọc Kinh Cung.</p>
+      <hr>
+      <h2>4. BẠCH NGỌC CHUNG</h2>
+      <p style="text-indent: 30px;">Thần chung things hướng phóng phong đô,</p>
+      <p style="text-indent: 30px;">Địa tạng khai môn phóng xá cô,</p>
+      <p style="text-indent: 30px;">Tam Kỳ vận chuyển Kim Quang hiện,</p>
+      <p style="text-indent: 30px;">Xám hối âm hồn xuất u đồ.</p>
+      <hr>
+      <h2>5. CHUÔNG BÃI ĐÀN</h2>
+      <p style="text-indent: 30px;">Đàn tràng viên mãn chức sắc qui nguyên, vĩnh mộc từ ân phong điều võ thuận,</p>
+      <p style="text-indent: 30px;">Thiên phong hãi chúng quốc thới ân an, hồi hướng Đàn đường tận thâu pháp giới,</p>
+      <p style="text-indent: 30px;">Án dà ra Đế dạ ta bà ha.</p>
+    </div>
+  </mat-tab>
+  <mat-tab [label]="'CHUÔNG, TRỐNG QUI LIỄU - ĐƯA LINH'">
+    <div class="text-base p-4">
+      <h1 class="text-center">CHUÔNG, TRỐNG QUI LIỄU - ĐƯA LINH</h1>
+      <p class="text-center text-sm italic">giống nhau</p>
+      <h2>I. PHẨM TRỌN LÀNH:</h2>
+      <p style="text-indent: 30px;">A. GIÁO TÔNG: Ba hồi chuông, trống, lại năm tiếng. (Chuông trống năm tiếng có nghĩa
+        là: Đức Giáo Tông thể hiện Ngũ Chỉ Đại Đạo).</p>
+      <p style="text-indent: 30px;">B. CHƯỞNG PHÁP: Ba hồi chuông, trống, lại hai tiếng trống. (lại hai tiếng trống có
+        nghĩa là Chưởng pháp có chơn hai Đài).</p>
+      <p style="text-indent: 30px;">C. ĐẦU SƯ: BA hồi chuông, trống, lại bảy tiếng là "Nam", chín tiếng là "Nữ".</p>
+      <h2>II. PHẨM THÁNH:</h2>
+      <p style="text-indent: 30px;">A. CHÁNH PHỐI SƯ VÀ PHỐI SƯ: Một hồi chuông, trống, lại bảy tiếng là "Nam", chín
+        tiếng là "Nữ".</p>
+      <p style="text-indent: 30px;">B. GIÁO SƯ, GIÁO HỮU: Ba hồi chuông, lại bảy tiếng là "Nam", chín tiếng là "Nữ".</p>
+      <h2>III. NHƠN SANH:</h2>
+      <p style="text-indent: 30px;">A. LỄ SANH, CHỨC VIỆC, ĐẠO HỮU: Một hồi chuông, lại bảy tiếng là "Nam", chín tiếng
+        là "Nữ".</p>
+      <p style="text-indent: 30px;">B. TRẺ EM: Dưới mười một tuổi: chuông bảy tiếng là "Nam", chín tiếng là "Nữ". Trên
+        mười một tuổi như người lớn.</p>
+      <h2>IV. HIỆP THIÊN ĐÀI:</h2>
+      <p style="text-indent: 30px;">A. HỘ PHÁP: Ba hồi chuông, trống, lại một tiếng chuông, trống. (Chuông, trống một
+        tiếng có nghĩa
+        là thống nhứt một luật, một pháp).</p>
+      <p style="text-indent: 30px;">B. THƯỢNG PHẨM, THƯỢNG SANH: Ba hồi chuông, trống trơn.</p>
+      <p style="text-indent: 30px;">C. THẬP NHỊ THỜI QUÂN: Một hồi chuông, trống trơn.</p>
+      <p style="text-indent: 30px;">D. VỀ BẢO QUÂN BÀ BẢO ĐÀN: Ba hồi chuông trơn.</p>
     </div>
   </mat-tab>
   <!-- <mat-tab [label]="'Tài liệu tham khảo'"></mat-tab> -->
