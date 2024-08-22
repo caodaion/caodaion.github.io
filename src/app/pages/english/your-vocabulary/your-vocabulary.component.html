@@ -105,7 +105,7 @@
             <div class="flex" *ngFor="let item of testVocabularies">
                 <div class="w-1/2 p-3">
                     <div class="textItem" [ngClass]="{
-                        'focus': validateItem?.english === item?.english?.key,
+                        'focus': validateItem?.english && validateItem?.english === item?.english?.key,
                         'wrong': validateItem?.english === item?.english?.key && inValid,
                         'correct': item?.english?.correct 
                         }" (click)="validate({english: item?.english?.key})">
@@ -114,7 +114,7 @@
                 </div>
                 <div class="w-1/2 p-3">
                     <div class="textItem" [ngClass]="{
-                        'focus': validateItem?.mean === item?.mean?.key,
+                        'focus': validateItem?.mean && validateItem?.mean === item?.mean?.key,
                         'wrong': validateItem?.mean === item?.mean?.key && inValid,
                         'correct': item?.mean?.correct 
                         }" (click)="validate({mean: item?.mean?.key})">

@@ -60,9 +60,10 @@ export class YourVocabularyComponent implements AfterViewInit {
         if (foundInCorrect) {
           this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].inCorrect += 1
         }
-      })
-      this.generateTest();      
+      })    
       this.cd.detectChanges();
+      this.generateTest();
+      this.validateItem = <any>{}
     })
   }
 
@@ -109,6 +110,7 @@ export class YourVocabularyComponent implements AfterViewInit {
         })
       }
     })
+     
   }
 
   saveVocabulary() {
