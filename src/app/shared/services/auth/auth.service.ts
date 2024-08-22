@@ -104,6 +104,7 @@ export class AuthService {
       if (this.currentUser?.sheetId) {
         this.getUserPersionalData(isLogIn).subscribe((res: any) => {
           this.currentUser.setting = res.setting
+          this.currentUser.vocabularies = res.remote?.vocabularies
           this.currentUserRemote = res.remote;
           this.isInvalidSyncData = this.checkSyncDataStatus();
           observable.next(this.currentUser);
@@ -313,7 +314,23 @@ export class AuthService {
                       if (isLogIn) {
                         this.currentUser[dr?.key] = dr?.data;
                       }
-                      response.remote[dr?.key] = dr?.data;
+                      switch (dr?.key) {
+                        case 'vocabulary':
+                          if (!response.remote['vocabularies']) {
+                            response.remote['vocabularies'] = <any>[]
+                          }
+                          response.remote['vocabularies'].push(dr?.data);
+                          break;
+                        case 'vocabularyExercise':
+                          if (!response.remote['vocabularyExercises']) {
+                            response.remote['vocabularyExercises'] = <any>[]
+                          }
+                          response.remote['vocabularyExercises'].push(dr?.data);
+                          break;
+                        default:
+                          response.remote[dr?.key] = dr?.data;
+                          break;
+                      }
                     }
                   })
                 }

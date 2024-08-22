@@ -13,12 +13,18 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FilterVocabularyPipe } from './filter-vocabulary.pipe';
 import { CpMarkdownModule } from "../../components/cp-markdown/cp-markdown.module";
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CaodaiVocabularyComponent } from './caodai-vocabulary/caodai-vocabulary.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { YourVocabularyComponent } from './your-vocabulary/your-vocabulary.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
   declarations: [
     EnglishComponent,
     FilterVocabularyPipe,
+    CaodaiVocabularyComponent,
+    YourVocabularyComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +37,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDialogModule,
     MatDividerModule,
     CpMarkdownModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatTooltipModule
 ]
 })
 export class EnglishModule { }

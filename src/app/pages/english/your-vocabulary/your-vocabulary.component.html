@@ -1,0 +1,133 @@
+<audio src="assets/audios/sound-effect/mixkit-correct-answer-notification-947.wav" #correctAnswer></audio>
+<audio src="assets/audios/sound-effect/mixkit-tech-break-fail-2947.wav" #inCorrectAnswer></audio>
+<audio src="assets/audios/sound-effect/mixkit-fantasy-game-success-notification-270.wav" #win></audio>
+
+<mat-tab-group>
+    <mat-tab label="Thêm từ vựng">
+        <div class="py-3">
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-1/2 px-3">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Text</mat-label>
+                        <input type="text" [(ngModel)]="addedData.text" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="w-full lg:w-1/2 px-3">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Mean</mat-label>
+                        <input type="text" [(ngModel)]="addedData.mean" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="w-full">
+                    <button mat-flat-button *ngIf="!syncGoogleFormPath" class="w-full" [color]="'primary'"
+                        (click)="saveVocabulary()">Save</button>
+                    <button mat-flat-button *ngIf="syncGoogleFormPath" class="w-full"
+                        (click)="syncGoogleFormPath = ''; addedData = {}">Clear</button>
+                </div>
+                <div class="w-full">
+                    <iframe *ngIf="syncGoogleFormPath" [src]="
+      syncGoogleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+                </div>
+            </div>
+        </div>
+        <div class="py-3" *ngIf="englishVocabularies?.length > 0">
+            <mat-form-field appearance="outline" class="w-full sticky top-0 bg-white z-10">
+                <mat-label>Tìm kiếm</mat-label>
+                <input type="text" matInput #filterVocabularyTextbox>
+            </mat-form-field>
+            <mat-accordion>
+                <mat-expansion-panel
+                    *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title><strong [ngClass]="{
+                            'text-[#34a853]': item?.count && item?.correct > item?.inCorrect,
+                            'text-[#ea4335]': item?.count && item?.correct < item?.inCorrect,
+                            'text-[#4284f3]': item?.count && item?.correct == item?.inCorrect,
+                        }">{{item?.data?.text}}</strong></mat-panel-title>
+                        <mat-panel-description>
+                            <div class="w-full flex">
+                                <div class="w-1/2">{{item?.data?.mean}}</div>
+                                <div class="w-1/2">
+                                    <span
+                                        [matTooltip]="'kiểm tra' + (item?.correct | number: '2.0-0') + ' lần ' + (item?.correct | number: '2.0-0') + ' lần đúng' + ' ' + (item?.inCorrect | number: '2.0-0') + ' lần sai'">
+                                        <span class="text-[#34a853]">{{item?.correct |
+                                            number: '2.0-0'}}</span>/<span class="text-[#ea4335]">{{item?.inCorrect
+                                            | number: '2.0-0'}}</span>/<span>{{item?.count | number: '2.0-0'}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="select-text">
+                        <div class="py-4">
+                            <strong class="text-5xl">{{item?.data?.text}}</strong>
+                            <p class="italic text-lg" *ngIf="item?.data?.type">/{{item?.data?.type?.toUpperCase()}}/</p>
+                            <p class="text-lg">{{item?.data?.mean}}</p>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="flex flex-wrap py-4">
+                            <div class="w-full lg:w-1/2">
+                                <iframe class="w-full h-full aspect-video" *ngIf="item?.data?.video"
+                                    [src]="item?.data?.video | safe" title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                            <div class="w-full lg:w-1/2">
+                                <img *ngIf="item?.data?.image" [src]="item?.data?.image | safe"
+                                    [alt]="item?.data?.text">
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="py-4">
+                            <div class="font-bold italic text-lg">VÍ DỤ:</div>
+                            <div class="p-4 text-base">
+                                <app-cp-markdown [data]="item?.data?.example"></app-cp-markdown>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </mat-tab>
+    <mat-tab label="Ôn Tập">
+        <div class="py-3">
+            <div class="flex flex-wrap">
+                <div class="w-full p-3">
+                    <mat-form-field class="w-full">
+                        <mat-label>Tối đa</mat-label>
+                        <input type="text" matInput [(ngModel)]="maxTests" (ngModelChange)="generateTest()">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="flex" *ngFor="let item of testVocabularies">
+                <div class="w-1/2 p-3">
+                    <div class="textItem" [ngClass]="{
+                        'focus': validateItem?.english === item?.english?.key,
+                        'wrong': validateItem?.english === item?.english?.key && inValid,
+                        'correct': item?.english?.correct 
+                        }" (click)="validate({english: item?.english?.key})">
+                        {{item?.english?.text}}
+                    </div>
+                </div>
+                <div class="w-1/2 p-3">
+                    <div class="textItem" [ngClass]="{
+                        'focus': validateItem?.mean === item?.mean?.key,
+                        'wrong': validateItem?.mean === item?.mean?.key && inValid,
+                        'correct': item?.mean?.correct 
+                        }" (click)="validate({mean: item?.mean?.key})">
+                        {{item?.mean?.text}}
+                    </div>
+                </div>
+            </div>
+            <div class="w-full" *ngIf="isFulfilled">
+                <button mat-flat-button [color]="'primary'" class="w-full" (click)="saveResult()">Save Process</button>
+                <iframe *ngIf="saveSyncGoogleFormPath" [src]="
+      saveSyncGoogleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
