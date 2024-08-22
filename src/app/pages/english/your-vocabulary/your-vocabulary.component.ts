@@ -89,7 +89,7 @@ export class YourVocabularyComponent implements AfterViewInit {
       for (let index = 0; index < testLenght; index++) {
         const randomIndex = getRandomInt(0, this.englishVocabularies.length - 1)
         const gotVocabulary = this.englishVocabularies[randomIndex]
-        if (!this.gotVocabularies?.find((gv: any) => gv?.data?.text === gotVocabulary?.data?.text)) {
+        if (!this.gotVocabularies?.find((gv: any) => gv?.data?.key === gotVocabulary?.data?.key)) {
           this.gotVocabularies.push({ data: gotVocabulary?.data, key: gotVocabulary?.data?.key })
         }
       }
