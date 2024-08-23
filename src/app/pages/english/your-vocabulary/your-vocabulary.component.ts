@@ -21,6 +21,7 @@ export class YourVocabularyComponent implements AfterViewInit {
   editToken: any = ''
   syncGoogleFormPath: any;
   saveSyncGoogleFormPath: any;
+  synth = window.speechSynthesis;
 
   @ViewChild('updateContent') updateContent!: any;
   @ViewChild('correctAnswer') correctAnswer!: ElementRef;
@@ -51,7 +52,7 @@ export class YourVocabularyComponent implements AfterViewInit {
         const foundItem = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0])
         const foundCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key === item[1])
         const foundInCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key !== item[1])
-        if (foundItem) {          
+        if (foundItem) {
           this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].count += 1
         }
         if (foundCorrect) {
@@ -60,7 +61,7 @@ export class YourVocabularyComponent implements AfterViewInit {
         if (foundInCorrect) {
           this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].inCorrect += 1
         }
-      })    
+      })
       this.cd.detectChanges();
       this.generateTest();
       this.validateItem = <any>{}
@@ -110,7 +111,7 @@ export class YourVocabularyComponent implements AfterViewInit {
         })
       }
     })
-     
+
   }
 
   saveVocabulary() {
@@ -120,16 +121,24 @@ export class YourVocabularyComponent implements AfterViewInit {
     this.syncGoogleFormPath += `?${this.currentUser?.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
   }
 
+  speak(text: any) {
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.rate = 1.2;
+    utterThis.pitch = 0.8;
+    this.synth.speak(utterThis);
+  }
+
   validateItem = <any>{}
   validatedItems = <any>[]
   inValid: boolean = false;
   isFulfilled: boolean = false;
   validate(data: any) {
     if (data?.english) {
-      this.validateItem.english = data?.english
+      this.validateItem.english = data?.english?.key
+      this.speak(data?.english?.text)
     }
     if (data?.mean) {
-      this.validateItem.mean = data?.mean
+      this.validateItem.mean = data?.mean?.key
     }
     if (this.validateItem.english && this.validateItem.mean) {
       this.validatedItems.push([this.validateItem.english, this.validateItem.mean])

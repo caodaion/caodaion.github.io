@@ -3,7 +3,7 @@
 <audio src="assets/audios/sound-effect/mixkit-fantasy-game-success-notification-270.wav" #win></audio>
 
 <mat-tab-group>
-    <mat-tab label="Thêm từ vựng">
+    <mat-tab label="Từ vựng">
         <div class="py-3">
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-1/2 px-3">
@@ -39,7 +39,7 @@
             <mat-accordion>
                 <mat-expansion-panel
                     *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']">
-                    <mat-expansion-panel-header>
+                    <mat-expansion-panel-header class="!min-h-[48px] !h-auto !px-0 !py-3">
                         <mat-panel-title><strong [ngClass]="{
                             'text-[#34a853]': item?.count && item?.correct > item?.inCorrect,
                             'text-[#ea4335]': item?.count && item?.correct < item?.inCorrect,
@@ -98,6 +98,9 @@
                         <mat-label>Tối đa</mat-label>
                         <input type="text" matInput [(ngModel)]="maxTests" (ngModelChange)="generateTest()">
                     </mat-form-field>
+                    <button mat-flat-button [color]="'primary'" class="w-full" (click)="generateTest()">
+                        Generate
+                    </button>
                 </div>
             </div>
         </div>
@@ -107,8 +110,8 @@
                     <div class="textItem" [ngClass]="{
                         'focus': validateItem?.english && validateItem?.english === item?.english?.key,
                         'wrong': validateItem?.english === item?.english?.key && inValid,
-                        'correct': item?.english?.correct 
-                        }" (click)="validate({english: item?.english?.key})">
+                        'correct': item?.english?.correct
+                        }" (click)="validate({english: item?.english})">
                         {{item?.english?.text}}
                     </div>
                 </div>
@@ -116,8 +119,8 @@
                     <div class="textItem" [ngClass]="{
                         'focus': validateItem?.mean && validateItem?.mean === item?.mean?.key,
                         'wrong': validateItem?.mean === item?.mean?.key && inValid,
-                        'correct': item?.mean?.correct 
-                        }" (click)="validate({mean: item?.mean?.key})">
+                        'correct': item?.mean?.correct
+                        }" (click)="validate({mean: item?.mean})">
                         {{item?.mean?.text}}
                     </div>
                 </div>

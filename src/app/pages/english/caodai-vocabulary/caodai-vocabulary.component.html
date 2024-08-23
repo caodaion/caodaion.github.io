@@ -63,7 +63,7 @@
 <mat-accordion>
     <mat-expansion-panel
         *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']">
-        <mat-expansion-panel-header>
+        <mat-expansion-panel-header class="!min-h-[48px] !h-auto !px-0 !py-3">
             <mat-panel-title><strong>{{item?.data?.text}}</strong></mat-panel-title>
             <mat-panel-description>{{item?.data?.mean}}</mat-panel-description>
         </mat-expansion-panel-header>
