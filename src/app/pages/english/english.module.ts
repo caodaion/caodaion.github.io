@@ -17,6 +17,7 @@ import { CaodaiVocabularyComponent } from './caodai-vocabulary/caodai-vocabulary
 import { MatTabsModule } from '@angular/material/tabs';
 import { YourVocabularyComponent } from './your-vocabulary/your-vocabulary.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CpMarkdownModule,
     MatExpansionModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
 ]
 })
 export class EnglishModule { }

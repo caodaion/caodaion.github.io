@@ -105,6 +105,7 @@ export class AuthService {
         this.getUserPersionalData(isLogIn).subscribe((res: any) => {
           this.currentUser.setting = res.setting
           this.currentUser.vocabularies = res.remote?.vocabularies
+          this.currentUser.vocabularyExercises = res.remote?.vocabularyExercises
           this.currentUserRemote = res.remote;
           this.isInvalidSyncData = this.checkSyncDataStatus();
           observable.next(this.currentUser);
@@ -128,12 +129,18 @@ export class AuthService {
     let currentUserKeys = Object.keys(this.currentUser);
     let currentUserRemoteKeys = Object.keys(this.currentUserRemote);
     currentUserKeys = currentUserKeys?.map((item: any) => {
+      if (item == "vocabularies" || item == "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise') {
+        return "MATCHED";
+      }
       if (item == "children" || (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item]))) {
         return "MATCHED";
       }
       return "UN-MATCHED";
     })
     currentUserRemoteKeys = currentUserRemoteKeys?.map((item: any) => {
+      if (item === "vocabularies" || item === "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise') {
+        return "MATCHED";
+      }
       if (item == "children" || (JSON.stringify(this.currentUserRemote[item]) == JSON.stringify(this.currentUser[item]))) {
         return "MATCHED";
       }
@@ -325,7 +332,9 @@ export class AuthService {
                           if (!response.remote['vocabularyExercises']) {
                             response.remote['vocabularyExercises'] = <any>[]
                           }
-                          response.remote['vocabularyExercises'].push(dr?.data);
+                          dr?.data?.forEach((ved: any) => {
+                            response.remote['vocabularyExercises'].push(ved);
+                          })
                           break;
                         default:
                           response.remote[dr?.key] = dr?.data;

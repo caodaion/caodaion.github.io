@@ -40,17 +40,21 @@
                 <mat-expansion-panel
                     *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']">
                     <mat-expansion-panel-header class="!min-h-[48px] !h-auto !px-0 !py-3">
-                        <mat-panel-title><strong [ngClass]="{
+                        <mat-panel-title>
+                            <button mat-icon-button
+                                (click)="speak(item?.data?.text)"><mat-icon>volume_up</mat-icon></button>
+                            <strong [ngClass]="{
                             'text-[#34a853]': item?.count && item?.correct > item?.inCorrect,
                             'text-[#ea4335]': item?.count && item?.correct < item?.inCorrect,
                             'text-[#4284f3]': item?.count && item?.correct == item?.inCorrect,
-                        }">{{item?.data?.text}}</strong></mat-panel-title>
+                        }">{{item?.data?.text}}</strong>
+                        </mat-panel-title>
                         <mat-panel-description>
                             <div class="w-full flex">
                                 <div class="w-1/2">{{item?.data?.mean}}</div>
                                 <div class="w-1/2">
                                     <span
-                                        [matTooltip]="'kiểm tra' + (item?.correct | number: '2.0-0') + ' lần ' + (item?.correct | number: '2.0-0') + ' lần đúng' + ' ' + (item?.inCorrect | number: '2.0-0') + ' lần sai'">
+                                        [matTooltip]="'kiểm tra ' + (item?.correct | number: '2.0-0') + ' lần ' + (item?.correct | number: '2.0-0') + ' lần đúng' + ' ' + (item?.inCorrect | number: '2.0-0') + ' lần sai'">
                                         <span class="text-[#34a853]">{{item?.correct |
                                             number: '2.0-0'}}</span>/<span class="text-[#ea4335]">{{item?.inCorrect
                                             | number: '2.0-0'}}</span>/<span>{{item?.count | number: '2.0-0'}}</span>
@@ -127,6 +131,10 @@
             </div>
             <div class="w-full" *ngIf="isFulfilled">
                 <button mat-flat-button [color]="'primary'" class="w-full" (click)="saveResult()">Save Process</button>
+                <button *ngIf="saveSyncGoogleFormPath" mat-flat-button class="w-full mt-3"
+                    (click)="generateTest()">
+                    Re-Generate
+                </button>
                 <iframe *ngIf="saveSyncGoogleFormPath" [src]="
       saveSyncGoogleFormPath | safe
     " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>

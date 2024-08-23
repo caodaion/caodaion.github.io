@@ -47,28 +47,44 @@ export class YourVocabularyComponent implements AfterViewInit {
           correct: 0,
           inCorrect: 0,
         }
-      })?.sort((a: any, b: any) => a?.data?.text < b?.data?.text ? -1 : 1);
-      this.currentUser?.vocabularyExercise?.forEach((item: any) => {
-        const foundItem = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0])
-        const foundCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key === item[1])
-        const foundInCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key !== item[1])
-        if (foundItem) {
-          this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].count += 1
-        }
-        if (foundCorrect) {
-          this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].correct += 1
-        }
-        if (foundInCorrect) {
-          this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].inCorrect += 1
-        }
+      })
+      const calculateValues = new Promise((resolve: any, reject: any) => {
+        this.currentUser?.vocabularyExercises?.forEach((item: any) => {
+          const foundItem = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0])
+          const foundCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key === item[1])
+          const foundInCorrect = this.englishVocabularies?.find((ev: any) => ev?.data?.key === item[0] && ev?.data?.key !== item[1])
+          if (foundItem) {
+            this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].count += 1
+          }
+          if (foundCorrect) {
+            this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].correct += 1
+          }
+          if (foundInCorrect) {
+            this.englishVocabularies[this.englishVocabularies.indexOf(foundItem)].inCorrect += 1
+          }
+        })
+        resolve();
+      })
+      calculateValues.then(() => {
+        this.englishVocabularies = this.englishVocabularies
+          ?.sort((a: any, b: any) => {
+            if (a?.inCorrect > b?.inCorrect) return -1;
+            if (a?.inCorrect < b?.inCorrect) return 1;
+            if (a?.count < b?.count) return -1;
+            if (a?.count > b?.count) return 1;
+            if (a?.data?.text < b?.data?.text) return -1;
+            if (a?.data?.text > b?.data?.text) return 1;
+            return 1;
+          });
+        this.cd.detectChanges();
+        this.generateTest();
+        this.validateItem = <any>{}     
       })
       this.cd.detectChanges();
-      this.generateTest();
-      this.validateItem = <any>{}
     })
   }
 
-  maxTests: number = 20;
+  maxTests: number = 12;
   gotVocabularies: any = <any>[]
   testVocabularies: any = <any>[]
 
@@ -85,7 +101,7 @@ export class YourVocabularyComponent implements AfterViewInit {
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    const testLenght = getRandomInt(1, this.maxTests || 20);
+    const testLenght = getRandomInt(1, this.maxTests || 12);
     const getData = new Promise((resolve: any, reject: any) => {
       for (let index = 0; index < testLenght; index++) {
         const randomIndex = getRandomInt(0, this.englishVocabularies.length - 1)
