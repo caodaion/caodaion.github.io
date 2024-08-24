@@ -115,7 +115,7 @@
                         'focus': validateItem?.english && validateItem?.english === item?.english?.key,
                         'wrong': validateItem?.english === item?.english?.key && inValid,
                         'correct': item?.english?.correct
-                        }" (click)="validate({english: item?.english})">
+                        }" (click)="item?.english?.correct ? speak(item?.english?.text) : validate({english: item?.english})">
                         {{item?.english?.text}}
                     </div>
                 </div>

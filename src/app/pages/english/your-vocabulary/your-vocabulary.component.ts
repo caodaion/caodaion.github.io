@@ -138,9 +138,16 @@ export class YourVocabularyComponent implements AfterViewInit {
   }
 
   speak(text: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    const match = text.match(regex)
+    text = text?.replace(regex, '')
+    text = text?.replace('/', '. ')
+    if (match) {
+      text+=`. ${text}${match[1]}`
+    }
     const utterThis = new SpeechSynthesisUtterance(text);
-    utterThis.rate = 1.2;
-    utterThis.pitch = 0.8;
+    utterThis.rate = 1;
+    utterThis.pitch = 1;
     this.synth.speak(utterThis);
   }
 
