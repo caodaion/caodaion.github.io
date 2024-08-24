@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { EnglishService } from 'src/app/shared/services/english/english.service';
+import { PhoneticService } from 'src/app/shared/services/phonetic/phonetic.service';
 
 @Component({
   selector: 'app-your-vocabulary',
@@ -32,7 +33,8 @@ export class YourVocabularyComponent implements AfterViewInit {
 
   constructor(
     protected authService: AuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private phoneticService: PhoneticService
   ) {
 
   }
@@ -78,10 +80,22 @@ export class YourVocabularyComponent implements AfterViewInit {
           });
         this.cd.detectChanges();
         this.generateTest();
-        this.validateItem = <any>{}     
+        this.validateItem = <any>{}
       })
       this.cd.detectChanges();
     })
+  }
+
+  fetchPhonetic(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    this.phoneticService.getPhonetic(text?.toLowerCase())
+      .subscribe((res: any) => {
+        item.dictionaryInfor = res[0];        
+      })
   }
 
   maxTests: number = 12;
@@ -141,9 +155,9 @@ export class YourVocabularyComponent implements AfterViewInit {
     const regex = new RegExp(/\(([^)]+)\)/);
     const match = text.match(regex)
     text = text?.replace(regex, '')
-    text = text?.replace('/', '. ')
+    text = text?.replaceAll('/', '. ')
     if (match) {
-      text+=`. ${text}${match[1]}`
+      text += `. ${text}${match[1]}`
     }
     const utterThis = new SpeechSynthesisUtterance(text);
     utterThis.rate = 1;
@@ -193,5 +207,23 @@ export class YourVocabularyComponent implements AfterViewInit {
     this.addedData.key = Date.now()
     const syncToken = [{ key: 'vocabularyExercise', data: this.validatedItems }]
     this.saveSyncGoogleFormPath += `?${this.currentUser?.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+  }
+
+  openInGTranslate(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    window.open(`https://translate.google.com/details?sl=en&tl=vi&text=${text}&op=translate`, '_blank')
+  }
+  
+  openInCambridge(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    window.open(`https://dictionary.cambridge.org/dictionary/english/${text}`, '_blank')
   }
 }

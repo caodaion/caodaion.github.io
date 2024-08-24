@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EnglishService } from 'src/app/shared/services/english/english.service';
+import { PhoneticService } from 'src/app/shared/services/phonetic/phonetic.service';
 
 @Component({
   selector: 'app-caodai-vocabulary',
@@ -21,12 +22,14 @@ export class CaodaiVocabularyComponent implements OnInit {
   isEditting: boolean = false;
   addedData: any = <any>{}
   editToken: any = ''
+  synth = window.speechSynthesis;
 
   constructor(
     private englishService: EnglishService,
     private authService: AuthService,
     private matDialog: MatDialog,
     private commonService: CommonService,
+    private phoneticService: PhoneticService
   ) {
 
   }
@@ -140,5 +143,49 @@ export class CaodaiVocabularyComponent implements OnInit {
     this.isEditting = true;
     this.addedData = item?.data
     this.editToken = item?.editToken
+  }
+
+  openInGTranslate(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    window.open(`https://translate.google.com/details?sl=en&tl=vi&text=${text}&op=translate`, '_blank')
+  }
+  
+  openInCambridge(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    window.open(`https://dictionary.cambridge.org/dictionary/english/${text}`, '_blank')
+  }
+
+  fetchPhonetic(item: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    let text = ''
+    text = item?.data?.text?.replace(regex, '')
+    text = text?.split('/')[0];
+    text = text?.split('.')[0];
+    this.phoneticService.getPhonetic(text?.toLowerCase())
+      .subscribe((res: any) => {
+        item.dictionaryInfor = res[0];        
+      })
+  }
+
+  speak(text: any) {
+    const regex = new RegExp(/\(([^)]+)\)/);
+    const match = text.match(regex)
+    text = text?.replace(regex, '')
+    text = text?.replaceAll('/', '. ')
+    if (match) {
+      text += `. ${text}${match[1]}`
+    }
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.rate = 1;
+    utterThis.pitch = 1;
+    this.synth.speak(utterThis);
   }
 }
