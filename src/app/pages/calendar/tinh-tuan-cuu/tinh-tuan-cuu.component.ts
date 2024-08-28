@@ -351,7 +351,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   onPrint(item: any, parent?: any) {
     let parentElement = null
-    parentElement = this.printedInfo.location
+    parentElement = this.printedInfo?.qrData
     let printTab = window.open(
       '',
       'PRINT',
@@ -362,7 +362,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       <title>${document.title.toUpperCase()}PRINTER</title>
       <style>
       .tableContent td, th {
-        font-size: 22px;
+        font-size: 21px;
         text-align: left;
         padding: 1rem;
         border-bottom: 1px solid #000000;
@@ -384,13 +384,13 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       `${item?.key}`
     );
     const caodaiOnInFo = `<div style="display: flex;">
-    <div style="float: left; width: 45%">
+    <div style="float: left; width: 50%">
     <p><strong>Truy Cập</strong> <a href="https://www.caodaion.com">https://www.caodaion.com</a> để tính lịch cúng tuần cửu tự động</p>
     <p style="text-align: center">hoặc</p>
     <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng ${item?.name}</p>
     </div>
-    <div style="float: right; width: 50%; text-align: right">
-    <img src="${parentElement}" style="width: 80%; object-fit: contain" />
+    <div style="float: right; width: 45%; text-align: right">
+    <img src="${parentElement}" style="width: 80%; object-fit: contain; margin-top: 5px" />
     </div>
     </div>`
     const writeContent = document.createElement('DIV');
