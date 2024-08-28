@@ -384,7 +384,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       `${item?.key}`
     );
     const caodaiOnInFo = `<div style="display: flex;">
-    <div style="float: left; width: 50%">
+    <div style="float: left; width: 45%">
     <p><strong>Truy Cập</strong> <a href="https://www.caodaion.com">https://www.caodaion.com</a> để tính lịch cúng tuần cửu tự động</p>
     <p style="text-align: center">hoặc</p>
     <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng ${item?.name}</p>
