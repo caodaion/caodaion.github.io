@@ -88,6 +88,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   ) {
   }
 
+
+
   ngOnInit(): void {
     this.guestMessage = 'Bổ sung lịch'
     this.titleService.setTitle(`Lịch | ${CONSTANT.page.name}`)
@@ -125,17 +127,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       if (calendarFilter) {
         this.filter = calendarFilter
       }
-      this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
-      if (new Date().getHours() > 22) {
-        this.currentDate?.solar.setDate(this.currentDate?.solar.getDate() + 1);
-      }
-      this.monthSelectValue =
-        this.selectedDate.solar?.getMonth() + 1 < 10
-          ? '0' + (this.selectedDate.solar?.getMonth() + 1)
-          : (this.selectedDate.solar?.getMonth() + 1).toString();
-    });
 
-    this.getThanhSoInMember()
+    });
   }
 
   getThanhSoInMember() {
@@ -154,6 +147,19 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.getTuThoiTimes();
     this.changeDetector.detectChanges();
+    this.authService.getCurrentUser()
+      .subscribe((res: any) => {
+        this.currentUser = res
+        this.onChangeCalendarMode(this.calendarMode, this.selectedDate);
+        if (new Date().getHours() > 22) {
+          this.currentDate?.solar.setDate(this.currentDate?.solar.getDate() + 1);
+        }
+        this.monthSelectValue =
+          this.selectedDate.solar?.getMonth() + 1 < 10
+            ? '0' + (this.selectedDate.solar?.getMonth() + 1)
+            : (this.selectedDate.solar?.getMonth() + 1).toString();
+        this.getThanhSoInMember()
+      })
   }
 
   getTuThoiTimes() {
@@ -293,6 +299,31 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     }
     if (this.calendarMode === 'month') {
       this.selectedMonth.forEach((date: any) => {
+        if (this.filter?.consecutive) {
+          let data = <any>[];
+          var now = new Date();
+          const startDate = this.currentUser.congPhu[0].dateTime
+          for (var d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
+            const dateValue = new Date(d);
+            const foundDate = this.currentUser.congPhu?.find((item: any) => item?.dateTime?.toString() == dateValue?.toString())
+            const focusArray = foundDate?.data?.map((item: any) => item?.focus)
+            const focusSum = focusArray?.reduce((a: any, b: any) => a + b, 0)
+            const qualityArray = foundDate?.data?.map((item: any) => item?.quality)
+            const qualitySum = qualityArray?.reduce((a: any, b: any) => a + b, 0)
+            let averageFocus = (focusSum / focusArray?.length) || 0
+            let qualityFocus = (qualitySum / qualityArray?.length) || 0
+            data.push({
+              date: new Date(d),
+              data: foundDate?.data || [],
+              averageFocus: averageFocus,
+              qualityFocus: qualityFocus,
+            });
+          }
+          const foundConsecutive = data?.find((cp: any) => {
+            return new Date(cp?.date?.setHours(0))?.toString() === date?.solar?.toString()
+          })
+          date.logged = foundConsecutive?.data?.length
+        }
         if (this.filter?.white) {
           if (
             date.solar.getDate() === comparedTime.getDate() &&
@@ -303,7 +334,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
         }
         if (this.filter?.blue) {
-
           let foundLunaryearlyMonthlySpecial = yearlyMonthlySpecial.filter(
             (item: any) =>
               parseInt(item.event.date.split('-')[2]) ===
@@ -727,7 +757,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   syncToGoogleCalendar() {
-    console.log(this.shownDate);
     const data = JSON.parse(JSON.stringify(this.shownDate?.event?.event))
     if (data) {
       if (data.solar) {
@@ -751,7 +780,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
               request.recur = 'RRULE:FREQ=DAILY'
             }
             if (data.date.match(new RegExp('yearly-[0-9][0-9]-[0-9][0-9]')) || data.date.match(new RegExp('yearly-monthly-[0-9][0-9]'))) {
-              console.log(parseInt(data?.time[0].split('-').slice(0, 2)));
               let startDateV = new Date(new Date(JSON.parse(JSON.stringify(this.shownDate.date.solar))).setHours(parseInt(data?.time[0].split('-')[1].slice(0, 2))))
               let endDateV = new Date(new Date(JSON.parse(JSON.stringify(this.shownDate.date.solar))).setHours(parseInt(data?.time[0].split('-')[1].slice(-2))))
               if (data?.time[0] === 'ty-2301') {
@@ -816,8 +844,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       const data = this.selectedThanhSoEvents.map((item: any) => {
         if (typeof item?.data == 'string') {
           item.data = JSON.parse(item?.data)
-        }        
-        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.key == item?.data?.title)        
+        }
+        const foundTitle = CAODAI_TITLE.data.find((ft: any) => ft.key == item?.data?.title)
         let name = ''
         let eventAddress: any;
         let solar: any;
@@ -879,7 +907,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
           eventName = `Kỷ Niệm chi nhựt`
           name = item?.eventName
-          eventAddress = item?.data?.eventAddress          
+          eventAddress = item?.data?.eventAddress
         }
         return {
           key: item['Timestamp'],
@@ -917,8 +945,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
 
   onOpenSoanSo() {
     const data = this.shownDate?.event?.event
-    console.log(data);
-
     if (this.shownDate?.event?.event?.key && typeof this.shownDate?.event?.event?.key === 'string') {
       if (this.shownDate?.event?.event?.key?.includes('thoi-ngo')) {
         this.shownDate.event.event.eventLunar.lunarTime = 'NGỌ'
@@ -982,14 +1008,14 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
   }
 
-  updateShareInformation() {    
+  updateShareInformation() {
     this.shareItem.date = this.shownDate?.date
     this.shareItem.name = this.shownDate.event?.event?.name
     if (!this.shareItem.time) this.shareItem.time = this.shownDate?.event?.date
     if (this.shareItem.time) {
       if (typeof this.shareItem.time == 'string') {
         this.shareItem.id = this.shareItem.time
-      }      
+      }
       const selectedEvent = this.shareItem.options?.find((item: any) => item.key == this.shareItem.time)
       this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name
       this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name} (${this.shareItem.time?.time})`
@@ -1016,7 +1042,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
         })
       } else {
-        if (this.shareItem?.date?.event) {          
+        if (this.shareItem?.date?.event) {
           this.shareItem.targetEvent = this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name
         }
       }
@@ -1076,8 +1102,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
 
   shareVegetarianDay(item: any) {
     this.vegetarianDay = item;
-    console.log(this.vegetarianDay);
-
     this.vegetarianBottomSheetRef = this.matBottomSheet.open(this.vegetarianBottomSheet)
   }
 }

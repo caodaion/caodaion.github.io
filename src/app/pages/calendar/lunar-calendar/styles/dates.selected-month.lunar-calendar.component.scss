@@ -9,9 +9,9 @@
         flex-wrap: wrap;
         .date {
           width: calc(100% / 7);
-          border-right: #dadce0 1px solid;
           border-bottom: #dadce0 1px solid;
           overflow: hidden;
+          box-shadow: none;
           button {
             padding: 3px;
             line-height: 1;
@@ -37,7 +37,7 @@
             }
           }
           .current-date {
-            background-color: map.get(variables.$light-theme, "primary");
+            background-color: map.get(variables.$light-theme, "primary") !important;
             color: map.get(variables.$light-theme, "on-primary");
           }
           .date-event {

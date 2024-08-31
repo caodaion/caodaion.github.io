@@ -1,4 +1,4 @@
-<div class="wrapper-container lunar-calendar-container">
+<div class="wrapper-container lunar-calendar-container" *ngIf="selectedDate">
   <mat-toolbar class="lunar-calendar-toolbar !h-auto !pr-0">
     <div class="!h-auto w-full">
       <div class="d-flex justify-content-between !h-auto w-full overflow-hidden pr-4">
@@ -52,6 +52,14 @@
             }})</span>
         </div>
         <div class="flex flex-wrap w-full align-items-center justify-center">
+          <div (click)="filter.consecutive = !filter.consecutive; updatefliter()"
+            class="cursor-pointer bg-[#fbbc05] border border-[#fbbc05] text-xs text-[#fbbc05] rounded px-3 transition"
+            [ngClass]="{
+              'bg-transparent': !filter.consecutive,
+              '!text-black': filter.consecutive
+            }" [matTooltip]="'Hiển thị hành trình'">
+            {{currentUser?.consecutive}}
+          </div>
           <div (click)="filter.cn = !filter.cn; updatefliter()"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
             [ngClass]="{
@@ -130,7 +138,8 @@
         <button class="w-full" mat-stroked-button [color]="'primary'" (click)="expaned = false">XEM LỊCH</button>
         <div class="w-full whitespace-break-spaces text-center my-3">{{guestMessage}}</div>
         <div class="w-full flex flex-col">
-          <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)" [selectedThanhSoSetting]="selectedThanhSoSetting"></app-update-event>
+          <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)"
+            [selectedThanhSoSetting]="selectedThanhSoSetting"></app-update-event>
         </div>
       </div>
     </div>
@@ -148,7 +157,8 @@
       <div class="day text-center">CN</div>
     </div>
     <div class="flex-1 dates h-100" (mousewheel)="onMouseWheel($event)">
-      <mat-card class="date wrapper-container align-items-center" *ngFor="let date of selectedMonth" [ngStyle]="{
+      <mat-card class="date wrapper-container align-items-center"
+        *ngFor="let date of selectedMonth; let dateIndex = index" [ngStyle]="{
           height:
             selectedMonth.length % 6 === 0
               ? 'calc(100%/' + 6 + ')'
@@ -156,10 +166,15 @@
           maxHeight:
             selectedMonth.length % 6 === 0
               ? 'calc(100%/' + 6 + ')'
-              : 'calc(100%/' + 5 + ')'
+              : 'calc(100%/' + 5 + ')',
+        }" [ngClass]="{
+          '!shadow-none': date?.logged !== undefined,
         }">
+        <div class="absolute top-0 right-0 bottom-0 left-0" [ngStyle]="{
+          background: date?.logged ? selectedMonth[dateIndex + 1]?.logged === 0 ? 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '), #eb4132)' : 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '))' : '',
+        }"></div>
         <div class="w-full flex justify-between flex-wrap">
-          <button mat-flat-button class="!px-4" [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
+          <button mat-flat-button class="!px-4 !bg-transparent" [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
             (click)="onChangeCalendarMode('day', date)">
             <div class="solar-date">{{ date?.solar?.getDate() }}</div>
             <div class="lunar-date">
@@ -175,8 +190,8 @@
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/full-moon.svg"
             alt="full-moon" [matTooltip]="'Vọng nhựt'">
           <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1"
-            class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/moon.svg"
-            alt="moon" [matTooltip]="'Sóc nhựt'">
+            class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/moon.svg" alt="moon"
+            [matTooltip]="'Sóc nhựt'">
           <div class="text-xs p-1" *ngIf="filter.cn">
             {{
             date?.lunar?.convertSolar2Lunar?.lunarDayName
@@ -438,7 +453,7 @@
         </p>
         <div class="text-right mt-8 text-xs">
           <span *ngIf="shareItem.traiGioi && (shareItem.date?.six || shareItem.date?.ten || shareItem.date?.fifteen)">
-            Trai giới: 
+            Trai giới:
           </span>
           <span *ngIf="shareItem.traiGioi && shareItem.date?.six">lục trai. </span>
           <span *ngIf="shareItem.traiGioi && shareItem.date?.ten">thập trai. </span>
