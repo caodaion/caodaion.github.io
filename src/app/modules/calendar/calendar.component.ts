@@ -3,11 +3,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
-import {CONSTANT} from "../../shared/constants/constants.constant";
-import {Title} from "@angular/platform-browser";
+import { CONSTANT } from "../../shared/constants/constants.constant";
+import { Title } from "@angular/platform-browser";
 import { MENU } from 'src/app/shared/constants/menu.constant';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 
 @Component({
   selector: 'app-calendar',
@@ -20,6 +21,7 @@ export class CalendarComponent implements OnInit {
   @ViewChild('addNewModal') addNewModal!: any;
   menu = <any>[]
   addNewModalRef: any;
+  user: any = <any>{}
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -30,7 +32,7 @@ export class CalendarComponent implements OnInit {
     public authService: AuthService,
     private route: ActivatedRoute,
     private matDialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -46,9 +48,26 @@ export class CalendarComponent implements OnInit {
       });
     this.titleSerVice.setTitle(`Lịch | ${CONSTANT.page.name}`)
     this.menu = this.authService.getMenu(MENU.find((item: any) => item.key === 'lich')?.children)
-    if (location.pathname.split('/').length > 2) {
-      this.calendarService.calendarViewMode = ''
-    }
+
+    this.authService.getCurrentUser().subscribe((res: any) => {
+      this.user = res;
+      console.log(this.user);      
+      this.menu?.forEach((menu: any) => {
+        if (menu?.label === '<self_improvement>') {
+          const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)
+          if (foundTitleIndex < 3) {
+            menu.label = 'Cúng tứ thời'
+            menu.icon = 'candle'
+            menu.consecutive = this.user?.consecutive
+          } else {
+            menu.label = 'Công phu'
+          }
+        }
+      })
+      if (location.pathname.split('/').length > 2) {
+        this.calendarService.calendarViewMode = ''
+      }
+    })
   }
 
   onToggleDrawer() {

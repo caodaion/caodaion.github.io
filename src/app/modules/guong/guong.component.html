@@ -12,7 +12,7 @@
           [routerLink]="'/@' + currentUser?.userName"
           (click)="onToggleDrawer()"
         >
-          <mat-icon class="sub-sidenav-icon">account_circle</mat-icon>
+          <span class="material-symbols-outlined sub-sidenav-icon">account_circle</span>
           <span class="label-large">{{ currentUser?.name }}</span></a
         >
         <a
@@ -22,7 +22,7 @@
           [routerLink]="'/@' + currentUser?.userName + '/guong'"
           (click)="onToggleDrawer()"
         >
-          <mat-icon class="sub-sidenav-icon">{{ item?.icon }}</mat-icon>
+          <span class="material-symbols-outlined sub-sidenav-icon">{{ item?.icon }}</span>
           <span class="label-large">{{ item?.label }}</span></a
         >
       </mat-nav-list>

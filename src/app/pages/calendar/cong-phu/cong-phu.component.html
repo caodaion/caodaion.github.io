@@ -1,0 +1,90 @@
+<div class="container-fluid">
+    <p class="my-3">Cúng tứ thời là phương pháp sơ thiền tuyệt vời của Đại Đạo Tam Kỳ Phổ Độ</p>
+    <p class="text-3xl" [innerHTML]="savedSummary()"></p>
+    <div class="my-4 flex flex-wrap">
+        <div class="w-full lg:w-1/4 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Năm</mat-label>
+                <mat-select [(ngModel)]="saved.year">
+                    <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{ item?.solar }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Tháng</mat-label>
+                <mat-select [(ngModel)]="saved.month">
+                    <mat-option *ngFor="let item of monthOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Ngày</mat-label>
+                <mat-select [(ngModel)]="saved.date">
+                    <mat-option *ngFor="let item of dayOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn giờ</mat-label>
+                <input matInput [(ngModel)]="saved.time" [ngxMatTimepicker]="pickerA" placeholder="14:00 PM"
+                    [format]="24" readonly />
+                <mat-icon matSuffix (click)="pickerA.open()">
+                    watch_later
+                </mat-icon>
+            </mat-form-field>
+            <ngx-mat-timepicker #pickerA></ngx-mat-timepicker>
+        </div>
+        <div class="w-full lg:w-1/2 px-3">
+            <mat-label>Đánh giá độ tập trung</mat-label>
+            <div>
+                <mat-radio-group [(ngModel)]="saved.focus">
+                    <mat-radio-button [value]="-3">Hoàn toàn sao nhãng</mat-radio-button>
+                    <mat-radio-button [value]="-2">Sao nhãng nhiều</mat-radio-button>
+                    <mat-radio-button [value]="-1">Có sao nhãng</mat-radio-button>
+                    <mat-radio-button [value]="0">Bình thường</mat-radio-button>
+                    <mat-radio-button [value]="1">Tập trung</mat-radio-button>
+                    <mat-radio-button [value]="2">Tập trung cao</mat-radio-button>
+                    <mat-radio-button [value]="3">Tập trung toàn phần</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="w-full lg:w-1/2 px-3">
+            <mat-label>Đánh giá chất lượng</mat-label>
+            <div>
+                <mat-radio-group [(ngModel)]="saved.quality">
+                    <mat-radio-button [value]="-2">Rất không tốt</mat-radio-button>
+                    <mat-radio-button [value]="-1">Không tốt</mat-radio-button>
+                    <mat-radio-button [value]="0">Bình thường</mat-radio-button>
+                    <mat-radio-button [value]="1">Tốt</mat-radio-button>
+                    <mat-radio-button [value]="2">Rất tốt</mat-radio-button>
+                    <mat-radio-button [value]="3">Hoàn hảo</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="w-full px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Ghi chú</mat-label>
+                <textarea matInput [(ngModel)]="saved.note"></textarea>
+            </mat-form-field>
+        </div>
+        <div class="w-full px-3">
+            <button *ngIf="!syncGoogleFormPath" mat-flat-button color="primary" class="w-full"
+                (click)="saveData()">Lưu</button>
+            <button *ngIf="syncGoogleFormPath" mat-flat-button class="w-full mt-3" (click)="syncGoogleFormPath = ''">
+                Làm mới
+            </button>
+        </div>
+        <div class="w-full px-3">
+            <iframe *ngIf="syncGoogleFormPath" [src]="
+      syncGoogleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+    </div>
+</div>

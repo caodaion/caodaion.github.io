@@ -5,15 +5,17 @@
         <button class="menu-icon" mat-icon-button (click)="onToggleDrawer()" [matTooltip]="
             viewMissionService.isDrawerOpened ? 'Ẩn menu' : 'Mở menu'
           ">
-          <mat-icon>{{
+          <span class="material-symbols-outlined">{{
             viewMissionService.isDrawerOpened ? "menu_open" : "menu"
-            }}</mat-icon>
+            }}</span>
         </button>
         <mat-nav-list class="main-nav-list">
           <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url"
             [routerLinkActive]="'active'">
             <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
-              <mat-icon>{{ item?.icon }}</mat-icon>
+              <span class="material-symbols-outlined">
+                {{ item?.icon }}
+                </span>
             </div>
             <span class="label-small main-drawer-label-text">{{
               item?.label
@@ -32,9 +34,9 @@
         <button class="menu-icon-mobile" mat-icon-button (click)="onToggleDrawer()" [matTooltip]="
             viewMissionService.isDrawerOpened ? 'Ẩn menu' : 'Mở menu'
           ">
-          <mat-icon>{{
+          <span class="material-symbols-outlined">{{
             viewMissionService.isDrawerOpened ? "menu_open" : "menu"
-            }}</mat-icon>
+            }}</span>
         </button>
         <a [routerLink]="''" class="d-flex align-items-center caodaion-logo">
           <svg width="36px" height="36px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,21 +70,21 @@
         <div class="d-flex justify-content-center align-items-center">
           <a mat-list-item [disableRipple]="true" (click)="openSnackBar()" *ngIf="isOffline">
             <div class="icon-hover wifi-logo d-flex justify-content-center align-items-center">
-              <mat-icon>wifi_off</mat-icon>
+              <span class="material-symbols-outlined">wifi_off</span>
             </div>
           </a>
           <button *ngIf="isShowButtonInstall" mat-icon-button
             class="account-logo d-flex justify-content-center align-items-center" (click)="installPWA()">
-            <mat-icon>{{
+            <span class="material-symbols-outlined">{{
               viewPortMode === "desktop" ? "install_desktop" : "install_mobile"
-              }}</mat-icon>
+              }}</span>
           </button>
           <button mat-icon-button class="account-logo relative" (click)="goToScreen('/qr')" matTooltip="Quét/Tạo mã QR">
-            <mat-icon>qr_code_2</mat-icon>
+            <span class="material-symbols-outlined">qr_code_2</span>
           </button>
           <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="account-logo relative" mat-icon-button
             [matTooltip]="currentUser?.name || currentUser?.userName">
-            <mat-icon>account_circle</mat-icon>
+            <span class="material-symbols-outlined">account_circle</span>
             <ng-container *ngIf="currentUser?.userName">
               <div class="absolute h-3 w-3 rounded-full top-7"
                 [ngClass]="{'bg-[#34a853]': isInvalidSyncData, 'bg-[#ea4335]': !isInvalidSyncData}">
@@ -94,7 +96,7 @@
           <mat-menu #profileMenu="matMenu">
             <button *ngIf="currentUser?.userName" mat-menu-item (click)="goToScreen('/@' + currentUser?.userName)"
               [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">
-              <mat-icon [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">account_circle</mat-icon>
+              <span class="material-symbols-outlined" [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">account_circle</span>
               {{ currentUser?.name || currentUser?.userName }}
             </button>
             <!-- <button
@@ -106,22 +108,22 @@
               >Thông báo
             </button> -->
             <button mat-menu-item (click)="goToScreen('/cai-dat')">
-              <mat-icon>settings</mat-icon>
+              <span class="material-symbols-outlined">settings</span>
               Cài đặt
             </button>
             <button mat-menu-item (click)="goToScreen('/qr')">
-              <mat-icon>qr_code_2</mat-icon>
+              <span class="material-symbols-outlined">qr_code_2</span>
               Quét mã QR
             </button>
             <!-- <button mat-menu-item (click)="checkForUpdate()">
                 <mat-icon>system_update</mat-icon>Cập nhật phiên bản
               </button> -->
             <button mat-menu-item [routerLink]="'auth/dang-nhap'" *ngIf="!currentUser">
-              <mat-icon>login</mat-icon>
+              <span class="material-symbols-outlined">login</span>
               Đăng nhập
             </button>
             <button mat-menu-item *ngIf="currentUser" (click)="logout()">
-              <mat-icon>logout</mat-icon>
+              <span class="material-symbols-outlined">logout</span>
               Đăng xuất
             </button>
           </mat-menu>
@@ -138,7 +140,9 @@
     <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url"
       [routerLinkActive]="'active'">
       <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
-        <mat-icon>{{ item?.icon }}</mat-icon>
+        <span class="material-symbols-outlined">
+          {{ item?.icon }}
+          </span>
       </div>
       <span class="label-small main-drawer-label-text">{{ item?.label }}</span>
     </a>

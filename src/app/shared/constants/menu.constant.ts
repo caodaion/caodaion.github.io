@@ -49,14 +49,14 @@ export const MENU = [
     fullAssess: true,
     released: true,
     children: [
-      {
-        key: 'lich.su-kien',
-        url: 'su-kien',
-        label: 'Sự kiện',
-        icon: 'bookmark_border',
-        fullAssess: true,
-        released: true,
-      },
+      // {
+      //   key: 'lich.su-kien',
+      //   url: 'su-kien',
+      //   label: 'Sự kiện',
+      //   icon: 'bookmark_border',
+      //   fullAssess: true,
+      //   released: true,
+      // },
       {
         key: 'lich.tinh-tuan-cuu',
         url: 'tinh-tuan-cuu',
@@ -66,13 +66,21 @@ export const MENU = [
         released: true,
       },
       {
-        key: 'lich.dong-bo',
-        url: 'dong-bo',
-        label: 'Đăng ký thông báo',
-        icon: 'cloud_sync',
+        key: 'lich.cong-phu',
+        url: 'cong-phu',
+        label: '<self_improvement>',
+        icon: 'self_improvement',
         fullAssess: true,
         released: true,
-      }
+      },
+      // {
+      //   key: 'lich.dong-bo',
+      //   url: 'dong-bo',
+      //   label: 'Đăng ký thông báo',
+      //   icon: 'cloud_sync',
+      //   fullAssess: true,
+      //   released: true,
+      // }
     ]
   },
   {
@@ -114,14 +122,6 @@ export const MENU = [
         label: 'Phòng Thơ',
         icon: 'circle',
         fullAssess: false,
-        released: true,
-      },
-      {
-        key: 'tac-vu.sync',
-        url: 'sync',
-        label: 'Đồng bộ dữ liệu',
-        icon: 'sync',
-        fullAssess: true,
         released: true,
       },
       {

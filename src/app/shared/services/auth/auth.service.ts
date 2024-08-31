@@ -5,9 +5,10 @@ import { Router } from "@angular/router";
 import { MENU } from '../../constants/menu.constant';
 import { Observable } from 'rxjs';
 import { SheetService } from '../sheet/sheet.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
 import { CommonService } from '../common/common.service';
+import * as moment from 'moment';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -27,7 +28,8 @@ export class AuthService {
     private router: Router,
     private sheetService: SheetService,
     private datePipe: DatePipe,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private decimalPipe: DecimalPipe
   ) {
   }
 
@@ -106,6 +108,8 @@ export class AuthService {
           this.currentUser.setting = res.setting
           this.currentUser.vocabularies = res.remote?.vocabularies
           this.currentUser.vocabularyExercises = res.remote?.vocabularyExercises
+          this.currentUser.congPhu = res.remote?.congPhu
+          this.currentUser.consecutive = res.remote?.consecutive
           this.currentUserRemote = res.remote;
           this.isInvalidSyncData = this.checkSyncDataStatus();
           observable.next(this.currentUser);
@@ -129,7 +133,7 @@ export class AuthService {
     let currentUserKeys = Object.keys(this.currentUser);
     let currentUserRemoteKeys = Object.keys(this.currentUserRemote);
     currentUserKeys = currentUserKeys?.map((item: any) => {
-      if (item == "vocabularies" || item == "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise') {
+      if (item == "vocabularies" || item == "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise' || item === 'cong-phu' || item === 'congPhu') {
         return "MATCHED";
       }
       if (item == "children" || (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item]))) {
@@ -335,6 +339,53 @@ export class AuthService {
                           dr?.data?.forEach((ved: any) => {
                             response.remote['vocabularyExercises'].push(ved);
                           })
+                          break;
+                        case 'cong-phu':
+                          if (!response.remote['congPhu']) {
+                            response.remote['congPhu'] = <any>[]
+                          }
+                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
+                          if (foundDate) {
+                            response.remote['congPhu'][response.remote['congPhu'].indexOf(foundDate)].data.push({
+                              time: dr?.data?.time,
+                              focus: dr?.data?.focus,
+                              quality: dr?.data?.quality,
+                              note: dr?.data?.note,
+                            })
+                          } else {
+                            response.remote['congPhu'].push({
+                              date: dr?.data?.date,
+                              month: dr?.data?.month,
+                              year: dr?.data?.year,
+                              data: [{
+                                time: dr?.data?.time,
+                                focus: dr?.data?.focus,
+                                quality: dr?.data?.quality,
+                                note: dr?.data?.note,
+                              }]
+                            });
+                          }
+                          response.remote['congPhu'].sort((a: any, b: any) => {
+                            return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
+                          })
+                          let consecutive = 0
+                          response.remote['congPhu']?.forEach((csec: any, index: any) => {
+                            if (index > 0) {
+                              const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
+                              const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
+                              const diff = parseInt(moment(previousDate).diff(compareDate, 'days').toString().replace('-', ''))
+                              if (diff === 1) {
+                                consecutive += 1
+                                const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
+                                if (diffToday === 1) {
+                                  consecutive += 1
+                                }
+                              } else {
+                                consecutive = 0
+                              }
+                            }
+                          })
+                          response.remote['consecutive'] = consecutive
                           break;
                         default:
                           response.remote[dr?.key] = dr?.data;

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LunarCalendarComponent } from './lunar-calendar/lunar-calendar.component';
 import { TinhTuanCuuComponent } from './tinh-tuan-cuu/tinh-tuan-cuu.component';
 import { SynchronizedComponent } from './synchronized/synchronized.component';
+import { CongPhuComponent } from './cong-phu/cong-phu.component';
 
 const routes: Routes = [
   {
@@ -11,7 +12,8 @@ const routes: Routes = [
       { path: '', component: LunarCalendarComponent },
       { path: 'tinh-tuan-cuu', component: TinhTuanCuuComponent },
       { path: 'tinh-tuan-cuu/:token', component: TinhTuanCuuComponent },
-      { path: 'dong-bo', component: SynchronizedComponent },
+      // { path: 'dong-bo', component: SynchronizedComponent },
+      { path: 'cong-phu', component: CongPhuComponent },
     ],
   },
 ];

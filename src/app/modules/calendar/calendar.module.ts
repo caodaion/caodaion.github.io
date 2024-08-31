@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { CalendarAddNewModule } from 'src/app/components/calendar/calendar-add-new/calendar-add-new.module';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
     MatListModule,
     CalendarRoutingModule,
     CalendarAddNewModule,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    MatTooltipModule
   ]
 })
 export class CalendarModule { }

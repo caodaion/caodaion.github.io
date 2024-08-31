@@ -30,9 +30,10 @@ import { SharedModule } from "../../shared/shared.module";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 import { UpdateEventModule } from "./update-event/update-event.module";
+import { CongPhuComponent } from './cong-phu/cong-phu.component';
 
 @NgModule({
-    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent],
+    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent, CongPhuComponent],
     providers: [DatePipe, DecimalPipe],
     imports: [
         CommonModule,

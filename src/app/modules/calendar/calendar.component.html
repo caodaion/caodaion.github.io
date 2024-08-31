@@ -1,51 +1,26 @@
 <mat-sidenav-container class="w-100" tosize>
-  <mat-sidenav
-    class="sub-sidenav"
-    mode="side"
-    [opened]="viewMissionService.isDrawerOpened"
-    [mode]="drawerMode"
-  >
+  <mat-sidenav class="sub-sidenav" mode="side" [opened]="viewMissionService.isDrawerOpened" [mode]="drawerMode">
     <mat-nav-list class="mat-list-sub-sidenav">
-      <button
-        mat-raised-button
-        [color]="'primary'"
+      <button mat-raised-button [color]="'primary'"
         class="!rounded-full !py-2 !px-8 !h-auto !bg-white !border-[#3f51b5] !text-[#3f51b5]"
-        (click)="onToggleDrawer(); addNew()"
-      >
-        <mat-icon
-          class="!text-[2rem] !w-[2rem] !h-[2rem]"
-          >add</mat-icon
-        >Thêm
+        (click)="onToggleDrawer(); addNew()">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>Thêm
       </button>
-      <a
-        mat-list-item
-        class="icon-hover"
-        [ngClass]="calendarService.calendarViewMode === 'day' ? 'active' : ''"
-        (click)="onChangeCalendarViewMode('day')"
-      >
-        <mat-icon class="sub-sidenav-icon">calendar_view_day</mat-icon
-        ><span class="label-large">Ngày</span></a
-      >
-      <a
-        mat-list-item
-        class="icon-hover"
-        [ngClass]="calendarService.calendarViewMode === 'month' ? 'active' : ''"
-        (click)="onChangeCalendarViewMode('month')"
-      >
-        <mat-icon class="sub-sidenav-icon">calendar_view_month</mat-icon
-        ><span class="label-large">Tháng</span></a
-      >
-      <a
-        mat-list-item
-        *ngFor="let item of menu"
-        class="icon-hover"
-        [routerLink]="item?.url"
-        [routerLinkActive]="'active'"
-        (click)="calendarService.calendarViewMode = ''; onToggleDrawer()"
-      >
-        <mat-icon class="sub-sidenav-icon">{{ item?.icon }}</mat-icon
-        ><span class="label-large">{{ item?.label }}</span></a
-      >
+      <a mat-list-item class="icon-hover" [ngClass]="calendarService.calendarViewMode === 'day' ? 'active' : ''"
+        (click)="onChangeCalendarViewMode('day')">
+        <span class="material-symbols-outlined sub-sidenav-icon">calendar_view_day</span><span
+          class="label-large">Ngày</span></a>
+      <a mat-list-item class="icon-hover" [ngClass]="calendarService.calendarViewMode === 'month' ? 'active' : ''"
+        (click)="onChangeCalendarViewMode('month')">
+        <span class="material-symbols-outlined sub-sidenav-icon">calendar_view_month</span><span
+          class="label-large">Tháng</span></a>
+      <a mat-list-item *ngFor="let item of menu" class="icon-hover" [routerLink]="item?.url"
+        [routerLinkActive]="'active'" (click)="calendarService.calendarViewMode = ''; onToggleDrawer()">
+        <span class="material-symbols-outlined sub-sidenav-icon">{{ item?.icon }}</span><span
+          class="w-full flex justify-between items-center label-large">{{ item?.label }}
+          <div *ngIf="item?.consecutive" [matTooltip]="item?.consecutive + ' ngày liên tục'"
+            class="bg-[#fbbc05] py-1 px-2 text-white rounded-full">{{item?.consecutive}}</div>
+        </span></a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="sub-sidenav-content">

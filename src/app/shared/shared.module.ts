@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { SafePipe } from './pipe/safe.pipe';
 
 
@@ -9,6 +9,8 @@ import { SafePipe } from './pipe/safe.pipe';
   imports: [
     CommonModule
   ],
-  exports: [SafePipe]
+  exports: [SafePipe],
+  providers: [DecimalPipe],
+
 })
 export class SharedModule { }
