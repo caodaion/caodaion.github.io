@@ -31,9 +31,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 import { UpdateEventModule } from "./update-event/update-event.module";
 import { CongPhuComponent } from './cong-phu/cong-phu.component';
+import { CongPhuReportComponent } from './cong-phu-report/cong-phu-report.component';
 
 @NgModule({
-    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent, CongPhuComponent],
+    declarations: [LunarCalendarComponent, TinhTuanCuuComponent, SynchronizedComponent, CongPhuComponent, CongPhuReportComponent],
     providers: [DatePipe, DecimalPipe],
     imports: [
         CommonModule,
@@ -65,6 +66,9 @@ import { CongPhuComponent } from './cong-phu/cong-phu.component';
         MatCheckboxModule,
         DivisionFilterPipe,
         UpdateEventModule
+    ],
+    exports: [
+        CongPhuReportComponent
     ]
 })
 export class CalendarModule { }

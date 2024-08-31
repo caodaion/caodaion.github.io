@@ -15,7 +15,7 @@
             <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
               <span class="material-symbols-outlined">
                 {{ item?.icon }}
-                </span>
+              </span>
             </div>
             <span class="label-small main-drawer-label-text">{{
               item?.label
@@ -61,7 +61,9 @@
             <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335" />
             <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
           </svg>
-          <span class="title-large">CaoDaiON</span></a>
+          <span class="title-large">CaoDaiON</span>
+        </a>
+        <div [routerLink]="'lich/cong-phu'" class="cursor-pointer ms-3 bg-[#fbbc05] py-1 px-2 rounded-full text-base" [matTooltip]="currentUser?.consecutive + ' ngày liên tục'">{{currentUser?.consecutive}}</div>
         <div class="text-center" *ngIf="viewPortMode === 'desktop'">
           Thời {{ time.commonTime.kanji
           }}<span class="number-time">
@@ -96,7 +98,8 @@
           <mat-menu #profileMenu="matMenu">
             <button *ngIf="currentUser?.userName" mat-menu-item (click)="goToScreen('/@' + currentUser?.userName)"
               [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">
-              <span class="material-symbols-outlined" [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">account_circle</span>
+              <span class="material-symbols-outlined"
+                [ngClass]="{ '!text-[#ea4335]': currentUser?.isGuest }">account_circle</span>
               {{ currentUser?.name || currentUser?.userName }}
             </button>
             <!-- <button
@@ -142,7 +145,7 @@
       <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
         <span class="material-symbols-outlined">
           {{ item?.icon }}
-          </span>
+        </span>
       </div>
       <span class="label-small main-drawer-label-text">{{ item?.label }}</span>
     </a>

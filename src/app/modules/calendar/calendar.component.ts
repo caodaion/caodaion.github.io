@@ -51,7 +51,6 @@ export class CalendarComponent implements OnInit {
 
     this.authService.getCurrentUser().subscribe((res: any) => {
       this.user = res;
-      console.log(this.user);      
       this.menu?.forEach((menu: any) => {
         if (menu?.label === '<self_improvement>') {
           const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)

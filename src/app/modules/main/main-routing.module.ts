@@ -29,11 +29,6 @@ const routes: Routes = [
           import('../../pages/thanh-ngon-hiep-tuyen/thanh-ngon-hiep-tuyen.module').then((m) => m.ThanhNgonHiepTuyenModule),
       },
       {
-        path: 'hanh-trinh',
-        loadChildren: () =>
-          import('../../pages/journey/journey.module').then((m) => m.JourneyModule),
-      },
-      {
         path: 'english',
         loadChildren: () =>
           import('../../pages/english/english.module').then((m) => m.EnglishModule),

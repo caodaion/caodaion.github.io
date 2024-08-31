@@ -344,48 +344,53 @@ export class AuthService {
                           if (!response.remote['congPhu']) {
                             response.remote['congPhu'] = <any>[]
                           }
-                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
-                          if (foundDate) {
-                            response.remote['congPhu'][response.remote['congPhu'].indexOf(foundDate)].data.push({
-                              time: dr?.data?.time,
-                              focus: dr?.data?.focus,
-                              quality: dr?.data?.quality,
-                              note: dr?.data?.note,
-                            })
-                          } else {
-                            response.remote['congPhu'].push({
-                              date: dr?.data?.date,
-                              month: dr?.data?.month,
-                              year: dr?.data?.year,
-                              data: [{
+                          if (new Date >= new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`)) {
+                            const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
+                            if (foundDate) {
+                              response.remote['congPhu'][response.remote['congPhu'].indexOf(foundDate)].data.push({
                                 time: dr?.data?.time,
                                 focus: dr?.data?.focus,
                                 quality: dr?.data?.quality,
                                 note: dr?.data?.note,
-                              }]
-                            });
-                          }
-                          response.remote['congPhu'].sort((a: any, b: any) => {
-                            return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
-                          })
-                          let consecutive = 0
-                          response.remote['congPhu']?.forEach((csec: any, index: any) => {
-                            if (index > 0) {
-                              const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
-                              const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
-                              const diff = parseInt(moment(previousDate).diff(compareDate, 'days').toString().replace('-', ''))
-                              if (diff === 1) {
-                                consecutive += 1
-                                const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
-                                if (diffToday === 1) {
-                                  consecutive += 1
-                                }
-                              } else {
-                                consecutive = 0
-                              }
+                              })
+                            } else {
+                              response.remote['congPhu'].push({
+                                date: dr?.data?.date,
+                                month: dr?.data?.month,
+                                year: dr?.data?.year,
+                                dateTime: new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`),
+                                data: [{
+                                  time: dr?.data?.time,
+                                  focus: dr?.data?.focus,
+                                  quality: dr?.data?.quality,
+                                  note: dr?.data?.note,
+                                }]
+                              });
                             }
-                          })
-                          response.remote['consecutive'] = consecutive
+                            response.remote['congPhu'].sort((a: any, b: any) => {
+                              return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
+                            })
+                            let consecutive = 0
+                            response.remote['congPhu']?.forEach((csec: any, index: any) => {
+                              if (index > 0) {
+                                const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
+                                const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
+                                const diff = parseInt(moment(previousDate).diff(compareDate, 'days').toString().replace('-', ''))
+                                if (diff === 1) {
+                                  if (compareDate <= new Date()) {
+                                    consecutive += 1
+                                    const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
+                                    if (diffToday === 1) {
+                                      consecutive += 1
+                                    }
+                                  }
+                                } else {
+                                  consecutive = 0
+                                }
+                              }
+                            })
+                            response.remote['consecutive'] = consecutive
+                          }
                           break;
                         default:
                           response.remote[dr?.key] = dr?.data;

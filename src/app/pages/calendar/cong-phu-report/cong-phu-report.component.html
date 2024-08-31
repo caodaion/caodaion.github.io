@@ -1,0 +1,46 @@
+<div class="py-4">
+    <div class="text-center">
+        <div class="text-3xl" *ngIf="user?.consecutive > 1">
+            Bạn làm rất tốt, bạn đã duy trì <span
+                class="bg-[#fbbc05] py-2 px-4 rounded-full">{{user?.consecutive}}</span> ngày có thực hành cúng tứ thời
+            liên tục rồi!
+        </div>
+    </div>
+    <div class="py-4">
+        <canvas id="congPhuReport"></canvas>
+    </div>
+    <div class="py-4">
+        <div class="flex items-center justify-between">
+            <button mat-icon-button [disabled]="selectedIndex === 0"
+                (click)="selectedIndex = selectedIndex - 1; viewDetailsData = displayData[selectedIndex]">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <div class="text-xl text-center">Xem chi tiết ngày {{viewDetailsData?.date | date: 'dd/MM/YYYY'}}</div>
+            <button mat-icon-button [disabled]="selectedIndex === displayData?.length - 1"
+                (click)="selectedIndex = selectedIndex + 1; viewDetailsData = displayData[selectedIndex]">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+        <table class="w-full" *ngIf="viewDetailsData?.data?.length > 0">
+            <thead>
+                <tr class="border-b py-3">
+                    <th class="py-3">Ghi lại lúc</th>
+                    <th class="py-3">Đánh giá tập trung</th>
+                    <th class="py-3">Chất lượng</th>
+                    <th class="py-3">ghi chú</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of viewDetailsData?.data" class="border-b">
+                    <td class="py-3">{{item?.time}}</td>
+                    <td class="py-3">{{getValuePoint('focus', item?.focus)}}</td>
+                    <td class="py-3">{{getValuePoint('quality', item?.quality)}}</td>
+                    <td class="py-3">{{item?.note}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center text-xl" *ngIf="!viewDetailsData?.data || viewDetailsData?.data?.length === 0">
+            Bạn không không thực hành hoặc chưa ghi lại ngày {{viewDetailsData?.date | date: 'dd/MM/YYYY'}}
+        </div>
+    </div>
+</div>
