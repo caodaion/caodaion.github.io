@@ -35,6 +35,8 @@ export class CongPhuReportComponent implements AfterViewInit {
     this.authService.getCurrentUser()
       .subscribe((res: any) => {
         this.user = res
+        console.log(this.user);
+        
         const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)
         if (foundTitleIndex < 3) {
           this.icon = 'candle'

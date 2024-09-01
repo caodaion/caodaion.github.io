@@ -9,6 +9,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
 import { CommonService } from '../common/common.service';
 import * as moment from 'moment';
+import { CalendarService } from '../calendar/calendar.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -29,7 +30,8 @@ export class AuthService {
     private sheetService: SheetService,
     private datePipe: DatePipe,
     private commonService: CommonService,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private calendarService: CalendarService
   ) {
   }
 
@@ -110,6 +112,7 @@ export class AuthService {
           this.currentUser.vocabularyExercises = res.remote?.vocabularyExercises
           this.currentUser.congPhu = res.remote?.congPhu
           this.currentUser.consecutive = res.remote?.consecutive
+          this.currentUser.consecutiveFrom = res.remote?.consecutiveFrom
           this.currentUserRemote = res.remote;
           this.isInvalidSyncData = this.checkSyncDataStatus();
           observable.next(this.currentUser);
@@ -381,21 +384,24 @@ export class AuthService {
                             })
                             let consecutive = 0
                             response.remote['congPhu']?.forEach((csec: any, index: any) => {
-                              if (index > 0) {
-                                const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
-                                const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
-                                const diff = parseInt(moment(previousDate).diff(compareDate, 'days').toString().replace('-', ''))
-                                if (diff === 1) {
-                                  if (compareDate <= new Date()) {
-                                    consecutive += 1
-                                    const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
-                                    if (diffToday === 0 || diffToday === 1) {
-                                      consecutive += 1
+                              const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
+                              const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
+                              const diff = parseInt(moment(previousDate?.toString() === 'Invalid Date' ? previousDate : compareDate).diff(compareDate, 'days').toString().replace('-', ''))
+                              if (diff === 0 || diff === 1) {
+                                if (compareDate <= new Date()) {
+                                  if (!response.remote['consecutiveFrom']) {
+                                    response.remote['consecutiveFrom'] = {
+                                      solar: compareDate,
+                                      lunar: this.calendarService.getConvertedFullDate(compareDate)?.convertSolar2Lunar
                                     }
                                   }
-                                } else {
-                                  consecutive = 0
+                                  const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
+                                  if (diffToday === 0 || diffToday === 1) {
+                                    consecutive += 1
+                                  }
                                 }
+                              } else {
+                                consecutive = 0
                               }
                             })
                             response.remote['consecutive'] = consecutive

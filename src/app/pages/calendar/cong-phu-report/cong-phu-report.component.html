@@ -1,16 +1,18 @@
 <div class="py-4">
-    <div class="bg-[#fbbc05] px-3 py-6 rounded ">
+    <div class="bg-[#fbbc05] px-3 py-6 rounded mb-4">
         <div class="flex items-center py-4">
             <div class="w-full flex flex-col items-center justify-center text-2xl font-bold" *ngIf="user?.consecutive">
                 <div class="text-6xl py-2 px-4 rounded-full">{{user?.consecutive | number: '2.0-0'}}</div>
-                <div>Ngày cúng tứ thời liên tục!</div>
+                <div class="text-center">Ngày cúng tứ thời liên tục!</div>
+                <div class="text-center text-xl">Từ ngày {{user?.consecutiveFrom?.lunar?.lunarDay}}/{{user?.consecutiveFrom?.lunar?.lunarMonth}}/{{user?.consecutiveFrom?.lunar?.lunarYearName}}</div>
+                <div class="text-center text-xl">({{user?.consecutiveFrom?.solar | date: 'dd/MM/YYYY'}})</div>
             </div>
             <div class="w-full flex items-center justify-center">
                 <span class="material-symbols-outlined text-[140px]">
                     {{icon}}
                 </span>
             </div>
-            <div class="text-3xl" *ngIf="!user?.consecutive">
+            <div class="text-3xl text-center" *ngIf="!user?.consecutive">
                 Hãy liên tục thực hành cúng tứ thời mỗi ngày bạn nhé!
             </div>
         </div>
@@ -72,7 +74,7 @@
                     <td class="py-3">{{item?.time}}</td>
                     <td class="py-3">{{getValuePoint('focus', item?.focus)}}</td>
                     <td class="py-3">{{getValuePoint('quality', item?.quality)}}</td>
-                    <td class="py-3">{{item?.note}}</td>
+                    <td class="py-3 whitespace-break-spaces" [innerHTML]="item?.note"></td>
                 </tr>
             </tbody>
         </table>
