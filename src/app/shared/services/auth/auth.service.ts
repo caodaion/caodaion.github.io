@@ -132,8 +132,17 @@ export class AuthService {
   checktoUpdate() {
     let currentUserKeys = Object.keys(this.currentUser);
     let currentUserRemoteKeys = Object.keys(this.currentUserRemote);
+    const autoMatchedKeys = [
+      'vocabularies',
+      'vocabularyExercises',
+      'vocabulary',
+      'vocabularyExercise',
+      'cong-phu',
+      'congPhu',
+      'fontSize',
+    ]
     currentUserKeys = currentUserKeys?.map((item: any) => {
-      if (item == "vocabularies" || item == "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise' || item === 'cong-phu' || item === 'congPhu') {
+      if (autoMatchedKeys?.includes(item)) {
         return "MATCHED";
       }
       if (item == "children" || (JSON.stringify(this.currentUser[item]) == JSON.stringify(this.currentUserRemote[item]))) {
@@ -142,7 +151,7 @@ export class AuthService {
       return "UN-MATCHED";
     })
     currentUserRemoteKeys = currentUserRemoteKeys?.map((item: any) => {
-      if (item === "vocabularies" || item === "vocabularyExercises" || item === 'vocabulary' || item === 'vocabularyExercise') {
+      if (autoMatchedKeys?.includes(item)) {
         return "MATCHED";
       }
       if (item == "children" || (JSON.stringify(this.currentUserRemote[item]) == JSON.stringify(this.currentUser[item]))) {
@@ -358,7 +367,7 @@ export class AuthService {
                                 date: dr?.data?.date,
                                 month: dr?.data?.month,
                                 year: dr?.data?.year,
-                                dateTime: new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`),
+                                dateTime: new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`),
                                 data: [{
                                   time: dr?.data?.time,
                                   focus: dr?.data?.focus,
@@ -380,7 +389,7 @@ export class AuthService {
                                   if (compareDate <= new Date()) {
                                     consecutive += 1
                                     const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
-                                    if (diffToday === 1) {
+                                    if (diffToday === 0 || diffToday === 1) {
                                       consecutive += 1
                                     }
                                   }

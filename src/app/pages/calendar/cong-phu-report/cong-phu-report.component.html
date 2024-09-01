@@ -1,25 +1,62 @@
 <div class="py-4">
-    <div class="text-center">
-        <div class="text-3xl" *ngIf="user?.consecutive > 1">
-            Bạn làm rất tốt, bạn đã duy trì <span
-                class="bg-[#fbbc05] py-2 px-4 rounded-full">{{user?.consecutive}}</span> ngày có thực hành cúng tứ thời
-            liên tục rồi!
+    <div class="bg-[#fbbc05] px-3 py-6 rounded ">
+        <div class="flex items-center py-4">
+            <div class="w-full flex flex-col items-center justify-center text-2xl font-bold" *ngIf="user?.consecutive">
+                <div class="text-6xl py-2 px-4 rounded-full">{{user?.consecutive | number: '2.0-0'}}</div>
+                <div>Ngày cúng tứ thời liên tục!</div>
+            </div>
+            <div class="w-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-[140px]">
+                    {{icon}}
+                </span>
+            </div>
+            <div class="text-3xl" *ngIf="!user?.consecutive">
+                Hãy liên tục thực hành cúng tứ thời mỗi ngày bạn nhé!
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mt-4" *ngIf="nextTarget > 0">
+            <div class="text-center text-2xl font-bold">Mục tiêu tiếp theo: {{user?.consecutive | number:
+                '2.0-0'}}/{{nextTarget | number: '2.0-0'}}</div>
+            <div class="flex justify-evenly items-center relative mt-4">
+                <div class="h-2 bg-black w-full absolute top-1/2 left-0"></div>
+                <div *ngFor="let target of targetRange; let targetIndex = index" class="relative bg-[#fbbc05]"
+                    [ngClass]="{
+                    'animate-bounce': target >= nextTarget,
+                }" [ngStyle]="{
+                    'animation-delay': targetIndex * 150 + 'ms'
+                }">
+                    <span class="material-symbols-outlined text-6xl relative">
+                        calendar_today
+                        <div *ngIf="target < nextTarget"
+                            class="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-45%] bg-black h-[40px] w-[40px] rounded-sm">
+                        </div>
+                    </span>
+                    <div class="text-xs absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-20%]" [ngClass]="{
+                        'text-[#fbbc05]': target < nextTarget
+                    }">
+                        {{target | number: '2.0-0'}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <mat-form-field class="w-full mt-6" appearance="outline">
+        <mat-label>Thống kê vào thời gian</mat-label>
+        <mat-select [(ngModel)]="selectedTimeRange" (ngModelChange)="initChart()">
+            <mat-optgroup *ngFor="let year of timeFilterOptions" [label]="'Năm ' + year?.key">
+                <mat-option *ngFor="let month of year?.month" [value]="year.key + '-' + (month?.key | number: '2.0-0')">
+                    Tháng {{month?.key}} năm {{year?.key}}
+                </mat-option>
+            </mat-optgroup>
+        </mat-select>
+    </mat-form-field>
     <div class="py-4">
         <canvas id="congPhuReport"></canvas>
     </div>
     <div class="py-4">
         <div class="flex items-center justify-between">
-            <button mat-icon-button [disabled]="selectedIndex === 0"
-                (click)="selectedIndex = selectedIndex - 1; viewDetailsData = displayData[selectedIndex]">
-                <mat-icon>chevron_left</mat-icon>
-            </button>
             <div class="text-xl text-center">Xem chi tiết ngày {{viewDetailsData?.date | date: 'dd/MM/YYYY'}}</div>
-            <button mat-icon-button [disabled]="selectedIndex === displayData?.length - 1"
-                (click)="selectedIndex = selectedIndex + 1; viewDetailsData = displayData[selectedIndex]">
-                <mat-icon>chevron_right</mat-icon>
-            </button>
         </div>
         <table class="w-full" *ngIf="viewDetailsData?.data?.length > 0">
             <thead>
