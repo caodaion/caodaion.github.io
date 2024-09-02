@@ -157,7 +157,7 @@
       <div class="day text-center">CN</div>
     </div>
     <div class="flex-1 dates h-100" (mousewheel)="onMouseWheel($event)">
-      <mat-card class="date wrapper-container align-items-center"
+      <mat-card class="date wrapper-container align-items-center z-10"
         *ngFor="let date of selectedMonth; let dateIndex = index" [ngStyle]="{
           height:
             selectedMonth.length % 6 === 0
@@ -170,7 +170,7 @@
         }" [ngClass]="{
           '!shadow-none': date?.logged !== undefined,
         }">
-        <div class="absolute top-0 right-0 bottom-0 left-0" [ngStyle]="{
+        <div class="absolute top-0 right-0 bottom-0 left-0 -z-10" [ngStyle]="{
           background: date?.logged ? selectedMonth[dateIndex + 1]?.logged === 0 ? 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '), #eb4132)' : 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '))' : '',
         }"></div>
         <div class="w-full flex justify-between flex-wrap">

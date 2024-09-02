@@ -378,7 +378,7 @@ export class AuthService {
                                     note: dr?.data?.note,
                                   }]
                                 });
-                              } else {                                
+                              } else {
                                 response.remote['congPhu'][response.remote['congPhu'].indexOf(foundNextDate)].data.push({
                                   time: dr?.data?.time,
                                   date: dr?.data?.date,
@@ -400,7 +400,7 @@ export class AuthService {
                                   quality: dr?.data?.quality,
                                   note: dr?.data?.note,
                                 })
-                              } else {                                
+                              } else {
                                 response.remote['congPhu'].push({
                                   date: dr?.data?.date,
                                   month: dr?.data?.month,
@@ -421,7 +421,6 @@ export class AuthService {
                             response.remote['congPhu'].sort((a: any, b: any) => {
                               return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
                             })
-                            let consecutive = 0
                             response.remote['congPhu']?.forEach((csec: any, index: any) => {
                               const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')} 00:00:00`)
                               const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')} 00:00:00`)
@@ -430,21 +429,22 @@ export class AuthService {
                                 if (compareDate <= new Date()) {
                                   if (!response.remote['consecutiveFrom']) {
                                     response.remote['consecutiveFrom'] = {
-                                      solar: compareDate,
-                                      lunar: this.calendarService.getConvertedFullDate(compareDate)?.convertSolar2Lunar
+                                      solar: new Date(compareDate.setDate(compareDate.getDate() - 1)),
+                                      lunar: this.calendarService.getConvertedFullDate(new Date(compareDate.setDate(compareDate.getDate() - 1)))?.convertSolar2Lunar
                                     }
-                                  }
-                                  const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
-                                  if (diffToday === 0 || diffToday === 1) {
-                                    consecutive += (diffToday + 1)
                                   }
                                 }
                               } else {
-                                consecutive = 1
                                 response.remote['consecutiveFrom'] = null
                               }
                             })
-                            response.remote['consecutive'] = consecutive
+                            if (!response.remote['consecutiveFrom']) {
+                              response.remote['consecutiveFrom'] = {
+                                solar: new Date(),
+                                lunar: this.calendarService.getConvertedFullDate(new Date())?.convertSolar2Lunar
+                              };
+                            }
+                            response.remote['consecutive'] = moment(new Date()).diff(moment(response.remote['consecutiveFrom']?.solar).subtract(1, 'days'), 'days')
                           }
                           break;
                         default:

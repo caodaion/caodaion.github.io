@@ -1003,7 +1003,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('vegetarianBottomSheet') vegetarianBottomSheet!: any;
   showShareImage() {
     this.shareItem = <any>{}
-    this.shareItem.traiGioi = true
+    this.shareItem.traiGioi = false
     this.updateShareInformation()
     this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
   }
@@ -1017,7 +1017,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         this.shareItem.id = this.shareItem.time
       }
       const selectedEvent = this.shareItem.options?.find((item: any) => item.key == this.shareItem.time)
-      this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name
+      this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name      
       this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name} (${this.shareItem.time?.time})`
       if (selectedEvent?.data?.name.includes(this.shareItem.name)) {
         this.shareItem.targetEvent = null
@@ -1043,7 +1043,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         })
       } else {
         if (this.shareItem?.date?.event) {
-          this.shareItem.targetEvent = this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name
+          this.shareItem.targetEvent = this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event?.find((de: any) => de?.event?.solar?.split('T')[0] === this.shareItem?.date?.d)?.event?.eventLunar?.lunarTime))?.name
         }
       }
     }
