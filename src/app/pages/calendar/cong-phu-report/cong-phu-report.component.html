@@ -47,8 +47,8 @@
         <mat-label>Thống kê vào thời gian</mat-label>
         <mat-select [(ngModel)]="selectedTimeRange" (ngModelChange)="initChart()">
             <mat-optgroup *ngFor="let year of timeFilterOptions" [label]="'Năm ' + year?.key">
-                <mat-option *ngFor="let month of year?.month" [value]="year.key + '-' + (month?.key | number: '2.0-0')">
-                    Tháng {{month?.key}} năm {{year?.key}}
+                <mat-option *ngFor="let month of year?.month" [value]="year.key + '-' + (month | number: '2.0-0')">
+                    Tháng {{month}} năm {{year?.key}}
                 </mat-option>
             </mat-optgroup>
         </mat-select>

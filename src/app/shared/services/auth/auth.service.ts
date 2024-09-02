@@ -356,37 +356,76 @@ export class AuthService {
                           if (!response.remote['congPhu']) {
                             response.remote['congPhu'] = <any>[]
                           }
-                          if (new Date >= new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`)) {
-                            const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
-                            if (foundDate) {
-                              response.remote['congPhu'][response.remote['congPhu'].indexOf(foundDate)].data.push({
-                                time: dr?.data?.time,
-                                focus: dr?.data?.focus,
-                                quality: dr?.data?.quality,
-                                note: dr?.data?.note,
-                              })
-                            } else {
-                              response.remote['congPhu'].push({
-                                date: dr?.data?.date,
-                                month: dr?.data?.month,
-                                year: dr?.data?.year,
-                                dateTime: new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`),
-                                data: [{
+                          const dateValue = new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`)
+                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
+                          if (new Date(new Date().setHours(0)) >= new Date(dateValue.setHours(0))) {
+                            if (parseInt(dr?.data?.time?.split(':')[0]) >= 23) {
+                              const nextDate = new Date(moment(moment(new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`)).add(1, 'days')).format('YYYY-MM-DD 00:00:00'))
+                              const foundNextDate = response.remote['congPhu']?.find((cp: any) => cp.date == parseInt(moment(nextDate).format('DD')) && cp.month == parseInt(moment(nextDate).format('MM')) && cp.year == parseInt(moment(nextDate).format('YYYY')))
+                              if (!foundNextDate) {
+                                response.remote['congPhu'].push({
+                                  date: parseInt(moment(nextDate).format('DD')),
+                                  month: parseInt(moment(nextDate).format('MM')),
+                                  year: parseInt(moment(nextDate).format('YYYY')),
+                                  dateTime: nextDate,
+                                  data: [{
+                                    time: dr?.data?.time,
+                                    date: dr?.data?.date,
+                                    month: dr?.data?.month,
+                                    year: dr?.data?.year,
+                                    focus: dr?.data?.focus,
+                                    quality: dr?.data?.quality,
+                                    note: dr?.data?.note,
+                                  }]
+                                });
+                              } else {                                
+                                response.remote['congPhu'][response.remote['congPhu'].indexOf(foundNextDate)].data.push({
                                   time: dr?.data?.time,
+                                  date: dr?.data?.date,
+                                  month: dr?.data?.month,
+                                  year: dr?.data?.year,
                                   focus: dr?.data?.focus,
                                   quality: dr?.data?.quality,
                                   note: dr?.data?.note,
-                                }]
-                              });
+                                })
+                              }
+                            } else {
+                              if (foundDate) {
+                                response.remote['congPhu'][response.remote['congPhu'].indexOf(foundDate)].data.push({
+                                  time: dr?.data?.time,
+                                  date: dr?.data?.date,
+                                  month: dr?.data?.month,
+                                  year: dr?.data?.year,
+                                  focus: dr?.data?.focus,
+                                  quality: dr?.data?.quality,
+                                  note: dr?.data?.note,
+                                })
+                              } else {                                
+                                response.remote['congPhu'].push({
+                                  date: dr?.data?.date,
+                                  month: dr?.data?.month,
+                                  year: dr?.data?.year,
+                                  dateTime: new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`),
+                                  data: [{
+                                    time: dr?.data?.time,
+                                    date: dr?.data?.date,
+                                    month: dr?.data?.month,
+                                    year: dr?.data?.year,
+                                    focus: dr?.data?.focus,
+                                    quality: dr?.data?.quality,
+                                    note: dr?.data?.note,
+                                  }]
+                                });
+                              }
                             }
                             response.remote['congPhu'].sort((a: any, b: any) => {
                               return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
                             })
                             let consecutive = 0
                             response.remote['congPhu']?.forEach((csec: any, index: any) => {
-                              const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')}`)
-                              const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')}`)
-                              const diff = parseInt(moment(previousDate?.toString() === 'Invalid Date' ? previousDate : compareDate).diff(compareDate, 'days').toString().replace('-', ''))
+                              const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')} 00:00:00`)
+                              const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')} 00:00:00`)
+                              const diff = parseInt(moment(previousDate?.toString() === 'Invalid Date' ? compareDate : previousDate).diff(compareDate, 'days').toString().replace('-', ''))
                               if (diff === 0 || diff === 1) {
                                 if (compareDate <= new Date()) {
                                   if (!response.remote['consecutiveFrom']) {
@@ -397,11 +436,12 @@ export class AuthService {
                                   }
                                   const diffToday = parseInt(moment(compareDate).diff(new Date(), 'days').toString().replace('-', ''))
                                   if (diffToday === 0 || diffToday === 1) {
-                                    consecutive += 1
+                                    consecutive += (diffToday + 1)
                                   }
                                 }
                               } else {
-                                consecutive = 0
+                                consecutive = 1
+                                response.remote['consecutiveFrom'] = null
                               }
                             })
                             response.remote['consecutive'] = consecutive

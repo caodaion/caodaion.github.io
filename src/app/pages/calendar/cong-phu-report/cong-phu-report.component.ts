@@ -35,8 +35,6 @@ export class CongPhuReportComponent implements AfterViewInit {
     this.authService.getCurrentUser()
       .subscribe((res: any) => {
         this.user = res
-        console.log(this.user);
-        
         const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)
         if (foundTitleIndex < 3) {
           this.icon = 'candle'
@@ -55,11 +53,10 @@ export class CongPhuReportComponent implements AfterViewInit {
         }
         this.user.congPhu?.forEach((item: any) => {
           if (!this.timeFilterOptions?.find((tfo: any) => tfo.key == item?.year)) {
-            this.timeFilterOptions?.push({ key: item?.year, month: this.user.congPhu?.filter((cpm: any) => cpm?.year === item?.year)?.map((cpm: any) => { return { key: cpm?.month } }) })
+            this.timeFilterOptions?.push({ key: item?.year, month: [... new Set(this.user.congPhu?.filter((cpm: any) => cpm?.year === item?.year)?.map((cpm: any) => cpm?.month))] })
           }
         })
         this.selectedTimeRange = this.datePipe.transform(new Date(), 'YYYY-MM')
-
         this.breakpointObserver
           .observe(['(max-width: 600px)'])
           .subscribe((state: BreakpointState) => {
@@ -82,7 +79,7 @@ export class CongPhuReportComponent implements AfterViewInit {
         for (var d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
           const dateValue = new Date(new Date(d).setHours(0, 0, 0));
           const foundDate = filteredData?.find((item: any) => item?.dateTime?.toString() == dateValue?.toString())
-          const focusArray = foundDate?.data?.map((item: any) => item?.focus)
+          const focusArray = foundDate?.data?.sort((a: any, b: any) => a?.date < b?.date ? -1 : 1)?.map((item: any) => item?.focus)
           const focusSum = focusArray?.reduce((a: any, b: any) => a + b, 0)
           const qualityArray = foundDate?.data?.map((item: any) => item?.quality)
           const qualitySum = qualityArray?.reduce((a: any, b: any) => a + b, 0)
