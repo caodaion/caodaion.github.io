@@ -34,7 +34,7 @@ export class CongPhuReportComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.authService.getCurrentUser()
       .subscribe((res: any) => {
-        this.user = res        
+        this.user = res                
         const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)
         if (foundTitleIndex < 3) {
           this.icon = 'candle'
@@ -49,6 +49,9 @@ export class CongPhuReportComponent implements AfterViewInit {
           }
           for (let index = this.nextTarget - 5; index < this.nextTarget + 15; index += 5) {
             this.targetRange.push(index)
+          }
+          if (this.nextTarget % 5 === 0) {
+            this.nextTarget += 5
           }
         }
         this.user.congPhu?.forEach((item: any) => {
