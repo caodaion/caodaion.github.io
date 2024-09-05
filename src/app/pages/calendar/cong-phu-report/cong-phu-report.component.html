@@ -4,15 +4,22 @@
             <div class="w-full flex flex-col items-center justify-center text-2xl font-bold" *ngIf="user?.consecutive">
                 <div class="text-6xl py-2 px-4 rounded-full">{{user?.consecutive | number: '2.0-0'}}</div>
                 <div class="text-center">Ngày cúng tứ thời liên tục!</div>
-                <div class="text-center text-xl">Từ ngày {{user?.consecutiveFrom?.lunar?.lunarDay}}/{{user?.consecutiveFrom?.lunar?.lunarMonth}}/{{user?.consecutiveFrom?.lunar?.lunarYearName}}</div>
+                <div class="text-center text-xl">Từ ngày
+                    {{user?.consecutiveFrom?.lunar?.lunarDay}}/{{user?.consecutiveFrom?.lunar?.lunarMonth}}/{{user?.consecutiveFrom?.lunar?.lunarYearName}}
+                </div>
                 <div class="text-center text-xl">({{user?.consecutiveFrom?.solar | date: 'dd/MM/YYYY'}})</div>
             </div>
-            <div class="w-full flex items-center justify-center">
+            <div class="w-full flex flex-col items-center justify-center">
                 <span class="material-symbols-outlined text-[140px]">
                     {{icon}}
                 </span>
+                <button mat-icon-button (click)="refreshData()" [matTooltip]="'Làm mới dữ liệu'">
+                    <span class="material-symbols-outlined">
+                        sync
+                    </span>
+                </button>
             </div>
-            <div class="text-3xl text-center" *ngIf="!user?.consecutive">
+            <div class="text-3xl text-center w-full flex items-center justify-center" *ngIf="!user?.consecutive">
                 Hãy liên tục thực hành cúng tứ thời mỗi ngày bạn nhé!
             </div>
         </div>

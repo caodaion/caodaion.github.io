@@ -449,8 +449,13 @@ export class AuthService {
                         response.remote['consecutiveFrom'] = null
                       }
                     })
-                    if (response.remote['congPhu']?.length > 0) {
-                      response.remote['consecutive'] = moment(new Date()).diff(moment(response.remote['consecutiveFrom']?.solar).subtract(1, 'days'), 'days')
+                    const lastData = response.remote['congPhu'][response.remote['congPhu']?.length - 1]
+                    const lastDate = new Date(`${lastData?.year}-${this.decimalPipe.transform(lastData?.month, '2.0-0')}-${this.decimalPipe.transform(lastData?.date, '2.0-0')} 00:00:00`)
+                    const lastDateDiff = moment(new Date()).diff(lastDate, 'days')
+                    if (lastDateDiff <= 1) {
+                      if (response.remote['congPhu']?.length > 0) {
+                        response.remote['consecutive'] = moment(new Date()).diff(moment(response.remote['consecutiveFrom']?.solar).subtract(1, 'days'), 'days')
+                      }
                     }
                   }
                   migrateCalendar();
@@ -460,6 +465,9 @@ export class AuthService {
               observable.complete()
             }
           })
+      }
+      if (isLogIn) {
+        ref.personalWorkbook = undefined;
       }
       if (!ref.personalWorkbook) {
         try {
