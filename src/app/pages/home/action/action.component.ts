@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.scss']
 })
-export class ActionComponent {
+export class ActionComponent implements OnInit {
   cols: number = 2;
   actionList = [
     {
@@ -52,10 +53,13 @@ export class ActionComponent {
     },
   ]
 
-  constructor (
-    private breakpointObserver: BreakpointObserver
-    ) {
-      this.breakpointObserver
+  isShowDienThoPhatMau: boolean = false
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService
+  ) {
+    this.breakpointObserver
       .observe(['(max-width: 600px)'])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
@@ -64,5 +68,24 @@ export class ActionComponent {
           this.cols = 8;
         }
       });
+  }
+
+  ngOnInit(): void {
+    this.authService.getCurrentUser()
+      .subscribe({
+        next: (res: any) => {
+          if (res?.userName === 'nhannt98' || res?.userName === 'annt90') {
+            this.isShowDienThoPhatMau = true
+          } else {
+            this.isShowDienThoPhatMau = false
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {
+          console.log('completed');
+        },
+      })
   }
 }

@@ -1,14 +1,20 @@
 <div class="container-fluid action">
   <h2>Truy cập</h2>
   <mat-divider></mat-divider>
+  <mat-card appearance="outlined"
+    class="mt-4 p-4 w-100 h-100 d-flex flex-column align-items-center justify-content-center" matRipple
+    [routerLink]="'dien-tho-phat-mau'" routerLinkActive="router-link-active" *ngIf="isShowDienThoPhatMau">
+    <span class="material-symbols-outlined">
+      temple_hindu
+    </span>
+    <mat-card-header class="w-100">
+      <mat-card-title class="w-100 text-center">Điện Thờ Phật Mẫu</mat-card-title>
+    </mat-card-header>
+  </mat-card>
   <mat-grid-list [cols]="cols" rowHeight="1:1" [gutterSize]="'1rem'" class="action-grid">
     <mat-grid-tile *ngFor="let item of actionList">
-      <mat-card
-        appearance="outlined"
-        class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
-        matRipple
-        [routerLink]="[item?.link]" routerLinkActive="router-link-active"
-      >
+      <mat-card appearance="outlined" class="w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+        matRipple [routerLink]="[item?.link]" routerLinkActive="router-link-active">
         <span class="material-symbols-outlined">{{item?.icon}}</span>
         <mat-card-header class="w-100">
           <mat-card-title class="w-100 text-center">{{ item?.label }}</mat-card-title>

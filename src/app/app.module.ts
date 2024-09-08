@@ -33,6 +33,7 @@ import { ErrorStateMatcher, MAT_DATE_LOCALE, MatNativeDateModule, ShowOnDirtyErr
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MarkdownModule } from 'ngx-markdown';
 import { register } from 'swiper/element/bundle';
+import { DienThoPhatMauGuard } from './shared/guards/dien-tho-phat-mau.guard';
 
 
 register();
@@ -76,7 +77,7 @@ register();
     MarkdownModule.forRoot({ sanitize: SecurityContext.NONE })
   ],
   providers: [
-    AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService, DecimalPipe,
+    AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService, DecimalPipe, DienThoPhatMauGuard,
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
   ],

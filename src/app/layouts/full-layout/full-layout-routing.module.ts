@@ -3,6 +3,7 @@ import { RouterModule, Routes, UrlMatchResult, UrlSegment } from '@angular/route
 import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
 import { FullLayoutComponent } from './full-layout.component';
 import { ReleasedGuard } from "../../shared/guards/released.guard";
+import { DienThoPhatMauGuard } from 'src/app/shared/guards/dien-tho-phat-mau.guard';
 
 // Matcher for the profile screen with format /@{username}
 export function profileMatcher(segments: UrlSegment[]): UrlMatchResult | null {
@@ -96,6 +97,14 @@ const routes: Routes = [
         path: 'qr',
         loadChildren: () =>
           import('../../modules/qr/qr.module').then((m) => m.QrModule),
+      },
+      {
+        path: 'dien-tho-phat-mau',
+        loadChildren: () =>
+          import('../../pages/dien-tho-phat-mau/dien-tho-phat-mau.module').then(
+            (m) => m.DienThoPhatMauModule
+          ),
+        canActivate: [DienThoPhatMauGuard]
       },
       {
         path: 'maps',

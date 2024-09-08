@@ -1,15 +1,17 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router";
-import {AuthService} from "../services/auth/auth.service";
-import {Observable} from "rxjs";
-import {MENU} from "../constants/menu.constant";
+import { AuthService } from "../services/auth/auth.service";
+import { Observable } from "rxjs";
+import { MENU } from "../constants/menu.constant";
 
 
 @Injectable()
-export class ReleasedGuard  {
+export class ReleasedGuard {
 
-  constructor(private authService: AuthService,
-              private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
