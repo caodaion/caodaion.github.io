@@ -1,0 +1,26 @@
+.dienThoTable {
+    @apply my-4;
+
+    thead {
+        @apply bg-[#603c83];
+
+        th {
+            @apply text-white;
+        }
+    }
+
+    th,
+    td {
+        @apply p-3;
+    }
+
+    tbody {
+        tr {
+            @apply bg-white;
+        }
+
+        tr:nth-child(even) {
+            @apply bg-[#f8f9fa];
+        }
+    }
+}

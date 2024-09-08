@@ -18,7 +18,7 @@ import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from "./shared/guards/auth.guard";
 import { ReleasedGuard } from "./shared/guards/released.guard";
-import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AngularFireModule } from '@angular/fire/compat';
@@ -77,7 +77,7 @@ register();
     MarkdownModule.forRoot({ sanitize: SecurityContext.NONE })
   ],
   providers: [
-    AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService, DecimalPipe, DienThoPhatMauGuard,
+    AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService, DecimalPipe, DienThoPhatMauGuard, CurrencyPipe,
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
   ],

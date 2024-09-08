@@ -9,6 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { PriceComponent } from './price/price.component';
+import { SharedModule } from "../../shared/shared.module";
+import { MatSelectModule } from '@angular/material/select';
+import { SearchPricePipe } from './search-price/search-price.pipe';
+import { BillComponent } from './bill/bill.component';
+import { SearchDataPipe } from './search-data/search-data.pipe';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 const routes: Routes = [
@@ -20,7 +28,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    DienThoPhatMauComponent
+    DienThoPhatMauComponent,
+    PriceComponent,
+    SearchPricePipe,
+    BillComponent,
+    SearchDataPipe
   ],
   imports: [
     CommonModule,
@@ -31,7 +43,14 @@ const routes: Routes = [
     MatInputModule,
     FormsModule,
     MatIconModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SharedModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatTooltipModule
+  ],
+  exports: [
+    SearchPricePipe
   ]
 })
 export class DienThoPhatMauModule { }

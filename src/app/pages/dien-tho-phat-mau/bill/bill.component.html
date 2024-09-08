@@ -1,0 +1,225 @@
+<div class="p-4">
+    <h3 class="p-3">Hoá đơn</h3>
+    <div class="flex flex-wrap">
+        <div class="w-full px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Mã Hoá Đơn</mat-label>
+                <input required matInput placeholder="Nhập Mã Hoá Đơn" [(ngModel)]="addedData.id">
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Năm</mat-label>
+                <mat-select [(ngModel)]="addedData.year">
+                    <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{ item?.solar }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Tháng</mat-label>
+                <mat-select [(ngModel)]="addedData.month">
+                    <mat-option *ngFor="let item of monthOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Ngày</mat-label>
+                <mat-select [(ngModel)]="addedData.date">
+                    <mat-option *ngFor="let item of dayOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full flex">
+            <div class="w-1/2 font-bold text-2xl">Thành tiền hoá đơn:</div>
+            <div class="w-1/2 font-bold text-2xl text-right">{{getBillToTalPrice() | currency: 'VND'}}</div>
+        </div>
+        <div class="w-full p-3 billTable relative max-h-[65vh] overflow-auto">
+            <table class="w-full dienThoTable">
+                <thead class="sticky top-0 z-10">
+                    <tr>
+                        <th class="text-left">Vật liệu</th>
+                        <th class="text-left">Đơn giá</th>
+                        <th class="text-left">Số lượng</th>
+                        <th class="text-right">Thành tiền</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let material of addedData?.materials; let materialIndex = index" [ngClass]="{
+                        '!bg-[#ea4335]': material?.inValid
+                    }" class="mainTr">
+                        <td>
+                            <mat-form-field class="w-full" [appearance]="'outline'">
+                                <mat-label>Chọn vật liệu</mat-label>
+                                <mat-select [(ngModel)]="material.material">
+                                    <input matInput placeholder="Tìm kiếm" #searchPriceTextBox
+                                        class="!border !w-full !p-2 !sticky !top-0">
+                                    <mat-option
+                                        *ngFor="let item of price | searchPrice: {searchText: searchPriceTextBox['value']}"
+                                        [value]="item">
+                                        {{item?.name}} | giá ngày {{item?.logFrom | date: 'dd/MM/YYYY'}}
+                                    </mat-option>
+                                    <mat-option [value]="{
+                                        key: 'dynamic-sli',
+                                        name: '',
+                                        price: '',
+                                        unit: ''
+                                    }">Số lượng ít</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <ng-container *ngIf="material?.material?.key === 'dynamic-sli'">
+                                <mat-form-field class="w-full" [appearance]="'outline'">
+                                    <mat-label>Tên vật liệu</mat-label>
+                                    <input matInput placeholder="Nhập Tên vật liệu"
+                                        [(ngModel)]="material.material.name">
+                                </mat-form-field>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="material?.material?.key !== 'dynamic-sli'">
+                                {{getMaterialData(material)?.unitPrice}}
+                            </ng-container>
+                            <ng-container *ngIf="material?.material?.key === 'dynamic-sli'">
+                                <mat-form-field class="w-full" [appearance]="'outline'">
+                                    <mat-label>Đơn giá</mat-label>
+                                    <input matInput placeholder="Đơn giá" [(ngModel)]="material.material.price">
+                                    <span matTextSuffix>₫</span>
+                                    <mat-hint>{{material.material.price | currency: 'VND'}}/đơn vị</mat-hint>
+                                </mat-form-field>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <mat-form-field class="w-full" [appearance]="'outline'">
+                                <mat-label>Số lượng</mat-label>
+                                <input matInput placeholder="Số lượng" [(ngModel)]="material.number">
+                            </mat-form-field>
+                        </td>
+                        <td class="text-right">
+                            {{getMaterialData(material)?.totalPrice | currency: 'VND'}}
+                        </td>
+                        <td class="text-right">
+                            <button mat-icon-button (click)="removeMaterial(materialIndex)">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="sticky bottom-0 z-10">
+                        <td [colSpan]="5">
+                            <button mat-stroked-button [color]="'primary'" class="w-full bg-white"
+                                (click)="addMaterial()">
+                                <mat-icon>add</mat-icon>
+                                Thêm vật liệu của hoá đơn
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="w-full px-3">
+            <button [disabled]="!addedData?.id" *ngIf="!googleFormPath" mat-flat-button [color]="'primary'"
+                class="w-full" (click)="onSave()">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined">save</span><span class="ms-3">Lưu</span>
+                </div>
+            </button>
+            <button *ngIf="googleFormPath" mat-stroked-button [color]="'primary'" class="w-full" (click)="clear()">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined">restart_alt</span><span class="ms-3">Làm mới</span>
+                </div>
+            </button>
+        </div>
+        <div class="w-full px-3">
+            <iframe *ngIf="googleFormPath" [src]="
+      googleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+    </div>
+    <div class="p-3">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+            <mat-label>Tìm kiếm</mat-label>
+            <input matInput placeholder="Tìm kiếm" #searchBillTextBox>
+        </mat-form-field>
+        <table class="w-full dienThoTable">
+            <thead>
+                <tr>
+                    <th class="text-left">Hoá đơn</th>
+                    <th>Ngày</th>
+                    <th>Thành tiền hoá đơn</th>
+                    <th class="text-right">
+                        <button mat-icon-button (click)="expanAll()"
+                            [matTooltip]="(isExpanedAll ? 'Đóng' : 'Mở') + ' tất cả chi tiết'">
+                            <span class="material-symbols-outlined">
+                                {{isExpanedAll ? 'expand_circle_up' : 'expand_circle_down'}}
+                            </span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container
+                    *ngFor="let item of data | searchData: {searchText: searchBillTextBox['value']}; let billIndex = index">
+                    <tr class="bg-white" [ngClass]="{
+                        'bg-[#f8f9fa]': billIndex % 2 === 1
+                    }">
+                        <td>{{item?.id}}</td>
+                        <td class="text-center">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
+                        <td class="text-center">{{getBillToTalPrice(item) | currency: 'VND'}}</td>
+                        <td class="text-right">
+                            <button mat-icon-button (click)="
+                                item.expaned = !item?.expaned;
+                                isExpanedAll = false
+                                " [matTooltip]="(item?.expaned ? 'Đóng' : 'Mở') + ' chi tiết'">
+                                <span class="material-symbols-outlined">
+                                    {{item?.expaned ? 'expand_circle_up' : 'expand_circle_down'}}
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="hidden" [ngClass]="{
+                        '!table-row': item?.expaned
+                    }">
+                        <td [colSpan]="4" class="bg-white !p-0">
+                            <div class="w-full border rounded p-3">
+                                <div class="text-2xl">Hoá đơn: {{item?.id}}</div>
+                                <div><span class="font-bold">Ghi nhận bởi:</span> {{item?.updatedBy}} </div>
+                                <div><span class="font-bold">Ghi nhận ngày:</span> {{item?.logFrom | date:
+                                    'dd/MM/YYYY'}}</div>
+                                <div class="text-lg"><span class="font-bold">Thành tiền hoá đơn:</span>
+                                    {{getBillToTalPrice(item) | currency:
+                                    'VND'}} </div>
+                                <table class="w-full childTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">Vật liệu</th>
+                                            <th class="text-left">Đơn giá</th>
+                                            <th class="text-center">Số lượng</th>
+                                            <th class="text-right">Thành tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let material of item?.materials">
+                                            <td>{{material?.material?.name}}</td>
+                                            <td class="text-left">{{material?.material?.price | currency:
+                                                'VND'}}/{{material?.material?.unit || 'đơn vị'}}</td>
+                                            <td class="text-center">{{material?.number}}</td>
+                                            <td class="text-right">{{material?.totalPrice | currency:
+                                                'VND'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

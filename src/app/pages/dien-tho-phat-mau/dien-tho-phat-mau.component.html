@@ -1,1 +1,20 @@
-<p>dien-tho-phat-mau works!</p>
+<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span class="px-3">Hoá đơn</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId">
+            <app-bill [data]="data" [setting]="setting" [user]="user" [price]="price"></app-bill>
+        </ng-container>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">warehouse</span>
+            <span class="px-3">Đơn giá/Vật liệu</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId">
+            <app-price [setting]="setting" [user]="user" [price]="price"></app-price>
+        </ng-container>
+    </mat-tab>
+</mat-tab-group>
