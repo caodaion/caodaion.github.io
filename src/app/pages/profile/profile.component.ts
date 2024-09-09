@@ -248,6 +248,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           phone: this.currentUser.phone,
           name: this.currentUser.name,
           password: this.currentUser.password,
+          userName: this.currentUser.userName,
         }))}`
       }
     }

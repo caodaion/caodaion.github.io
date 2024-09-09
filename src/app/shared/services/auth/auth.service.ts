@@ -184,7 +184,18 @@ export class AuthService {
                 remoteData: this.currentUserRemote[key],
                 load: 'upload'
               }
-              response.data.push(comparedData);
+              const autoMatchedKeys = [
+                'vocabularies',
+                'vocabularyExercises',
+                'vocabulary',
+                'vocabularyExercise',
+                'cong-phu',
+                'congPhu',
+                'fontSize',
+              ]
+              if (!autoMatchedKeys?.includes(key)) {
+                response.data.push(comparedData);
+              }
             }
           }
           if (key.includes('province') || key.includes('district') || key.includes('ward')) {
@@ -426,19 +437,19 @@ export class AuthService {
                       }
                     }
                   })
-                }                
+                }
                 if (resIndex === res?.length - 1) {
                   const migrateCalendar = () => {
                     response.remote['congPhu'].sort((a: any, b: any) => {
                       return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
-                    })                    
+                    })
                     response.remote['congPhu']?.forEach((csec: any, index: any) => {
                       const previousDate = new Date(`${response.remote['congPhu'][index - 1]?.year}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.month, '2.0-0')}-${this.decimalPipe.transform(response.remote['congPhu'][index - 1]?.date, '2.0-0')} 00:00:00`)
                       const compareDate = new Date(`${csec?.year}-${this.decimalPipe.transform(csec?.month, '2.0-0')}-${this.decimalPipe.transform(csec?.date, '2.0-0')} 00:00:00`)
                       const diff = moment(previousDate?.toString() === 'Invalid Date' ? compareDate : previousDate).diff(compareDate, 'days')
                       if (diff === 0 || diff === 1 || diff === -1) {
-                        if (compareDate <= new Date()) {                          
-                          if (!response.remote['consecutiveFrom']) {                            
+                        if (compareDate <= new Date()) {
+                          if (!response.remote['consecutiveFrom']) {
                             response.remote['consecutiveFrom'] = {
                               solar: new Date(compareDate.setDate(compareDate.getDate() - 1)),
                               lunar: this.calendarService.getConvertedFullDate(new Date(compareDate.setDate(compareDate.getDate() - 1)))?.convertSolar2Lunar
