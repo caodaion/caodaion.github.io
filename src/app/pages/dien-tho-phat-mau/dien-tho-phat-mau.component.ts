@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { DienThoPhatMauService } from 'src/app/shared/services/dien-tho-phat-mau/dien-tho-phat-mau.service';
 
@@ -54,5 +55,4 @@ export class DienThoPhatMauComponent implements OnInit {
       },
     })
   }
-
 }

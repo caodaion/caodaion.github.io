@@ -33,6 +33,8 @@ export class DienThoPhatMauService {
             })
             let price = <any>[];
             let bill = <any>[];
+            let deletedBill = <any>[];
+            let deletedPrice = <any>[];
             let data = <any>[];
             res?.forEach((item: any, resIndex: any) => {
               if (item?.Timestamp != 'setting') {
@@ -51,14 +53,28 @@ export class DienThoPhatMauService {
                         priceData = dr?.data
                         priceData.updatedBy = item?.updatedBy
                         priceData.logFrom = item?.logFrom
-                        price.push(dr?.data)
+                        price.push(priceData)
                         break;
                       case 'bill':
                         let billData: any = <any>{}
                         billData = dr?.data
                         billData.updatedBy = item?.updatedBy
                         billData.logFrom = item?.logFrom
-                        bill.push(dr?.data)
+                        bill.push(billData)
+                        break;
+                      case 'delete-bill':
+                        let deletedBillData: any = <any>{}
+                        deletedBillData = dr?.data
+                        deletedBillData.updatedBy = item?.updatedBy
+                        deletedBillData.logFrom = item?.logFrom
+                        deletedBill.push(deletedBillData)
+                        break;
+                      case 'delete-price':
+                        let deletedPriceData: any = <any>{}
+                        deletedPriceData = dr?.data
+                        deletedPriceData.updatedBy = item?.updatedBy
+                        deletedPriceData.logFrom = item?.logFrom
+                        deletedPrice.push(deletedPriceData)
                         break;
                     }
                   }
@@ -73,6 +89,12 @@ export class DienThoPhatMauService {
                     }
                   });
                   data.push(billItem);
+                })                
+                deletedBill?.forEach((billItem: any) => {
+                  data = data?.filter((db: any) => db?.key !== billItem?.key)
+                })
+                deletedPrice?.forEach((priceItem: any) => {
+                  price = price?.filter((pb: any) => pb?.key !== priceItem?.key)
                 })
               }
             })

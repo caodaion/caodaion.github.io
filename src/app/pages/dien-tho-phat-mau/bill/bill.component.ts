@@ -1,5 +1,6 @@
 import { DecimalPipe, DatePipe, CurrencyPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
@@ -34,6 +35,7 @@ export class BillComponent implements OnInit {
     private commonService: CommonService,
     private cd: ChangeDetectorRef,
     private currencyPipe: CurrencyPipe,
+    private matDialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {
 
@@ -159,6 +161,24 @@ export class BillComponent implements OnInit {
     this.isExpanedAll = !this.isExpanedAll
     this.data?.forEach((item: any) => {
       item.expaned = this.isExpanedAll
+    })
+  }
+
+  deleteGoogleFormPath: any;
+  @ViewChild('deleteBillDialog') deleteBillDialog!: any;
+
+  deleteBill(item: any) {
+    this.deleteGoogleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
+    this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.id)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
+    const syncToken = [
+      { key: 'delete-bill', data: {key: item?.key} }
+    ]
+    this.deleteGoogleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+    this.deleteGoogleFormPath += `&${this.setting?.logFrom}=${this.addedData?.year}-${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}-${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`;
+    this.deleteGoogleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;
+    const deleteBillDialogRef = this.matDialog.open(this.deleteBillDialog)
+    deleteBillDialogRef.afterClosed().subscribe(() => {
+      this.deleteGoogleFormPath = ''
     })
   }
 }

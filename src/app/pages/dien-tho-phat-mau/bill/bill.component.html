@@ -124,6 +124,12 @@
             </table>
         </div>
         <div class="w-full px-3">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Hình ảnh</mat-label>
+                <input matInput placeholder="Nhập liên kết hình ảnh" [(ngModel)]="addedData.image">
+            </mat-form-field>
+        </div>
+        <div class="w-full px-3">
             <button [disabled]="!addedData?.id" *ngIf="!googleFormPath" mat-flat-button [color]="'primary'"
                 class="w-full" (click)="onSave()">
                 <div class="flex items-center">
@@ -173,6 +179,11 @@
                         <td class="text-center">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
                         <td class="text-center">{{getBillToTalPrice(item) | currency: 'VND'}}</td>
                         <td class="text-right">
+                            <button mat-icon-button (click)="deleteBill(item)" [matTooltip]="'Xoá hoá đơn'">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
                             <button mat-icon-button (click)="
                                 item.expaned = !item?.expaned;
                                 isExpanedAll = false
@@ -223,3 +234,13 @@
         </table>
     </div>
 </div>
+
+
+<ng-template #deleteBillDialog>
+    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận xoá</div>
+    <mat-dialog-content>
+        <iframe *ngIf="deleteGoogleFormPath" [src]="
+        deleteGoogleFormPath | safe
+        " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </mat-dialog-content>
+</ng-template>

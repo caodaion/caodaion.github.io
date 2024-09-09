@@ -17,6 +17,7 @@ import { BillComponent } from './bill/bill.component';
 import { SearchDataPipe } from './search-data/search-data.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 const routes: Routes = [
@@ -47,7 +48,8 @@ const routes: Routes = [
     SharedModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   exports: [
     SearchPricePipe

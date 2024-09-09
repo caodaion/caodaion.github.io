@@ -91,6 +91,7 @@
                     <th class="text-left">Đơn giá</th>
                     <th>Đơn giá ngày</th>
                     <th>Cung cấp bởi</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -100,8 +101,24 @@
                     <td>{{item?.price | currency: 'VND'}}</td>
                     <td class="text-center">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
                     <td class="text-center">{{item?.provider || '...'}}</td>
+                    <td class="text-right">
+                        <button mat-icon-button (click)="deletePrice(item)" [matTooltip]="'Xoá hoá đơn'">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<ng-template #deletePriceDialog>
+    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận xoá</div>
+    <mat-dialog-content>
+        <iframe *ngIf="deleteGoogleFormPath" [src]="
+        deleteGoogleFormPath | safe
+        " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </mat-dialog-content>
+</ng-template>
