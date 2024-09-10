@@ -66,7 +66,7 @@ Ngàn tuổi muôn tên giữ trọn biên.`,
   ]
   message = this.messages[0]
 
-  constructor(private renderer2: Renderer2) {}
+  constructor(private renderer2: Renderer2) { }
 
   ngOnInit(): void {
     this.initThreeJS();
@@ -127,17 +127,16 @@ Ngàn tuổi muôn tên giữ trọn biên.`,
   }
 
   private loadTexturesAndNodes() {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('assets/images/divine-eye.png', (texture) => {
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-      const sprite = new THREE.Sprite(spriteMaterial);
-      sprite.position.set(0, 0, 0);
-      this.scene.add(sprite);
-    });
 
     this.nodes.forEach((node, index) => {
       if (index !== 0) {
         const sphere = this.createSphere(node);
+        this.scene.add(sphere);
+        const label = this.createTextSprite(node.name);
+        label.position.set(node.x!, node.y! - 2, node.z || 0);
+        this.scene.add(label);
+      } else {
+        const sphere = this.createSphere(node, 'assets/images/divine-eye.png');
         this.scene.add(sphere);
         const label = this.createTextSprite(node.name);
         label.position.set(node.x!, node.y! - 2, node.z || 0);
@@ -148,9 +147,20 @@ Ngàn tuổi muôn tên giữ trọn biên.`,
     this.links.forEach(link => this.createLink(link));
   }
 
-  private createSphere(node: any): THREE.Mesh {
+  private createSphere(node: any, image?: any): THREE.Mesh {
     const geometry = new THREE.SphereGeometry(1, 16, 16);
-    const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+    const material = new THREE.MeshBasicMaterial();
+    if (!image) {
+      material.setValues({
+        color: Math.random() * 0xffffff
+      })
+    } else {
+      const textureLoader = new THREE.TextureLoader();
+      material.setValues({
+        map: textureLoader.load('assets/images/divine-eye.png')
+      })
+      material.shadowSide
+    }
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.set(node.x!, node.y!, node.z || 0);
     sphere.name = node.id;
@@ -163,8 +173,8 @@ Ngàn tuổi muôn tên giữ trọn biên.`,
 
     if (sourceNode && targetNode) {
       const material = new THREE.LineBasicMaterial({ color: link.linkColor, linewidth: 10 });
-      const points = [new THREE.Vector3(sourceNode.x!, sourceNode.y!, sourceNode.z || 0), 
-                      new THREE.Vector3(targetNode.x!, targetNode.y!, targetNode.z || 0)];
+      const points = [new THREE.Vector3(sourceNode.x!, sourceNode.y!, sourceNode.z || 0),
+      new THREE.Vector3(targetNode.x!, targetNode.y!, targetNode.z || 0)];
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       const line = new THREE.Line(geometry, material);
       this.scene.add(line);
