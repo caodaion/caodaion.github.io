@@ -18,10 +18,10 @@ export class SearchDataPipe implements PipeTransform {
   transform(value: any, options: any): any {
     const searchContent = this.commonService.generatedSlug(`${options?.searchText}`)
     value = value?.sort((a: any, b: any) => {
-      return new Date(a?.logFrom) > new Date(b?.logFrom) ? 1 : -1
+      return new Date(a?.logFrom) < new Date(b?.logFrom) ? 1 : -1
     })
     value = value?.sort((a: any, b: any) => {
-      return this.commonService.generatedSlug(a[options?.orderBy]) > this.commonService.generatedSlug(b[options?.orderBy]) ? (options?.isAsc ? 1 : -1) : (options?.isAsc ? -1 : 1)
+      return this.commonService.generatedSlug(a[options?.orderBy]) < this.commonService.generatedSlug(b[options?.orderBy]) ? (options?.isAsc ? 1 : -1) : (options?.isAsc ? -1 : 1)
     })
     if (!searchContent) {
       return value;

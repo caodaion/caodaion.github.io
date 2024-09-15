@@ -90,17 +90,15 @@ export class DienThoPhatMauService {
                 })
               }
               if (resIndex === res?.length - 1) {
-                setTimeout(() => {
-                  bill?.forEach((billItem: any) => {
-                    billItem?.materials?.forEach((material: any) => {
-                      if (typeof material?.material === 'string') {
-                        const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material.material)
-                        material.material = itemMaterial
-                      }
-                    });
-                    data.push(billItem);
-                  })
-                }, 0);
+                bill?.forEach((billItem: any) => {
+                  billItem?.materials?.forEach((material: any) => {
+                    if (typeof material?.material === 'string') {
+                      const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material.material)
+                      material.material = itemMaterial
+                    }
+                  });
+                  data.push(billItem);
+                })
                 setTimeout(() => {
                   updatedBill?.forEach((priceItem: any) => {
                     const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)
@@ -117,7 +115,7 @@ export class DienThoPhatMauService {
                 }, 0);
                 deletedBill?.forEach((billItem: any) => {
                   data = data?.filter((db: any) => db?.key !== billItem?.key)
-                })                
+                })
                 deletedPrice?.forEach((priceItem: any) => {
                   price = price?.filter((pb: any) => pb?.key !== priceItem?.key)
                 })

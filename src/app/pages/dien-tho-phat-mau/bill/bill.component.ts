@@ -18,6 +18,9 @@ export class BillComponent implements OnInit {
   @Input() data: any = <any>[];
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  deleteGoogleFormPath: any;
+  @ViewChild('deleteBillDialog') deleteBillDialog!: any;
+  @ViewChild('saveBillDialog') saveBillDialog!: any;
 
   addedData: any = <any>{
     materials: <any>[]
@@ -29,6 +32,7 @@ export class BillComponent implements OnInit {
   durationInSeconds = 3;
   orderBy: any = 'logFrom'
   isAsc: boolean = true
+  edittingItem: any = <any>{}
 
   constructor(
     private decimalPipe: DecimalPipe,
@@ -69,11 +73,13 @@ export class BillComponent implements OnInit {
     this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1)
   }
 
-  onSave() {
+  onSave(savedData: any) {
     this.googleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
-    this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.id)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
+    if (!savedData?.key) {
+      savedData.key = `${this.commonService.generatedSlug(savedData?.id)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
+    }
     let requestPayload = <any>{}
-    requestPayload = JSON.parse(JSON.stringify(this.addedData))
+    requestPayload = JSON.parse(JSON.stringify(savedData))
     requestPayload.materials = requestPayload?.materials?.map((item: any) => {
       const returnData = <any>{
         number: item?.number,
@@ -89,24 +95,28 @@ export class BillComponent implements OnInit {
       { key: 'bill', data: requestPayload }
     ]
     this.googleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
-    this.googleFormPath += `&${this.setting?.logFrom}=${this.addedData?.year}-${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}-${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`;
+    this.googleFormPath += `&${this.setting?.logFrom}=${savedData?.year}-${this.decimalPipe.transform(savedData?.month, '2.0-0')}-${this.decimalPipe.transform(savedData?.date, '2.0-0')}`;
     this.googleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;
+    const saveBillDialogRef = this.matDialog.open(this.saveBillDialog)
+    saveBillDialogRef.afterClosed().subscribe(() => {
+      this.googleFormPath = ''
+    })
   }
 
   getBillToTalPrice(bill?: any): any {
     let billToTalPrice = 0
     if (!bill) {
       this.addedData?.materials?.forEach((item: any) => {
-        billToTalPrice += item?.totalPrice
+        billToTalPrice += item?.totalPrice || 0
       });
     } else {
       bill?.materials?.forEach((item: any) => {
         item.totalPrice = parseFloat(item?.number) * parseFloat(item?.material?.price)
-        billToTalPrice += item?.totalPrice
+        billToTalPrice += item?.totalPrice || 0
       });
-      bill.billToTalPrice = billToTalPrice
+      bill.billToTalPrice = billToTalPrice || 0
     }
-    return billToTalPrice;
+    return billToTalPrice || 0;
   }
 
   clear() {
@@ -166,9 +176,6 @@ export class BillComponent implements OnInit {
     })
   }
 
-  deleteGoogleFormPath: any;
-  @ViewChild('deleteBillDialog') deleteBillDialog!: any;
-
   deleteBill(item: any) {
     this.deleteGoogleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
     this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.id)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
@@ -182,5 +189,10 @@ export class BillComponent implements OnInit {
     deleteBillDialogRef.afterClosed().subscribe(() => {
       this.deleteGoogleFormPath = ''
     })
+  }
+
+  editBill(item: any) {
+    this.edittingItem = item;
+    item.expaned = true
   }
 }
