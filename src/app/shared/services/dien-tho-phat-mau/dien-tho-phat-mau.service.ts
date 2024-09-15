@@ -35,6 +35,8 @@ export class DienThoPhatMauService {
             let bill = <any>[];
             let deletedBill = <any>[];
             let deletedPrice = <any>[];
+            let updatedPrice = <any>[];
+            let updatedBill = <any>[];
             let data = <any>[];
             res?.forEach((item: any, resIndex: any) => {
               if (item?.Timestamp != 'setting') {
@@ -76,23 +78,46 @@ export class DienThoPhatMauService {
                         deletedPriceData.logFrom = item?.logFrom
                         deletedPrice.push(deletedPriceData)
                         break;
+                      case 'update-price':
+                        let updatedPriceData: any = <any>{}
+                        updatedPriceData = dr?.data
+                        updatedPriceData.updatedBy = item?.updatedBy
+                        updatedPriceData.logFrom = item?.logFrom
+                        updatedPrice.push(updatedPriceData)
+                        break;
                     }
                   }
                 })
               }
               if (resIndex === res?.length - 1) {
-                bill?.forEach((billItem: any) => {
-                  billItem?.materials?.forEach((material: any) => {
-                    if (typeof material?.material === 'string') {
-                      const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material.material)
-                      material.material = itemMaterial
+                setTimeout(() => {
+                  bill?.forEach((billItem: any) => {
+                    billItem?.materials?.forEach((material: any) => {
+                      if (typeof material?.material === 'string') {
+                        const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material.material)
+                        material.material = itemMaterial
+                      }
+                    });
+                    data.push(billItem);
+                  })
+                }, 0);
+                setTimeout(() => {
+                  updatedBill?.forEach((priceItem: any) => {
+                    const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)
+                    if (price.indexOf(foundUpdatedPrice) !== -1) {
+                      price[price.indexOf(foundUpdatedPrice)] = priceItem
                     }
-                  });
-                  data.push(billItem);
-                })                
+                  })
+                  updatedPrice?.forEach((billItem: any) => {
+                    const foundUpdatedBill = data?.find((ub: any) => ub?.key === billItem?.key)
+                    if (data.indexOf(foundUpdatedBill) !== -1) {
+                      data[data.indexOf(foundUpdatedBill)] = billItem
+                    }
+                  })
+                }, 0);
                 deletedBill?.forEach((billItem: any) => {
                   data = data?.filter((db: any) => db?.key !== billItem?.key)
-                })
+                })                
                 deletedPrice?.forEach((priceItem: any) => {
                   price = price?.filter((pb: any) => pb?.key !== priceItem?.key)
                 })

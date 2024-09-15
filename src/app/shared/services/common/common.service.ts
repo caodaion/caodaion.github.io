@@ -289,7 +289,7 @@ export class CommonService {
 
   public generatedSlug(text: any) {
     let slug;
-    slug = text?.toLowerCase();
+    slug = text?.toString()?.toLowerCase();
 
     //Đổi ký tự có dấu thành không dấu
     slug = slug?.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');

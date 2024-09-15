@@ -27,6 +27,8 @@ export class BillComponent implements OnInit {
   monthOptions = <any>[];
   dayOptions = <any>[];
   durationInSeconds = 3;
+  orderBy: any = 'logFrom'
+  isAsc: boolean = true
 
   constructor(
     private decimalPipe: DecimalPipe,

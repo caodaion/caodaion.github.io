@@ -21,6 +21,12 @@ export class PriceComponent implements OnInit {
   yearOptions = <any>[];
   monthOptions = <any>[];
   dayOptions = <any>[];
+  orderBy: any = 'name'
+  isAsc: boolean = true
+  edittingItem: any
+  deleteGoogleFormPath: any;
+  @ViewChild('deletePriceDialog') deletePriceDialog!: any;
+  @ViewChild('savePriceDialog') savePriceDialog!: any;
 
   constructor(
     private decimalPipe: DecimalPipe,
@@ -34,7 +40,7 @@ export class PriceComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.cd.detectChanges()    
+    this.cd.detectChanges()
   }
 
   ngOnInit(): void {
@@ -56,15 +62,23 @@ export class PriceComponent implements OnInit {
     this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1)
   }
 
-  onSave() {
+  onSave(savedData: any) {
     this.googleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
-    this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.name)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
+    if (!savedData.key) {
+      savedData.key = `${this.commonService.generatedSlug(savedData?.name)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
+    }
     const syncToken = [
-      { key: 'price', data: this.addedData }
+      { key: savedData.key ? 'update-price' : 'price', data: savedData }
     ]
     this.googleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
-    this.googleFormPath += `&${this.setting?.logFrom}=${this.addedData?.year}-${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}-${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`;
+    this.googleFormPath += `&${this.setting?.logFrom}=${savedData?.year}-${this.decimalPipe.transform(savedData?.month, '2.0-0')}-${this.decimalPipe.transform(savedData?.date, '2.0-0')}`;
     this.googleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;
+    const savePriceDialogRef = this.matDialog.open(this.savePriceDialog)
+    savePriceDialogRef.afterClosed().subscribe(() => {
+      this.googleFormPath = ''
+      this.edittingItem = <any>{}
+      this.clear()
+    })
   }
 
   clear() {
@@ -76,22 +90,21 @@ export class PriceComponent implements OnInit {
     this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
   }
 
-  deleteGoogleFormPath: any;
-
-  @ViewChild('deletePriceDialog') deletePriceDialog!: any;
-
   deletePrice(item: any) {
     this.deleteGoogleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
-    this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.id)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
     const syncToken = [
-      { key: 'delete-price', data: {key: item?.key} }
+      { key: 'delete-price', data: { key: item?.key } }
     ]
     this.deleteGoogleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
     this.deleteGoogleFormPath += `&${this.setting?.logFrom}=${this.addedData?.year}-${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}-${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`;
     this.deleteGoogleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;
-    const deleteBillDialogRef = this.matDialog.open(this.deletePriceDialog)
-    deleteBillDialogRef.afterClosed().subscribe(() => {
+    const deletePriceDialogRef = this.matDialog.open(this.deletePriceDialog)
+    deletePriceDialogRef.afterClosed().subscribe(() => {
       this.deleteGoogleFormPath = ''
     })
+  }
+
+  editPrice(item: any) {
+    this.edittingItem = item
   }
 }

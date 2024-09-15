@@ -156,9 +156,39 @@
         <table class="w-full dienThoTable">
             <thead>
                 <tr>
-                    <th class="text-left">Hoá đơn</th>
-                    <th>Ngày</th>
-                    <th>Thành tiền hoá đơn</th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            Hoá đơn
+                            <button mat-icon-button (click)="orderBy = 'id'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'id'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            Ngày
+                            <button mat-icon-button (click)="orderBy = 'logFrom'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'logFrom'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            Thành tiền hoá đơn
+                            <button mat-icon-button (click)="orderBy = 'billToTalPrice'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'billToTalPrice'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
                     <th class="text-right">
                         <button mat-icon-button (click)="expanAll()"
                             [matTooltip]="(isExpanedAll ? 'Đóng' : 'Mở') + ' tất cả chi tiết'">
@@ -171,7 +201,7 @@
             </thead>
             <tbody>
                 <ng-container
-                    *ngFor="let item of data | searchData: {searchText: searchBillTextBox['value']}; let billIndex = index">
+                    *ngFor="let item of data | searchData: {searchText: searchBillTextBox['value'], orderBy: orderBy, isAsc: isAsc}; let billIndex = index">
                     <tr class="bg-white" [ngClass]="{
                         'bg-[#f8f9fa]': billIndex % 2 === 1
                     }">
