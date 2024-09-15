@@ -75,6 +75,9 @@ export class BillComponent implements OnInit {
 
   onSave(savedData: any) {
     this.googleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
+    const syncToken = <any>[
+      <any>{ key: savedData?.key ? 'update-bill' : 'bill', }
+    ]
     if (!savedData?.key) {
       savedData.key = `${this.commonService.generatedSlug(savedData?.id)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
     }
@@ -91,9 +94,7 @@ export class BillComponent implements OnInit {
       }
       return returnData
     })
-    const syncToken = [
-      { key: 'bill', data: requestPayload }
-    ]
+    syncToken[0].data = requestPayload
     this.googleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
     this.googleFormPath += `&${this.setting?.logFrom}=${savedData?.year}-${this.decimalPipe.transform(savedData?.month, '2.0-0')}-${this.decimalPipe.transform(savedData?.date, '2.0-0')}`;
     this.googleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;
@@ -180,7 +181,7 @@ export class BillComponent implements OnInit {
     this.deleteGoogleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
     this.addedData.key = `${this.commonService.generatedSlug(this.addedData?.id)}_${this.addedData?.year}${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`
     const syncToken = [
-      { key: 'delete-bill', data: {key: item?.key} }
+      { key: 'delete-bill', data: { key: item?.key } }
     ]
     this.deleteGoogleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
     this.deleteGoogleFormPath += `&${this.setting?.logFrom}=${this.addedData?.year}-${this.decimalPipe.transform(this.addedData?.month, '2.0-0')}-${this.decimalPipe.transform(this.addedData?.date, '2.0-0')}`;
@@ -192,7 +193,6 @@ export class BillComponent implements OnInit {
   }
 
   editBill(item: any) {
-    this.edittingItem = item;
-    item.expaned = true
+    this.addedData = item;
   }
 }

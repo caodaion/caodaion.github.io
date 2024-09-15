@@ -204,38 +204,25 @@
                         <td class="text-center">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
                         <td class="text-center">{{getBillToTalPrice(item) | currency: 'VND'}}</td>
                         <td class="text-right">
-                            <ng-container *ngIf="!edittingItem?.key">
-                                <button mat-icon-button (click)="editBill(item)" [matTooltip]="'Sửa đơn giá'">
-                                    <span class="material-symbols-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button mat-icon-button (click)="deleteBill(item)" [matTooltip]="'Xoá hoá đơn'">
-                                    <span class="material-symbols-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                                <button mat-icon-button (click)="
+                            <button *ngIf="addedData?.key !== item?.key" mat-icon-button (click)="editBill(item)"
+                                [matTooltip]="'Sửa đơn giá'">
+                                <span class="material-symbols-outlined">
+                                    edit
+                                </span>
+                            </button>
+                            <button mat-icon-button (click)="deleteBill(item)" [matTooltip]="'Xoá hoá đơn'">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
+                            <button mat-icon-button (click)="
                                     item.expaned = !item?.expaned;
                                     isExpanedAll = false
                                     " [matTooltip]="(item?.expaned ? 'Đóng' : 'Mở') + ' chi tiết'">
-                                    <span class="material-symbols-outlined">
-                                        {{item?.expaned ? 'expand_circle_up' : 'expand_circle_down'}}
-                                    </span>
-                                </button>
-                            </ng-container>
-                            <ng-container *ngIf="edittingItem?.key === item?.key">
-                                <button mat-icon-button (click)="onSave(edittingItem)" [matTooltip]="'Lưu sửa đơn giá'">
-                                    <span class="material-symbols-outlined">
-                                        save
-                                    </span>
-                                </button>
-                                <button mat-icon-button (click)="edittingItem = null" [matTooltip]="'Huỷ sửa đơn giá'">
-                                    <span class="material-symbols-outlined">
-                                        close
-                                    </span>
-                                </button>
-                            </ng-container>
+                                <span class="material-symbols-outlined">
+                                    {{item?.expaned ? 'expand_circle_up' : 'expand_circle_down'}}
+                                </span>
+                            </button>
                         </td>
                     </tr>
                     <tr class="hidden" [ngClass]="{

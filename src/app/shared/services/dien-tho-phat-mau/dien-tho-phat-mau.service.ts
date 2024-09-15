@@ -85,6 +85,13 @@ export class DienThoPhatMauService {
                         updatedPriceData.logFrom = item?.logFrom
                         updatedPrice.push(updatedPriceData)
                         break;
+                        case 'update-bill':
+                          let updatedBillData: any = <any>{}
+                          updatedBillData = dr?.data
+                          updatedBillData.updatedBy = item?.updatedBy
+                          updatedBillData.logFrom = item?.logFrom
+                          updatedBill.push(updatedBillData)
+                          break;
                     }
                   }
                 })
@@ -99,19 +106,27 @@ export class DienThoPhatMauService {
                   });
                   data.push(billItem);
                 })
+                updatedBill?.forEach((billItem: any) => {
+                  billItem?.materials?.forEach((material: any) => {
+                    if (typeof material?.material === 'string') {
+                      const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material.material)
+                      material.material = itemMaterial
+                    }
+                  });
+                })
                 setTimeout(() => {
-                  updatedBill?.forEach((priceItem: any) => {
+                  updatedPrice?.forEach((priceItem: any) => {
                     const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)
                     if (price.indexOf(foundUpdatedPrice) !== -1) {
                       price[price.indexOf(foundUpdatedPrice)] = priceItem
                     }
                   })
-                  updatedPrice?.forEach((billItem: any) => {
+                  updatedBill?.forEach((billItem: any) => {
                     const foundUpdatedBill = data?.find((ub: any) => ub?.key === billItem?.key)
                     if (data.indexOf(foundUpdatedBill) !== -1) {
                       data[data.indexOf(foundUpdatedBill)] = billItem
                     }
-                  })
+                  })                  
                 }, 0);
                 deletedBill?.forEach((billItem: any) => {
                   data = data?.filter((db: any) => db?.key !== billItem?.key)
