@@ -101,6 +101,7 @@ export class BillComponent implements OnInit {
     const saveBillDialogRef = this.matDialog.open(this.saveBillDialog)
     saveBillDialogRef.afterClosed().subscribe(() => {
       this.googleFormPath = ''
+      this.clear();
     })
   }
 
