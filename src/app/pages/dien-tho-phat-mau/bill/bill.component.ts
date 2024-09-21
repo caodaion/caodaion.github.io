@@ -76,10 +76,11 @@ export class BillComponent implements OnInit {
   onSave(savedData: any) {
     this.googleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
     const syncToken = <any>[
-      <any>{ key: savedData?.key ? 'update-bill' : 'bill', }
+      <any>{ key: 'update-bill' }
     ]
     if (!savedData?.key) {
       savedData.key = `${this.commonService.generatedSlug(savedData?.id)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
+      syncToken[0].key = 'bill'
     }
     let requestPayload = <any>{}
     requestPayload = JSON.parse(JSON.stringify(savedData))

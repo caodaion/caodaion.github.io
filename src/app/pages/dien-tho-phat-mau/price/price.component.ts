@@ -64,12 +64,14 @@ export class PriceComponent implements OnInit {
 
   onSave(savedData: any) {
     this.googleFormPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`
+    const syncToken = <any>[
+      { key: 'update-price' }
+    ]
     if (!savedData.key) {
       savedData.key = `${this.commonService.generatedSlug(savedData?.name)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
+      syncToken[0].key = 'price'
     }
-    const syncToken = [
-      { key: savedData.key ? 'update-price' : 'price', data: savedData }
-    ]
+    syncToken[0].data = savedData
     this.googleFormPath += `?${this.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
     this.googleFormPath += `&${this.setting?.logFrom}=${savedData?.year}-${this.decimalPipe.transform(savedData?.month, '2.0-0')}-${this.decimalPipe.transform(savedData?.date, '2.0-0')}`;
     this.googleFormPath += `&${this.setting?.updatedBy}=${this.user.userName}`;

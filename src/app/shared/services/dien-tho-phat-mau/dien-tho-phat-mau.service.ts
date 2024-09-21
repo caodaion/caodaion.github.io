@@ -117,13 +117,13 @@ export class DienThoPhatMauService {
                 setTimeout(() => {
                   updatedPrice?.forEach((priceItem: any) => {
                     const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)
-                    if (price.indexOf(foundUpdatedPrice) !== -1) {
+                    if (foundUpdatedPrice) {
                       price[price.indexOf(foundUpdatedPrice)] = priceItem
                     }
                   })
                   updatedBill?.forEach((billItem: any) => {
                     const foundUpdatedBill = data?.find((ub: any) => ub?.key === billItem?.key)
-                    if (data.indexOf(foundUpdatedBill) !== -1) {
+                    if (foundUpdatedBill) {
                       data[data.indexOf(foundUpdatedBill)] = billItem
                     }
                   })                  
