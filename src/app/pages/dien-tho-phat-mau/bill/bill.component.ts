@@ -16,6 +16,7 @@ export class BillComponent implements OnInit {
   @Input() user: any;
   @Input() price: any = <any>[];
   @Input() data: any = <any>[];
+  rawPrice: any = <any>[];
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   deleteGoogleFormPath: any;
@@ -23,7 +24,14 @@ export class BillComponent implements OnInit {
   @ViewChild('saveBillDialog') saveBillDialog!: any;
 
   addedData: any = <any>{
-    materials: <any>[]
+    materials: <any>[
+      <any>{
+        material: <any>{
+          price: '',
+          unit: '',
+        }
+      }
+    ]
   }
   googleFormPath: any;
   yearOptions = <any>[];
@@ -48,8 +56,14 @@ export class BillComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.rawPrice = JSON.parse(JSON.stringify(this.price))
     if (this.addedData?.materials?.length === 0) {
-      this.addedData?.materials.push(<any>{})
+      this.addedData?.materials.push(<any>{
+        material: <any>{
+          price: '',
+          unit: '',
+        }
+      })
     }
     this.cd.detectChanges()
   }
@@ -78,6 +92,28 @@ export class BillComponent implements OnInit {
     const syncToken = <any>[
       <any>{ key: 'update-bill' }
     ]
+    console.log(savedData);
+    
+    savedData?.materials?.forEach((materialItem: any) => {
+      const foundMaterial = this.rawPrice?.find((rp: any) => rp?.key === materialItem?.material?.key)
+      if (parseFloat(materialItem?.material?.price) !== parseFloat(foundMaterial?.price) || materialItem?.material?.unit !== foundMaterial?.unit || materialItem?.material?.provider !== foundMaterial?.provider) {
+        syncToken.push({
+          key: 'update-price',
+          data: {
+            date: materialItem?.material?.date,
+            key: materialItem?.material?.key,
+            logFrom: materialItem?.material?.logFrom,
+            month: materialItem?.material?.month,
+            name: materialItem?.material?.name,
+            price: materialItem?.material?.price,
+            provider: materialItem?.material?.provider,
+            unit: materialItem?.material?.unit,
+            updatedBy: this.user.userName,
+            year: materialItem?.material?.year,
+          }
+        })
+      }
+    })
     if (!savedData?.key) {
       savedData.key = `${this.commonService.generatedSlug(savedData?.id)}_${savedData?.year}${this.decimalPipe.transform(savedData?.month, '2.0-0')}${this.decimalPipe.transform(savedData?.date, '2.0-0')}`
       syncToken[0].key = 'bill'
@@ -119,14 +155,22 @@ export class BillComponent implements OnInit {
       });
       bill.billToTalPrice = billToTalPrice || 0
     }
-    return billToTalPrice || 0;
+    return { 
+      billToTalPrice: billToTalPrice || 0,
+      count: bill?.materials?.length
+    };
   }
 
   clear() {
     this.googleFormPath = ''
     this.addedData = <any>{}
     const now = new Date()
-    this.addedData.materials = <any>[<any>{}]
+    this.addedData.materials = <any>[<any>{
+      material: <any>{
+        price: '',
+        unit: '',
+      }
+    }]
     this.addedData.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.addedData.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
     this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
@@ -160,7 +204,12 @@ export class BillComponent implements OnInit {
       item.inValid = item?.totalPrice === 0
     })
     if (this.addedData?.materials?.filter((item: any) => item?.inValid)?.length === 0) {
-      this.addedData.materials?.push(<any>{})
+      this.addedData.materials?.push(<any>{
+        material: <any>{
+          price: '',
+          unit: '',
+        }
+      })
     } else {
       this._snackBar.open('Phát hiện một vật liệu chưa tính ra thành tiền', 'Đóng', {
         duration: this.durationInSeconds * 1000,

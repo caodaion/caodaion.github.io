@@ -18,6 +18,7 @@ import { SearchDataPipe } from './search-data/search-data.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReportComponent } from './report/report.component';
 
 
 const routes: Routes = [
@@ -33,7 +34,8 @@ const routes: Routes = [
     PriceComponent,
     SearchPricePipe,
     BillComponent,
-    SearchDataPipe
+    SearchDataPipe,
+    ReportComponent
   ],
   imports: [
     CommonModule,

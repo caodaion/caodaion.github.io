@@ -35,16 +35,24 @@
                 </mat-select>
             </mat-form-field>
         </div>
+        <div class="w-full px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Đơn vị cung cấp hoá đơn</mat-label>
+                <input matInput placeholder="Nhập Đơn vị cung cấp hoá đơn" [(ngModel)]="addedData.provider">
+            </mat-form-field>
+        </div>
         <div class="w-full flex">
             <div class="w-1/2 font-bold text-2xl">Thành tiền hoá đơn:</div>
-            <div class="w-1/2 font-bold text-2xl text-right">{{getBillToTalPrice() | currency: 'VND'}}</div>
+            <div class="w-1/2 font-bold text-2xl text-right">{{getBillToTalPrice()?.billToTalPrice | currency: 'VND'}}</div>
         </div>
         <div class="w-full p-3 billTable relative max-h-[65vh] overflow-auto">
             <table class="w-full dienThoTable">
                 <thead class="sticky top-0 z-10">
                     <tr>
                         <th class="text-left">Vật liệu</th>
+                        <th class="text-left">Đơn vị cung cấp</th>
                         <th class="text-left">Đơn giá</th>
+                        <th class="text-left">Đơn vị tính</th>
                         <th class="text-left">Số lượng</th>
                         <th class="text-right">Thành tiền</th>
                         <th></th>
@@ -82,21 +90,28 @@
                             </ng-container>
                         </td>
                         <td>
-                            <ng-container *ngIf="material?.material?.key !== 'dynamic-sli'">
-                                {{getMaterialData(material)?.unitPrice}}
-                            </ng-container>
-                            <ng-container *ngIf="material?.material?.key === 'dynamic-sli'">
-                                <mat-form-field class="w-full" [appearance]="'outline'">
-                                    <mat-label>Đơn giá</mat-label>
-                                    <input matInput placeholder="Đơn giá" [(ngModel)]="material.material.price">
-                                    <span matTextSuffix>₫</span>
-                                    <mat-hint>{{material.material.price | currency: 'VND'}}/đơn vị</mat-hint>
-                                </mat-form-field>
-                            </ng-container>
+                            <mat-form-field class="w-full" [appearance]="'outline'">
+                                <mat-label>Đơn vị cung cấp</mat-label>
+                                <input matInput placeholder="Đơn vị cung cấp" [(ngModel)]="material.material.provider">
+                            </mat-form-field>
                         </td>
                         <td>
                             <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Số lượng</mat-label>
+                                <mat-label>Đơn giá</mat-label>
+                                <input matInput placeholder="Đơn giá" [(ngModel)]="material.material.price">
+                                <mat-hint>{{material.material.price | currency: 'VND'}}</mat-hint>
+                                <span matTextSuffix>₫</span>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="w-full" [appearance]="'outline'">
+                                <mat-label>Đơn vị tính</mat-label>
+                                <input matInput placeholder="Đơn vị tính" [(ngModel)]="material.material.unit">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="w-full" [appearance]="'outline'">
+                                <mat-label>Số lượng vật liệu</mat-label>
                                 <input matInput placeholder="Số lượng" [(ngModel)]="material.number">
                             </mat-form-field>
                         </td>
@@ -112,7 +127,7 @@
                         </td>
                     </tr>
                     <tr class="sticky bottom-0 z-10">
-                        <td [colSpan]="5">
+                        <td [colSpan]="6">
                             <button mat-stroked-button [color]="'primary'" class="w-full bg-white"
                                 (click)="addMaterial()">
                                 <mat-icon>add</mat-icon>
@@ -184,6 +199,28 @@
                             </button>
                         </div>
                     </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            Số lượng
+                            <button mat-icon-button (click)="orderBy = 'count'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'count'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            Đơn vị cung cấp
+                            <button mat-icon-button (click)="orderBy = 'provider'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'provider'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
                     <th class="text-right">
                         <button mat-icon-button (click)="expanAll()"
                             [matTooltip]="(isExpanedAll ? 'Đóng' : 'Mở') + ' tất cả chi tiết'">
@@ -198,11 +235,13 @@
                 <ng-container
                     *ngFor="let item of data | searchData: {searchText: searchBillTextBox['value'], orderBy: orderBy, isAsc: isAsc}; let billIndex = index">
                     <tr class="bg-white" [ngClass]="{
-                        'bg-[#f8f9fa]': billIndex % 2 === 1
+                        '!bg-[#f8f9fa]': billIndex % 2 === 1
                     }">
                         <td>{{item?.id}}</td>
-                        <td class="text-center">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
-                        <td class="text-center">{{getBillToTalPrice(item) | currency: 'VND'}}</td>
+                        <td class="text-left">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
+                        <td class="text-left">{{getBillToTalPrice(item)?.billToTalPrice | currency: 'VND'}}</td>
+                        <td class="text-left">{{getBillToTalPrice(item)?.count}}</td>
+                        <td class="text-left">{{item?.provider}}</td>
                         <td class="text-right">
                             <button *ngIf="addedData?.key !== item?.key" mat-icon-button (click)="editBill(item)"
                                 [matTooltip]="'Sửa đơn giá'">
@@ -228,14 +267,14 @@
                     <tr class="hidden" [ngClass]="{
                         '!table-row': item?.expaned
                     }">
-                        <td [colSpan]="4" class="bg-white !p-0">
+                        <td [colSpan]="6" class="bg-white !p-0">
                             <div class="w-full border rounded p-3">
                                 <div class="text-2xl">Hoá đơn: {{item?.id}}</div>
                                 <div><span class="font-bold">Ghi nhận bởi:</span> {{item?.updatedBy}} </div>
                                 <div><span class="font-bold">Ghi nhận ngày:</span> {{item?.logFrom | date:
                                     'dd/MM/YYYY'}}</div>
                                 <div class="text-lg"><span class="font-bold">Thành tiền hoá đơn:</span>
-                                    {{getBillToTalPrice(item) | currency:
+                                    {{getBillToTalPrice(item)?.billToTalPrice | currency:
                                     'VND'}} </div>
                                 <table class="w-full childTable">
                                     <thead>
@@ -243,6 +282,7 @@
                                             <th class="text-left">Vật liệu</th>
                                             <th class="text-left">Đơn giá</th>
                                             <th class="text-center">Số lượng</th>
+                                            <th class="text-center">Đơn vị cung cấp</th>
                                             <th class="text-right">Thành tiền</th>
                                         </tr>
                                     </thead>
@@ -252,6 +292,7 @@
                                             <td class="text-left">{{material?.material?.price | currency:
                                                 'VND'}}/{{material?.material?.unit || 'đơn vị'}}</td>
                                             <td class="text-center">{{material?.number}}</td>
+                                            <td class="text-center">{{material?.material?.provider}}</td>
                                             <td class="text-right">{{material?.totalPrice | currency:
                                                 'VND'}}</td>
                                         </tr>

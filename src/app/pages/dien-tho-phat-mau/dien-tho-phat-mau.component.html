@@ -17,4 +17,13 @@
             <app-price [setting]="setting" [user]="user" [price]="price"></app-price>
         </ng-container>
     </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">description</span>
+            <span class="px-3">Báo cáo</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId">
+            <app-report [data]="data" [setting]="setting" [user]="user" [price]="price"></app-report>
+        </ng-container>
+    </mat-tab>
 </mat-tab-group>

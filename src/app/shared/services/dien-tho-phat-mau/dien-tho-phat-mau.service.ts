@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SheetService } from '../sheet/sheet.service';
-import { Observable } from 'rxjs';
+import { observable, Observable } from 'rxjs';
+import { Workbook } from 'exceljs';
+import * as fs from 'file-saver';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
@@ -9,7 +11,8 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 })
 export class DienThoPhatMauService {
 
-
+  readonly EXCEL_TYPE = 'application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet;charset=UTF-8';
+  readonly EXCEL_EXTENSION = '.xlsx';
   readonly sheetId = `2PACX-1vR7KmDI0VFeL7oqXTNvj4OMS0qk9-oebKYLvZRxDujPS5FcSCGRSiODep9FGkCDu6SpAer8_ZYnMSUR`
   readonly dienThoPhatMauWorkbook: any;
   readonly dienThoPhatMau: any;
@@ -85,13 +88,13 @@ export class DienThoPhatMauService {
                         updatedPriceData.logFrom = item?.logFrom
                         updatedPrice.push(updatedPriceData)
                         break;
-                        case 'update-bill':
-                          let updatedBillData: any = <any>{}
-                          updatedBillData = dr?.data
-                          updatedBillData.updatedBy = item?.updatedBy
-                          updatedBillData.logFrom = item?.logFrom
-                          updatedBill.push(updatedBillData)
-                          break;
+                      case 'update-bill':
+                        let updatedBillData: any = <any>{}
+                        updatedBillData = dr?.data
+                        updatedBillData.updatedBy = item?.updatedBy
+                        updatedBillData.logFrom = item?.logFrom
+                        updatedBill.push(updatedBillData)
+                        break;
                     }
                   }
                 })
@@ -126,7 +129,7 @@ export class DienThoPhatMauService {
                     if (foundUpdatedBill) {
                       data[data.indexOf(foundUpdatedBill)] = billItem
                     }
-                  })                  
+                  })
                 }, 0);
                 deletedBill?.forEach((billItem: any) => {
                   data = data?.filter((db: any) => db?.key !== billItem?.key)
@@ -164,5 +167,52 @@ export class DienThoPhatMauService {
         returnData()
       }
     })
+  }
+
+  exportToExcel(type: any): Observable<any> {
+    return new Observable((observable: any) => {
+      const dienThoPhatMauExportedWorkbook = new Workbook()
+      console.log(dienThoPhatMauExportedWorkbook);
+      console.log(this.dienThoPhatMau);
+
+      this.dailyReportWorkSheet(dienThoPhatMauExportedWorkbook)
+
+      // DOWNLOAD FILE
+      dienThoPhatMauExportedWorkbook.xlsx.writeBuffer().then((data: any) => {
+        const blob = new Blob([data], { type: this.EXCEL_TYPE })
+        fs.saveAs(blob, `${type}${this.EXCEL_EXTENSION}`);
+        const response = {
+          code: 200
+        }
+        observable.next(response)
+        observable.complete()
+      })
+
+    })
+  }
+
+  dailyReportWorkSheet(dienThoPhatMauExportedWorkbook: Workbook) {
+    const sheetLabel = 'Thống kê theo ngày'
+    const dailyReportWorkSheet = dienThoPhatMauExportedWorkbook.addWorksheet(sheetLabel);
+    // REPORT TITLE
+    dailyReportWorkSheet.mergeCells('A1:C1');
+    dailyReportWorkSheet.getCell('A1').value = 'BẢNG THỐNG KÊ THEO NGÀY'
+    dailyReportWorkSheet.getCell('A1').alignment = { horizontal: 'center' }
+    dailyReportWorkSheet.getCell('A1').font = { size: 18, bold: true }
+    // TABLE HEAD
+      // STT
+    dailyReportWorkSheet.mergeCells('A2:A3');
+    dailyReportWorkSheet.getCell('A2').value = 'STT'
+    dailyReportWorkSheet.getCell('A2').alignment = { horizontal: 'center', vertical: 'middle' }
+    dailyReportWorkSheet.getCell('A2').font = { size: 18, bold: true }
+      // NGÀY
+    dailyReportWorkSheet.mergeCells('B2:D2');
+    dailyReportWorkSheet.getCell('B2').value = 'NGÀY'
+    dailyReportWorkSheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' }
+    dailyReportWorkSheet.getCell('B2').font = { size: 18, bold: true }
+        // Dương lịch
+    dailyReportWorkSheet.getCell('B3').value = 'Dương lịch'
+    dailyReportWorkSheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' }
+    dailyReportWorkSheet.getCell('B3').font = { size: 18, bold: true }
   }
 }
