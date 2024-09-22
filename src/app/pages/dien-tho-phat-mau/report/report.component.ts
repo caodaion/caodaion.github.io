@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DienThoPhatMauService } from 'src/app/shared/services/dien-tho-phat-mau/dien-tho-phat-mau.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-report',
@@ -13,26 +14,26 @@ export class ReportComponent implements OnInit {
   @Input() price: any = <any>[];
   @Input() data: any = <any>[];
 
+  reportFromDate: any;
+  reportToDate: any;
+
   constructor(private dienThoPhatMauService: DienThoPhatMauService) {
 
   }
 
 
   ngOnInit(): void {
-    console.log('this.setting', this.setting);
-    console.log('this.user', this.user);
-    console.log('this.price', this.price);
-    console.log('this.data', this.data);
-
+    this.reportFromDate = new Date(moment().startOf('month').format('YYYY-MM-DD'))
+    this.reportToDate = new Date(moment().endOf('month').format('YYYY-MM-DD'))
   }
 
-  onExportToExcel(type: any) {
-    this.dienThoPhatMauService.exportToExcel(type).subscribe({
+  onExportToExcel() {
+    this.dienThoPhatMauService.exportToExcel({ dateFrom: this.reportFromDate, dateTo: this.reportToDate }).subscribe({
       next: (res: any) => {
-
+        console.log(res);
       },
       error: (error: any) => {
-
+        console.log(error);
       },
       complete: () => {
         console.info('complete')

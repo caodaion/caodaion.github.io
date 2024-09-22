@@ -1,1 +1,19 @@
-<button mat-flat-button [color]="'primary'" (click)="onExportToExcel('type')">Tải thống kê </button>
+<div class="w-full flex flex-wrap">
+    <div class="p-3 w-full lg:w-1/4">
+        <mat-form-field [appearance]="'outline'" class="w-full">
+            <mat-label>Chọn ngày báo cáo</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate [(ngModel)]="reportFromDate" placeholder="Từ ngày">
+                <input matEndDate [(ngModel)]="reportToDate" placeholder="Đến ngày">
+            </mat-date-range-input>
+            <mat-hint>Từ ngày – Đến ngày</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+    </div>
+</div>
+<div class="w-full flex flex-wrap">
+    <div class="p-3 w-full">
+        <button mat-flat-button [color]="'primary'" (click)="onExportToExcel()">Tải thống kê </button>
+    </div>
+</div>
