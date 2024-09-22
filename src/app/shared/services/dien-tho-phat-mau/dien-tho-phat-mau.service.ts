@@ -197,7 +197,7 @@ export class DienThoPhatMauService {
     const sheetLabel = `CHI TIẾT (${this.datePipe.transform(dateRange.dateFrom, 'dd-MM-YY')}-${this.datePipe.transform(dateRange.dateTo, 'dd-MM-YY')})`
     const startCol = `A`
     const defaultFontSize = 14
-    const colCount = 7 - (1) // minus 1 because index from 0
+    const colCount = 6 - (1) // minus 1 because index from 0
     const endCol = String.fromCharCode(colCount + 'A'.charCodeAt(0))
     const dailyReportWorkSheet = dienThoPhatMauExportedWorkbook.addWorksheet(sheetLabel);
     // REPORT TITLE
@@ -241,28 +241,6 @@ export class DienThoPhatMauService {
         }
       },
       {
-        label: 'Đơn vị cung cấp', width: 30,
-        alignment: { horizontal: 'left', vertical: 'middle', wrapText: true },
-        border: {
-          top: {
-            style: 'thin',
-            color: { argb: '000000' }
-          },
-          right: {
-            style: 'thin',
-            color: { argb: '000000' }
-          },
-          bottom: {
-            style: 'thin',
-            color: { argb: '000000' }
-          },
-          left: {
-            style: 'thin',
-            color: { argb: '000000' }
-          },
-        }
-      },
-      {
         label: 'Tên vật tư', width: 30,
         alignment: { horizontal: 'left', vertical: 'middle', wrapText: true },
         border: {
@@ -285,7 +263,7 @@ export class DienThoPhatMauService {
         }
       },
       {
-        label: 'Đơn vị tính', width: 15,
+        label: 'Số lượng', width: 15,
         alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
         border: {
           top: {
@@ -307,7 +285,7 @@ export class DienThoPhatMauService {
         }
       },
       {
-        label: 'Số lượng', width: 15,
+        label: 'Đơn vị tính', width: 15,
         alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
         border: {
           top: {
@@ -385,22 +363,22 @@ export class DienThoPhatMauService {
     // Frozen from A row to E row
     dailyReportWorkSheet.views = [{ state: 'frozen', ySplit: 4, activeCell: 'A1' }];
     // GET DATA
-    const exportedData = <any>[]
+    const materialImportSummaryData = <any>[]
     const filteredData = this.dienThoPhatMau
       ?.filter((item: any) => new Date(item.logFrom) <= dateRange.dateTo && new Date(item.logFrom) >= dateRange.dateFrom)
       ?.sort((a: any, b: any) => new Date(a?.logFrom) < new Date(b?.logFrom) ? -1 : 1)
     filteredData?.forEach((item: any) => {
-      const foundDate = exportedData.find((ed: any) => ed?.logFrom === item.logFrom)
+      const foundDate = materialImportSummaryData.find((ed: any) => ed?.logFrom === item.logFrom)
       if (foundDate) {
         foundDate.bills.push(item)
       } else {
-        exportedData.push({
+        materialImportSummaryData.push({
           logFrom: item?.logFrom,
           bills: <any>[item]
         })
       }
     })
-    exportedData?.forEach((item: any) => {
+    materialImportSummaryData?.forEach((item: any) => {
       // Date Row
       const rowLunarDate = this.calendarService.getConvertedFullDate(new Date(item?.logFrom)).convertSolar2Lunar
       const dateRow = dailyReportWorkSheet.addRow([`Ngày ${this.datePipe.transform(new Date(item?.logFrom), 'dd/MM/YYYY')} (${rowLunarDate.lunarDay}/${rowLunarDate.lunarMonth}/${rowLunarDate.lunarYearName})`])
@@ -435,12 +413,11 @@ export class DienThoPhatMauService {
         billItem?.materials?.forEach((materialItem: any, materialIndex: any) => {
           const materialRow = dailyReportWorkSheet.addRow([
             '',
-            materialItem?.material?.provider || '...',
             materialItem?.material?.name,
-            materialItem?.material?.unit,
             materialItem?.number,
-            this.currencyPipe.transform(materialItem?.material?.price, 'VND'),
-            this.currencyPipe.transform(materialItem?.totalPrice, 'VND'),
+            materialItem?.material?.unit,
+            this.currencyPipe.transform(materialItem?.material?.price, 'VND')?.replace('₫', ''),
+            this.currencyPipe.transform(materialItem?.totalPrice, 'VND')?.replace('₫', ''),
           ])
           if (materialIndex === 0) {
             billRow = materialRow?.findCell(1)
@@ -465,7 +442,7 @@ export class DienThoPhatMauService {
       totalDateRow.font = { size: defaultFontSize, bold: true }
       totalDateRow.alignment = { horizontal: 'right' }
       dailyReportWorkSheet.mergeCells(`${totalDateRow.findCell(1)?.address}`, `${String.fromCharCode(colCount - 1 + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`)
-      dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(totalPriceDate, 'VND')
+      dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(totalPriceDate, 'VND')?.replace('₫', '')
       totalDateRow.eachCell((cell: any) => {
         cell.border = {
           top: {
@@ -491,7 +468,7 @@ export class DienThoPhatMauService {
       'TỔNG CỘNG',
     ])
     dailyReportWorkSheet.mergeCells(`${reportTotalPriceRow.findCell(1)?.address}`, `${String.fromCharCode(colCount - 1 + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`)
-    dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(exportedData?.map((ed: any) => ed?.totalPriceDate).reduce((a: any, b: any) => a + b, 0), 'VND')
+    dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(materialImportSummaryData?.map((ed: any) => ed?.totalPriceDate).reduce((a: any, b: any) => a + b, 0), 'VND')?.replace('₫', '')
     reportTotalPriceRow.font = { bold: true, size: 18 }
     reportTotalPriceRow.alignment = { horizontal: 'right' }
     reportTotalPriceRow.eachCell((cell: any) => {

@@ -37,8 +37,8 @@
         </div>
         <div class="w-full px-3">
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Đơn vị cung cấp hoá đơn</mat-label>
-                <input matInput placeholder="Nhập Đơn vị cung cấp hoá đơn" [(ngModel)]="addedData.provider">
+                <mat-label>Nhà cung cấp hoá đơn</mat-label>
+                <input matInput placeholder="Nhập Nhà cung cấp hoá đơn" [(ngModel)]="addedData.provider">
             </mat-form-field>
         </div>
         <div class="w-full flex">
@@ -50,7 +50,7 @@
                 <thead class="sticky top-0 z-10">
                     <tr>
                         <th class="text-left">Vật liệu</th>
-                        <th class="text-left">Đơn vị cung cấp</th>
+                        <th class="text-left">Nhà cung cấp</th>
                         <th class="text-left">Đơn giá</th>
                         <th class="text-left">Đơn vị tính</th>
                         <th class="text-left">Số lượng</th>
@@ -91,8 +91,8 @@
                         </td>
                         <td>
                             <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Đơn vị cung cấp</mat-label>
-                                <input matInput placeholder="Đơn vị cung cấp" [(ngModel)]="material.material.provider">
+                                <mat-label>Nhà cung cấp</mat-label>
+                                <input matInput placeholder="Nhà cung cấp" [(ngModel)]="material.material.provider">
                             </mat-form-field>
                         </td>
                         <td>
@@ -212,7 +212,7 @@
                     </th>
                     <th>
                         <div class="flex justify-between items-center">
-                            Đơn vị cung cấp
+                            Nhà cung cấp
                             <button mat-icon-button (click)="orderBy = 'provider'; isAsc = !isAsc">
                                 <span class="material-symbols-outlined text-gray-500"
                                     [ngClass]="{'text-white': orderBy === 'provider'}">
@@ -282,7 +282,7 @@
                                             <th class="text-left">Vật liệu</th>
                                             <th class="text-left">Đơn giá</th>
                                             <th class="text-center">Số lượng</th>
-                                            <th class="text-center">Đơn vị cung cấp</th>
+                                            <th class="text-center">Nhà cung cấp</th>
                                             <th class="text-right">Thành tiền</th>
                                         </tr>
                                     </thead>
