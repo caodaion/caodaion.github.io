@@ -3,8 +3,8 @@
         <mat-form-field [appearance]="'outline'" class="w-full">
             <mat-label>Chọn ngày báo cáo</mat-label>
             <mat-date-range-input [rangePicker]="picker">
-                <input matStartDate [(ngModel)]="reportFromDate" placeholder="Từ ngày" (ngModelChange)="updateData()">
-                <input matEndDate [(ngModel)]="reportToDate" placeholder="Đến ngày" (ngModelChange)="updateData()">
+                <input matStartDate [(ngModel)]="reportFromDate" placeholder="Từ ngày" (dateChange)="updateData()">
+                <input matEndDate [(ngModel)]="reportToDate" placeholder="Đến ngày" (dateChange)="updateData()">
             </mat-date-range-input>
             <mat-hint>Từ ngày – Đến ngày</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -22,7 +22,8 @@
             <table class="w-full">
                 <thead>
                     <tr>
-                        <th [colSpan]="6" class="text-center font-bold text-xl border-none">BÁO CÁO VẬT TƯ CHI TIẾT</th>
+                        <th [colSpan]="6" class="text-center font-bold text-xl border-none">BÁO CÁO NHẬP VẬT TƯ CHI TIẾT
+                        </th>
                     </tr>
                     <tr>
                         <th class="text-left font-bold text-lg border-none">Từ ngày</th>
@@ -55,7 +56,7 @@
                                     <td class="text-left">{{material?.material?.name}}</td>
                                     <td class="text-center">{{material?.number}}</td>
                                     <td class="text-center">{{material?.material?.unit}}</td>
-                                    <td class="text-right">{{material?.material?.price}}</td>
+                                    <td class="text-right">{{material?.material?.price | currency: 'VND'}}</td>
                                     <td class="text-right">{{material?.totalPrice | currency: 'VND'}}</td>
                                 </tr>
                             </ng-container>
@@ -67,14 +68,64 @@
                     </ng-container>
                     <tr>
                         <td [colSpan]="5" class="font-bold text-xl text-right">TỔNG CỘNG:</td>
-                        <td class="font-bold text-xl text-right">{{totalReport | currency: 'VND'}}</td>
+                        <td class="font-bold text-xl text-right">{{totalImportReport | currency: 'VND'}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </mat-tab>
-    <mat-tab
-        [label]="'VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
-        
+    <mat-tab [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
+        <div class="w-full p-3">
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th [colSpan]="5" class="text-center font-bold text-xl border-none">BÁO CÁO LOẠI VẬT TƯ</th>
+                    </tr>
+                    <tr>
+                        <th class="text-left font-bold text-lg border-none">Từ ngày</th>
+                        <th class="text-left border-none">{{reportFromDate | date: 'dd/MM/YYYY'}}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-left font-bold text-lg border-none">Đến ngày</th>
+                        <th class="text-left border-none">{{reportToDate | date: 'dd/MM/YYYY'}}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Hoá đơn</th>
+                        <th class="text-center">Ngày</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-right">Đơn giá</th>
+                        <th class="text-right">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let item of materialTypeData">
+                        <tr>
+                            <td [colSpan]="2" class="font-bold">{{item?.name}}</td>
+                            <td [colSpan]="4">Đơn vị tính: {{item?.unit}}</td>
+                        </tr>
+                        <ng-container *ngFor="let priceMaterial of item?.materialPrice">
+                            <tr>
+                                <td class="text-center">{{priceMaterial?.billId}}</td>
+                                <td class="text-center">{{priceMaterial?.logFrom | date: 'dd/MM/YYYY'}}</td>
+                                <td class="text-center">{{priceMaterial?.number}}</td>
+                                <td class="text-right">{{priceMaterial?.material?.price | currency: 'VND'}}</td>
+                                <td class="text-right">{{priceMaterial?.totalPrice | currency: 'VND'}}</td>
+                            </tr>
+                        </ng-container>
+                        <tr>
+                            <td [colSpan]="2" class="font-bold text-right">Tổng cộng:</td>
+                            <td class="font-bold text-center">{{item?.totalMaterialCount}}</td>
+                            <td></td>
+                            <td class="font-bold text-right">{{item?.totalMaterialPrice | currency: 'VND'}}</td>
+                        </tr>
+                    </ng-container>
+                    <tr>
+                        <td [colSpan]="2" class="font-bold text-xl text-right">TỔNG CỘNG:</td>
+                        <td [colSpan]="2"></td>
+                        <td class="font-bold text-xl text-right">{{totalMaterialReport | currency: 'VND'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </mat-tab>
 </mat-tab-group>

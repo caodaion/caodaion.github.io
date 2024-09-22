@@ -121,21 +121,25 @@ export class DienThoPhatMauService {
                       material.material = itemMaterial
                     }
                   });
+                })                
+                updatedPrice?.forEach((priceItem: any) => {
+                  const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)                  
+                  if (foundUpdatedPrice) {
+                    price[price.indexOf(foundUpdatedPrice)] = priceItem
+                  }
+                })                
+                updatedBill?.forEach((billItem: any) => {
+                  const foundUpdatedBill = data?.find((ub: any) => ub?.key === billItem?.key)
+                  if (foundUpdatedBill) {
+                    billItem?.materials?.forEach((material: any) => {
+                      if (typeof material?.material?.key === 'string') {
+                        const itemMaterial = price?.find((priceItem: any) => priceItem?.key === material?.material?.key)
+                        material.material = itemMaterial
+                      }
+                    });
+                    data[data.indexOf(foundUpdatedBill)] = billItem
+                  }
                 })
-                setTimeout(() => {
-                  updatedPrice?.forEach((priceItem: any) => {
-                    const foundUpdatedPrice = price?.find((up: any) => up?.key === priceItem?.key)
-                    if (foundUpdatedPrice) {
-                      price[price.indexOf(foundUpdatedPrice)] = priceItem
-                    }
-                  })
-                  updatedBill?.forEach((billItem: any) => {
-                    const foundUpdatedBill = data?.find((ub: any) => ub?.key === billItem?.key)
-                    if (foundUpdatedBill) {
-                      data[data.indexOf(foundUpdatedBill)] = billItem
-                    }
-                  })
-                }, 0);
                 deletedBill?.forEach((billItem: any) => {
                   data = data?.filter((db: any) => db?.key !== billItem?.key)
                 })
@@ -174,15 +178,18 @@ export class DienThoPhatMauService {
     })
   }
 
-  exportToExcel(dateRange: any): Observable<any> {
+  exportToExcel(exportData: any): Observable<any> {
+    console.log(exportData);
+
     return new Observable((observable: any) => {
       const dienThoPhatMauExportedWorkbook = new Workbook()
-      this.materialImportSummaryReportWorkSheet(dienThoPhatMauExportedWorkbook, dateRange)
+      this.materialImportSummaryReportWorkSheet(dienThoPhatMauExportedWorkbook, exportData)
+      this.materialTypeSheet(dienThoPhatMauExportedWorkbook, exportData)
 
       // DOWNLOAD FILE
       dienThoPhatMauExportedWorkbook.xlsx.writeBuffer().then((data: any) => {
         const blob = new Blob([data], { type: this.EXCEL_TYPE })
-        fs.saveAs(blob, `${this.datePipe.transform(dateRange.dateFrom, 'dd-MM-yy')}_${this.datePipe.transform(dateRange.dateTo, 'dd-MM-yy')}${this.EXCEL_EXTENSION}`);
+        fs.saveAs(blob, `${this.datePipe.transform(exportData.dateFrom, 'dd-MM-yy')}_${this.datePipe.transform(exportData.dateTo, 'dd-MM-yy')}${this.EXCEL_EXTENSION}`);
         const response = {
           code: 200
         }
@@ -193,8 +200,8 @@ export class DienThoPhatMauService {
     })
   }
 
-  materialImportSummaryReportWorkSheet(dienThoPhatMauExportedWorkbook: Workbook, dateRange: any) {
-    const sheetLabel = `CHI TIẾT (${this.datePipe.transform(dateRange.dateFrom, 'dd-MM-YY')}-${this.datePipe.transform(dateRange.dateTo, 'dd-MM-YY')})`
+  materialImportSummaryReportWorkSheet(dienThoPhatMauExportedWorkbook: Workbook, exportData: any) {
+    const sheetLabel = `CHI TIẾT (${this.datePipe.transform(exportData.dateFrom, 'dd-MM-YY')}-${this.datePipe.transform(exportData.dateTo, 'dd-MM-YY')})`
     const startCol = `A`
     const defaultFontSize = 14
     const colCount = 6 - (1) // minus 1 because index from 0
@@ -206,15 +213,15 @@ export class DienThoPhatMauService {
     dailyReportWorkSheet.getCell('A1').alignment = { horizontal: 'center' }
     dailyReportWorkSheet.getCell('A1').font = { size: 18, bold: true }
     // Date Range
-    const lunarDateFrom = this.calendarService.getConvertedFullDate(dateRange.dateFrom)
+    const lunarDateFrom = this.calendarService.getConvertedFullDate(exportData.dateFrom)
     dailyReportWorkSheet.getCell('A2').value = `Từ ngày: `
     dailyReportWorkSheet.getCell('A2').font = { size: defaultFontSize, bold: true }
-    dailyReportWorkSheet.getCell('B2').value = `${this.datePipe.transform(dateRange.dateFrom, 'dd-MM-YYYY')} (${lunarDateFrom.convertSolar2Lunar.lunarDay}-${lunarDateFrom.convertSolar2Lunar.lunarMonth}-${lunarDateFrom.convertSolar2Lunar.lunarYearName})`
+    dailyReportWorkSheet.getCell('B2').value = `${this.datePipe.transform(exportData.dateFrom, 'dd-MM-YYYY')} (${lunarDateFrom.convertSolar2Lunar.lunarDay}-${lunarDateFrom.convertSolar2Lunar.lunarMonth}-${lunarDateFrom.convertSolar2Lunar.lunarYearName})`
     dailyReportWorkSheet.getCell('B2').font = { size: defaultFontSize, }
-    const lunarDateTo = this.calendarService.getConvertedFullDate(dateRange.dateTo)
+    const lunarDateTo = this.calendarService.getConvertedFullDate(exportData.dateTo)
     dailyReportWorkSheet.getCell('A3').value = `Đến ngày: `
     dailyReportWorkSheet.getCell('A3').font = { size: defaultFontSize, bold: true }
-    dailyReportWorkSheet.getCell('B3').value = `${this.datePipe.transform(dateRange.dateTo, 'dd-MM-YYYY')} (${lunarDateTo.convertSolar2Lunar.lunarDay}-${lunarDateTo.convertSolar2Lunar.lunarMonth}-${lunarDateTo.convertSolar2Lunar.lunarYearName})`
+    dailyReportWorkSheet.getCell('B3').value = `${this.datePipe.transform(exportData.dateTo, 'dd-MM-YYYY')} (${lunarDateTo.convertSolar2Lunar.lunarDay}-${lunarDateTo.convertSolar2Lunar.lunarMonth}-${lunarDateTo.convertSolar2Lunar.lunarYearName})`
     dailyReportWorkSheet.getCell('B3').font = { size: defaultFontSize, }
     // Table Head
     const tableHeadSetting = [
@@ -363,22 +370,7 @@ export class DienThoPhatMauService {
     // Frozen from A row to E row
     dailyReportWorkSheet.views = [{ state: 'frozen', ySplit: 4, activeCell: 'A1' }];
     // GET DATA
-    const materialImportSummaryData = <any>[]
-    const filteredData = this.dienThoPhatMau
-      ?.filter((item: any) => new Date(item.logFrom) <= dateRange.dateTo && new Date(item.logFrom) >= dateRange.dateFrom)
-      ?.sort((a: any, b: any) => new Date(a?.logFrom) < new Date(b?.logFrom) ? -1 : 1)
-    filteredData?.forEach((item: any) => {
-      const foundDate = materialImportSummaryData.find((ed: any) => ed?.logFrom === item.logFrom)
-      if (foundDate) {
-        foundDate.bills.push(item)
-      } else {
-        materialImportSummaryData.push({
-          logFrom: item?.logFrom,
-          bills: <any>[item]
-        })
-      }
-    })
-    materialImportSummaryData?.forEach((item: any) => {
+    exportData?.materialImportSummarySheet?.materialImportSummaryData?.forEach((item: any) => {
       // Date Row
       const rowLunarDate = this.calendarService.getConvertedFullDate(new Date(item?.logFrom)).convertSolar2Lunar
       const dateRow = dailyReportWorkSheet.addRow([`Ngày ${this.datePipe.transform(new Date(item?.logFrom), 'dd/MM/YYYY')} (${rowLunarDate.lunarDay}/${rowLunarDate.lunarMonth}/${rowLunarDate.lunarYearName})`])
@@ -434,15 +426,13 @@ export class DienThoPhatMauService {
         dailyReportWorkSheet.getCell(billRow?.address).alignment = { horizontal: 'center', vertical: 'middle' }
         dailyReportWorkSheet.getCell(billRow?.address).font = { size: defaultFontSize }
       })
-      const totalPriceDate = item?.bills?.map((bi: any) => bi?.billToTalPrice)?.reduce((a: any, b: any) => a + b, 0)
-      item.totalPriceDate = totalPriceDate
       const totalDateRow = dailyReportWorkSheet.addRow([
         'Tổng cộng:'
       ])
       totalDateRow.font = { size: defaultFontSize, bold: true }
       totalDateRow.alignment = { horizontal: 'right' }
       dailyReportWorkSheet.mergeCells(`${totalDateRow.findCell(1)?.address}`, `${String.fromCharCode(colCount - 1 + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`)
-      dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(totalPriceDate, 'VND')?.replace('₫', '')
+      dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(item.totalPriceDate, 'VND')?.replace('₫', '')
       totalDateRow.eachCell((cell: any) => {
         cell.border = {
           top: {
@@ -468,7 +458,7 @@ export class DienThoPhatMauService {
       'TỔNG CỘNG',
     ])
     dailyReportWorkSheet.mergeCells(`${reportTotalPriceRow.findCell(1)?.address}`, `${String.fromCharCode(colCount - 1 + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`)
-    dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(materialImportSummaryData?.map((ed: any) => ed?.totalPriceDate).reduce((a: any, b: any) => a + b, 0), 'VND')?.replace('₫', '')
+    dailyReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(exportData?.materialImportSummarySheet?.materialImportSummaryData?.map((ed: any) => ed?.totalPriceDate).reduce((a: any, b: any) => a + b, 0), 'VND')?.replace('₫', '')
     reportTotalPriceRow.font = { bold: true, size: 18 }
     reportTotalPriceRow.alignment = { horizontal: 'right' }
     reportTotalPriceRow.eachCell((cell: any) => {
@@ -481,6 +471,264 @@ export class DienThoPhatMauService {
     })
     // pageSetup
     dailyReportWorkSheet.pageSetup = {
+      fitToPage: true,
+      fitToHeight: colCount + 1, // plus 1 because index from 1
+      paperSize: 9,
+      margins: {
+        top: 0.64,
+        left: 0.64,
+        bottom: 0.64,
+        right: 0.64,
+        header: 0.64,
+        footer: 0.64,
+      }
+    }
+  }
+
+  materialTypeSheet(dienThoPhatMauExportedWorkbook: Workbook, exportData: any) {
+    const sheetLabel = `LOẠI VẬT TƯ (${this.datePipe.transform(exportData.dateFrom, 'dd-MM-YY')}-${this.datePipe.transform(exportData.dateTo, 'dd-MM-YY')})`
+    const startCol = `A`
+    const defaultFontSize = 14
+    const colCount = 5 - (1) // minus 1 because index from 0
+    const endCol = String.fromCharCode(colCount + 'A'.charCodeAt(0))
+    const materialReportWorkSheet = dienThoPhatMauExportedWorkbook.addWorksheet(sheetLabel);
+    // REPORT TITLE
+    materialReportWorkSheet.mergeCells(`${startCol}1:${endCol}1`);
+    materialReportWorkSheet.getCell('A1').value = 'BÁO CÁO LOẠI VẬT TƯ'
+    materialReportWorkSheet.getCell('A1').alignment = { horizontal: 'center' }
+    materialReportWorkSheet.getCell('A1').font = { size: 18, bold: true }
+    // Date Range
+    const lunarDateFrom = this.calendarService.getConvertedFullDate(exportData.dateFrom)
+    materialReportWorkSheet.getCell('A2').value = `Từ ngày: `
+    materialReportWorkSheet.getCell('A2').font = { size: defaultFontSize, bold: true }
+    materialReportWorkSheet.getCell('B2').value = `${this.datePipe.transform(exportData.dateFrom, 'dd-MM-YYYY')} (${lunarDateFrom.convertSolar2Lunar.lunarDay}-${lunarDateFrom.convertSolar2Lunar.lunarMonth}-${lunarDateFrom.convertSolar2Lunar.lunarYearName})`
+    materialReportWorkSheet.getCell('B2').font = { size: defaultFontSize, }
+    const lunarDateTo = this.calendarService.getConvertedFullDate(exportData.dateTo)
+    materialReportWorkSheet.getCell('A3').value = `Đến ngày: `
+    materialReportWorkSheet.getCell('A3').font = { size: defaultFontSize, bold: true }
+    materialReportWorkSheet.getCell('B3').value = `${this.datePipe.transform(exportData.dateTo, 'dd-MM-YYYY')} (${lunarDateTo.convertSolar2Lunar.lunarDay}-${lunarDateTo.convertSolar2Lunar.lunarMonth}-${lunarDateTo.convertSolar2Lunar.lunarYearName})`
+    materialReportWorkSheet.getCell('B3').font = { size: defaultFontSize, }
+    // Table Head
+    const tableHeadSetting = [
+      {
+        label: 'Hoá đơn', width: 25,
+        alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
+        border: {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      },
+      {
+        label: 'Ngày', width: 20,
+        alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
+        border: {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      },
+      {
+        label: 'Số lượng', width: 15,
+        alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
+        border: {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      },
+      {
+        label: 'Đơn giá', width: 15,
+        alignment: { horizontal: 'right', vertical: 'middle', wrapText: true },
+        border: {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      },
+      {
+        label: 'Thành tiền', width: 25,
+        alignment: { horizontal: 'right', vertical: 'middle', wrapText: true },
+        border: {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      },
+    ]
+    const tableHeadRow = materialReportWorkSheet.addRow(tableHeadSetting?.map((cell: any) => cell?.label))
+    tableHeadRow.eachCell((cell: any, colNumber: number) => {
+      cell.font = { size: defaultFontSize, bold: true }
+      cell.alignment = tableHeadSetting[colNumber - 1].alignment
+      cell.border = tableHeadSetting[colNumber - 1].border
+    })
+    materialReportWorkSheet.columns?.forEach((col: any, index: any) => {
+      col.width = tableHeadSetting[index]?.width
+    })
+    // Frozen from A row to E row
+    materialReportWorkSheet.views = [{ state: 'frozen', ySplit: 4, activeCell: 'A1' }];
+    // GET DATA
+    exportData?.materialTypeSheet?.materialTypeData?.forEach((item: any) => {
+      // Date Row
+      const dateRow = materialReportWorkSheet.addRow([`${item?.name}`])
+      if (dateRow?.findCell(1)?.address) {
+        const rowNumber = parseInt(dateRow?.findCell(1)?.address?.replace(startCol, '') || '1')
+        materialReportWorkSheet.mergeCells(`${dateRow?.findCell(1)?.address}`, `${String.fromCharCode(1 + 'A'.charCodeAt(0))}${rowNumber}`)
+        materialReportWorkSheet.getCell(`${dateRow?.findCell(1)?.address}`).font = { bold: true, size: defaultFontSize }
+        materialReportWorkSheet.mergeCells(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`, `${endCol}${rowNumber}`)
+        materialReportWorkSheet.getCell(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`).value = `Đơn vị tính: ${item?.unit}`
+        materialReportWorkSheet.getCell(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`).font = { size: 14 }
+        materialReportWorkSheet.getCell(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`).alignment = { vertical: 'middle' }
+      }
+      dateRow.eachCell((cell: any) => {
+        cell.border = {
+          top: {
+            style: 'double',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'double',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'double',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'double',
+            color: { argb: '000000' }
+          },
+        }
+      })
+      // Date Details
+      item?.materialPrice?.forEach((materialPriceItem: any) => {
+        const materialPriceRow = materialReportWorkSheet.addRow([
+          materialPriceItem?.billId,
+          this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY'),
+          materialPriceItem?.number,
+          this.currencyPipe.transform(materialPriceItem?.material?.price, 'VND')?.replace('₫', ''),
+          this.currencyPipe.transform(materialPriceItem?.totalPrice, 'VND')?.replace('₫', ''),
+        ])
+        materialPriceRow.eachCell((cell: any, colNumber: number) => {
+          cell.font = { size: defaultFontSize }
+          cell.alignment = tableHeadSetting[colNumber - 1].alignment
+          cell.border = tableHeadSetting[colNumber - 1].border
+        })
+      })
+      const totalDateRow = materialReportWorkSheet.addRow([
+        'Tổng cộng:'
+      ])
+      totalDateRow.font = { size: defaultFontSize, bold: true }
+      totalDateRow.alignment = { horizontal: 'right' }
+      materialReportWorkSheet.mergeCells(`${totalDateRow.findCell(1)?.address}`, `${String.fromCharCode(1 + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`)
+      materialReportWorkSheet.getCell(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = item.totalMaterialCount
+      materialReportWorkSheet.getCell(`${String.fromCharCode(2 + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).alignment = {
+        horizontal: 'center'
+      }
+      materialReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${totalDateRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(item.totalMaterialPrice, 'VND')?.replace('₫', '')
+      totalDateRow.eachCell((cell: any) => {
+        cell.border = {
+          top: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          right: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          bottom: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+          left: {
+            style: 'thin',
+            color: { argb: '000000' }
+          },
+        }
+      })
+    })
+    const reportTotalPriceRow = materialReportWorkSheet.addRow([
+      'TỔNG CỘNG',
+    ])
+    materialReportWorkSheet.mergeCells(`${reportTotalPriceRow.findCell(1)?.address}`, `${String.fromCharCode(colCount - 1 + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`)
+    materialReportWorkSheet.getCell(`${String.fromCharCode(colCount + 'A'.charCodeAt(0))}${reportTotalPriceRow.findCell(1)?.address?.match(/\d+/g)}`).value = this.currencyPipe.transform(exportData?.materialImportSummarySheet?.materialImportSummaryData?.map((ed: any) => ed?.totalPriceDate).reduce((a: any, b: any) => a + b, 0), 'VND')?.replace('₫', '')
+    reportTotalPriceRow.font = { bold: true, size: 18 }
+    reportTotalPriceRow.alignment = { horizontal: 'right' }
+    reportTotalPriceRow.eachCell((cell: any) => {
+      cell.border = {
+        top: {
+          style: 'thin',
+          color: { argb: '000000' }
+        },
+      }
+    })
+    // pageSetup
+    materialReportWorkSheet.pageSetup = {
       fitToPage: true,
       fitToHeight: colCount + 1, // plus 1 because index from 1
       paperSize: 9,

@@ -93,7 +93,7 @@ export class BillComponent implements OnInit {
       <any>{ key: 'update-bill' }
     ]
     console.log(savedData);
-    
+
     savedData?.materials?.forEach((materialItem: any) => {
       const foundMaterial = this.rawPrice?.find((rp: any) => rp?.key === materialItem?.material?.key)
       if (parseFloat(materialItem?.material?.price) !== parseFloat(foundMaterial?.price) || materialItem?.material?.unit !== foundMaterial?.unit || materialItem?.material?.provider !== foundMaterial?.provider) {
@@ -153,9 +153,8 @@ export class BillComponent implements OnInit {
         item.totalPrice = parseFloat(item?.number) * parseFloat(item?.material?.price)
         billToTalPrice += item?.totalPrice || 0
       });
-      bill.billToTalPrice = billToTalPrice || 0
     }
-    return { 
+    return {
       billToTalPrice: billToTalPrice || 0,
       count: bill?.materials?.length
     };
@@ -185,8 +184,6 @@ export class BillComponent implements OnInit {
     if (material?.material && material?.number) {
       totalPrice = parseFloat(material?.material?.price) * parseFloat(material?.number)
     }
-    material.unitPrice = unitPrice
-    material.totalPrice = totalPrice
     return {
       unitPrice: unitPrice,
       totalPrice: totalPrice,

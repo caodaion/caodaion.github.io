@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { DienThoPhatMauService } from 'src/app/shared/services/dien-tho-phat-mau/dien-tho-phat-mau.service';
 import * as moment from 'moment';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
@@ -8,7 +8,7 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
-export class ReportComponent implements OnInit {
+export class ReportComponent implements AfterViewInit {
 
   @Input() setting: any;
   @Input() user: any;
@@ -17,7 +17,8 @@ export class ReportComponent implements OnInit {
 
   reportFromDate: any;
   reportToDate: any;
-  totalReport: any;
+  totalImportReport: any;
+  totalMaterialReport: any;
   materialImportSummaryData = <any>[]
   materialTypeData = <any>[]
   filteredData = <any>[]
@@ -30,60 +31,119 @@ export class ReportComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.reportFromDate = new Date(moment().startOf('month').format('YYYY-MM-DD'))
     this.reportToDate = new Date(moment().endOf('month').format('YYYY-MM-DD'))
     this.updateData();
   }
 
   updateData() {
-    this.filteredData = this.data
-      ?.filter((item: any) => new Date(item.logFrom) <= this.reportToDate && new Date(item.logFrom) >= this.reportFromDate)
-      ?.sort((a: any, b: any) => new Date(a?.logFrom) < new Date(b?.logFrom) ? -1 : 1)
-    console.log('%cthis.filteredData', 'font-size: 30px', this.filteredData);
-    this.updateMaterialImportSummaryData()
-    this.updateMaterialType()
+    if (this.reportToDate && this.reportFromDate) {
+      this.filteredData = this.data
+        ?.filter((item: any) => new Date(`${item.logFrom}`) <= new Date(new Date(this.reportToDate).setDate(new Date(this.reportToDate).getDate() + 1)) && new Date(`${item.logFrom}`) >= this.reportFromDate)
+        ?.sort((a: any, b: any) => new Date(a?.logFrom) < new Date(b?.logFrom) ? -1 : 1)
+      this.updateMaterialImportSummaryData()
+      this.updateMaterialType()
+    }
   }
 
   updateMaterialImportSummaryData() {
     this.materialImportSummaryData = <any>[]
     this.filteredData?.forEach((item: any) => {
-      item.lunar = this.calendarService.getConvertedFullDate(new Date(item.logFrom)).convertSolar2Lunar
-      const foundDate = this.materialImportSummaryData.find((ed: any) => ed?.logFrom === item.logFrom)
+      const pushData = JSON.parse(JSON.stringify(item))
+      pushData.lunar = this.calendarService.getConvertedFullDate(new Date(pushData.logFrom)).convertSolar2Lunar
+      const foundDate = this.materialImportSummaryData.find((ed: any) => ed?.logFrom === pushData.logFrom)
       if (foundDate) {
-        foundDate.bills.push(item)
+        foundDate.bills.push(pushData)
       } else {
         this.materialImportSummaryData.push({
-          logFrom: item?.logFrom,
-          lunar: item?.lunar,
-          bills: <any>[item]
+          logFrom: pushData?.logFrom,
+          lunar: pushData?.lunar,
+          bills: <any>[pushData]
         })
       }
     })
     this.materialImportSummaryData.forEach((item: any) => {
       item.totalPriceDate = item?.bills?.map((bi: any) => bi?.billToTalPrice)?.reduce((a: any, b: any) => a + b, 0)
     });
-    console.log(this.materialImportSummaryData);
-    this.totalReport = this.materialImportSummaryData?.map((bi: any) => bi?.totalPriceDate)?.reduce((a: any, b: any) => a + b, 0)
+    this.totalImportReport = this.materialImportSummaryData?.map((bi: any) => bi?.totalPriceDate)?.reduce((a: any, b: any) => a + b, 0)
   }
 
   updateMaterialType() {
     this.materialTypeData = <any>[]
-    console.log(this.materialTypeData);
+    const priceList = <any>[]
+    this.filteredData?.forEach((item: any) => {
+      item?.materials?.forEach((material: any) => {
+        priceList.push(<any>{
+          name: material?.material?.name
+        })
+      })
+    })    
+    priceList?.forEach((priceItem: any) => {
+      const foundPriceMaterial = this.materialTypeData?.find((mtd: any) => mtd?.name === priceItem?.name)
+      if (!foundPriceMaterial) {
+        let matchMaterialPrice = <any>[]
+        this.filteredData?.forEach((fd: any) => {
+          const pushFilter = JSON.parse(JSON.stringify(fd))
+          const materialPrice = pushFilter?.materials?.filter((fdm: any) => fdm?.material?.name === priceItem?.name)
+          if (materialPrice?.length > 0) {
+            materialPrice?.forEach((mpfd: any) => {
+              const pushData: any = JSON.parse(JSON.stringify(mpfd))
+              pushData.billId = pushFilter?.id;
+              pushData.logFrom = pushFilter?.logFrom;
+              matchMaterialPrice.push(pushData)
+            })
+          }
+        })
+        if (matchMaterialPrice?.length > 0) {
+          this.materialTypeData.push(<any>{
+            name: priceItem?.name,
+            unit: priceItem?.unit,
+            materialPrice: matchMaterialPrice
+          })
+        }
+      }
+    })
+    this.materialTypeData?.forEach((item: any) => {
+      if (!item?.totalMaterialCount) {
+        item.totalMaterialCount = 0
+      }
+      if (!item?.totalMaterialPrice) {
+        item.totalMaterialPrice = 0
+      }
+
+      item?.materialPrice?.forEach((imp: any) => {
+        item.totalMaterialPrice += imp?.totalPrice
+        item.totalMaterialCount += parseFloat(imp?.number)
+      })
+    })
+    this.totalMaterialReport = this.materialTypeData?.map((bi: any) => bi?.totalMaterialPrice)?.reduce((a: any, b: any) => a + b, 0)
   }
 
   onExportToExcel() {
-    this.dienThoPhatMauService.exportToExcel({ dateFrom: this.reportFromDate, dateTo: this.reportToDate }).subscribe({
-      next: (res: any) => {
-        console.log(res);
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-      complete: () => {
-        console.info('complete')
-      }
-    })
+    this.dienThoPhatMauService.exportToExcel(
+      {
+        dateFrom: this.reportFromDate,
+        dateTo: this.reportToDate,
+        materialImportSummarySheet: {
+          materialImportSummaryData: this.materialImportSummaryData,
+          totalImportReport: this.totalImportReport,
+        },
+        materialTypeSheet: {
+          materialTypeData: this.materialTypeData,
+          totalMaterialReport: this.totalMaterialReport,
+        },
+      }).subscribe({
+        next: (res: any) => {
+          console.log(res);
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {
+          console.info('complete')
+        }
+      })
 
   }
 }
