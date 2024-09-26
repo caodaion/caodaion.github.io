@@ -19,7 +19,7 @@
     <mat-tab
         [label]="'CHI TIẾT ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
         <div class="w-full p-3">
-            <table class="w-full">
+            <table class="w-full select-text">
                 <thead>
                     <tr>
                         <th [colSpan]="6" class="text-center font-bold text-xl border-none">BÁO CÁO NHẬP VẬT TƯ CHI TIẾT
@@ -76,7 +76,7 @@
     </mat-tab>
     <mat-tab [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
         <div class="w-full p-3">
-            <table class="w-full">
+            <table class="w-full select-text">
                 <thead>
                     <tr>
                         <th [colSpan]="5" class="text-center font-bold text-xl border-none">BÁO CÁO LOẠI VẬT TƯ</th>

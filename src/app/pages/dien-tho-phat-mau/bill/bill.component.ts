@@ -146,12 +146,12 @@ export class BillComponent implements OnInit {
     let billToTalPrice = 0
     if (!bill) {
       this.addedData?.materials?.forEach((item: any) => {
-        billToTalPrice += item?.totalPrice || 0
+        billToTalPrice += this.getMaterialData(item)?.totalPrice || 0
       });
     } else {
       bill?.materials?.forEach((item: any) => {
         item.totalPrice = parseFloat(item?.number) * parseFloat(item?.material?.price)
-        billToTalPrice += item?.totalPrice || 0
+        billToTalPrice += this.getMaterialData(item)?.totalPrice || 0
       });
     }
     return {
