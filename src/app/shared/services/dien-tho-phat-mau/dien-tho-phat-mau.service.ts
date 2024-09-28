@@ -406,11 +406,14 @@ export class DienThoPhatMauService {
           const materialRow = dailyReportWorkSheet.addRow([
             '',
             materialItem?.material?.name,
-            materialItem?.number,
+            parseFloat(materialItem?.number),
             materialItem?.material?.unit,
-            this.currencyPipe.transform(materialItem?.material?.price, 'VND')?.replace('₫', ''),
-            this.currencyPipe.transform(materialItem?.totalPrice, 'VND')?.replace('₫', ''),
+            parseFloat(materialItem?.material?.price),
+            parseFloat(materialItem?.totalPrice),
           ])
+          dailyReportWorkSheet.getColumn(3).numFmt = '#,##0.00'
+          dailyReportWorkSheet.getColumn(5).numFmt = '[$-vi-VN]#,##0'
+          dailyReportWorkSheet.getColumn(6).numFmt = '[$-vi-VN]#,##0'
           if (materialIndex === 0) {
             billRow = materialRow?.findCell(1)
           }
@@ -670,10 +673,13 @@ export class DienThoPhatMauService {
         const materialPriceRow = materialReportWorkSheet.addRow([
           materialPriceItem?.billId,
           this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY'),
-          materialPriceItem?.number,
-          this.currencyPipe.transform(materialPriceItem?.material?.price, 'VND')?.replace('₫', ''),
-          this.currencyPipe.transform(materialPriceItem?.totalPrice, 'VND')?.replace('₫', ''),
+          parseFloat(materialPriceItem?.number),
+          parseFloat(materialPriceItem?.material?.price),
+          parseFloat(materialPriceItem?.totalPrice),
         ])
+        materialReportWorkSheet.getColumn(4).numFmt = '#,##0.00'
+        materialReportWorkSheet.getColumn(4).numFmt = '[$-vi-VN]#,##0'
+        materialReportWorkSheet.getColumn(5).numFmt = '[$-vi-VN]#,##0'
         materialPriceRow.eachCell((cell: any, colNumber: number) => {
           cell.font = { size: defaultFontSize }
           cell.alignment = tableHeadSetting[colNumber - 1].alignment

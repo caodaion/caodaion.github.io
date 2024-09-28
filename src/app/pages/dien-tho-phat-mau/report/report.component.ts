@@ -75,11 +75,12 @@ export class ReportComponent implements AfterViewInit {
     this.filteredData?.forEach((item: any) => {
       item?.materials?.forEach((material: any) => {
         priceList.push(<any>{
-          name: material?.material?.name
+          name: material?.material?.name,
+          unit: material?.material?.unit,
         })
       })
     })    
-    priceList?.forEach((priceItem: any) => {
+    priceList?.forEach((priceItem: any) => {      
       const foundPriceMaterial = this.materialTypeData?.find((mtd: any) => mtd?.name === priceItem?.name)
       if (!foundPriceMaterial) {
         let matchMaterialPrice = <any>[]
@@ -116,7 +117,7 @@ export class ReportComponent implements AfterViewInit {
         item.totalMaterialPrice += imp?.totalPrice
         item.totalMaterialCount += parseFloat(imp?.number)
       })
-    })
+    })    
     this.totalMaterialReport = this.materialTypeData?.map((bi: any) => bi?.totalMaterialPrice)?.reduce((a: any, b: any) => a + b, 0)
   }
 
