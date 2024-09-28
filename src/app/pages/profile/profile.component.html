@@ -16,7 +16,7 @@
     </div>
   </div>
   <div>
-    <div class="block lg:flex" *ngIf="!currentUser.isGuest">
+    <!-- <div class="block lg:flex" *ngIf="!currentUser.isGuest">
       <div class="w-full">
         <div class="text-2xl text-center">
           Mã QR đăng nhập/đồng bộ tài khoản
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div *ngIf="currentUser.isGuest">
       <button mat-flat-button [color]="'warn'" class="w-full" (click)="activeAccount()">
         KÍCH HOẠT

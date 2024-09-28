@@ -21,7 +21,8 @@ import { EventService } from 'src/app/shared/services/event/event.service';
 import * as CryptoJS from "crypto-js";
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { NgxCaptureService } from 'ngx-capture';
+import html2canvas from 'html2canvas-pro';
+
 
 @Component({
   selector: 'app-lunar-calendar',
@@ -83,7 +84,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private decimal: DecimalPipe,
     private matBottomSheet: MatBottomSheet,
-    private captureService: NgxCaptureService,
     private authService: AuthService
   ) {
   }
@@ -1017,7 +1017,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         this.shareItem.id = this.shareItem.time
       }
       const selectedEvent = this.shareItem.options?.find((item: any) => item.key == this.shareItem.time)
-      this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name      
+      this.shareItem.name = selectedEvent?.data?.name || this.shownDate.event?.event?.name
       this.shareItem.targetEvent = selectedEvent?.data?.name || `${this.lunarTimeZone?.find((item: any) => item?.name?.includes(this.shareItem?.date?.event[0]?.event?.eventLunar?.lunarTime))?.name} (${this.shareItem.time?.time})`
       if (selectedEvent?.data?.name.includes(this.shareItem.name)) {
         this.shareItem.targetEvent = null
@@ -1059,43 +1059,18 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.downloading = true
       const saveItem = document.getElementById(element.id)
-      this.captureService
-        //@ts-ignore
-        .getImage(saveItem, true)
-        .pipe(
-          tap((img: string) => {
-            // converts base 64 encoded image to blobData
-            let blobData = this.convertBase64ToBlob(img)
-            // saves as image
-            const blob = new Blob([blobData], { type: "image/png" })
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement("a")
-            link.href = url
-            // name of the file
-            link.download = `${element?.id?.toString()?.replace('.', '_')}`
-            link.click()
-            this.downloading = false
-          })
-        )
-        .subscribe();
+      if (saveItem) {
+        html2canvas(saveItem).then((canvas) => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `${this.commonService.generatedSlug(element.id)}.png`;
+          link.click();
+          this.downloading = false
+        }).catch((error: any) => {
+          this.downloading = false
+        });
+      }
     }, 0)
-  }
-
-  private convertBase64ToBlob(Base64Image: string) {
-    // split into two parts
-    const parts = Base64Image.split(";base64,")
-    // hold the content type
-    const imageType = parts[0].split(":")[1]
-    // decode base64 string
-    const decodedData = window.atob(parts[1])
-    // create unit8array of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length)
-    // insert all character code into uint8array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i)
-    }
-    // return blob image after conversion
-    return new Blob([uInt8Array], { type: imageType })
   }
 
   vegetarianDay: any;

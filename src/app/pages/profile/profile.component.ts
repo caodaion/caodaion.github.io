@@ -124,13 +124,13 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           }
           if (qrData?.length >= 350) {
             try {
-              this.tinyUrlService.shortenUrl(qrData)
-                .subscribe((res: any) => {
-                  if (res.code === 0) {
-                    this.qrData = res?.data?.tiny_url
-                    resolve()
-                  }
-                })
+              // this.tinyUrlService.shortenUrl(qrData)
+              //   .subscribe((res: any) => {
+              //     if (res.code === 0) {
+              //       this.qrData = res?.data?.tiny_url
+              //       resolve()
+              //     }
+              //   })
             } catch (e) {
               console.log(e)
               rejects()

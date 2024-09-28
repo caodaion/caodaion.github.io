@@ -5,9 +5,9 @@ import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
 import { SYNCTYPES } from 'src/app/shared/constants/master-data/sync.constant';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
-import { NgxCaptureService } from 'ngx-capture';
 import { Observable, tap } from 'rxjs';
 import * as QRCode from 'qrcode'
+import html2canvas from 'html2canvas-pro';
 
 
 @Component({
@@ -43,8 +43,7 @@ export class QrGeneratorComponent implements OnInit {
   constructor(
     private tinyUrlService: TinyUrlService,
     private _snackBar: MatSnackBar,
-    private commonService: CommonService,
-    private captureService: NgxCaptureService
+    private commonService: CommonService
   ) {
   }
 
@@ -147,26 +146,18 @@ export class QrGeneratorComponent implements OnInit {
   saveAsImage(element: any) {
     setTimeout(() => {
       this.downloading = true
-      const saveItem = document.getElementById(element?.id)
-      this.captureService
-        //@ts-ignore
-        .getImage(saveItem, true)
-        .pipe(
-          tap((img: string) => {
-            // converts base 64 encoded image to blobData
-            let blobData = this.convertBase64ToBlob(img)
-            // saves as image
-            const blob = new Blob([blobData], { type: "image/png" })
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement("a")
-            link.href = url
-            // name of the file            
-            link.download = `${element?.id?.toString()?.replace('.', '_')}`
-            link.click()
-            this.downloading = false
-          })
-        )
-        .subscribe();
+      const saveItem = document.getElementById(element.id)
+      if (saveItem) {
+        html2canvas(saveItem).then((canvas) => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `${this.commonService.generatedSlug(element.id)}.png`;
+          link.click();
+          this.downloading = false
+        }).catch((error: any) => {
+          this.downloading = false
+        });
+      }
     }, 0)
   }
 

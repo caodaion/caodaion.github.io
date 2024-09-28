@@ -11,11 +11,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
-import { NgxCaptureService } from 'ngx-capture';
 import { tap } from 'rxjs';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { LocationService } from 'src/app/shared/services/location/location.service';
 import * as QRCode from 'qrcode'
+import html2canvas from 'html2canvas-pro';
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -105,7 +105,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private decimalPipe: DecimalPipe,
     private matBottomSheet: MatBottomSheet,
     private breakpointObserver: BreakpointObserver,
-    private captureService: NgxCaptureService,
     private locationService: LocationService
   ) {
 
@@ -484,25 +483,17 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.downloading = true
       const saveItem = document.getElementById(element.id)
-      this.captureService
-        //@ts-ignore
-        .getImage(saveItem, true)
-        .pipe(
-          tap((img: string) => {
-            // converts base 64 encoded image to blobData
-            let blobData = this.convertBase64ToBlob(img)
-            // saves as image
-            const blob = new Blob([blobData], { type: "image/png" })
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement("a")
-            link.href = url
-            // name of the file
-            link.download = `${element.id}`
-            link.click()
-            this.downloading = false
-          })
-        )
-        .subscribe();
+      if (saveItem) {
+        html2canvas(saveItem).then((canvas) => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `${this.commonService.generatedSlug(element.id)}.png`;
+          link.click();
+          this.downloading = false
+        }).catch((error: any) => {
+          this.downloading = false
+        });
+      }
     }, 0)
   }
 
