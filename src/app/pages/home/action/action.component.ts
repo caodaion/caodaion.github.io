@@ -46,11 +46,11 @@ export class ActionComponent implements OnInit {
       icon: 'receipt_long',
       label: 'Hành Lễ'
     },
-    {
-      link: '/100',
-      icon: 'money',
-      label: '100'
-    },
+    // {
+    //   link: '/100',
+    //   icon: 'money',
+    //   label: '100'
+    // },
     {
       link: '/caodai100',
       icon: 'money',

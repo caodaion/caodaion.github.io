@@ -207,7 +207,7 @@ export class CommonService {
       let lunar = ''
       switch (num) {
         case 1:
-          lunar = 'Nhất'
+          lunar = 'Nhứt'
           break;
         case 2:
           lunar = 'Nhị'
@@ -242,7 +242,7 @@ export class CommonService {
       return lunar
     }
     const convertNumber = (n: any) => {
-      const decimalSeparator = ['ức', 'thập vạn', 'vạn', 'thiên', 'bách', 'thập']
+      const decimalSeparator = ['ức', 'thập vạn', 'vạn', 'thiên', 'bá', 'thập']
       const splitValue = n.toString().trim().split('')
       let returnValue = ''
       for (let index = decimalSeparator.length - 1; index >= splitValue.length; index--) {
