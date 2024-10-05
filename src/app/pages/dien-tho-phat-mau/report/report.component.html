@@ -74,7 +74,16 @@
             </table>
         </div>
     </mat-tab>
-    <mat-tab [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
+    <mat-tab
+        [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
+        <div class="flex flex-wrap p-3">
+            <mat-form-field [appearance]="'outline'" class="w-full">
+                <mat-label>Chọn loại vật tư</mat-label>
+                <mat-select [(ngModel)]="filterByMaterial" [multiple]="true" (selectionChange)="updateMaterialType()">
+                    <mat-option *ngFor="let item of filteredDataPrice" [value]="item">{{item}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
         <div class="w-full p-3">
             <table class="w-full select-text">
                 <thead>

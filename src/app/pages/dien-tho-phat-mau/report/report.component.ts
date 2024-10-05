@@ -22,6 +22,7 @@ export class ReportComponent implements AfterViewInit {
   materialImportSummaryData = <any>[]
   materialTypeData = <any>[]
   filteredData = <any>[]
+  filterByMaterial: any;
 
   constructor(
     private dienThoPhatMauService: DienThoPhatMauService,
@@ -68,18 +69,32 @@ export class ReportComponent implements AfterViewInit {
     });
     this.totalImportReport = this.materialImportSummaryData?.map((bi: any) => bi?.totalPriceDate)?.reduce((a: any, b: any) => a + b, 0)
   }
-
+  filteredDataPrice: any;
   updateMaterialType() {
     this.materialTypeData = <any>[]
+    this.filteredDataPrice = <any>[]
     const priceList = <any>[]
     this.filteredData?.forEach((item: any) => {
       item?.materials?.forEach((material: any) => {
-        priceList.push(<any>{
-          name: material?.material?.name,
-          unit: material?.material?.unit,
-        })
+        if (!this.filteredDataPrice?.find((fdp: any) => fdp === material?.material?.name)) {
+          this.filteredDataPrice.push(material?.material?.name)
+        }
+        if (this.filterByMaterial?.length > 0) {
+          if (this.filterByMaterial?.includes(material?.material?.name)) {
+            priceList.push(<any>{
+              name: material?.material?.name,
+              unit: material?.material?.unit,
+            })
+          }
+        } else {
+          priceList.push(<any>{
+            name: material?.material?.name,
+            unit: material?.material?.unit,
+          })
+        }
       })
-    })    
+    })
+    this.filteredDataPrice = this.filteredDataPrice?.filter((item: any) => !!item?.replaceAll(' ', ''))
     priceList?.forEach((priceItem: any) => {      
       const foundPriceMaterial = this.materialTypeData?.find((mtd: any) => mtd?.name === priceItem?.name)
       if (!foundPriceMaterial) {
@@ -145,6 +160,5 @@ export class ReportComponent implements AfterViewInit {
           console.info('complete')
         }
       })
-
   }
 }
