@@ -35,7 +35,7 @@
                 <div class="flex justify-center flex-col items-center w-full relative">
                     <div class="animate-pulse w-full lg:w-1/2 h-80 bg-slate-100 rounded-2xl" *ngIf="!section?.loaded">
                     </div>
-                    <img class="w-full lg:w-1/2 h-80 object-contain" [src]="section?.setting?.logo"
+                    <img loading="lazy" class="w-full lg:w-1/2 h-80 object-contain" [src]="section?.setting?.logo"
                         [alt]="section?.name" [ngStyle]="{
                             'opacity': section?.loaded ? '1' : '0',
                             'height': section?.loaded ? '320px' : '0'
@@ -66,7 +66,7 @@
                         </mat-form-field>
                     </ng-container>
                 </div>
-                <img *ngIf="gate?.setting?.image" [src]="gate?.setting?.image" [alt]="gate?.setting?.name"
+                <img loading="lazy" *ngIf="gate?.setting?.image" [src]="gate?.setting?.image" [alt]="gate?.setting?.name"
                     class="absolute top-0 right-0 bottom-0 left-0 h-full w-full object-cover object-center z-[-1] rounded-2xl">
             </div>
             <div class="my-4 lg:my-6">
@@ -75,7 +75,7 @@
                         *ngFor="let lesson of gate?.lesson">
                         <div class="w-20 lg:w-40 h-20 lg:h-40 rounded-full overflow-hidden bg-slate-100"
                             [ngClass]="{'bg-transparent': lesson?.setting?.loaded, 'animate-pulse': !lesson?.setting?.loaded}">
-                            <img *ngIf="lesson.setting.image" class="w-full h-full object-cover cursor-pointer"
+                            <img loading="lazy" *ngIf="lesson.setting.image" class="w-full h-full object-cover cursor-pointer"
                                 [routerLink]="gate?.key + '/' + lesson?.key" [src]="lesson.setting.image"
                                 [alt]="lesson?.setting?.name" [ngStyle]="{
                                     'opacity': lesson?.setting?.loaded ? '1' : '0'

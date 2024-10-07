@@ -389,7 +389,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     <p><strong>Quét mã QR ngay</strong> để đồng bộ lịch cúng ${item?.name}</p>
     </div>
     <div style="float: right; width: 45%; text-align: right">
-    <img src="${parentElement}" style="width: 80%; object-fit: contain; margin-top: 5px" />
+    <img loading="lazy" src="${parentElement}" style="width: 80%; object-fit: contain; margin-top: 5px" />
     </div>
     </div>`
     const writeContent = document.createElement('DIV');

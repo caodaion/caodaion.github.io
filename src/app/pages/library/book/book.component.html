@@ -43,9 +43,9 @@
                         class="hover:underline cursor-pointer">{{item?.name}}</mat-card-title>
                       <mat-card-subtitle class="hover:underline cursor-pointer">{{item?.author}}</mat-card-subtitle>
                     </mat-card-header>
-                    <img mat-card-image *ngIf="item?.cover" [src]="item?.cover" [alt]="item?.name"
+                    <img loading="lazy" mat-card-image *ngIf="item?.cover" [src]="item?.cover" [alt]="item?.name"
                       (click)="onItemFocus(item)" class="object-cover h-40 w-full cursor-pointer mt-3" />
-                    <img mat-card-image *ngIf="!item?.cover" (click)="onItemFocus(item)"
+                    <img loading="lazy" mat-card-image *ngIf="!item?.cover" (click)="onItemFocus(item)"
                       src="/assets/icons/assets/book-bookmark-minimalistic-svgrepo-com.svg"
                       class="object-contain h-40 w-full cursor-pointer mt-3" [alt]="item?.name" />
                     <mat-card-content>

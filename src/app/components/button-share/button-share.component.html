@@ -21,7 +21,7 @@
       </button>
     </mat-form-field>
     <div class="qr-area flex flex-col items-center">
-      <img #parent [src]="qrSharedUrl" class="w-[300px] h-[300px]">
+      <img loading="lazy" #parent [src]="qrSharedUrl" class="w-[300px] h-[300px]">
       <div class="text-center">
         <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
           <mat-icon>download</mat-icon> Tải Mã QR chia sẻ

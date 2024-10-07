@@ -186,10 +186,10 @@
               }}
             </div>
           </button>
-          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 15"
+          <img loading="lazy" *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 15"
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/full-moon.svg"
             alt="full-moon" [matTooltip]="'Vọng nhựt'">
-          <img *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1"
+          <img loading="lazy" *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1"
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/moon.svg" alt="moon"
             [matTooltip]="'Sóc nhựt'">
           <div class="text-xs p-1" *ngIf="filter.cn">
@@ -484,7 +484,7 @@
     <h3>Tải ảnh chia sẻ ngày ăn chay</h3>
     <div class="container-fluid text-center">
       <div #shareVegetarian [id]="vegetarianDay.d" class="min-w-[1200px] relative">
-        <img src="/assets/images/vegetarianDayFrame.png" alt="vegetarianDay">
+        <img loading="lazy" src="/assets/images/vegetarianDayFrame.png" alt="vegetarianDay">
         <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center flex-col">
           <div class="w-full">
             <h5 class="text-left ml-[33%]">Bạn đừng quên </h5>

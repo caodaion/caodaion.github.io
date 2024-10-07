@@ -83,7 +83,7 @@
                             <button mat-icon-button
                                 (click)="openInGTranslate(item)"><mat-icon>g_translate</mat-icon></button>
                             <button class="bg-transparent ms-4" (click)="openInCambridge(item)">
-                                <img class="h-[30px] w-[30px] rounded-full" src="assets/icons/assets/og-image.png"
+                                <img loading="lazy" class="h-[30px] w-[30px] rounded-full" src="assets/icons/assets/og-image.png"
                                     alt="og-image.png">
                             </button>
                         </div>
@@ -106,7 +106,7 @@
                                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                             </div>
                             <div class="w-full lg:w-1/2">
-                                <img *ngIf="item?.data?.image" [src]="item?.data?.image | safe"
+                                <img loading="lazy" *ngIf="item?.data?.image" [src]="item?.data?.image | safe"
                                     [alt]="item?.data?.text">
                             </div>
                         </div>

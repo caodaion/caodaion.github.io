@@ -337,7 +337,7 @@
       }})
     </p>
     <div class="qr-area flex flex-col items-center">
-        <img [style]="{width: '300px', height: '300px'}" #parent [src]="printedInfo?.qrData" alt="">
+        <img loading="lazy" [style]="{width: '300px', height: '300px'}" #parent [src]="printedInfo?.qrData" alt="">
       <div class="text-center">
         <button mat-raised-button color="primary" (click)="onPrint(printedInfo, parent)">
           <mat-icon>print</mat-icon> Xác nhận in

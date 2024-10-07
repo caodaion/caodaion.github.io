@@ -45,7 +45,7 @@
         <div *ngIf="!error && qrData && qrUrl" class="flex justify-center flex-col items-center">
           <div class="h-fit w-fit" #parentQR [id]="'CaoDaiON_QR'">
             <div class="h-fit w-fit border-[5px] rounded-2xl border-[black] mb-2">
-            <img #parent [src]="qrUrl" class="w-[300px] h-[300px] rounded-2xl">
+            <img loading="lazy" #parent [src]="qrUrl" class="w-[300px] h-[300px] rounded-2xl">
             </div>
             <div class="flex items-center justify-center flex-col pb-2">
               <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">

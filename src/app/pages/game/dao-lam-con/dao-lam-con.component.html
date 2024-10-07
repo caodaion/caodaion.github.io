@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="block lg:flex flex-wrap justify-around items-center mb-4">
-    <img
+    <img loading="lazy"
       src="/assets/game/dao-lam-con.jpg"
       alt="Đạo làm con"
       class="w-full lg:w-1/3"
@@ -17,22 +17,22 @@
         <span class="absolute right-0 text-3xl top-full">"</span>
       </blockquote>
     </div>
-    <img
+    <img loading="lazy"
       src="/assets/game/truoc-hieu-thuan.jpg"
       alt="Trước hiếu thuận"
       class="w-full lg:w-1/3"
     />
-    <img
+    <img loading="lazy"
       src="/assets/game/thuong-moi-nguoi.jpg"
       alt="Thương mọi người"
       class="w-full lg:w-1/3"
     />
-    <img
+    <img loading="lazy"
       src="/assets/game/ket-ban-tot.jpg"
       alt="Kết bạn tốt"
       class="w-full lg:w-1/3"
     />
-    <img
+    <img loading="lazy"
       src="/assets/game/hoc-tap-them.jpg"
       alt="Lại nỗ lực, học tập thêm."
       class="w-full lg:w-1/3"
@@ -45,7 +45,7 @@
         <div
           class="border w-full h-full p-3 rounded cursor-pointer overflow-hidden"
         >
-          <img [src]="item?.preview" [alt]="item?.subject" />
+          <img loading="lazy" [src]="item?.preview" [alt]="item?.subject" />
           <div class="content">{{ item?.subject }}</div>
         </div>
       </mat-grid-tile>

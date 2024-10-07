@@ -143,7 +143,7 @@
         </button>
     </div>
     <div class="text-xl mb-4">
-        <span>{{selectedMap?.name}}<img *ngIf="selectedMap?.caodaion" src="/assets/icons/assets/circle-logo.svg"
+        <span>{{selectedMap?.name}}<img loading="lazy" *ngIf="selectedMap?.caodaion" src="/assets/icons/assets/circle-logo.svg"
                 alt="circle-logo" class="h-4 inline-block border rounded-full ml-2"></span>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.address">

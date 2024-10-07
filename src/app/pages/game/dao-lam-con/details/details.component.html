@@ -30,14 +30,14 @@
   <div class="flex flex-col lg:flex-row">
     <div class="p-3 w-full lg:w-1/2 relative lg:sticky top-0 h-fit">
       <div class="preview">
-        <img
+        <img loading="lazy"
           [src]="article?.preview"
           [alt]="article?.subject"
           class="w-full object-contain"
         />
         <div class="flex flex-wrap">
           <ng-container *ngFor="let item of article?.images">
-            <img
+            <img loading="lazy"
               [src]="item.src"
               [alt]="article?.subject"
               class="w-1/6 lg:w-1/12 border-[3px] cursor-pointer rounded border-transparent"

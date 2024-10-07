@@ -180,7 +180,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
         className: 'caodaion relative',
-        html: `<img src="/assets/icons/assets/caodaion-pin.svg"/>
+        html: `<img loading="lazy" src="/assets/icons/assets/caodaion-pin.svg"/>
         <span class="absolute left-1/2 translate-x-[-50%]">CaoDaiON</span>`
       })
       return caoDaiONIcon
@@ -192,7 +192,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
         className: 'caodaion relative',
-        html: `<img class="w-[32px] h-[32px]" src="/assets/icons/assets/thanhSo-pin.svg"/>
+        html: `<img loading="lazy" class="w-[32px] h-[32px]" src="/assets/icons/assets/thanhSo-pin.svg"/>
         <span class="absolute left-1/2 translate-x-[-50%] w-max">${item?.name}</span>`
       })
       return thanhSoCaoDaiONIcon
@@ -203,7 +203,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
       iconAnchor: [16, 32],
       popupAnchor: [0, -32],
       className: 'caodaion relative',
-      html: `<img class="w-[32px] h-[32px]" src="/assets/icons/assets/thanhSo-pin.svg"/>
+      html: `<img loading="lazy" class="w-[32px] h-[32px]" src="/assets/icons/assets/thanhSo-pin.svg"/>
       <span class="absolute left-1/2 translate-x-[-50%] w-max">${item?.name}</span>`
     })
     return thanhSoIcon
