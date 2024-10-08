@@ -240,7 +240,14 @@ export class BillComponent implements OnInit {
     })
   }
 
-  editBill(item: any) {
+  editBill(item: any) {    
+    if (!item?.materials || !item?.materials[0].material) {
+      item.materials = <any>[<any>{
+        material: <any>{
+          material: <any>{}
+        }
+      }]
+    }
     this.addedData = item;
   }
 }
