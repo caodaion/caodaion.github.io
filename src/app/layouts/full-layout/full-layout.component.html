@@ -10,8 +10,9 @@
             }}</span>
         </button>
         <mat-nav-list class="main-nav-list">
-          <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url"
-            [routerLinkActive]="'active'">
+          <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url" [ngClass]="{
+              'active': mainSelectedMenu?.key === item?.key
+            }">
             <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
               <span class="material-symbols-outlined">
                 {{ item?.icon }}
@@ -63,7 +64,9 @@
           </svg>
           <span class="title-large">CaoDaiON</span>
         </a>
-        <div [routerLink]="'lich/cong-phu'" class="cursor-pointer ms-3 bg-[#fbbc05] py-1 px-2 rounded-full text-base" [matTooltip]="(currentUser?.consecutive || 0) + ' ngày ' + (currentUser?.consecutive > 1 ? 'liên tục' : '')">{{currentUser?.consecutive || 0}}</div>
+        <div [routerLink]="'lich/cong-phu'" class="cursor-pointer ms-3 bg-[#fbbc05] py-1 px-2 rounded-full text-base"
+          [matTooltip]="(currentUser?.consecutive || 0) + ' ngày ' + (currentUser?.consecutive > 1 ? 'liên tục' : '')">
+          {{currentUser?.consecutive || 0}}</div>
         <div class="text-center" *ngIf="viewPortMode === 'desktop'">
           Thời {{ time.commonTime.kanji
           }}<span class="number-time">
@@ -140,8 +143,9 @@
 </mat-drawer-container>
 <div class="w-100 d-flex side-nav-mobile-wrapper" *ngIf="!isHideBottomNavBar">
   <mat-nav-list class="side-nav-mobile d-flex">
-    <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url"
-      [routerLinkActive]="'active'">
+    <a *ngFor="let item of mainMenu" mat-list-item [disableRipple]="true" [routerLink]="item?.url" [ngClass]="{
+      'active': mainSelectedMenu?.key === item?.key
+    }">
       <div class="icon-hover w-100 d-flex justify-content-center align-items-center">
         <span class="material-symbols-outlined">
           {{ item?.icon }}

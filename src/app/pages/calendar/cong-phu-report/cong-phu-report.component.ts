@@ -39,12 +39,12 @@ export class CongPhuReportComponent implements AfterViewInit {
     this.targetRange = <any>[]
     this.authService.getCurrentUser(true)
       .subscribe((res: any) => {
-        this.user = res
+        this.user = res        
         const foundTitleIndex = CAODAI_TITLE.data?.findIndex((ct: any) => ct?.key === this.user?.title)
         if (foundTitleIndex < 3) {
           this.icon = 'candle'
         } else {
-          this.icon = 'self_improvement phu'
+          this.icon = 'self_improvement'
         }
         if (this.user?.consecutive) {
           this.nextTarget = JSON.parse(JSON.stringify(this.user?.consecutive))
@@ -54,9 +54,6 @@ export class CongPhuReportComponent implements AfterViewInit {
           }
           for (let index = this.nextTarget - 5; index < this.nextTarget + 15; index += 5) {
             this.targetRange.push(index)
-          }
-          if (this.nextTarget % 5 === 0) {
-            this.nextTarget += 5
           }
         }
         this.user.congPhu?.forEach((item: any) => {
@@ -83,7 +80,7 @@ export class CongPhuReportComponent implements AfterViewInit {
         const calculateDate = new Date(new Date(new Date(new Date().setFullYear(parseInt(this.selectedTimeRange.split('-')[0]))).setMonth(parseInt(this.selectedTimeRange.split('-')[1]) - 1)))
         const startDate = new Date(calculateDate.setDate(1))
         let data = <any>[];
-        var now = new Date(new Date(moment(calculateDate).endOf('month').format('YYYY-MM-DD')).setDate(new Date(moment(calculateDate).endOf('month').format('YYYY-MM-DD')).getDate() + 1));
+        var now = calculateDate?.getMonth() >= new Date()?.getMonth() ? new Date() : new Date(new Date(moment(calculateDate).endOf('month').format('YYYY-MM-DD')).setDate(new Date(moment(calculateDate).endOf('month').format('YYYY-MM-DD')).getDate() + 1));
         for (var d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
           const dateValue = new Date(new Date(d).setHours(0, 0, 0));
           const foundDate = filteredData?.find((item: any) => item?.dateTime?.toString() == dateValue?.toString())
@@ -114,7 +111,7 @@ export class CongPhuReportComponent implements AfterViewInit {
                 if (elements.length > 0) {
                   const element = elements[0];
                   const index = element.index;
-                  this.viewDetailsData = data[index]
+                  this.viewDetailsData = this.displayData[index]
                 }
               }
             },

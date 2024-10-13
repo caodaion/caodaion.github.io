@@ -20,7 +20,7 @@ import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mi
 import { OfflineSnackbarComponent } from '../offline-snackbar/offline-snackbar.component';
 import { AuthService } from "../../shared/services/auth/auth.service";
 import { MENU } from "../../shared/constants/menu.constant";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'full-layout',
@@ -51,8 +51,10 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
     'BOVH41pe57AnjbYpRvEOrJvyo9eGeOkfyCVPvBnvS8KF4IG9Wo6NsEubLzrXbeEz1ihntSxRWh0qOxrdhaWo_I4';
 
   mainMenu = <any>[]
+  mainSelectedMenu: any
   currentUser: any
   isInvalidSyncData: any
+  location: any
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -64,7 +66,8 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
     private appRef: ApplicationRef,
     private authService: AuthService,
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -124,7 +127,15 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
   ngAfterViewInit(): void {
     this.authService.getCurrentUser(true).subscribe((res: any) => {
       this.currentUser = res;
-    })
+    }) 
+    this.router.events.subscribe((val: any) => {
+      this.location = location
+      this.mainSelectedMenu = this.mainMenu?.find((menu: any) => {
+        return menu?.children?.length > 0 ? menu?.children?.find((item: any) => {
+          return item?.key?.includes(this.location?.pathname?.split('/')[1])
+        }) : menu?.key?.includes(this.location?.pathname?.split('/')[1])
+      })      
+    });
   }
 
   clearUnread() {
