@@ -42,7 +42,7 @@ export class HanhLeComponent implements OnInit {
     },
     {
       key: 'nghi-tien-biet',
-      name: 'Nghi tiển biệt',
+      name: 'Nghi tiễn biệt',
       published: true,
     },
     {

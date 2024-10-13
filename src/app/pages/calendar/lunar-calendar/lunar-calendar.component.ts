@@ -305,12 +305,15 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
           const foundConsecutive = data?.find((cp: any) => {
             return new Date(cp?.date?.setHours(0))?.toString() === date?.solar?.toString()
-          })
-          if (date?.solar < new Date(new Date().setDate(new Date().getDate() - 1))) {
+          })          
+          if (new Date(new Date(new Date(date?.solar.setHours(0)).setMinutes(0)).setSeconds(0)) < new Date(new Date(new Date(new Date(new Date().setDate(new Date().getDate())).setHours(0)).setMinutes(0)).setSeconds(0))) {
             date.logged = foundConsecutive?.data?.length
-          }
+          }          
           if (this.datePipe.transform(date?.solar, 'YYYY-MM-dd') == this.datePipe.transform(new Date(), 'YYYY-MM-dd')) {
-            date.continue = true
+            if (foundConsecutive?.data?.length === 0) {
+              date.logged = ''
+              date.continue = true
+            }
           }
         }
         if (this.filter?.white) {
