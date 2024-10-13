@@ -102,32 +102,20 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           this.viewPortMode = 'desktop';
         }
       });
-    this.route.queryParams.subscribe((param: any) => {
-      if (param['m']) {
-        this.calendarMode = param['m'];
-      } else {
-        this.calendarMode = 'month';
-      }
-      if (param['s']) {
-        this.selectedDate.solar = new Date(param['s']);
-        if (!new Date(param['s'])) {
-          this.selectedDate.solar = new Date();
-        }
-        this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
-          this.selectedDate.solar
-        );
-      } else {
-        this.selectedDate.solar = new Date();
-        this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
-          this.selectedDate.solar
-        );
-      }
+    this.route.params.subscribe((param: any) => {
+      this.calendarMode = 'month';
+      if (param.mode) {
+        this.calendarMode = param.mode
+      }  
+      this.selectedDate.solar = new Date(`${param.year || this.datePipe.transform(new Date(), 'YYYY')}-${param.month || this.datePipe.transform(new Date(), 'MM')}-${param.date || this.datePipe.transform(new Date(), 'dd')} 00:00:00`);        
+      this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
+        this.selectedDate.solar
+      );
       this.calendarService.calendarViewMode = this.calendarMode;
       const calendarFilter = JSON.parse(localStorage.getItem('calendarFilter') || 'null')
       if (calendarFilter) {
         this.filter = calendarFilter
       }
-
     });
   }
 
@@ -252,11 +240,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       this.selectedDate.solar.getMonth() + 1,
       this.selectedDate.solar.getFullYear()
     );
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { s: this.selectedDate.solar.toDateString() },
-      queryParamsHandling: 'merge',
-    });
+    this.router.navigate([`/lich/${this.calendarMode}/${this.datePipe.transform(this.selectedDate.solar, 'YYYY/MM/dd')}`]);
     this.getCalendarEvent();
   }
 
@@ -322,7 +306,12 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           const foundConsecutive = data?.find((cp: any) => {
             return new Date(cp?.date?.setHours(0))?.toString() === date?.solar?.toString()
           })
-          date.logged = foundConsecutive?.data?.length
+          if (date?.solar < new Date(new Date().setDate(new Date().getDate() - 1))) {
+            date.logged = foundConsecutive?.data?.length
+          }
+          if (this.datePipe.transform(date?.solar, 'YYYY-MM-dd') == this.datePipe.transform(new Date(), 'YYYY-MM-dd')) {
+            date.continue = true
+          }
         }
         if (this.filter?.white) {
           if (
@@ -649,8 +638,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     this.calendarMode = mode;
     if (this.calendarMode === 'month') {
       this.selectedMonth = this.calendarService.getSelectedMonthCalendar(
-        this.selectedDate.solar.getMonth() + 1,
-        this.selectedDate.solar.getFullYear()
+        this.selectedDate.solar?.getMonth() + 1,
+        this.selectedDate.solar?.getFullYear()
       );
       this.calendarService.calendarViewMode = mode;
     }
@@ -680,12 +669,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.getTuThoiTimes();
       }, 0);
-    }
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { m: mode, s: this.selectedDate.solar.toDateString() },
-      queryParamsHandling: 'merge',
-    });
+    }    
+    this.router.navigate([`/lich/${this.calendarMode}/${this.datePipe.transform(this.selectedDate.solar, 'YYYY/MM/dd')}`]);
     this.getCalendarEvent()
   }
 

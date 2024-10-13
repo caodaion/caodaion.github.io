@@ -63,7 +63,7 @@
           </svg>
           <span class="title-large">CaoDaiON</span>
         </a>
-        <div [routerLink]="'lich/cong-phu'" class="cursor-pointer ms-3 bg-[#fbbc05] py-1 px-2 rounded-full text-base" [matTooltip]="(currentUser?.consecutive || 0) + ' ngày liên tục'">{{currentUser?.consecutive || 0}}</div>
+        <div [routerLink]="'lich/cong-phu'" class="cursor-pointer ms-3 bg-[#fbbc05] py-1 px-2 rounded-full text-base" [matTooltip]="(currentUser?.consecutive || 0) + ' ngày ' + (currentUser?.consecutive > 1 ? 'liên tục' : '')">{{currentUser?.consecutive || 0}}</div>
         <div class="text-center" *ngIf="viewPortMode === 'desktop'">
           Thời {{ time.commonTime.kanji
           }}<span class="number-time">

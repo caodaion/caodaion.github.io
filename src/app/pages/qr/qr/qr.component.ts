@@ -44,7 +44,7 @@ export class QrComponent implements OnInit {
       this.tinyUrlService.fetchShort()?.subscribe((res: any) => {
         if (res.status === 200) {
           this.setting = res.setting
-          this.shorts = res.shorts
+          this.shorts = res.shorts          
           returnData()
         }
       })
@@ -89,7 +89,7 @@ export class QrComponent implements OnInit {
       catch (e) { return false; }
     }
     if (validURL(this.endPath)) {
-      location.href = `${this.endPath}`;
+      window.open(`${this.endPath}`, '_blank');
     }
   }
 }

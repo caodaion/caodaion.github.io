@@ -43,12 +43,12 @@
                 item?.name
                 }}</mat-option>
             </mat-select>
-            {{ selectedDate.solar.getFullYear() }} ({{
+            {{ selectedDate.solar?.getFullYear() }} ({{
             calendarMode === "day"
-            ? selectedDate.lunar.convertSolar2Lunar.lunarDayName + "/"
+            ? selectedDate.lunar?.convertSolar2Lunar?.lunarDayName + "/"
             : ""
-            }}{{ selectedDate.lunar.convertSolar2Lunar.lunarMonthName }}/{{
-            selectedDate.lunar.convertSolar2Lunar.lunarYearName
+            }}{{ selectedDate.lunar?.convertSolar2Lunar?.lunarMonthName }}/{{
+            selectedDate.lunar?.convertSolar2Lunar?.lunarYearName
             }})</span>
         </div>
         <div class="flex flex-wrap w-full align-items-center justify-center">
@@ -58,7 +58,7 @@
               'bg-transparent': !filter.consecutive,
               '!text-black': filter.consecutive
             }" [matTooltip]="'Hiển thị hành trình'">
-            {{currentUser?.consecutive}}
+            {{currentUser?.consecutive || '0'}}
           </div>
           <div (click)="filter.cn = !filter.cn; updatefliter()"
             class="cursor-pointer bg-[#34a853] border border-[#34a853] text-xs text-[#34a853] rounded px-3 transition"
@@ -171,8 +171,19 @@
           '!shadow-none': date?.logged !== undefined,
         }">
         <div class="absolute top-0 right-0 bottom-0 left-0 -z-10" [ngStyle]="{
-          background: date?.logged ? selectedMonth[dateIndex + 1]?.logged === 0 ? 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '), #eb4132)' : 'linear-gradient(to right, rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + (selectedMonth[dateIndex]?.logged || 0) / 4 + '))' : '',
-        }"></div>
+          background: date?.logged ? selectedMonth[dateIndex + 1]?.logged === 0 ? 
+          'linear-gradient(to right, rgba(251, 188, 5, ' + 
+            (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + 
+            (selectedMonth[dateIndex]?.logged || 0) / 4 + '), #eb4132)' : 
+          'linear-gradient(to right, rgba(251, 188, 5, ' + 
+            (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + 
+            (selectedMonth[dateIndex]?.logged || 0) / 4 + '))' : '',
+        }">
+          <span *ngIf="date?.continue" class="animate-pulse absolute inline-flex h-full w-full"
+           [ngStyle]="{
+            background: 'rgba(251, 188, 5, ' + (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + ')'
+           }"></span>
+        </div>
         <div class="w-full flex justify-between flex-wrap">
           <button mat-flat-button class="!px-4 !bg-transparent" [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
             (click)="onChangeCalendarMode('day', date)">

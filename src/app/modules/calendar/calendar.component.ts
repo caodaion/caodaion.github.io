@@ -79,11 +79,11 @@ export class CalendarComponent implements OnInit {
   onChangeCalendarViewMode(mode: any) {
     this.onToggleDrawer()
     this.calendarService.calendarViewMode = mode;
-    this.router.navigate(['./'], {
-      relativeTo: this.route,
-      queryParams: { m: mode },
-      queryParamsHandling: 'merge',
-    });
+    let modeLink = ''
+    let splitedLink = location?.pathname?.split('/')
+    splitedLink[2] = mode
+    modeLink = splitedLink.join('/')
+    this.router.navigate([modeLink]);
   }
 
   addNew() {

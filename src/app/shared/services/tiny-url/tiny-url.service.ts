@@ -40,8 +40,8 @@ export class TinyUrlService {
             } else {
               response.status = 400;
             }
-            this.sheetService.decodeRawSheetData(ref.shortWorkbook.Sheets[this.shortListSheet])
-              .subscribe((res: any) => {
+            this.sheetService.decodeRawSheetData(ref.shortWorkbook.Sheets[this.shortListSheet], 1, {raw: true})
+              .subscribe((res: any) => {                
                 ref.shortList = res;
                 response.shorts = ref.shortList
                 observable.next(response)
@@ -55,7 +55,7 @@ export class TinyUrlService {
             .subscribe((res: any) => {
               if (res.status == 200) {
                 if (res?.workbook) {
-                  ref.shortWorkbook = res?.workbook
+                  ref.shortWorkbook = res?.workbook                  
                   returnData()
                 }
               }

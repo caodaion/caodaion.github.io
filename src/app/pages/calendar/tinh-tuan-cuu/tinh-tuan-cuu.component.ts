@@ -118,45 +118,45 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
     this.selectedDate.time = this.datePipe.transform(now, 'HH:mm')
     this.getCalculatedLunarDate()
-    this.route.queryParams.subscribe((param: any) => {
-      if (param['y']) {
-        this.selectedDate.year = parseInt(param['y']);
+    this.route.params.subscribe((param: any) => {
+      console.log(param);
+      
+      if (param.year) {
+        this.selectedDate.year = parseInt(param.year);
       }
-      if (param['m']) {
-        this.selectedDate.month = parseInt(param['m']);
+      if (param.month) {
+        this.selectedDate.month = parseInt(param.month);
       }
-      if (param['d']) {
-        this.selectedDate.date = parseInt(param['d']);
+      if (param.date) {
+        this.selectedDate.date = parseInt(param.date);
       }
-      if (param['t']) {
-        this.selectedDate.time = param['t'];
-      }
-      console.log(this.selectedDate);
-
-      if (param['y'] && param['m'] && param['d']) {
+      if (param.year && param.month && param.date) {
         this.calculateTuanCuu()
-        if (param['details']) {
+        if (param.details) {
           const jwtHelper = new JwtHelperService()
-          const decodedToken = jwtHelper.decodeToken(param['details'])?.split('+')
+          console.log(jwtHelper.decodeToken(param.details));
+          const decodedToken = JSON.parse(jwtHelper.decodeToken(param.details) || '[]')
+          console.log(decodedToken);
+          
           this.selectedDate = {
-            time: param['t'],
-            date: parseInt(param['d']),
-            month: parseInt(param['m']),
-            year: parseInt(param['y'])
+            time: param.time?.replace('-', ':'),
+            date: parseInt(param.date),
+            month: parseInt(param.month),
+            year: parseInt(param.year)
           }
           this.getCalculatedLunarDate()
           this.calculatedTuanCuu.details = {
-            name: decodedToken[0] === 'empty' ? '' : decodedToken[0],
-            age: decodedToken[1] === 'empty' ? null : decodedToken[1],
-            sex: decodedToken[2] === 'empty' ? null : decodedToken[2],
-            color: decodedToken[3] === 'empty' ? null : decodedToken[3],
-            title: decodedToken[4] === 'empty' ? null : decodedToken[4],
-            subTitle: decodedToken[5] === 'empty' ? null : decodedToken[5],
-            holyName: decodedToken[6] === 'empty' ? null : decodedToken[6],
-            province: decodedToken[7] === 'empty' ? null : decodedToken[7],
-            district: decodedToken[8] === 'empty' ? null : decodedToken[8],
-            ward: decodedToken[9] === 'empty' ? null : decodedToken[9],
-            address: decodedToken[10] === 'empty' ? null : decodedToken[10],
+            name: decodedToken[0],
+            age: decodedToken[1],
+            sex: decodedToken[2],
+            color: decodedToken[3],
+            title: decodedToken[4],
+            subTitle: decodedToken[5],
+            holyName: decodedToken[6],
+            province: decodedToken[7],
+            district: decodedToken[8],
+            ward: decodedToken[9],
+            address: decodedToken[10],
           }
           this.saveSharedEvent()
         }
@@ -318,14 +318,26 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     };
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodedHeader = base64url(stringifiedHeader);
-    const data = `${item?.details?.name || 'empty'}+${item?.details?.age || 'empty'}+${item?.details?.sex || 'empty'}+${item?.details?.color || 'empty'}+${item?.details?.title || 'empty'}+${item?.details?.subTitle || 'empty'}+${item?.details?.holyName || 'empty'}+${item?.details?.province || 'empty'}+${item?.details?.district || 'empty'}+${item?.details?.ward || 'empty'}+${item?.details?.address || 'empty'}`;
+    const sourcedata = []
+    sourcedata.push(item?.details?.name || '')
+    sourcedata.push(item?.details?.age || '')
+    sourcedata.push(item?.details?.sex || '')
+    sourcedata.push(item?.details?.color || '')
+    sourcedata.push(item?.details?.title || '')
+    sourcedata.push(item?.details?.subTitle || '')
+    sourcedata.push(item?.details?.holyName || '')
+    sourcedata.push(item?.details?.province || '')
+    sourcedata.push(item?.details?.district || '')
+    sourcedata.push(item?.details?.ward || '')
+    sourcedata.push(item?.details?.address || '')
+    const data = JSON.stringify(sourcedata);
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
     const encodedData = base64url(stringifiedData);
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
     const encodedSignature = btoa(signature);
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     item.token = token
-    item.location = `${location.href}?y=${item?.date?.year}&m=${item?.date?.month}&d=${item?.date?.date}&t=${encodeURIComponent(item?.date?.time)}&details=${token}`
+    item.location = `${location.href}/${item?.date?.year}/${this.decimalPipe.transform(item?.date?.month, '2.0-0')}/${this.decimalPipe.transform(item?.date?.date, '2.0-0')}/${item?.date?.time?.replace(':', '-')}/${token}`
     this.cd.detectChanges()
   }
 

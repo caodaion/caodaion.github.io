@@ -10,7 +10,7 @@ export class SheetService {
 
   constructor() { }
 
-  decodeRawSheetData(data: any, slice: any = 1, header?: any): Observable<any> {
+  decodeRawSheetData(data: any, slice: any = 1, options?: any): Observable<any> {
     return new Observable((observable) => {
       const column = [...new Set(Object.keys(data).map((col: any) => {
         let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
@@ -19,8 +19,8 @@ export class SheetService {
         }
       }))]?.filter((col: any) => !!col)
       const responseData = utils.sheet_to_json<any>(data, {
-        header: header || column,
-        raw: false
+        header: options?.header || column,
+        raw: options?.raw || false
       })?.slice(slice);
       responseData.forEach((item: any) => {
         if (item?.option?.includes('||')) {

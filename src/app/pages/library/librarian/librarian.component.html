@@ -109,9 +109,9 @@
           *ngFor="let item of books | searchBookByKeyWord: {searchText: searchBox['value'], selectedChips: selectedChips}">
           <mat-card>
             <mat-card-header>
-              <mat-icon mat-card-avatar *ngIf="!item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+              <mat-icon mat-card-avatar *ngIf="!item?.finished" [ngStyle]="{fontSize: '40px', height: '40px', width: '40px'}"
                 matTooltip="Đang viết" class="text-[#4758b8]">history_edu</mat-icon>
-              <mat-icon mat-card-avatar *ngIf="item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+              <mat-icon mat-card-avatar *ngIf="item?.finished" [ngStyle]="{fontSize: '40px', height: '40px', width: '40px'}"
                 matTooltip="Hoàn thành" class="text-[#01855d]">check_circle</mat-icon>
               <mat-card-title (click)="onItemFocus(item, libradianDrawer)"
                 class="hover:underline cursor-pointer">{{item?.name}}</mat-card-title>
