@@ -339,39 +339,54 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   addComboLocation() {
-    const comboLocation = document.getElementById(this.addedComboLocation.key)
-    comboLocation?.setAttribute('value', JSON.stringify(this.addedComboLocation))
-    if (comboLocation) {
-      const country = this.isShowCountry ? this.addedComboLocation.country : ''
-      const province = this.provinces.find((item: any) => item.id == this.addedComboLocation.province)
-      const district = this.districts.find((item: any) => item.id == this.addedComboLocation.district)
-      const ward = this.wards.find((item: any) => item.id == this.addedComboLocation.ward)
-      const wardName = this.wards.find((item: any) => item.id == this.addedComboLocation.ward)?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-      switch (this.addedComboLocation.mode) {
+    const comboLocation = document.getElementById(this.addedComboLocation.key);
+    if (!comboLocation) return;
+
+    const { country, province, district, ward, village, mode, title } = this.addedComboLocation;
+    const isShowCountry = this.isShowCountry;
+
+    const provinceData = this.provinces.find((item: any) => item.id === province);
+    const districtData = this.districts.find((item: any) => item.id === district);
+    const wardData = this.wards.find((item: any) => item.id === ward);
+
+    const formatName = (name: string, prefixes: string[]) => 
+      prefixes.reduce((acc, prefix) => acc.replace(prefix, '').trim(), name);
+
+    const formatWardName = (name: string) => {
+      const cleanName = formatName(name, ['Phường', 'Thị trấn', 'Xã']);
+      return parseInt(cleanName) ? `đệ ${this.commonService.convertNumberToText(cleanName)}` : cleanName;
+    };
+
+    const getLocationText = () => {
+      switch (mode) {
         case 'PpDdWwA':
-          this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-            (province?.name?.split(province?.name?.replace('Thành phố', '')?.replace('Tỉnh', ''))[0])?.toLowerCase() : ''
-            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-              (district?.name?.split(district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', ''))[0])?.toLowerCase() : ''
-            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-              (ward?.level)?.toLowerCase() : ''
-            }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
-          break;
+          return [
+            isShowCountry ? `${country} quốc,` : '',
+            provinceData && `${formatName(provinceData.name, ['Thành phố', 'Tỉnh'])} ${provinceData.name.split(formatName(provinceData.name, ['Thành phố', 'Tỉnh']))[0].toLowerCase()}`,
+            districtData && `${formatName(districtData.name, ['Huyện', 'Quận', 'Thị xã', 'Thành phố'])} ${districtData.name.split(formatName(districtData.name, ['Huyện', 'Quận', 'Thị xã', 'Thành phố']))[0].toLowerCase()}`,
+            wardData && `${formatWardName(wardData.name)} ${wardData.level.toLowerCase()}`,
+            village
+          ].filter(Boolean).join(', ');
         case 'pPdDwWA':
-          this.addedComboLocation.text = this.addedComboLocation.title
-          break;
+          return title;
         default:
-          break;
+          return '';
       }
-      comboLocation.innerHTML = this.addedComboLocation.text
-      const data = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key)
-      if (data) {
-        data.value = this.addedComboLocation
-        this.onBlur()
-        this.saveData()
-      }
+    };
+
+    const locationText = getLocationText().trim();
+    comboLocation.setAttribute('value', JSON.stringify(this.addedComboLocation));
+    comboLocation.innerHTML = locationText;
+    this.addedComboLocation.text = locationText;
+
+    const formGroupData = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key);
+    if (formGroupData) {
+      formGroupData.value = this.addedComboLocation;
+      this.onBlur();
+      this.saveData();
     }
-    console.log(this.addedComboLocation);    
+
+    console.log(this.addedComboLocation);
   }
 
   onBlur() {
