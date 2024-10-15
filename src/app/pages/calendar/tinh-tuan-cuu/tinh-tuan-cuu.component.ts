@@ -5,17 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANT } from 'src/app/shared/constants/constants.constant';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
-import * as CryptoJS from 'crypto-js';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
-import { tap } from 'rxjs';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { LocationService } from 'src/app/shared/services/location/location.service';
 import * as QRCode from 'qrcode'
 import html2canvas from 'html2canvas-pro';
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-tinh-tuan-cuu',
@@ -103,9 +100,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     private router: Router,
     public dialog: MatDialog,
     private decimalPipe: DecimalPipe,
-    private matBottomSheet: MatBottomSheet,
-    private breakpointObserver: BreakpointObserver,
-    private locationService: LocationService
+    private matBottomSheet: MatBottomSheet
   ) {
 
   }
@@ -306,39 +301,44 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   generateShareInformation(item: any) {
     const base64url = (source: any) => {
-      let encodedSource = CryptoJS.enc.Base64.stringify(source);
-      encodedSource = encodedSource.replace(/=+$/, '');
-      encodedSource = encodedSource.replace(/\+/g, '-');
-      encodedSource = encodedSource.replace(/\//g, '_');
-      return encodedSource;
+      return CryptoJS.enc.Base64.stringify(source)
+        .replace(/=+$/, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
     }
+
     const header = {
       "alg": "HS256",
       "typ": "JWT"
     };
-    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-    const encodedHeader = base64url(stringifiedHeader);
-    const sourcedata = []
-    sourcedata.push(item?.details?.name || '')
-    sourcedata.push(item?.details?.age || '')
-    sourcedata.push(item?.details?.sex || '')
-    sourcedata.push(item?.details?.color || '')
-    sourcedata.push(item?.details?.title || '')
-    sourcedata.push(item?.details?.subTitle || '')
-    sourcedata.push(item?.details?.holyName || '')
-    sourcedata.push(item?.details?.province || '')
-    sourcedata.push(item?.details?.district || '')
-    sourcedata.push(item?.details?.ward || '')
-    sourcedata.push(item?.details?.address || '')
-    const data = JSON.stringify(sourcedata);
-    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
-    const encodedData = base64url(stringifiedData);
+
+    const encodedHeader = base64url(CryptoJS.enc.Utf8.parse(JSON.stringify(header)));
+
+    const sourcedata = [
+      item?.details?.name,
+      item?.details?.age,
+      item?.details?.sex,
+      item?.details?.color,
+      item?.details?.title,
+      item?.details?.subTitle,
+      item?.details?.holyName,
+      item?.details?.province,
+      item?.details?.district,
+      item?.details?.ward,
+      item?.details?.address
+    ].map(value => value || '');
+
+    const encodedData = base64url(CryptoJS.enc.Utf8.parse(JSON.stringify(sourcedata)));
+    
     const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
     const encodedSignature = btoa(signature);
+
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
-    item.token = token
-    item.location = `${location.href}/${item?.date?.year}/${this.decimalPipe.transform(item?.date?.month, '2.0-0')}/${this.decimalPipe.transform(item?.date?.date, '2.0-0')}/${item?.date?.time?.replace(':', '-')}/${token}`
-    this.cd.detectChanges()
+    
+    item.token = token;
+    item.location = `${location.href}/${item?.date?.year}/${this.decimalPipe.transform(item?.date?.month, '2.0-0')}/${this.decimalPipe.transform(item?.date?.date, '2.0-0')}/${item?.date?.time?.replace(':', '-')}/${token}`;
+    
+    this.cd.detectChanges();
   }
 
   deleteAllExpiriedEvent() {
@@ -421,143 +421,164 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     printTab?.print();
   }
 
-  onUpdateInfomation() {
-    this.isHolyNameRequired = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title)?.isHolyNameRequired || false
-    let selectedTitle: any = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title);
-    this.subTitles = []
-    if (selectedTitle?.subTitle) {
-      this.subTitles = selectedTitle?.subTitle
-    }
-    if (this.calculatedTuanCuu.details.name) {
-      if (this.isHolyNameRequired) {
-        if (this.calculatedTuanCuu.details.sex === 'male') {
-          if (this.calculatedTuanCuu.details.color) {
-            this.calculatedTuanCuu.details.holyName = `${this.colors.find((item: any) => item.key === this.calculatedTuanCuu.details.color)?.name} ${this.calculatedTuanCuu.details.name?.split(' ')[this.calculatedTuanCuu.details.name?.split(' ').length - 1]} Thanh`
-          }
-        }
-        if (this.calculatedTuanCuu.details.sex === 'female') {
-          this.calculatedTuanCuu.details.holyName = `Hương ${this.calculatedTuanCuu.details.name?.split(' ')[this.calculatedTuanCuu.details.name?.split(' ').length - 1]}`
-        }
+  onUpdateInformation() {
+    const selectedTitle = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title);
+    this.isHolyNameRequired = selectedTitle?.isHolyNameRequired || false;
+    this.subTitles = selectedTitle?.subTitle || [];
+
+    if (this.calculatedTuanCuu.details.name && this.isHolyNameRequired) {
+      const lastName = this.calculatedTuanCuu.details.name.split(' ').pop();
+      if (this.calculatedTuanCuu.details.sex === 'male' && this.calculatedTuanCuu.details.color) {
+        const colorName = this.colors.find((item: any) => item.key === this.calculatedTuanCuu.details.color)?.name;
+        this.calculatedTuanCuu.details.holyName = `${colorName} ${lastName} Thanh`;
+      } else if (this.calculatedTuanCuu.details.sex === 'female') {
+        this.calculatedTuanCuu.details.holyName = `Hương ${lastName}`;
       }
     }
-    this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && this.calculatedTuanCuu.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[this.calculatedTuanCuu.details.sex] : ''} ${this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || ''} ${this.calculatedTuanCuu.details.holyName ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})` : this.calculatedTuanCuu.details.name} ${this.calculatedTuanCuu.details.age ? this.calculatedTuanCuu.details.age + ' tuổi' : ''}`
-    this.getCalculatedLunarDate()
+
+    const subTitleName = this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || '';
+    const howToAddress = selectedTitle?.howToAddress && this.calculatedTuanCuu.details.sex
+      ? (selectedTitle.howToAddress as Record<string, string>)[this.calculatedTuanCuu.details.sex]
+      : '';
+    const nameDisplay = this.calculatedTuanCuu.details.holyName 
+      ? `${selectedTitle?.name} ${this.calculatedTuanCuu.details.holyName} (${this.calculatedTuanCuu.details.name})`
+      : this.calculatedTuanCuu.details.name;
+    const ageDisplay = this.calculatedTuanCuu.details.age ? `${this.calculatedTuanCuu.details.age} tuổi` : '';
+
+    this.eventSummary = `Lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${howToAddress} ${subTitleName} ${nameDisplay} ${ageDisplay}`.trim();
+    
+    this.getCalculatedLunarDate();
   }
 
   getCalculatedLunarDate() {
-    const calculatedLunarDate = this.calendarService.getConvertedFullDate(new Date(`${this.selectedDate?.year}-${this.selectedDate?.month < 10 ? '0' + this.selectedDate?.month : this.selectedDate?.month}-${this.selectedDate?.date < 10 ? '0' + this.selectedDate?.date : this.selectedDate?.date}T${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)).convertSolar2Lunar
-    this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || ''
-    this.calculatedLunarDate = `${calculatedLunarDate.lunarTime ? 'Thời ' + calculatedLunarDate.lunarTime : ''} | ${calculatedLunarDate.lunarDay < 10 ? '0' + calculatedLunarDate.lunarDay : calculatedLunarDate.lunarDay}/${calculatedLunarDate.lunarMonth < 10 ? '0' + calculatedLunarDate.lunarMonth : calculatedLunarDate.lunarMonth}${calculatedLunarDate.lunarLeap ? 'N' : ''}/${calculatedLunarDate.lunarYearName}`
+    const date = new Date(
+      this.selectedDate.year,
+      this.selectedDate.month - 1,
+      this.selectedDate.date,
+      ...((this.selectedDate.time || '00:00').split(':').map(Number))
+    );
+    const calculatedLunarDate = this.calendarService.getConvertedFullDate(date).convertSolar2Lunar;
+    
+    this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || '';
+    this.calculatedLunarDate = [
+      calculatedLunarDate.lunarTime ? `Thời ${calculatedLunarDate.lunarTime}` : '',
+      [
+        calculatedLunarDate.lunarDay.toString().padStart(2, '0'),
+        calculatedLunarDate.lunarMonth.toString().padStart(2, '0') + (calculatedLunarDate.lunarLeap ? 'N' : ''),
+        calculatedLunarDate.lunarYearName
+      ].join('/')
+    ].filter(Boolean).join(' | ');
   }
 
   showShareImage(element: any, item: any) {
-    this.shareItem = {
-      element, item
-    }
-    this.timeZone = TIME_TYPE.data
-    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
-    const foundCurrentEvent = localStorageEvents.find((lc: any) => lc.key === this.shareItem.item.key)
-    if (element?.lunar?.lunarTime) {
-      this.shareItem.time = element?.lunar?.lunarTime
-    } else {
-      if (foundCurrentEvent.defaultTime) {
-        this.shareItem.time = foundCurrentEvent.defaultTime
-        this.isShowButtonSetDefault = false
-      } else {
-        this.shareItem.time = 'DẬU | 17:00-19:00'
-        this.isShowButtonSetDefault = true
-      }
-    }
-    this.shareItem.id = this.commonService
-      .generatedSlug(`${this.shareItem?.element?.eventName} ${this.datePipe
-        .transform(this.shareItem?.element?.solar, 'YYYYMMdd')}` || 'caodaion-qr')
-    this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet)
+    this.shareItem = { element, item };
+    this.timeZone = TIME_TYPE.data;
+    const localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]');
+    const foundCurrentEvent = localStorageEvents.find((lc: any) => lc.key === this.shareItem.item.key);
+
+    this.shareItem.time = element?.lunar?.lunarTime || foundCurrentEvent?.defaultTime || 'DẬU | 17:00-19:00';
+    this.isShowButtonSetDefault = !foundCurrentEvent?.defaultTime;
+
+    this.shareItem.id = this.commonService.generatedSlug(
+      `${this.shareItem?.element?.eventName} ${this.datePipe.transform(this.shareItem?.element?.solar, 'YYYYMMdd')}` || 'caodaion-qr'
+    );
+    this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet);
   }
 
   private convertBase64ToBlob(Base64Image: string) {
-    // split into two parts
-    const parts = Base64Image.split(";base64,")
-    // hold the content type
-    const imageType = parts[0].split(":")[1]
-    // decode base64 string
-    const decodedData = window.atob(parts[1])
-    // create unit8array of size same as row data length
-    const uInt8Array = new Uint8Array(decodedData.length)
-    // insert all character code into uint8array
-    for (let i = 0; i < decodedData.length; ++i) {
-      uInt8Array[i] = decodedData.charCodeAt(i)
+    const [metadata, base64] = Base64Image.split(';base64,');
+    const contentType = metadata.split(':')[1];
+    const byteCharacters = atob(base64);
+    const byteArrays = new Uint8Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArrays[i] = byteCharacters.charCodeAt(i);
     }
-    // return blob image after conversion
-    return new Blob([uInt8Array], { type: imageType })
+
+    return new Blob([byteArrays], { type: contentType });
   }
 
   saveAsImage(element: any) {
-    setTimeout(() => {
-      this.downloading = true
-      const saveItem = document.getElementById(element.id)
-      if (saveItem) {
-        html2canvas(saveItem).then((canvas) => {
+    this.downloading = true;
+    const saveItem = document.getElementById(element.id);
+    if (saveItem) {
+      html2canvas(saveItem)
+        .then((canvas) => {
           const link = document.createElement('a');
           link.href = canvas.toDataURL('image/png');
           link.download = `${this.commonService.generatedSlug(element.id)}.png`;
           link.click();
-          this.downloading = false
-        }).catch((error: any) => {
-          this.downloading = false
-        });
-      }
-    }, 0)
+        })
+        .catch((error: any) => console.error('Error saving image:', error))
+        .finally(() => this.downloading = false);
+    } else {
+      this.downloading = false;
+    }
   }
 
   setDefaultTimeForEvent() {
-    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
-    const foundCurrentEvent = localStorageEvents.find((item: any) => item.key === this.shareItem.item.key)
-    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)].defaultTime = this.shareItem.time
-    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)]?.event?.forEach((item: any) => {
-      item.solar = new Date(item.solar)
-      item.solar = new Date(new Date(new Date(item.solar.setHours(parseInt(localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)]?.defaultTime?.split('|')[1].split(':')[0]))).setMinutes(0)).setSeconds(0))
-      item.lunar.lunarTime = this.shareItem.time
-    })
-    setTimeout(() => {
-      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
-      this.isShowButtonSetDefault = false
-      this.getLocalStorageTuanCuu()
-    }, 0)
+    const localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]');
+    const eventIndex = localStorageEvents.findIndex((item: any) => item.key === this.shareItem.item.key);
+    
+    if (eventIndex !== -1) {
+      localStorageEvents[eventIndex].defaultTime = this.shareItem.time;
+      localStorageEvents[eventIndex].event = localStorageEvents[eventIndex].event.map((item: any) => {
+        const [hours] = this.shareItem.time.split('|')[1].split(':').map(Number);
+        const newSolar = new Date(item.solar);
+        newSolar.setHours(hours, 0, 0);
+        return {
+          ...item,
+          solar: newSolar,
+          lunar: { ...item.lunar, lunarTime: this.shareItem.time }
+        };
+      });
+
+      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents));
+      this.isShowButtonSetDefault = false;
+      this.getLocalStorageTuanCuu();
+    }
   }
 
   onSyncToGoogleCalendar(element: any, item: any) {
-    const foundTitle = this.caoDaiTitle.find((cdt: any) => cdt.key === item?.details?.title)
+    const foundTitle = this.caoDaiTitle.find((cdt: any) => cdt.key === item?.details?.title);
+    const name = item?.details.holyName ? `${item?.details?.holyName} - ${item?.details?.name}` : item?.details?.name;
     const data = {
-      text: `${foundTitle?.eventTitle} ${element?.eventName} cho ${foundTitle?.name} ${item?.details.holyName ? item?.details?.holyName + ' - ' + item?.details?.name : item?.details?.name}`,
-      dates: [new Date(element.solar), new Date(new Date(element.solar).setMinutes(new Date(element.solar).getMinutes() + 60))],
+      text: `${foundTitle?.eventTitle} ${element?.eventName} cho ${foundTitle?.name} ${name}`,
+      dates: [new Date(element.solar), new Date(new Date(element.solar).getTime() + 60 * 60 * 1000)],
       subTitle: ''
-    }
-    const url = this.calendarService.getGoogleCalendarEventEditUrl(data)
-    window.open(url, '_blank')
+    };
+    const url = this.calendarService.getGoogleCalendarEventEditUrl(data);
+    window.open(url, '_blank');
   }
 
   changeTime() {
-    let localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
-    const foundCurrentEvent = localStorageEvents.find((item: any) => item.key === this.shareItem.item.key)
-    foundCurrentEvent?.event?.forEach((ev: any) => {
-      ev.key = this.commonService
-        .generatedSlug(`${ev?.eventName} ${this.datePipe
-          .transform(ev?.solar, 'YYYYMMdd')}` || 'caodaion-qr')
-    })
-    const foundElement = foundCurrentEvent.event.find((item: any) => item?.key === this.shareItem?.id)
-    foundElement.solar = new Date(foundElement.solar)
-    foundElement.solar = new Date(new Date(new Date(new Date(foundElement.solar.setHours(parseInt(this.shareItem.time.split('|')[1].split(":")[0]))).setMinutes(0))).setSeconds(0))?.toJSON()
-    foundElement.lunar.lunarTime = this.shareItem.time
-    localStorageEvents[localStorageEvents.indexOf(foundCurrentEvent)].event = foundCurrentEvent.event
-    setTimeout(() => {
-      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents))
-      this.getLocalStorageTuanCuu()
-    }, 0)
+    const localStorageEvents = JSON.parse(localStorage.getItem('tuanCuu') || '[]');
+    const eventIndex = localStorageEvents.findIndex((item: any) => item.key === this.shareItem.item.key);
+    
+    if (eventIndex !== -1) {
+      localStorageEvents[eventIndex].event = localStorageEvents[eventIndex].event.map((ev: any) => {
+        if (ev?.key === this.shareItem?.id) {
+          const [hours, minutes] = this.shareItem.time.split('|')[1].split(':').map(Number);
+          const newSolar = new Date(ev.solar);
+          newSolar.setHours(hours, minutes, 0);
+          return {
+            ...ev,
+            key: this.commonService.generatedSlug(`${ev?.eventName} ${this.datePipe.transform(newSolar, 'YYYYMMdd')}` || 'caodaion-qr'),
+            solar: newSolar.toJSON(),
+            lunar: { ...ev.lunar, lunarTime: this.shareItem.time }
+          };
+        }
+        return ev;
+      });
+
+      localStorage.setItem('tuanCuu', JSON.stringify(localStorageEvents));
+      this.getLocalStorageTuanCuu();
+    }
   }
 
-  onPress(event: any) {
-    if (event?.keyCode == 32) {
-      event['target']['value'] = event['target']['value'] + ' '
+  onPress(event: KeyboardEvent) {
+    if (event.code === 'Space') {
+      (event.target as HTMLInputElement).value += ' ';
     }
   }
 }

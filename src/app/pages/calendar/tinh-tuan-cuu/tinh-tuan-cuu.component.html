@@ -9,7 +9,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Năm</mat-label>
-            <mat-select [(ngModel)]="selectedDate.year" (ngModelChange)="onUpdateInfomation()">
+            <mat-select [(ngModel)]="selectedDate.year" (ngModelChange)="onUpdateInformation()">
               <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{ item?.solar }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -17,7 +17,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Tháng</mat-label>
-            <mat-select [(ngModel)]="selectedDate.month" (ngModelChange)="onUpdateInfomation()">
+            <mat-select [(ngModel)]="selectedDate.month" (ngModelChange)="onUpdateInformation()">
               <mat-option *ngFor="let item of monthOptions" [value]="item">{{
                 item
                 }}</mat-option>
@@ -27,7 +27,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Ngày</mat-label>
-            <mat-select [(ngModel)]="selectedDate.date" (ngModelChange)="onUpdateInfomation()">
+            <mat-select [(ngModel)]="selectedDate.date" (ngModelChange)="onUpdateInformation()">
               <mat-option *ngFor="let item of dayOptions" [value]="item">{{
                 item
                 }}</mat-option>
@@ -38,7 +38,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn giờ</mat-label>
             <input matInput [(ngModel)]="selectedDate.time" [ngxMatTimepicker]="pickerA" placeholder="14:00 PM"
-              [format]="24" readonly (ngModelChange)="onUpdateInfomation()" />
+              [format]="24" readonly (ngModelChange)="onUpdateInformation()" />
             <mat-icon matSuffix (click)="pickerA.open()">
               watch_later
             </mat-icon>
@@ -64,13 +64,13 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Họ và Tên</mat-label>
                 <input type="text" matInput required [(ngModel)]="calculatedTuanCuu.details.name"
-                  (input)="onUpdateInfomation()" (ngModelChange)="onUpdateInfomation()" />
+                  (input)="onUpdateInformation()" (ngModelChange)="onUpdateInformation()" />
               </mat-form-field>
             </div>
             <div class="form-group">
               <mat-label>Giới tính</mat-label>
               <div>
-                <mat-radio-group [(ngModel)]="calculatedTuanCuu.details.sex" (ngModelChange)="onUpdateInfomation()">
+                <mat-radio-group [(ngModel)]="calculatedTuanCuu.details.sex" (ngModelChange)="onUpdateInformation()">
                   <mat-radio-button [value]="'male'">Nam</mat-radio-button>
                   <mat-radio-button [value]="'female'">Nữ</mat-radio-button>
                 </mat-radio-group>
@@ -79,7 +79,7 @@
             <div class="form-group">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Chức Đạo</mat-label>
-                <mat-select [(ngModel)]="calculatedTuanCuu.details.title" (ngModelChange)="onUpdateInfomation()">
+                <mat-select [(ngModel)]="calculatedTuanCuu.details.title" (ngModelChange)="onUpdateInformation()">
                   <mat-option *ngFor="let item of caoDaiTitle" [value]="item.key">{{ item.name }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -87,7 +87,7 @@
             <div class="form-group" *ngIf="subTitles?.length > 0">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Chức Vụ</mat-label>
-                <mat-select [(ngModel)]="calculatedTuanCuu.details.subTitle" (ngModelChange)="onUpdateInfomation()">
+                <mat-select [(ngModel)]="calculatedTuanCuu.details.subTitle" (ngModelChange)="onUpdateInformation()">
                   <mat-option *ngFor="let item of subTitles" [value]="item.key">{{ item.name }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -97,7 +97,7 @@
               ">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Sắc phái</mat-label>
-                <mat-select [(ngModel)]="calculatedTuanCuu.details.color" (ngModelChange)="onUpdateInfomation()">
+                <mat-select [(ngModel)]="calculatedTuanCuu.details.color" (ngModelChange)="onUpdateInformation()">
                   <mat-option *ngFor="let item of colors" [value]="item.key" [ngStyle]="{ background: item.color }">{{
                     item.name }}</mat-option>
                 </mat-select>
@@ -107,14 +107,14 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Thánh Danh</mat-label>
                 <input type="text" matInput [required]="isHolyNameRequired"
-                  [(ngModel)]="calculatedTuanCuu.details.holyName" (ngModelChange)="onUpdateInfomation()" />
+                  [(ngModel)]="calculatedTuanCuu.details.holyName" (ngModelChange)="onUpdateInformation()" />
               </mat-form-field>
             </div>
             <div class="form-group">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Tuổi</mat-label>
                 <input type="number" matInput [(ngModel)]="calculatedTuanCuu.details.age"
-                  (ngModelChange)="onUpdateInfomation()" />
+                  (ngModelChange)="onUpdateInformation()" />
               </mat-form-field>
             </div>
           </div>
