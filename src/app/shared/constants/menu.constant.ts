@@ -15,14 +15,14 @@ export const MENU = [
         fullAssess: true,
         released: true,
       },
-      {
-        key: 'trang-chu.thanh-ngon-hiep-tuyen',
-        url: 'thanh-ngon-hiep-tuyen',
-        label: 'Thánh Ngôn Hiệp Tuyển',
-        icon: 'auto_stories',
-        fullAssess: true,
-        released: true
-      },
+      // {
+      //   key: 'trang-chu.thanh-ngon-hiep-tuyen',
+      //   url: 'thanh-ngon-hiep-tuyen',
+      //   label: 'Thánh Ngôn Hiệp Tuyển',
+      //   icon: 'auto_stories',
+      //   fullAssess: true,
+      //   released: true
+      // },
       {
         key: 'trang-chu.thu-vien',
         url: 'thu-vien',

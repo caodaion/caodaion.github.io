@@ -106,8 +106,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       this.calendarMode = 'month';
       if (param.mode) {
         this.calendarMode = param.mode
-      }  
-      this.selectedDate.solar = new Date(`${param.year || this.datePipe.transform(new Date(), 'YYYY')}-${param.month || this.datePipe.transform(new Date(), 'MM')}-${param.date || this.datePipe.transform(new Date(), 'dd')} 00:00:00`);        
+      }
+      this.selectedDate.solar = new Date(`${param.year || this.datePipe.transform(new Date(), 'YYYY')}-${param.month || this.datePipe.transform(new Date(), 'MM')}-${param.date || this.datePipe.transform(new Date(), 'dd')} 00:00:00`);
       this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
         this.selectedDate.solar
       );
@@ -148,6 +148,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
             : (this.selectedDate.solar?.getMonth() + 1).toString();
         this.getThanhSoInMember()
       })
+    this.changeDetector.detectChanges();
   }
 
   getTuThoiTimes() {
@@ -305,10 +306,10 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           }
           const foundConsecutive = data?.find((cp: any) => {
             return new Date(cp?.date?.setHours(0))?.toString() === date?.solar?.toString()
-          })          
+          })
           if (new Date(new Date(new Date(date?.solar.setHours(0)).setMinutes(0)).setSeconds(0)) < new Date(new Date(new Date(new Date(new Date().setDate(new Date().getDate())).setHours(0)).setMinutes(0)).setSeconds(0))) {
             date.logged = foundConsecutive?.data?.length
-          }          
+          }
           if (this.datePipe.transform(date?.solar, 'YYYY-MM-dd') == this.datePipe.transform(new Date(), 'YYYY-MM-dd')) {
             if (foundConsecutive?.data?.length === 0) {
               date.logged = ''
@@ -672,7 +673,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.getTuThoiTimes();
       }, 0);
-    }    
+    }
     this.router.navigate([`/lich/${this.calendarMode}/${this.datePipe.transform(this.selectedDate.solar, 'YYYY/MM/dd')}`]);
     this.getCalendarEvent()
   }
@@ -1066,6 +1067,37 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   shareVegetarianDay(item: any) {
     this.vegetarianDay = item;
     this.vegetarianBottomSheetRef = this.matBottomSheet.open(this.vegetarianBottomSheet)
+  }
+
+  addTuanCuu(date: any) {
+    this.router.navigateByUrl(`/lich/tinh-tuan-cuu/${this.datePipe.transform(date.solar, 'yyyy/MM/dd')}`)
+  }
+  newEvent = <any>{
+    data: <any>{}
+  };
+  addEventFromDate(date: any) {    
+    // default event type cau-sieu-ky-niem
+    this.newEvent.eventType = {
+      key: 'cau-sieu-ky-niem',
+      name: 'Cầu Siêu Kỷ Niệm'
+    }
+    this.newEvent.data = {
+      eventDate: date?.lunar?.convertSolar2Lunar?.lunarDay,
+      eventMonth: date?.lunar?.convertSolar2Lunar?.lunarMonth,
+      eventAddress: <any>{
+        province: '',
+        district: '',
+        ward: '',
+        address: ''
+      },
+      address: <any>{
+        province: '',
+        district: '',
+        ward: '',
+        address: ''
+      }
+    }
+    this.expaned = true
   }
 }
 

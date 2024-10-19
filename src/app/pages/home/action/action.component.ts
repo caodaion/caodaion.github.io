@@ -16,11 +16,11 @@ export class ActionComponent implements OnInit {
       icon: 'menu_book',
       label: 'Các bài Kinh'
     },
-    {
-      link: '/thanh-ngon-hiep-tuyen',
-      icon: 'auto_stories',
-      label: 'Thánh Ngôn Hiệp Tuyển'
-    },
+    // {
+    //   link: '/thanh-ngon-hiep-tuyen',
+    //   icon: 'auto_stories',
+    //   label: 'Thánh Ngôn Hiệp Tuyển'
+    // },
     {
       link: '/thu-vien',
       icon: 'library_books',

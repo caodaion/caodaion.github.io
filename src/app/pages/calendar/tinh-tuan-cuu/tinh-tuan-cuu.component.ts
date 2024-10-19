@@ -113,9 +113,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
     this.selectedDate.time = this.datePipe.transform(now, 'HH:mm')
     this.getCalculatedLunarDate()
-    this.route.params.subscribe((param: any) => {
-      console.log(param);
-      
+    this.route.params.subscribe((param: any) => {      
       if (param.year) {
         this.selectedDate.year = parseInt(param.year);
       }

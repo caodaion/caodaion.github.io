@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
@@ -16,9 +17,6 @@ export class UpdateEventComponent implements OnInit {
   memberThanhSo = <any>[];
   setting = <any>{};
   user = <any>{};
-  newEvent = <any>{
-    data: <any>{}
-  };
   newRegister = <any>{
     address: <any>{}
   };
@@ -42,8 +40,12 @@ export class UpdateEventComponent implements OnInit {
   ]
   isEditor: boolean = false
   @Output('updateSelectedThanhSo') updateSelectedThanhSo = new EventEmitter()
-  @Input('selectedThanhSoSetting') selectedThanhSoSetting?: any;
-  @Input('selectedThanhSoEvents') selectedThanhSoEvents?: any;
+  @Input() selectedThanhSoSetting?: any;
+  @Input() selectedThanhSoEvents?: any;
+  @Input() newEvent: any = {
+    data: <any>{
+    }
+  };
 
   constructor(
     private commonService: CommonService,
@@ -56,7 +58,7 @@ export class UpdateEventComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchRegisteredMember()
-    this.getAllDivisions()
+    this.getAllDivisions()    
   }
 
   fetchRegisteredMember() {
@@ -168,5 +170,10 @@ export class UpdateEventComponent implements OnInit {
         this.registrationGoogleFormsPath += `&${this.setting?.thanhSoSheet}=${encodeURIComponent(this.newRegister.thanhSoSheet)}`
       }
     }
+  }
+  onUpdateEventType(event: any) {
+    let keyData = `${this.newEvent.data.eventTime ? this.newEvent.data.eventTime?.split('|')[0]?.trim() : ''}${this.newEvent.data.date || ''}${this.newEvent.data.month || ''}${this.newEvent.data.year || ''}${this.newEvent.data.eventDate || ''}${this.newEvent.data.eventMonth || ''}${this.newEvent?.data?.time ? this.newEvent?.data?.time?.split('|')[0]?.trim() : ''}${this.newEvent?.eventType?.name || ''}`
+    this.newEvent.key = this.commonService.generatedSlug(keyData)
+    this.newEvent.eventName = `${this.newEvent?.eventType?.name}`
   }
 }

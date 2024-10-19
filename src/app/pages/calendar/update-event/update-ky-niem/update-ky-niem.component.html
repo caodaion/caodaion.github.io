@@ -202,6 +202,7 @@
     </div>
 </div>
 
-<button class="w-full mb-4" mat-flat-button *ngIf="showSaveButton" (click)="updateNewEvent()" [color]="'primary'">
+<button class="w-full mb-4" mat-flat-button *ngIf="showSaveButton" (click)="updateNewEvent()" [color]="'primary'"
+    [disabled]="!newEvent.data.eventDate || !newEvent.data.eventMonth">
     <mat-icon>save</mat-icon>Lưu sự kiện
 </button>

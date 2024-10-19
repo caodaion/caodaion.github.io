@@ -78,8 +78,6 @@ export class KinhContentComponent implements OnInit {
       const jwtHelper = new JwtHelperService()
       const decodedToken = jwtHelper.decodeToken(settingFontSize)
       this.fontSize = decodedToken?.fontSize || 18
-      console.log(decodedToken);
-
       this.cd.detectChanges();
     }
     this.contentEditable = this.authService.contentEditable

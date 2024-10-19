@@ -24,7 +24,7 @@
             <div class="w-full lg:w-1/4 p-2">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Loại sự kiện</mat-label>
-                    <mat-select [(ngModel)]="newEvent.eventType">
+                    <mat-select [(ngModel)]="newEvent.eventType" (selectionChange)="onUpdateEventType($event)">
                         <mat-optgroup *ngFor="let item of eventTypes" [label]="item?.group">
                             <mat-option *ngFor="let op of item?.data" [value]="op">
                                 {{ op?.name}}

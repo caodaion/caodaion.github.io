@@ -43,7 +43,7 @@ export class UpdateKyNiemComponent implements OnInit {
     this.timeZone = TIME_TYPE.data
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.newEvent.data.atThanhSo = true
     this.onUpdateInfomation()
     this.getAllDivisions()
@@ -57,16 +57,24 @@ export class UpdateKyNiemComponent implements OnInit {
           this.provinces = res.provinces
           this.districts = res.districts
           this.wards = res.wards
-          this.newEvent.data.eventAddress = <any>{}
-          this.newEvent.data.address = <any>{}
+          if (!this.newEvent.data.eventAddress) {
+            this.newEvent.data.eventAddress = <any>{}
+          }
+          if (!this.newEvent.data.address) {
+            this.newEvent.data.address = <any>{}
+          }
         }
       })
     } else {
       this.provinces = this.commonService.provinces
       this.districts = this.commonService.districts
       this.wards = this.commonService.wards
-      this.newEvent.data.eventAddress = <any>{}
-      this.newEvent.data.address = <any>{}
+      if (!this.newEvent.data.eventAddress) {
+        this.newEvent.data.eventAddress = <any>{}
+      }
+      if (!this.newEvent.data.address) {
+        this.newEvent.data.address = <any>{}
+      }
     }
   }
 

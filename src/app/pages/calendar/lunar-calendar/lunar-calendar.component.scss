@@ -51,4 +51,8 @@
       visibility: hidden;
     }
   }
+  .mat-mdc-menu-item-text {
+    display: flex;
+    align-items: center;
+  }
 }

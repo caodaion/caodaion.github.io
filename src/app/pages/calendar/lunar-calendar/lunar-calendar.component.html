@@ -139,6 +139,7 @@
         <div class="w-full whitespace-break-spaces text-center my-3">{{guestMessage}}</div>
         <div class="w-full flex flex-col">
           <app-update-event (updateSelectedThanhSo)="updateSelectedThanhSo($event)"
+            [newEvent]="newEvent"
             [selectedThanhSoSetting]="selectedThanhSoSetting"></app-update-event>
         </div>
       </div>
@@ -186,7 +187,7 @@
         </div>
         <div class="w-full flex justify-between flex-wrap">
           <button mat-flat-button class="!px-4 !bg-transparent" [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
-            (click)="onChangeCalendarMode('day', date)">
+          [matMenuTriggerFor]="dateMenu">
             <div class="solar-date">{{ date?.solar?.getDate() }}</div>
             <div class="lunar-date">
               <span *ngIf="!!date?.lunar?.convertSolar2Lunar?.lunarLeap" [matTooltip]="
@@ -197,6 +198,20 @@
               }}
             </div>
           </button>
+          <mat-menu #dateMenu="matMenu">
+            <button mat-menu-item (click)="onChangeCalendarMode('day', date)">
+              <span class="material-symbols-outlined">view_day</span>
+              <span class="ml-2">Xem ngày</span>
+            </button>
+            <button mat-menu-item (click)="addTuanCuu(date)">
+              <span class="material-symbols-outlined">calculate</span>
+              <span class="ml-2">Thêm lịch cúng cửu</span>
+            </button>
+            <button mat-menu-item (click)="addEventFromDate(date)">
+              <span class="material-symbols-outlined">add</span>
+              <span class="ml-2">Thêm  sự kiện</span>
+            </button>
+          </mat-menu>
           <img loading="lazy" *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 15"
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]" src="assets/icons/assets/full-moon.svg"
             alt="full-moon" [matTooltip]="'Vọng nhựt'">
@@ -437,7 +452,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div #shareImage class="p-8 min-w-[1200px]" [id]="shareItem.id">
+      <div #shareImage class="p-8 min-w-[1200px]" [id]="shareItem.id" [contentEditable]="true">
         <div class="h-3 w-full mb-8" [ngClass]="
         shareItem?.event?.date === 'yearly-monthly-daily'
           ? 'yearly-monthly-daily'

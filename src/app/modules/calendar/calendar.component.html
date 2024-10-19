@@ -1,11 +1,11 @@
 <mat-sidenav-container class="w-100" tosize>
   <mat-sidenav class="sub-sidenav" mode="side" [opened]="viewMissionService.isDrawerOpened" [mode]="drawerMode">
     <mat-nav-list class="mat-list-sub-sidenav">
-      <button mat-raised-button [color]="'primary'"
+      <!-- <button mat-raised-button [color]="'primary'"
         class="!rounded-full !py-2 !px-8 !h-auto !bg-white !border-[#3f51b5] !text-[#3f51b5]"
         (click)="onToggleDrawer(); addNew()">
         <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>Thêm
-      </button>
+      </button> -->
       <a mat-list-item class="icon-hover" [ngClass]="calendarService.calendarViewMode === 'day' ? 'active' : ''"
         (click)="onChangeCalendarViewMode('day')">
         <span class="material-symbols-outlined sub-sidenav-icon">calendar_view_day</span><span
