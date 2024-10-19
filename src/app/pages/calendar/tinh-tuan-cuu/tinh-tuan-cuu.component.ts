@@ -127,10 +127,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
         this.calculateTuanCuu()
         if (param.details) {
           const jwtHelper = new JwtHelperService()
-          console.log(jwtHelper.decodeToken(param.details));
-          const decodedToken = JSON.parse(jwtHelper.decodeToken(param.details) || '[]')
-          console.log(decodedToken);
-          
+          const decodeTokenData = jwtHelper.decodeToken(param.details) || []          
+          const decodedToken = decodeTokenData          
           this.selectedDate = {
             time: param.time?.replace('-', ':'),
             date: parseInt(param.date),
