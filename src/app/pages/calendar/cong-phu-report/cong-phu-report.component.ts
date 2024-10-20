@@ -6,6 +6,9 @@ import * as moment from 'moment';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { CongPhuService } from 'src/app/shared/services/cong-phu/cong-phu.service';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import html2canvas from 'html2canvas-pro';
+import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
   selector: 'app-cong-phu-report',
@@ -16,12 +19,9 @@ export class CongPhuReportComponent implements AfterViewInit {
   user: any;
   viewDetailsData: any;
   displayData: any;
-  nextTarget: number = 0;
   timeFilterOptions: any = <any>[]
   selectedTimeRange: any;
   chart: any;
-  icon: any;
-  targetRange: any = <any>[]
   congPhuSetting: any = <any>{}
   congPhuFilterSetting: any = <any>[]
   congPhuRawData: any = <any>[]
@@ -29,14 +29,15 @@ export class CongPhuReportComponent implements AfterViewInit {
   filteringName = <any>[]
   filteredDataSets = <any>[]
   chartDataSetting = <any>[]
+  downloading: boolean = false;
 
   constructor(
-    private authService: AuthService,
     private datePipe: DatePipe,
-    private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
     private congPhuService: CongPhuService,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private calendarService: CalendarService,
+    private commonService: CommonService
   ) {
 
   }
@@ -49,14 +50,12 @@ export class CongPhuReportComponent implements AfterViewInit {
   }
 
   refreshData() {
-    this.targetRange = <any>[]
     this.fetchCongPhuData()
   }
 
   fetchCongPhuData() {
     this.congPhuService.fetchCongPhuData()
       .subscribe((res: any) => {
-        console.log(res);
         this.congPhuFilterSetting = res?.filterSetting
         this.congPhuSetting = res?.setting
         this.congPhuRawData = JSON.parse(JSON.stringify(res?.data))
@@ -92,7 +91,6 @@ export class CongPhuReportComponent implements AfterViewInit {
   calculateConsecutiveDays() {
     this.chartDataSetting = this.filteringName?.map((filterItem: any) => {
       const foundItem = this.congPhu?.filter((item: any) => item?.name?.na == filterItem.split('-')[0] && item?.name?.by == filterItem.split('-')[1] && item?.name?.tt == filterItem.split('-')[2])
-
       const dataPoints = foundItem.map((item: any) => {
         const calculatedDate = () => {
           if (new Date(new Date().setHours(parseInt(item?.data?.ti.split(':')[0]), parseInt(item?.data?.ti.split(':')[1]), 59)) >= new Date(new Date().setHours(22, 59, 59))) {
@@ -103,13 +101,57 @@ export class CongPhuReportComponent implements AfterViewInit {
         }
         return {
           date: this.datePipe.transform(calculatedDate(), 'yyyy-MM-dd'),
-          time: item?.data?.ti
+          item: item
         }
       })
       return {
         name: filterItem,
-        dataPoints: dataPoints
+        info: {
+          na: foundItem[0]?.name?.na,
+          by: foundItem[0]?.name?.by,
+          tt: foundItem[0]?.name?.tt
+        },
+        dataPoints: dataPoints?.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
       }
+    })
+    this.chartDataSetting.forEach((item: any) => {
+      let consecutiveDays = 0;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      for (let i = item.dataPoints.length - 1; i >= 0; i--) {
+        const currentDate = new Date(item.dataPoints[i].date);
+        currentDate.setHours(0, 0, 0, 0);
+        if (currentDate.getTime() === today.getTime() || currentDate.getTime() === today.getTime() - 86400000) {
+          consecutiveDays++;
+          today.setDate(today.getDate() - 1);
+        }
+      }
+      item.consecutiveDays = consecutiveDays;
+      item.icon = 'check_circle';
+      if (consecutiveDays > 0) {
+        item.icon = 'candle';
+        item.consecutiveFromDay = <any>{};
+        item.consecutiveFromDay.solar = new Date(moment(new Date()).subtract(consecutiveDays, 'days').format('YYYY-MM-DD'));
+        item.consecutiveFromDay.lunar = this.calendarService.getConvertedFullDate(item.consecutiveFromDay.solar).convertSolar2Lunar;
+      }
+    })
+    this.chartDataSetting.forEach((item: any) => {
+      if (item.consecutiveDays <= 0) return;
+      const nextTargets = [5, 10, 15].map(step => {
+        const target = Math.ceil(item.consecutiveDays / step) * step;
+        return target > item.consecutiveDays ? target : item.consecutiveDays;
+      });
+      // Get two previous targets
+      const prevTargets = [5].map(step => {
+        const target = Math.floor(item.consecutiveDays / step) * step;
+        return target;
+      }).filter(target => target !== null);
+
+      // Merge previous targets with nextTargets
+      const allTargets = [...prevTargets, ...nextTargets];
+      item.targetRange = allTargets
+      item.nextTarget = allTargets.find((target: any) => target > item.consecutiveDays) || 0
     })
   }
 
@@ -146,26 +188,9 @@ export class CongPhuReportComponent implements AfterViewInit {
     // ]
 
     const datasets = this.filteringName.map((filterItem: any) => {
-      const foundItem = data?.filter((item: any) => item?.name?.na == filterItem.split('-')[0] && item?.name?.by == filterItem.split('-')[1] && item?.name?.tt == filterItem.split('-')[2])
-
+      const gotNameChartData = this.chartDataSetting?.find((item: any) => item?.name == filterItem)
       const dataPoint = Array.from({ length: endDate.getDate() }, (x, i) => i + 1).map((item: any) => {
-        const foundItemDate = foundItem?.filter((dateItem: any, index: number) => {
-          const currentDate = new Date(dateItem.data.yy, dateItem.data.mm - 1, dateItem.data.dd);
-          const itemDate = currentDate.getDate();
-          const itemTime = dateItem.data.ti.split(':')[0];
-
-          if (itemDate === item) {
-            if (parseInt(itemTime) < 23) {
-              return true;
-            }
-          } else if (itemDate === item - 1) {
-            if (parseInt(itemTime) >= 23) {
-              return true;
-            }
-          }
-          return false;
-        })
-        return foundItemDate.length
+        return gotNameChartData.dataPoints.filter((dataPointItem: any) => dataPointItem.date == this.datePipe.transform(new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1] - 1, item), 'yyyy-MM-dd'))?.length
       })
 
       return {
@@ -232,5 +257,25 @@ export class CongPhuReportComponent implements AfterViewInit {
         }
       default: return ''
     }
+  }
+
+  saveAsImage(element: any) {
+    const content = document.getElementById(element)?.textContent
+    navigator.clipboard.writeText(content || '')
+    setTimeout(() => {
+      this.downloading = true
+      const saveItem = document.getElementById(element)
+      if (saveItem) {
+        html2canvas(saveItem).then((canvas) => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `${this.commonService.generatedSlug(element)}.png`;
+          link.click();
+          this.downloading = false
+        }).catch((error: any) => {
+          this.downloading = false
+        });
+      }
+    }, 0)
   }
 }
