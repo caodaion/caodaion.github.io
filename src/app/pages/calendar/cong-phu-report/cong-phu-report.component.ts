@@ -137,6 +137,19 @@ export class CongPhuReportComponent implements AfterViewInit {
       type: 'bar',
       options: {
         responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: (value: number | string, index: number, values: any[]) => {
+                if (typeof value === 'number' && Math.floor(value) === value) {
+                  return value.toString();
+                }
+                return null;
+              }
+            }
+          }
+        },
         onClick: (event: any, elements: any) => {
           if (elements.length > 0) {
             const index = elements[0].index;

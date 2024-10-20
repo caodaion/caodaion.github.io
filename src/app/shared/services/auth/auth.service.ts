@@ -368,7 +368,7 @@ export class AuthService {
                             response.remote['congPhu'] = <any>[]
                           }
                           const dateValue = new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`)
-                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
+                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)                          
                           if (new Date(new Date().setHours(0)) >= new Date(dateValue.setHours(0))) {
                             if (parseInt(dr?.data?.time?.split(':')[0]) >= 23) {
                               const nextDate = new Date(moment(moment(new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`)).add(1, 'days')).format('YYYY-MM-DD 00:00:00'))
@@ -439,6 +439,7 @@ export class AuthService {
                   })
                 }
                 if (resIndex === res?.length - 1) {
+                  response.remote['consecutive'] = 0
                   const migrateCalendar = () => {
                     response.remote['congPhu'].sort((a: any, b: any) => {
                       return new Date(`${a?.year}-${this.decimalPipe.transform(a?.month, '2.0-0')}-${this.decimalPipe.transform(a?.date, '2.0-0')}`) < new Date(`${b?.year}-${this.decimalPipe.transform(b?.month, '2.0-0')}-${this.decimalPipe.transform(b?.date, '2.0-0')}`) ? -1 : 1
@@ -465,7 +466,7 @@ export class AuthService {
                     const lastDateDiff = moment(new Date()).diff(lastDate, 'days')
                     if (lastDateDiff <= 1) {
                       if (response.remote['congPhu']?.length > 0) {
-                        response.remote['consecutive'] = moment(new Date()).diff(moment(response.remote['consecutiveFrom']?.solar).subtract(1, 'days'), 'days')
+                        response.remote['consecutive'] = moment(new Date()).diff(moment(response.remote['consecutiveFrom']?.solar).subtract(lastDateDiff == 0 ? 1 : 0, 'days'), 'days')
                       }
                     }
                   }
