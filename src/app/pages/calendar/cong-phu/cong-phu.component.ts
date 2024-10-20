@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { CongPhuService } from 'src/app/shared/services/cong-phu/cong-phu.service';
 
 @Component({
   selector: 'app-cong-phu',
@@ -14,12 +15,14 @@ export class CongPhuComponent implements AfterViewInit {
   monthOptions = <any>[];
   dayOptions = <any>[];
   currentUser: any = <any>{}
+  congPhuSetting: any = <any>{}
   syncGoogleFormPath: any;
 
   constructor(
     private calendarService: CalendarService,
     private datePipe: DatePipe,
-    private authService: AuthService
+    private authService: AuthService,
+    private congPhuService: CongPhuService
   ) {
 
   }
@@ -34,6 +37,18 @@ export class CongPhuComponent implements AfterViewInit {
     this.authService.getCurrentUser(true).subscribe((res: any) => {
       this.currentUser = res;
     })
+    const localCongPhuData = localStorage.getItem('congPhuData') || '{}'
+    this.saved.name = JSON.parse(localCongPhuData)?.na
+    this.saved.bornYear = JSON.parse(localCongPhuData)?.by
+    this.saved.thanhThat = JSON.parse(localCongPhuData)?.tt
+    this.fetchCongPhuData()
+  }
+
+  fetchCongPhuData() {
+    this.congPhuService.fetchCongPhuData()
+      .subscribe((res: any) => {
+        this.congPhuSetting = res.setting
+      })
   }
 
   savedSummary() {
@@ -58,8 +73,27 @@ export class CongPhuComponent implements AfterViewInit {
   }
 
   saveData() {
-    this.syncGoogleFormPath = `https://docs.google.com/forms/d/e/${this.currentUser?.googleFormsId}/viewform`
-    const syncToken = [{ key: 'cong-phu', data: this.saved }]
-    this.syncGoogleFormPath += `?${this.currentUser?.setting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+    this.syncGoogleFormPath = `https://docs.google.com/forms/d/e/${this.congPhuSetting?.googleFormsId}/viewform`
+    const syncToken = { 
+      yy: this.saved.year, 
+      mm: this.saved.month, 
+      dd: this.saved.date, 
+      ti: this.saved.time,
+      no: this.saved.note
+    }
+    this.syncGoogleFormPath += `?${this.congPhuSetting?.name}=${encodeURIComponent(JSON.stringify({
+      na: this.saved.name,
+      by: this.saved.bornYear,
+      tt: this.saved.thanhThat
+    }))}`;
+    this.syncGoogleFormPath += `&${this.congPhuSetting?.data}=${encodeURIComponent(JSON.stringify(syncToken))}`;
+  }
+
+  updateName() {
+    localStorage.setItem('congPhuData', JSON.stringify({
+      na: this.saved.name,
+      by: this.saved.bornYear,
+      tt: this.saved.thanhThat
+    }))
   }
 }

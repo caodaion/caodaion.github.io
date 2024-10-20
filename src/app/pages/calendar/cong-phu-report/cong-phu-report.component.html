@@ -1,4 +1,12 @@
 <div class="py-4">
+    <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Xem theo tên {{filteringName?.length}}/{{congPhuFilterSetting?.length}}</mat-label>
+        <mat-select [(ngModel)]="filteringName" [multiple]="true" (ngModelChange)="initChart()">
+            <mat-option *ngFor="let item of congPhuFilterSetting" [value]="item?.na + '-' + item?.by + '-' + item?.tt">
+                {{item?.na}} - {{item?.by}} - {{item?.tt}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <div class="bg-[#fbbc05] px-3 py-6 rounded mb-4">
         <div class="flex items-center py-4">
             <div class="w-full flex flex-col items-center justify-center text-2xl font-bold" *ngIf="user?.consecutive">
