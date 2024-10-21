@@ -203,7 +203,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
       item.name = `${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
       item.title = `Chia sẻ lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((item: any) => item?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
-      const date = this.calendarService.getConvertedFullDate(new Date(`${item?.date?.year}-${item?.date?.month < 10 ? '0' + item?.date?.month : item?.date?.month}-${item?.date?.date < 10 ? '0' + item?.date?.date : item?.date?.date}`)).convertSolar2Lunar
+      const date = this.calendarService.getConvertedFullDate(new Date(`${item?.date?.year}-${item?.date?.month < 10 ? '0' + item?.date?.month : item?.date?.month}-${item?.date?.date < 10 ? '0' + item?.date?.date : item?.date?.date} ${item?.date?.time}:00`)).convertSolar2Lunar
       item.date.lunarMonth = `${date.lunarMonth} ${date.lunarLeap ? 'nhuận' : ''}`
       item.date.lunarDay = date.lunarDay
       item.date.lunarYearName = date.lunarYearName
@@ -384,7 +384,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     const information = `
     <h2 style="text-align: center;">LỊCH ${item.name?.toUpperCase()}</h2>
     <h3 style="text-align: center;">
-    TỪ TRẦN NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
+    TỪ TRẦN NGÀY THỜI ${item?.date?.lunarTime} ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
     </h3>`
 
     const printContent = document.getElementById(

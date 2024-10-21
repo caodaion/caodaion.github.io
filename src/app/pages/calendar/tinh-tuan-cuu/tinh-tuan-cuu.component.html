@@ -123,8 +123,8 @@
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tỉnh/Thành phố</mat-label>
                 <mat-select [(ngModel)]="calculatedTuanCuu.details.province">
-                  <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                    (keydown)="onPress($event)">
+                  <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                   <mat-option
                     *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
                     [value]="item?.id">{{ item?.name }}</mat-option>
@@ -135,8 +135,8 @@
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Quận/Huyện</mat-label>
                 <mat-select [(ngModel)]="calculatedTuanCuu.details.district">
-                  <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                    (keydown)="onPress($event)">
+                  <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                   <mat-option
                     *ngFor="let item of districts | divisionFilter: {level: 'district', parent: calculatedTuanCuu.details.province, searchText: districtFilter['value']}"
                     [value]="item?.id">{{ item?.name }}</mat-option>
@@ -147,8 +147,8 @@
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Phường/Xã</mat-label>
                 <mat-select [(ngModel)]="calculatedTuanCuu.details.ward">
-                  <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
-                    (keydown)="onPress($event)">
+                  <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10"
+                    [placeholder]="'Tìm kiếm hoặc tạo mới'" (keydown)="onPress($event)">
                   <mat-option
                     *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: calculatedTuanCuu.details.district, searchText: wardFilter['value']}"
                     [value]="item?.id">{{ item?.name }}</mat-option>
@@ -328,7 +328,7 @@
   <div class="container-fluid">
     <p>Xác nhận in lịch cúng cửu cho {{ printedInfo?.name }}</p>
     <p>
-      Từ trần ngày {{ printedInfo?.date?.lunarDay }} tháng
+      Từ trần thời {{printedInfo?.date?.lunarTime}} ngày {{ printedInfo?.date?.lunarDay }} tháng
       {{ printedInfo?.date?.lunarMonth }} năm
       {{ printedInfo?.date?.lunarYearName }} ({{
       printedInfo?.date.date | number : "2.0-0"
@@ -337,7 +337,7 @@
       }})
     </p>
     <div class="qr-area flex flex-col items-center">
-        <img loading="lazy" [style]="{width: '300px', height: '300px'}" #parent [src]="printedInfo?.qrData" alt="">
+      <img loading="lazy" [style]="{width: '300px', height: '300px'}" #parent [src]="printedInfo?.qrData" alt="">
       <div class="text-center">
         <button mat-raised-button color="primary" (click)="onPrint(printedInfo, parent)">
           <mat-icon>print</mat-icon> Xác nhận in
