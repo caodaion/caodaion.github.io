@@ -125,7 +125,6 @@ export class TinhTuanCuuComponent implements AfterViewInit {
         this.selectedDate.date = parseInt(param.date);
       }
       if (param.year && param.month && param.date) {
-        this.calculateTuanCuu()
         if (param.details) {
           const jwtHelper = new JwtHelperService()
           const decodeTokenData = jwtHelper.decodeToken(param.details) || []          
@@ -137,6 +136,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
             year: parseInt(param.year)
           }
           this.getCalculatedLunarDate()
+          this.calculateTuanCuu()
           this.calculatedTuanCuu.details = {
             name: decodedToken[0],
             age: decodedToken[1],
@@ -151,6 +151,8 @@ export class TinhTuanCuuComponent implements AfterViewInit {
             address: decodedToken[10],
           }
           this.saveSharedEvent()
+        } else {
+          this.calculateTuanCuu()
         }
       }
     })
@@ -226,8 +228,9 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1)
   }
 
-  calculateTuanCuu() {
-    let calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date}T${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)
+  calculateTuanCuu() {    
+    let calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date} ${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)
+    
     if (calDate > new Date(new Date(calDate).setHours(22, 59, 59))) {
       calDate = new Date(new Date(calDate.setDate(calDate.getDate() + 1)).setHours(0, 0, 0))
     }
