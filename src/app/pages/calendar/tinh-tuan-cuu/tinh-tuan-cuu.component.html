@@ -216,7 +216,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button-share [title]="item?.title" [url]="item?.location">
+            <button-share [title]="item?.title" *ngIf="item?.isLocationRead" [url]="item?.location">
               <button mat-menu-item><mat-icon>share</mat-icon>Chia sẻ</button>
             </button-share>
             <button mat-menu-item (click)="onCallPrint(item)">

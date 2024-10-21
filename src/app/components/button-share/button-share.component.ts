@@ -49,16 +49,19 @@ export class ButtonShareComponent implements OnInit, AfterViewChecked, AfterView
     }
   }
 
-  ngAfterViewChecked(): void {
+  ngAfterViewChecked(): void {    
     if (this.url) {
       this.sharedUrl = this.url
     }
   }
 
   ngAfterViewInit(): void {
+    if (this.url) {
+      this.sharedUrl = this.url
+    }
     QRCode.toDataURL(this.sharedUrl)
       .then(url => {
-        this.qrSharedUrl = url;
+        this.qrSharedUrl = url;        
       })
       .catch(err => {
         console.error(err);

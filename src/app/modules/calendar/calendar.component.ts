@@ -80,9 +80,13 @@ export class CalendarComponent implements OnInit {
     this.onToggleDrawer()
     this.calendarService.calendarViewMode = mode;
     let modeLink = ''
-    let splitedLink = location?.pathname?.split('/')
-    splitedLink[2] = mode
-    modeLink = splitedLink.join('/')
+    let splitedLink = location?.pathname?.split('/')        
+    if (splitedLink?.includes('tinh-tuan-cuu')) {
+      modeLink = `lich/${mode}`
+    } else {
+      splitedLink[2] = mode
+      modeLink = splitedLink.join('/')
+    }    
     this.router.navigate([modeLink]);
   }
 

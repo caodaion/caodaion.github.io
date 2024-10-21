@@ -19,7 +19,7 @@ import * as CryptoJS from "crypto-js";
   templateUrl: './tinh-tuan-cuu.component.html',
   styleUrls: ['./tinh-tuan-cuu.component.scss']
 })
-export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
+export class TinhTuanCuuComponent implements AfterViewInit {
   provinces = <any>[]
   districts = <any>[]
   filteredDistricts = <any>[]
@@ -105,7 +105,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    this.getLocalStorageTuanCuu()
     this.getYearOptions()
     const now = new Date()
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
@@ -157,10 +158,6 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     this.getAllDivisions()
   }
 
-  ngAfterViewInit(): void {
-    this.getLocalStorageTuanCuu()
-  }
-
   getAllDivisions() {
     if (this.commonService.provinces?.length === 0) {
       this.commonService.fetchProvinceData()
@@ -180,7 +177,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
 
   saveSharedEvent() {
     this.saveTuanCuu()
-    this.selectedIndex = this.tuanCuuList.length
+    const foundItem = this.tuanCuuList?.find((item: any) => item?.key === this.calculatedTuanCuu.key)
+    this.selectedIndex = foundItem ? this.tuanCuuList.indexOf(foundItem) + 1 : this.tuanCuuList.length
     if (!!location.search) {
       this.router.navigate([], {
       })
@@ -190,7 +188,7 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
   expiriedEvent = <any>[];
   dialogRef: any;
   getLocalStorageTuanCuu() {
-    this.tuanCuuList = JSON.parse(localStorage.getItem('tuanCuu') || '[]')
+    this.tuanCuuList = JSON.parse(localStorage.getItem('tuanCuu') || '[]')    
     this.expiriedEvent = this.tuanCuuList.filter((item: any) => new Date(item?.event[item?.event?.length - 1].solar) < new Date())
     if (this.expiriedEvent?.length > 0) {
       // @ts-ignore
@@ -332,8 +330,8 @@ export class TinhTuanCuuComponent implements OnInit, AfterViewInit {
     const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
     
     item.token = token;
-    item.location = `${location.href}/${item?.date?.year}/${this.decimalPipe.transform(item?.date?.month, '2.0-0')}/${this.decimalPipe.transform(item?.date?.date, '2.0-0')}/${item?.date?.time?.replace(':', '-')}/${token}`;
-    
+    item.location = `${location.origin}/lich/tinh-tuan-cuu/${item?.date?.year}/${this.decimalPipe.transform(item?.date?.month, '2.0-0')}/${this.decimalPipe.transform(item?.date?.date, '2.0-0')}/${item?.date?.time?.replace(':', '-')}/${token}`;
+    item.isLocationRead = item?.location?.split('tinh-tuan-cuu')[1]?.split('/')?.length > 5    
     this.cd.detectChanges();
   }
 
