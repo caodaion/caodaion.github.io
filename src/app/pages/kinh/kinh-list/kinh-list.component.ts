@@ -40,20 +40,14 @@ export class KinhListComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.getKinhList();
     this.titleSerVice.setTitle(`Kinh | ${CONSTANT.page.name}`)
-    this.route.queryParams.subscribe((params) => {
-      if (this.selectedIndex === 0) {
-        if (params['me']) {
-          this.nowKinh.filter.me = params['me'];
-        }
-        if (params['e']) {
-          this.nowKinh.filter.e = params['e'];
-        }
+    this.route.params.subscribe((param: any) => {
+      if (param?.kinhGroup) {
+        this.selectedIndex = this.kinhFilter.findIndex(({ key }) => key === param?.kinhGroup)
       }
-      this.selectedIndex = this.kinhFilter.findIndex(({ key }) => key === this.nowKinh.filter.me)
-    });
+    })
     this.contentEditable = this.authService.contentEditable;
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
@@ -77,6 +71,11 @@ export class KinhListComponent implements OnInit {
     kinhQuanHonTangTe = kinhQuanHonTangTe.map((item) => item.key)
 
     this.kinhFilter.push(
+      {
+        key: '',
+        name: 'CÁC BÀI KINH',
+        kinh: this.kinhList,
+      },
       {
         key: 'cung-tu-thoi',
         name: 'CÚNG TỨ THỜI',
@@ -220,18 +219,11 @@ export class KinhListComponent implements OnInit {
   }
 
   selectedTabChange(event: any) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { me: this.kinhFilter[event.index]?.key, e: this.kinhFilter[event.index]?.key },
-      queryParamsHandling: 'merge',
-    });
+    this.router.navigate([`/kinh/${this.kinhFilter[event.index]?.key}`]);
   }
 
   onOpenKinhContent(kinh: any) {
-    this.router.navigate([kinh.key], {
-      relativeTo: this.route,
-      queryParams: { me: this.nowKinh.filter.me, e: this.nowKinh.filter.e },
-    });
+    this.router.navigate([`/kinh/${this.kinhFilter[this.selectedIndex]?.key ? this.kinhFilter[this.selectedIndex]?.key + '/' : ''}${kinh.key}`]);
   }
 
   updateViewMode() {

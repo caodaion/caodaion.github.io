@@ -1,25 +1,28 @@
 <mat-divider></mat-divider>
-<mat-nav-list class="bottom-navbar d-flex">
+<mat-nav-list class="bottom-navbar d-flex !pb-0">
   <a
-    mat-list-item
+    matRipple
     (click)="onNavigate(prev)"
     *ngIf="prev?.navigate?.link !== '/'"
+    class="min-h-[50px] w-full flex items-center justify-between me-2"
   >
     <div
       class="w-100 d-flex justify-content-center align-items-center"
     >
-      <mat-icon>arrow_back</mat-icon> <span>{{prev?.text}}</span>
+      <mat-icon class="me-2">arrow_back</mat-icon> <span class="text-center">{{prev?.text}}</span>
     </div>
   </a>
+  <mat-divider vertical></mat-divider>
   <a
-    mat-list-item
+    matRipple
     (click)="onNavigate(next)"
     *ngIf="next?.navigate?.link !== '/'"
+    class="min-h-[50px] w-full flex items-center justify-between ms-2"
   >
     <div
       class="w-100 d-flex justify-content-center align-items-center"
     >
-    <span>{{next?.text}}</span> <mat-icon>arrow_forward</mat-icon>
+    <span class="text-center">{{next?.text}}</span> <mat-icon class="ms-2">arrow_forward</mat-icon>
     </div>
   </a>
 </mat-nav-list>

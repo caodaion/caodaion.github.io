@@ -20,14 +20,15 @@ export class KinhContentComponent implements OnInit {
   contentEditable: boolean = false;
   nowContent: any;
   navigate = {
-    prev: {
+    prev: <any>{
       link: '/',
     },
-    next: {
+    next: <any>{
       link: '/',
     }
   };
   kinhKey: any;
+  kinhGroup: any;
   eventList = this.eventService.eventList
   queryParams = {
     me: '',
@@ -50,28 +51,14 @@ export class KinhContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((query) => {
-      if (query['kinhKey']) {
-        this.kinhKey = query['kinhKey']
-        this.getKinhContent(query['kinhKey'])
+    this.route.params.subscribe((param: any) => {
+      if (param?.kinhGroup) {
+        this.kinhGroup = param?.kinhGroup
       }
-    })
-    this.route.queryParams.subscribe((query) => {
-      if (query['me'] && query['e']) {
-        this.queryParams.me = query['me']
-        this.queryParams.e = query['e']
+      if (param?.kinhKey) {
+        this.kinhKey = param?.kinhKey
+        this.getKinhContent(param?.kinhKey)
       }
-      this.router.navigate(
-        ['.'],
-        {
-          relativeTo: this.route,
-          fragment: location.hash.replace('#', ''),
-          queryParams: {
-            me: this.queryParams.me,
-            e: this.queryParams.e
-          }
-        }
-      );
     })
     const settingFontSize = localStorage.getItem('token')
     if (settingFontSize) {
@@ -163,17 +150,18 @@ export class KinhContentComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.kinhList = res
-          const foundKinhIndex = this.kinhList.findIndex((item: any) => item?.key == this.kinhKey)
-          const filteredKinhList = this.kinhList.filter((item: any) => item.group == this.kinhList[foundKinhIndex]?.group)
+          const filteredKinhList = this.kinhGroup ? this.kinhList.filter((item: any) => item.group == this.kinhGroup?.replaceAll('-', '_')) : this.kinhList
           const filteredFoundKinhIndex = filteredKinhList.findIndex((item: any) => item?.key == this.kinhKey)
           this.content.name = filteredKinhList[filteredFoundKinhIndex]?.name
           this.titleService.setTitle(`${this.content.name} | CaoDaiON`)
           if (filteredKinhList[filteredFoundKinhIndex - 1]) {
+            this.navigate.prev.name = filteredKinhList[filteredFoundKinhIndex - 1]?.name
             this.navigate.prev.link = `${location.pathname.replace(this.kinhKey, '')}${filteredKinhList[filteredFoundKinhIndex - 1]?.key}`
           } else {
             this.navigate.prev.link = `/`
           }
           if (filteredKinhList[filteredFoundKinhIndex + 1]) {
+            this.navigate.next.name = filteredKinhList[filteredFoundKinhIndex + 1]?.name
             this.navigate.next.link = `${location.pathname.replace(this.kinhKey, '')}${filteredKinhList[filteredFoundKinhIndex + 1]?.key}`
           } else {
             this.navigate.next.link = `/`

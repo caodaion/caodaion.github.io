@@ -2,7 +2,7 @@
   <app-header
     class="header"
     [prevPage]="{
-      navigate: { link: 'kinh' }
+      navigate: { link: 'kinh' + (kinhGroup ? '/' + kinhGroup : '') }
     }"
   >
     <div class="kinh-header">
@@ -55,12 +55,12 @@
   <app-bottom-navigator
     *ngIf="!authService.contentEditable || content?.type == 'block'"
     [prev]="{
-      text: 'Trước đó',
-      navigate: { link: navigate.prev.link, queryParams: queryParams }
+      text: navigate.prev.name,
+      navigate: { link: navigate.prev.link }
     }"
     [next]="{
-      text: 'Tiếp theo',
-      navigate: { link: navigate.next.link, queryParams: queryParams }
+      text: navigate.next.name,
+      navigate: { link: navigate.next.link }
     }"
   ></app-bottom-navigator>
 </div>
