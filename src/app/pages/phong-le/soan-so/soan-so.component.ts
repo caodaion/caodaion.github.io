@@ -298,24 +298,25 @@ export class SoanSoComponent implements OnInit {
   applyDefaultForm() {
     const namDaoFound = this.content?.formGroup?.find((item: any) => item.key === 'nam-dao')
     if (namDaoFound) {
-      const convertDateV = this.calendarService.getConvertedFullDate(new Date())
-      const newYearTime = this.calendarService.getConvertedFullDate({
-        "lunarDay": 1,
-        "lunarMonth": 1,
-        "lunarYear": new Date().getFullYear(),
+      const currentEventDate = this.calendarService.getConvertedFullDate({
+        "lunarDay": this.editData?.eventLunar?.lunarDay,
+        "lunarMonth": this.editData?.eventLunar?.lunarMonth,
+        "lunarYear": this.editData?.eventLunar?.lunarYear,
       }).convertLunar2Solar
-      const newYear = new Date(`${newYearTime[2]}-${this.decimal.transform(newYearTime[1], '2.0-0')}-${this.decimal.transform(newYearTime[0], '2.0-0')}`)
+      const newYearTime = this.calendarService.getConvertedFullDate({
+        "lunarDay": 15,
+        "lunarMonth": 10,
+        "lunarYear": this.editData?.eventLunar?.lunarYear,
+      }).convertLunar2Solar
+      const newDateEventDate = new Date(currentEventDate[2], currentEventDate[1] - 1, currentEventDate[0])
+      const newDateYearTime = new Date(newYearTime[2], newYearTime[1] - 1, newYearTime[0])      
       let calculatedDate = new Date().getFullYear() - 1926 + 1
-      if (new Date() < newYear) {
-        calculatedDate -= 1
-      }
-      if (convertDateV.convertSolar2Lunar.lunarMonth > 10 || convertDateV.convertSolar2Lunar.lunarMonth === 10 && convertDateV.convertSolar2Lunar.lunarDay >= 15) {
-        calculatedDate++
+      if (newDateEventDate >= newDateYearTime) {
+        calculatedDate+=1
       }
       this.applyData('nam-dao', this.commonService.convertNumberToText(calculatedDate).toLowerCase())
     }
     if (this.editData.eventLunar.lunarYearName) {
-      const date = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar
       this.applyData('nam-am-lich', this.editData.eventLunar.lunarYearName)
     } else {
       const date = this.calendarService.getConvertedFullDate(new Date()).convertSolar2Lunar

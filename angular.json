@@ -82,7 +82,10 @@
               "html2canvas",
               "moment",
               "leaflet",
-              "html2canvas-pro"
+              "html2canvas-pro",
+              "exceljs",
+              "leaflet.markercluster",
+              "file-saver"
             ]
           },
           "configurations": {
