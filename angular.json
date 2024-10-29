@@ -81,7 +81,8 @@
               "crypto-js",
               "html2canvas",
               "moment",
-              "leaflet"
+              "leaflet",
+              "html2canvas-pro"
             ]
           },
           "configurations": {
