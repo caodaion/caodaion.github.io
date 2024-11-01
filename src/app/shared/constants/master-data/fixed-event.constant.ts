@@ -1004,13 +1004,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ THƯỢNG NGƯƠNG",
-      "description": "ĐẠI LỄ THƯỢNG NGƯƠNG",
+      "name": "ĐẠI LỄ THƯỢNG NGƯƠN",
+      "description": "ĐẠI LỄ THƯỢNG NGƯƠN",
       "key": "dai-le-thuong-nguong",
       "event": [
         {
           "key": "thoi-ty-dai-le-thuong-nguong",
-          "name": "Thời Tý | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Tý | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1038,7 +1038,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-thuong-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Mẹo | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1066,7 +1066,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-thuong-nguong",
-          "name": "Thời Ngọ | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Ngọ | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1094,7 +1094,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-thuong-nguong",
-          "name": "Thời Dậu | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Dậu | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1718,13 +1718,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ TRUNG NGƯƠNG",
-      "description": "ĐẠI LỄ TRUNG NGƯƠNG",
+      "name": "ĐẠI LỄ TRUNG NGƯƠN",
+      "description": "ĐẠI LỄ TRUNG NGƯƠN",
       "key": "dai-le-trung-nguong",
       "event": [
         {
           "key": "thoi-ty-dai-le-trung-nguong",
-          "name": "Thời Tý | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Tý | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1752,7 +1752,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-trung-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Mẹo | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1780,7 +1780,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-trung-nguong",
-          "name": "Thời Ngọ | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Ngọ | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1808,7 +1808,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-trung-nguong",
-          "name": "Thời Dậu | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Dậu | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1956,13 +1956,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
-      "description": "ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+      "name": "ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
+      "description": "ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
       "key": "dai-le-ha-nguong-va-ky-niem-khai-dao",
       "event": [
         {
           "key": "thoi-ty-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Tý | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Tý | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -1990,7 +1990,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Mẹo | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Mẹo | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -2018,7 +2018,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Ngọ | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Ngọ | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -2046,7 +2046,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Dậu | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Dậu | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
