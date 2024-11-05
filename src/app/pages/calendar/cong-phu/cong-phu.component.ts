@@ -79,7 +79,9 @@ export class CongPhuComponent implements AfterViewInit {
       mm: this.saved.month, 
       dd: this.saved.date, 
       ti: this.saved.time,
-      no: this.saved.note
+      no: this.saved.note,
+      qa: this.saved.quality,
+      fo: this.saved.focus,
     }
     this.syncGoogleFormPath += `?${this.congPhuSetting?.name}=${encodeURIComponent(JSON.stringify({
       na: this.saved.name,

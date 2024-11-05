@@ -99,14 +99,19 @@
                 <textarea matInput [(ngModel)]="saved.note"></textarea>
             </mat-form-field>
         </div>
-        <div class="w-full px-3">
+        <div class="w-full px-3 flex flex-wrap">
             <button *ngIf="!syncGoogleFormPath" mat-flat-button color="primary" class="w-full"
                 [disabled]="!saved?.name || !saved?.thanhThat || !saved?.bornYear || !saved?.date || !saved?.month || !saved?.year || !saved?.time"
                 (click)="saveData()">Lưu</button>
-            <button *ngIf="syncGoogleFormPath" mat-flat-button class="w-full mt-3" (click)="
+            <button *ngIf="syncGoogleFormPath" mat-flat-button class="w-full lg:w-1/2 mt-3" (click)="
                 syncGoogleFormPath = ''; saved.note = ''
                 ">
-                Làm mới
+                Làm mới (Xoá ghi chú)
+            </button>
+            <button *ngIf="syncGoogleFormPath" mat-flat-button class="w-full lg:w-1/2 mt-3" (click)="
+                syncGoogleFormPath = '';
+                ">
+                Đóng
             </button>
         </div>
         <div class="w-full px-3">

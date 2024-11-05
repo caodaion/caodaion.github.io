@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "caodaion-f6f4b",
     "public": "dist/pwa",
     "ignore": [
       "firebase.json",

@@ -1,14 +1,13 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { Chart } from 'chart.js/auto';
 import * as moment from 'moment';
-import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CongPhuService } from 'src/app/shared/services/cong-phu/cong-phu.service';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import html2canvas from 'html2canvas-pro';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cong-phu-report',
@@ -17,7 +16,8 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 })
 export class CongPhuReportComponent implements AfterViewInit {
   user: any;
-  viewDetailsData: any;
+  viewDetailsData: any = <any>{}
+  exportData: any = <any>{}
   displayData: any;
   timeFilterOptions: any = <any>[]
   selectedTimeRange: any;
@@ -37,7 +37,9 @@ export class CongPhuReportComponent implements AfterViewInit {
     private congPhuService: CongPhuService,
     private decimalPipe: DecimalPipe,
     private calendarService: CalendarService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private cd: ChangeDetectorRef,
+    public dialog: MatDialog,
   ) {
 
   }
@@ -47,6 +49,7 @@ export class CongPhuReportComponent implements AfterViewInit {
     this.filteringName = [localCongPhuData.na + '-' + localCongPhuData.by + '-' + localCongPhuData.tt]
     this.selectedTimeRange = this.datePipe.transform(new Date(), 'yyyy-MM')
     this.refreshData()
+    this.cd.detectChanges()
   }
 
   refreshData() {
@@ -58,7 +61,7 @@ export class CongPhuReportComponent implements AfterViewInit {
       .subscribe((res: any) => {
         this.congPhuFilterSetting = res?.filterSetting
         this.congPhuSetting = res?.setting
-        this.congPhuRawData = JSON.parse(JSON.stringify(res?.data))
+        this.congPhuRawData = JSON.parse(JSON.stringify(res?.data))        
         this.initChart()
       })
   }
@@ -88,7 +91,7 @@ export class CongPhuReportComponent implements AfterViewInit {
     this.renderChart(filteredData);
   }
 
-  calculateConsecutiveDays() {
+  calculateConsecutiveDays() {    
     this.chartDataSetting = this.filteringName?.map((filterItem: any) => {
       const foundItem = this.congPhu?.filter((item: any) => item?.name?.na == filterItem.split('-')[0] && item?.name?.by == filterItem.split('-')[1] && item?.name?.tt == filterItem.split('-')[2])
       const dataPoints = foundItem.map((item: any) => {
@@ -103,7 +106,7 @@ export class CongPhuReportComponent implements AfterViewInit {
           date: this.datePipe.transform(calculatedDate(), 'yyyy-MM-dd'),
           item: item
         }
-      })
+      })      
       return {
         name: filterItem,
         info: {
@@ -118,13 +121,16 @@ export class CongPhuReportComponent implements AfterViewInit {
       let consecutiveDays = 0;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-
+      const filteredDataPoints = <any>[]
       for (let i = item.dataPoints.length - 1; i >= 0; i--) {
         const currentDate = new Date(item.dataPoints[i].date);
         currentDate.setHours(0, 0, 0, 0);
-        if (currentDate.getTime() === today.getTime() || currentDate.getTime() === today.getTime() - 86400000) {
-          consecutiveDays++;
-          today.setDate(today.getDate() - 1);
+        if (filteredDataPoints?.length === 0 || !filteredDataPoints?.includes(item.dataPoints[i].date)) {          
+          filteredDataPoints?.push(item.dataPoints[i].date)
+          if (currentDate.getTime() === today.getTime() || currentDate.getTime() === today.getTime() - 86400000) {
+            consecutiveDays++;
+            today.setDate(today.getDate() - 1);
+          }
         }
       }
       item.consecutiveDays = consecutiveDays;
@@ -151,15 +157,15 @@ export class CongPhuReportComponent implements AfterViewInit {
       // Merge previous targets with nextTargets
       const allTargets = [...prevTargets, ...nextTargets];
       item.targetRange = allTargets
-      item.nextTarget = allTargets.find((target: any) => target > item.consecutiveDays) || 0
+      item.nextTarget = allTargets.find((target: any) => target > item.consecutiveDays) || 0      
     })
   }
 
-  private calculateAverages(data: any[]) {
-    if (!data?.length) return { averageFocus: 0, qualityFocus: 0 };
+  private calculateAverages(data: any[]) {    
+    if (!data?.length) return { averageFocus: null, qualityFocus: null };
 
-    const focusSum = data.reduce((sum, item) => sum + (item?.focus || 0), 0);
-    const qualitySum = data.reduce((sum, item) => sum + (item?.quality || 0), 0);
+    const focusSum = data.reduce((sum, item) => sum + (item?.item?.data?.fo || null), null);
+    const qualitySum = data.reduce((sum, item) => sum + (item?.item?.data?.qa || null), null);
 
     return {
       averageFocus: focusSum / data.length,
@@ -174,24 +180,12 @@ export class CongPhuReportComponent implements AfterViewInit {
       new Date().getTime(),
       new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1], 0).getTime()
     ));
-    // [
-    //   {
-    //     type: 'bar',
-    //     label: 'Bar Dataset',
-    //     data: [10, 20, 30, 40]
-    //   },
-    //   {
-    //     type: 'line',
-    //     label: 'Line Dataset',
-    //     data: [50, 50, 50, 50],
-    //   }
-    // ]
-
-    const datasets = this.filteringName.map((filterItem: any) => {
+    let datasets = <any>[]
+    const countDatasets = this.filteringName.map((filterItem: any) => {
       const gotNameChartData = this.chartDataSetting?.find((item: any) => item?.name == filterItem)
       const dataPoint = Array.from({ length: endDate.getDate() }, (x, i) => i + 1).map((item: any) => {
         return gotNameChartData.dataPoints.filter((dataPointItem: any) => dataPointItem.date == this.datePipe.transform(new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1] - 1, item), 'yyyy-MM-dd'))?.length
-      })
+      })      
 
       return {
         label: filterItem,
@@ -202,6 +196,48 @@ export class CongPhuReportComponent implements AfterViewInit {
         borderSkipped: false,
       }
     })
+    datasets = datasets.concat(countDatasets)
+    let mappingData = this.filteringName.map((filterItem: any) => {
+      const gotNameChartData = this.chartDataSetting?.find((item: any) => item?.name == filterItem)
+      const dataPoint = Array.from({ length: endDate.getDate() }, (x, i) => i + 1).map((item: any) => {
+        return gotNameChartData.dataPoints.filter((dataPointItem: any) => dataPointItem.date == this.datePipe.transform(new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1] - 1, item), 'yyyy-MM-dd'))
+      })
+      return dataPoint
+    })   
+    const averageFocusDatasets = this.filteringName.map((filterItem: any) => {
+      const gotNameChartData = this.chartDataSetting?.find((item: any) => item?.name == filterItem)
+      const dataPoint = Array.from({ length: endDate.getDate() }, (x, i) => i + 1).map((item: any) => {
+        const foundData = gotNameChartData.dataPoints.filter((dataPointItem: any) => dataPointItem.date == this.datePipe.transform(new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1] - 1, item), 'yyyy-MM-dd'))        
+        const averageFocus = this.calculateAverages(foundData)?.averageFocus
+        return averageFocus
+      })      
+
+      return {
+        label: filterItem,
+        type: 'line',
+        data: dataPoint,
+        tension: 0.3
+      }
+    })
+    datasets = datasets.concat(averageFocusDatasets)
+    mappingData = mappingData.concat(mappingData)
+    const qualityFocusDatasets = this.filteringName.map((filterItem: any) => {
+      const gotNameChartData = this.chartDataSetting?.find((item: any) => item?.name == filterItem)
+      const dataPoint = Array.from({ length: endDate.getDate() }, (x, i) => i + 1).map((item: any) => {
+        const foundData = gotNameChartData.dataPoints.filter((dataPointItem: any) => dataPointItem.date == this.datePipe.transform(new Date(this.selectedTimeRange.split('-')[0], this.selectedTimeRange.split('-')[1] - 1, item), 'yyyy-MM-dd'))        
+        const qualityFocus = this.calculateAverages(foundData)?.qualityFocus
+        return qualityFocus
+      })      
+
+      return {
+        label: filterItem,
+        type: 'line',
+        data: dataPoint,
+        tension: 0.3
+      }
+    })
+    datasets = datasets.concat(qualityFocusDatasets) 
+    mappingData = mappingData.concat(mappingData)   
     this.chart = new Chart(ctx, {
       data: {
         datasets: datasets,
@@ -223,10 +259,12 @@ export class CongPhuReportComponent implements AfterViewInit {
           }
         },
         onClick: (event: any, elements: any) => {
-          // if (elements.length > 0) {
-          //   const index = elements[0].index;
-          //   this.viewDetailsData = this.displayData[index];
-          // }
+          if (elements.length > 0) {            
+            const datasetIndex = elements[0].datasetIndex;
+            const index = elements[0].index;
+            this.viewDetailsData.date = mappingData[datasetIndex][index][0]['date'];
+            this.viewDetailsData.data = mappingData[datasetIndex][index];            
+          }
         }
       },
     });
@@ -272,10 +310,18 @@ export class CongPhuReportComponent implements AfterViewInit {
           link.download = `${this.commonService.generatedSlug(element)}.png`;
           link.click();
           this.downloading = false
+          this.exportImageDialogRef?.close()
         }).catch((error: any) => {
           this.downloading = false
         });
       }
     }, 0)
+  }
+
+  exportImageDialogRef: any;
+
+  onShowExportImage(item: any, exportImage: any) {
+    this.exportData = item
+    this.exportImageDialogRef = this.dialog.open(exportImage)
   }
 }
