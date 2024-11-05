@@ -121,13 +121,17 @@ export class CongPhuReportComponent implements AfterViewInit {
       let consecutiveDays = 0;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      const foundTodayData = item.dataPoints?.find((idp: any) => idp?.date === this.datePipe.transform(today, 'YYYY-MM-dd'))
+      if (!foundTodayData) {
+        today.setDate(today.getDate() - 1)
+      }
       const filteredDataPoints = <any>[]
       for (let i = item.dataPoints.length - 1; i >= 0; i--) {
         const currentDate = new Date(item.dataPoints[i].date);
         currentDate.setHours(0, 0, 0, 0);
         if (filteredDataPoints?.length === 0 || !filteredDataPoints?.includes(item.dataPoints[i].date)) {          
           filteredDataPoints?.push(item.dataPoints[i].date)
-          if (currentDate.getTime() === today.getTime() || currentDate.getTime() === today.getTime() - 86400000) {
+          if (currentDate.getTime() === today.getTime()) {
             consecutiveDays++;
             today.setDate(today.getDate() - 1);
           }
