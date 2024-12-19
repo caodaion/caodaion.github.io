@@ -199,10 +199,11 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     const newDate = new Date()
     this.tuanCuuList?.forEach((item: any) => {
       let selectedTitle: any = this.caoDaiTitle.find((v: any) => v.key === item.details.title);
-      item.tab = `${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
-      item.name = `${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
+      let subTitles = selectedTitle?.subTitle || [];
+      item.tab = `${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
+      item.name = `${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${subTitles?.find((v: any) => v?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       this.generateShareInformation(item)
-      item.title = `Chia sẻ lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${this.subTitles?.find((item: any) => item?.key === item.details.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
+      item.title = `Chia sẻ lịch ${selectedTitle?.eventTitle || 'cúng'} cửu cho ${selectedTitle && item.details.sex && selectedTitle?.howToAddress ? selectedTitle?.howToAddress[item.details.sex] : ''} ${subTitles?.find((st: any) => st?.key === item.details?.subTitle)?.name || ''} ${item.details.holyName ? `${selectedTitle?.name} ${item.details.holyName} (${item.details.name})` : item.details.name} ${item.details.age ? item.details.age + ' tuổi' : ''}`
       const date = this.calendarService.getConvertedFullDate(new Date(`${item?.date?.year}-${item?.date?.month < 10 ? '0' + item?.date?.month : item?.date?.month}-${item?.date?.date < 10 ? '0' + item?.date?.date : item?.date?.date} ${item?.date?.time}:00`)).convertSolar2Lunar
       item.date.lunarMonth = `${date.lunarMonth} ${date.lunarLeap ? 'nhuận' : ''}`
       item.date.lunarDay = date.lunarDay
@@ -420,7 +421,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
 
   onUpdateInformation() {
     const selectedTitle = this.caoDaiTitle.find((item: any) => item.key === this.calculatedTuanCuu.details.title);
-    this.isHolyNameRequired = selectedTitle?.isHolyNameRequired || false;
+    this.isHolyNameRequired = selectedTitle?.isHolyNameRequired || false;    
     this.subTitles = selectedTitle?.subTitle || [];
 
     if (this.calculatedTuanCuu.details.name && this.isHolyNameRequired) {
@@ -433,7 +434,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
       }
     }
 
-    const subTitleName = this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || '';
+    const subTitleName = this.subTitles.find((item: any) => item?.key === this.calculatedTuanCuu.details.subTitle)?.name || '';    
     const howToAddress = selectedTitle?.howToAddress && this.calculatedTuanCuu.details.sex
       ? (selectedTitle.howToAddress as Record<string, string>)[this.calculatedTuanCuu.details.sex]
       : '';

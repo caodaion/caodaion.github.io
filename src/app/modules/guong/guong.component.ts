@@ -2,25 +2,26 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { GuongService } from 'src/app/shared/services/guong/guong.service';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 
 @Component({
   selector: 'app-guong',
   templateUrl: './guong.component.html',
-  styleUrls: ['./guong.component.scss']
+  styleUrls: ['./guong.component.scss'],
 })
 export class GuongComponent {
-  profileMenu = <any>[
-
-  ]
+  profileMenu = <any>[];
   public drawerMode: any;
   currentUser: any;
+  guongRes: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     public viewMissionService: ViewMissionService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private guongService: GuongService
   ) {
     this.breakpointObserver
       .observe(['(max-width: 600px)'])
@@ -35,10 +36,10 @@ export class GuongComponent {
       });
   }
 
-  ngAfterViewInit(): void {+
-    this.authService.getCurrentUser().subscribe({
+  ngAfterViewInit(): void {
+    +this.authService.getCurrentUser().subscribe({
       next: (res: any) => {
-        this.currentUser = res
+        this.currentUser = res;
         this.profileMenu = [
           {
             key: 'profile.guong',
@@ -48,9 +49,10 @@ export class GuongComponent {
             fullAssess: true,
             released: true,
           },
-        ]
+        ];
+        this.fetchGuongData();
       },
-    })
+    });
   }
 
   onToggleDrawer() {
@@ -58,5 +60,13 @@ export class GuongComponent {
       this.viewMissionService.isDrawerOpened =
         !this.viewMissionService.isDrawerOpened;
     }
+  }
+
+  fetchGuongData() {
+    this.guongService.fetchGuongData().subscribe({
+      next: (res: any) => {
+        this.guongRes = res;
+      },
+    });
   }
 }

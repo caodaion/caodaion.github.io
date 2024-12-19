@@ -40,14 +40,14 @@ export class ProfileComponent implements AfterViewInit {
       next: (res: any) => {
         this.currentUser = res
         this.profileMenu = [
-          // {
-          //   key: 'profile.guong',
-          //   url: 'guong',
-          //   label: 'Gương',
-          //   icon: 'bubble_chart',
-          //   fullAssess: true,
-          //   released: true,
-          // },
+          {
+            key: 'profile.guong',
+            url: 'guong',
+            label: 'Gương',
+            icon: 'bubble_chart',
+            fullAssess: true,
+            released: true,
+          },
         ]
       },
     })

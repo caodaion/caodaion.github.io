@@ -1,0 +1,150 @@
+<div>{{ guong?.userName || guongUser }}</div>
+<ng-container *ngIf="!guongUser">
+  <div class="flex flex-wrap">
+    <div class="w-full lg:w-1/4 p-2">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Họ và Tên</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="guong.name"
+          (input)="updateUserInfo()"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Năm sinh</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="guong.birthday"
+          (input)="updateUserInfo()"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Thánh Sở</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="guong.thanhSo"
+          (input)="updateUserInfo()"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+      <button
+        mat-flat-button
+        [color]="'primary'"
+        (click)="saveData()"
+        *ngIf="!syncGoogleFormPath"
+      >
+        Lưu
+      </button>
+      <button
+        mat-flat-button
+        (click)="syncGoogleFormPath = ''"
+        *ngIf="syncGoogleFormPath"
+      >
+        Đóng
+      </button>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="guongUser">
+  <div class="flex flex-wrap">
+    <div
+      class="w-full lg:w-1/4 p-2"
+      *ngFor="let formField of guong?.formFields"
+    >
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>{{ formField?.name }}</mat-label>
+        <ng-container *ngIf="formField?.type == 'number'">
+          <input type="number" matInput [(ngModel)]="guong[formField['key']]" />
+        </ng-container>
+        <ng-container *ngIf="formField?.type == 'text'">
+          <input type="text" matInput [(ngModel)]="guong[formField['key']]" />
+        </ng-container>
+        <ng-container *ngIf="formField?.type == 'textarea'">
+          <textarea matInput [(ngModel)]="guong[formField['key']]"></textarea>
+        </ng-container>
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/4 p-2">
+      <button mat-flat-button (click)="addFormField()">Thêm trường mới</button>
+    </div>
+  </div>
+</ng-container>
+
+<div class="w-full px-3">
+  <iframe
+    *ngIf="syncGoogleFormPath"
+    [src]="syncGoogleFormPath | safe"
+    class="w-full"
+    height="520"
+    frameborder="0"
+    marginheight="0"
+    marginwidth="0"
+    >Loading…</iframe
+  >
+</div>
+<ng-template #addFormFieldDialog>
+  <div mat-dialog-title>Thêm trường mới</div>
+  <div mat-dialog-content>
+    <div class="flex flex-wrap">
+      <div class="w-full lg:w-1/2 p-2">
+        <mat-form-field [appearance]="'outline'">
+          <mat-label>Tên trường</mat-label>
+          <input type="text" matInput [(ngModel)]="addedFormField.name" />
+        </mat-form-field>
+      </div>
+      <div class="w-full lg:w-1/2 p-2">
+        <mat-form-field [appearance]="'outline'">
+          <mat-label>Loại dữ liệu trường</mat-label>
+          <mat-select [(ngModel)]="addedFormField.type">
+            <mat-option [value]="'number'">
+              <span class="material-symbols-outlined">pin</span>
+              Trả lời số
+            </mat-option>
+            <mat-option [value]="'text'">
+              <span class="material-symbols-outlined"> short_text </span>
+              Trả lời ngắn
+            </mat-option>
+            <mat-option [value]="'textarea'">
+              <span class="material-symbols-outlined"> subject </span>
+              Đoạn
+            </mat-option>
+            <mat-option [value]="'radio'">
+              <span class="material-symbols-outlined"
+                >radio_button_checked</span
+              >
+              Trắc nghiệm
+            </mat-option>
+            <mat-option [value]="'checkbox'">
+              <span class="material-symbols-outlined">check_box</span>
+              Hộp kiểm
+            </mat-option>
+            <mat-option [value]="'checkbox'">
+              <span class="material-symbols-outlined"
+                >arrow_drop_down_circle</span
+              >
+              Menu thả xuống
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      [color]="'primary'"
+      [matDialogClose]="true"
+      (click)="saveFormField()"
+    >
+      Thêm
+    </button>
+  </div>
+</ng-template>
