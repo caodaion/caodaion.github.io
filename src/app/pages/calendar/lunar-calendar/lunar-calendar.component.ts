@@ -793,6 +793,9 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       this.selectedEvents = <any>[]
       addEvent();
       this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
+      this.eventSummaryDialogRef.afterDismissed().subscribe(() => {
+        this.selectedEvents = <any>[]
+      });
     }
   }
 
@@ -1296,7 +1299,6 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   }
 
   updateShareInformation() {
-    
     this.selectedEvents?.forEach((shareItem: any, index: any) => {
       if (shareItem?.date == this.selectedEvents[index + 1]?.date && index != this.selectedEvents?.length - 1) {
         shareItem.date = null;
