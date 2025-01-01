@@ -793,7 +793,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       this.selectedEvents = <any>[]
       addEvent();
       this.eventSummaryDialogRef = this.matDialog.open(eventSummayDialog);
-      this.eventSummaryDialogRef.afterDismissed().subscribe(() => {
+      this.eventSummaryDialogRef.afterClosed().subscribe(() => {
         this.selectedEvents = <any>[]
       });
     }
