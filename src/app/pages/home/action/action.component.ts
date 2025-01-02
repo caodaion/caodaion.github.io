@@ -51,11 +51,11 @@ export class ActionComponent implements OnInit {
     //   icon: 'money',
     //   label: '100'
     // },
-    {
-      link: '/caodai100',
-      icon: 'money',
-      label: '100'
-    },
+    // {
+    //   link: '/caodai100',
+    //   icon: 'money',
+    //   label: '100'
+    // },
   ]
 
   isShowDienThoPhatMau: boolean = false
