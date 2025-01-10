@@ -53,10 +53,10 @@
                             <ng-container *ngFor="let material of bill?.materials">
                                 <tr>
                                     <td class="text-center">{{bill?.id}}</td>
-                                    <td class="text-left">{{material?.material?.name}}</td>
+                                    <td class="text-left">{{material?.material?.name || material?.materialObject?.name}}</td>
                                     <td class="text-center">{{material?.number}}</td>
-                                    <td class="text-center">{{material?.material?.unit}}</td>
-                                    <td class="text-right">{{material?.material?.price | currency: 'VND'}}</td>
+                                    <td class="text-center">{{material?.material?.unit || material?.materialObject?.unit}}</td>
+                                    <td class="text-right">{{(material?.material?.price || material?.materialObject?.price) | currency: 'VND'}}</td>
                                     <td class="text-right">{{material?.totalPrice | currency: 'VND'}}</td>
                                 </tr>
                             </ng-container>

@@ -77,13 +77,13 @@ export class DienThoPhatMauService {
               price[foundPriceIndex] = null;
               price = price?.filter((v: any) => !!v);
             };
-            let history = <any>[]
+            let history = <any>[];
             res?.forEach((item: any, resIndex: any) => {
               if (item?.Timestamp != 'setting') {
                 if (!price) {
                   price = <any>[];
                 }
-                history?.push(item)
+                history?.push(item);
                 const dataRow = JSON.parse(item.data);
 
                 if (dataRow?.length == 1) {
@@ -102,10 +102,14 @@ export class DienThoPhatMauService {
                           billData = { ...billData, ...dr?.data };
                           billData.updatedBy = item?.updatedBy;
                           billData.logFrom = item?.logFrom;
+
                           billData?.materials?.forEach((bd: any) => {
-                            const foundPriceMaterial = price?.filter(
-                              (v: any) => v?.key === bd?.material
-                            );
+                            const foundPriceMaterial = typeof bd?.material === 'string'
+                            ? price?.filter(
+                                (v: any) => v?.key === bd?.material
+                              )
+                            : [bd?.material];
+
                             bd.materialObject =
                               foundPriceMaterial[
                                 foundPriceMaterial?.length - 1
@@ -113,8 +117,17 @@ export class DienThoPhatMauService {
                             bd.totalPrice =
                               parseFloat(bd.materialObject?.price) *
                               parseFloat(bd?.number);
+
+                            if (bd?.material == 'da-0x4_20240612' && billData?.id === '60') {
+                              console.log(
+                                'billDatabillDatabillDatabillDatabillDatabillDatabillDatabillData',
+                                billData
+                              );
+                              console.log(bd?.material);
+                              console.log(foundPriceMaterial);
+                            }
                           });
-                          addBill(billData);
+                          addBill(JSON.parse(JSON.stringify(billData)));
                           break;
                         case 'delete-bill':
                           let deletedBillData: any = <any>{};
@@ -163,9 +176,6 @@ export class DienThoPhatMauService {
                 if (dataRow?.length > 1) {
                   let billDataList: any = <any>[];
                   let priceDataList: any = <any>[];
-                  let deletedBillDataList: any = <any>[];
-                  let deletedPriceDataList: any = <any>[];
-                  let updatedPriceDataList: any = <any>[];
                   let updatedBillDataList: any = <any>[];
                   dataRow?.forEach((dr: any, dataRowIndex: any) => {
                     if (dr?.key) {
@@ -183,9 +193,12 @@ export class DienThoPhatMauService {
                           billData.updatedBy = item?.updatedBy;
                           billData.logFrom = item?.logFrom;
                           billData?.materials?.forEach((bd: any) => {
-                            const foundPriceMaterial = price?.filter(
-                              (v: any) => v?.key == bd?.material
-                            );
+                            const foundPriceMaterial =
+                              typeof bd?.material === 'string'
+                                ? price?.filter(
+                                    (v: any) => v?.key === bd?.material
+                                  )
+                                : [bd?.material];
                             bd.materialObject =
                               foundPriceMaterial[
                                 foundPriceMaterial?.length - 1
@@ -201,7 +214,9 @@ export class DienThoPhatMauService {
                                 parseFloat(bd?.number);
                             }
                           });
-                          billDataList.push(billData);
+                          billDataList.push(
+                            JSON.parse(JSON.stringify(billData))
+                          );
                           break;
                         case 'delete-bill':
                           let deletedBillData: any = <any>{};
@@ -234,10 +249,18 @@ export class DienThoPhatMauService {
                           updatePrice(updatedPriceData);
                           if (billDataList?.length > 0) {
                             billDataList[0].materials?.forEach((blm: any) => {
-                              if (updatedPriceData?.key == blm.material) {
-                                blm.materialObject = JSON.parse(
-                                  JSON.stringify(updatedPriceData)
-                                );
+                              if (typeof blm?.material === 'string') {
+                                if (updatedPriceData?.key == blm.material) {
+                                  blm.materialObject = JSON.parse(
+                                    JSON.stringify(updatedPriceData)
+                                  );
+                                }
+                              } else {
+                                if (blm?.material) {
+                                  blm.materialObject = JSON.parse(
+                                    JSON.stringify(blm?.material)
+                                  );
+                                }
                               }
 
                               if (
@@ -251,7 +274,6 @@ export class DienThoPhatMauService {
                                   parseFloat(blm?.number);
                               }
                             });
-                            addBill(billDataList[0]);
                           }
                           if (updatedBillDataList?.length > 0) {
                             updatedBillDataList[0].materials?.forEach(
@@ -263,7 +285,6 @@ export class DienThoPhatMauService {
                                 }
                               }
                             );
-                            updateBill(updatedBillDataList[0]);
                           }
                           break;
                         case 'update-bill':
@@ -279,6 +300,12 @@ export class DienThoPhatMauService {
                       }
                     }
                   });
+                  if (billDataList[0]) {
+                    addBill(billDataList[0]);
+                  }
+                  if (updatedBillDataList[0]) {
+                    updateBill(updatedBillDataList[0]);
+                  }
                 }
               }
             });
@@ -288,6 +315,7 @@ export class DienThoPhatMauService {
             response.data = data;
             response.history = history;
             response.price = price;
+            console.log(response);
             ref.dienThoPhatMauSetting = dienThoPhatMauSetting;
             ref.dienThoPhatMau = data;
             response.setting = dienThoPhatMauSetting;
