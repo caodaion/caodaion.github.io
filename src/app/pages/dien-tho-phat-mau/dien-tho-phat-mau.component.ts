@@ -13,6 +13,7 @@ export class DienThoPhatMauComponent implements AfterViewInit {
   setting: any;
   price: any;
   data: any;
+  history: any;
   isActiveModule: boolean = false;
 
   constructor(
@@ -46,20 +47,24 @@ export class DienThoPhatMauComponent implements AfterViewInit {
           setTimeout(() => {
             this.setting = res.setting
             this.data = res.data
+            this.history = res.history?.sort((a: any, b: any) => {
+              return new Date(a?.Timestamp) > new Date(b?.Timestamp) ? -1 : 1
+            })
+            this.history?.forEach((item: any) => {
+              item.data = JSON.parse(item?.data);
+            });            
             this.price = res.price.sort((a: any, b: any) => {
               return new Date(a?.logFrom) > new Date(b?.logFrom) ? -1 : 1
             })
+            
             this.data?.forEach((item: any) => {
-              item?.materials?.forEach((material: any) => {
-                if (material?.material && material?.number) {
-                  material.totalPrice = parseFloat(material?.material?.price) * parseFloat(material?.number)
-                }
-              })
               let billToTalPrice = 0
               item?.materials?.forEach((material: any) => {
                 billToTalPrice += material?.totalPrice || 0
+                this.cd.detectChanges()
               });
               item.billToTalPrice = billToTalPrice || 0
+              this.cd.detectChanges()
             })
             this.cd.detectChanges()
           }, 0);

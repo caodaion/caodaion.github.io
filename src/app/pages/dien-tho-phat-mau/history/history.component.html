@@ -1,0 +1,63 @@
+<div class="p-3">
+  <table class="w-full dienThoTable">
+    <thead>
+      <tr>
+        <th class="w-1/6">
+          <div class="flex justify-between items-center">
+            Cập nhật lúc
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-between items-center">Hành động</div>
+        </th>
+        <th class="w-1/12">
+          <div class="flex justify-between items-center">
+            Cập nhật bởi
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of history">
+        <td>{{ item?.Timestamp | date : "dd/MM/YYYY hh:mm:ss" }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let di of item?.data">
+              <span>- {{
+                di?.key === "bill"
+                  ? "Thêm hoá đơn"
+                  : di?.key === "update-price"
+                  ? "Sửa đơn giá"
+                  : di?.key === "price"
+                  ? "Thêm đơn giá"
+                  : di?.key === "update-bill"
+                  ? "Sửa hoá đơn"
+                  : di?.key === "delete-bill"
+                  ? "Xoá hoá đơn"
+                  : di?.key === "delete-price"
+                  ? "Xoá đơn giá"
+                  : ""
+              }}</span>
+              <span class="ps-2">- {{
+                di?.key === "bill"
+                  ? "Thêm hoá đơn"
+                  : di?.key === "update-price"
+                  ? "Sửa đơn giá"
+                  : di?.key === "price"
+                  ? "Thêm đơn giá"
+                  : di?.key === "update-bill"
+                  ? "Sửa hoá đơn"
+                  : di?.key === "delete-bill"
+                  ? "Xoá hoá đơn"
+                  : di?.key === "delete-price"
+                  ? "Xoá đơn giá"
+                  : ""
+              }}</span>
+            </li>
+          </ul>
+        </td>
+        <td>{{ item?.updatedBy }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

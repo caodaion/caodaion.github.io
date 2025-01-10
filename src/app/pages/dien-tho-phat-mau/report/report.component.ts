@@ -132,7 +132,7 @@ export class ReportComponent implements AfterViewInit {
         item.totalMaterialPrice += imp?.totalPrice
         item.totalMaterialCount += parseFloat(imp?.number)
       })
-    })    
+    })
     this.totalMaterialReport = this.materialTypeData?.map((bi: any) => bi?.totalMaterialPrice)?.reduce((a: any, b: any) => a + b, 0)
   }
 

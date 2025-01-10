@@ -21,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReportComponent } from './report/report.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { HistoryComponent } from './history/history.component';
 
 
 const routes: Routes = [
@@ -37,7 +38,8 @@ const routes: Routes = [
     SearchPricePipe,
     BillComponent,
     SearchDataPipe,
-    ReportComponent
+    ReportComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,

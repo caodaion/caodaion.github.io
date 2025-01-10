@@ -26,4 +26,13 @@
             <app-report [data]="data" [setting]="setting" [user]="user" [price]="price"></app-report>
         </ng-container>
     </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">history</span>
+            <span class="px-3">Lịch sử</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId && isActiveModule">
+            <app-history [history]="history"></app-history>
+        </ng-container>
+    </mat-tab>
 </mat-tab-group>

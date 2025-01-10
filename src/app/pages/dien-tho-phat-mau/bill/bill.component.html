@@ -1,328 +1,479 @@
 <div class="p-4">
-    <h3 class="p-3">Hoá đơn</h3>
-    <div class="flex flex-wrap">
-        <div class="w-full px-3">
-            <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Mã Hoá Đơn</mat-label>
-                <input required matInput placeholder="Nhập Mã Hoá Đơn" [(ngModel)]="addedData.id">
-            </mat-form-field>
-        </div>
-        <div class="w-full lg:w-1/3 px-3">
-            <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Chọn Năm</mat-label>
-                <mat-select [(ngModel)]="addedData.year">
-                    <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{ item?.solar }}</mat-option>
+  <h3 class="p-3">Hoá đơn</h3>
+  <div class="flex flex-wrap">
+    <div class="w-full px-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Mã Hoá Đơn</mat-label>
+        <input
+          required
+          matInput
+          placeholder="Nhập Mã Hoá Đơn"
+          [(ngModel)]="addedData.id"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/3 px-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Chọn Năm</mat-label>
+        <mat-select [(ngModel)]="addedData.year">
+          <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{
+            item?.solar
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/3 px-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Chọn Tháng</mat-label>
+        <mat-select [(ngModel)]="addedData.month">
+          <mat-option *ngFor="let item of monthOptions" [value]="item">{{
+            item
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full lg:w-1/3 px-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Chọn Ngày</mat-label>
+        <mat-select [(ngModel)]="addedData.date">
+          <mat-option *ngFor="let item of dayOptions" [value]="item">{{
+            item
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full px-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Đơn vị cung cấp hoá đơn</mat-label>
+        <input
+          matInput
+          placeholder="Nhập Đơn vị cung cấp hoá đơn"
+          [(ngModel)]="addedData.provider"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full flex">
+      <div class="w-1/2 font-bold text-2xl">Thành tiền hoá đơn:</div>
+      <div class="w-1/2 font-bold text-2xl text-right">
+        {{ getBillToTalPrice()?.billToTalPrice | currency : "VND" }}
+      </div>
+    </div>
+    <div class="w-full p-3 billTable relative max-h-[65vh] overflow-auto">
+      <table class="w-full dienThoTable">
+        <thead class="sticky top-0 z-10">
+          <tr>
+            <th class="text-left">Vật liệu</th>
+            <th class="text-left">Đơn vị cung cấp</th>
+            <th class="text-left">Đơn giá</th>
+            <th class="text-left">Đơn vị tính</th>
+            <th class="text-left">Số lượng</th>
+            <th class="text-right">Thành tiền</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let material of addedData?.materials;
+              let materialIndex = index
+            "
+            [ngClass]="{
+              '!bg-[#ea4335]': material?.inValid
+            }"
+            class="mainTr"
+          >
+            <td>
+              <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Chọn vật liệu</mat-label>
+                <mat-select [(ngModel)]="material.material">
+                  <input
+                    matInput
+                    placeholder="Tìm kiếm"
+                    #searchPriceTextBox
+                    placeholder="Chọn vật liệu"
+                    class="!border !w-full !p-2 !sticky !top-0"
+                  />
+                  <mat-option
+                    *ngFor="
+                      let item of price
+                        | searchPrice
+                          : { searchText: searchPriceTextBox['value'] }
+                    "
+                    [value]="item"
+                  >
+                    {{ item?.name }} | giá ngày
+                    {{ item?.logFrom | date : "dd/MM/YYYY" }}
+                  </mat-option>
+                  <mat-option
+                    [value]="{
+                      key: 'dynamic-sli',
+                      name: '',
+                      price: '',
+                      unit: ''
+                    }"
+                    >Số lượng ít</mat-option
+                  >
                 </mat-select>
-            </mat-form-field>
+              </mat-form-field>
+              <ng-container *ngIf="material?.material?.key === 'dynamic-sli'">
+                <mat-form-field class="w-full" [appearance]="'outline'">
+                  <mat-label>Tên vật liệu</mat-label>
+                  <input
+                    matInput
+                    placeholder="Nhập Tên vật liệu"
+                    [(ngModel)]="material.material.name"
+                  />
+                </mat-form-field>
+              </ng-container>
+            </td>
+            <td>
+              <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Đơn vị cung cấp</mat-label>
+                <input
+                  matInput
+                  placeholder="Đơn vị cung cấp"
+                  [(ngModel)]="material.material.provider"
+                />
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Đơn giá</mat-label>
+                <input
+                  matInput
+                  placeholder="Đơn giá"
+                  [(ngModel)]="material.material.price"
+                />
+                <mat-hint>{{
+                  material.material.price | currency : "VND"
+                }}</mat-hint>
+                <span matTextSuffix>₫</span>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Đơn vị tính</mat-label>
+                <input
+                  matInput
+                  placeholder="Đơn vị tính"
+                  [(ngModel)]="material.material.unit"
+                />
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Số lượng vật liệu</mat-label>
+                <input
+                  matInput
+                  placeholder="Số lượng"
+                  [(ngModel)]="material.number"
+                />
+              </mat-form-field>
+            </td>
+            <td class="text-right">
+              {{ getMaterialData(material)?.totalPrice | currency : "VND" }}
+            </td>
+            <td class="text-right">
+              <button mat-icon-button (click)="removeMaterial(materialIndex)">
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </td>
+          </tr>
+          <tr class="sticky bottom-0 z-10">
+            <td [colSpan]="6">
+              <button
+                mat-stroked-button
+                [color]="'primary'"
+                class="w-full bg-white"
+                (click)="addMaterial()"
+              >
+                <mat-icon>add</mat-icon>
+                Thêm vật liệu của hoá đơn
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="w-full px-3">
+      <mat-form-field class="w-full" [appearance]="'outline'">
+        <mat-label>Hình ảnh</mat-label>
+        <input
+          matInput
+          placeholder="Nhập liên kết hình ảnh"
+          [(ngModel)]="addedData.image"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full px-3">
+      <button
+        [disabled]="!addedData?.id"
+        *ngIf="!googleFormPath"
+        mat-flat-button
+        [color]="'primary'"
+        class="w-full"
+        (click)="onSave(addedData)"
+      >
+        <div class="flex items-center">
+          <span class="material-symbols-outlined">save</span
+          ><span class="ms-3">Lưu</span>
         </div>
-        <div class="w-full lg:w-1/3 px-3">
-            <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Chọn Tháng</mat-label>
-                <mat-select [(ngModel)]="addedData.month">
-                    <mat-option *ngFor="let item of monthOptions" [value]="item">{{
-                        item
-                        }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+      </button>
+      <button
+        *ngIf="googleFormPath"
+        mat-stroked-button
+        [color]="'primary'"
+        class="w-full"
+        (click)="clear()"
+      >
+        <div class="flex items-center">
+          <span class="material-symbols-outlined">restart_alt</span
+          ><span class="ms-3">Làm mới</span>
         </div>
-        <div class="w-full lg:w-1/3 px-3">
-            <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Chọn Ngày</mat-label>
-                <mat-select [(ngModel)]="addedData.date">
-                    <mat-option *ngFor="let item of dayOptions" [value]="item">{{
-                        item
-                        }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="w-full px-3">
-            <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Đơn vị cung cấp hoá đơn</mat-label>
-                <input matInput placeholder="Nhập Đơn vị cung cấp hoá đơn" [(ngModel)]="addedData.provider">
-            </mat-form-field>
-        </div>
-        <div class="w-full flex">
-            <div class="w-1/2 font-bold text-2xl">Thành tiền hoá đơn:</div>
-            <div class="w-1/2 font-bold text-2xl text-right">{{getBillToTalPrice()?.billToTalPrice | currency: 'VND'}}
+      </button>
+    </div>
+  </div>
+  <div class="p-3">
+    <mat-form-field class="w-full" [appearance]="'outline'">
+      <mat-label>Tìm kiếm</mat-label>
+      <input matInput placeholder="Tìm kiếm" #searchBillTextBox />
+    </mat-form-field>
+    <table class="w-full dienThoTable">
+      <thead>
+        <tr>
+          <th>
+            <div class="flex justify-between items-center">
+              Hoá đơn
+              <button mat-icon-button (click)="orderBy = 'id'; isAsc = !isAsc">
+                <span
+                  class="material-symbols-outlined text-gray-500"
+                  [ngClass]="{ 'text-white': orderBy === 'id' }"
+                >
+                  swap_vert
+                </span>
+              </button>
             </div>
-        </div>
-        <div class="w-full p-3 billTable relative max-h-[65vh] overflow-auto">
-            <table class="w-full dienThoTable">
-                <thead class="sticky top-0 z-10">
+          </th>
+          <th>
+            <div class="flex justify-between items-center">
+              Ngày
+              <button
+                mat-icon-button
+                (click)="orderBy = 'logFrom'; isAsc = !isAsc"
+              >
+                <span
+                  class="material-symbols-outlined text-gray-500"
+                  [ngClass]="{ 'text-white': orderBy === 'logFrom' }"
+                >
+                  swap_vert
+                </span>
+              </button>
+            </div>
+          </th>
+          <th>
+            <div class="flex justify-between items-center">
+              Thành tiền hoá đơn
+              <button
+                mat-icon-button
+                (click)="orderBy = 'billToTalPrice'; isAsc = !isAsc"
+              >
+                <span
+                  class="material-symbols-outlined text-gray-500"
+                  [ngClass]="{ 'text-white': orderBy === 'billToTalPrice' }"
+                >
+                  swap_vert
+                </span>
+              </button>
+            </div>
+          </th>
+          <th>
+            <div class="flex justify-between items-center">
+              Số lượng
+              <button
+                mat-icon-button
+                (click)="orderBy = 'count'; isAsc = !isAsc"
+              >
+                <span
+                  class="material-symbols-outlined text-gray-500"
+                  [ngClass]="{ 'text-white': orderBy === 'count' }"
+                >
+                  swap_vert
+                </span>
+              </button>
+            </div>
+          </th>
+          <th>
+            <div class="flex justify-between items-center">
+              Đơn vị cung cấp
+              <button
+                mat-icon-button
+                (click)="orderBy = 'provider'; isAsc = !isAsc"
+              >
+                <span
+                  class="material-symbols-outlined text-gray-500"
+                  [ngClass]="{ 'text-white': orderBy === 'provider' }"
+                >
+                  swap_vert
+                </span>
+              </button>
+            </div>
+          </th>
+          <th class="text-right">
+            <button
+              mat-icon-button
+              (click)="expanAll()"
+              [matTooltip]="(isExpanedAll ? 'Đóng' : 'Mở') + ' tất cả chi tiết'"
+            >
+              <span class="material-symbols-outlined">
+                {{ isExpanedAll ? "expand_circle_up" : "expand_circle_down" }}
+              </span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let item of data
+              | searchData
+                : {
+                    searchText: searchBillTextBox['value'],
+                    orderBy: orderBy,
+                    isAsc: isAsc
+                  };
+            let billIndex = index
+          "
+        >
+          <tr
+            class="bg-white"
+            [ngClass]="{
+              '!bg-[#f8f9fa]': billIndex % 2 === 1
+            }"
+          >
+            <td>{{ item?.id }}</td>
+            <td class="text-left">{{ item?.logFrom | date : "dd/MM/YYYY" }}</td>
+            <td class="text-left">
+              {{ item?.billToTalPrice | currency : "VND" }}
+            </td>
+            <td class="text-left">{{ getBillToTalPrice(item)?.count }}</td>
+            <td class="text-left">{{ item?.provider }}</td>
+            <td class="text-right">
+              <button
+                *ngIf="addedData?.key !== item?.key"
+                mat-icon-button
+                (click)="editBill(item)"
+                [matTooltip]="'Sửa đơn giá'"
+              >
+                <span class="material-symbols-outlined"> edit </span>
+              </button>
+              <button
+                mat-icon-button
+                (click)="deleteBill(item)"
+                [matTooltip]="'Xoá hoá đơn'"
+              >
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+              <button
+                mat-icon-button
+                (click)="item.expaned = !item?.expaned; isExpanedAll = false"
+                [matTooltip]="(item?.expaned ? 'Đóng' : 'Mở') + ' chi tiết'"
+              >
+                <span class="material-symbols-outlined">
+                  {{
+                    item?.expaned ? "expand_circle_up" : "expand_circle_down"
+                  }}
+                </span>
+              </button>
+            </td>
+          </tr>
+          <tr
+            class="hidden"
+            [ngClass]="{
+              '!table-row': item?.expaned
+            }"
+          >
+            <td [colSpan]="6" class="bg-white !p-0">
+              <div class="w-full border rounded p-3">
+                <div class="text-2xl">Hoá đơn: {{ item?.id }}</div>
+                <div>
+                  <span class="font-bold">Ghi nhận bởi:</span>
+                  {{ item?.updatedBy }}
+                </div>
+                <div>
+                  <span class="font-bold">Ghi nhận ngày:</span>
+                  {{ item?.logFrom | date : "dd/MM/YYYY" }}
+                </div>
+                <div class="text-lg">
+                  <span class="font-bold">Thành tiền hoá đơn:</span>
+                  {{
+                    item?.billToTalPrice | currency : "VND"
+                  }}
+                </div>
+                <table class="w-full childTable">
+                  <thead>
                     <tr>
-                        <th class="text-left">Vật liệu</th>
-                        <th class="text-left">Đơn vị cung cấp</th>
-                        <th class="text-left">Đơn giá</th>
-                        <th class="text-left">Đơn vị tính</th>
-                        <th class="text-left">Số lượng</th>
-                        <th class="text-right">Thành tiền</th>
-                        <th></th>
+                      <th class="text-left">Vật liệu</th>
+                      <th class="text-left">Đơn giá</th>
+                      <th class="text-center">Số lượng</th>
+                      <th class="text-center">Đơn vị cung cấp</th>
+                      <th class="text-right">Thành tiền</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let material of addedData?.materials; let materialIndex = index" [ngClass]="{
-                        '!bg-[#ea4335]': material?.inValid
-                    }" class="mainTr">
-                        <td>
-                            <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Chọn vật liệu</mat-label>
-                                <mat-select [(ngModel)]="material.material">
-                                    <input matInput placeholder="Tìm kiếm" #searchPriceTextBox
-                                        class="!border !w-full !p-2 !sticky !top-0">
-                                    <mat-option
-                                        *ngFor="let item of price | searchPrice: {searchText: searchPriceTextBox['value']}"
-                                        [value]="item">
-                                        {{item?.name}} | giá ngày {{item?.logFrom | date: 'dd/MM/YYYY'}}
-                                    </mat-option>
-                                    <mat-option [value]="{
-                                        key: 'dynamic-sli',
-                                        name: '',
-                                        price: '',
-                                        unit: ''
-                                    }">Số lượng ít</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <ng-container *ngIf="material?.material?.key === 'dynamic-sli'">
-                                <mat-form-field class="w-full" [appearance]="'outline'">
-                                    <mat-label>Tên vật liệu</mat-label>
-                                    <input matInput placeholder="Nhập Tên vật liệu"
-                                        [(ngModel)]="material.material.name">
-                                </mat-form-field>
-                            </ng-container>
-                        </td>
-                        <td>
-                            <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Đơn vị cung cấp</mat-label>
-                                <input matInput placeholder="Đơn vị cung cấp" [(ngModel)]="material.material.provider">
-                            </mat-form-field>
-                        </td>
-                        <td>
-                            <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Đơn giá</mat-label>
-                                <input matInput placeholder="Đơn giá" [(ngModel)]="material.material.price">
-                                <mat-hint>{{material.material.price | currency: 'VND'}}</mat-hint>
-                                <span matTextSuffix>₫</span>
-                            </mat-form-field>
-                        </td>
-                        <td>
-                            <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Đơn vị tính</mat-label>
-                                <input matInput placeholder="Đơn vị tính" [(ngModel)]="material.material.unit">
-                            </mat-form-field>
-                        </td>
-                        <td>
-                            <mat-form-field class="w-full" [appearance]="'outline'">
-                                <mat-label>Số lượng vật liệu</mat-label>
-                                <input matInput placeholder="Số lượng" [(ngModel)]="material.number">
-                            </mat-form-field>
-                        </td>
-                        <td class="text-right">
-                            {{getMaterialData(material)?.totalPrice | currency: 'VND'}}
-                        </td>
-                        <td class="text-right">
-                            <button mat-icon-button (click)="removeMaterial(materialIndex)">
-                                <span class="material-symbols-outlined">
-                                    delete
-                                </span>
-                            </button>
-                        </td>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let material of item?.materials">
+                      <td>{{ material?.materialObject?.name }}</td>
+                      <td class="text-left">
+                        {{ material?.materialObject?.price | currency : "VND" }}/{{
+                          material?.materialObject?.unit || "đơn vị"
+                        }}
+                      </td>
+                      <td class="text-center">{{ material?.number }}</td>
+                      <td class="text-center">
+                        {{ material?.materialObject?.provider }}
+                      </td>
+                      <td class="text-right">
+                        {{ material?.totalPrice | currency : "VND" }}
+                      </td>
                     </tr>
-                    <tr class="sticky bottom-0 z-10">
-                        <td [colSpan]="6">
-                            <button mat-stroked-button [color]="'primary'" class="w-full bg-white"
-                                (click)="addMaterial()">
-                                <mat-icon>add</mat-icon>
-                                Thêm vật liệu của hoá đơn
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="w-full px-3">
-            <mat-form-field class="w-full" [appearance]="'outline'">
-                <mat-label>Hình ảnh</mat-label>
-                <input matInput placeholder="Nhập liên kết hình ảnh" [(ngModel)]="addedData.image">
-            </mat-form-field>
-        </div>
-        <div class="w-full px-3">
-            <button [disabled]="!addedData?.id" *ngIf="!googleFormPath" mat-flat-button [color]="'primary'"
-                class="w-full" (click)="onSave(addedData)">
-                <div class="flex items-center">
-                    <span class="material-symbols-outlined">save</span><span class="ms-3">Lưu</span>
-                </div>
-            </button>
-            <button *ngIf="googleFormPath" mat-stroked-button [color]="'primary'" class="w-full" (click)="clear()">
-                <div class="flex items-center">
-                    <span class="material-symbols-outlined">restart_alt</span><span class="ms-3">Làm mới</span>
-                </div>
-            </button>
-        </div>
-    </div>
-    <div class="p-3">
-        <mat-form-field class="w-full" [appearance]="'outline'">
-            <mat-label>Tìm kiếm</mat-label>
-            <input matInput placeholder="Tìm kiếm" #searchBillTextBox>
-        </mat-form-field>
-        <table class="w-full dienThoTable">
-            <thead>
-                <tr>
-                    <th>
-                        <div class="flex justify-between items-center">
-                            Hoá đơn
-                            <button mat-icon-button (click)="orderBy = 'id'; isAsc = !isAsc">
-                                <span class="material-symbols-outlined text-gray-500"
-                                    [ngClass]="{'text-white': orderBy === 'id'}">
-                                    swap_vert
-                                </span>
-                            </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex justify-between items-center">
-                            Ngày
-                            <button mat-icon-button (click)="orderBy = 'logFrom'; isAsc = !isAsc">
-                                <span class="material-symbols-outlined text-gray-500"
-                                    [ngClass]="{'text-white': orderBy === 'logFrom'}">
-                                    swap_vert
-                                </span>
-                            </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex justify-between items-center">
-                            Thành tiền hoá đơn
-                            <button mat-icon-button (click)="orderBy = 'billToTalPrice'; isAsc = !isAsc">
-                                <span class="material-symbols-outlined text-gray-500"
-                                    [ngClass]="{'text-white': orderBy === 'billToTalPrice'}">
-                                    swap_vert
-                                </span>
-                            </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex justify-between items-center">
-                            Số lượng
-                            <button mat-icon-button (click)="orderBy = 'count'; isAsc = !isAsc">
-                                <span class="material-symbols-outlined text-gray-500"
-                                    [ngClass]="{'text-white': orderBy === 'count'}">
-                                    swap_vert
-                                </span>
-                            </button>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex justify-between items-center">
-                            Đơn vị cung cấp
-                            <button mat-icon-button (click)="orderBy = 'provider'; isAsc = !isAsc">
-                                <span class="material-symbols-outlined text-gray-500"
-                                    [ngClass]="{'text-white': orderBy === 'provider'}">
-                                    swap_vert
-                                </span>
-                            </button>
-                        </div>
-                    </th>
-                    <th class="text-right">
-                        <button mat-icon-button (click)="expanAll()"
-                            [matTooltip]="(isExpanedAll ? 'Đóng' : 'Mở') + ' tất cả chi tiết'">
-                            <span class="material-symbols-outlined">
-                                {{isExpanedAll ? 'expand_circle_up' : 'expand_circle_down'}}
-                            </span>
-                        </button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container
-                    *ngFor="let item of data | searchData: {searchText: searchBillTextBox['value'], orderBy: orderBy, isAsc: isAsc}; let billIndex = index">
-                    <tr class="bg-white" [ngClass]="{
-                        '!bg-[#f8f9fa]': billIndex % 2 === 1
-                    }">
-                        <td>{{item?.id}}</td>
-                        <td class="text-left">{{item?.logFrom | date: 'dd/MM/YYYY'}}</td>
-                        <td class="text-left">{{getBillToTalPrice(item)?.billToTalPrice | currency: 'VND'}}</td>
-                        <td class="text-left">{{getBillToTalPrice(item)?.count}}</td>
-                        <td class="text-left">{{item?.provider}}</td>
-                        <td class="text-right">
-                            <button *ngIf="addedData?.key !== item?.key" mat-icon-button (click)="editBill(item)"
-                                [matTooltip]="'Sửa đơn giá'">
-                                <span class="material-symbols-outlined">
-                                    edit
-                                </span>
-                            </button>
-                            <button mat-icon-button (click)="deleteBill(item)" [matTooltip]="'Xoá hoá đơn'">
-                                <span class="material-symbols-outlined">
-                                    delete
-                                </span>
-                            </button>
-                            <button mat-icon-button (click)="
-                                    item.expaned = !item?.expaned;
-                                    isExpanedAll = false
-                                    " [matTooltip]="(item?.expaned ? 'Đóng' : 'Mở') + ' chi tiết'">
-                                <span class="material-symbols-outlined">
-                                    {{item?.expaned ? 'expand_circle_up' : 'expand_circle_down'}}
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr class="hidden" [ngClass]="{
-                        '!table-row': item?.expaned
-                    }">
-                        <td [colSpan]="6" class="bg-white !p-0">
-                            <div class="w-full border rounded p-3">
-                                <div class="text-2xl">Hoá đơn: {{item?.id}}</div>
-                                <div><span class="font-bold">Ghi nhận bởi:</span> {{item?.updatedBy}} </div>
-                                <div><span class="font-bold">Ghi nhận ngày:</span> {{item?.logFrom | date:
-                                    'dd/MM/YYYY'}}</div>
-                                <div class="text-lg"><span class="font-bold">Thành tiền hoá đơn:</span>
-                                    {{getBillToTalPrice(item)?.billToTalPrice | currency:
-                                    'VND'}} </div>
-                                <table class="w-full childTable">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-left">Vật liệu</th>
-                                            <th class="text-left">Đơn giá</th>
-                                            <th class="text-center">Số lượng</th>
-                                            <th class="text-center">Đơn vị cung cấp</th>
-                                            <th class="text-right">Thành tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let material of item?.materials">
-                                            <td>{{material?.material?.name}}</td>
-                                            <td class="text-left">{{material?.material?.price | currency:
-                                                'VND'}}/{{material?.material?.unit || 'đơn vị'}}</td>
-                                            <td class="text-center">{{material?.number}}</td>
-                                            <td class="text-center">{{material?.material?.provider}}</td>
-                                            <td class="text-right">{{material?.totalPrice | currency:
-                                                'VND'}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-container>
-            </tbody>
-        </table>
-    </div>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-
 <ng-template #deleteBillDialog>
-    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận xoá</div>
-    <mat-dialog-content>
-        <iframe *ngIf="deleteGoogleFormPath" [src]="
-        deleteGoogleFormPath | safe
-        " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-    </mat-dialog-content>
+  <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận xoá</div>
+  <mat-dialog-content>
+    <iframe
+      *ngIf="deleteGoogleFormPath"
+      [src]="deleteGoogleFormPath | safe"
+      class="w-full"
+      height="520"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0"
+      >Loading…</iframe
+    >
+  </mat-dialog-content>
 </ng-template>
 
 <ng-template #saveBillDialog>
-    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận lưu</div>
-    <mat-dialog-content>
-        <iframe *ngIf="googleFormPath" [src]="
-      googleFormPath | safe
-    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-    </mat-dialog-content>
+  <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận lưu</div>
+  <mat-dialog-content>
+    <iframe
+      *ngIf="googleFormPath"
+      [src]="googleFormPath | safe"
+      class="w-full"
+      height="520"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0"
+      >Loading…</iframe
+    >
+  </mat-dialog-content>
 </ng-template>
