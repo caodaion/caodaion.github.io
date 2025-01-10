@@ -43,10 +43,48 @@ export class DienThoPhatMauService {
               dienThoPhatMauSetting[item?.logFrom] = item?.data;
             });
             let price = <any>[];
+            let priceLog = <any>[];
             let bill = <any>[];
+            let billLog = <any>[];
             let data = <any>[];
+            const getTotalPrice = (materialItem: any) => {
+              materialItem.totalPrice =
+                parseFloat(materialItem?.number) *
+                parseFloat(materialItem?.materialObject?.price);
+            };
+            const searchMaterialPrice = (v: any, materialItem: any) => {
+              const foundPrices = JSON.parse(JSON.stringify(priceLog))?.filter(
+                (fp: any) => {
+                  return (
+                    fp?.data?.key === materialItem?.material &&
+                    new Date(fp?.Timestamp) <= new Date(v?.Timestamp)
+                  );
+                }
+              );
+              materialItem.materialObject =
+                foundPrices[foundPrices?.length - 1]?.data;
+              if (materialItem.materialObject?.price) {
+                getTotalPrice(materialItem);
+              }
+            };
+            const searchPrice = (v: any) => {
+              v?.materials?.forEach((materialItem: any) => {
+                if (materialItem.material) {
+                  if (typeof materialItem.material == 'string') {
+                    searchMaterialPrice(v, materialItem);
+                  } else {
+                    materialItem.materialObject = materialItem.material;
+                    if (materialItem.materialObject?.price) {
+                      getTotalPrice(materialItem);
+                    }
+                  }
+                }
+              });
+              v.materials = v?.materials?.filter((vm: any) => !!vm);
+            };
             const addBill = (billInfo: any) => {
               bill.push(billInfo);
+              searchPrice(billInfo);
             };
             const updateBill = (billInfo: any) => {
               const foundBillIndex = bill.indexOf(
@@ -77,248 +115,134 @@ export class DienThoPhatMauService {
               price[foundPriceIndex] = null;
               price = price?.filter((v: any) => !!v);
             };
-            let history = <any>[];
             res?.forEach((item: any, resIndex: any) => {
               if (item?.Timestamp != 'setting') {
                 if (!price) {
                   price = <any>[];
                 }
-                history?.push(item);
                 const dataRow = JSON.parse(item.data);
 
-                if (dataRow?.length == 1) {
-                  dataRow?.forEach((dr: any, dataRowIndex: any) => {
-                    if (dr?.key) {
-                      switch (dr?.key) {
-                        case 'price':
-                          let priceData: any = <any>{};
-                          priceData = { ...priceData, ...dr?.data };
-                          priceData.updatedBy = item?.updatedBy;
-                          priceData.logFrom = item?.logFrom;
-                          addPrice(priceData);
-                          break;
-                        case 'bill':
-                          let billData: any = <any>{};
-                          billData = { ...billData, ...dr?.data };
-                          billData.updatedBy = item?.updatedBy;
-                          billData.logFrom = item?.logFrom;
-
-                          billData?.materials?.forEach((bd: any) => {
-                            const foundPriceMaterial = typeof bd?.material === 'string'
-                            ? price?.filter(
-                                (v: any) => v?.key === bd?.material
-                              )
-                            : [bd?.material];
-
-                            bd.materialObject =
-                              foundPriceMaterial[
-                                foundPriceMaterial?.length - 1
-                              ];
-                            bd.totalPrice =
-                              parseFloat(bd.materialObject?.price) *
-                              parseFloat(bd?.number);
-
-                            if (bd?.material == 'da-0x4_20240612' && billData?.id === '60') {
-                              console.log(
-                                'billDatabillDatabillDatabillDatabillDatabillDatabillDatabillData',
-                                billData
-                              );
-                              console.log(bd?.material);
-                              console.log(foundPriceMaterial);
-                            }
-                          });
-                          addBill(JSON.parse(JSON.stringify(billData)));
-                          break;
-                        case 'delete-bill':
-                          let deletedBillData: any = <any>{};
-                          deletedBillData = {
-                            ...deletedBillData,
-                            ...dr?.data,
-                          };
-                          deletedBillData.updatedBy = item?.updatedBy;
-                          deletedBillData.logFrom = item?.logFrom;
-                          deleteBill(deletedBillData);
-                          break;
-                        case 'delete-price':
-                          let deletedPriceData: any = <any>{};
-                          deletedPriceData = {
-                            ...deletedPriceData,
-                            ...dr?.data,
-                          };
-                          deletedPriceData.updatedBy = item?.updatedBy;
-                          deletedPriceData.logFrom = item?.logFrom;
-                          deletePrice(deletedPriceData);
-                          break;
-                        case 'update-price':
-                          let updatedPriceData: any = <any>{};
-                          updatedPriceData = {
-                            ...updatedPriceData,
-                            ...dr?.data,
-                          };
-                          updatedPriceData.updatedBy = item?.updatedBy;
-                          updatedPriceData.logFrom = item?.logFrom;
-                          updatePrice(updatedPriceData);
-                          break;
-                        case 'update-bill':
-                          let updatedBillData: any = <any>{};
-                          updatedBillData = {
-                            ...updatedBillData,
-                            ...dr?.data,
-                          };
-                          updatedBillData.updatedBy = item?.updatedBy;
-                          updatedBillData.logFrom = item?.logFrom;
-                          updateBill(updatedBillData);
-                          break;
-                      }
+                let billDataList: any = <any>[];
+                let priceDataList: any = <any>[];
+                let updatedBillDataList: any = <any>[];
+                let updatedPriceDataList: any = <any>[];
+                let deleteBillDataList: any = <any>[];
+                let deletePriceDataList: any = <any>[];
+                dataRow?.forEach((dr: any, dataRowIndex: any) => {
+                  if (dr?.key) {
+                    let actionData: any = <any>{};
+                    actionData = { ...actionData, ...dr?.data };
+                    actionData.updatedBy = item?.updatedBy;
+                    actionData.logFrom = item?.logFrom;
+                    switch (dr?.key) {
+                      case 'bill':
+                        billLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        billDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      case 'update-bill':
+                        billLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        updatedBillDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      case 'delete-bill':
+                        billLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        deleteBillDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      case 'price':
+                        priceLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        priceDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      case 'update-price':
+                        priceLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        updatedPriceDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      case 'delete-price':
+                        priceLog.push({ ...dr, Timestamp: item?.Timestamp });
+                        deletePriceDataList.push({
+                          ...actionData,
+                          Timestamp: item?.Timestamp,
+                        });
+                        break;
+                      default:
+                        break;
                     }
+                  }
+                });
+                if (billDataList?.length > 0) {
+                  billDataList?.forEach((v: any) => {
+                    addBill(v);
                   });
                 }
-                if (dataRow?.length > 1) {
-                  let billDataList: any = <any>[];
-                  let priceDataList: any = <any>[];
-                  let updatedBillDataList: any = <any>[];
-                  dataRow?.forEach((dr: any, dataRowIndex: any) => {
-                    if (dr?.key) {
-                      switch (dr?.key) {
-                        case 'price':
-                          let priceData: any = <any>{};
-                          priceData = { ...priceData, ...dr?.data };
-                          priceData.updatedBy = item?.updatedBy;
-                          priceData.logFrom = item?.logFrom;
-                          priceDataList.push(priceData);
-                          break;
-                        case 'bill':
-                          let billData: any = <any>{};
-                          billData = { ...billData, ...dr?.data };
-                          billData.updatedBy = item?.updatedBy;
-                          billData.logFrom = item?.logFrom;
-                          billData?.materials?.forEach((bd: any) => {
-                            const foundPriceMaterial =
-                              typeof bd?.material === 'string'
-                                ? price?.filter(
-                                    (v: any) => v?.key === bd?.material
-                                  )
-                                : [bd?.material];
-                            bd.materialObject =
-                              foundPriceMaterial[
-                                foundPriceMaterial?.length - 1
-                              ];
-                            if (
-                              parseFloat(
-                                bd.materialObject?.price
-                              )?.toString() !== 'NaN' &&
-                              parseFloat(bd?.number)?.toString() !== 'NaN'
-                            ) {
-                              bd.totalPrice =
-                                parseFloat(bd.materialObject?.price) *
-                                parseFloat(bd?.number);
-                            }
-                          });
-                          billDataList.push(
-                            JSON.parse(JSON.stringify(billData))
-                          );
-                          break;
-                        case 'delete-bill':
-                          let deletedBillData: any = <any>{};
-                          deletedBillData = {
-                            ...deletedBillData,
-                            ...dr?.data,
-                          };
-                          deletedBillData.updatedBy = item?.updatedBy;
-                          deletedBillData.logFrom = item?.logFrom;
-                          deleteBill(deletedBillData);
-                          break;
-                        case 'delete-price':
-                          let deletedPriceData: any = <any>{};
-                          deletedPriceData = {
-                            ...deletedPriceData,
-                            ...dr?.data,
-                          };
-                          deletedPriceData.updatedBy = item?.updatedBy;
-                          deletedPriceData.logFrom = item?.logFrom;
-                          deletePrice(deletedPriceData);
-                          break;
-                        case 'update-price':
-                          let updatedPriceData: any = <any>{};
-                          updatedPriceData = {
-                            ...updatedPriceData,
-                            ...dr?.data,
-                          };
-                          updatedPriceData.updatedBy = item?.updatedBy;
-                          updatedPriceData.logFrom = item?.logFrom;
-                          updatePrice(updatedPriceData);
-                          if (billDataList?.length > 0) {
-                            billDataList[0].materials?.forEach((blm: any) => {
-                              if (typeof blm?.material === 'string') {
-                                if (updatedPriceData?.key == blm.material) {
-                                  blm.materialObject = JSON.parse(
-                                    JSON.stringify(updatedPriceData)
-                                  );
-                                }
-                              } else {
-                                if (blm?.material) {
-                                  blm.materialObject = JSON.parse(
-                                    JSON.stringify(blm?.material)
-                                  );
-                                }
-                              }
-
-                              if (
-                                parseFloat(
-                                  blm.materialObject?.price
-                                )?.toString() !== 'NaN' &&
-                                parseFloat(blm?.number)?.toString() !== 'NaN'
-                              ) {
-                                blm.totalPrice =
-                                  parseFloat(blm.materialObject?.price) *
-                                  parseFloat(blm?.number);
-                              }
-                            });
-                          }
-                          if (updatedBillDataList?.length > 0) {
-                            updatedBillDataList[0].materials?.forEach(
-                              (blm: any) => {
-                                if (updatedPriceData?.key == blm.material) {
-                                  blm.materialObject = JSON.parse(
-                                    JSON.stringify(updatedPriceData)
-                                  );
-                                }
-                              }
-                            );
-                          }
-                          break;
-                        case 'update-bill':
-                          let updatedBillData: any = <any>{};
-                          updatedBillData = {
-                            ...updatedBillData,
-                            ...dr?.data,
-                          };
-                          updatedBillData.updatedBy = item?.updatedBy;
-                          updatedBillData.logFrom = item?.logFrom;
-                          updatedBillDataList.push(updatedBillData);
-                          break;
-                      }
-                    }
+                if (updatedBillDataList?.length > 0) {
+                  updatedBillDataList?.forEach((v: any) => {
+                    updateBill(v);
                   });
-                  if (billDataList[0]) {
-                    addBill(billDataList[0]);
-                  }
-                  if (updatedBillDataList[0]) {
-                    updateBill(updatedBillDataList[0]);
-                  }
+                }
+                if (deleteBillDataList?.length > 0) {
+                  deleteBillDataList?.forEach((v: any) => {
+                    deleteBill(v);
+                  });
+                }
+                if (priceDataList?.length > 0) {
+                  priceDataList?.forEach((v: any) => {
+                    addPrice(v);
+                  });
+                }
+                if (updatedPriceDataList?.length > 0) {
+                  updatedPriceDataList?.forEach((v: any) => {
+                    updatePrice(v);
+                  });
+                }
+                if (deletePriceDataList?.length > 0) {
+                  deletePriceDataList?.forEach((v: any) => {
+                    deletePrice(v);
+                  });
                 }
               }
             });
             data = bill;
 
+            // Try to update the missing material price
+            data?.forEach((missingItem: any) => {
+              missingItem?.materials?.forEach((materialItem: any) => {
+                if (
+                  typeof materialItem?.material == 'string' &&
+                  !materialItem?.materialObject
+                ) {
+                  searchMaterialPrice(missingItem, materialItem);
+                }
+              });
+              missingItem.materials = missingItem?.materials?.filter(
+                (missingItemMaterial: any) =>
+                  !!missingItemMaterial &&
+                  missingItemMaterial?.material &&
+                  missingItemMaterial?.materialObject
+              );
+            });
+
             response.status = 200;
             response.data = data;
-            response.history = history;
             response.price = price;
-            console.log(response);
+            response.priceLog = priceLog;
+            response.billLog = billLog;
             ref.dienThoPhatMauSetting = dienThoPhatMauSetting;
             ref.dienThoPhatMau = data;
             response.setting = dienThoPhatMauSetting;
+            console.log(response);
             observable.next(response);
             observable.complete();
           });

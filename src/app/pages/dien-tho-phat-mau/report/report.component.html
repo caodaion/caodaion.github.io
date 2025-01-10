@@ -117,7 +117,7 @@
                                 <td class="text-center">{{priceMaterial?.billId}}</td>
                                 <td class="text-center">{{priceMaterial?.logFrom | date: 'dd/MM/YYYY'}}</td>
                                 <td class="text-center">{{priceMaterial?.number}}</td>
-                                <td class="text-right">{{priceMaterial?.material?.price | currency: 'VND'}}</td>
+                                <td class="text-right">{{priceMaterial?.materialObject?.price | currency: 'VND'}}</td>
                                 <td class="text-right">{{priceMaterial?.totalPrice | currency: 'VND'}}</td>
                             </tr>
                         </ng-container>
