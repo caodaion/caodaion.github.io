@@ -55,7 +55,7 @@ export const GACHA_DATA = {
         top: 200,
         left: 100,
         color: "#a32625",
-        family: "Fleur De Leah",
+        family: "Dancing Script",
         fontSize: 112,
         background: "rgb(251 244 225 / 80%)",
         padding: 75,
