@@ -12,7 +12,7 @@
     }
 }
 .lixi {
-    @apply w-80 lg:w-96 h-80 lg:h-96 cursor-pointer relative bg-[#ca3b2e];
+    @apply w-80 lg:w-96 h-80 lg:h-96 cursor-pointer relative bg-[#ca3b2e] overflow-hidden;
     transition: 0.3s;
     box-shadow: 0px 25px 20px -20px rgba(0,0,0,0.45);
     &::before {
@@ -94,6 +94,7 @@
 
     &.active {
         animation: 5s openLixiBox forwards;
+        overflow: visible;
         .topSide {
             transform: perspective(75em) translate(-50%, -200%) rotateX(0deg);
             z-index: 0;

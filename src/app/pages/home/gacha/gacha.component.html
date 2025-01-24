@@ -1,3 +1,4 @@
+<audio [src]="selectedAudio" #audio></audio>
 <div class="gachaContainer w-full flex justify-center items-center">
   <h1 class="text-center">Mừng Xuân Ất Tỵ</h1>
   <h3 class="text-center">Hái lộc đầu năm cùng CaoDaiON</h3>
@@ -29,19 +30,45 @@
             <div
               class="gachaContent"
               [ngStyle]="{
-                top: selectedFrame?.setting?.top ? selectedFrame?.setting?.top + 'px' : '',
-                right: selectedFrame?.setting?.right ? selectedFrame?.setting?.right + 'px' : '',
-                bottom: selectedFrame?.setting?.bottom ? selectedFrame?.setting?.bottom + 'px' : '',
-                left: selectedFrame?.setting?.left ? selectedFrame?.setting?.left + 'px' : '',
-                width: selectedFrame?.setting?.width ? selectedFrame?.setting?.width + 'px' : '',
-                height: selectedFrame?.setting?.height ? selectedFrame?.setting?.height + 'px' : '',
-                fontSize: selectedFrame?.setting?.fontSize ? selectedFrame?.setting?.fontSize + 'px' : '',
-                color: selectedFrame?.setting?.color ? selectedFrame?.setting?.color : '',
-                fontFamily: selectedFrame?.setting?.family ? selectedFrame?.setting?.family + ', serif' : '',
-                background: selectedFrame?.setting?.background ? selectedFrame?.setting?.background : '',
-                padding: selectedFrame?.setting?.padding ? selectedFrame?.setting?.padding + 'px' : '',
-                borderRadius: selectedFrame?.setting?.borderRadius ? selectedFrame?.setting?.borderRadius + 'px' : '',
-                backdropFilter: selectedFrame?.setting?.backdropFilter ? selectedFrame?.setting?.backdropFilter : '',
+                top: selectedFrame?.setting?.top
+                  ? selectedFrame?.setting?.top + 'px'
+                  : '',
+                right: selectedFrame?.setting?.right
+                  ? selectedFrame?.setting?.right + 'px'
+                  : '',
+                bottom: selectedFrame?.setting?.bottom
+                  ? selectedFrame?.setting?.bottom + 'px'
+                  : '',
+                left: selectedFrame?.setting?.left
+                  ? selectedFrame?.setting?.left + 'px'
+                  : '',
+                width: selectedFrame?.setting?.width
+                  ? selectedFrame?.setting?.width + 'px'
+                  : '',
+                height: selectedFrame?.setting?.height
+                  ? selectedFrame?.setting?.height + 'px'
+                  : '',
+                fontSize: selectedFrame?.setting?.fontSize
+                  ? selectedFrame?.setting?.fontSize + 'px'
+                  : '',
+                color: selectedFrame?.setting?.color
+                  ? selectedFrame?.setting?.color
+                  : '',
+                fontFamily: selectedFrame?.setting?.family
+                  ? selectedFrame?.setting?.family + ', serif'
+                  : '',
+                background: selectedFrame?.setting?.background
+                  ? selectedFrame?.setting?.background
+                  : '',
+                padding: selectedFrame?.setting?.padding
+                  ? selectedFrame?.setting?.padding + 'px'
+                  : '',
+                borderRadius: selectedFrame?.setting?.borderRadius
+                  ? selectedFrame?.setting?.borderRadius + 'px'
+                  : '',
+                backdropFilter: selectedFrame?.setting?.backdropFilter
+                  ? selectedFrame?.setting?.backdropFilter
+                  : '',
                 fontWeight: 'bold'
               }"
             >
@@ -53,7 +80,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="selectedFrame?.src && isAllowDownload" class="frame-selector mt-6">
+  <div
+    *ngIf="selectedFrame?.src && isAllowDownload"
+    class="frame-selector mt-6"
+  >
     <div class="text-center">Chọn khung theo sở thích</div>
     <div class="flex justify-around gap-3 mt-3 flex-wrap">
       <div
@@ -83,4 +113,10 @@
   >
     <mat-icon>download</mat-icon> Tải ảnh chia sẻ
   </button>
+  <div class="text-center mt-4" *ngIf="selectedFrame?.src && isAllowDownload">
+    <div><strong>Bài hát đang phát:</strong></div>
+    <a [href]="selectedAudio" [target]="'_blank'" class="underline">{{
+      selectedAudioName
+    }}</a>
+  </div>
 </div>
