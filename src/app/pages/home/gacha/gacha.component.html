@@ -1,0 +1,86 @@
+<div class="gachaContainer w-full flex justify-center items-center">
+  <h1 class="text-center">Mừng Xuân Ất Tỵ</h1>
+  <h3 class="text-center">Hái lộc đầu năm cùng CaoDaiON</h3>
+  <div class="lixi" #lixiBox>
+    <div class="lixiSide topSide" (click)="onRunGacha()"></div>
+    <div class="lixiSide rightSide" (click)="onRunGacha()"></div>
+    <div class="lixiSide bottomSide" (click)="onRunGacha()"></div>
+    <div class="lixiSide leftSide" (click)="onRunGacha()"></div>
+    <div class="lixiSide middleSide" (click)="onRunGacha()">
+      <div>Mở ngay</div>
+    </div>
+    <div class="gachaResult" *ngIf="selectedFrame?.src">
+      <div class="gachaFrameWrapper" #gachaFrameWrapper>
+        <div
+          class="gachaFrameContainer"
+          #gachaFrameContainer
+          id="gachaFrameContainer"
+        >
+          <div
+            class="gachaFrame"
+            #gachaFrame
+            [ngStyle]="{
+          'background-image': 'url(/assets/images/tet-frames/' + selectedFrame?.src + ')',
+          'background-size': 'cover',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+        }"
+          >
+            <div
+              class="gachaContent"
+              [ngStyle]="{
+                top: selectedFrame?.setting?.top ? selectedFrame?.setting?.top + 'px' : '',
+                right: selectedFrame?.setting?.right ? selectedFrame?.setting?.right + 'px' : '',
+                bottom: selectedFrame?.setting?.bottom ? selectedFrame?.setting?.bottom + 'px' : '',
+                left: selectedFrame?.setting?.left ? selectedFrame?.setting?.left + 'px' : '',
+                width: selectedFrame?.setting?.width ? selectedFrame?.setting?.width + 'px' : '',
+                height: selectedFrame?.setting?.height ? selectedFrame?.setting?.height + 'px' : '',
+                fontSize: selectedFrame?.setting?.fontSize ? selectedFrame?.setting?.fontSize + 'px' : '',
+                color: selectedFrame?.setting?.color ? selectedFrame?.setting?.color : '',
+                fontFamily: selectedFrame?.setting?.family ? selectedFrame?.setting?.family + ', serif' : '',
+                background: selectedFrame?.setting?.background ? selectedFrame?.setting?.background : '',
+                padding: selectedFrame?.setting?.padding ? selectedFrame?.setting?.padding + 'px' : '',
+                borderRadius: selectedFrame?.setting?.borderRadius ? selectedFrame?.setting?.borderRadius + 'px' : '',
+                backdropFilter: selectedFrame?.setting?.backdropFilter ? selectedFrame?.setting?.backdropFilter : '',
+                fontWeight: 'bold'
+              }"
+            >
+              <div class="gachaSrc">{{ selectedLecture?.src }}</div>
+              <div class="gachaAuthor">({{ selectedLecture?.author }})</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedFrame?.src && isAllowDownload" class="frame-selector mt-6">
+    <div class="text-center">Chọn khung theo sở thích</div>
+    <div class="flex justify-around gap-3 mt-3 flex-wrap">
+      <div
+        class="frameItem cursor-pointer"
+        *ngFor="let item of gachaData?.frames"
+        (click)="selectedFrame = item"
+      >
+        <div
+          class="w-20 h-20"
+          [ngStyle]="{
+          'background-image': 'url(/assets/images/tet-frames/' + item?.src + ')',
+          'background-size': 'cover',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+    }"
+        ></div>
+      </div>
+    </div>
+  </div>
+  <button
+    *ngIf="selectedFrame?.src && isAllowDownload"
+    mat-raised-button
+    color="primary"
+    (click)="saveAsImage('gachaFrameContainer')"
+    [disabled]="downloading"
+    class="mt-3 buttonDownload"
+  >
+    <mat-icon>download</mat-icon> Tải ảnh chia sẻ
+  </button>
+</div>

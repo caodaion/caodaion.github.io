@@ -13,12 +13,14 @@ import { LoiKhuyenCanYeuComponent } from './loi-khuyen-can-yeu/loi-khuyen-can-ye
 import { ActionModule } from './action/action.module';
 import { WelcomeModule } from './welcome/welcome.module';
 import { BaiThuongYeuModule } from './bai-thuong-yeu/bai-thuong-yeu.module';
+import { GachaComponent } from './gacha/gacha.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     TimeComponent,
-    LoiKhuyenCanYeuComponent
+    LoiKhuyenCanYeuComponent,
+    GachaComponent
   ],
   imports: [
     CommonModule,
