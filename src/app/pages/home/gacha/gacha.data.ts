@@ -164,11 +164,11 @@ export const GACHA_DATA = {
       setting: {
         width: 1600,
         height: "auto",
-        top: 700,
+        top: 800,
         left: 200,
         color: "#6a4f3d",
         family: "Dancing Script",
-        fontSize: 112,
+        fontSize: 100,
         background: "rgb(243 237 213 / 80%)",
         padding: 75,
         borderRadius: 75,

@@ -109,7 +109,7 @@
     color="primary"
     (click)="saveAsImage('gachaFrameContainer')"
     [disabled]="downloading"
-    class="mt-3 buttonDownload"
+    class="mt-3 w-full buttonDownload"
   >
     <mat-icon>download</mat-icon> Tải ảnh chia sẻ
   </button>
@@ -118,5 +118,8 @@
     <a [href]="selectedAudio" [target]="'_blank'" class="underline">{{
       selectedAudioName
     }}</a>
+    <button mat-stroked-button (click)="audio?.pause()" class="ms-4">
+      <mat-icon>pause</mat-icon><span>Dừng nhạc</span>
+    </button>
   </div>
 </div>

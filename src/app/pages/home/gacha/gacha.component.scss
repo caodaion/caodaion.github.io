@@ -6,15 +6,19 @@
 
 .gachaContainer {
     @apply p-6 relative flex flex-col justify-center items-center;
-    font-family: Dancing Script;
     h1 {
+        font-family: Dancing Script;
         color: #ca3b2e;
+    }
+    h3 {
+        font-family: Dancing Script;
     }
 }
 .lixi {
     @apply w-80 lg:w-96 h-80 lg:h-96 cursor-pointer relative bg-[#ca3b2e] overflow-hidden;
     transition: 0.3s;
     box-shadow: 0px 25px 20px -20px rgba(0,0,0,0.45);
+    border-radius: 30px;
     &::before {
         content: "";
         position: absolute;
@@ -38,6 +42,7 @@
         &.topSide {
             transform-origin: bottom center;
             transform: perspective(75em) translate(-50%, -200%) rotateX(180deg);
+            border-bottom: 192px solid #ca3b2e;
             &::before {
                 content: '';
                 transform-origin: bottom center;
@@ -47,29 +52,14 @@
         &.rightSide {
             transform: translate(-0%, -100%) rotate(-90deg);
             transform-origin: bottom center;
-            &::before {
-                content: '';
-                transform: translate(-0%, -100%) rotate(-90deg);
-                transform-origin: bottom center;
-            }
         }
         &.bottomSide {
             transform: translate(-50%, -0%) rotate(0deg);
             transform-origin: bottom center;
-            &::before {
-                content: '';
-                transform: translate(-50%, -0%) rotate(0deg);
-                transform-origin: bottom center;
-            }
         }
         &.leftSide {
             transform-origin: bottom center;
             transform: translate(-100%, -100%) rotate(90deg);
-            &::before {
-                content: '';
-                transform-origin: bottom center;
-                transform: translate(-100%, -100%) rotate(90deg);
-            }
         }
         &.middleSide {
             transform-origin: center center;
@@ -78,6 +68,7 @@
             height: 150px;
             width: 150px;
             border: none;
+            border-radius: 12px;
             div {
                 font-family: Dancing Script;
                 transform: translate(-50%, -50%) rotate(-45deg);
@@ -95,6 +86,8 @@
     &.active {
         animation: 5s openLixiBox forwards;
         overflow: visible;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
         .topSide {
             transform: perspective(75em) translate(-50%, -200%) rotateX(0deg);
             z-index: 0;
