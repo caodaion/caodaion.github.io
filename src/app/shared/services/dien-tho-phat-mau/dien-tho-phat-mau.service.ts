@@ -561,7 +561,7 @@ export class DienThoPhatMauService {
                 materialItem?.material?.name,
                 parseFloat(materialItem?.number),
                 materialItem?.material?.unit,
-                parseFloat(materialItem?.material?.price),
+                parseFloat(materialItem?.materialObject ?.price),
                 parseFloat(materialItem?.totalPrice),
               ]);
               dailyReportWorkSheet.getColumn(3).numFmt = '#,##0.00';
@@ -859,7 +859,7 @@ export class DienThoPhatMauService {
     // GET DATA
     exportData?.materialTypeSheet?.materialTypeData?.forEach((item: any) => {
       // Date Row
-      const dateRow = materialReportWorkSheet.addRow([`${item?.name}`]);
+      const dateRow = materialReportWorkSheet.addRow([`${item?.name || ''}`]);
       if (dateRow?.findCell(1)?.address) {
         const rowNumber = parseInt(
           dateRow?.findCell(1)?.address?.replace(startCol, '') || '1'
@@ -877,7 +877,7 @@ export class DienThoPhatMauService {
         );
         materialReportWorkSheet.getCell(
           `${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`
-        ).value = `Đơn vị tính: ${item?.unit}`;
+        ).value = `Đơn vị tính: ${item?.unit || ''}`;
         materialReportWorkSheet.getCell(
           `${String.fromCharCode(2 + 'A'.charCodeAt(0))}${rowNumber}`
         ).font = { size: 14 };
@@ -911,7 +911,7 @@ export class DienThoPhatMauService {
           materialPriceItem?.billId,
           this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY'),
           parseFloat(materialPriceItem?.number),
-          parseFloat(materialPriceItem?.material?.price),
+          parseFloat(materialPriceItem?.materialObject?.price),
           parseFloat(materialPriceItem?.totalPrice),
         ]);
         materialReportWorkSheet.getColumn(4).numFmt = '#,##0.00';
