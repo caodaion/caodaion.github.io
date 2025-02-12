@@ -84,18 +84,7 @@ export class BillComponent implements OnInit {
   }
 
   getYearOptions() {
-    for (
-      let i = new Date().getFullYear() + 1;
-      i > new Date().getFullYear() - 5;
-      i--
-    ) {
-      const convertedDate = this.calendarService.getConvertedFullDate(
-        new Date(new Date().setFullYear(i))
-      );
-      this.yearOptions.push({
-        solar: convertedDate.convertSolar2Lunar.lunarYear,
-      });
-    }
+    
     this.monthOptions = Array.from({ length: 12 }, (x, i) => i + 1);
     this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1);
   }

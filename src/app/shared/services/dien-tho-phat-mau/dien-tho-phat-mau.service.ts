@@ -558,11 +558,11 @@ export class DienThoPhatMauService {
             (materialItem: any, materialIndex: any) => {
               const materialRow = dailyReportWorkSheet.addRow([
                 '',
-                materialItem?.material?.name,
-                parseFloat(materialItem?.number),
-                materialItem?.material?.unit,
-                parseFloat(materialItem?.materialObject ?.price),
-                parseFloat(materialItem?.totalPrice),
+                materialItem?.materialObject?.name || '',
+                parseFloat(materialItem?.number || ''),
+                materialItem?.materialObject?.unit || '',
+                parseFloat(materialItem?.materialObject ?.price || ''),
+                parseFloat(materialItem?.totalPrice || ''),
               ]);
               dailyReportWorkSheet.getColumn(3).numFmt = '#,##0.00';
               dailyReportWorkSheet.getColumn(5).numFmt = '[$-vi-VN]#,##0';
@@ -908,11 +908,11 @@ export class DienThoPhatMauService {
       // Date Details
       item?.materialPrice?.forEach((materialPriceItem: any) => {
         const materialPriceRow = materialReportWorkSheet.addRow([
-          materialPriceItem?.billId,
-          this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY'),
-          parseFloat(materialPriceItem?.number),
-          parseFloat(materialPriceItem?.materialObject?.price),
-          parseFloat(materialPriceItem?.totalPrice),
+          materialPriceItem?.billId || '',
+          materialPriceItem?.logFrom ? this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY') : '',
+          parseFloat(materialPriceItem?.number || ''),
+          parseFloat(materialPriceItem?.materialObject?.price || ''),
+          parseFloat(materialPriceItem?.totalPrice || ''),
         ]);
         materialReportWorkSheet.getColumn(4).numFmt = '#,##0.00';
         materialReportWorkSheet.getColumn(4).numFmt = '[$-vi-VN]#,##0';

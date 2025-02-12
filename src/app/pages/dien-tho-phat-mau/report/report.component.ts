@@ -76,20 +76,20 @@ export class ReportComponent implements AfterViewInit {
     const priceList = <any>[]
     this.filteredData?.forEach((item: any) => {
       item?.materials?.forEach((material: any) => {
-        if (!this.filteredDataPrice?.find((fdp: any) => fdp === material?.material?.name)) {
-          this.filteredDataPrice.push(material?.material?.name)
+        if (!this.filteredDataPrice?.find((fdp: any) => fdp === material?.materialObject?.name)) {
+          this.filteredDataPrice.push(material?.materialObject?.name)
         }
         if (this.filterByMaterial?.length > 0) {
-          if (this.filterByMaterial?.includes(material?.material?.name)) {
+          if (this.filterByMaterial?.includes(material?.materialObject?.name)) {
             priceList.push(<any>{
-              name: material?.material?.name,
-              unit: material?.material?.unit,
+              name: material?.materialObject?.name,
+              unit: material?.materialObject?.unit,
             })
           }
         } else {
           priceList.push(<any>{
-            name: material?.material?.name,
-            unit: material?.material?.unit,
+            name: material?.materialObject?.name,
+            unit: material?.materialObject?.unit,
           })
         }
       })
@@ -101,7 +101,7 @@ export class ReportComponent implements AfterViewInit {
         let matchMaterialPrice = <any>[]
         this.filteredData?.forEach((fd: any) => {
           const pushFilter = JSON.parse(JSON.stringify(fd))
-          const materialPrice = pushFilter?.materials?.filter((fdm: any) => fdm?.material?.name === priceItem?.name)
+          const materialPrice = pushFilter?.materials?.filter((fdm: any) => fdm?.materialObject?.name === priceItem?.name)
           if (materialPrice?.length > 0) {
             materialPrice?.forEach((mpfd: any) => {
               const pushData: any = JSON.parse(JSON.stringify(mpfd))
