@@ -249,7 +249,10 @@ export class SoanSoService {
       },
       'so-cau-an': {
         name: 'Cầu An Tư Gia'
-      }
+      },
+      'so-kinh-an-thanh-tuong': {
+        name: 'Kỉnh An Thánh Tượng'
+      },
     }
   }
 
