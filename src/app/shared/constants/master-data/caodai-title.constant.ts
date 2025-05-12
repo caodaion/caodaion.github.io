@@ -32,6 +32,11 @@ export const CAODAI_TITLE = {
           isChucViecRequired: true
         },
         {
+          key: 'giup-dau-ho-dao',
+          name: 'Giúp Đầu Họ Đạo',
+          isChucViecRequired: true
+        },
+        {
           key: 'chanh-tri-su',
           name: 'Chánh Trị Sự',
           isChucViecRequired: true
