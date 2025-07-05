@@ -175,7 +175,7 @@
                     </td>
                     <td class="text-left">
                         <ng-container *ngIf="edittingItem?.key !== item?.key">
-                            {{item?.logFrom | date: 'dd/MM/YYYY'}}
+                            {{item?.logFrom | date: 'dd/MM/yyyy'}}
                         </ng-container>
                         <ng-container *ngIf="edittingItem?.key === item?.key">
                             <mat-form-field [appearance]="'outline'">

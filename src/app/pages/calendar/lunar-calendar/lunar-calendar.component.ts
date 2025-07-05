@@ -106,7 +106,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         this.calendarMode = param.mode;
       }
       this.selectedDate.solar = new Date(
-        `${param.year || this.datePipe.transform(new Date(), 'YYYY')}-${
+        `${param.year || this.datePipe.transform(new Date(), 'yyyy')}-${
           param.month || this.datePipe.transform(new Date(), 'MM')
         }-${
           this.calendarMode == 'month'
@@ -252,7 +252,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     this.router.navigate([
       `/lich/${this.calendarMode}/${this.datePipe.transform(
         this.selectedDate.solar,
-        'YYYY/MM/dd'
+        'yyyy/MM/dd'
       )}`,
     ]);
     this.getCalendarEvent();
@@ -350,8 +350,8 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
             date.logged = foundConsecutive?.data?.length;
           }
           if (
-            this.datePipe.transform(date?.solar, 'YYYY-MM-dd') ==
-            this.datePipe.transform(new Date(), 'YYYY-MM-dd')
+            this.datePipe.transform(date?.solar, 'yyyy-MM-dd') ==
+            this.datePipe.transform(new Date(), 'yyyy-MM-dd')
           ) {
             if (foundConsecutive?.data?.length === 0) {
               date.logged = '';
@@ -763,7 +763,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
           event?.event?.lunar?.lunarDay
         } tháng ${event?.event?.lunar?.lunarMonth} năm ${
           event?.event?.lunar?.lunarYearName
-        } (${this.datePipe.transform(event?.event?.solar, 'dd/MM/YYYY')})`;
+        } (${this.datePipe.transform(event?.event?.solar, 'dd/MM/yyyy')})`;
       }
       if (!event?.event?.soTemplate) {
         if (event.event.name?.includes('Cầu Siêu')) {
@@ -873,7 +873,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     this.router.navigate([
       `/lich/${this.calendarMode}/${this.datePipe.transform(
         this.selectedDate.solar,
-        'YYYY/MM/dd'
+        'yyyy/MM/dd'
       )}`,
     ]);
     this.getCalendarEvent();

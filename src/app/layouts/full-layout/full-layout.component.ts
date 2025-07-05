@@ -13,7 +13,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
-import { SwPush, SwUpdate } from '@angular/service-worker';
+import { SwPush, SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { fromEvent, interval, Observable, Subscription } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
@@ -128,14 +128,14 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
   ngAfterViewInit(): void {
     this.authService.getCurrentUser(true).subscribe((res: any) => {
       this.currentUser = res;
-    }) 
+    })
     this.router.events.subscribe((val: any) => {
       this.location = location
       this.mainSelectedMenu = this.mainMenu?.find((menu: any) => {
         return menu?.children?.length > 0 ? menu?.children?.find((item: any) => {
           return item?.key?.includes(this.location?.pathname?.split('/')[1])
         }) : menu?.key?.includes(this.location?.pathname?.split('/')[1])
-      })      
+      })
     });
   }
 
@@ -200,18 +200,20 @@ export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewI
       console.log('Not enable to update');
       return;
     }
-    this.swUpdate.available.subscribe((event: any) => {
-      console.log(`current`, event.current, `available`, event.available);
-      if (
-        confirm(
-          'Phiên bản mới đã sẵn sàng, hãy đồng ý để cập nhật phiên bản mới ngay!!'
-        )
-      ) {
-        this.swUpdate.activateUpdate().then(() => location.reload());
+    this.swUpdate.versionUpdates.subscribe((event) => {
+      if (event.type === 'VERSION_READY') {
+        console.log(`current`, event.currentVersion, `available`, event.latestVersion);
+        if (
+          confirm(
+            'Phiên bản mới đã sẵn sàng, hãy đồng ý để cập nhật phiên bản mới ngay!!'
+          )
+        ) {
+          this.swUpdate.activateUpdate().then(() => location.reload());
+        }
       }
-    });
-    this.swUpdate.activated.subscribe((event: any) => {
-      console.log(`current`, event.previous, `available`, event.current);
+      if (event.type === 'VERSION_INSTALLATION_FAILED') {
+        console.error('Service worker update failed:', event.error);
+      }
     });
   }
 

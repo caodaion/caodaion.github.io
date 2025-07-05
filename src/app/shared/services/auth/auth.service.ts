@@ -8,7 +8,7 @@ import { SheetService } from '../sheet/sheet.service';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { CAODAI_TITLE } from '../../constants/master-data/caodai-title.constant';
 import { CommonService } from '../common/common.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { CalendarService } from '../calendar/calendar.service';
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
@@ -104,7 +104,7 @@ export class AuthService {
         })
         this.currentUser.children = this.mainModuleKey
       }
-      // this.contentEditable = true;    
+      // this.contentEditable = true;
       if (this.currentUser?.sheetId) {
         this.getUserPersionalData(isLogIn).subscribe((res: any) => {
           this.currentUser.setting = res.setting
@@ -241,7 +241,7 @@ export class AuthService {
       }
       case 'birthday': return {
         label: 'Ngày sinh',
-        displayData: this.datePipe.transform(item, 'dd/MM/YYYY'),
+        displayData: this.datePipe.transform(item, 'dd/MM/yyyy'),
       }
       case 'thanhSo': return {
         label: 'Thánh Sở',
@@ -368,16 +368,16 @@ export class AuthService {
                             response.remote['congPhu'] = <any>[]
                           }
                           const dateValue = new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')}`)
-                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)                          
+                          const foundDate = response.remote['congPhu']?.find((cp: any) => cp.date == dr?.data?.date && cp.month == dr?.data?.month && cp.year == dr?.data?.year)
                           if (new Date(new Date().setHours(0)) >= new Date(dateValue.setHours(0))) {
                             if (parseInt(dr?.data?.time?.split(':')[0]) >= 23) {
-                              const nextDate = new Date(moment(moment(new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`)).add(1, 'days')).format('YYYY-MM-DD 00:00:00'))
-                              const foundNextDate = response.remote['congPhu']?.find((cp: any) => cp.date == parseInt(moment(nextDate).format('DD')) && cp.month == parseInt(moment(nextDate).format('MM')) && cp.year == parseInt(moment(nextDate).format('YYYY')))
+                              const nextDate = new Date(moment(moment(new Date(`${dr?.data?.year}-${this.decimalPipe.transform(dr?.data?.month, '2.0-0')}-${this.decimalPipe.transform(dr?.data?.date, '2.0-0')} 00:00:00`)).add(1, 'days')).format('yyyy-MM-DD 00:00:00'))
+                              const foundNextDate = response.remote['congPhu']?.find((cp: any) => cp.date == parseInt(moment(nextDate).format('DD')) && cp.month == parseInt(moment(nextDate).format('MM')) && cp.year == parseInt(moment(nextDate).format('yyyy')))
                               if (!foundNextDate) {
                                 response.remote['congPhu'].push({
                                   date: parseInt(moment(nextDate).format('DD')),
                                   month: parseInt(moment(nextDate).format('MM')),
-                                  year: parseInt(moment(nextDate).format('YYYY')),
+                                  year: parseInt(moment(nextDate).format('yyyy')),
                                   dateTime: nextDate,
                                   data: [{
                                     time: dr?.data?.time,

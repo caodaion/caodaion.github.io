@@ -328,7 +328,7 @@ export class DienThoPhatMauService {
     };
     dailyReportWorkSheet.getCell('B2').value = `${this.datePipe.transform(
       exportData.dateFrom,
-      'dd-MM-YYYY'
+      'dd-MM-yyyy'
     )} (${lunarDateFrom.convertSolar2Lunar.lunarDay}-${
       lunarDateFrom.convertSolar2Lunar.lunarMonth
     }-${lunarDateFrom.convertSolar2Lunar.lunarYearName})`;
@@ -343,7 +343,7 @@ export class DienThoPhatMauService {
     };
     dailyReportWorkSheet.getCell('B3').value = `${this.datePipe.transform(
       exportData.dateTo,
-      'dd-MM-YYYY'
+      'dd-MM-yyyy'
     )} (${lunarDateTo.convertSolar2Lunar.lunarDay}-${
       lunarDateTo.convertSolar2Lunar.lunarMonth
     }-${lunarDateTo.convertSolar2Lunar.lunarYearName})`;
@@ -514,7 +514,7 @@ export class DienThoPhatMauService {
         const dateRow = dailyReportWorkSheet.addRow([
           `Ngày ${this.datePipe.transform(
             new Date(item?.logFrom),
-            'dd/MM/YYYY'
+            'dd/MM/yyyy'
           )} (${rowLunarDate.lunarDay}/${rowLunarDate.lunarMonth}/${
             rowLunarDate.lunarYearName
           })`,
@@ -703,7 +703,7 @@ export class DienThoPhatMauService {
     };
     materialReportWorkSheet.getCell('B2').value = `${this.datePipe.transform(
       exportData.dateFrom,
-      'dd-MM-YYYY'
+      'dd-MM-yyyy'
     )} (${lunarDateFrom.convertSolar2Lunar.lunarDay}-${
       lunarDateFrom.convertSolar2Lunar.lunarMonth
     }-${lunarDateFrom.convertSolar2Lunar.lunarYearName})`;
@@ -718,7 +718,7 @@ export class DienThoPhatMauService {
     };
     materialReportWorkSheet.getCell('B3').value = `${this.datePipe.transform(
       exportData.dateTo,
-      'dd-MM-YYYY'
+      'dd-MM-yyyy'
     )} (${lunarDateTo.convertSolar2Lunar.lunarDay}-${
       lunarDateTo.convertSolar2Lunar.lunarMonth
     }-${lunarDateTo.convertSolar2Lunar.lunarYearName})`;
@@ -909,7 +909,7 @@ export class DienThoPhatMauService {
       item?.materialPrice?.forEach((materialPriceItem: any) => {
         const materialPriceRow = materialReportWorkSheet.addRow([
           materialPriceItem?.billId || '',
-          materialPriceItem?.logFrom ? this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/YYYY') : '',
+          materialPriceItem?.logFrom ? this.datePipe.transform(materialPriceItem?.logFrom, 'dd/MM/yyyy') : '',
           parseFloat(materialPriceItem?.number || ''),
           parseFloat(materialPriceItem?.materialObject?.price || ''),
           parseFloat(materialPriceItem?.totalPrice || ''),

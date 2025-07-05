@@ -1,6 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import * as CryptoJS from "crypto-js";
@@ -73,7 +73,7 @@ export class TuanCuuComponent implements OnInit {
           ev.upComming = true
         }
         if (new Date(ev?.solar) > currentDate) {
-          const difference = moment(new Date(), "DD/MM/YYYY HH:mm:ss").diff(moment(new Date(ev?.solar), "DD/MM/YYYY HH:mm:ss"))
+          const difference = moment(new Date(), "DD/MM/yyyy HH:mm:ss").diff(moment(new Date(ev?.solar), "DD/MM/yyyy HH:mm:ss"))
           if (lessDiff !== 0) {
             if (lessDiff < difference) {
               lessDiff = difference

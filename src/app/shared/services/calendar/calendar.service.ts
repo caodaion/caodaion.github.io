@@ -278,7 +278,7 @@ export class CalendarService {
       lunarDay = dayNumber - monthStart + 1;
       let diff = INT((monthStart - a11) / 29);
       if (calDate > new Date(new Date(tt).setHours(22, 59, 59))) {
-        const nextDate = this.datePipe.transform(new Date(new Date(tt).setDate(new Date(tt).getDate() + 1)), 'dd/MM/YYYY')
+        const nextDate = this.datePipe.transform(new Date(new Date(tt).setDate(new Date(tt).getDate() + 1)), 'dd/MM/yyyy')
         let nextDateNumber: any;
         let nextMonthStart: any
         nextDateNumber = jdFromDate(parseInt(nextDate?.split('/')[0] || ''), parseInt(nextDate?.split('/')[1] || ''), parseInt(nextDate?.split('/')[2] || ''));

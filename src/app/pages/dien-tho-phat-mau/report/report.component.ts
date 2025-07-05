@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { DienThoPhatMauService } from 'src/app/shared/services/dien-tho-phat-mau/dien-tho-phat-mau.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 @Component({
@@ -34,8 +34,8 @@ export class ReportComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-    this.reportFromDate = new Date(moment().startOf('month').format('YYYY-MM-DD'))
-    this.reportToDate = new Date(moment().endOf('month').format('YYYY-MM-DD'))
+    this.reportFromDate = new Date(moment().startOf('month').format('yyyy-MM-DD'))
+    this.reportToDate = new Date(moment().endOf('month').format('yyyy-MM-DD'))
     this.updateData();
   }
 
@@ -96,7 +96,7 @@ export class ReportComponent implements AfterViewInit {
       })
     })
     this.filteredDataPrice = this.filteredDataPrice?.filter((item: any) => !!item?.replaceAll(' ', ''))
-    priceList?.forEach((priceItem: any) => {      
+    priceList?.forEach((priceItem: any) => {
       const foundPriceMaterial = this.materialTypeData?.find((mtd: any) => mtd?.name === priceItem?.name)
       if (!foundPriceMaterial) {
         let matchMaterialPrice = <any>[]

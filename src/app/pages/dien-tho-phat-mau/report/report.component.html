@@ -17,7 +17,7 @@
 </div>
 <mat-tab-group>
     <mat-tab
-        [label]="'CHI TIẾT ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
+        [label]="'CHI TIẾT ('+(reportFromDate | date: 'dd-MM-yyyy') + '-' +(reportToDate | date: 'dd-MM-yyyy')+')'">
         <div class="w-full p-3">
             <table class="w-full select-text">
                 <thead>
@@ -27,11 +27,11 @@
                     </tr>
                     <tr>
                         <th class="text-left font-bold text-lg border-none">Từ ngày</th>
-                        <th class="text-left border-none">{{reportFromDate | date: 'dd/MM/YYYY'}}</th>
+                        <th class="text-left border-none">{{reportFromDate | date: 'dd/MM/yyyy'}}</th>
                     </tr>
                     <tr>
                         <th class="text-left font-bold text-lg border-none">Đến ngày</th>
-                        <th class="text-left border-none">{{reportToDate | date: 'dd/MM/YYYY'}}</th>
+                        <th class="text-left border-none">{{reportToDate | date: 'dd/MM/yyyy'}}</th>
                     </tr>
                     <tr>
                         <th class="text-center">Hoá đơn</th>
@@ -45,7 +45,7 @@
                 <tbody>
                     <ng-container *ngFor="let item of materialImportSummaryData">
                         <tr>
-                            <td [colSpan]="6" class="font-bold">Ngày {{item?.logFrom | date: 'dd/MM/YYYY'}}
+                            <td [colSpan]="6" class="font-bold">Ngày {{item?.logFrom | date: 'dd/MM/yyyy'}}
                                 ({{item?.lunar?.lunarDay}}/{{item?.lunar?.lunarMonth}}/{{item?.lunar?.lunarYearName}})
                             </td>
                         </tr>
@@ -75,7 +75,7 @@
         </div>
     </mat-tab>
     <mat-tab
-        [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-YYYY') + '-' +(reportToDate | date: 'dd-MM-YYYY')+')'">
+        [label]="'LOẠI VẬT TƯ ('+(reportFromDate | date: 'dd-MM-yyyy') + '-' +(reportToDate | date: 'dd-MM-yyyy')+')'">
         <div class="flex flex-wrap p-3">
             <mat-form-field [appearance]="'outline'" class="w-full">
                 <mat-label>Chọn loại vật tư</mat-label>
@@ -92,11 +92,11 @@
                     </tr>
                     <tr>
                         <th class="text-left font-bold text-lg border-none">Từ ngày</th>
-                        <th class="text-left border-none">{{reportFromDate | date: 'dd/MM/YYYY'}}</th>
+                        <th class="text-left border-none">{{reportFromDate | date: 'dd/MM/yyyy'}}</th>
                     </tr>
                     <tr>
                         <th class="text-left font-bold text-lg border-none">Đến ngày</th>
-                        <th class="text-left border-none">{{reportToDate | date: 'dd/MM/YYYY'}}</th>
+                        <th class="text-left border-none">{{reportToDate | date: 'dd/MM/yyyy'}}</th>
                     </tr>
                     <tr>
                         <th class="text-center">Hoá đơn</th>
@@ -115,7 +115,7 @@
                         <ng-container *ngFor="let priceMaterial of item?.materialPrice">
                             <tr>
                                 <td class="text-center">{{priceMaterial?.billId}}</td>
-                                <td class="text-center">{{priceMaterial?.logFrom | date: 'dd/MM/YYYY'}}</td>
+                                <td class="text-center">{{priceMaterial?.logFrom | date: 'dd/MM/yyyy'}}</td>
                                 <td class="text-center">{{priceMaterial?.number}}</td>
                                 <td class="text-right">{{priceMaterial?.materialObject?.price | currency: 'VND'}}</td>
                                 <td class="text-right">{{priceMaterial?.totalPrice | currency: 'VND'}}</td>

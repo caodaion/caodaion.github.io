@@ -1,7 +1,7 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import * as moment from 'moment';
+import moment from 'moment';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
@@ -49,7 +49,7 @@ export class PriceComponent implements OnInit {
     const now = new Date()
     this.addedData.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.addedData.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
-    this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
+    this.addedData.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0')
   }
 
   getYearOptions() {
@@ -90,7 +90,7 @@ export class PriceComponent implements OnInit {
     const now = new Date()
     this.addedData.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.addedData.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
-    this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
+    this.addedData.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0')
   }
 
   deletePrice(item: any) {

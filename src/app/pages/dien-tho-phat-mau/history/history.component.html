@@ -19,7 +19,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of history">
-        <td>{{ item?.Timestamp | date : "dd/MM/YYYY hh:mm:ss" }}</td>
+        <td>{{ item?.Timestamp | date : "dd/MM/yyyy hh:mm:ss" }}</td>
         <td>
           <ul>
             <li *ngFor="let di of item?.data">

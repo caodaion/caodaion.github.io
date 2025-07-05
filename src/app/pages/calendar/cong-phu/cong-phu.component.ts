@@ -32,7 +32,7 @@ export class CongPhuComponent implements AfterViewInit {
     const now = new Date()
     this.saved.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.saved.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
-    this.saved.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
+    this.saved.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0')
     this.saved.time = this.datePipe.transform(now, 'HH:mm')
     this.getYearOptions();
     this.authService.getCurrentUser(true).subscribe((res: any) => {

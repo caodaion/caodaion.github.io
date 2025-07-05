@@ -112,7 +112,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     const now = new Date()
     this.selectedDate.date = parseInt(this.datePipe.transform(now, 'dd') || '0')
     this.selectedDate.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
-    this.selectedDate.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0')
+    this.selectedDate.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0')
     this.selectedDate.time = this.datePipe.transform(now, 'HH:mm')
     this.getCalculatedLunarDate()
     this.route.params.subscribe((param: any) => {      
@@ -479,7 +479,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     this.isShowButtonSetDefault = !foundCurrentEvent?.defaultTime;
 
     this.shareItem.id = this.commonService.generatedSlug(
-      `${this.shareItem?.element?.eventName} ${this.datePipe.transform(this.shareItem?.element?.solar, 'YYYYMMdd')}` || 'caodaion-qr'
+      `${this.shareItem?.element?.eventName} ${this.datePipe.transform(this.shareItem?.element?.solar, 'yyyyMMdd')}` || 'caodaion-qr'
     );
     this.shareBottomSheetRef = this.matBottomSheet.open(this.shareBottomSheet);
   }
@@ -562,7 +562,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
           newSolar.setHours(hours, minutes, 0);
           return {
             ...ev,
-            key: this.commonService.generatedSlug(`${ev?.eventName} ${this.datePipe.transform(newSolar, 'YYYYMMdd')}` || 'caodaion-qr'),
+            key: this.commonService.generatedSlug(`${ev?.eventName} ${this.datePipe.transform(newSolar, 'yyyyMMdd')}` || 'caodaion-qr'),
             solar: newSolar.toJSON(),
             lunar: { ...ev.lunar, lunarTime: this.shareItem.time }
           };

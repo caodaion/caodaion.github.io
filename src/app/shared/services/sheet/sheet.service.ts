@@ -56,7 +56,7 @@ export class SheetService {
           fetch(sheetUrl)
             .then((res: any) => res.arrayBuffer())
             .then((req => {
-              const workbook = read(req, {dateNF: "DD/MM/YYYY"})
+              const workbook = read(req, {dateNF: "DD/MM/yyyy"})
               resolve(workbook)
               rejects()
             }))

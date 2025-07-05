@@ -81,7 +81,7 @@ export class BillComponent implements OnInit {
     const now = new Date();
     this.addedData.date = parseInt(this.datePipe.transform(now, 'dd') || '0');
     this.addedData.month = parseInt(this.datePipe.transform(now, 'MM') || '0');
-    this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0');
+    this.addedData.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0');
   }
 
   getYearOptions() {
@@ -187,7 +187,7 @@ export class BillComponent implements OnInit {
     ];
     this.addedData.date = parseInt(this.datePipe.transform(now, 'dd') || '0');
     this.addedData.month = parseInt(this.datePipe.transform(now, 'MM') || '0');
-    this.addedData.year = parseInt(this.datePipe.transform(now, 'YYYY') || '0');
+    this.addedData.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0');
   }
 
   getMaterialData(material: any): any {
