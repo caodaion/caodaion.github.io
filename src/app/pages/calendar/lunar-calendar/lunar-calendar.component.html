@@ -2,26 +2,21 @@
   <mat-toolbar class="lunar-calendar-toolbar !h-auto !pr-0">
     <div class="!h-auto w-full">
       <div
-        class="d-flex justify-content-between !h-auto w-full overflow-hidden pr-4"
-      >
+        class="d-flex justify-content-between !h-auto w-full overflow-hidden pr-4">
         <div class="d-flex align-items-center w-100">
           <div
             class="d-flex align-items-center justify-content-between"
-            [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''"
-          >
+            [ngClass]="viewPortMode === 'mobile' ? 'w-100' : ''">
             <div *ngIf="viewPortMode === 'mobile'" class="w-100">
               <mat-select
                 [(ngModel)]="monthSelectValue"
                 (selectionChange)="
                   onChangeSelectedCalendar(calendarMode, monthSelectValue)
-                "
-              >
+                ">
                 <mat-option
                   class="!px-0"
                   *ngFor="let item of commonDateTimeValue.month"
-                  [value]="item?.key"
-                  >{{ item?.name }}</mat-option
-                >
+                  [value]="item?.key">{{ item?.name }}</mat-option>
               </mat-select>
             </div>
             <button
@@ -34,11 +29,9 @@
                 ' năm ' +
                 currentDate.solar.getFullYear()
               "
-              class="relative"
-            >
+              class="relative">
               <span
-                class="absolute text-[12px] top-1/2 left-1/2 translate-x-[-50%] translate-y-[-40%] font-bold"
-              >
+                class="absolute text-[12px] top-1/2 left-1/2 translate-x-[-50%] translate-y-[-40%] font-bold">
                 {{ currentDate.solar.getDate() }}
               </span>
               <mat-icon>calendar_today</mat-icon>
@@ -48,16 +41,14 @@
             *ngIf="viewPortMode === 'desktop'"
             mat-icon-button
             (click)="onChangeSelectedCalendar('before')"
-            [matTooltip]="calendarMode === 'day' ? 'ngày trước' : 'tháng trước'"
-          >
+            [matTooltip]="calendarMode === 'day' ? 'ngày trước' : 'tháng trước'">
             <mat-icon>navigate_before</mat-icon>
           </button>
           <button
             *ngIf="viewPortMode === 'desktop'"
             mat-icon-button
             (click)="onChangeSelectedCalendar('next')"
-            [matTooltip]="calendarMode === 'day' ? 'ngày sau' : 'tháng sau'"
-          >
+            [matTooltip]="calendarMode === 'day' ? 'ngày sau' : 'tháng sau'">
             <mat-icon>navigate_next</mat-icon>
           </button>
           <span class="selected-date" *ngIf="viewPortMode === 'desktop'">
@@ -67,22 +58,30 @@
                 onChangeSelectedCalendar(calendarMode, monthSelectValue)
               "
               id="month"
-              class="!w-auto !text-[20px] !font-[500]"
-            >
+              class="!w-auto !text-[20px] !font-[500]">
               <mat-option
                 *ngFor="let item of commonDateTimeValue.month"
-                [value]="item?.key"
-                >{{ item?.name }}</mat-option
-              >
+                [value]="item?.key">{{ item?.name }}</mat-option>
             </mat-select>
-            {{ selectedDate.solar?.getFullYear() }} ({{
-              calendarMode === "day"
-                ? selectedDate.lunar?.convertSolar2Lunar?.lunarDayName + "/"
-                : ""
-            }}{{ selectedDate.lunar?.convertSolar2Lunar?.lunarMonthName }}/{{
+            <input
+              matInput
+              [(ngModel)]="selectedYear"
+              type="number"
+              class="!text-[20px] !font-[500]"
+              (ngModelChange)="onYearChange()"
+              min="1900"
+              max="2100"
+              placeholder="YYYY"
+              [matTooltip]="'Nhập năm dương lịch (1900-2100)'" /> ({{
+            calendarMode === "day"
+            ? selectedDate.lunar?.convertSolar2Lunar?.lunarDayName + "/"
+            : ""
+            }}<span
+              [matTooltip]="'tháng ' + selectedDate.lunar?.convertSolar2Lunar?.lunarMonthName + ' năm ' + selectedDate.lunar?.convertSolar2Lunar?.lunarYearName">{{
+              selectedDate.lunar?.convertSolar2Lunar?.lunarMonthName }}/{{
               selectedDate.lunar?.convertSolar2Lunar?.lunarYearName
-            }})</span
-          >
+              }})
+            </span></span>
         </div>
         <div class="flex flex-wrap w-full align-items-center justify-center">
           <div
@@ -93,8 +92,7 @@
               'bg-transparent': !filter.consecutive,
               '!text-black': filter.consecutive
             }"
-            [matTooltip]="'Hiển thị hành trình'"
-          >
+            [matTooltip]="'Hiển thị hành trình'">
             {{ currentUser?.consecutive }}
           </div>
           <div
@@ -104,8 +102,7 @@
               'bg-transparent': !filter.cn,
               'text-white': filter.cn
             }"
-            [matTooltip]="'Hiển thị Can Chi mỗi ngày'"
-          >
+            [matTooltip]="'Hiển thị Can Chi mỗi ngày'">
             Can chi
           </div>
           <div
@@ -117,8 +114,7 @@
               'text-white':
                 filter.red || filter.blue || filter.yellow || filter.white,
             }"
-            [matTooltip]="'Hiển thị sự kiện'"
-          >
+            [matTooltip]="'Hiển thị sự kiện'">
             Sự kiện
           </div>
           <mat-menu #filterEventMenu="matMenu">
@@ -128,8 +124,7 @@
               [ngClass]="{
                 '!bg-[#ea4335] !text-white': filter.red
               }"
-              (click)="filter.red = !filter.red; updatefliter()"
-            >
+              (click)="filter.red = !filter.red; updatefliter()">
               Sự kiện quan trọng
             </button>
             <button
@@ -138,8 +133,7 @@
               [ngClass]="{
                 '!bg-[#4285f4] !text-white': filter.blue
               }"
-              (click)="filter.blue = !filter.blue; updatefliter()"
-            >
+              (click)="filter.blue = !filter.blue; updatefliter()">
               Sự kiện sóc vọng
             </button>
             <button
@@ -148,8 +142,7 @@
               [ngClass]="{
                 '!bg-[#fbbc05] !text-black': filter.yellow
               }"
-              (click)="filter.yellow = !filter.yellow; updatefliter()"
-            >
+              (click)="filter.yellow = !filter.yellow; updatefliter()">
               Sự kiện quan hôn tang tế
             </button>
             <button
@@ -158,8 +151,7 @@
               [ngClass]="{
                 '!bg-[#eaf1fb] !text-black': filter.white
               }"
-              (click)="filter.white = !filter.white; updatefliter()"
-            >
+              (click)="filter.white = !filter.white; updatefliter()">
               Cúng tứ thời
             </button>
           </mat-menu>
@@ -170,8 +162,7 @@
               'bg-transparent': !filter.six && !filter.ten && !filter.fifteen,
               'text-white': filter.six || filter.ten || filter.fifteen
             }"
-            [matTooltip]="'Hiển thị ngày ăn chay'"
-          >
+            [matTooltip]="'Hiển thị ngày ăn chay'">
             Ăn chay
           </div>
           <mat-menu #veganMenu="matMenu">
@@ -180,8 +171,7 @@
               [ngClass]="{
                 '!bg-[#34a853] !text-white': filter.six
               }"
-              (click)="filter.six = !filter.six; updatefliter()"
-            >
+              (click)="filter.six = !filter.six; updatefliter()">
               Lục trai (6 Ngày)
             </button>
             <button
@@ -189,17 +179,14 @@
               [ngClass]="{
                 '!bg-[#34a853] !text-white': filter.ten
               }"
-              (click)="filter.ten = !filter.ten; updatefliter()"
-            >
-              Thập trai (10 Ngày)</button
-            ><button
+              (click)="filter.ten = !filter.ten; updatefliter()">
+              Thập trai (10 Ngày)</button><button
               mat-menu-item
               [ngClass]="{
                 '!bg-[#34a853] !text-white': filter.fifteen
               }"
-              (click)="filter.fifteen = !filter.fifteen; updatefliter()"
-            >
-              Thiên ngươn (15 Ngày)
+              (click)="filter.fifteen = !filter.fifteen; updatefliter()">
+              Thiên ngươn (16 Ngày)
             </button>
           </mat-menu>
         </div>
@@ -211,13 +198,11 @@
           class="transition-all relative"
           (click)="expaned = !expaned"
           [ngClass]="{ 'rotate-180': expaned }"
-          *ngIf="isActiveMoreInformation"
-        >
+          *ngIf="isActiveMoreInformation">
           <mat-icon>expand_circle_down</mat-icon>
           <span
             *ngIf="suggetExpand && !expaned"
-            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75 top-0 left-0"
-          ></span>
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75 top-0 left-0"></span>
         </button>
       </div>
       <mat-divider *ngIf="expaned"></mat-divider>
@@ -226,8 +211,7 @@
           class="w-full"
           mat-stroked-button
           [color]="'primary'"
-          (click)="expaned = false"
-        >
+          (click)="expaned = false">
           XEM LỊCH
         </button>
         <div class="w-full whitespace-break-spaces text-center my-3">
@@ -237,8 +221,7 @@
           <app-update-event
             (updateSelectedThanhSo)="updateSelectedThanhSo($event)"
             [newEvent]="newEvent"
-            [selectedThanhSoSetting]="selectedThanhSoSetting"
-          ></app-update-event>
+            [selectedThanhSoSetting]="selectedThanhSoSetting"></app-update-event>
         </div>
       </div>
     </div>
@@ -248,8 +231,7 @@
     class="flex-1 h-100 wrapper-container selected-month-calendar"
     *ngIf="calendarMode === 'month'"
     (touchstart)="swipe($event, 'start')"
-    (touchend)="swipe($event, 'end')"
-  >
+    (touchend)="swipe($event, 'end')">
     <div class="days">
       <div class="day text-center">T2</div>
       <div class="day text-center">T3</div>
@@ -275,8 +257,7 @@
         }"
         [ngClass]="{
           '!shadow-none': date?.logged !== undefined,
-        }"
-      >
+        }">
         <div
           class="absolute top-0 right-0 bottom-0 left-0 -z-10"
           [ngStyle]="{
@@ -287,8 +268,7 @@
           'linear-gradient(to right, rgba(251, 188, 5, ' + 
             (selectedMonth[dateIndex - 1]?.logged || 0) / 4 + '), rgba(251, 188, 5, ' + 
             (selectedMonth[dateIndex]?.logged || 0) / 4 + '))' : '',
-        }"
-        >
+        }">
           <span
             *ngIf="date?.continue"
             class="animate-pulse absolute inline-flex h-full w-full"
@@ -297,27 +277,23 @@
                 'rgba(251, 188, 5, ' +
                 (selectedMonth[dateIndex - 1]?.logged || 0) / 4 +
                 ')'
-            }"
-          ></span>
+            }"></span>
         </div>
         <div class="w-full flex justify-between flex-wrap">
           <button
             mat-flat-button
             class="!px-4 !bg-transparent"
             [ngClass]="getCurrentDate(date) ? 'current-date' : ''"
-            [matMenuTriggerFor]="dateMenu"
-          >
+            [matMenuTriggerFor]="dateMenu">
             <div class="solar-date">{{ date?.solar?.getDate() }}</div>
             <div class="lunar-date">
               <span
                 *ngIf="!!date?.lunar?.convertSolar2Lunar?.lunarLeap"
                 [matTooltip]="
                   'Nhuận tháng ' + date?.lunar?.convertSolar2Lunar?.lunarMonth
-                "
-                >NH</span
-              >
+                ">NH</span>
               {{ date?.lunar?.convertSolar2Lunar?.lunarDay }}/{{
-                date?.lunar?.convertSolar2Lunar?.lunarMonth
+              date?.lunar?.convertSolar2Lunar?.lunarMonth
               }}
             </div>
           </button>
@@ -341,16 +317,14 @@
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]"
             src="assets/icons/assets/full-moon.svg"
             alt="full-moon"
-            [matTooltip]="'Vọng nhựt'"
-          />
+            [matTooltip]="'Vọng nhựt'" />
           <img
             loading="lazy"
             *ngIf="date?.lunar?.convertSolar2Lunar?.lunarDay == 1"
             class="me-0 lg:me-2 w-[16px] lg:w-[24px] h-[16px] lg:h-[24px]"
             src="assets/icons/assets/moon.svg"
             alt="moon"
-            [matTooltip]="'Sóc nhựt'"
-          />
+            [matTooltip]="'Sóc nhựt'" />
           <div class="text-xs p-1" *ngIf="filter.cn">
             {{ date?.lunar?.convertSolar2Lunar?.lunarDayName }}
           </div>
@@ -359,24 +333,21 @@
               class="m-0 lg:mx-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
               *ngIf="date?.six && filter.six"
               [matTooltip]="'lục trai'"
-              (click)="shareVegetarianDay(date)"
-            >
+              (click)="shareVegetarianDay(date)">
               6
             </div>
             <div
               class="m-0 lg:mx-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
               *ngIf="date?.ten && filter.ten"
               [matTooltip]="'thập trai'"
-              (click)="shareVegetarianDay(date)"
-            >
+              (click)="shareVegetarianDay(date)">
               10
             </div>
             <div
               class="m-0 lg:mx-1 text-xs w-full bg-[#34a853] text-white flex items-center justify-center rounded"
               *ngIf="date?.fifteen && filter.fifteen"
               [matTooltip]="'thiên ngươn'"
-              (click)="shareVegetarianDay(date)"
-            >
+              (click)="shareVegetarianDay(date)">
               15
             </div>
           </div>
@@ -399,9 +370,9 @@
                   ? 'yearly-special-special'
                   : ''
               "
-              (click)="openEventSummaryDialog(date, event, eventSummayDialog)"
-            >
-              {{ event?.event?.name || event?.event?.eventName }} {{isSelectedItem(date, event) ? '✅' : ''}}
+              (click)="openEventSummaryDialog(date, event, eventSummayDialog)">
+              {{ event?.event?.name || event?.event?.eventName }}
+              {{isSelectedItem(date, event) ? '✅' : ''}}
             </mat-list-item>
           </mat-list>
         </div>
@@ -412,8 +383,7 @@
     class="flex-1 h-100 wrapper-container selected-date-calendar"
     *ngIf="calendarMode === 'day'"
     (touchstart)="swipe($event, 'start')"
-    (touchend)="swipe($event, 'end')"
-  >
+    (touchend)="swipe($event, 'end')">
     <div class="current-selected-date">
       <div class="date-wraper">
         <div class="flex items-center lg:justify-between">
@@ -423,11 +393,11 @@
             </div>
             <div class="date-lunar">
               {{
-                selectedDate.lunar.convertSolar2Lunar.lunarDay
-                  | number : "2.0-0"
+              selectedDate.lunar.convertSolar2Lunar.lunarDay
+              | number : "2.0-0"
               }}/{{
-                selectedDate.lunar.convertSolar2Lunar.lunarMonth
-                  | number : "2.0-0"
+              selectedDate.lunar.convertSolar2Lunar.lunarMonth
+              | number : "2.0-0"
               }}
             </div>
           </div>
@@ -436,15 +406,15 @@
               Ngày
               <strong>{{
                 selectedDate.lunar.convertSolar2Lunar.lunarDayName
-              }}</strong>
+                }}</strong>
               / Tháng
               <strong>{{
                 selectedDate.lunar.convertSolar2Lunar.lunarMonthName
-              }}</strong>
+                }}</strong>
               / Năm
               <strong>{{
                 selectedDate.lunar.convertSolar2Lunar.lunarYearName
-              }}</strong>
+                }}</strong>
             </div>
           </div>
         </div>
@@ -467,17 +437,15 @@
               ':' +
               (timeRange.munite | number : '2.0')
             : ''
-        "
-      >
+        ">
         <div
           *ngIf="
             timeRange.munite === 0 ||
             (timeRange.hour !== 23 && timeRange.munite === 0)
           "
-          class="start-time-hour"
-        >
+          class="start-time-hour">
           {{ timeRange.hour < 10 ? "0" + timeRange.hour : timeRange.hour }}:{{
-            timeRange.munite < 10 ? "0" + timeRange.munite : timeRange.munite
+          timeRange.munite < 10 ? "0" + timeRange.munite : timeRange.munite
           }}
         </div>
         <mat-divider
@@ -485,8 +453,7 @@
           *ngIf="
             timeRange.munite === 0 ||
             (timeRange.hour !== 23 && timeRange.munite === 0)
-          "
-        ></mat-divider>
+          "></mat-divider>
       </div>
       <div
         class="now-time"
@@ -495,8 +462,7 @@
           top: getPosition(time.time | async)
             ? getPosition(time.time | async) + 'px'
             : ''
-        }"
-      >
+        }">
         <div class="time-now text-[#eb4132]">
           {{ time.time | async | date : "HH:mm:ss" }}
         </div>
@@ -505,13 +471,11 @@
       <div
         class="tu-thoi-zone"
         *ngFor="let zone of tuThoiZone"
-        [ngStyle]="{ height: zone?.height + 'px', top: zone?.position + 'px' }"
-      ></div>
+        [ngStyle]="{ height: zone?.height + 'px', top: zone?.position + 'px' }"></div>
       <div
         class="selected-date-events"
         *ngFor="let zone of dateEvents"
-        [ngStyle]="{ top: getPosition(zone?.timeZone?.start) + 'px' }"
-      >
+        [ngStyle]="{ top: getPosition(zone?.timeZone?.start) + 'px' }">
         <div
           class="selected-date-event"
           *ngFor="let event of zone.event"
@@ -529,8 +493,7 @@
           "
           (click)="
             openEventSummaryDialog(selectedDate, event, eventSummayDialog)
-          "
-        >
+          ">
           {{ event?.event?.name || event?.event?.eventName }}
         </div>
       </div>
@@ -544,53 +507,49 @@
       <div class="d-flex details-item">
         <mat-icon>event</mat-icon>
         {{
-          shownDate?.event?.event?.date === "yearly-monthly-daily"
-            ? "Mỗi ngày"
-            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-              shownDate?.event?.event?.date?.includes("yearly-monthly-")
-            ? "Ngày " +
-              shownDate?.event?.event?.date.split("-")[2] +
-              " mỗi tháng"
-            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-              !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
-              shownDate?.event?.event?.date?.includes("yearly-")
-            ? "Ngày " +
-              shownDate?.event?.event?.date?.split("-")[2] +
-              " tháng " +
-              shownDate?.event?.event?.date?.split("-")[1] +
-              " mỗi năm"
-            : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
-              !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
-              shownDate?.event?.event?.date?.includes("yearly-")
-            ? "Ngày " +
-              shownDate?.event?.event?.date?.split("-")[2] +
-              " tháng " +
-              shownDate?.event?.event?.date?.split("-")[1] +
-              " năm" +
-              shownDate?.event?.event?.date?.split("-")[0]
-            : shownDate?.event?.event?.date
+        shownDate?.event?.event?.date === "yearly-monthly-daily"
+        ? "Mỗi ngày"
+        : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+        shownDate?.event?.event?.date?.includes("yearly-monthly-")
+        ? "Ngày " +
+        shownDate?.event?.event?.date.split("-")[2] +
+        " mỗi tháng"
+        : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+        !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
+        shownDate?.event?.event?.date?.includes("yearly-")
+        ? "Ngày " +
+        shownDate?.event?.event?.date?.split("-")[2] +
+        " tháng " +
+        shownDate?.event?.event?.date?.split("-")[1] +
+        " mỗi năm"
+        : shownDate?.event?.event?.date !== "yearly-monthly-daily" &&
+        !shownDate?.event?.event?.date?.includes("yearly-monthly-") &&
+        shownDate?.event?.event?.date?.includes("yearly-")
+        ? "Ngày " +
+        shownDate?.event?.event?.date?.split("-")[2] +
+        " tháng " +
+        shownDate?.event?.event?.date?.split("-")[1] +
+        " năm" +
+        shownDate?.event?.event?.date?.split("-")[0]
+        : shownDate?.event?.event?.date
         }}
       </div>
       <div
         class="d-flex details-item"
-        *ngIf="shownDate?.event?.event?.time?.length > 0"
-      >
+        *ngIf="shownDate?.event?.event?.time?.length > 0">
         <mat-icon>schedule</mat-icon>
         <span *ngFor="let time of getTimes(shownDate?.event?.event?.time)">{{
           time?.name
-        }}</span>
+          }}</span>
       </div>
       <div
         class="d-flex details-item"
-        *ngIf="shownDate?.event?.event?.locationType?.length > 0"
-      >
+        *ngIf="shownDate?.event?.event?.locationType?.length > 0">
         <mat-icon>location_pin</mat-icon>
         <span
           *ngFor="
             let time of getLocationTypes(shownDate?.event?.event?.locationType)
-          "
-          >{{ time?.name }}</span
-        >
+          ">{{ time?.name }}</span>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
@@ -600,8 +559,7 @@
         (click)="showShareImage()"
         [mat-dialog-close]="true"
         *ngIf="viewPortMode !== 'mobile'"
-        [matTooltip]="'Tải ảnh chia sẻ'"
-      >
+        [matTooltip]="'Tải ảnh chia sẻ'">
         <mat-icon>download</mat-icon>
       </button>
       <button
@@ -610,8 +568,7 @@
         (click)="showShareImage()"
         [mat-dialog-close]="true"
         *ngIf="viewPortMode === 'mobile'"
-        class="w-full lg:w-auto"
-      >
+        class="w-full lg:w-auto">
         <mat-icon>download</mat-icon> Tải ảnh chia sẻ
       </button>
       <button
@@ -620,16 +577,14 @@
         (click)="onOpenSoanSo()"
         [mat-dialog-close]="true"
         *ngIf="shownDate?.event?.event?.soTemplate"
-        class="w-full lg:w-auto"
-      >
+        class="w-full lg:w-auto">
         <mat-icon>receipt_long</mat-icon>Soạn sớ
       </button>
       <button
         mat-button
         [color]="'primary'"
         (click)="syncToGoogleCalendar()"
-        [mat-dialog-close]="true"
-      >
+        [mat-dialog-close]="true">
         <mat-icon>cloud_sync</mat-icon>
         Đồng bộ lên Google Calendar
       </button>
@@ -638,8 +593,7 @@
         [color]="'primary'"
         (click)="onGetKinhFromSummaryEvent()"
         [mat-dialog-close]="true"
-        class="w-full lg:w-auto"
-      >
+        class="w-full lg:w-auto">
         Xem kinh
       </button>
       <button mat-button mat-dialog-close class="w-full lg:w-auto">Đóng</button>
@@ -651,23 +605,19 @@
   <h3>Tải ảnh chia sẻ</h3>
   <div class="container-fluid">
     <div class="flex flex-wrap">
-      <mat-checkbox [(ngModel)]="shareItem.traiGioi"
-        >Hiển thị trai giới</mat-checkbox
-      >
+      <mat-checkbox [(ngModel)]="shareItem.traiGioi">Hiển thị trai
+        giới</mat-checkbox>
     </div>
     <div *ngIf="shareItem.options?.length > 0">
       <mat-form-field class="w-full" [appearance]="'outline'">
         <mat-label>Thời gian</mat-label>
         <mat-select
           [(ngModel)]="shareItem.time"
-          (ngModelChange)="updateShareInformation()"
-        >
+          (ngModelChange)="updateShareInformation()">
           <mat-option [value]="undefined">Tất cả</mat-option>
           <mat-option
             *ngFor="let item of shareItem.options"
-            [value]="item?.key"
-            >{{ item?.data?.name }}</mat-option
-          >
+            [value]="item?.key">{{ item?.data?.name }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -675,15 +625,14 @@
       *ngIf="
         !shareItem.time &&
         (!shareItem.options || shareItem.options?.length == 0)
-      "
-    >
+      ">
       <mat-form-field class="w-full" [appearance]="'outline'">
         <mat-label>Thời gian</mat-label>
         <mat-select [(ngModel)]="shareItem.targetEvent"
-        (ngModelChange)="updateShareInformation()">
+          (ngModelChange)="updateShareInformation()">
           <mat-option *ngFor="let item of lunarTimeZone" [value]="item?.name">{{
             item?.name
-          }}</mat-option>
+            }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -691,8 +640,7 @@
       #shareImage
       class="p-8 min-w-[700px]"
       [id]="shareItem.id"
-      [contentEditable]="true"
-    >
+      [contentEditable]="true">
       <ng-container *ngFor="let item of shareItem.events; let index = index">
         <div
           class="h-3 w-full bg-[#fbbc05]"
@@ -707,8 +655,7 @@
               !item?.event?.date?.toString()?.includes('yearly-monthly-') &&
               item?.event?.date?.toString()?.includes('yearly-'),
             'mb-8': index == shareItem.events?.length - 1
-          }"
-        ></div>
+          }"></div>
       </ng-container>
       <ng-container *ngFor="let item of shareItem.events">
         <h1 class="text-2xl font-bold text-center mb-8">
@@ -718,16 +665,16 @@
           {{ item?.date?.day }}
           Ngày
           {{
-            item?.date?.lunar?.convertSolar2Lunar?.lunarDay | number : "2.0-0"
+          item?.date?.lunar?.convertSolar2Lunar?.lunarDay | number : "2.0-0"
           }}
           tháng
           {{
-            item?.date?.lunar?.convertSolar2Lunar?.lunarMonth | number : "2.0-0"
+          item?.date?.lunar?.convertSolar2Lunar?.lunarMonth | number : "2.0-0"
           }}
           {{ item?.date?.lunar?.convertSolar2Lunar?.lunarLeap ? "nhuận" : "" }}
           năm
           {{ item?.date?.lunar?.convertSolar2Lunar?.lunarYearName }} ({{
-            item?.date?.solar | date : "dd/MM/yyyy"
+          item?.date?.solar | date : "dd/MM/yyyy"
           }})
         </p>
         <p class="text-center text-xl font-bold" *ngIf="item.targetEvent">
@@ -748,8 +695,7 @@
               !item?.event?.date?.toString()?.includes('yearly-monthly-') &&
               item?.event?.date?.toString()?.includes('yearly-'),
             'mt-8': index == 0
-          }"
-        ></div>
+          }"></div>
       </ng-container>
     </div>
     <div class="text-center">
@@ -757,8 +703,7 @@
         mat-raised-button
         color="primary"
         (click)="saveAsImage(shareItem)"
-        [disabled]="downloading"
-      >
+        [disabled]="downloading">
         <mat-icon>download</mat-icon> Tải ảnh chia sẻ
       </button>
     </div>
@@ -771,31 +716,28 @@
     <div
       #shareVegetarian
       [id]="vegetarianDay.d"
-      class="min-w-[1200px] relative"
-    >
+      class="min-w-[1200px] relative">
       <img
         loading="lazy"
         src="/assets/images/vegetarianDayFrame.png"
-        alt="vegetarianDay"
-      />
+        alt="vegetarianDay" />
       <div
-        class="absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center flex-col"
-      >
+        class="absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center flex-col">
         <div class="w-full">
           <h5 class="text-left ml-[33%]">Bạn đừng quên</h5>
           <h6 class="text-left ml-[33%]">
             Ngày
             {{
-              vegetarianDay?.lunar?.convertSolar2Lunar?.lunarDay
-                | number : "2.0-0"
+            vegetarianDay?.lunar?.convertSolar2Lunar?.lunarDay
+            | number : "2.0-0"
             }}
             tháng
             {{
-              vegetarianDay?.lunar?.convertSolar2Lunar?.lunarMonth
-                | number : "2.0-0"
+            vegetarianDay?.lunar?.convertSolar2Lunar?.lunarMonth
+            | number : "2.0-0"
             }}
             {{
-              vegetarianDay?.lunar?.convertSolar2Lunar?.lunarLeap ? "Nhuận" : ""
+            vegetarianDay?.lunar?.convertSolar2Lunar?.lunarLeap ? "Nhuận" : ""
             }}
             năm {{ vegetarianDay?.lunar?.convertSolar2Lunar?.lunarYearName }}
             {{ vegetarianDay?.solar | date : "(dd/MM/yyyy)" }}
@@ -818,8 +760,7 @@
         mat-raised-button
         color="primary"
         (click)="saveAsImage(shareVegetarian)"
-        [disabled]="downloading"
-      >
+        [disabled]="downloading">
         <mat-icon>download</mat-icon> Tải ảnh chia sẻ
       </button>
     </div>

@@ -56,6 +56,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
   allowToUpdateMember: any;
   commonDateTimeValue = this.commonService.commonDates;
   monthSelectValue: any = this.selectedDate.solar?.getMonth();
+  selectedYear: number = new Date().getFullYear();
   time = this.commonService.time;
   tuThoiZone: any[] = [];
   memberThanhSo: any[] = [];
@@ -117,6 +118,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
         this.selectedDate.solar
       );
+      this.selectedYear = this.selectedDate.solar.getFullYear();
       this.calendarService.calendarViewMode = this.calendarMode;
       const calendarFilter = JSON.parse(
         localStorage.getItem('calendarFilter') || 'null'
@@ -154,6 +156,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
         this.selectedDate.solar?.getMonth() + 1 < 10
           ? '0' + (this.selectedDate.solar?.getMonth() + 1)
           : (this.selectedDate.solar?.getMonth() + 1).toString();
+      this.selectedYear = this.selectedDate.solar?.getFullYear();
       this.getThanhSoInMember();
     });
     this.changeDetector.detectChanges();
@@ -244,6 +247,7 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
     }
     if (action === 'current') {
       this.selectedDate.solar = new Date();
+      this.selectedYear = this.selectedDate.solar.getFullYear();
     }
     this.selectedMonth = this.calendarService.getSelectedMonthCalendar(
       this.selectedDate.solar.getMonth() + 1,
@@ -1460,6 +1464,44 @@ export class LunarCalendarComponent implements OnInit, AfterViewInit {
       },
     };
     this.expaned = true;
+  }
+
+  onYearChange() {
+    if (this.selectedYear && this.selectedYear > 0 && this.selectedYear >= 1900 && this.selectedYear <= 2100) {
+      // Update the solar date with the new year
+      this.selectedDate.solar = new Date(
+        this.selectedYear,
+        this.selectedDate.solar.getMonth(),
+        this.selectedDate.solar.getDate()
+      );
+      
+      // Recalculate the lunar date
+      this.selectedDate.lunar = this.calendarService.getConvertedFullDate(
+        this.selectedDate.solar
+      );
+      
+      // Update the selected month calendar
+      this.selectedMonth = this.calendarService.getSelectedMonthCalendar(
+        this.selectedDate.solar.getMonth() + 1,
+        this.selectedDate.solar.getFullYear()
+      );
+      
+      // Update the month select value to ensure consistency
+      this.monthSelectValue = this.selectedDate.solar?.getMonth() + 1 < 10
+        ? '0' + (this.selectedDate.solar?.getMonth() + 1)
+        : (this.selectedDate.solar?.getMonth() + 1).toString();
+      
+      // Navigate to the new URL
+      this.router.navigate([
+        `/lich/${this.calendarMode}/${this.datePipe.transform(
+          this.selectedDate.solar,
+          'yyyy/MM/dd'
+        )}`,
+      ]);
+      
+      // Refresh calendar events
+      this.getCalendarEvent();
+    }
   }
 }
 
