@@ -10,9 +10,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-cong-phu-report',
-  templateUrl: './cong-phu-report.component.html',
-  styleUrls: ['./cong-phu-report.component.scss']
+    selector: 'app-cong-phu-report',
+    templateUrl: './cong-phu-report.component.html',
+    styleUrls: ['./cong-phu-report.component.scss'],
+    standalone: false
 })
 export class CongPhuReportComponent implements AfterViewInit {
   user: any;

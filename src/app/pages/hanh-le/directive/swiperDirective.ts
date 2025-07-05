@@ -3,7 +3,8 @@ import { SwiperContainer } from 'swiper/element';
 import { SwiperOptions } from 'swiper/types';
 
 @Directive({
-  selector: '[appSwiper]'
+    selector: '[appSwiper]',
+    standalone: false
 })
 export class SwiperDirective implements AfterViewInit {
   @Input() config?: SwiperOptions;

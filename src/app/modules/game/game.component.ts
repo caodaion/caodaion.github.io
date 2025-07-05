@@ -5,9 +5,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 
 @Component({
-  selector: 'app-game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+    selector: 'app-game',
+    templateUrl: './game.component.html',
+    styleUrls: ['./game.component.scss'],
+    standalone: false
 })
 export class GameComponent {
   public drawerMode: any;

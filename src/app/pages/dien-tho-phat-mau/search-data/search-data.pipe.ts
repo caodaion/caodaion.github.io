@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Pipe({
-  name: 'searchData'
+    name: 'searchData',
+    standalone: false
 })
 export class SearchDataPipe implements PipeTransform {
 

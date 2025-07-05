@@ -12,9 +12,10 @@ import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
 @Component({
-  selector: 'app-long-so',
-  templateUrl: './long-so.component.html',
-  styleUrls: ['./long-so.component.scss']
+    selector: 'app-long-so',
+    templateUrl: './long-so.component.html',
+    styleUrls: ['./long-so.component.scss'],
+    standalone: false
 })
 export class LongSoComponent implements OnInit {
 

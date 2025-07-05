@@ -5,9 +5,10 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-update-ky-niem',
-  templateUrl: './update-ky-niem.component.html',
-  styleUrls: ['./update-ky-niem.component.scss']
+    selector: 'app-update-ky-niem',
+    templateUrl: './update-ky-niem.component.html',
+    styleUrls: ['./update-ky-niem.component.scss'],
+    standalone: false
 })
 export class UpdateKyNiemComponent implements OnInit {
   @Input('newEvent') newEvent?: any = <any>{};

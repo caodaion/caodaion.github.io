@@ -16,9 +16,10 @@ import {
 import { CauSieuVoViService } from 'src/app/shared/services/cau-sieu-vo-vi/cau-sieu-vo-vi.service';
 
 @Component({
-  selector: 'app-content',
-  templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss'],
+    selector: 'app-content',
+    templateUrl: './content.component.html',
+    styleUrls: ['./content.component.scss'],
+    standalone: false
 })
 export class ContentComponent implements OnInit {
   so: any;

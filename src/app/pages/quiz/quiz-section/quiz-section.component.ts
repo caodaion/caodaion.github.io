@@ -6,9 +6,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
 @Component({
-  selector: 'app-quiz-section',
-  templateUrl: './quiz-section.component.html',
-  styleUrls: ['./quiz-section.component.scss']
+    selector: 'app-quiz-section',
+    templateUrl: './quiz-section.component.html',
+    styleUrls: ['./quiz-section.component.scss'],
+    standalone: false
 })
 export class QuizSectionComponent implements OnInit {
 

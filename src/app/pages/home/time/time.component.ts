@@ -4,9 +4,10 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-time',
-  templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss']
+    selector: 'app-time',
+    templateUrl: './time.component.html',
+    styleUrls: ['./time.component.scss'],
+    standalone: false
 })
 export class TimeComponent implements OnInit {
   time = this.commonService.time;

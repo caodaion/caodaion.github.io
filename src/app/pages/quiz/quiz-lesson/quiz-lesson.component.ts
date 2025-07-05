@@ -9,9 +9,10 @@ import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
 @Component({
-  selector: 'app-quiz-lesson',
-  templateUrl: './quiz-lesson.component.html',
-  styleUrls: ['./quiz-lesson.component.scss']
+    selector: 'app-quiz-lesson',
+    templateUrl: './quiz-lesson.component.html',
+    styleUrls: ['./quiz-lesson.component.scss'],
+    standalone: false
 })
 export class QuizLessonComponent implements OnInit, OnDestroy {
 

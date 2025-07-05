@@ -3,9 +3,10 @@ import { GACHA_DATA } from './gacha.data';
 import html2canvas from 'html2canvas-pro';
 
 @Component({
-  selector: 'app-gacha',
-  templateUrl: './gacha.component.html',
-  styleUrls: ['./gacha.component.scss'],
+    selector: 'app-gacha',
+    templateUrl: './gacha.component.html',
+    styleUrls: ['./gacha.component.scss'],
+    standalone: false
 })
 export class GachaComponent implements OnInit, OnDestroy {
   gachaData: any = GACHA_DATA;

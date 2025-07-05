@@ -2,9 +2,10 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmi
 import { INSTRUCTIONS_VI } from './instruction.vi';
 
 @Component({
-  selector: 'app-routing-instructions',
-  templateUrl: './routing-instructions.component.html',
-  styleUrls: ['./routing-instructions.component.scss']
+    selector: 'app-routing-instructions',
+    templateUrl: './routing-instructions.component.html',
+    styleUrls: ['./routing-instructions.component.scss'],
+    standalone: false
 })
 export class RoutingInstructionsComponent implements AfterViewChecked {
   @Input('route') route: any = <any>{};

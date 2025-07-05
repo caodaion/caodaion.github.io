@@ -2,9 +2,10 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-hanh-le',
-  templateUrl: './hanh-le.component.html',
-  styleUrls: ['./hanh-le.component.scss']
+    selector: 'app-hanh-le',
+    templateUrl: './hanh-le.component.html',
+    styleUrls: ['./hanh-le.component.scss'],
+    standalone: false
 })
 export class HanhLeComponent implements OnInit {
 

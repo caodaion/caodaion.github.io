@@ -4,9 +4,10 @@ import { EnglishService } from 'src/app/shared/services/english/english.service'
 import { PhoneticService } from 'src/app/shared/services/phonetic/phonetic.service';
 
 @Component({
-  selector: 'app-your-vocabulary',
-  templateUrl: './your-vocabulary.component.html',
-  styleUrls: ['./your-vocabulary.component.scss']
+    selector: 'app-your-vocabulary',
+    templateUrl: './your-vocabulary.component.html',
+    styleUrls: ['./your-vocabulary.component.scss'],
+    standalone: false
 })
 export class YourVocabularyComponent implements AfterViewInit {
 

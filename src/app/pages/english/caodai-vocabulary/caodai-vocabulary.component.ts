@@ -6,9 +6,10 @@ import { EnglishService } from 'src/app/shared/services/english/english.service'
 import { PhoneticService } from 'src/app/shared/services/phonetic/phonetic.service';
 
 @Component({
-  selector: 'app-caodai-vocabulary',
-  templateUrl: './caodai-vocabulary.component.html',
-  styleUrls: ['./caodai-vocabulary.component.scss']
+    selector: 'app-caodai-vocabulary',
+    templateUrl: './caodai-vocabulary.component.html',
+    styleUrls: ['./caodai-vocabulary.component.scss'],
+    standalone: false
 })
 export class CaodaiVocabularyComponent implements OnInit {
 

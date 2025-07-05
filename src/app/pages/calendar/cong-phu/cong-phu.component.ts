@@ -5,9 +5,10 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CongPhuService } from 'src/app/shared/services/cong-phu/cong-phu.service';
 
 @Component({
-  selector: 'app-cong-phu',
-  templateUrl: './cong-phu.component.html',
-  styleUrls: ['./cong-phu.component.scss']
+    selector: 'app-cong-phu',
+    templateUrl: './cong-phu.component.html',
+    styleUrls: ['./cong-phu.component.scss'],
+    standalone: false
 })
 export class CongPhuComponent implements AfterViewInit {
   saved: any = <any>{}

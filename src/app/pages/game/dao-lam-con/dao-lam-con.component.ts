@@ -4,9 +4,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
-  selector: 'app-dao-lam-con',
-  templateUrl: './dao-lam-con.component.html',
-  styleUrls: ['./dao-lam-con.component.scss']
+    selector: 'app-dao-lam-con',
+    templateUrl: './dao-lam-con.component.html',
+    styleUrls: ['./dao-lam-con.component.scss'],
+    standalone: false
 })
 export class DaoLamConComponent implements AfterViewChecked, OnInit {
 

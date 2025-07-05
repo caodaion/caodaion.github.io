@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'app-phong-le-main',
-  templateUrl: './phong-le-main.component.html',
-  styleUrls: ['./phong-le-main.component.scss']
+    selector: 'app-phong-le-main',
+    templateUrl: './phong-le-main.component.html',
+    styleUrls: ['./phong-le-main.component.scss'],
+    standalone: false
 })
 export class PhongLeMainComponent implements OnInit {
 

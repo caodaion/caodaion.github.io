@@ -8,9 +8,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import * as CryptoJS from "crypto-js";
 
 @Component({
-  selector: 'app-tnht-content',
-  templateUrl: './tnht-content.component.html',
-  styleUrls: ['./tnht-content.component.scss']
+    selector: 'app-tnht-content',
+    templateUrl: './tnht-content.component.html',
+    styleUrls: ['./tnht-content.component.scss'],
+    standalone: false
 })
 export class TnhtContentComponent implements OnInit {
   rootContent: any;

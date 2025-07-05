@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Pipe({
-  name: 'filterVocabulary'
+    name: 'filterVocabulary',
+    standalone: false
 })
 export class FilterVocabularyPipe implements PipeTransform {
 

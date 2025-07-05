@@ -6,9 +6,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+    selector: 'app-details',
+    templateUrl: './details.component.html',
+    styleUrls: ['./details.component.scss'],
+    standalone: false
 })
 export class DetailsComponent {
 

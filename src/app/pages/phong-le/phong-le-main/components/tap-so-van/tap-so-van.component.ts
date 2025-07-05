@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-tap-so-van',
-  templateUrl: './tap-so-van.component.html',
-  styleUrls: ['./tap-so-van.component.scss']
+    selector: 'app-tap-so-van',
+    templateUrl: './tap-so-van.component.html',
+    styleUrls: ['./tap-so-van.component.scss'],
+    standalone: false
 })
 export class TapSoVanComponent implements OnInit {
 

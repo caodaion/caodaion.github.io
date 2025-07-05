@@ -8,9 +8,10 @@ import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-tuan-cuu',
-  templateUrl: './tuan-cuu.component.html',
-  styleUrls: ['./tuan-cuu.component.scss']
+    selector: 'app-tuan-cuu',
+    templateUrl: './tuan-cuu.component.html',
+    styleUrls: ['./tuan-cuu.component.scss'],
+    standalone: false
 })
 export class TuanCuuComponent implements OnInit {
 

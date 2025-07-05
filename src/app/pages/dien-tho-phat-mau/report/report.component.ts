@@ -4,9 +4,10 @@ import * as moment from 'moment';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 @Component({
-  selector: 'app-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.scss']
+    selector: 'app-report',
+    templateUrl: './report.component.html',
+    styleUrls: ['./report.component.scss'],
+    standalone: false
 })
 export class ReportComponent implements AfterViewInit {
 

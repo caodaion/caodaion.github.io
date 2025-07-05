@@ -6,9 +6,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { EventService } from 'src/app/shared/services/event/event.service';
 
 @Component({
-  selector: 'app-update-event',
-  templateUrl: './update-event.component.html',
-  styleUrls: ['./update-event.component.scss']
+    selector: 'app-update-event',
+    templateUrl: './update-event.component.html',
+    styleUrls: ['./update-event.component.scss'],
+    standalone: false
 })
 export class UpdateEventComponent implements OnInit {
   googleFormsPath: any;

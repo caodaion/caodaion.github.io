@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
 import { AuthService } from "../../shared/services/auth/auth.service";
 
 @Component({
-  selector: 'cp-creator-block',
-  templateUrl: './cp-creator-block.component.html',
-  styleUrls: ['./cp-creator-block.component.scss']
+    selector: 'cp-creator-block',
+    templateUrl: './cp-creator-block.component.html',
+    styleUrls: ['./cp-creator-block.component.scss'],
+    standalone: false
 })
 export class CpCreatorBlockComponent implements OnChanges, AfterViewInit {
   @Input() data: any;

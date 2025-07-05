@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Bcd100Service } from 'src/app/shared/services/bcd100/bcd100.service';
 
 @Component({
-  selector: 'app-viewer',
-  templateUrl: './viewer.component.html',
-  styleUrls: ['./viewer.component.scss']
+    selector: 'app-viewer',
+    templateUrl: './viewer.component.html',
+    styleUrls: ['./viewer.component.scss'],
+    standalone: false
 })
 export class ViewerComponent implements OnInit {
   data: any = <any>{}

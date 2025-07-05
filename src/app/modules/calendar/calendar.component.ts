@@ -11,9 +11,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.scss'],
+    standalone: false
 })
 export class CalendarComponent implements OnInit {
   public drawerMode: any;

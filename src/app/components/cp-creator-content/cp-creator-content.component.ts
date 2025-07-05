@@ -10,9 +10,10 @@ import { LocationService } from 'src/app/shared/services/location/location.servi
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
-  selector: 'cp-creator-content',
-  templateUrl: './cp-creator-content.component.html',
-  styleUrls: ['./cp-creator-content.component.scss']
+    selector: 'cp-creator-content',
+    templateUrl: './cp-creator-content.component.html',
+    styleUrls: ['./cp-creator-content.component.scss'],
+    standalone: false
 })
 export class CpCreatorContentComponent implements OnChanges {
   @Input() data: any;

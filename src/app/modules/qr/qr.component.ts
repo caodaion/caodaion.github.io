@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 
 @Component({
-  selector: 'app-qr',
-  templateUrl: './qr.component.html',
-  styleUrls: ['./qr.component.scss']
+    selector: 'app-qr',
+    templateUrl: './qr.component.html',
+    styleUrls: ['./qr.component.scss'],
+    standalone: false
 })
 export class QrComponent {
   settingsMenu = <any>[

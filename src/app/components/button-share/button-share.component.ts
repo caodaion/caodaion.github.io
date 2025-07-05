@@ -6,9 +6,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import * as QRCode from 'qrcode'
 
 @Component({
-  selector: 'button-share',
-  templateUrl: './button-share.component.html',
-  styleUrls: ['./button-share.component.scss']
+    selector: 'button-share',
+    templateUrl: './button-share.component.html',
+    styleUrls: ['./button-share.component.scss'],
+    standalone: false
 })
 export class ButtonShareComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @Input() title?: any

@@ -12,9 +12,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: false
 })
 export class ProfileComponent implements OnInit, AfterViewChecked {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';

@@ -5,9 +5,10 @@ import { AuthService } from "../../shared/services/auth/auth.service";
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: false
 })
 export class ProfileComponent implements AfterViewInit {
   profileMenu = <any>[

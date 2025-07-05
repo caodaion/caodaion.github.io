@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
 @Component({
-  selector: 'app-quiz-list',
-  templateUrl: './quiz-list.component.html',
-  styleUrls: ['./quiz-list.component.scss']
+    selector: 'app-quiz-list',
+    templateUrl: './quiz-list.component.html',
+    styleUrls: ['./quiz-list.component.scss'],
+    standalone: false
 })
 export class QuizListComponent implements OnInit {
   quiz = <any>[]

@@ -15,9 +15,10 @@ import html2canvas from 'html2canvas-pro';
 import * as CryptoJS from "crypto-js";
 
 @Component({
-  selector: 'app-tinh-tuan-cuu',
-  templateUrl: './tinh-tuan-cuu.component.html',
-  styleUrls: ['./tinh-tuan-cuu.component.scss']
+    selector: 'app-tinh-tuan-cuu',
+    templateUrl: './tinh-tuan-cuu.component.html',
+    styleUrls: ['./tinh-tuan-cuu.component.scss'],
+    standalone: false
 })
 export class TinhTuanCuuComponent implements AfterViewInit {
   provinces = <any>[]

@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'cp-input-form-field',
-  templateUrl: './cp-input-form-field.component.html',
-  styleUrls: ['./cp-input-form-field.component.scss'],
+    selector: 'cp-input-form-field',
+    templateUrl: './cp-input-form-field.component.html',
+    styleUrls: ['./cp-input-form-field.component.scss'],
+    standalone: false
 })
 export class CpFormFieldComponent implements OnInit {
   @Input() inputFormControl: any;

@@ -11,9 +11,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'app-maps',
-  templateUrl: './maps.component.html',
-  styleUrls: ['./maps.component.scss']
+    selector: 'app-maps',
+    templateUrl: './maps.component.html',
+    styleUrls: ['./maps.component.scss'],
+    standalone: false
 })
 export class MapsComponent implements OnInit, AfterViewInit {
   map: any;

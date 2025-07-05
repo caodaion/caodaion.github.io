@@ -12,9 +12,10 @@ import { TnhtService } from './shared/services/tnht/tnht.service';
 import { MessagingService } from './shared/services/messaging/messaging.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   gettingCommonData: boolean = true

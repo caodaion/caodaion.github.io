@@ -11,9 +11,10 @@ import { LocationService } from 'src/app/shared/services/location/location.servi
 import { SoanSoService } from 'src/app/shared/services/soan-so/soan-so.service';
 
 @Component({
-  selector: 'app-soan-so',
-  templateUrl: './soan-so.component.html',
-  styleUrls: ['./soan-so.component.scss']
+    selector: 'app-soan-so',
+    templateUrl: './soan-so.component.html',
+    styleUrls: ['./soan-so.component.scss'],
+    standalone: false
 })
 export class SoanSoComponent implements OnInit {
 

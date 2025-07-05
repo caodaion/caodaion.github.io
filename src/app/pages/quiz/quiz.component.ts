@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
 @Component({
-  selector: 'app-sync',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss']
+    selector: 'app-sync',
+    templateUrl: './quiz.component.html',
+    styleUrls: ['./quiz.component.scss'],
+    standalone: false
 })
 export class QuizComponent implements OnInit {
   quiz = <any>[]

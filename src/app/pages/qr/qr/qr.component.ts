@@ -5,9 +5,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.service';
 
 @Component({
-  selector: 'app-qr',
-  templateUrl: './qr.component.html',
-  styleUrls: ['./qr.component.scss']
+    selector: 'app-qr',
+    templateUrl: './qr.component.html',
+    styleUrls: ['./qr.component.scss'],
+    standalone: false
 })
 export class QrComponent implements OnInit {
 

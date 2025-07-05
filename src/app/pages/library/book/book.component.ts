@@ -8,9 +8,10 @@ import { LibraryService } from 'src/app/shared/services/library/library.service'
 import * as CryptoJS from "crypto-js";
 
 @Component({
-  selector: 'app-book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.scss']
+    selector: 'app-book',
+    templateUrl: './book.component.html',
+    styleUrls: ['./book.component.scss'],
+    standalone: false
 })
 export class BookComponent implements OnInit, OnChanges {
   rootContent: any;

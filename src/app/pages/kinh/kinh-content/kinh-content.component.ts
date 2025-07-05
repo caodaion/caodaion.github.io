@@ -9,9 +9,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import * as CryptoJS from "crypto-js";
 
 @Component({
-  selector: 'app-kinh-content',
-  templateUrl: './kinh-content.component.html',
-  styleUrls: ['./kinh-content.component.scss']
+    selector: 'app-kinh-content',
+    templateUrl: './kinh-content.component.html',
+    styleUrls: ['./kinh-content.component.scss'],
+    standalone: false
 })
 export class KinhContentComponent implements OnInit {
   rootContent: any;

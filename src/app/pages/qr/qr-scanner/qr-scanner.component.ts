@@ -6,9 +6,10 @@ import { BehaviorSubject } from 'rxjs';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'app-qr-scanner',
-  templateUrl: './qr-scanner.component.html',
-  styleUrls: ['./qr-scanner.component.scss']
+    selector: 'app-qr-scanner',
+    templateUrl: './qr-scanner.component.html',
+    styleUrls: ['./qr-scanner.component.scss'],
+    standalone: false
 })
 export class QrScannerComponent {
 

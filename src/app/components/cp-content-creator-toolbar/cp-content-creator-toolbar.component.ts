@@ -5,9 +5,10 @@ import { LocationService } from 'src/app/shared/services/location/location.servi
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
-  selector: 'cp-content-creator-toolbar',
-  templateUrl: './cp-content-creator-toolbar.component.html',
-  styleUrls: ['./cp-content-creator-toolbar.component.scss']
+    selector: 'cp-content-creator-toolbar',
+    templateUrl: './cp-content-creator-toolbar.component.html',
+    styleUrls: ['./cp-content-creator-toolbar.component.scss'],
+    standalone: false
 })
 export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;

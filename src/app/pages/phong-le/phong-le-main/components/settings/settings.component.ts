@@ -3,9 +3,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { LocationService } from 'src/app/shared/services/location/location.service';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+    selector: 'app-settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss'],
+    standalone: false
 })
 export class SettingsComponent implements OnInit {
   provinces = <any>[];

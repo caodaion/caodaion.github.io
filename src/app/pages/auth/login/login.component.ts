@@ -8,9 +8,10 @@ import * as CryptoJS from "crypto-js";
 import { GameService } from 'src/app/shared/services/game/game.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit, AfterViewChecked {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';

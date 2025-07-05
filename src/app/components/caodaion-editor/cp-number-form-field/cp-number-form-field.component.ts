@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'cp-number-form-field',
-  templateUrl: './cp-number-form-field.component.html',
-  styleUrls: ['./cp-number-form-field.component.scss']
+    selector: 'cp-number-form-field',
+    templateUrl: './cp-number-form-field.component.html',
+    styleUrls: ['./cp-number-form-field.component.scss'],
+    standalone: false
 })
 export class CpNumberFormFieldComponent implements OnInit {
   @Input() inputFormControl: any;

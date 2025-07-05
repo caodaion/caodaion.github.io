@@ -11,9 +11,10 @@ import html2canvas from 'html2canvas-pro';
 
 
 @Component({
-  selector: 'app-qr-generator',
-  templateUrl: './qr-generator.component.html',
-  styleUrls: ['./qr-generator.component.scss']
+    selector: 'app-qr-generator',
+    templateUrl: './qr-generator.component.html',
+    styleUrls: ['./qr-generator.component.scss'],
+    standalone: false
 })
 export class QrGeneratorComponent implements OnInit {
   qrData = location.href

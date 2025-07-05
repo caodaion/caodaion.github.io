@@ -3,9 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-bottom-navigator',
-  templateUrl: './bottom-navigator.component.html',
-  styleUrls: ['./bottom-navigator.component.scss'],
+    selector: 'app-bottom-navigator',
+    templateUrl: './bottom-navigator.component.html',
+    styleUrls: ['./bottom-navigator.component.scss'],
+    standalone: false
 })
 export class BottomNavigatorComponent implements OnInit {
   @Input() prev: any;

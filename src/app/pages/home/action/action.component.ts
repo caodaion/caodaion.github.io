@@ -4,9 +4,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-action',
-  templateUrl: './action.component.html',
-  styleUrls: ['./action.component.scss']
+    selector: 'app-action',
+    templateUrl: './action.component.html',
+    styleUrls: ['./action.component.scss'],
+    standalone: false
 })
 export class ActionComponent implements OnInit {
   cols: number = 2;

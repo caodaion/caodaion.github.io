@@ -10,9 +10,10 @@ import { CONSTANT } from "../../../shared/constants/constants.constant";
 import { Title } from "@angular/platform-browser";
 
 @Component({
-  selector: 'app-kinh-list',
-  templateUrl: './kinh-list.component.html',
-  styleUrls: ['./kinh-list.component.scss'],
+    selector: 'app-kinh-list',
+    templateUrl: './kinh-list.component.html',
+    styleUrls: ['./kinh-list.component.scss'],
+    standalone: false
 })
 export class KinhListComponent implements OnInit {
   nowKinh = new NowKinhModel();

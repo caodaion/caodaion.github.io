@@ -8,9 +8,10 @@ import { Title } from "@angular/platform-browser";
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-action',
-  templateUrl: './action.component.html',
-  styleUrls: ['./action.component.scss']
+    selector: 'app-action',
+    templateUrl: './action.component.html',
+    styleUrls: ['./action.component.scss'],
+    standalone: false
 })
 export class ActionComponent implements OnInit {
   public drawerMode: any;

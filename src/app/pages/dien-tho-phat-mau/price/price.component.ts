@@ -6,9 +6,10 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-price',
-  templateUrl: './price.component.html',
-  styleUrls: ['./price.component.scss']
+    selector: 'app-price',
+    templateUrl: './price.component.html',
+    styleUrls: ['./price.component.scss'],
+    standalone: false
 })
 export class PriceComponent implements OnInit {
 

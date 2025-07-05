@@ -6,9 +6,10 @@ interface Food {
   viewValue: string;
 }
 @Component({
-  selector: 'cp-toolbar-editor',
-  templateUrl: './cp-toolbar-editor.component.html',
-  styleUrls: ['./cp-toolbar-editor.component.scss'],
+    selector: 'cp-toolbar-editor',
+    templateUrl: './cp-toolbar-editor.component.html',
+    styleUrls: ['./cp-toolbar-editor.component.scss'],
+    standalone: false
 })
 export class CpToolbarEditorComponent implements OnInit {
   foods: Food[] = [

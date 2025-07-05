@@ -4,9 +4,10 @@ import { Bcd100Service } from 'src/app/shared/services/bcd100/bcd100.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-collector',
-  templateUrl: './collector.component.html',
-  styleUrls: ['./collector.component.scss']
+    selector: 'app-collector',
+    templateUrl: './collector.component.html',
+    styleUrls: ['./collector.component.scss'],
+    standalone: false
 })
 export class CollectorComponent implements OnInit {
   provinces = <any>[];

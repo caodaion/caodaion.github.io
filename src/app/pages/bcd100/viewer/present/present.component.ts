@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-present',
-  templateUrl: './present.component.html',
-  styleUrls: ['./present.component.scss']
+    selector: 'app-present',
+    templateUrl: './present.component.html',
+    styleUrls: ['./present.component.scss'],
+    standalone: false
 })
 export class PresentComponent implements OnInit {
   @Input('data') data: any;

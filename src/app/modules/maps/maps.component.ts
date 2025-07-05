@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { ViewMissionService } from 'src/app/shared/services/view-mission/view-mission.service';
 
 @Component({
-  selector: 'app-maps',
-  templateUrl: './maps.component.html',
-  styleUrls: ['./maps.component.scss']
+    selector: 'app-maps',
+    templateUrl: './maps.component.html',
+    styleUrls: ['./maps.component.scss'],
+    standalone: false
 })
 export class MapsComponent {
   settingsMenu = <any>[

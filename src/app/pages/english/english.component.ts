@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'app-english',
-  templateUrl: './english.component.html',
-  styleUrls: ['./english.component.scss']
+    selector: 'app-english',
+    templateUrl: './english.component.html',
+    styleUrls: ['./english.component.scss'],
+    standalone: false
 })
 export class EnglishComponent {
 

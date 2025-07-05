@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 @Component({
-  selector: 'app-synchronized',
-  templateUrl: './synchronized.component.html',
-  styleUrls: ['./synchronized.component.scss']
+    selector: 'app-synchronized',
+    templateUrl: './synchronized.component.html',
+    styleUrls: ['./synchronized.component.scss'],
+    standalone: false
 })
 export class SynchronizedComponent implements OnInit {
 

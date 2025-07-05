@@ -5,9 +5,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AuthService } from "../../../shared/services/auth/auth.service";
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
+    selector: 'app-welcome',
+    templateUrl: './welcome.component.html',
+    styleUrls: ['./welcome.component.scss'],
+    standalone: false
 })
 export class WelcomeComponent implements OnInit {
   greatings = [

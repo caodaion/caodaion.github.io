@@ -16,9 +16,10 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
 import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss'],
+    selector: 'app-bill',
+    templateUrl: './bill.component.html',
+    styleUrls: ['./bill.component.scss'],
+    standalone: false
 })
 export class BillComponent implements OnInit {
   @Input() setting: any;

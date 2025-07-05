@@ -25,15 +25,16 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import html2canvas from 'html2canvas-pro';
 
 @Component({
-  selector: 'app-lunar-calendar',
-  templateUrl: './lunar-calendar.component.html',
-  styleUrls: [
-    './lunar-calendar.component.scss',
-    './styles/date-calendar.lunar-calendar.component.scss',
-    './styles/date-hours.date-calendar.lunar-calendar.component.scss',
-    './styles/selected-month.lunar-calendar.component.scss',
-    './styles/dates.selected-month.lunar-calendar.component.scss',
-  ],
+    selector: 'app-lunar-calendar',
+    templateUrl: './lunar-calendar.component.html',
+    styleUrls: [
+        './lunar-calendar.component.scss',
+        './styles/date-calendar.lunar-calendar.component.scss',
+        './styles/date-hours.date-calendar.lunar-calendar.component.scss',
+        './styles/selected-month.lunar-calendar.component.scss',
+        './styles/dates.selected-month.lunar-calendar.component.scss',
+    ],
+    standalone: false
 })
 export class LunarCalendarComponent implements OnInit, AfterViewInit {
   selectedDate = new DateFormatModel();

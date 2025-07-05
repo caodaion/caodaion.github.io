@@ -6,9 +6,10 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 import { GuongService } from 'src/app/shared/services/guong/guong.service';
 
 @Component({
-  selector: 'app-guong-form',
-  templateUrl: './guong-form.component.html',
-  styleUrls: ['./guong-form.component.scss'],
+    selector: 'app-guong-form',
+    templateUrl: './guong-form.component.html',
+    styleUrls: ['./guong-form.component.scss'],
+    standalone: false
 })
 export class GuongFormComponent implements OnInit {
   @Input('guongRes') guongRes: any;

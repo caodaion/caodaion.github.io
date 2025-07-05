@@ -5,9 +5,10 @@ import * as CryptoJS from "crypto-js";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+    selector: 'app-signup',
+    templateUrl: './signup.component.html',
+    styleUrls: ['./signup.component.scss'],
+    standalone: false
 })
 export class SignupComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';

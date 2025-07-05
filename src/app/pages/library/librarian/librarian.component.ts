@@ -6,9 +6,10 @@ import { LibraryService } from 'src/app/shared/services/library/library.service'
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 @Component({
-  selector: 'app-librarian',
-  templateUrl: './librarian.component.html',
-  styleUrls: ['./librarian.component.scss']
+    selector: 'app-librarian',
+    templateUrl: './librarian.component.html',
+    styleUrls: ['./librarian.component.scss'],
+    standalone: false
 })
 export class LibrarianComponent implements OnInit {
   previewingItem: any;

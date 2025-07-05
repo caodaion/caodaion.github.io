@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { TacVuService } from 'src/app/shared/services/tac-vu/tac-vu.service';
 
 @Component({
-  selector: 'app-nghi-tiet',
-  templateUrl: './nghi-tiet.component.html',
-  styleUrls: ['./nghi-tiet.component.scss']
+    selector: 'app-nghi-tiet',
+    templateUrl: './nghi-tiet.component.html',
+    styleUrls: ['./nghi-tiet.component.scss'],
+    standalone: false
 })
 export class NghiTietComponent implements OnInit {
 

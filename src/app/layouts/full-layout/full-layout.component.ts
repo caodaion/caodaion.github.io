@@ -23,14 +23,15 @@ import { MENU } from "../../shared/constants/menu.constant";
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'full-layout',
-  templateUrl: './full-layout.component.html',
-  styleUrls: [
-    './full-layout.component.scss',
-    './styles/caodaionlogo.fulllayout.component.scss',
-    './styles/main-drawer.fulllayout.component.scss',
-    './styles/main-toolbar.fulllayout.component.scss',
-  ],
+    selector: 'full-layout',
+    templateUrl: './full-layout.component.html',
+    styleUrls: [
+        './full-layout.component.scss',
+        './styles/caodaionlogo.fulllayout.component.scss',
+        './styles/main-drawer.fulllayout.component.scss',
+        './styles/main-toolbar.fulllayout.component.scss',
+    ],
+    standalone: false
 })
 export class FullLayoutComponent implements OnInit, AfterViewChecked, AfterViewInit {
   offlineEvent?: Observable<Event>;

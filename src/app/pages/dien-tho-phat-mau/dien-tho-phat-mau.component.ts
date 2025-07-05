@@ -3,9 +3,10 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { DienThoPhatMauService } from 'src/app/shared/services/dien-tho-phat-mau/dien-tho-phat-mau.service';
 
 @Component({
-  selector: 'app-dien-tho-phat-mau',
-  templateUrl: './dien-tho-phat-mau.component.html',
-  styleUrls: ['./dien-tho-phat-mau.component.scss']
+    selector: 'app-dien-tho-phat-mau',
+    templateUrl: './dien-tho-phat-mau.component.html',
+    styleUrls: ['./dien-tho-phat-mau.component.scss'],
+    standalone: false
 })
 export class DienThoPhatMauComponent implements AfterViewInit {
 

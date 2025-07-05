@@ -8,9 +8,10 @@ import { CpCreatorContentComponent } from '../cp-creator-content/cp-creator-cont
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
-  selector: 'cp-content-creator',
-  templateUrl: './cp-content-creator.component.html',
-  styleUrls: ['./cp-content-creator.component.scss']
+    selector: 'cp-content-creator',
+    templateUrl: './cp-content-creator.component.html',
+    styleUrls: ['./cp-content-creator.component.scss'],
+    standalone: false
 })
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   [x: string]: any;

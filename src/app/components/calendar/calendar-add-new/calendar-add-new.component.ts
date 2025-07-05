@@ -3,9 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 @Component({
-  selector: 'app-calendar-add-new',
-  templateUrl: './calendar-add-new.component.html',
-  styleUrls: ['./calendar-add-new.component.scss']
+    selector: 'app-calendar-add-new',
+    templateUrl: './calendar-add-new.component.html',
+    styleUrls: ['./calendar-add-new.component.scss'],
+    standalone: false
 })
 export class CalendarAddNewComponent implements OnInit {
 
