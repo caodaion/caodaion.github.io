@@ -10,6 +10,12 @@
     .mat-mdc-tab-body-content {
       padding: 1rem 0.5rem;
     }
+    .calendar-type-selection {
+      margin-bottom: 1rem;
+      .mat-radio-button {
+        margin-right: 2rem;
+      }
+    }
     .form-group {
       padding: 0 1rem;
       @media only screen and (max-width: map.get(variables.$small-361-600, "layout-region-off")) {

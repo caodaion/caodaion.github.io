@@ -4,8 +4,16 @@
     <mat-tab label="Tính Tuần Cửu mới">
       <div class="form-group">
         <h3>Hãy chọn ngày từ trần</h3>
+        <div class="calendar-type-selection mb-4">
+          <mat-radio-group [(ngModel)]="calendarType" (ngModelChange)="onCalendarTypeChange()">
+            <mat-radio-button value="lunar" class="mr-4">Âm lịch</mat-radio-button>
+            <mat-radio-button value="solar">Dương lịch</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </div>
-      <div class="d-flex flex-wrap">
+      
+      <!-- Solar Calendar Section -->
+      <div class="d-flex flex-wrap" *ngIf="calendarType === 'solar'">
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Chọn Năm</mat-label>
@@ -49,6 +57,63 @@
           <mat-form-field appearance="outline" class="w-100 focus-disabled">
             <mat-label>Âm lịch</mat-label>
             <input type="text" matInput [value]="calculatedLunarDate" [disabled]="true" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Lunar Calendar Section -->
+      <div class="d-flex flex-wrap" *ngIf="calendarType === 'lunar'">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Năm Âm lịch</mat-label>
+            <mat-select [(ngModel)]="selectedLunarDate.lunarYear" (ngModelChange)="onLunarDateChange()">
+              <mat-option *ngFor="let item of lunarYearOptions" [value]="item?.lunarYear">{{ item?.lunarYearName }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Tháng Âm lịch</mat-label>
+            <mat-select [(ngModel)]="selectedLunarDate.lunarMonth" (ngModelChange)="onLunarDateChange()">
+              <mat-option *ngFor="let item of lunarMonthOptions" [value]="item">{{
+                item
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn Ngày Âm lịch</mat-label>
+            <mat-select [(ngModel)]="selectedLunarDate.lunarDay" (ngModelChange)="onLunarDateChange()">
+              <mat-option *ngFor="let item of lunarDayOptions" [value]="item">{{
+                item
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Tháng nhuận</mat-label>
+            <mat-select [(ngModel)]="selectedLunarDate.lunarLeap" (ngModelChange)="onLunarDateChange()">
+              <mat-option [value]="false">Không</mat-option>
+              <mat-option [value]="true">Có</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Chọn giờ</mat-label>
+            <mat-select [(ngModel)]="selectedLunarDate.lunarTime" (ngModelChange)="onLunarDateChange()">
+              <mat-option *ngFor="let time of traditionalTimes" [value]="time.key">
+                {{ time.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group w-full" *ngIf="calculatedLunarDate">
+          <mat-form-field appearance="outline" class="w-100 focus-disabled">
+            <mat-label>Dương lịch</mat-label>
+            <input type="text" matInput [value]="selectedDate.year + '/' + selectedDate.month + '/' + selectedDate.date" [disabled]="true" />
           </mat-form-field>
         </div>
       </div>

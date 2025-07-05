@@ -33,9 +33,21 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     time: null,
     lunarTime: null
   };
+  selectedLunarDate = <any>{
+    lunarYear: 0,
+    lunarMonth: 0,
+    lunarDay: 0,
+    lunarLeap: false,
+    time: null,
+    lunarTime: null
+  };
+  calendarType: 'solar' | 'lunar' = 'lunar';
   yearOptions = <any>[];
   monthOptions = <any>[];
   dayOptions = <any>[];
+  lunarYearOptions = <any>[];
+  lunarMonthOptions = <any>[];
+  lunarDayOptions = <any>[];
   tuanCuuEvents = <any>[];
   tuanCuuList = <any>[];
   displayedColumns: string[] = ['eventName', 'day', 'lunar', 'solar'];
@@ -65,6 +77,7 @@ export class TinhTuanCuuComponent implements AfterViewInit {
   timeZone = <any>[];
   sharedUrl: any;
   caoDaiTitle = CAODAI_TITLE.data
+  traditionalTimes = TIME_TYPE.data.filter(time => time.key !== 'all' && time.key !== 'tu-thoi');
   isHolyNameRequired: boolean = false;
   colors = <any>[
     {
@@ -114,6 +127,18 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     this.selectedDate.month = parseInt(this.datePipe.transform(now, 'MM') || '0')
     this.selectedDate.year = parseInt(this.datePipe.transform(now, 'yyyy') || '0')
     this.selectedDate.time = this.datePipe.transform(now, 'HH:mm')
+    
+    // Initialize lunar date with current date
+    const lunarDate = this.calendarService.getConvertedFullDate(now).convertSolar2Lunar;
+    this.selectedLunarDate = {
+      lunarYear: lunarDate.lunarYear,
+      lunarMonth: lunarDate.lunarMonth,
+      lunarDay: lunarDate.lunarDay,
+      lunarLeap: lunarDate.lunarLeap,
+      time: this.datePipe.transform(now, 'HH:mm'),
+      lunarTime: lunarDate.lunarTime || 'ty-2301'
+    };
+    
     this.getCalculatedLunarDate()
     this.route.params.subscribe((param: any) => {      
       if (param.year) {
@@ -228,10 +253,80 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     }
     this.monthOptions = Array.from({ length: 12 }, (x, i) => i + 1)
     this.dayOptions = Array.from({ length: 31 }, (x, i) => i + 1)
+    this.getLunarYearOptions()
+  }
+
+  getLunarYearOptions() {
+    // Generate lunar year options
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear + 1; i > currentYear - 5; i--) {
+      const convertedDate = this.calendarService.getConvertedFullDate(new Date(i, 0, 1))
+      this.lunarYearOptions.push({
+        lunarYear: convertedDate.convertSolar2Lunar.lunarYear,
+        lunarYearName: convertedDate.convertSolar2Lunar.lunarYearName,
+      })
+    }
+    this.lunarMonthOptions = Array.from({ length: 12 }, (x, i) => i + 1)
+    this.lunarDayOptions = Array.from({ length: 30 }, (x, i) => i + 1)
+  }
+
+  onCalendarTypeChange() {
+    if (this.calendarType === 'lunar') {
+      // Convert current solar date to lunar
+      const solarDate = new Date(this.selectedDate.year, this.selectedDate.month - 1, this.selectedDate.date);
+      const lunarDate = this.calendarService.getConvertedFullDate(solarDate).convertSolar2Lunar;
+      this.selectedLunarDate = {
+        lunarYear: lunarDate.lunarYear,
+        lunarMonth: lunarDate.lunarMonth,
+        lunarDay: lunarDate.lunarDay,
+        lunarLeap: lunarDate.lunarLeap,
+        time: this.selectedDate.time,
+        lunarTime: lunarDate.lunarTime || 'ty-2301'
+      };
+    } else {
+      // Convert current lunar date to solar
+      this.convertLunarToSolar();
+    }
+    this.onUpdateInformation();
+  }
+
+  convertLunarToSolar() {
+    if (this.selectedLunarDate.lunarYear && this.selectedLunarDate.lunarMonth && this.selectedLunarDate.lunarDay) {
+      const lunarInput = {
+        lunarDay: this.selectedLunarDate.lunarDay,
+        lunarMonth: this.selectedLunarDate.lunarMonth,
+        lunarYear: this.selectedLunarDate.lunarYear,
+        lunarLeap: this.selectedLunarDate.lunarLeap ? 1 : 0
+      };
+      
+      const result = this.calendarService.getConvertedFullDate(lunarInput);
+      const solarDate = result.convertLunar2Solar;
+      
+      if (solarDate && solarDate.length >= 3) {
+        this.selectedDate.date = solarDate[0];
+        this.selectedDate.month = solarDate[1];
+        this.selectedDate.year = solarDate[2];
+        this.selectedDate.time = this.selectedLunarDate.time;
+      }
+    }
+    this.onUpdateInformation();
+  }
+
+  onLunarDateChange() {
+    this.convertLunarToSolar();
   }
 
   calculateTuanCuu() {    
-    let calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date} ${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)
+    let calDate: Date;
+    
+    if (this.calendarType === 'solar') {
+      calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date} ${this.selectedDate?.time ? this.selectedDate?.time + ':00' : '00:00:00'}`)
+    } else {
+      // Convert lunar date to solar date first
+      // You'll need to implement the lunar to solar conversion using your calendar service
+      // For now, using the existing selected solar date as fallback
+      calDate = new Date(`${this.selectedDate.year}-${this.selectedDate.month < 10 ? '0' + this.selectedDate.month : this.selectedDate.month}-${this.selectedDate.date < 10 ? '0' + this.selectedDate.date : this.selectedDate.date} ${this.selectedLunarDate?.time ? this.selectedLunarDate?.time + ':00' : '00:00:00'}`)
+    }
     
     if (calDate > new Date(new Date(calDate).setHours(22, 59, 59))) {
       calDate = new Date(new Date(calDate.setDate(calDate.getDate() + 1)).setHours(0, 0, 0))
@@ -250,7 +345,11 @@ export class TinhTuanCuuComponent implements AfterViewInit {
   saveTuanCuu() {
     this.calculatedTuanCuu.key = this.commonService.generatedSlug(`tuancuu-${this.selectedDate.year}${this.selectedDate.month}${this.selectedDate.date}-${this.calculatedTuanCuu.details.name}`)
     this.calculatedTuanCuu.event = this.tuanCuuEvents
-    this.calculatedTuanCuu.date = this.selectedDate
+    this.calculatedTuanCuu.date = {
+      ...this.selectedDate,
+      calendarType: this.calendarType,
+      lunarDate: this.calendarType === 'lunar' ? this.selectedLunarDate : null
+    }
     if (!this.tuanCuuList?.find((item: any) => item?.key == this.calculatedTuanCuu.key)) {
       this.tuanCuuList.push(this.calculatedTuanCuu)
       this.storeTuanCuu()
@@ -450,23 +549,35 @@ export class TinhTuanCuuComponent implements AfterViewInit {
   }
 
   getCalculatedLunarDate() {
-    const date = new Date(
-      this.selectedDate.year,
-      this.selectedDate.month - 1,
-      this.selectedDate.date,
-      ...((this.selectedDate.time || '00:00').split(':').map(Number))
-    );
-    const calculatedLunarDate = this.calendarService.getConvertedFullDate(date).convertSolar2Lunar;
-    
-    this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || '';
-    this.calculatedLunarDate = [
-      calculatedLunarDate.lunarTime ? `Thời ${calculatedLunarDate.lunarTime}` : '',
-      [
-        calculatedLunarDate.lunarDay.toString().padStart(2, '0'),
-        calculatedLunarDate.lunarMonth.toString().padStart(2, '0') + (calculatedLunarDate.lunarLeap ? 'N' : ''),
-        calculatedLunarDate.lunarYearName
-      ].join('/')
-    ].filter(Boolean).join(' | ');
+    if (this.calendarType === 'solar') {
+      const date = new Date(
+        this.selectedDate.year,
+        this.selectedDate.month - 1,
+        this.selectedDate.date,
+        ...((this.selectedDate.time || '00:00').split(':').map(Number))
+      );
+      const calculatedLunarDate = this.calendarService.getConvertedFullDate(date).convertSolar2Lunar;
+      
+      this.selectedDate.lunarTime = calculatedLunarDate?.lunarTime || '';
+      this.calculatedLunarDate = [
+        calculatedLunarDate.lunarTime ? `Thời ${calculatedLunarDate.lunarTime}` : '',
+        [
+          calculatedLunarDate.lunarDay.toString().padStart(2, '0'),
+          calculatedLunarDate.lunarMonth.toString().padStart(2, '0') + (calculatedLunarDate.lunarLeap ? 'N' : ''),
+          calculatedLunarDate.lunarYearName
+        ].join('/')
+      ].filter(Boolean).join(' | ');
+    } else {
+      // For lunar calendar, show the solar equivalent
+      this.calculatedLunarDate = [
+        this.selectedLunarDate.lunarTime ? `Thời ${this.selectedLunarDate.lunarTime}` : '',
+        [
+          this.selectedLunarDate.lunarDay.toString().padStart(2, '0'),
+          this.selectedLunarDate.lunarMonth.toString().padStart(2, '0') + (this.selectedLunarDate.lunarLeap ? 'N' : ''),
+          this.lunarYearOptions.find((y: any) => y.lunarYear === this.selectedLunarDate.lunarYear)?.lunarYearName || ''
+        ].join('/')
+      ].filter(Boolean).join(' | ');
+    }
   }
 
   showShareImage(element: any, item: any) {
