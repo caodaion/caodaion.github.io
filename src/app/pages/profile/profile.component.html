@@ -3,7 +3,7 @@
   <div class="flex flex-col lg:flex-row items-center justify-between">
     <div>
       <h1>{{ currentUser?.holyName ? (currentUser?.holyName + ' | ' + currentUser?.name) : currentUser?.name }}</h1>
-      <p>@{{ currentUser?.userName }}</p>
+      <p>&#64;{{ currentUser?.userName }}</p>
     </div>
     <div>
       <button mat-button (click)="onStartSyncDatawithRemote()"
