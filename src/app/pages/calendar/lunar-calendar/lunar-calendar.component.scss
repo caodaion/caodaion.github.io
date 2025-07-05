@@ -2,6 +2,11 @@
 @use "sass:map";
 ::ng-deep {
   .lunar-calendar-container {
+    .date-event {
+      .mdc-list {
+        padding: 0;
+      }
+    }
     .date-event-item {
       background-color: #fbbc05;
       height: auto !important;

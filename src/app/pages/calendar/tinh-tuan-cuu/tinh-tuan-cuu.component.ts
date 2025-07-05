@@ -298,7 +298,6 @@ export class TinhTuanCuuComponent implements AfterViewInit {
         lunarYear: this.selectedLunarDate.lunarYear,
         lunarLeap: this.selectedLunarDate.lunarLeap ? 1 : 0
       };
-      
       const result = this.calendarService.getConvertedFullDate(lunarInput);
       const solarDate = result.convertLunar2Solar;
       
@@ -484,9 +483,9 @@ export class TinhTuanCuuComponent implements AfterViewInit {
     );
     printTab?.document.write('</head><body >');
     const information = `
-    <h2 style="text-align: center;">LỊCH ${item.name?.toUpperCase()}</h2>
-    <h3 style="text-align: center;">
-    TỪ TRẦN NGÀY THỜI ${item?.date?.lunarTime} ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
+    <h2 style="text-align: center; margin: 0;">LỊCH ${item.name?.toUpperCase()}</h2>
+    <h3 style="text-align: center; margin: 0;">
+    TỪ TRẦN ${item?.date?.lunarTime} NGÀY ${item?.date?.lunarDay} THÁNG ${item?.date?.lunarMonth} NĂM ${item?.date?.lunarYearName?.toUpperCase()} (${this.decimalPipe.transform(item.date.date, '2.0-0')}/${this.decimalPipe.transform(item.date.month, '2.0-0')}/${item.date.year})
     </h3>`
 
     const printContent = document.getElementById(

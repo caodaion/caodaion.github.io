@@ -504,7 +504,7 @@ export class CalendarService {
         comparedDate.lunarDay,
         comparedDate.lunarMonth,
         comparedDate.lunarYear,
-        0,
+        comparedDate?.lunarLeap || 0,
         '+7'
       )
     }
@@ -682,8 +682,13 @@ export class CalendarService {
 
   getTuanCuuEvents(date: any): Observable<any> {
     let events = <any>[]
-    const eventCount = 9
+    const eventCount = 11
     let startDate = date
+    
+    // Get lunar date of the original date
+    const originalLunarDate = this.getConvertedFullDate(date).convertSolar2Lunar
+    const originalSolarDate = new Date(date)    
+    
     Array.from({ length: eventCount }, (x, i) => {
       i++
       switch (i) {
@@ -698,34 +703,58 @@ export class CalendarService {
           )
           break;
         }
-        // case 10: {
-        //   const calcDate = this.getConvertedFullDate({
-        //     lunarDay: date.lunarDay,
-        //     lunarMonth: date.lunarMonth,
-        //     lunarYear: date.lunarYear + 1
-        //   }).convertLunar2Solar
-        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
-        //   events.push({
-        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
-        //       solar: solar,
-        //       eventName: `Tiểu Tường`
-        //     })
-        //   break;
-        // }
-        // case 11: {
-        //   const calcDate = this.getConvertedFullDate({
-        //     lunarDay: date.lunarDay,
-        //     lunarMonth: date.lunarMonth,
-        //     lunarYear: date.lunarYear + 2
-        //   }).convertLunar2Solar
-        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
-        //   events.push({
-        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
-        //       solar: solar,
-        //       eventName: `Đại Tường`
-        //     })
-        //   break;
-        // }
+        case 10: {
+          // Calculate Tiểu Tường: same lunar date but 12 months later
+          // Use solar date iteration to properly handle leap months
+          let currentSolarDate = originalSolarDate
+          let monthsCount = 0          
+          // Iterate through solar months until we find 12 lunar months
+          while (monthsCount < 12) {
+            // Move to next solar month
+            currentSolarDate.setDate(currentSolarDate.getDate() + 1)
+            
+            // Get lunar date for this solar date
+            const currentLunar = this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar
+            
+            // Check if this matches our target lunar day and month (non-leap)
+            if (currentLunar.lunarDay === originalLunarDate.lunarDay) {
+              monthsCount++
+            }
+          }
+          
+          events.push({
+              lunar: this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar,
+              solar: new Date(currentSolarDate),
+              eventName: `Tiểu Tường`
+            })
+          break;
+        }
+        case 11: {
+          // Calculate Tiểu Tường: same lunar date but 12 months later
+          // Use solar date iteration to properly handle leap months
+          let currentSolarDate = originalSolarDate
+          let monthsCount = 0          
+          // Iterate through solar months until we find 12 lunar months
+          while (monthsCount < 24) {
+            // Move to next solar month
+            currentSolarDate.setDate(currentSolarDate.getDate() + 1)
+            
+            // Get lunar date for this solar date
+            const currentLunar = this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar
+            
+            // Check if this matches our target lunar day and month (non-leap)
+            if (currentLunar.lunarDay === originalLunarDate.lunarDay) {
+              monthsCount++
+            }
+          }
+          
+          events.push({
+              lunar: this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar,
+              solar: new Date(currentSolarDate),
+              eventName: `Đại Tường`
+            })
+          break;
+        }
         default: {
           const calDate = new Date(startDate.setDate(startDate.getDate() + 9))
           events.push(
