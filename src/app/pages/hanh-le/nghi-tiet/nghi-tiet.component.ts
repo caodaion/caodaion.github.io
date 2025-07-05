@@ -15,8 +15,10 @@ export class NghiTietComponent implements OnInit {
   fontSize: any = 16;
   nghiTiet: any;
   isShowGuide: boolean = false;
+  isShowDescription: boolean = false;
   filteredNghiTiet = <any>{};
   nghiTietToggle: any = 'down';
+  calendarType: string = 'lunar'; // Default to lunar calendar
   fontSizeRange = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
 
   constructor(
@@ -75,6 +77,14 @@ export class NghiTietComponent implements OnInit {
     this.filteredNghiTiet.steps = []
     this.filteredNghiTiet.steps = this.nghiTiet?.steps?.filter((item: any) => !item?.toggle || item?.toggle === this.nghiTietToggle)
     this.cd.detectChanges()
+  }
+
+  onCalendarTypeChange() {
+    // Handle calendar type change logic here
+    // You can add specific logic based on lunar or solar calendar selection
+    console.log('Calendar type changed to:', this.calendarType);
+    // Optionally re-filter or update data based on calendar type
+    this.filterNghiTiet();
   }
 
   onPrint(printArea: any) {

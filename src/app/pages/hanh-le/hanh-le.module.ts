@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MatDividerModule } from '@angular/material/divider';
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCheckboxModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
