@@ -253,6 +253,9 @@ export class SoanSoService {
       'so-kinh-an-thanh-tuong': {
         name: 'Kỉnh An Thánh Tượng'
       },
+      'so-cau-tho': {
+        name: 'Cầu Thọ'
+      },
     }
   }
 
