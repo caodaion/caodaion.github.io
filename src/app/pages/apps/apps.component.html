@@ -1,0 +1,31 @@
+<div class="apps-container p-4">
+  <div class="apps-header mb-6">
+    <h1 class="display-small text-center mb-2">Ứng dụng</h1>
+    <p class="body-medium text-center text-muted">Khám phá tất cả tính năng của CaoDaiON - Ứng dụng đồng hành cùng đạo pháp</p>
+  </div>
+
+  <div class="apps-content">
+    <div *ngFor="let category of getCategories()" class="category-section mb-6">
+      <h2 class="headline-small mb-4">{{ category }}</h2>
+      
+      <div class="apps-grid">
+        <mat-card 
+          *ngFor="let app of getAppsByCategory(category)" 
+          class="app-card"
+          (click)="onNavigateToApp(app)"
+          matRipple
+        >
+          <mat-card-content class="app-card-content">
+            <div class="app-icon-container">
+              <mat-icon class="app-icon">{{ app.icon }}</mat-icon>
+            </div>
+            <div class="app-info">
+              <h3 class="title-medium app-title">{{ app.label }}</h3>
+              <p class="body-small app-description">{{ app.description }}</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

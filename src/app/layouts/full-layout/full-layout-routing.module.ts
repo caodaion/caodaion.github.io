@@ -107,6 +107,11 @@ const routes: Routes = [
         canActivate: [DienThoPhatMauGuard]
       },
       {
+        path: 'apps',
+        loadChildren: () =>
+          import('../../modules/apps/apps.module').then((m) => m.AppsModule),
+      },
+      {
         path: 'maps',
         loadChildren: () =>
           import('../../modules/maps/maps.module').then((m) => m.MapsModule),

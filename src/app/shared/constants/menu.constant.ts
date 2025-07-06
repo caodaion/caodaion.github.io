@@ -135,10 +135,10 @@ export const MENU = [
     ]
   },
   {
-    key: 'maps',
-    url: 'maps',
-    label: 'Bản đồ',
-    icon: 'map',
+    key: 'apps',
+    url: 'apps',
+    label: 'Ứng dụng',
+    icon: 'apps',
     fullAssess: true,
     released: true,
   },
