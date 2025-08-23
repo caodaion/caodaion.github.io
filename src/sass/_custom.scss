@@ -275,3 +275,8 @@ input:-webkit-autofill:active {
   .mdc-notched-outline__notch {
   border-right: none;
 }
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
