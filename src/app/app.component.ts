@@ -53,25 +53,25 @@ export class AppComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.kinhService.kinhList = res;
-          fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
+          // fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
           this.kinhService.kinhList.forEach((item: any) => {
             this.kinhService.getKinhContent(item.key)
             .subscribe()
           })
           this.eventService.getEventList()
           this.gettingCommonData = false
-          this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
-            if (res.data) {
-              this.tnhtService.tableContent = res.data
-              this.tnhtService.tableContent?.content?.forEach((item: any) => {
-                if (item?.audio && item?.audio?.src) {
-                  fetch(item.audio.src)
-                }
-              })
-              this.checkPushNotification()
-            }
-          })
-
+          // this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
+          //   if (res.data) {
+          //     this.tnhtService.tableContent = res.data
+          //     this.tnhtService.tableContent?.content?.forEach((item: any) => {
+          //       if (item?.audio && item?.audio?.src) {
+          //         fetch(item.audio.src)
+          //       }
+          //     })
+          //     this.checkPushNotification()
+          //   }
+          // })
+          this.checkPushNotification()
         }
       });
       this.messagingService.requestPermission()
