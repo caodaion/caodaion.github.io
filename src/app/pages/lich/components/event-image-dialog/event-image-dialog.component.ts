@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-image-dialog',
@@ -40,12 +41,13 @@ export class EventImageDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: {
       event: CalendarEvent,
       dateData: any,
-    }
+    },
+    private router: Router
   ) {
     this.event = data.event;
     this.dateData = data.dateData
-    console.log(data);
-
+    console.log(this.event);
+    console.log(this.dateData);
   }
 
   ngOnInit(): void {
@@ -107,5 +109,10 @@ export class EventImageDialogComponent implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+  openTuanCuu() {
+    this.closeDialog()
+    this.router.navigate([`/tuan-cuu/${this.event.tuanCuuId}`]);
   }
 }

@@ -91,9 +91,6 @@ export class TuanCuuService {
       
       await this.baseDbService.tuanCuu.add(tuanCuu);
       
-      // Refresh calendar events after adding
-      this.refreshCalendarEvents();
-      
       return tuanCuu.id;
     } catch (error) {
       console.error('Error adding Tuan Cuu:', error);
@@ -113,9 +110,6 @@ export class TuanCuuService {
       }
       
       await this.baseDbService.tuanCuu.update(id, tuanCuu);
-      
-      // Refresh calendar events after updating
-      this.refreshCalendarEvents();
     } catch (error) {
       console.error('Error updating Tuan Cuu:', error);
       throw error;
@@ -126,9 +120,6 @@ export class TuanCuuService {
   async deleteTuanCuu(id: string): Promise<void> {
     try {
       await this.baseDbService.tuanCuu.delete(id);
-      
-      // Refresh calendar events after deletion
-      this.refreshCalendarEvents();
     } catch (error) {
       console.error('Error deleting Tuan Cuu:', error);
       throw error;
@@ -205,30 +196,5 @@ export class TuanCuuService {
     }
     
     return tuanCuu as TuanCuu;
-  }
-
-  // Refresh calendar events
-  private refreshCalendarEvents(): void {
-    console.log('Refreshing calendar events...');
-    
-    // Use dynamic import to avoid circular dependency with calendar service
-    // if (typeof window !== 'undefined') {
-    //   setTimeout(() => {
-    //     import('../../lich/services/calendar.service').then(module => {
-    //       try {
-    //         // Try to get the calendar service from the global app injector
-    //         const appInjector = (window as any).appInjector;
-    //         if (appInjector) {
-    //           const calendarService = appInjector.get(module.CalendarService);
-    //           if (calendarService && typeof calendarService.refreshTuanCuuEvents === 'function') {
-    //             calendarService.refreshTuanCuuEvents();
-    //           }
-    //         }
-    //       } catch (error) {
-    //         console.error('Error refreshing calendar with Tuần Cửu events:', error);
-    //       }
-    //     });
-    //   }, 500); // Small delay to ensure database operations are complete
-    // }
   }
 }

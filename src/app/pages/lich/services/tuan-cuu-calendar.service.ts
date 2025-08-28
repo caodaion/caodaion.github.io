@@ -90,6 +90,7 @@ export class TuanCuuCalendarService {
 
         // Create calendar event
         const calendarEvent: CalendarEvent = {
+          tuanCuuId: `${tuanCuu.id}`,
           id: `tuancuu-${tuanCuu.id}-${event.sequence}`,
           title: title,
           description: `${tuanCuu.summary || ''}`,

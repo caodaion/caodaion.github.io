@@ -400,4 +400,10 @@ mat-toolbar {
       max-height: 100%;
     }
   }
+  .mat-drawer {
+    background-color: var(--surface-color) !important;
+  }
+  .mat-icon {
+    color: var(--text-secondary-color);
+  }
 }

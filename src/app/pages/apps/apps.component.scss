@@ -18,7 +18,7 @@
 .app-card {
   display: flex;
   align-items: center;
-  background-color: var(--card-background-color, white);
+  background-color: var(--surface-color, white);
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

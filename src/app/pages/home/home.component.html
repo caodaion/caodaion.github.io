@@ -26,24 +26,17 @@
     </div>
 
     <div class="events-card">
-      <h3 class="events-title">Sự kiện hôm nay</h3>
+      <h3 class="events-title" *ngIf="todayEvents && todayEvents.length > 0">Sự kiện hôm nay</h3>
       <div class="events-list" *ngIf="todayEvents && todayEvents.length > 0">
-        <div
-          class="event-item"
-          *ngFor="let event of todayEvents"
-          [style.border-left-color]="event.color"
-        >
+        <div class="event-item" *ngFor="let event of todayEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
           <div class="event-content">
             <div class="event-title">{{ event.title }}</div>
             <div class="event-description" *ngIf="event.description">
               {{ event.description }}
             </div>
             <div class="event-type">
-              <span
-                class="event-badge"
-                [style.background-color]="event.color"
-                >{{ getEventTypeName(event.type) }}</span
-              >
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
               <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
             </div>
           </div>
@@ -51,6 +44,25 @@
       </div>
       <div class="no-events" *ngIf="!todayEvents || todayEvents.length === 0">
         <p>Không có sự kiện nào hôm nay</p>
+      </div>
+      <h3 class="events-title" *ngIf="weekEvents && weekEvents.length > 0">Sự kiện tuần này</h3>
+      <div class="events-list" *ngIf="weekEvents && weekEvents.length > 0">
+        <div class="event-item" *ngFor="let event of weekEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!weekEvents || weekEvents.length === 0">
+        <p>Không có sự kiện nào trong tuần này</p>
       </div>
       <div class="view-calendar">
         <a routerLink="/lich" class="calendar-link">
@@ -67,10 +79,7 @@
   <!-- Lanh shortcut card -->
   <div class="shortcut-container">
     <div class="app-card" routerLink="/tuan-cuu">
-      <div
-        class="app-icon-container"
-        style="background: var(--tuan-cuu-app-background); color: white"
-      >
+      <div class="app-icon-container" style="background: var(--tuan-cuu-app-background); color: white">
         <app-icon name="date_range"></app-icon>
       </div>
       <div class="app-info">
@@ -78,19 +87,6 @@
         <p class="app-description">Tính và quản lý Tuần Cửu</p>
       </div>
     </div>
-    <!-- <div class="app-card" routerLink="/lanh">
-      <div
-        class="app-icon-container"
-        style="background: var(--lanh-app-background); color: white"
-      >
-        <app-icon name="favorite"></app-icon>
-      </div>
-      <div class="app-info">
-        <h2 class="app-name">Lành</h2>
-        <p class="app-description">
-          Thực hành nghĩ lành, nói lành, làm lành mỗi ngày
-        </p>
-      </div>
-    </div> -->
+    <app-bai-thuong-yeu></app-bai-thuong-yeu>
   </div>
 </div>

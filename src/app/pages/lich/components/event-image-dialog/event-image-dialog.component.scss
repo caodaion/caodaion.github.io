@@ -4,13 +4,6 @@
   width: 100%;
 }
 
-h2.mat-mdc-dialog-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0;
-}
-
 .dialog-actions {
   display: flex;
   gap: 8px;
@@ -21,7 +14,7 @@ h2.mat-mdc-dialog-title {
 }
 
 .event-card-container {
-  padding: 16px 0;
+  padding: 0 0 16px 0;
 }
 
 .event-card {
@@ -144,4 +137,18 @@ h2.mat-mdc-dialog-title {
   width: 16px;
   height: 16px;
   object-fit: contain;
+}
+
+::ng-deep {
+  .matButton {
+    .mdc-button__label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      svg {
+        height: 18px !important;
+        width: 18px !important;
+      }
+    }
+  }
 }

@@ -34,7 +34,7 @@
   transition: background 0.2s, color 0.2s;
 }
 .display-toggle-btn.active, .display-toggle-btn:hover {
-  background: #e3edff;
+  background: var(--group-header-background);
   color: #4285f4;
   border-color: #4285f4;
 }
@@ -97,9 +97,10 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
+  padding: 1rem 0;
   
   &.expanded {
-    max-height: 2000px;
+    max-height: 100%;
   }
 }
 

@@ -39,6 +39,7 @@ export interface CalendarEvent {
   allDay: boolean;
   isHoliday?: boolean;
   eventTime?: string; // Time for the event ceremony, default is "Dậu" for Tuan Cuu events
+  tuanCuuId?: string;
   solar?: {
     year?: number;
     month?: number;
@@ -59,7 +60,7 @@ export type EventType = 'annual-solar' | 'annual-lunar' | 'monthly-solar' | 'mon
   providedIn: 'root'
 })
 export class LichService {
-  private events: CalendarEvent[] = [];
+  public events: CalendarEvent[] = [];
   private eventTypeVisibility: { [key: string]: boolean } = {
     'annual-solar': true,
     'annual-lunar': true,
@@ -75,8 +76,7 @@ export class LichService {
 
   constructor(
     private calendarService: CalendarService,
-    private tuanCuuCalendarService: TuanCuuCalendarService,
-    private tuanCuuService: TuanCuuService
+    private tuanCuuCalendarService: TuanCuuCalendarService
   ) {
     // Load event type visibility settings from localStorage
     if (typeof localStorage !== 'undefined') {
@@ -350,8 +350,6 @@ export class LichService {
     if (typeof window !== 'undefined') {
 
       this.tuanCuuCalendarService.getTuanCuuCalendarEvents().subscribe(events => {
-        console.log(events);
-
         // Remove any existing Tuan Cuu events
         this.events = this.events.filter(e => e.type !== 'tuan-cuu');
         // Add new Tuan Cuu events

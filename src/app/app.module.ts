@@ -7,9 +7,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthComponent } from './modules/auth/auth.component';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { LoginComponent } from './pages/auth/login/login.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from "@angular/forms";
@@ -21,7 +19,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AngularFireModule } from '@angular/fire/compat';
 import { MessagingService } from './shared/services/messaging/messaging.service';
-import { SignupComponent } from './pages/auth/signup/signup.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { CpQrScannerModule } from './components/cp-qr-scanner/cp-qr-scanner.module';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -39,9 +36,6 @@ register();
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent,
-    LoginComponent,
-    SignupComponent
   ],
   imports: [
     BrowserModule,

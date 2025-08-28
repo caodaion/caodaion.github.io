@@ -1,26 +1,14 @@
 <div class="event-image-dialog">
-  <h2 mat-dialog-title class="!px-0">
-    <span>Chi tiết sự kiện</span>
-    <div class="dialog-actions">
-      <button mat-icon-button color="primary" (click)="generateImage()" [disabled]="isGenerating"
-        matTooltip="Tải xuống ảnh" aria-label="Download image">
-        <mat-icon>download</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" (click)="closeDialog()" matTooltip="Đóng" aria-label="Close">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-  </h2>
+  <h2 mat-dialog-title>Chi tiết sự kiện</h2>
 
-  <mat-dialog-content class="!p-0">
-    <!-- Event card template that will be converted to image -->
+  <mat-dialog-content class="!p-0 border-t">
+    <div class="pt-4 px-4 text-center">Ấn vào để chỉnh sửa ảnh</div>
     <div class="event-card-container">
       <div class="event-card" #eventCard>
         <div class="event-content">
           <div class="event-type-marker" [style.background-color]="event.color"></div>
           <div class="event-details">
             <h3 contenteditable="true" (blur)="onContentEdit('title', $event)" [innerHTML]="event.title"></h3>
-
             <div class="lunar-solar-info" contenteditable="true">
               <p class="date-info">
                 <ng-container *ngIf="event?.type === 'annual-solar'">
@@ -76,7 +64,7 @@
 
     <!-- Image preview -->
     <div class="preview-container" *ngIf="imagePreviewUrl">
-      <h3>Xem trước ảnh</h3>
+      <h3 class="px-4">Xem trước ảnh</h3>
       <div class="preview-image">
         <img #previewImage [src]="imagePreviewUrl" alt="Event preview" />
       </div>
@@ -86,4 +74,33 @@
       <p>Đang tạo ảnh...</p>
     </div>
   </mat-dialog-content>
+  <mat-dialog-actions [align]="'end'" class="dialog-actions">
+    <div class="dialog-actions">
+      @if (event.type === 'tuan-cuu') {
+      <button class="matButton" mat-button color="primary" (click)="openTuanCuu()" [disabled]="isGenerating"
+        matTooltip="Tải xuống ảnh" aria-label="Download image">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
+        </svg>
+        <span>Xem tuần cửu</span>
+      </button>
+      }
+      <button class="matButton" mat-button color="primary" (click)="generateImage()" [disabled]="isGenerating"
+        matTooltip="Tải xuống ảnh" aria-label="Download image">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+        </svg>
+        <span>Tải ảnh</span>
+      </button>
+      <button class="matButton" mat-button color="warn" (click)="closeDialog()" matTooltip="Đóng" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+        </svg>
+        <span>Đóng</span>
+      </button>
+    </div>
+  </mat-dialog-actions>
 </div>
