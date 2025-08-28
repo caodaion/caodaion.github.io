@@ -1,0 +1,154 @@
+.day-view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--background-color, #f0f0f0);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.calendar-main {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden; /* Changed from auto to hidden to prevent scrollbars */
+  padding: 1rem;
+}
+
+.day-info-panel {
+  background-color: var(--surface-color, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  padding: 24px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 8px;
+  overflow-y: auto; /* Allow content scrolling within the panel instead of entire view */
+  max-height: 100%; /* Ensure panel doesn't exceed container height */
+}
+
+.day-header {
+  padding: 16px;
+  background-color: var(--primary-color, #1976d2);
+  color: white;
+  margin-bottom: 16px;
+}
+
+.day-header h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.info-section {
+  padding: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+}
+
+.info-section:last-child {
+  border-bottom: none;
+}
+
+.info-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-color, rgba(0, 0, 0, 0.87));
+}
+
+.info-section p {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary-color, rgba(0, 0, 0, 0.6));
+}
+
+.empty-events {
+  font-style: italic;
+  color: var(--text-tertiary-color, rgba(0, 0, 0, 0.38));
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.event-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.event-marker {
+  width: 4px;
+  height: auto;
+  min-height: 100%;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.event-content {
+  flex: 1;
+}
+
+.event-details {
+  padding: 12px 16px;
+}
+
+.event-title {
+  font-weight: 500;
+  color: var(--text-color, rgba(0, 0, 0, 0.87));
+  margin-bottom: 4px;
+}
+
+.event-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary-color, rgba(0, 0, 0, 0.6));
+}
+
+@media (max-width: 600px) {
+  .calendar-main {
+    padding: 0.5rem;
+  }
+  
+  .day-info-panel {
+    padding: 16px;
+  }
+  
+  .day-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .info-section h3 {
+    font-size: 0.95rem;
+  }
+  
+  .info-section p, 
+  .event-title {
+    font-size: 0.9rem;
+  }
+  
+  .event-subtitle {
+    font-size: 0.8rem;
+  }
+}

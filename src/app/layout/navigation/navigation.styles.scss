@@ -1,0 +1,403 @@
+/* Navigation System Styles for CaoDaiON */
+
+:host {
+  /* Color variables - Light Theme (default) */
+  --bright-blue: oklch(51.01% 0.274 263.83);
+  --electric-violet: oklch(53.18% 0.28 296.97);
+  --french-violet: oklch(47.66% 0.246 305.88);
+  --vivid-pink: oklch(69.02% 0.277 332.77);
+  --hot-red: oklch(61.42% 0.238 15.34);
+  --orange-red: oklch(63.32% 0.24 31.68);
+
+  --gray-900: oklch(19.37% 0.006 300.98);
+  --gray-700: oklch(36.98% 0.014 302.71);
+  --gray-400: oklch(70.9% 0.015 304.04);
+
+  --primary-color: var(--bright-blue);
+  --secondary-color: var(--french-violet);
+  --accent-color: var(--electric-violet);
+
+  /* Background and text colors */
+  --background-color: #ffffff;
+  --surface-color: #ffffff;
+  --text-color: var(--gray-900);
+  --text-secondary-color: var(--gray-700);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --hover-color: rgba(0, 0, 0, 0.04);
+  --active-color: rgba(0, 0, 0, 0.08);
+
+  /* Font settings */
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Apply theme colors */
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Dark Theme Variables */
+:host-context(.dark-theme) {
+  /* Dark theme colors */
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --text-secondary-color: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --hover-color: rgba(255, 255, 255, 0.05);
+  --active-color: rgba(255, 255, 255, 0.08);
+
+  /* Adjust primary colors for better visibility in dark mode */
+  --bright-blue: oklch(70% 0.274 263.83);
+  --electric-violet: oklch(72% 0.28 296.97);
+  --french-violet: oklch(67% 0.246 305.88);
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.app-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+  height: 100%;
+  position: relative;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  .subnav-toggle {
+    display: none;
+  }
+  .main-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
+mat-toolbar {
+  justify-content: space-between;
+  background-color: var(--surface-color);
+  user-select: none;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+
+  .logo {
+    margin-right: 0.5rem;
+  }
+  .app-name {
+    color: var(--text-color);
+    margin-left: 1rem;
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+}
+
+/* Navigation Rail Styles */
+.nav-rail {
+  width: 72px;
+  height: 100%;
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: width 0.3s ease;
+  user-select: none;
+}
+
+.nav-logo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 2rem;
+  object-fit: contain;
+}
+
+/* Sub Navigation Toggle Button */
+.nav-item.subnav-toggle {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.nav-item.subnav-toggle::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.nav-item.subnav-toggle.active::after {
+  background-color: var(--primary-color);
+}
+
+/* Animation for menu toggle */
+.nav-item.subnav-toggle .nav-icon {
+  transition: transform 0.3s ease;
+}
+
+.nav-item.subnav-toggle.active .nav-icon {
+  transform: rotate(90deg);
+}
+
+.nav-item {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 3px;
+  height: 50%;
+  background-color: transparent;
+  transform: translateY(-50%);
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nav-item.active::before {
+  background-color: var(--primary-color);
+  opacity: 1;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-item:hover::before {
+  background-color: var(--primary-color);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--text-secondary-color);
+  &--active {
+    display: none;
+  }
+}
+
+.nav-item.active .nav-icon {
+  color: var(--primary-color);
+  display: none;
+  &--active {
+    display: block;
+    color: var(--primary-color);
+  }
+}
+
+.nav-label {
+  font-size: 0.7rem;
+  margin-top: 4px;
+  color: var(--text-secondary-color);
+  text-align: center;
+}
+
+.nav-item.active .nav-label {
+  color: var(--primary-color);
+}
+
+/* Theme toggle styling */
+.theme-toggle {
+  margin-bottom: 1rem;
+}
+
+.theme-toggle-mobile {
+  cursor: pointer;
+  color: var(--text-color);
+  height: auto;
+}
+
+/* Bottom Navigation for Mobile */
+.bottom-nav {
+  display: none;
+  width: 100%;
+  height: 56px;
+  min-height: 56px;
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  z-index: 1000;
+  user-select: none;
+}
+
+.bottom-nav-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-secondary-color);
+}
+
+.bottom-nav-icon {
+  width: 24px;
+  height: 24px;
+  &--active {
+    display: none;
+  }
+}
+
+.bottom-nav-item.active {
+  color: var(--primary-color);
+  .bottom-nav-icon {
+    display: none;
+    &--active {
+      display: block;
+      color: var(--primary-color);
+    }
+  }
+}
+
+.bottom-nav-label {
+  font-size: 0.7rem;
+  margin-top: 2px;
+  text-align: center;
+}
+
+/* Drawer Navigation */
+.sub-nav-drawer {
+  width: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 72px; /* Aligned with the end of rail */
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  z-index: 10;
+}
+
+.sub-nav-drawer.open {
+  width: 250px;
+}
+
+.sub-nav-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sub-nav-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.sub-nav-items {
+  padding: 0.5rem 0;
+}
+
+.sub-nav-item {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-secondary-color);
+}
+
+.sub-nav-item:hover {
+  background-color: var(--hover-color);
+}
+
+.sub-nav-item.active {
+  background-color: var(--active-color);
+  color: var(--primary-color);
+}
+
+.sub-nav-item-icon {
+  margin-right: 0.75rem;
+  width: 20px;
+  height: 20px;
+}
+
+/* Last Visited Page Button */
+.last-visited {
+  margin-top: auto;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+  .nav-rail {
+    display: none;
+  }
+
+  .bottom-nav {
+    display: block;
+  }
+
+  .main-content {
+    .subnav-toggle {
+      display: block;
+    }
+  }
+
+  .sub-nav-drawer {
+    left: 0;
+    z-index: 1001;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+::ng-deep {
+  .cdk-overlay-pane.mat-mdc-dialog-panel.qrScannerDialog {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    mat-dialog-content {
+      max-height: 100%;
+    }
+  }
+}

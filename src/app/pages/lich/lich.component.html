@@ -1,0 +1,39 @@
+<div class="calendar-container">
+  <mat-drawer-container class="calendar-drawer-container">
+    <mat-drawer
+      #drawer
+      [mode]="isMobileView ? 'over' : 'side'"
+      class="calendar-drawer"
+      [(opened)]="isDrawerOpen"
+    >
+      <!-- Shortcut to Tuần Cửu page -->
+      <div class="shortcuts-container">
+        <h3>Ứng dụng</h3>
+        <a class="shortcut-item" routerLink="/tuan-cuu">
+          <div
+            class="shortcut-icon"
+            style="background: var(--tuan-cuu-app-background); color: white"
+          >
+            <app-icon name="date_range" size="21px"></app-icon>
+          </div>
+          <div class="shortcut-label">Tuần Cửu</div>
+        </a>
+      </div>
+      <!-- Calendar Filter Component -->
+      <app-calendar-filter
+        (canChiVisibilityChange)="onCanChiVisibilityChange($event)"
+      >
+      </app-calendar-filter>
+    </mat-drawer>
+    <mat-drawer-content>
+      <app-calendar-controller
+        [date]="currentDate"
+        [view]="currentView"
+        (dateChange)="onDateChange($event)"
+        (viewChange)="onViewChange($event)"
+      >
+      </app-calendar-controller>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

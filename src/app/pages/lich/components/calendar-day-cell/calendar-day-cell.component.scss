@@ -1,0 +1,221 @@
+.day-cell {
+  background-color: var(--surface-color);
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.today {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    border: 2px solid var(--primary-color);
+    z-index: 1;
+  }
+
+  .solar-date {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+}
+
+.other-month {
+  opacity: 0.6;
+}
+
+.selected {
+  background-color: rgba(var(--primary-color-rgb), 0.15);
+}
+
+.date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.solar-date {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 2px 5px;
+}
+
+.lunar-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary-color);
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &.can-chi-visible {
+    margin-bottom: 4px;
+  }
+}
+
+.lunar-day {
+  font-size: 0.75rem;
+}
+
+.can-chi {
+  font-size: 0.7rem;
+  color: var(--text-tertiary-color);
+  margin-top: 1px;
+}
+
+.events-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  gap: 2px;
+  z-index: 2;
+  /* Hide scrollbars */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+  }
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-marker {
+  border-radius: 2px;
+  min-width: 100%;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-marker.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    opacity: 0.9;
+  }
+  
+  &:active {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.more-indicator {
+  font-size: 0.7rem;
+  color: var(--text-tertiary-color);
+  text-align: right;
+  padding-right: 4px;
+  margin-top: auto;
+}
+
+/* Responsive styles */
+@media (max-width: 800px) {
+  .day-cell {
+    min-height: 80px;
+  }
+
+  .solar-date {
+    font-size: 1rem;
+  }
+
+  .lunar-date,
+  .lunar-day {
+    font-size: 0.7rem;
+  }
+
+  .can-chi {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .day-cell {
+    min-height: 70px;
+    padding: 2px;
+  }
+
+  .date-container {
+    margin-bottom: 4px;
+  }
+
+  .solar-date {
+    font-size: 0.9rem;
+    padding: 1px 2px;
+  }
+
+  .lunar-date,
+  .lunar-day {
+    font-size: 0.65rem;
+    padding: 0 2px;
+  }
+
+  .can-chi {
+    font-size: 0.6rem;
+  }
+
+  .event-marker {
+    font-size: 0.7rem;
+    padding: 1px 2px;
+  }
+
+  .more-indicator {
+    font-size: 0.65rem;
+  }
+
+  .today .solar-date {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .day-cell {
+    min-height: 60px;
+    padding: 1px;
+  }
+
+  .solar-date {
+    font-size: 0.85rem;
+  }
+
+  .lunar-date,
+  .lunar-day {
+    font-size: 0.6rem;
+  }
+
+  .can-chi {
+    font-size: 0.55rem;
+  }
+
+  .today .solar-date {
+    width: 22px;
+    height: 22px;
+  }
+}

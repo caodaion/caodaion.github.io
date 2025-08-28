@@ -5,9 +5,7 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PagenotfoundComponent } from './layouts/pagenotfound/pagenotfound.component';
 import { MatIconModule } from '@angular/material/icon';
-import { OfflineSnackbarComponent } from './layouts/offline-snackbar/offline-snackbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './modules/auth/auth.component';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -41,8 +39,6 @@ register();
 @NgModule({
   declarations: [
     AppComponent,
-    PagenotfoundComponent,
-    OfflineSnackbarComponent,
     AuthComponent,
     LoginComponent,
     SignupComponent

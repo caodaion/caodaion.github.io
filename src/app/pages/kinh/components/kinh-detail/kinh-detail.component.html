@@ -1,0 +1,67 @@
+<app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="kinhInfo.name">
+  <div class="font-size-controls">
+    <button
+      mat-icon-button
+      (click)="decreaseFontSize()"
+      aria-label="Decrease font size"
+      matTooltip="Giảm cỡ chữ"
+    >
+      <mat-icon>text_decrease</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="resetFontSize()"
+      aria-label="Reset font size"
+      matTooltip="Đặt lại cỡ chữ"
+    >
+      <mat-icon>restart_alt</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="increaseFontSize()"
+      aria-label="Increase font size"
+      matTooltip="Tăng cỡ chữ"
+    >
+      <mat-icon>text_increase</mat-icon>
+    </button>
+  </div>
+</app-child-header>
+<div class="kinh-detail-container">
+  <div class="kinh-content" *ngIf="kinhContent$ | async as content">
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!error" class="markdown-content">
+      <markdown
+        [data]="content"
+        [ngStyle]="{ 'font-size.px': fontSize }"
+      ></markdown>
+    </div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="navigation-buttons">
+    <button
+      class="nav-button prev-button"
+      *ngIf="prevKinh"
+      (click)="goToPreviousKinh()"
+      aria-label="Go to previous kinh"
+    >
+      <span class="nav-icon">&#8592;</span>
+      <span class="nav-text">{{ prevKinh.name }}</span>
+    </button>
+
+    <div class="spacer"></div>
+
+    <button
+      class="nav-button next-button"
+      *ngIf="nextKinh"
+      (click)="goToNextKinh()"
+      aria-label="Go to next kinh"
+    >
+      <span class="nav-text">{{ nextKinh.name }}</span>
+      <span class="nav-icon">&#8594;</span>
+    </button>
+  </div>
+</div>

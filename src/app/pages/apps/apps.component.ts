@@ -1,55 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MENU } from 'src/app/shared/constants/menu.constant';
+import { Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { IconComponent } from '../../components/icon/icon.component';
+
+interface App {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  route: string;
+}
 
 @Component({
   selector: 'app-apps',
+  standalone: true,
+  imports: [CommonModule, RouterModule, MatIconModule, IconComponent],
   templateUrl: './apps.component.html',
-  styleUrls: ['./apps.component.scss'],
-  standalone: false
+  styleUrl: './apps.component.scss'
 })
-export class AppsComponent implements OnInit {
-  allApps: any[] = [];
-  featuredApps: any[] = [];
-
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
-    this.buildAppsList();
-    this.categorizeApps();
-  }
-
-  buildAppsList() {
-    this.allApps = [
-      {
-        key: 'lich',
-        url: '/lich',
-        label: 'Lịch',
-        icon: 'calendar_today',
-        description: 'Xem lịch Cao Đài và các ngày lễ quan trọng',
-      },
-      {
-        key: 'kinh',
-        url: '/kinh',
-        label: 'Kinh',
-        icon: 'book',
-        description: 'Đọc và tra cứu kinh cúng tứ thời và quan hôn tang tế',
-      },
-      {
-        key: 'tinh-tuan-cuu',
-        url: '/tinh-tuan-cuu',
-        label: 'Tính tuần cửu',
-        icon: 'calculate',
-        description: 'Tính và quản lý Tuần Cửu',
-      }
-    ];
-  }
-
-  categorizeApps() {
-    this.featuredApps = this.allApps;
-  }
-
-  onNavigateToApp(app: any) {
-    this.router.navigate([app.url]);
-  }
+export class AppsComponent {
+  apps: App[] = [
+    {
+      id: 'calendar',
+      name: 'Lịch',
+      description: 'Xem lịch Cao Đài và các ngày lễ quan trọng',
+      icon: 'calendar_today',
+      route: '/lich'
+    },
+    {
+      id: 'tuan-cuu',
+      name: 'Tuần Cửu',
+      description: 'Tính và quản lý Tuần Cửu',
+      icon: 'date_range',
+      route: '/tuan-cuu'
+    },
+    // {
+    //   id: 'lanh',
+    //   name: 'Lành',
+    //   description: 'Theo dõi và quản lý các hoạt động lành hàng ngày',
+    //   icon: 'favorite',
+    //   route: '/lanh'
+    // },
+    {
+      id: 'kinh',
+      name: 'Kinh',
+      description: 'Đọc và tra cứu kinh sách Cao Đài',
+      icon: 'book',
+      route: '/kinh'
+    },
+    // {
+    //   id: 'tnht',
+    //   name: 'TNHT',
+    //   description: 'Thánh Ngôn Hiệp Tuyển',
+    //   icon: 'auto_stories',
+    //   route: '/tnht'
+    // },
+    // {
+    //   id: 'docs',
+    //   name: 'Soạn thảo',
+    //   description: 'Soạn thảo và quản lý văn bản với trình soạn thảo nâng cao',
+    //   icon: 'description',
+    //   route: '/docs'
+    // },
+  ];
 }

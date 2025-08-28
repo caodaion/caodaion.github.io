@@ -479,7 +479,7 @@ export class CalendarService {
       monthStart = getNewMoonDay(k + off, timeZone);
       return jdToDate(monthStart + lunarDay - 1);
     };
-    let result = {
+    let result = <any>{
       convertSolar2Lunar: {
         lunarDay: 0,
         lunarMonth: 0,
@@ -500,13 +500,20 @@ export class CalendarService {
         '+7'
       )
     } else {
-      result.convertLunar2Solar = convertLunar2Solar(
+      const convertedDate = convertLunar2Solar(
         comparedDate.lunarDay,
         comparedDate.lunarMonth,
         comparedDate.lunarYear,
         comparedDate?.lunarLeap || 0,
         '+7'
       )
+      result.convertLunar2Solar = new Date(convertedDate[2],
+        convertedDate[1] - 1,
+        convertedDate[0],
+        0,
+        0,
+        0,
+        0)
     }
     return result;
   }

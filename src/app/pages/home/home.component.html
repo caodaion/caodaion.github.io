@@ -1,12 +1,96 @@
-<div class="home">
-  <!-- <app-gacha></app-gacha> -->
-  <app-time></app-time>
-  <mat-divider></mat-divider>
-  <app-action></app-action>
-  <app-welcome></app-welcome>
-  <mat-divider></mat-divider>
-  <div id="rootContent">
-    <app-bai-thuong-yeu></app-bai-thuong-yeu>
-    <app-loi-khuyen-can-yeu></app-loi-khuyen-can-yeu>
+<div class="page-container">
+  <h1 class="page-title">Trang chủ</h1>
+
+  <!-- Lunar Calendar Information Section -->
+  <div class="lunar-dashboard">
+    <div class="lunar-card" routerLink="/lich">
+      <div class="lunar-date-section">
+        <div class="lunar-today">
+          <div class="lunar-main">
+            <span class="lunar-day">{{ currentDate | date : "dd" }}</span>
+            <div class="solar-date">{{ currentDate | date : "MM/yyyy" }}</div>
+            <div class="lunar-month-year">
+              <span>Ngày {{ lunarDate?.day }}</span>
+              <span>Tháng {{ lunarDate?.month }}</span>
+              <span *ngIf="lunarDate?.isLeapMonth">(Nhuận)</span>
+              <span>Năm {{ lunarDate?.year }}</span>
+            </div>
+          </div>
+          <div class="canchi-info" *ngIf="lunarDate">
+            <div>Ngày: {{ lunarDate.dayCanchi }}</div>
+            <div>Tháng: {{ lunarDate.monthCanchi }}</div>
+            <div>Năm: {{ lunarDate.year }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="events-card">
+      <h3 class="events-title">Sự kiện hôm nay</h3>
+      <div class="events-list" *ngIf="todayEvents && todayEvents.length > 0">
+        <div
+          class="event-item"
+          *ngFor="let event of todayEvents"
+          [style.border-left-color]="event.color"
+        >
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span
+                class="event-badge"
+                [style.background-color]="event.color"
+                >{{ getEventTypeName(event.type) }}</span
+              >
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!todayEvents || todayEvents.length === 0">
+        <p>Không có sự kiện nào hôm nay</p>
+      </div>
+      <div class="view-calendar">
+        <a routerLink="/lich" class="calendar-link">
+          <mat-icon>calendar_today</mat-icon>
+          <span>Xem lịch đầy đủ</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shortcuts Section -->
+  <h3 class="section-title">Lối tắt</h3>
+
+  <!-- Lanh shortcut card -->
+  <div class="shortcut-container">
+    <div class="app-card" routerLink="/tuan-cuu">
+      <div
+        class="app-icon-container"
+        style="background: var(--tuan-cuu-app-background); color: white"
+      >
+        <app-icon name="date_range"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Tuần Cửu</h2>
+        <p class="app-description">Tính và quản lý Tuần Cửu</p>
+      </div>
+    </div>
+    <!-- <div class="app-card" routerLink="/lanh">
+      <div
+        class="app-icon-container"
+        style="background: var(--lanh-app-background); color: white"
+      >
+        <app-icon name="favorite"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Lành</h2>
+        <p class="app-description">
+          Thực hành nghĩ lành, nói lành, làm lành mỗi ngày
+        </p>
+      </div>
+    </div> -->
   </div>
 </div>

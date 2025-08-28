@@ -1,28 +1,17 @@
-<div class="apps-container">
-  <div class="apps-header">
-    <h1 class="apps-title">Ứng dụng</h1>
-  </div>
-
-  <div class="apps-content">
-    <!-- Featured Apps Section -->
-    <div class="featured-apps">
-      <div class="apps-grid">
-        <div 
-          *ngFor="let app of featuredApps" 
-          class="app-card"
-          (click)="onNavigateToApp(app)"
-          matRipple
-        >
-          <div class="app-card-content">
-            <div class="app-icon-container">
-              <mat-icon class="app-icon">{{ app.icon }}</mat-icon>
-            </div>
-            <div class="app-info">
-              <h3 class="app-title">{{ app.label }}</h3>
-              <p class="app-description">{{ app.description }}</p>
-            </div>
-          </div>
-        </div>
+<div class="page-container">
+  <h1 class="page-title">Ứng dụng</h1>
+  <div class="app-grid">
+    <div class="app-card" *ngFor="let app of apps" [routerLink]="app.route">
+      <div
+        class="app-icon-container"
+        [style.background]="'var(--' + app?.id + '-app-background)'"
+        [style.color]="'white'"
+      >
+        <app-icon [name]="app.icon"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">{{ app.name }}</h2>
+        <p class="app-description">{{ app.description }}</p>
       </div>
     </div>
   </div>

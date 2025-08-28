@@ -1,0 +1,101 @@
+<div class="calendar-filter">
+  <h3>Bộ lọc lịch</h3>
+  
+  <div class="filter-options">
+    <div class="filter-section">
+      <h4>Loại sự kiện</h4>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['annual-solar']" 
+          (change)="toggleEventType('annual-solar', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #e74c3c"></span>
+            Hàng năm (DL)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['annual-lunar']" 
+          (change)="toggleEventType('annual-lunar', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #e67e22"></span>
+            Hàng năm (AL)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['monthly-solar']" 
+          (change)="toggleEventType('monthly-solar', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #3498db"></span>
+            Hàng tháng (DL)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['monthly-lunar']" 
+          (change)="toggleEventType('monthly-lunar', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #9b59b6"></span>
+            Hàng tháng (AL)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['daily']" 
+          (change)="toggleEventType('daily', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #673AB7"></span>
+            Sự kiện ngày
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['user']" 
+          (change)="toggleEventType('user', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #009688"></span>
+            Sự kiện cá nhân
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [checked]="eventTypes['tuan-cuu']" 
+          (change)="toggleEventType('tuan-cuu', $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #9C27B0"></span>
+            Tuần Cửu
+          </span>
+        </mat-checkbox>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <h4>Hiển thị</h4>
+      <div class="filter-option">
+        <mat-checkbox 
+          [(ngModel)]="showCanChi"
+          (ngModelChange)="onCanChiChange()"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #3498db"></span>
+            Hiển thị Can Chi
+          </span>
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>

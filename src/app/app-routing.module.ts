@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NavigationComponent } from './layout/navigation/navigation.component';
 
 const routes: Routes = [
   {
@@ -11,10 +12,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () =>
-      import('./layouts/full-layout/full-layout.module').then(
-        (m) => m.FullLayoutModule
-      )
+    loadChildren: () => import('./layout/navigation/navigation-module').then(m => m.NavigationModule)
   }
 ];
 

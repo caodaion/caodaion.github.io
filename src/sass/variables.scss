@@ -162,3 +162,66 @@ $extra-small-0-360: (
   "layout-region-on": 0px,
   "layout-region-off": 360px,
 );
+/* Navigation System Styles for CaoDaiON */
+
+:host {
+  /* Color variables - Light Theme (default) */
+  --bright-blue: oklch(51.01% 0.274 263.83);
+  --electric-violet: oklch(53.18% 0.28 296.97);
+  --french-violet: oklch(47.66% 0.246 305.88);
+  --vivid-pink: oklch(69.02% 0.277 332.77);
+  --hot-red: oklch(61.42% 0.238 15.34);
+  --orange-red: oklch(63.32% 0.24 31.68);
+
+  --gray-900: oklch(19.37% 0.006 300.98);
+  --gray-700: oklch(36.98% 0.014 302.71);
+  --gray-400: oklch(70.9% 0.015 304.04);
+
+  --primary-color: var(--bright-blue);
+  --secondary-color: var(--french-violet);
+  --accent-color: var(--electric-violet);
+
+  /* Background and text colors */
+  --background-color: #ffffff;
+  --surface-color: #ffffff;
+  --text-color: var(--gray-900);
+  --text-secondary-color: var(--gray-700);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --hover-color: rgba(0, 0, 0, 0.04);
+  --active-color: rgba(0, 0, 0, 0.08);
+
+  /* Font settings */
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Apply theme colors */
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+:root {
+  --lanh-app-background: linear-gradient(135deg, #4285f4, #34a853);
+  --calendar-app-background: linear-gradient(135deg, #fbbc04, #ea4335);
+  --kinh-app-background: linear-gradient(135deg, #8ab4f8, #4285f4);
+  --tnht-app-background: linear-gradient(135deg, #9575cd, #7e57c2);
+  --tuan-cuu-app-background: linear-gradient(135deg, #9c27b0, #ff9800);
+  --docs-app-background: linear-gradient(135deg, #0097a7, #00bcd4);
+  /* Define theme colors */
+  --custom-activity-background: linear-gradient(135deg, #9575cd, #7e57c2);
+  --think-activity-background: linear-gradient(135deg, #4285f4, #34a853);
+  --speak-activity-background: linear-gradient(135deg, #fbbc04, #ea4335);
+  --do-activity-background: linear-gradient(135deg, #8ab4f8, #4285f4);
+  
+  /* Card variables */
+  --card-background-color: #ffffff;
+  --card-hover-background-color: #f8f9fa;
+  --text-secondary-color: #6c757d;
+  --total-background-color: #fffaf2; /* Default card background color */
+  
+  /* Add other global variables here */
+}
