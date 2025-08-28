@@ -15,7 +15,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-import { TinhTuanCuuComponent } from './tinh-tuan-cuu/tinh-tuan-cuu.component';
+import { TinhTuanCuuComponent } from '../tinh-tuan-cuu/tinh-tuan-cuu.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';

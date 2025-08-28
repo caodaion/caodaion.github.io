@@ -1,87 +1,140 @@
 @use "../../../sass/variables.scss";
 @use "sass:map";
 
-::ng-deep {
-  .apps-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
+.apps-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
 
-    .apps-header {
-      text-align: center;
-      margin-bottom: 48px;
+  .apps-header {
+    text-align: center;
+    margin-bottom: 48px;
 
-      .display-small {
-        color: map.get(variables.$light-theme, "on-surface");
-        margin-bottom: 8px;
-      }
+    .apps-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: map.get(variables.$light-theme, "on-surface");
+      margin: 0;
+      letter-spacing: -0.02em;
 
-      .body-medium {
-        color: map.get(variables.$light-theme, "on-surface-variant");
+      @media (max-width: 768px) {
+        font-size: 2rem;
       }
     }
+  }
 
-    .category-section {
-      margin-bottom: 48px;
+  .apps-content {
+    .featured-apps {
+      margin-bottom: 64px;
+    }
 
-      .headline-small {
+    .other-apps-section {
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 500;
         color: map.get(variables.$light-theme, "on-surface");
         margin-bottom: 24px;
-        font-weight: 500;
+        text-align: center;
       }
     }
 
     .apps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
       margin-bottom: 32px;
 
+      &.secondary {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
       @media (max-width: 768px) {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+
+        &.secondary {
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 12px;
+        }
       }
 
       @media (max-width: 480px) {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 12px;
+
+        &.secondary {
+          gap: 8px;
+        }
       }
     }
 
     .app-card {
       cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 16px;
-      background: map.get(variables.$light-theme, "surface");
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
       border: 1px solid map.get(variables.$light-theme, "outline-variant");
+      overflow: hidden;
+      position: relative;
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         border-color: map.get(variables.$light-theme, "primary");
       }
 
+      &:active {
+        transform: translateY(-2px);
+      }
+
+      &.secondary {
+        border-radius: 16px;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+      }
+
       .app-card-content {
-        padding: 20px;
+        padding: 32px 24px;
         display: flex;
-        align-items: center;
-        gap: 16px;
+        align-items: flex-start;
+        gap: 20px;
+        height: 100%;
+
+        .secondary & {
+          padding: 24px 20px;
+          gap: 16px;
+        }
 
         .app-icon-container {
           flex-shrink: 0;
-          width: 56px;
-          height: 56px;
-          border-radius: 16px;
-          background: map.get(variables.$light-theme, "primary-container");
+          width: 64px;
+          height: 64px;
+          border-radius: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.3s ease;
+
+          .secondary & {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+          }
 
           .app-icon {
-            font-size: 28px;
-            width: 28px;
-            height: 28px;
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
             color: map.get(variables.$light-theme, "on-primary-container");
+
+            .secondary & {
+              font-size: 28px;
+              width: 28px;
+              height: 28px;
+            }
           }
         }
 
@@ -90,22 +143,97 @@
           min-width: 0;
 
           .app-title {
+            font-size: 1.25rem;
+            font-weight: 600;
             color: map.get(variables.$light-theme, "on-surface");
-            margin-bottom: 4px;
-            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.3;
+
+            .secondary & {
+              font-size: 1.1rem;
+              margin-bottom: 6px;
+            }
           }
 
           .app-description {
+            font-size: 0.9rem;
             color: map.get(variables.$light-theme, "on-surface-variant");
-            line-height: 1.4;
+            line-height: 1.5;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             line-clamp: 2;
             -webkit-box-orient: vertical;
+
+            .secondary & {
+              font-size: 0.85rem;
+            }
           }
         }
+      }
+
+      // Ripple effect enhancement
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: transparent;
+        transition: background 0.3s ease;
+        border-radius: inherit;
+      }
+
+      &:hover::before {
+        background: rgba(map.get(variables.$light-theme, "primary"), 0.04);
+      }
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .apps-container {
+    .apps-header .apps-title {
+      color: map.get(variables.$dark-theme, "on-surface");
+    }
+
+    .other-apps-section .section-title {
+      color: map.get(variables.$dark-theme, "on-surface");
+    }
+
+    .app-card {
+      background: map.get(variables.$dark-theme, "surface");
+      border-color: map.get(variables.$dark-theme, "outline-variant");
+
+      &:hover {
+        border-color: map.get(variables.$dark-theme, "primary");
+      }
+
+      .app-card-content {
+        .app-icon-container {
+          background: map.get(variables.$dark-theme, "primary-container");
+
+          .app-icon {
+            color: map.get(variables.$dark-theme, "on-primary-container");
+          }
+        }
+
+        .app-info {
+          .app-title {
+            color: map.get(variables.$dark-theme, "on-surface");
+          }
+
+          .app-description {
+            color: map.get(variables.$dark-theme, "on-surface-variant");
+          }
+        }
+      }
+
+      &:hover::before {
+        background: rgba(map.get(variables.$dark-theme, "primary"), 0.08);
       }
     }
   }

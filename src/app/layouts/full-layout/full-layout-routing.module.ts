@@ -4,6 +4,7 @@ import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
 import { FullLayoutComponent } from './full-layout.component';
 import { ReleasedGuard } from "../../shared/guards/released.guard";
 import { DienThoPhatMauGuard } from 'src/app/shared/guards/dien-tho-phat-mau.guard';
+import { TinhTuanCuuComponent } from 'src/app/pages/tinh-tuan-cuu/tinh-tuan-cuu.component';
 
 // Matcher for the profile screen with format /@{username}
 export function profileMatcher(segments: UrlSegment[]): UrlMatchResult | null {
@@ -24,7 +25,7 @@ const routes: Routes = [
     component: FullLayoutComponent,
     children: [
       {
-        matcher: (url) => {          
+        matcher: (url) => {
           if (url.length === 1 && url[0].path.startsWith('@')) {
             const username = url[0].path.slice(1); // Remove '@'
             if (username) { // Ensure there's something after '@'
@@ -43,7 +44,7 @@ const routes: Routes = [
         canActivate: [ReleasedGuard]
       },
       {
-        matcher: (url) => {          
+        matcher: (url) => {
           if (url.length === 2 && url[0].path.startsWith('@') && url[1].path === 'guong') {
             const username = url[0].path.slice(1); // Remove '@'
             return {
@@ -116,6 +117,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../modules/maps/maps.module').then((m) => m.MapsModule),
       },
+      { path: 'tinh-tuan-cuu', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:year', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:year/:month', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:year/:month/:date', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:year/:month/:date/:time', component: TinhTuanCuuComponent },
+      { path: 'tinh-tuan-cuu/:year/:month/:date/:time/:details', component: TinhTuanCuuComponent },
       {
         path: '',
         loadChildren: () =>
