@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 // import { ChildHeaderComponent } from '../../../components/child-header/child-header.component';
 import { TuanCuu, TuanCuuService, TuanCuuEvent } from '../services/tuan-cuu.service';
+import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 // import { SeoService } from '../../../shared/services/seo.service';
 
 @Component({
@@ -22,8 +23,8 @@ import { TuanCuu, TuanCuuService, TuanCuuEvent } from '../services/tuan-cuu.serv
     MatDividerModule,
     MatListModule,
     RouterModule,
-    // ChildHeaderComponent
-  ],
+    ChildHeaderComponent
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   providers: [DatePipe, TuanCuuService]

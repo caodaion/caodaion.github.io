@@ -12,6 +12,7 @@ import { TuanCuu, TuanCuuService } from '../services/tuan-cuu.service';
 import { CAODAI_TITLE } from '../../../shared/constants/master-data/caodai-title.constant';
 import { v4 as uuidv4 } from 'uuid';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 
 @Component({
   selector: 'app-import-tuan-cuu',
@@ -24,9 +25,14 @@ import { CalendarService } from 'src/app/shared/services/calendar/calendar.servi
     MatDividerModule,
     MatListModule,
     MatTableModule,
-    RouterModule
-  ],
+    RouterModule,
+    ChildHeaderComponent
+],
   template: `
+    <app-child-header
+      [title]="'Nhập dữ liệu Tuần Cửu'"
+      [path]="'/tuan-cuu'"
+    ></app-child-header>
     <div class="page-container" *ngIf="!isLoading">
       <div *ngIf="errorMessage" class="error-container">
         <mat-icon class="error-icon">error</mat-icon>
