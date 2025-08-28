@@ -112,10 +112,8 @@
           </mat-form-field>
           <div>
             <mat-button-toggle-group [(ngModel)]="mode" class="!rounded-full" (ngModelChange)="updateViewMode()">
-              <mat-button-toggle value="list" [matTooltip]="'hiển thị kiểu danh sách'"><mat-icon
-                  *ngIf="mode === 'list'">check</mat-icon><mat-icon>list</mat-icon></mat-button-toggle>
-              <mat-button-toggle value="gird" [matTooltip]="'hiển thị kiểu lưới'"><mat-icon
-                  *ngIf="mode === 'gird'">check</mat-icon><mat-icon>grid_view</mat-icon></mat-button-toggle>
+              <mat-button-toggle value="list" [matTooltip]="'hiển thị kiểu danh sách'"><mat-icon>list</mat-icon></mat-button-toggle>
+              <mat-button-toggle value="gird" [matTooltip]="'hiển thị kiểu lưới'"><mat-icon>grid_view</mat-icon></mat-button-toggle>
             </mat-button-toggle-group>
           </div>
         </div>
