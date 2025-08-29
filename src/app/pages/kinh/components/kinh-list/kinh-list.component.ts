@@ -38,7 +38,7 @@ export class KinhListComponent implements OnInit {
 
         Object.keys(groups).forEach((key) => {
           const filteredKinhs = groups[key].filter((kinh) =>
-            this.commonService.generatedSlug(kinh.name).includes(searchContent) || 
+            this.commonService.generatedSlug(kinh.name).includes(searchContent) ||
             this.commonService.generatedSlug(kinh.key).includes(searchContent)
           );
 
@@ -65,10 +65,17 @@ export class KinhListComponent implements OnInit {
         this.expandedGroups[key] = true;
       });
     });
+
+    // Load view mode from localStorage if available
+    const savedViewMode = localStorage.getItem('kinhViewMode');
+    if (savedViewMode === 'grid' || savedViewMode === 'list') {
+      this.displayType = savedViewMode;
+    }
   }
 
   setDisplayType(type: 'grid' | 'list') {
     this.displayType = type;
+    localStorage.setItem('kinhViewMode', type);
   }
 
   toggleGroup(groupKey: string): void {
@@ -82,7 +89,7 @@ export class KinhListComponent implements OnInit {
   search(term: string): void {
     this.searchTerm$.next(term);
   }
-  
+
   isGrid(): boolean {
     return this.displayType === 'grid';
   }

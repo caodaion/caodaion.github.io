@@ -104,6 +104,7 @@ mat-toolbar {
   align-items: center;
   height: 100%;
   cursor: pointer;
+  position: relative;
 
   .logo {
     margin-right: 0.5rem;
@@ -272,6 +273,7 @@ mat-toolbar {
   align-items: center;
   cursor: pointer;
   color: var(--text-secondary-color);
+  position: relative;
 }
 
 .bottom-nav-icon {

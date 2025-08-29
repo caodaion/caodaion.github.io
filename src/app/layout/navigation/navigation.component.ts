@@ -5,6 +5,7 @@ import { NavigationService } from '../../shared/services/navigation.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { EventSignService } from 'src/app/shared/services/event-sign.service';
 
 @Component({
   selector: 'app-navigation',
@@ -20,6 +21,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     localStorage.getItem('lastVisitedPage') || '/';
   showToolbar = true;
   showBottomNav = true;
+  eventSigns: any[] = [];
 
   private subscriptions: Subscription[] = [];
 
@@ -27,7 +29,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private themeService: ThemeService,
     private router: Router,
     private navigationService: NavigationService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private eventSignService: EventSignService
   ) {
     this.subscriptions.push(
       this.themeService.darkMode$.subscribe((isDark: any) => {
@@ -49,6 +52,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.eventSigns = this.eventSignService.getEventSigns();
     // Subscribe to router events to track navigation
     this.subscriptions.push(
       this.router.events

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../components/icon/icon.component';
+import { EventSignService } from 'src/app/shared/services/event-sign.service';
 
 interface App {
   id: string;
@@ -15,7 +15,7 @@ interface App {
 @Component({
   selector: 'app-apps',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, IconComponent],
+  imports: [CommonModule, RouterModule, IconComponent],
   templateUrl: './apps.component.html',
   styleUrl: './apps.component.scss'
 })
@@ -64,4 +64,11 @@ export class AppsComponent {
     //   route: '/docs'
     // },
   ];
+  eventSigns: any[] = [];
+
+  constructor(
+    private eventSignService: EventSignService
+  ) {
+    this.eventSigns = this.eventSignService.getEventSigns();
+  }
 }
