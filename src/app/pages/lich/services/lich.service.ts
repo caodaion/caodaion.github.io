@@ -33,7 +33,7 @@ export interface CalendarEvent {
   title: string;
   description?: string;
   subtitle?: string;
-  type: 'annual-solar' | 'annual-lunar' | 'monthly-solar' | 'monthly-lunar' | 'daily' | 'user' | 'tuan-cuu';
+  type: 'annual-solar' | 'annual-lunar' | 'monthly-solar' | 'monthly-lunar' | 'daily' | 'user' | 'tuan-cuu' | 'thanhso';
   color: string;
   textColor?: string;
   allDay: boolean;
@@ -287,7 +287,7 @@ export class LichService {
       },
       {
         id: 'le-trung-nguon',
-        title: 'Lễ Trung Ngươn',
+        title: 'Đại Lễ Trung Ngươn',
         description: 'Đại lễ Trung Ngươn',
         type: 'annual-lunar',
         color: '#e67e22',
@@ -309,7 +309,7 @@ export class LichService {
       },
       {
         id: 'national-day',
-        title: 'Quốc Khánh',
+        title: 'Quốc Khánh Việt Nam',
         description: 'Kỷ niệm Quốc khánh Việt Nam',
         type: 'annual-solar',
         color: '#e74c3c',
@@ -320,7 +320,7 @@ export class LichService {
       },
       {
         id: 'le-ha-nguon-khai-dao',
-        title: 'Lễ Hạ Ngươn và kỷ niệm Khai Đạo',
+        title: 'Đại Lễ Hạ Ngươn và kỷ niệm Khai Đạo',
         description: 'Đại lễ Hạ Ngươn và kỷ niệm Khai Đạo',
         type: 'annual-lunar',
         color: '#e67e22',
@@ -421,7 +421,18 @@ export class LichService {
   }
 
   private getEventsForDate(date: Date, lunarDate: { year: number; month: number; day: number; isLeapMonth: boolean }): CalendarEvent[] {
-    return this.events.filter(event => {
+    return this.events.filter((event: any) => {
+      // Always show 'thanhso' events for the correct date, regardless of eventTypeVisibility
+      if (event.type === 'thanhso') {
+        if (event.data) {
+          if (event.data.eventMonth === lunarDate.month &&
+            event.data.eventDate === lunarDate.day) {
+            return true;
+          }
+        }
+        return false;
+      }
+      // For all other event types, respect eventTypeVisibility
       if (!this.eventTypeVisibility[event.type]) {
         return false;
       }

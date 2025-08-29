@@ -59,7 +59,7 @@
           </span>
         </mat-checkbox>
       </div>
-      <div class="filter-option">
+      <!-- <div class="filter-option">
         <mat-checkbox 
           [checked]="eventTypes['user']" 
           (change)="toggleEventType('user', $event.checked)"
@@ -69,7 +69,7 @@
             Sự kiện cá nhân
           </span>
         </mat-checkbox>
-      </div>
+      </div> -->
       <div class="filter-option">
         <mat-checkbox 
           [checked]="eventTypes['tuan-cuu']" 
@@ -93,6 +93,22 @@
           <span class="filter-label">
             <span class="color-dot" style="background-color: #3498db"></span>
             Hiển thị Can Chi
+          </span>
+        </mat-checkbox>
+      </div>
+    </div>
+    <div class="filter-section">
+      <h4>Thánh Sở</h4>
+      <div *ngIf="loadingThanhSoMembers">Đang tải danh sách Thánh Sở...</div>
+      <div *ngIf="!loadingThanhSoMembers && thanhSoMembers.length === 0">Không có Thánh Sở nào.</div>
+      <div *ngFor="let member of thanhSoMembers" class="filter-option">
+        <mat-checkbox
+          [checked]="selectedThanhSoIds.has(member.thanhSoSheet)"
+          (change)="onThanhSoMemberChange(member, $event.checked)"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #fbbc05"></span>
+            {{ member.thanhSo }}
           </span>
         </mat-checkbox>
       </div>

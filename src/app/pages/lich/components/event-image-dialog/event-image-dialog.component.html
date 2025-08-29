@@ -26,7 +26,7 @@
                 </ng-container>
               </p>
               <!-- Display event time for Tuan Cuu events -->
-              <p class="time-info" *ngIf="event.type === 'tuan-cuu' && event.eventTime">
+              <p class="time-info" *ngIf="(event.type === 'tuan-cuu' && event.eventTime) || event.eventTime">
                 Thời {{ event.eventTime }}
               </p>
             </div>
