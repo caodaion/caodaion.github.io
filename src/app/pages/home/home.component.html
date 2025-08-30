@@ -26,7 +26,12 @@
     </div>
 
     <div class="events-card">
-      <h3 class="events-title" *ngIf="todayEvents && todayEvents.length > 0">Sự kiện hôm nay</h3>
+      <h3 class="events-title pb-3" *ngIf="todayEvents && todayEvents.length > 0">
+        Sự kiện hôm nay        
+        <span class="relative inline-block rounded-full h-3 w-3 bg-[#ea4335]">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ea4335] opacity-75"></span>
+        </span>
+      </h3>
       <div class="events-list" *ngIf="todayEvents && todayEvents.length > 0">
         <div class="event-item" *ngFor="let event of todayEvents" [style.border-left-color]="event.color"
           (click)="onEventClick(event)">
@@ -45,7 +50,33 @@
       <div class="no-events" *ngIf="!todayEvents || todayEvents.length === 0">
         <p>Không có sự kiện nào hôm nay</p>
       </div>
-      <h3 class="events-title" *ngIf="weekEvents && weekEvents.length > 0">Sự kiện tuần này</h3>
+      <mat-divider></mat-divider>
+      <h3 class="events-title py-3" *ngIf="tomorrowEvents && tomorrowEvents.length > 0">
+        Sự kiện ngày mai
+        <span class="relative inline-block rounded-full h-3 w-3 bg-sky-400">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+        </span>
+      </h3>
+      <div class="events-list" *ngIf="tomorrowEvents && tomorrowEvents.length > 0">
+        <div class="event-item" *ngFor="let event of tomorrowEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!tomorrowEvents || tomorrowEvents.length === 0">
+        <p>Không có sự kiện nào ngày mai nay</p>
+      </div>
+      <mat-divider></mat-divider>
+      <h3 class="events-title py-3" *ngIf="weekEvents && weekEvents.length > 0">Sự kiện tuần này</h3>
       <div class="events-list" *ngIf="weekEvents && weekEvents.length > 0">
         <div class="event-item" *ngFor="let event of weekEvents" [style.border-left-color]="event.color"
           (click)="onEventClick(event)">
@@ -80,7 +111,7 @@
   <div class="shortcut-container">
     <div class="app-card" routerLink="/tuan-cuu">
       @for (sign of eventSigns; track sign.key) {
-          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
           top: sign?.appsPageSettings?.position?.top,
           right: sign?.appsPageSettings?.position?.right,
@@ -89,7 +120,7 @@
           height: sign?.appsPageSettings?.size,
           width: sign?.appsPageSettings?.size,
         }" />
-          }
+      }
       <div class="app-icon-container" style="background: var(--tuan-cuu-app-background); color: white">
         <app-icon name="date_range"></app-icon>
       </div>

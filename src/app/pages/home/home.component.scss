@@ -17,7 +17,7 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  
+
   &:after {
     content: '';
     flex: 1;
@@ -45,7 +45,7 @@
   max-width: 600px;
   margin: 0 auto;
   position: relative;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -93,19 +93,20 @@
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-bottom: 20px;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 }
 
-.lunar-card, .events-card {
+.lunar-card,
+.events-card {
   background: var(--surface-color);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
@@ -178,6 +179,20 @@
   font-weight: 500;
   margin: 0;
   color: var(--text-color);
+  position: relative;
+
+  &.important {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      width: 10px;
+      height: 10px;
+      background-color: #ea4335;
+      border-radius: 99px;
+    }
+  }
 }
 
 .events-list {
@@ -185,6 +200,7 @@
   flex-direction: column;
   gap: 12px;
   margin-bottom: 16px;
+  position: relative;
 }
 
 .event-item {
@@ -263,11 +279,11 @@
   padding: 8px 12px;
   border-radius: 8px;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background-color: rgba(var(--primary-color-rgb), 0.1);
   }
-  
+
   mat-icon {
     font-size: 18px;
     width: 18px;

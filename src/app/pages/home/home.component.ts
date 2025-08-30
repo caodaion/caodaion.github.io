@@ -16,11 +16,13 @@ import { Subscription, map, shareReplay } from 'rxjs';
 import { EventImageDialogComponent } from '../lich/components/event-image-dialog/event-image-dialog.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
+import { n } from '@angular/cdk/overlay-module.d-C2CxnwqT';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule, IconComponent, BaiThuongYeu],
+  imports: [CommonModule, MatIconModule, RouterModule, IconComponent, BaiThuongYeu, MatDividerModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [LichService, CalendarService, DatePipe],
@@ -40,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // Today's events
   todayEvents: CalendarEvent[] = [];
+  tomorrowEvents: CalendarEvent[] = [];
   weekEvents: CalendarEvent[] = [];
   eventSigns: any[] = [];
 
@@ -123,6 +126,19 @@ export class HomeComponent implements OnInit, OnDestroy {
           day.solar.year === this.currentDate.getFullYear()
         );
       });
+    // Get tomorrow's calendar data
+    const tomorrowDate = this.lichService
+      .getMonthCalendar(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth() + 1
+      )
+      .find((day) => {
+        return (
+          day.solar.day === this.currentDate.getDate() + 1 &&
+          day.solar.month === this.currentDate.getMonth() + 1 &&
+          day.solar.year === this.currentDate.getFullYear()
+        );
+      });
 
     const endOfWeekDate = moment().endOf('week')?.toDate();
     const weekDates = this.lichService
@@ -146,6 +162,25 @@ export class HomeComponent implements OnInit, OnDestroy {
       }))
       this.weekEvents.push(...day.events);
     })
+
+    if (tomorrowDate) {
+      const lunar = this.calendarService.getConvertedFullDate(
+        new Date(new Date().setDate(new Date().getDate() + 1))
+      ).convertSolar2Lunar;
+      this.lunarDate = {
+        year: lunar?.lunarYearName,
+        month: lunar?.lunarMonth,
+        monthCanchi: lunar?.lunarMonthName,
+        dayCanchi: lunar?.lunarDayName,
+        day: lunar?.lunarDay,
+        isLeapMonth: lunar?.lunarLeap,
+      };
+      tomorrowDate.events = tomorrowDate.events.map((event: any) => ({
+        ...event,
+        dateData: tomorrowDate,
+      }));
+      this.tomorrowEvents = tomorrowDate.events;
+    }
 
     if (todayDate) {
       const lunar = this.calendarService.getConvertedFullDate(
