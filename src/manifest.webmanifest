@@ -1,8 +1,10 @@
 {
   "name": "CaoDaiON",
   "short_name": "CaoDaiON",
-  "theme_color": "#eaf1fb",
-  "background_color": "#eaf1fb",
+  "description": "CaoDaiON - Đơn giản hóa công cụ để trực tiến nội tâm",
+  "orientation": "any",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone",
   "scope": "https://www.caodaion.com/",
   "start_url": "https://www.caodaion.com",

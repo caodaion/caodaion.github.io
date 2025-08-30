@@ -204,6 +204,21 @@ $extra-small-0-360: (
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
+:host.dark-mode {
+  --primary-color: #b69df8;
+  --secondary-color: #b0a7c0;
+  --accent-color: #d0bcff;
+  --background-color: #1c1b1f;
+  --surface-color: #313033;
+  --text-color: #e6e1e5;
+  --text-secondary-color: #aeaaae;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --hover-color: rgba(255, 255, 255, 0.04);
+  --active-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
 :root {
   --lanh-app-background: linear-gradient(135deg, #4285f4, #34a853);
   --calendar-app-background: linear-gradient(135deg, #fbbc04, #ea4335);

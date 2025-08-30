@@ -46,6 +46,11 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+body.dark-mode {
+  background-color: #1c1b1f;
+  color: #e6e1e5;
+}
+
 html, body {
   height: 100%;
 }

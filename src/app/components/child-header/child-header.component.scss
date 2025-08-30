@@ -6,6 +6,9 @@
     .mat-toolbar {
       background-color: var(--surface-color);
       color: var(--text-color);
+      @media (max-width: 600px) {
+        padding: 0;
+      }
     }
   }
 }

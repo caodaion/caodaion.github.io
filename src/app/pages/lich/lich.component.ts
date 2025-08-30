@@ -121,9 +121,6 @@ export class LichComponent implements OnInit, AfterViewInit, OnDestroy {
       const showCanChi = JSON.parse(savedCanChiSetting);
       // Dispatch the stored setting on component init to ensure consistency
       this.onCanChiVisibilityChange(showCanChi);
-    } else {
-      localStorage.setItem('showCanChi', 'true');
-      this.dispatchCanChiEvent(true);
     }
 
     // If we're at exactly /lich, redirect to the month view with current date

@@ -278,3 +278,15 @@
     }
   }
 }
+
+::ng-deep {
+  .font-size-form-field {
+    width: 95px;
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+      background: transparent;
+    }
+    .mat-mdc-form-field-subscript-wrapper, .mat-mdc-form-field-bottom-align::before {
+      display: none;
+    }
+  }
+}

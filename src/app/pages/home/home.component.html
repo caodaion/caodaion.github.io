@@ -79,6 +79,17 @@
   <!-- Lanh shortcut card -->
   <div class="shortcut-container">
     <div class="app-card" routerLink="/tuan-cuu">
+      @for (sign of eventSigns; track sign.key) {
+          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+          }
       <div class="app-icon-container" style="background: var(--tuan-cuu-app-background); color: white">
         <app-icon name="date_range"></app-icon>
       </div>

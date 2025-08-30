@@ -25,6 +25,12 @@ export class KinhDetailComponent implements OnInit {
   readonly MIN_FONT_SIZE: number = 12;
   readonly MAX_FONT_SIZE: number = 24;
   readonly FONT_SIZE_STEP: number = 2;
+  fontSizeOptions: number[] = [];
+
+  onFontSizeChange(newSize: number) {
+    this.fontSize = Number(newSize);
+    this.saveFontSize();
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +39,10 @@ export class KinhDetailComponent implements OnInit {
     private location: Location,
     private seoService: SeoService
   ) {
+    // Generate font size options for dropdown
+    for (let size = this.MIN_FONT_SIZE; size <= this.MAX_FONT_SIZE; size += this.FONT_SIZE_STEP) {
+      this.fontSizeOptions.push(size);
+    }
     // Get the full list of kinh first
     this.kinhService.getKinhList().subscribe((kinhList) => {
       this.allKinhList = kinhList;

@@ -80,9 +80,6 @@ export class MonthViewComponent implements OnInit, OnDestroy {
       const savedCanChiSetting = localStorage.getItem('showCanChi');
       if (savedCanChiSetting) {
         this.showCanChi = JSON.parse(savedCanChiSetting);
-      } else {
-        // Default to showing Can Chi if no setting found
-        this.showCanChi = true;
       }
       
       console.log('Month view initialized with Can Chi:', this.showCanChi);

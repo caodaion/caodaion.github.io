@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, map, shareReplay } from 'rxjs';
 import { EventImageDialogComponent } from '../lich/components/event-image-dialog/event-image-dialog.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { EventSignService } from 'src/app/shared/services/event-sign.service';
 
 @Component({
   selector: 'app-home',
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Today's events
   todayEvents: CalendarEvent[] = [];
   weekEvents: CalendarEvent[] = [];
+  eventSigns: any[] = [];
 
   // Event type names lookup
   private readonly eventTypeNames: { [key: string]: string } = {
@@ -61,7 +63,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private lichService: LichService,
     private seoService: SeoService,
     private dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private eventSignService: EventSignService
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.isMobileView = isMobile;
         })
     );
+    this.eventSigns = this.eventSignService.getEventSigns();
     this.setSeoMetadata();
     // Subscribe to events changes
     this.eventsSubscription = this.lichService.getEvents().subscribe(events => {
