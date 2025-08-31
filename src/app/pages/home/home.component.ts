@@ -195,6 +195,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         isLeapMonth: lunar?.lunarLeap,
       };
       this.todayEvents = todayDate.events;
+      this.todayEvents?.forEach((event: any) => {
+        event.dateData = todayDate;
+      });
     } else {
       // Fallback in case calendar service doesn't return today's date
       const lunar = this.calendarService.getConvertedFullDate(
