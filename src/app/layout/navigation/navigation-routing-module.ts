@@ -17,7 +17,6 @@ const routes: Routes = [
       },
       {
         path: 'kinh',
-        loadComponent: () => import('../../pages/kinh/kinh.component').then(m => m.KinhComponent),
         loadChildren: () => import('../../pages/kinh/kinh/kinh.module').then(m => m.KinhModule)
       },
       {
@@ -27,6 +26,10 @@ const routes: Routes = [
       {
         path: 'tuan-cuu',
         loadChildren: () => import('../../pages/tuan-cuu/tuan-cuu-routing.module').then(m => m.TuanCuuRoutingModule)
+      },
+      {
+        path: 'ca-nhan',
+        loadChildren: () => import('../../pages/ca-nhan/ca-nhan-module').then(m => m.CaNhanModule)
       },
     ]
   }

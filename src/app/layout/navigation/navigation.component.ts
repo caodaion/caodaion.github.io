@@ -91,6 +91,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     if (this.router.url.includes('/lich')) {
       this.navigationService.setCalendarNavVisibility(!this.isSubNavOpen);
     }
+    if (this.router.url.includes('/ca-nhan')) {
+      this.navigationService.setCaNhanNavVisibility(!this.isSubNavOpen);
+    }
     this.isSubNavOpen = !this.isSubNavOpen;
   }
 

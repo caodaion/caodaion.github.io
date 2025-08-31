@@ -133,6 +133,7 @@ export class LichComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.subscriptions.push(
       this.navigationService.showCalendarNav$.subscribe((show: any) => {
+        console.log(show);
         this.isDrawerOpen = show;
       })
     );

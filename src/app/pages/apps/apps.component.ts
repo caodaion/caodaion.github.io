@@ -49,6 +49,13 @@ export class AppsComponent {
       icon: 'book',
       route: '/kinh'
     },
+    {
+      id: 'ca-nhan',
+      name: 'Cá Nhân',
+      description: 'Tự theo dõi hành trình mỗi ngày',
+      icon: 'self_improvement',
+      route: '/ca-nhan'
+    },
     // {
     //   id: 'tnht',
     //   name: 'TNHT',
