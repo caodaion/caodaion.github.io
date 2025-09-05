@@ -160,7 +160,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         ...de,
         dateData: day,
       }))
-      this.weekEvents.push(...day.events);
+      day.events?.forEach((event: any) => {
+        if (!this.weekEvents.some(e => e.id === event.id)) {
+          this.weekEvents.push(event);
+        }
+      })
     })
 
     if (tomorrowDate) {
