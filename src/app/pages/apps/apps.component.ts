@@ -45,7 +45,7 @@ export class AppsComponent {
     {
       id: 'kinh',
       name: 'Kinh',
-      description: 'Đọc và tra cứu kinh sách Cao Đài',
+      description: 'Đọc và tra cứu kinh cúng tứ thời và quan hôn tang tế',
       icon: 'book',
       route: '/kinh'
     },

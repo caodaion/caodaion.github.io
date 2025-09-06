@@ -1,6 +1,33 @@
 <div class="page-container">
   <h1 class="page-title">Trang chủ</h1>
 
+  <!-- Install app button -->
+  <div class="pwa-install-section" *ngIf="canInstallPwa || showIOSInstructions">
+    <div class="pwa-install-card">
+      <div class="pwa-install-content">
+        <div class="pwa-install-icon">
+          <mat-icon>install_mobile</mat-icon>
+        </div>
+        <div class="pwa-install-text">
+          <h3>Cài đặt CaoDaiON</h3>
+          <p *ngIf="!showIOSInstructions">Cài đặt ứng dụng để truy cập nhanh hơn và sử dụng khi không có kết nối mạng</p>
+          <p *ngIf="showIOSInstructions">{{ getInstallInstructions() }}</p>
+        </div>
+        <div class="pwa-install-action">
+          <button mat-raised-button color="primary" (click)="installPwa()" *ngIf="canInstallPwa">
+            <mat-icon>download</mat-icon>
+            Cài đặt
+          </button>
+          <div class="ios-install-steps" *ngIf="showIOSInstructions">
+            <mat-icon>ios_share</mat-icon>
+            <span>→</span>
+            <mat-icon>add_box</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Lunar Calendar Information Section -->
   <div class="lunar-dashboard">
     <div class="lunar-card" routerLink="/lich">
@@ -127,6 +154,46 @@
       <div class="app-info">
         <h2 class="app-name">Tuần Cửu</h2>
         <p class="app-description">Tính và quản lý Tuần Cửu</p>
+      </div>
+    </div>
+    <div class="app-card" routerLink="/kinh">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--kinh-app-background); color: white">
+        <app-icon name="book"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Kinh</h2>
+        <p class="app-description">Đọc và tra cứu kinh cúng tứ thời và quan hôn tang tế</p>
+      </div>
+    </div>
+    <div class="app-card" routerLink="/lich">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--calendar-app-background); color: white">
+        <app-icon name="calendar_today"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Lịch</h2>
+        <p class="app-description">Xem lịch Cao Đài và các ngày lễ quan trọng</p>
       </div>
     </div>
     <app-bai-thuong-yeu></app-bai-thuong-yeu>

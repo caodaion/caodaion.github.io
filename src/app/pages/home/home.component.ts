@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import {
   LichService,
@@ -18,11 +19,12 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
 import { n } from '@angular/cdk/overlay-module.d-C2CxnwqT';
 import { MatDividerModule } from '@angular/material/divider';
+import { PwaInstallService } from '../../shared/services/pwa-install/pwa-install.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule, IconComponent, BaiThuongYeu, MatDividerModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule, IconComponent, BaiThuongYeu, MatDividerModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [LichService, CalendarService, DatePipe],
@@ -67,7 +69,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
-    private eventSignService: EventSignService
+    private eventSignService: EventSignService,
+    private pwaInstallService: PwaInstallService
   ) { }
 
   ngOnInit(): void {
@@ -237,5 +240,29 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
       autoFocus: false,
     });
+  }
+
+  // PWA Install methods
+  get canInstallPwa(): boolean {
+    return this.pwaInstallService.canInstall;
+  }
+
+  get isPwaInstalled(): boolean {
+    return this.pwaInstallService.isInstalled;
+  }
+
+  get showIOSInstructions(): boolean {
+    return this.pwaInstallService.showIOSInstallInstructions();
+  }
+
+  async installPwa(): Promise<void> {
+    const success = await this.pwaInstallService.installPwa();
+    if (success) {
+      console.log('PWA installation initiated successfully');
+    }
+  }
+
+  getInstallInstructions(): string {
+    return this.pwaInstallService.getInstallInstructions();
   }
 }
