@@ -14,30 +14,34 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 
 
 @NgModule({
-  declarations: [
-    CpContentCreatorComponent
-  ],
-  imports: [
-    CommonModule,
-    CpCreatorBlockModule,
-    CpCreatorContentModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    CpContentCreatorToolbarModule,
-    MatProgressBarModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    MatInputModule,
-    MatCheckboxModule
-  ],
-  exports: [
-    CpContentCreatorComponent
-  ]
+    declarations: [
+        CpContentCreatorComponent
+    ],
+    exports: [
+        CpContentCreatorComponent
+    ],
+    imports: [
+        CommonModule,
+        CpCreatorBlockModule,
+        CpCreatorContentModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        CpContentCreatorToolbarModule,
+        MatProgressBarModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        FormsModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatIconModule,
+        DivisionFilterPipe
+    ]
 })
 export class CpContentCreatorModule { }

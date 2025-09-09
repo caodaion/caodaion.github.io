@@ -1,0 +1,243 @@
+<div class="p-4">
+    <h3 class="p-3">Đơn giá / Vật liệu</h3>
+    <div class="flex flex-wrap">
+
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Năm</mat-label>
+                <mat-select [(ngModel)]="addedData.year">
+                    <mat-option *ngFor="let item of yearOptions" [value]="item?.solar">{{ item?.solar }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Tháng</mat-label>
+                <mat-select [(ngModel)]="addedData.month">
+                    <mat-option *ngFor="let item of monthOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/3 px-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Chọn Ngày</mat-label>
+                <mat-select [(ngModel)]="addedData.date">
+                    <mat-option *ngFor="let item of dayOptions" [value]="item">{{
+                        item
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-3">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Tên vật liệu</mat-label>
+                <input matInput required placeholder="Tên Vật Liệu" [(ngModel)]="addedData.name">
+                <mat-hint>Xi măng, gạch, đá, ...</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-3">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Đơn vị</mat-label>
+                <input matInput required placeholder="Đơn vị" [(ngModel)]="addedData.unit">
+                <mat-hint>Khối, tấn, viên, kg, m<sup>2</sup>, m<sup>3</sup>, ...</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-3">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Đơn giá</mat-label>
+                <input matInput required placeholder="Đơn giá" [(ngModel)]="addedData.price">
+                <span matTextSuffix>₫</span>
+                <mat-hint>{{addedData.price | currency: 'VND'}}</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/4 p-3">
+            <mat-form-field class="w-full" [appearance]="'outline'">
+                <mat-label>Cung cấp bởi</mat-label>
+                <input matInput placeholder="Cung cấp bởi" [(ngModel)]="addedData.provider">
+                <mat-hint>Nhập tên Nhà cung cấp vật liệu ...</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="w-full px-3">
+            <button *ngIf="!googleFormPath" mat-flat-button [color]="'primary'" class="w-full"
+                (click)="onSave(addedData)" [disabled]="!addedData.price || !addedData.unit || !addedData.name">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined">save</span><span class="ms-3">Lưu</span>
+                </div>
+            </button>
+            <button *ngIf="googleFormPath" mat-stroked-button [color]="'primary'" class="w-full" (click)="clear()">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined">restart_alt</span><span class="ms-3">Làm mới</span>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="p-3">
+        <mat-form-field class="w-full" [appearance]="'outline'">
+            <mat-label>Tìm kiếm</mat-label>
+            <input matInput placeholder="Tìm kiếm" #searchPriceTextBox>
+        </mat-form-field>
+        <table class="w-full dienThoTable">
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        <div class="flex justify-between items-center">
+                            <span>Tên vật liệu</span>
+                            <button mat-icon-button (click)="orderBy = 'name'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'name'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            <span>Đơn vị</span>
+                            <button mat-icon-button (click)="orderBy = 'unit'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'unit'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th class="text-left">
+                        <div class="flex justify-between items-center">
+                            <span>Đơn giá</span>
+                            <button mat-icon-button (click)="orderBy = 'price'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'price'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            <span>Đơn giá ngày</span>
+                            <button mat-icon-button (click)="orderBy = 'logFrom'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'logFrom'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-between items-center">
+                            <span>Cung cấp bởi</span>
+                            <button mat-icon-button (click)="orderBy = 'provider'; isAsc = !isAsc">
+                                <span class="material-symbols-outlined text-gray-500"
+                                    [ngClass]="{'text-white': orderBy === 'provider'}">
+                                    swap_vert
+                                </span>
+                            </button>
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let item of price | searchPrice: {searchText: searchPriceTextBox['value'], orderBy: orderBy, isAsc: isAsc}">
+                    <td>
+                        <ng-container *ngIf="edittingItem?.key !== item?.key">
+                            {{item?.name}}
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <mat-form-field [appearance]="'outline'">
+                                <input type="text" matInput [(ngModel)]="item.name">
+                            </mat-form-field>
+                        </ng-container>
+                    </td>
+                    <td class="text-left">
+                        <ng-container *ngIf="edittingItem?.key !== item?.key">
+                            {{item?.unit}}
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <mat-form-field [appearance]="'outline'">
+                                <input type="text" matInput [(ngModel)]="item.unit">
+                            </mat-form-field>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="edittingItem?.key !== item?.key">
+                            {{item?.price | currency: 'VND'}}
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <mat-form-field [appearance]="'outline'">
+                                <input type="text" matInput [(ngModel)]="item.price">
+                                <mat-hint>{{item.price | currency: 'VND'}}</mat-hint>
+                            </mat-form-field>
+                        </ng-container>
+                    </td>
+                    <td class="text-left">
+                        <ng-container *ngIf="edittingItem?.key !== item?.key">
+                            {{item?.logFrom | date: 'dd/MM/yyyy'}}
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <mat-form-field [appearance]="'outline'">
+                                <input type="date" matInput [(ngModel)]="item.logFrom">
+                            </mat-form-field>
+                        </ng-container>
+                    </td>
+                    <td class="text-left">
+                        <ng-container *ngIf="edittingItem?.key !== item?.key">
+                            {{item?.provider || '...'}}
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <mat-form-field [appearance]="'outline'">
+                                <input type="text" matInput [(ngModel)]="item.provider">
+                            </mat-form-field>
+                        </ng-container>
+                    </td>
+                    <td class="text-right">
+                        <ng-container *ngIf="!edittingItem?.key">
+                            <button mat-icon-button (click)="editPrice(item)" [matTooltip]="'Sửa đơn giá'">
+                                <span class="material-symbols-outlined">
+                                    edit
+                                </span>
+                            </button>
+                            <button mat-icon-button (click)="deletePrice(item)" [matTooltip]="'Xoá đơn giá'">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="edittingItem?.key === item?.key">
+                            <button mat-icon-button (click)="onSave(edittingItem)" [matTooltip]="'Lưu sửa đơn giá'">
+                                <span class="material-symbols-outlined">
+                                    save
+                                </span>
+                            </button>
+                            <button mat-icon-button (click)="edittingItem = null" [matTooltip]="'Huỷ sửa đơn giá'">
+                                <span class="material-symbols-outlined">
+                                    close
+                                </span>
+                            </button>
+                        </ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #deletePriceDialog>
+    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận xoá</div>
+    <mat-dialog-content>
+        <iframe *ngIf="deleteGoogleFormPath" [src]="
+        deleteGoogleFormPath | safe
+        " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </mat-dialog-content>
+</ng-template>
+<ng-template #savePriceDialog>
+    <div matDialogTitle>Ấn Gửi trong Biểu mẩu dưới đây để xác nhận lưu</div>
+    <mat-dialog-content>
+        <iframe *ngIf="googleFormPath" [src]="
+      googleFormPath | safe
+    " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </mat-dialog-content>
+</ng-template>

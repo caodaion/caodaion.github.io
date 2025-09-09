@@ -1,0 +1,42 @@
+<div class="kinh-container">
+  <h1 class="page-title">Kinh Cúng Tứ Thời và Quan Hôn Tang Tế</h1>
+
+  <div class="search-container">
+    <input type="text" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)" class="search-input">
+  </div>
+
+  <div class="display-toggle-container">
+    <button class="display-toggle-btn" [class.active]="isList()" (click)="setDisplayType('list')">
+      <span class="material-icons">view_list</span>
+    </button>
+    <button class="display-toggle-btn" [class.active]="isGrid()" (click)="setDisplayType('grid')">
+      <span class="material-icons">grid_view</span>
+    </button>
+  </div>
+
+  <div class="kinh-groups" *ngIf="(kinhGroups$ | async) as groups">
+    <div class="kinh-group" *ngFor="let groupEntry of groups | keyvalue">
+      <div class="group-header" (click)="toggleGroup(groupEntry.key)">
+        <h2 class="group-title">{{ getGroupName(groupEntry.key) }}</h2>
+        <span class="group-toggle">{{ expandedGroups[groupEntry.key] ? '▼' : '►' }}</span>
+      </div>
+      
+      <div class="group-content" [class.expanded]="expandedGroups[groupEntry.key]">
+        <ul *ngIf="isList()" class="kinh-list list-view">
+          <li *ngFor="let kinh of groupEntry.value" class="kinh-item">
+            <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+              {{ kinh.name }}
+            </a>
+          </li>
+        </ul>
+        <div *ngIf="isGrid()" class="kinh-grid">
+          <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item">
+            <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+              {{ kinh.name }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,162 @@
+<div *ngIf="editable" class="py-3">
+    <div class="flex flex-wrap">
+        <div class="w-full lg:w-1/5 px-3">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Text</mat-label>
+                <input type="text" [(ngModel)]="addedData.text" matInput>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/5 px-3">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Mean</mat-label>
+                <input type="text" [(ngModel)]="addedData.mean" matInput>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/5 px-3">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Type</mat-label>
+                <input type="text" [(ngModel)]="addedData.type" matInput>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/5 px-3">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Video</mat-label>
+                <input type="text" [(ngModel)]="addedData.video" matInput>
+            </mat-form-field>
+        </div>
+        <div class="w-full lg:w-1/5 px-3">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Image</mat-label>
+                <input type="text" [(ngModel)]="addedData.image" matInput>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <div class="flex flex-wrap">
+                <div class="w-full px-3">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Example</mat-label>
+                        <textarea [rows]="15" [(ngModel)]="addedData.example" matInput></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="w-full lg:w-1/2 px-3">
+                    <app-cp-markdown [data]="addedData.example"></app-cp-markdown>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="w-full mb-3" mat-flat-button (click)="onUpdateData(submitDialog, isEditting)"
+        [color]="'primary'">Lưu</button>
+    <button class="w-full mb-3" *ngIf="addedData?.key" mat-stroked-button (click)="onClear()">Làm Mới</button>
+    <div class="w-full" *ngIf="addedData?.key">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Token</mat-label>
+            <input type="text" [(ngModel)]="addedData.editToken" matInput>
+        </mat-form-field>
+    </div>
+    <button class="w-full mb-3" *ngIf="addedData?.key" mat-flat-button [color]="'primary'"
+        (click)="updateEditToken(tokenDialog)">Token cập nhật</button>
+</div>
+<mat-form-field appearance="outline" class="w-full sticky top-0 bg-white z-10">
+    <mat-label>Tìm kiếm</mat-label>
+    <input type="text" matInput #filterVocabularyTextbox>
+</mat-form-field>
+<mat-accordion>
+    <mat-accordion>
+        <mat-expansion-panel
+            *ngFor="let item of englishVocabularies | filterVocabulary: filterVocabularyTextbox['value']"
+            (opened)="fetchPhonetic(item)">
+            <mat-expansion-panel-header class="!min-h-[48px] !h-auto !px-0 !py-3">
+                <mat-panel-title>
+                    <strong [ngClass]="{
+                    'text-[#34a853]': item?.count && item?.correct > item?.inCorrect,
+                    'text-[#ea4335]': item?.count && item?.correct < item?.inCorrect,
+                    'text-[#4284f3]': item?.count && item?.correct == item?.inCorrect,
+                }">{{item?.data?.text}}</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <div class="w-full flex">
+                        <div class="w-1/2">{{item?.data?.mean}}</div>
+                        <div class="w-1/2">
+                            <span
+                                [matTooltip]="'kiểm tra ' + (item?.correct | number: '2.0-0') + ' lần ' + (item?.correct | number: '2.0-0') + ' lần đúng' + ' ' + (item?.inCorrect | number: '2.0-0') + ' lần sai'">
+                                <span class="text-[#34a853]">{{item?.correct |
+                                    number: '2.0-0'}}</span>/<span class="text-[#ea4335]">{{item?.inCorrect
+                                    | number: '2.0-0'}}</span>/<span>{{item?.count | number: '2.0-0'}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="select-text">
+                <div class="py-4">
+                    <div class="font-bold text-5xl mb-3">
+                        {{item?.data?.text}}
+                        <button mat-icon-button
+                            (click)="speak(item?.data?.text)"><mat-icon>volume_up</mat-icon></button>
+                    </div>
+                    <p class="pb-4">
+                        <span class="me-2 font-bold">{{item?.dictionaryInfor?.meanings[0]?.partOfSpeech}}</span>
+                        <span class="mx-2">|</span>
+                        <span class="bg-slate-300 rounded p-1 m-2 inline-block"
+                            *ngFor="let phonetic of item?.dictionaryInfor?.phonetics">{{phonetic?.text}}</span>
+                    </p>
+                    <p class="italic text-lg" *ngIf="item?.data?.type">/{{item?.data?.type?.toUpperCase()}}/</p>
+                    <p class="text-lg">{{item?.data?.mean}}</p>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="text-3xl font-bold mt-4">Dictionary
+                    <button mat-icon-button (click)="openInGTranslate(item)"><mat-icon>g_translate</mat-icon></button>
+                    <button class="bg-transparent ms-4" (click)="openInCambridge(item)">
+                        <img loading="lazy" class="h-[30px] w-[30px] rounded-full" src="assets/icons/assets/og-image.png"
+                            alt="og-image.png">
+                    </button>
+                </div>
+                <div *ngFor="let meaning of item?.dictionaryInfor?.meanings" class="py-4">
+                    <div class="text-xl font-bold text-[#4286f3] mb-3">{{meaning?.partOfSpeech}}</div>
+                    <p class="indent-6 mb-3" *ngFor="let definition of meaning?.definitions">
+                        {{definition?.definition}}</p>
+                    <div class="text-2xl" *ngIf="meaning?.synonyms?.length > 0">Synonyms:</div>
+                    <div class="my-3">
+                        <span *ngFor="let synonym of meaning?.synonyms"
+                            class="m-2 p-2 border rounded-full inline-block">{{synonym}}</span>
+                    </div>
+                    <mat-divider></mat-divider>
+                </div>
+                <div class="flex flex-wrap py-4">
+                    <div class="w-full lg:w-1/2">
+                        <iframe class="w-full h-full aspect-video" *ngIf="item?.data?.video"
+                            [src]="item?.data?.video | safe" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="w-full lg:w-1/2">
+                        <img loading="lazy" *ngIf="item?.data?.image" [src]="item?.data?.image | safe" [alt]="item?.data?.text">
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="py-4">
+                    <div class="font-bold italic text-lg">VÍ DỤ:</div>
+                    <div class="p-4 text-base">
+                        <app-cp-markdown [data]="item?.data?.example"></app-cp-markdown>
+                    </div>
+                </div>
+                <button class="w-full mb-3" *ngIf="editable" mat-flat-button (click)="onEdit(item)"
+                    [color]="'primary'">Cập nhật</button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</mat-accordion>
+
+<ng-template #submitDialog>
+    <iframe *ngIf="googleFormsPath" [src]="
+              googleFormsPath | safe
+            " class="w-full lg:min-w-[1000px]" height="520" frameborder="0" marginheight="0"
+        marginwidth="0">Loading…</iframe>
+</ng-template>
+
+<ng-template #tokenDialog>
+    <iframe *ngIf="editGoogleFormsPath" [src]="
+    editGoogleFormsPath | safe
+            " class="w-full lg:min-w-[1000px]" height="520" frameborder="0" marginheight="0"
+        marginwidth="0">Loading…</iframe>
+</ng-template>

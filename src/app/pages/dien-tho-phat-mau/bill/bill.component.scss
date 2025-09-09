@@ -1,0 +1,39 @@
+.dienThoTable {
+    @apply my-4 border;
+
+    thead {
+        @apply bg-[#603c83];
+
+        th {
+            @apply text-white;
+        }
+    }
+
+    th,
+    td {
+        @apply p-3;
+    }
+}
+
+.childTable {
+    @apply my-4 border;
+
+    thead {
+        @apply border;
+    }
+
+    th,
+    td {
+        @apply p-3;
+    }
+
+    tbody {
+        tr {
+            @apply bg-white;
+
+            &:nth-child(even) {
+                @apply bg-[#f8f9fa];
+            }
+        }
+    }
+}

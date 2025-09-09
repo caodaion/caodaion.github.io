@@ -1,6 +1,205 @@
-<div class="home">
-  <app-time></app-time>
-  <app-welcome></app-welcome>
-  <app-action></app-action>
+<div class="page-container">
+  <h1 class="page-title">Trang chủ</h1>
+
+  <!-- Install app button -->
+  <div class="pwa-install-section" *ngIf="canInstallPwa || showIOSInstructions">
+    <div class="pwa-install-card">
+      <div class="pwa-install-content">
+        <div class="pwa-install-icon">
+          <mat-icon>install_mobile</mat-icon>
+        </div>
+        <div class="pwa-install-text">
+          <h3>Cài đặt CaoDaiON</h3>
+          <p *ngIf="!showIOSInstructions">Cài đặt ứng dụng để truy cập nhanh hơn và sử dụng khi không có kết nối mạng
+          </p>
+          <p *ngIf="showIOSInstructions">{{ getInstallInstructions() }}</p>
+        </div>
+        <div class="pwa-install-action">
+          <button mat-raised-button color="primary" (click)="installPwa()" *ngIf="canInstallPwa">
+            <mat-icon>download</mat-icon>
+            Cài đặt
+          </button>
+          <div class="ios-install-steps" *ngIf="showIOSInstructions">
+            <mat-icon>ios_share</mat-icon>
+            <span>→</span>
+            <mat-icon>add_box</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Shortcuts Section -->
+  <h3 class="section-title">Lối tắt</h3>
+
+  <!-- Lanh shortcut card -->
+  <div class="shortcut-container mb-4">
+    <div class="app-card" routerLink="/kinh">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--kinh-app-background); color: white">
+        <app-icon name="book"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Kinh</h2>
+        <p class="app-description">Đọc và tra cứu kinh cúng tứ thời và quan hôn tang tế</p>
+      </div>
+    </div>
+    <div class="app-card" routerLink="/lich">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--calendar-app-background); color: white">
+        <app-icon name="calendar_today"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Lịch</h2>
+        <p class="app-description">Xem lịch Cao Đài và các ngày lễ quan trọng</p>
+      </div>
+    </div>
+    <div class="app-card" routerLink="/tuan-cuu">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--tuan-cuu-app-background); color: white">
+        <app-icon name="date_range"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Tuần Cửu</h2>
+        <p class="app-description">Tính và quản lý Tuần Cửu</p>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Lunar Calendar Information Section -->
+  <div class="lunar-dashboard mt-4">
+    <div class="lunar-card" routerLink="/lich">
+      <div class="lunar-date-section">
+        <div class="lunar-today">
+          <div class="lunar-main">
+            <span class="lunar-day">{{ currentDate | date : "dd" }}</span>
+            <div class="solar-date">{{ currentDate | date : "MM/yyyy" }}</div>
+            <div class="lunar-month-year">
+              <span>Ngày {{ lunarDate?.day }}</span>
+              <span>Tháng {{ lunarDate?.month }}</span>
+              <span *ngIf="lunarDate?.isLeapMonth">(Nhuận)</span>
+              <span>Năm {{ lunarDate?.year }}</span>
+            </div>
+          </div>
+          <div class="canchi-info" *ngIf="lunarDate">
+            <div>Ngày: {{ lunarDate.dayCanchi }}</div>
+            <div>Tháng: {{ lunarDate.monthCanchi }}</div>
+            <div>Năm: {{ lunarDate.year }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="events-card">
+      <h3 class="events-title pb-3" *ngIf="todayEvents && todayEvents.length > 0">
+        Sự kiện hôm nay
+        <span class="relative inline-block rounded-full h-3 w-3 bg-[#ea4335]">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ea4335] opacity-75"></span>
+        </span>
+      </h3>
+      <div class="events-list" *ngIf="todayEvents && todayEvents.length > 0">
+        <div class="event-item" *ngFor="let event of todayEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!todayEvents || todayEvents.length === 0">
+        <p>Không có sự kiện nào hôm nay</p>
+      </div>
+      <mat-divider></mat-divider>
+      <h3 class="events-title py-3" *ngIf="tomorrowEvents && tomorrowEvents.length > 0">
+        Sự kiện ngày mai
+        <span class="relative inline-block rounded-full h-3 w-3 bg-sky-400">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+        </span>
+      </h3>
+      <div class="events-list" *ngIf="tomorrowEvents && tomorrowEvents.length > 0">
+        <div class="event-item" *ngFor="let event of tomorrowEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!tomorrowEvents || tomorrowEvents.length === 0">
+        <p>Không có sự kiện nào ngày mai</p>
+      </div>
+      <mat-divider></mat-divider>
+      <h3 class="events-title py-3" *ngIf="weekEvents && weekEvents.length > 0">Sự kiện tuần này</h3>
+      <div class="events-list" *ngIf="weekEvents && weekEvents.length > 0">
+        <div class="event-item" *ngFor="let event of weekEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-events" *ngIf="!weekEvents || weekEvents.length === 0">
+        <p>Không có sự kiện nào trong tuần này</p>
+      </div>
+      <div class="view-calendar">
+        <a routerLink="/lich" class="calendar-link">
+          <mat-icon>calendar_today</mat-icon>
+          <span>Xem lịch đầy đủ</span>
+        </a>
+      </div>
+    </div>
+  </div>
   <app-bai-thuong-yeu></app-bai-thuong-yeu>
 </div>

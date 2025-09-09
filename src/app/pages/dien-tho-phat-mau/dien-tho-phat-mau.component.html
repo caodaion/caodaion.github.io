@@ -1,0 +1,38 @@
+<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span class="px-3">Hoá đơn</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId && isActiveModule">
+            <app-bill [data]="data" [setting]="setting" [user]="user" [price]="price"></app-bill>
+        </ng-container>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">warehouse</span>
+            <span class="px-3">Đơn giá/Vật liệu</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId && isActiveModule">
+            <app-price [setting]="setting" [user]="user" [price]="price"></app-price>
+        </ng-container>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">description</span>
+            <span class="px-3">Báo cáo</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId && isActiveModule">
+            <app-report [data]="data" [setting]="setting" [user]="user" [price]="price"></app-report>
+        </ng-container>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span class="material-symbols-outlined">history</span>
+            <span class="px-3">Lịch sử</span>
+        </ng-template>
+        <ng-container *ngIf="setting?.googleFormsId && isActiveModule">
+            <app-history [history]="history"></app-history>
+        </ng-container>
+    </mat-tab>
+</mat-tab-group>

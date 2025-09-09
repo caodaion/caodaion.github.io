@@ -11,11 +11,29 @@ export class CalendarService {
   commonTimes: any[] = [];
   commonLocationTypes: any[] = [];
   calendarViewMode: any = 'day';
+  tuThoiTimeRange = <any>{
+    'ty-23-01': {
+      start: '23:00:00',
+      end: '01:00:00'
+    },
+    'meo-05-07': {
+      start: '05:00:00',
+      end: '07:00:00'
+    },
+    'ngo-11-13': {
+      start: '11:00:00',
+      end: '13:00:00'
+    },
+    'dau-17-19': {
+      start: '17:00:00',
+      end: '19:00:00'
+    }
+  }
 
   constructor(private http: HttpClient, private commonService: CommonService, private datePipe: DatePipe) { }
 
   getConvertedFullDate(date?: any) {
-    let comparedDate = null;
+    let comparedDate: any = null;
     if (date) {
       comparedDate = date;
     } else {
@@ -260,7 +278,7 @@ export class CalendarService {
       lunarDay = dayNumber - monthStart + 1;
       let diff = INT((monthStart - a11) / 29);
       if (calDate > new Date(new Date(tt).setHours(22, 59, 59))) {
-        const nextDate = this.datePipe.transform(new Date(new Date(tt).setDate(new Date(tt).getDate() + 1)), 'dd/MM/YYYY')
+        const nextDate = this.datePipe.transform(new Date(new Date(tt).setDate(new Date(tt).getDate() + 1)), 'dd/MM/yyyy')
         let nextDateNumber: any;
         let nextMonthStart: any
         nextDateNumber = jdFromDate(parseInt(nextDate?.split('/')[0] || ''), parseInt(nextDate?.split('/')[1] || ''), parseInt(nextDate?.split('/')[2] || ''));
@@ -299,20 +317,18 @@ export class CalendarService {
       if (lunarMonth >= 11 && diff < 4) {
         lunarYear -= 1;
       }
-      const canChiMonth = ['Giáp Tý', 'Ất Sửu', 'Bính Dần', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi']
-      const lunarMonthName = canChiMonth[(((lunarYear % 10) * 2 + lunarMonth) % 10)]
       const lunarTime = this.commonService.getTimeLunarTime(calDate)
       const cans = [
-        'Tân',
-        'Nhâm',
-        'Quý',
         'Giáp',
         'Ất',
         'Bính',
         'Đinh',
         'Mậu',
         'Kỷ',
-        'Canh']
+        'Canh',
+        'Tân',
+        'Nhâm',
+        'Quý',]
       const chis = [
         'Tý',
         'Sửu',
@@ -325,14 +341,95 @@ export class CalendarService {
         'Thân',
         'Dậu',
         'Tuất',
-        'Hợi']
-      const a = (14 - mm) % 12
-      const y = yy + 4800 - a
-      const m = mm + 12 * a - 3
-      const JDN = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045
-      const canDay = Math.floor(JDN % 10)
+        'Hợi',]
+      const getDaysInMonth = (month: any, year: any) => {
+        switch (month) {
+          case 1:
+          case 3:
+          case 5:
+          case 7:
+          case 8:
+          case 10:
+          case 12:
+            return 31;
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            return 30;
+          case 2:
+            return isLeapYear(year) ? 29 : 28;
+        }
+        return 0;
+      }
+      const getJulianDay = (date: any) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+      
+        // Tính số ngày trong năm dương lịch
+        let daysInYear = 365 * year;
+        if (isLeapYear(year)) {
+          daysInYear += 1;
+        }
+      
+        // Tính số ngày trong các tháng trước
+        let daysInMonths: any = 0;
+        for (let i = 1; i < month; i++) {
+          daysInMonths += getDaysInMonth(i, year);
+        }
+      
+        // Tính tổng số ngày
+        const julianDay = daysInYear + daysInMonths + day - 1;
+      
+        return julianDay;
+      }
+      const isLeapYear = (year: any) => {
+        return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+      }
+
+      function calculateJDN(day: any, month: any, year: any) {
+        const a = Math.floor((14 - month) / 12);
+        const y = year + 4800 - a;
+        const m = month + 12 * a - 3;
+      
+        const JDN = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+        return JDN;
+      }          
+      let JDN = calculateJDN(dd, mm, yy)
+
+      const canDay = Math.floor((JDN + 9) % 10)
       const chiDay = Math.floor((JDN + 1) % 12)
       const lunarDayName = `${cans[canDay]} ${chis[chiDay]}`
+      let lunarMonthName = ''
+      switch (lunarYear % 10) {
+        case 3:
+        case 8:
+          const canchiMonthMauQuy = ['Giáp Dần', 'Ất Mão', 'Bính Thìn', 'Đinh Tỵ', 'Mậu Ngọ', 'Kỷ Mùi', 'Canh Thân', 'Tân Dậu', 'Nhâm Tuất', 'Quý Hợi', 'Giáp Tý', 'Ất Sửu'];
+          lunarMonthName = canchiMonthMauQuy[lunarMonth - 1]
+          break;
+        case 4:
+        case 9:
+          const canchiMonthGiapKy = ['Bính Dần', 'Đinh Mão', 'Mậu Thìn', 'Kỷ Tỵ', 'Canh Ngọ', 'Tân Mùi', 'Nhâm Thân', 'Quý Dậu', 'Giáp Tuất', 'Ất Hợi', 'Bính Tý', 'Đinh Sửu'];
+          lunarMonthName = canchiMonthGiapKy[lunarMonth - 1]
+          break;
+        case 5:
+        case 0:
+          const canchiMonthAtCanh = ['Mậu Dần', 'Kỷ Mão', 'Canh Thìn', 'Tân Tỵ', 'Nhâm Ngọ', 'Quý Mùi', 'Giáp Thân', 'Ất Dậu', 'Bính Tuất', 'Đinh Hợi', 'Mậu Tý', 'Kỷ Sửu'];
+          lunarMonthName = canchiMonthAtCanh[lunarMonth - 1]
+          break;
+        case 6:
+        case 1:
+          const canchiMonthBinhTan = ['Canh Dần', 'Tân Mão', 'Nhâm Thìn', 'Quý Tỵ', 'Giáp Ngọ', 'Ất Mùi', 'Bính Thân', 'Đinh Dậu', 'Mậu Tuất', 'Kỷ Hợi', 'Canh Tý', 'Tân Sửu'];
+          lunarMonthName = canchiMonthBinhTan[lunarMonth - 1]
+          break;
+        case 7:
+        case 2:
+          const canchiMonthDinhNham = ['Nhâm Dần', 'Quý Mão', 'Giáp Thìn', 'Ất Tỵ', 'Bính Ngọ', 'Đinh Mùi', 'Mậu Thân', 'Kỷ Dậu', 'Canh Tuất', 'Tân Hợi', 'Nhâm Tý', 'Quý Sửu'];
+          lunarMonthName = canchiMonthDinhNham[lunarMonth - 1]
+          break;
+        default: break;
+      }
 
       return {
         lunarDay,
@@ -382,7 +479,7 @@ export class CalendarService {
       monthStart = getNewMoonDay(k + off, timeZone);
       return jdToDate(monthStart + lunarDay - 1);
     };
-    let result = {
+    let result = <any>{
       convertSolar2Lunar: {
         lunarDay: 0,
         lunarMonth: 0,
@@ -403,13 +500,20 @@ export class CalendarService {
         '+7'
       )
     } else {
-      result.convertLunar2Solar = convertLunar2Solar(
+      const convertedDate = convertLunar2Solar(
         comparedDate.lunarDay,
         comparedDate.lunarMonth,
         comparedDate.lunarYear,
-        0,
+        comparedDate?.lunarLeap || 0,
         '+7'
       )
+      result.convertLunar2Solar = new Date(convertedDate[2],
+        convertedDate[1] - 1,
+        convertedDate[0],
+        0,
+        0,
+        0,
+        0)
     }
     return result;
   }
@@ -430,6 +534,7 @@ export class CalendarService {
       if (day !== 1) date.setHours(-24 * (day - 1));
       return date;
     };
+    let selectedMonthCount = <any>{}
     for (
       let d = getMonday(new Date(`${comparedYear}-${comparedMonth}-01`));
       d <=
@@ -441,19 +546,156 @@ export class CalendarService {
       );
       d.setDate(d.getDate() + 1)
     ) {
-      selectedMonth.push({
+      const pushedData = <any>{
         solar: new Date(d),
         lunar: this.getConvertedFullDate(d),
-      });
+        d: this.datePipe.transform(d, 'yyyy-MM-dd'),
+      }
+      switch (this.getConvertedFullDate(d).convertSolar2Lunar.lunarDay) {
+        case 1:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 4:
+          pushedData.fifteen = true
+          break;
+        case 6:
+          pushedData.fifteen = true
+          break;
+        case 8:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 9:
+          pushedData.fifteen = true
+          break;
+        case 14:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 15:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 16:
+          pushedData.fifteen = true
+          break;
+        case 18:
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 19:
+          pushedData.fifteen = true
+          break;
+        case 23:
+          pushedData.six = true
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 24:
+          pushedData.ten = true
+          pushedData.fifteen = true
+          break;
+        case 25:
+          pushedData.fifteen = true
+          break;
+        default: break;
+      }
+      if (!selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth] || selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth]?.length === 0) {
+        selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth] = []
+      }
+      selectedMonthCount[this.getConvertedFullDate(d).convertSolar2Lunar.lunarMonth].push(pushedData)
+      selectedMonth.push(pushedData);
     }
+    Object.keys(selectedMonthCount).forEach((smc: any) => {
+      const lastDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 1]
+      const lastOneDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 2]
+      const lastTwoDate = selectedMonthCount[smc][selectedMonthCount[smc]?.length - 3]
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 30) {
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).six = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar).fifteen = true
+        }
+      }
+      const dValue = new Date(lastDate.d)
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 29) {
+        const nextDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 1)))
+        if (nextDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).six = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).ten = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+          if (selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastTwoDate?.solar).fifteen = true
+          }
+        }
+        if (nextDate.convertSolar2Lunar.lunarDay === 30) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+        }
+        if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+          selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+        }
+      }
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 28) {
+        const nexTwotDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 2)))
+        if (nexTwotDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).ten = true
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+            selectedMonth.find((sm: any) => sm.solar == lastOneDate?.solar).fifteen = true
+          }
+        }
+      }
+      if (lastDate.lunar.convertSolar2Lunar.lunarDay === 27) {
+        const nexThreetDate = this.getConvertedFullDate(new Date(dValue.setDate(dValue.getDate() + 3)))
+        if (nexThreetDate.convertSolar2Lunar.lunarDay === 1) {
+          if (selectedMonth.find((sm: any) => sm.solar == lastDate?.solar)) {
+            selectedMonth.find((sm: any) => sm.solar == lastDate?.solar).fifteen = true
+          }
+        }
+      }
+    })
     console.log(selectedMonth);
     return selectedMonth;
   }
 
   getTuanCuuEvents(date: any): Observable<any> {
     let events = <any>[]
-    const eventCount = 9
+    const eventCount = 11
     let startDate = date
+    
+    // Get lunar date of the original date
+    const originalLunarDate = this.getConvertedFullDate(date).convertSolar2Lunar
+    const originalSolarDate = new Date(date)    
+    
     Array.from({ length: eventCount }, (x, i) => {
       i++
       switch (i) {
@@ -468,34 +710,58 @@ export class CalendarService {
           )
           break;
         }
-        // case 10: {
-        //   const calcDate = this.getConvertedFullDate({
-        //     lunarDay: date.lunarDay,
-        //     lunarMonth: date.lunarMonth,
-        //     lunarYear: date.lunarYear + 1
-        //   }).convertLunar2Solar
-        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
-        //   events.push({
-        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
-        //       solar: solar,
-        //       eventName: `Tiểu Tường`
-        //     })
-        //   break;
-        // }
-        // case 11: {
-        //   const calcDate = this.getConvertedFullDate({
-        //     lunarDay: date.lunarDay,
-        //     lunarMonth: date.lunarMonth,
-        //     lunarYear: date.lunarYear + 2
-        //   }).convertLunar2Solar
-        //   const solar = new Date(`${calcDate[2]}-${calcDate[1] > 9 ? '0' + calcDate[1] : calcDate[1]}-${calcDate[0] > 9 ? '0' + calcDate[0] : calcDate[0]}`)
-        //   events.push({
-        //       lunar: this.getConvertedFullDate(solar).convertSolar2Lunar,
-        //       solar: solar,
-        //       eventName: `Đại Tường`
-        //     })
-        //   break;
-        // }
+        case 10: {
+          // Calculate Tiểu Tường: same lunar date but 12 months later
+          // Use solar date iteration to properly handle leap months
+          let currentSolarDate = originalSolarDate
+          let monthsCount = 0          
+          // Iterate through solar months until we find 12 lunar months
+          while (monthsCount < 12) {
+            // Move to next solar month
+            currentSolarDate.setDate(currentSolarDate.getDate() + 1)
+            
+            // Get lunar date for this solar date
+            const currentLunar = this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar
+            
+            // Check if this matches our target lunar day and month (non-leap)
+            if (currentLunar.lunarDay === originalLunarDate.lunarDay) {
+              monthsCount++
+            }
+          }
+          
+          events.push({
+              lunar: this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar,
+              solar: new Date(currentSolarDate),
+              eventName: `Tiểu Tường`
+            })
+          break;
+        }
+        case 11: {
+          // Calculate Tiểu Tường: same lunar date but 12 months later
+          // Use solar date iteration to properly handle leap months
+          let currentSolarDate = originalSolarDate
+          let monthsCount = 0          
+          // Iterate through solar months until we find 12 lunar months
+          while (monthsCount < 24) {
+            // Move to next solar month
+            currentSolarDate.setDate(currentSolarDate.getDate() + 1)
+            
+            // Get lunar date for this solar date
+            const currentLunar = this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar
+            
+            // Check if this matches our target lunar day and month (non-leap)
+            if (currentLunar.lunarDay === originalLunarDate.lunarDay) {
+              monthsCount++
+            }
+          }
+          
+          events.push({
+              lunar: this.getConvertedFullDate(currentSolarDate).convertSolar2Lunar,
+              solar: new Date(currentSolarDate),
+              eventName: `Đại Tường`
+            })
+          break;
+        }
         default: {
           const calDate = new Date(startDate.setDate(startDate.getDate() + 9))
           events.push(
@@ -512,5 +778,70 @@ export class CalendarService {
     return new Observable((observer) => {
       observer.next(events)
     });
+  }
+
+  getGoogleCalendarEventEditUrl(item: any): string {
+    let url = `https://calendar.google.com/calendar/u/0/r/eventedit`
+    if (item?.text) {
+      url += `?text=${encodeURI(item?.text + ' | ' + item?.subTitle)}`
+    }
+    const dates = <any>[]
+    let detailsStartDateValue = ''
+    let detailsEndDateValue = ''
+    if (item?.dates.length > 0) {
+      if (item?.dates[0] === 'ty-23-01' || item?.dates[0] === 'meo-05-07' || item?.dates[0] === 'ngo-11-13' || item?.dates[0] === 'dau-17-19') {
+        const startDateValue = new Date()
+        const endDateValue = new Date()
+        const foundDateRange = this.tuThoiTimeRange[item?.dates[0]]
+        if (foundDateRange) {
+          startDateValue.setHours(foundDateRange?.start?.split(':')[0])
+          startDateValue.setMinutes(foundDateRange?.start?.split(':')[1])
+          startDateValue.setSeconds(foundDateRange?.start?.split(':')[2])
+          detailsStartDateValue = `${foundDateRange?.start}`
+          endDateValue.setHours(foundDateRange?.end?.split(':')[0])
+          endDateValue.setMinutes(foundDateRange?.end?.split(':')[1])
+          endDateValue.setSeconds(foundDateRange?.end?.split(':')[2])
+          detailsEndDateValue = `${foundDateRange?.end}`
+        }
+        if (item?.dates[0] === 'ty-23-01') {
+          startDateValue.setDate(startDateValue.getDate() - 1)
+          detailsStartDateValue = `${foundDateRange?.start} ngày trước`
+        }
+        // @ts-ignore
+        dates.push(startDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        // @ts-ignore
+        dates.push(endDateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        url += `&dates=${dates?.join('/')}`
+      } else {
+        item?.dates?.forEach((date: any, index: any) => {
+          let dateValue = new Date()
+          if (typeof date === 'string') {
+            dateValue.setHours(parseInt(date.split(':')[0]))
+            dateValue.setMinutes(parseInt(date.split(':')[1]))
+            dateValue.setSeconds(parseInt(date.split(':')[2]))
+          } else {
+            dateValue = date
+          }
+          if (index === 0) {
+            detailsStartDateValue = `${this.datePipe.transform(dateValue, 'HH:mm:ss')}`;
+          }
+          if (index === 1) {
+            detailsEndDateValue = `${this.datePipe.transform(dateValue, 'HH:mm:ss')}`;
+          }
+          // @ts-ignore
+          dates.push(dateValue.toJSON().replaceAll('-', '').replaceAll(':', '').replaceAll('.', ''))
+        })
+        url += `&dates=${dates?.join('/')}`
+      }
+    }
+    item.details = encodeURI(`<h1><a href="${location.origin}">CaoDaiON</a></h1><h2>${item?.text} | ${item?.subTitle}</h2><ul><li><strong>Bắt đầu:</strong> ${detailsStartDateValue}.</li><li><strong>Kết thúc:</strong> ${detailsEndDateValue}.</li></ul><p>Sự kiện tự động tạo bởi ứng dụng <a href="${location.origin}">CaoDaiON</a>.<br/></p>`)
+    url += `&location=${item?.location || location.origin}`
+    if (item?.details) {
+      url += `&details=${item?.details}`
+    }
+    if (item?.recur) {
+      url += `&recur=${item?.recur}`
+    }
+    return url;
   }
 }

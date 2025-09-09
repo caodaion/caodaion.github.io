@@ -1,0 +1,29 @@
+<div class="page-container">
+  <h1 class="page-title">Ứng dụng</h1>
+  <div class="app-grid">
+    <div class="app-card" *ngFor="let app of apps" [routerLink]="app.route">
+      @for (sign of eventSigns; track sign.key) {
+          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+          }
+      <div
+        class="app-icon-container"
+        [style.background]="'var(--' + app?.id + '-app-background)'"
+        [style.color]="'white'"
+      >
+        <app-icon [name]="app.icon"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">{{ app.name }}</h2>
+        <p class="app-description">{{ app.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

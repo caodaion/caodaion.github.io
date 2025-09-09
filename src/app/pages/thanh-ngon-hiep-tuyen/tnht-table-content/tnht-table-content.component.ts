@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-tnht-table-content',
-  templateUrl: './tnht-table-content.component.html',
-  styleUrls: ['./tnht-table-content.component.scss']
+    selector: 'app-tnht-table-content',
+    templateUrl: './tnht-table-content.component.html',
+    styleUrls: ['./tnht-table-content.component.scss'],
+    standalone: false
 })
 export class TnhtTableContentComponent implements OnInit {
 

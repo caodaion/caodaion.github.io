@@ -3,9 +3,10 @@ import { ScannerQRCodeConfig, ScannerQRCodeSelectedFiles, NgxScannerQrcodeCompon
 import { delay } from 'rxjs';
 
 @Component({
-  selector: 'cp-qr-scanner',
-  templateUrl: './cp-qr-scanner.component.html',
-  styleUrls: ['./cp-qr-scanner.component.scss']
+    selector: 'cp-qr-scanner',
+    templateUrl: './cp-qr-scanner.component.html',
+    styleUrls: ['./cp-qr-scanner.component.scss'],
+    standalone: false
 })
 export class CpQrScannerComponent implements AfterViewInit, OnDestroy {
 
@@ -37,9 +38,9 @@ export class CpQrScannerComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.action.stop()
-    this.action.isReady.pipe(delay(3000)).subscribe(() => {
-      this.action.start();
-    });
+    this.action.start();
+    // this.action.isReady.pipe(delay(3000)).subscribe(() => {
+    // });
   }
 
   ngOnDestroy(): void {

@@ -7,16 +7,17 @@ import { CHECKINTYPES, CHECKINEVENT } from 'src/app/shared/constants/master-data
 import { TIME_TYPE } from 'src/app/shared/constants/master-data/time-type.constant';
 
 @Component({
-  selector: 'app-sync',
-  templateUrl: './sync.component.html',
-  styleUrls: ['./sync.component.scss']
+    selector: 'app-sync',
+    templateUrl: './sync.component.html',
+    styleUrls: ['./sync.component.scss'],
+    standalone: false
 })
 export class SyncComponent implements OnInit {
   jwtHelper = new JwtHelperService();
   syncData: any;
   ratingPieChartLabels = ["Hoàn toàn không", "Không hài lòng", "Bình thường", "Hài lòng", "Rất hài lòng", "Chưa đánh giá"];
   public isShowPhoneLayout: boolean = true
-  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'device', 'comment']
+  displayedColumns = ['timestamp', 'type', 'location', 'rating', 'lastDevice', 'comment']
   confirmSyncJourneyDialogRef: any;
   @ViewChild('confirmSyncJourneyDialog') confirmSyncJourneyDialog!: any;
   isSyncSavedLoccaly: any;

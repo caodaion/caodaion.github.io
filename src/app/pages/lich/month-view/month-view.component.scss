@@ -1,0 +1,79 @@
+.month-view-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent container from overflowing */
+}
+
+.calendar-main {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.calendar-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1));
+}
+
+.weekday {
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 500;
+  color: var(--text-secondary-color);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  flex-grow: 1;
+  padding: 1px;
+  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
+  height: 100%;
+  min-height: 0; /* Needed for Firefox */
+  overflow: hidden; /* Prevent grid from overflowing */
+}
+
+@media (max-width: 800px) {
+  .calendar-grid {
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+    overflow: hidden; /* Changed from visible to hidden */
+    height: 100%; /* Changed from auto to 100% */
+  }
+  
+  .calendar-body {
+    height: 100%;
+    overflow: hidden; /* Ensure no overflow on mobile */
+  }
+}
+
+@media (max-width: 600px) {
+  .weekday {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+  }
+  
+  .calendar-grid {
+    gap: 1px;
+    padding: 1px;
+  }
+}
+
+@media (max-width: 400px) {
+  .weekday {
+    padding: 6px 2px;
+    font-size: 0.8rem;
+  }
+}

@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'cp-number-form-field',
-  templateUrl: './cp-number-form-field.component.html',
-  styleUrls: ['./cp-number-form-field.component.scss']
+    selector: 'cp-number-form-field',
+    templateUrl: './cp-number-form-field.component.html',
+    styleUrls: ['./cp-number-form-field.component.scss'],
+    standalone: false
 })
 export class CpNumberFormFieldComponent implements OnInit {
   @Input() inputFormControl: any;
@@ -31,5 +32,16 @@ export class CpNumberFormFieldComponent implements OnInit {
         : '';
     }
     return errorMessage;
+  }
+
+  get modelValue() {
+    if (this.modifierAt === 'prevText') return this.inputFormControl.prevText;
+    if (this.modifierAt === 'nextText') return this.inputFormControl.nextText;
+    return this.inputFormControl.value;
+  }
+  set modelValue(val: any) {
+    if (this.modifierAt === 'prevText') this.inputFormControl.prevText = val;
+    else if (this.modifierAt === 'nextText') this.inputFormControl.nextText = val;
+    else this.inputFormControl.value = val;
   }
 }

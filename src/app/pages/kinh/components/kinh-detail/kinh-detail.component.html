@@ -1,0 +1,43 @@
+<app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="'Đọc Kinh'">
+  <div class="font-size-controls">
+    <button-share>
+      <button mat-icon-button aria-label="Share">
+        <mat-icon>share</mat-icon>
+      </button>
+    </button-share>
+    <mat-form-field appearance="fill" class="font-size-form-field">
+      <mat-label for="fontSizeSelect">Cỡ chữ</mat-label>
+      <mat-select id="fontSizeSelect" [(ngModel)]="fontSize" (selectionChange)="onFontSizeChange($event.value)"
+        [panelClass]="'font-size-select-panel'">
+        <mat-option *ngFor="let size of fontSizeOptions" [value]="size">{{ size }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</app-child-header>
+<div class="kinh-detail-container">
+  <div class="kinh-content" *ngIf="kinhContent$ | async as content">
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!error" class="markdown-content">
+      <markdown [data]="content" [ngStyle]="{ 'font-size.px': fontSize }"></markdown>
+    </div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="navigation-buttons">
+    <button class="nav-button prev-button" *ngIf="prevKinh" (click)="goToPreviousKinh()"
+      aria-label="Go to previous kinh">
+      <span class="nav-icon">&#8592;</span>
+      <span class="nav-text">{{ prevKinh.name }}</span>
+    </button>
+
+    <div class="spacer"></div>
+
+    <button class="nav-button next-button" *ngIf="nextKinh" (click)="goToNextKinh()" aria-label="Go to next kinh">
+      <span class="nav-text">{{ nextKinh.name }}</span>
+      <span class="nav-icon">&#8594;</span>
+    </button>
+  </div>
+</div>

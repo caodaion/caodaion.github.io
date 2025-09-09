@@ -15,9 +15,10 @@ import { KinhService } from 'src/app/shared/services/kinh/kinh.service';
 import { EventModel } from '../event-list/event-list.component';
 
 @Component({
-  selector: 'app-event-content',
-  templateUrl: './event-edit.component.html',
-  styleUrls: ['./event-edit.component.scss'],
+    selector: 'app-event-content',
+    templateUrl: './event-edit.component.html',
+    styleUrls: ['./event-edit.component.scss'],
+    standalone: false
 })
 export class EventEditComponent implements OnInit {
   eventKey!: String;

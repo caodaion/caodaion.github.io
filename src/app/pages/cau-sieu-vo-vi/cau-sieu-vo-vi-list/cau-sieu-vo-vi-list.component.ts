@@ -6,9 +6,10 @@ import { DocumentModel } from 'src/app/shared/services/caodaion-editor/caodaion-
 import { CauSieuVoViService } from 'src/app/shared/services/cau-sieu-vo-vi/cau-sieu-vo-vi.service';
 
 @Component({
-  selector: 'app-cau-sieu-vo-vi-list',
-  templateUrl: './cau-sieu-vo-vi-list.component.html',
-  styleUrls: ['./cau-sieu-vo-vi-list.component.scss'],
+    selector: 'app-cau-sieu-vo-vi-list',
+    templateUrl: './cau-sieu-vo-vi-list.component.html',
+    styleUrls: ['./cau-sieu-vo-vi-list.component.scss'],
+    standalone: false
 })
 export class CauSieuVoViListComponent implements OnInit {
   cauSieuVoViList: DocumentModel[] = [];

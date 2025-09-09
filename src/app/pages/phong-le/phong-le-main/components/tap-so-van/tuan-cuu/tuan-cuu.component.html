@@ -24,11 +24,11 @@
                   }"
                 >
                   <mat-card-header class="w-100">
-                    <mat-card-title class="w-100 text-center"
+                    <mat-card-title class="w-100 text-center !text-2xl !mb-4 !font-bold"
                       >Soạn Sớ {{ item?.eventName }}</mat-card-title
                     >
                   </mat-card-header>
-                  <mat-card-content>
+                  <mat-card-content class="w-100 text-center text-xl">
                     {{ item?.day }}
                     {{ item?.lunar?.lunarDay }} tháng
                     {{ item?.lunar?.lunarMonth }} năm
@@ -36,10 +36,6 @@
                       item?.solar | date : "dd/MM/yyyy"
                     }})
                   </mat-card-content>
-                  <span
-                    *ngIf="item?.upComming"
-                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fbbc05] opacity-75"
-                  ></span>
                 </mat-card>
               </mat-grid-tile>
             </mat-grid-list>

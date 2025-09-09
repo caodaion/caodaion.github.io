@@ -13,7 +13,7 @@ export class LocationService {
   constructor(private http: HttpClient) { }
 
   getAllDivisions() {
-    const url = 'https://provinces.open-api.vn/api/p/'
+    const url = 'https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1'
     return this.http.get(url)
   }
 

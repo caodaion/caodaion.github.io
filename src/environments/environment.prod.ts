@@ -3,12 +3,12 @@ export const environment = {
   apiUrl: 'https://apicaodaion.herokuapp.com',
   token: "be68683e1331090fb778bb589ece9fda7d53bd57",
   firebaseConfig: {
-    apiKey: "AIzaSyAnwlY1ftsfJLWfn-5PCbftOaQ1_4wRKxo",
-    authDomain: "caodaion-5167e.firebaseapp.com",
-    projectId: "caodaion-5167e",
-    storageBucket: "caodaion-5167e.appspot.com",
-    messagingSenderId: "671089239835",
-    appId: "1:671089239835:web:d2ec42f54b02f0fed115be",
-    measurementId: "G-8EMJZEB65T"
+    apiKey: "AIzaSyDavRMqGB8aszzTrYJ2IOmpPUkeynN_xbk",
+    authDomain: "caodaion-5c203.firebaseapp.com",
+    projectId: "caodaion-5c203",
+    storageBucket: "caodaion-5c203.appspot.com",
+    messagingSenderId: "415271346393",
+    appId: "1:415271346393:web:4405bd4a06c08c18079ec8",
+    measurementId: "G-3TZWT3X0N6"
   }
 };

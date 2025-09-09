@@ -1,0 +1,121 @@
+<div mat-dialog-title>Thêm sự kiện</div>
+<mat-dialog-content>
+  <div class="flex flex-wrap pt-4">
+    <div class="p-1 w-full">
+      <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Tên sự kiện</mat-label>
+        <input type="text" matInput [(ngModel)]="data.text" />
+      </mat-form-field>
+    </div>
+    <div class="p-1 w-full lg:w-1/4">
+      <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Ngày bắt đầu</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startDatePicker"
+          [(ngModel)]="data.startDate"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="startDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="p-1 w-full lg:w-1/4">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Giờ bắt đầu</mat-label>
+        <input
+          matInput
+          [ngxMatTimepicker]="startTimePicker"
+          placeholder="14:00 PM"
+          [format]="24"
+          readonly
+          [(ngModel)]="data.startTime"
+        />
+        <button matSuffix mat-icon-button (click)="startTimePicker.open()">
+          <mat-icon> watch_later </mat-icon>
+        </button>
+      </mat-form-field>
+      <ngx-mat-timepicker #startTimePicker></ngx-mat-timepicker>
+    </div>
+    <div class="p-1 w-full lg:w-1/4">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Giờ kết thúc</mat-label>
+        <input
+          matInput
+          [ngxMatTimepicker]="endTimePicker"
+          placeholder="14:00 PM"
+          [format]="24"
+          readonly
+          [(ngModel)]="data.endTime"
+        />
+        <button matSuffix mat-icon-button (click)="endTimePicker.open()">
+          <mat-icon> watch_later </mat-icon>
+        </button>
+      </mat-form-field>
+      <ngx-mat-timepicker #endTimePicker></ngx-mat-timepicker>
+    </div>
+    <div class="p-1 w-full lg:w-1/4">
+      <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Ngày kết thúc</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endDatePicker"
+          [(ngModel)]="data.endDate"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="endDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="p-1 w-full lg:w-1/6">
+      <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Lặp lại</mat-label>
+        <mat-select [(ngModel)]="data.recurring">
+          <mat-option
+            *ngFor="let item of recurringEventType"
+            [value]="item?.key"
+            >{{ item?.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div
+      class="p-1 w-full lg:w-1/4"
+      *ngIf="
+        data.recurring === 'RRULE:FREQ=DAILY' ||
+        data.recurring === 'RRULE:FREQ=WEEKLY' ||
+        data.recurring === 'RRULE:FREQ=MONTHLY' ||
+        data.recurring === 'RRULE:FREQ=YEARLY'
+      "
+    >
+      <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Ngày kết thúc lặp</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endRepeatDatePicker"
+          [(ngModel)]="data.endRepeatDate"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="endRepeatDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endRepeatDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    (click)="saveEvent()"
+    [color]="'primary'"
+    [disabled]="disabledSave()"
+    [matTooltip]="'Lưu và đồng bộ lên Google Calendar'"
+  >
+    <mat-icon>save</mat-icon>Lưu
+  </button>
+</mat-dialog-actions>

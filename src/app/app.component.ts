@@ -12,9 +12,10 @@ import { TnhtService } from './shared/services/tnht/tnht.service';
 import { MessagingService } from './shared/services/messaging/messaging.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   gettingCommonData: boolean = true
@@ -42,7 +43,6 @@ export class AppComponent implements OnInit {
           isHideBottomNavBar: false,
         })
       );
-      this.authService.getCurrentUser();
     });
     this.addTag()
   }
@@ -52,25 +52,26 @@ export class AppComponent implements OnInit {
     this.kinhService.getKinhList()
       .subscribe((res: any) => {
         if (res) {
-          this.kinhService.kinhList = res.data;
-          fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
+          this.kinhService.kinhList = res;
+          // fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
           this.kinhService.kinhList.forEach((item: any) => {
-            this.kinhService.getKinhContent(item.key).subscribe()
+            this.kinhService.getKinhContent(item.key)
+            .subscribe()
           })
           this.eventService.getEventList()
           this.gettingCommonData = false
-          this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
-            if (res.data) {
-              this.tnhtService.tableContent = res.data
-              this.tnhtService.tableContent?.content?.forEach((item: any) => {
-                if (item?.audio && item?.audio?.src) {
-                  fetch(item.audio.src)
-                }
-              })
-              this.checkPushNotification()
-            }
-          })
-
+          // this.tnhtService.getTNHTByPath('quyen-1').subscribe((res: any) => {
+          //   if (res.data) {
+          //     this.tnhtService.tableContent = res.data
+          //     this.tnhtService.tableContent?.content?.forEach((item: any) => {
+          //       if (item?.audio && item?.audio?.src) {
+          //         fetch(item.audio.src)
+          //       }
+          //     })
+          //     this.checkPushNotification()
+          //   }
+          // })
+          this.checkPushNotification()
         }
       });
       this.messagingService.requestPermission()

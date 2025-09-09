@@ -947,7 +947,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-via-duc-chi-ton",
-          "name": "Thời Mẹo | ĐẠI LỄ VÍA ĐỨC CHÍ TÔN",
+          "name": "Thời Ngọ | ĐẠI LỄ VÍA ĐỨC CHÍ TÔN",
           "dateType": "lunar",
           "date": "yearly-01-09",
           "time": [
@@ -1004,13 +1004,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ THƯỢNG NGƯƠNG",
-      "description": "ĐẠI LỄ THƯỢNG NGƯƠNG",
+      "name": "ĐẠI LỄ THƯỢNG NGƯƠN",
+      "description": "ĐẠI LỄ THƯỢNG NGƯƠN",
       "key": "dai-le-thuong-nguong",
       "event": [
         {
           "key": "thoi-ty-dai-le-thuong-nguong",
-          "name": "Thời Tý | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Tý | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1038,7 +1038,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-thuong-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Mẹo | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1066,7 +1066,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-thuong-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Ngọ | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1094,7 +1094,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-thuong-nguong",
-          "name": "Thời Dậu | ĐẠI LỄ THƯỢNG NGƯƠNG",
+          "name": "Thời Dậu | ĐẠI LỄ THƯỢNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-01-15",
           "time": [
@@ -1185,7 +1185,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-via-duc-thai-thuong-lao-quan",
-          "name": "Thời Mẹo | ĐẠI LỄ VÍA ĐỨC THÁI THƯỢNG LÃO QUÂN",
+          "name": "Thời Ngọ | ĐẠI LỄ VÍA ĐỨC THÁI THƯỢNG LÃO QUÂN",
           "dateType": "lunar",
           "date": "yearly-02-15",
           "time": [
@@ -1216,6 +1216,244 @@ export const FIXED_EVENT = {
           "name": "Thời Dậu | ĐẠI LỄ VÍA ĐỨC THÁI THƯỢNG LÃO QUÂN",
           "dateType": "lunar",
           "date": "yearly-02-15",
+          "time": [
+            "dau-1719"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+      "description": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+      "key": "le-ky-niem-duc-giao-tong-dac-dao",
+      "event": [
+        {
+          "key": "thoi-ty-le-ky-niem-duc-giao-tong-dac-dao",
+          "name": "Thời Tý | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+          "dateType": "lunar",
+          "date": "yearly-02-25",
+          "time": [
+            "ty-2301"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-meo-le-ky-niem-duc-giao-tong-dac-dao",
+          "name": "Thời Mẹo | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+          "dateType": "lunar",
+          "date": "yearly-02-25",
+          "time": [
+            "meo-0507"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-ngo-le-ky-niem-duc-giao-tong-dac-dao",
+          "name": "Thời Ngọ | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+          "dateType": "lunar",
+          "date": "yearly-02-25",
+          "time": [
+            "ngo-1113"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-dau-le-ky-niem-duc-giao-tong-dac-dao",
+          "name": "Thời Dậu | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG ĐẮC ĐẠO",
+          "dateType": "lunar",
+          "date": "yearly-02-25",
+          "time": [
+            "dau-1719"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+      "description": "LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+      "key": "le-ky-niem-duc-giao-tong-tho-phong",
+      "event": [
+        {
+          "key": "thoi-ty-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Tý | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "ty-2301"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-meo-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Mẹo | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "meo-0507"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-ngo-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Ngọ | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
+          "time": [
+            "ngo-1113"
+          ],
+          "locationType": [
+            "all",
+            "dien-tien",
+            "dien-tho-phat-mau",
+            "nha-tu-trung-thua",
+            "thien-ban"
+          ],
+          "kinh": [
+            "niem-huong",
+            "khai-kinh",
+            "ngoc-hoang-thuong-de",
+            "thich-giao",
+            "tien-giao",
+            "nho-giao",
+            "dang-hoa",
+            "dang-ruou",
+            "dang-tra",
+            "ngu-nguyen"
+          ]
+        },
+        {
+          "key": "thoi-dau-le-ky-niem-duc-giao-tong-tho-phong",
+          "name": "Thời Dậu | LỄ KỶ NIỆM ĐỨC GIÁO TÔNG THỌ PHONG",
+          "dateType": "lunar",
+          "date": "yearly-03-13",
           "time": [
             "dau-1719"
           ],
@@ -1304,7 +1542,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-via-duc-thich-ca",
-          "name": "Thời Mẹo | ĐẠI LỄ VÍA ĐỨC THÍCH CA",
+          "name": "Thời Ngọ | ĐẠI LỄ VÍA ĐỨC THÍCH CA",
           "dateType": "lunar",
           "date": "yearly-04-08",
           "time": [
@@ -1423,7 +1661,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-ky-niem-sinh-nhut-duc-giao-tong-nguyen-ngoc-tuong",
-          "name": "Thời Mẹo | ĐẠI LỄ KỶ NIỆM SINH NHỰT ĐỨC GIÁO TÔNG NGUYỄN NGỌC TƯƠNG",
+          "name": "Thời Ngọ | ĐẠI LỄ KỶ NIỆM SINH NHỰT ĐỨC GIÁO TÔNG NGUYỄN NGỌC TƯƠNG",
           "dateType": "lunar",
           "date": "yearly-05-26",
           "time": [
@@ -1480,13 +1718,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ TRUNG NGƯƠNG",
-      "description": "ĐẠI LỄ TRUNG NGƯƠNG",
+      "name": "ĐẠI LỄ TRUNG NGƯƠN",
+      "description": "ĐẠI LỄ TRUNG NGƯƠN",
       "key": "dai-le-trung-nguong",
       "event": [
         {
           "key": "thoi-ty-dai-le-trung-nguong",
-          "name": "Thời Tý | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Tý | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1514,7 +1752,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-trung-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Mẹo | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1542,7 +1780,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-trung-nguong",
-          "name": "Thời Mẹo | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Ngọ | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1570,7 +1808,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-trung-nguong",
-          "name": "Thời Dậu | ĐẠI LỄ TRUNG NGƯƠNG",
+          "name": "Thời Dậu | ĐẠI LỄ TRUNG NGƯƠN",
           "dateType": "lunar",
           "date": "yearly-07-15",
           "time": [
@@ -1661,7 +1899,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-via-duc-dieu-tri-kim-mau",
-          "name": "Thời Mẹo | ĐẠI LỄ VÍA ĐỨC DIÊU TRÌ KIM MẪU",
+          "name": "Thời Ngọ | ĐẠI LỄ VÍA ĐỨC DIÊU TRÌ KIM MẪU",
           "dateType": "lunar",
           "date": "yearly-08-15",
           "time": [
@@ -1718,13 +1956,13 @@ export const FIXED_EVENT = {
       ]
     },
     {
-      "name": "ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
-      "description": "ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+      "name": "ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
+      "description": "ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
       "key": "dai-le-ha-nguong-va-ky-niem-khai-dao",
       "event": [
         {
           "key": "thoi-ty-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Tý | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Tý | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -1752,7 +1990,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-meo-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Mẹo | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Mẹo | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -1780,7 +2018,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Mẹo | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Ngọ | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -1808,7 +2046,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-dau-dai-le-ha-nguong-va-ky-niem-khai-dao",
-          "name": "Thời Dậu | ĐẠI LỄ HẠ NGƯƠNG và KỶ NIỆM KHAI ĐẠO",
+          "name": "Thời Dậu | ĐẠI LỄ HẠ NGƯƠN và KỶ NIỆM KHAI ĐẠO",
           "dateType": "lunar",
           "date": "yearly-10-15",
           "time": [
@@ -1899,7 +2137,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-dai-le-ky-niem-sanh-nhut-duc-gia-to-giao-chu",
-          "name": "Thời Mẹo | ĐẠI LỄ KỶ NIỆM SANH NHỰT ĐỨC GIA TÔ GIÁO CHỦ",
+          "name": "Thời Ngọ | ĐẠI LỄ KỶ NIỆM SANH NHỰT ĐỨC GIA TÔ GIÁO CHỦ",
           "dateType": "solar",
           "date": "yearly-12-25",
           "time": [
@@ -2018,7 +2256,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-tet-nguyen-dan-mung-1-dai-le-tan-nien",
-          "name": "Thời Mẹo | TẾT NGUYÊN ĐÁN | MÙNG 1 | ĐẠI LỄ TÂN NIÊN",
+          "name": "Thời Ngọ | TẾT NGUYÊN ĐÁN | MÙNG 1 | ĐẠI LỄ TÂN NIÊN",
           "dateType": "lunar",
           "date": "yearly-01-01",
           "time": [
@@ -2137,7 +2375,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-tet-nguyen-dan-mung-2-dai-le-tan-nien",
-          "name": "Thời Mẹo | TẾT NGUYÊN ĐÁN | MÙNG 2 | ĐẠI LỄ TÂN NIÊN",
+          "name": "Thời Ngọ | TẾT NGUYÊN ĐÁN | MÙNG 2 | ĐẠI LỄ TÂN NIÊN",
           "dateType": "lunar",
           "date": "yearly-01-02",
           "time": [
@@ -2256,7 +2494,7 @@ export const FIXED_EVENT = {
         },
         {
           "key": "thoi-ngo-tet-nguyen-dan-mung-3-dai-le-tan-nien",
-          "name": "Thời Mẹo | TẾT NGUYÊN ĐÁN | MÙNG 3 | ĐẠI LỄ TÂN NIÊN",
+          "name": "Thời Ngọ | TẾT NGUYÊN ĐÁN | MÙNG 3 | ĐẠI LỄ TÂN NIÊN",
           "dateType": "lunar",
           "date": "yearly-01-03",
           "time": [

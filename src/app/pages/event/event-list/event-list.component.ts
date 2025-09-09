@@ -11,9 +11,10 @@ import { NotificationsService } from 'src/app/shared/services/notifications/noti
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 
 @Component({
-  selector: 'app-event-list',
-  templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss'],
+    selector: 'app-event-list',
+    templateUrl: './event-list.component.html',
+    styleUrls: ['./event-list.component.scss'],
+    standalone: false
 })
 export class EventListComponent implements OnInit {
   selectedIndex: number = 0;

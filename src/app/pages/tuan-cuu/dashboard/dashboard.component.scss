@@ -1,0 +1,256 @@
+.page-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.next-event {
+  color: var(--text-secondary-color);
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  
+  .loading-spinner {
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color, #1976d2);
+    animation: spin 1.5s linear infinite;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: var(--text-secondary-color, rgba(0, 0, 0, 0.6));
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.tuancuu-status-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.status-section {
+  .section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+
+    .title-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+
+      &.active {
+        background-color: var(--primary-color);
+      }
+
+      &.upcoming {
+        background-color: #FFA000;
+      }
+
+      &.completed {
+        background-color: #4CAF50;
+      }
+    }
+  }
+}
+
+.tuancuu-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tuancuu-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: var(--card-bg);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+  }
+
+  mat-card-header {
+    padding: 16px 16px 0 16px;
+
+    .avatar-icon {
+      background-color: var(--light-primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+    }
+
+    mat-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+  }
+
+  mat-card-content {
+    padding: 8px 16px;
+    flex-grow: 1;
+  }
+
+  mat-card-actions {
+    padding: 8px 8px 16px 16px;
+    display: flex;
+    justify-content: flex-start;
+    
+    button {
+      border-radius: 8px;
+    }
+  }
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 16px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-item {
+  .info-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 0.25rem;
+  }
+
+  .info-value {
+    font-size: 1rem;
+    color: var(--text-color);
+    font-weight: 500;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  .empty-icon {
+    font-size: 4rem;
+    height: 4rem;
+    width: 4rem;
+    color: var(--text-secondary-color);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary-color);
+  }
+
+  button {
+    margin-top: 1rem;
+  }
+}
+
+// Dark mode adjustments
+:host-context(.dark-mode) {
+  .tuancuu-card {
+    background-color: var(--card-bg);
+  }
+
+  .avatar-icon {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .empty-state {
+    background-color: var(--card-bg);
+  }
+  
+  .loading-container {
+    background-color: var(--card-bg);
+  }
+}

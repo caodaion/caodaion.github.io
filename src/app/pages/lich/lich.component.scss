@@ -1,0 +1,155 @@
+// Calendar container styles
+::ng-deep app-month-view,
+::ng-deep app-week-view,
+::ng-deep app-day-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent child views from overflowing */
+}
+
+::ng-deep .calendar-controller {
+  flex-direction: row !important;
+  align-items: center !important;
+  padding: 8px;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1));
+}
+
+::ng-deep .controller-left,
+::ng-deep .controller-right {
+  flex: 0 0 auto;
+}
+
+::ng-deep .date-range {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendar-drawer-container {
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden; /* Ensure drawer container doesn't overflow */
+}
+
+.calendar-drawer {
+  min-width: 280px;
+  max-width: 280px;
+  padding: 16px;
+  border-right: 1px solid var(--border-color, rgba(0,0,0,0.1));
+}
+
+/* Styles for shortcuts */
+.shortcuts-container {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.shortcuts-container h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  text-decoration: none;
+  color: var(--text-color);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.shortcut-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.shortcut-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
+.shortcut-icon mat-icon {
+  color: white;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.shortcut-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+::ng-deep mat-drawer-content {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important; /* Prevent overflow in both directions */
+  height: 100%; /* Ensure it takes full height */
+}
+
+::ng-deep mat-drawer-content .router-outlet-container {
+  flex: 1;
+  overflow: hidden; /* Changed from auto to hidden to prevent scrollbars */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .calendar-drawer {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .calendar-drawer {
+    min-width: 90%;
+    width: 90%;
+  }
+  
+  .shortcuts-container {
+    padding: 12px;
+  }
+  
+  .shortcuts-container h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  
+  .shortcut-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  ::ng-deep .calendar-controller {
+    padding: 4px;
+  }
+}
+
+::ng-deep {
+  app-lich {
+    mat-drawer-content.mat-drawer-content {
+      overflow: hidden !important; /* Prevent overflow in both directions */
+    }
+  }
+}

@@ -26,13 +26,7 @@
         ? 'Từ đứng sau'
         : inputFormControl?.placeholder
     "
-    [(ngModel)]="
-      modifierAt === 'prevText'
-        ? inputFormControl.prevText
-        : modifierAt === 'nextText'
-        ? inputFormControl.nextText
-        : inputFormControl.value
-    "
+    [(ngModel)]="modelValue"
     [required]="inputFormControl?.required"
     [autocomplete]="
       inputFormControl?.autocomplete ? inputFormControl?.autocomplete : 'off'

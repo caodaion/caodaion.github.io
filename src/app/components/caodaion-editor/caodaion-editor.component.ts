@@ -6,9 +6,10 @@ import { Location } from '@angular/common';
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'caodaion-editor',
-  templateUrl: './caodaion-editor.component.html',
-  styleUrls: ['./caodaion-editor.component.scss'],
+    selector: 'caodaion-editor',
+    templateUrl: './caodaion-editor.component.html',
+    styleUrls: ['./caodaion-editor.component.scss'],
+    standalone: false
 })
 export class CaodaionEditorComponent implements OnInit {
   @Input() renderDocument: any;

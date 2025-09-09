@@ -105,9 +105,10 @@
               >
             </ng-container>
             <ng-container *ngIf="text.formType == 'comboLocation'">
-              <span [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }">
+              <span *ngIf="getComboLocationText(text)?.length > 0" [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }">
                 {{ getComboLocationText(text) }}
               </span>
+              <span *ngIf="getComboLocationText(text)?.length == 0 && text?.dots > 0"><ng-container *ngFor="let dot of [].constructor(text?.dots)"> . </ng-container></span>
             </ng-container>
             <ng-container
               *ngIf="
@@ -118,8 +119,10 @@
               <span
                 [ngClass]="{ 'opacity-50': !text?.value }"
                 [ngStyle]="{ fontWeight: text?.value ? 'bold' : 'unset' }"
+                *ngIf="text?.value"
                 >{{ text?.value }}</span
               >
+              <span *ngIf="!text?.value && text?.dots > 0"><ng-container *ngFor="let dot of [].constructor(text?.dots)"> . </ng-container></span>
             </ng-container>
           </ng-container>
         </ng-container>

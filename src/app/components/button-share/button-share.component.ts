@@ -1,15 +1,17 @@
-import { AfterContentChecked, AfterViewChecked, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import * as QRCode from 'qrcode'
 
 @Component({
-  selector: 'button-share',
-  templateUrl: './button-share.component.html',
-  styleUrls: ['./button-share.component.scss']
+    selector: 'button-share',
+    templateUrl: './button-share.component.html',
+    styleUrls: ['./button-share.component.scss'],
+    standalone: false
 })
-export class ButtonShareComponent implements OnInit, AfterViewChecked {
+export class ButtonShareComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @Input() title?: any
   @Input() url?: any = ``
   shareBottomSheetRef: any;
@@ -18,6 +20,7 @@ export class ButtonShareComponent implements OnInit, AfterViewChecked {
   durationInSeconds = 3;
   @ViewChild('shareBottomSheet') shareBottomSheet!: any;
   sharedUrl: any = ''
+  qrSharedUrl: any = ''
 
   @HostListener('document:click', ['$event'])
   onClick(event: any) {
@@ -38,18 +41,46 @@ export class ButtonShareComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.router.events.subscribe((val: any) => {
+    this.sharedUrl = `${window.location.href}`
+    this.router.events.subscribe((val: any) => {      
       this.sharedUrl = `${window.location.origin}${val.url || window.location.pathname}`
+      QRCode.toDataURL(this.sharedUrl)
+        .then(url => {
+          this.qrSharedUrl = url;        
+        })
+        .catch(err => {
+          console.error(err);
+        });
     })
+    if (this.url) {
+      this.sharedUrl = this.url
+      QRCode.toDataURL(this.sharedUrl)
+        .then(url => {
+          this.qrSharedUrl = url;        
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  }
+
+  ngAfterViewChecked(): void {    
     if (this.url) {
       this.sharedUrl = this.url
     }
   }
 
-  ngAfterViewChecked(): void {
+  ngAfterViewInit(): void {
     if (this.url) {
       this.sharedUrl = this.url
     }
+    QRCode.toDataURL(this.sharedUrl)
+      .then(url => {
+        this.qrSharedUrl = url;        
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   copyLink() {
@@ -92,9 +123,7 @@ export class ButtonShareComponent implements OnInit, AfterViewChecked {
 
   saveAsImage(parent: any) {
     let parentElement = null
-    parentElement = parent.qrcElement.nativeElement
-      .querySelector("canvas")
-      .toDataURL("image/png")
+    parentElement = this.qrSharedUrl
     if (parentElement) {
       // converts base 64 encoded image to blobData
       let blobData = this.convertBase64ToBlob(parentElement)

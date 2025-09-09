@@ -11,7 +11,7 @@ export class KinhService {
 
   getKinhList(): Observable<any> {
     return this.http
-      .get(`assets/documents/kinh/tam-ky-pho-do-kinh.json`);
+      .get(`assets/documents/kinh/kinh_list.json`);
     // const url = `${API_PATH.kinh.root}`;
     // return this.http.get(url);
   }
@@ -27,7 +27,7 @@ export class KinhService {
   }
 
   getKinhContent(key: any): Observable<any> {
-    return this.http.get(`assets/documents/kinh/${key}.json`);
+    return this.http.get(`assets/documents/kinh/${key}.txt`, {responseType: 'text'});
   }
 
   getKinhContentFromAPI(key: any): Observable<any> {

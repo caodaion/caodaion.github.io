@@ -2,6 +2,7 @@
 @use "sass:map";
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 body {
   user-select: none;
@@ -273,4 +274,9 @@ input:-webkit-autofill:active {
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
   .mdc-notched-outline__notch {
   border-right: none;
+}
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }

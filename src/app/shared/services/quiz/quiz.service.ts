@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { read, utils } from 'xlsx';
+import { SheetService } from '../sheet/sheet.service';
+import { CommonService } from '../common/common.service';
+import { AuthService } from '../auth/auth.service';
 
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
@@ -8,103 +11,127 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] }
   providedIn: 'root'
 })
 export class QuizService {
-  readonly sheetUrl = `https://docs.google.com/spreadsheets/d/e/{id}/pub?output=xlsx`
-  readonly sheetId = `2PACX-1vTsJmf7PU_OGzxa4ruikf-OC7aDF2NGlLbIi9jKTthpc7OAPA2fe07nU5SWQ3Yx7HCbyAFxeRXMBQKp`
+  readonly sheetId = `2PACX-1vSazKGjlmbtJ2frNa2zkHGEwYIV5lt29Gd_9pGI3LX7-tHq8esauUI-OZCr2tfZathkwLfAB6-hlSkd`
   readonly quizWorkbook: any;
-  readonly settingStudentData: any;
-  readonly quizOfWorkbook: any;
-  readonly quizList: any;
-  readonly quizSetting: any;
-  isActiveQuizList: boolean = false;
-  countSettingValueColIndex = 2
-  constructor() {
-    this.fetchWorkbook()
+  readonly quiz = <any>[];
+
+  constructor(
+    private sheetService: SheetService,
+    private commonService: CommonService,
+    private authService: AuthService
+  ) {
   }
 
-  fetchWorkbook() {
-    if (!this.quizWorkbook) {
-      const ref: Mutable<this> = this;
-      const sheetUrl = this.sheetUrl.replace('{id}', this.sheetId)
-      fetch(sheetUrl)
-        .then((res: any) => res.arrayBuffer())
-        .then((req => {
-          const workbook = read(req)
-          ref.quizWorkbook = workbook
-          this.isActiveQuizList = true
-          this.getQuizList()
-            .subscribe()
-        }))
-    }
-  }
-
-  private decodeRawSheetData(data: any, slice: any = 1, header?: any) {
-    const column = [...new Set(Object.keys(data).map((col: any) => {
-      let returnData = data[col.replace(/\d+((.|,)\d+)?/, slice)]
-      if (returnData) {
-        if (!parseFloat(returnData['v'])) {
-          return returnData['v']
-        } else {
-          return new Date(returnData['v']).toString() !== 'Invalid Date' ? returnData['v'] : new Date(returnData['w']).getTime()
-        }
-      }
-    }))]?.filter((col: any) => !!col)
-    const responseData = utils.sheet_to_json<any>(data, {
-      header: header || column
-    })?.slice(slice);
-    responseData.forEach((item: any) => {
-      if (item?.option?.includes('||')) {
-        item.options = item?.option?.split('||')
-      }
-    })
-    return responseData
-  }
-
-  getQuizList(request?: any): Observable<any> {
+  fetchQuiz(): Observable<any> {
+    const ref: Mutable<this> = this;
     return new Observable((observable) => {
-      let querySheet = 'quiz'
-      if (request?.subject && request?.time) {
-        querySheet = request.subject
-      }
-      const quizList = this.quizWorkbook.Sheets[querySheet]
-      let data = this.decodeRawSheetData(quizList).filter((item: any) => !!item.key)
-      if (!request?.subject && !request?.time) {
-        const ref: Mutable<this> = this;
-        ref.settingStudentData = data
-      }
-      const ref: Mutable<this> = this;
-      ref.quizList = data
-      const response = {
-        code: data?.length > 0 ? 200 : 404,
-        data: data
-      }
-      observable.next(response)
-      observable.complete()
-    })
-  }
-
-  getQuizListOfDoc(docId: any, article: any) {
-    return new Observable((observable) => {
-      const ref: Mutable<this> = this;
-      const sheetUrl = this.sheetUrl.replace('{id}', docId)
-      fetch(sheetUrl)
-        .then((res: any) => res.arrayBuffer())
-        .then((req => {
-          const workbook = read(req)
-          ref.quizOfWorkbook = workbook
-          ref.quizSetting = this.decodeRawSheetData(this.quizOfWorkbook.Sheets[article || 'setting'])
-          if (!article) {
-            ref.quizSetting = ref.quizSetting.filter((item: any) => !!item.key)
-          }
-          const response = <any>{
-            code: ref.quizSetting?.length > 0 ? 200 : 404,
-            data: ref.quizSetting
-          }
-          if (article) {
-            response['name'] =this.decodeRawSheetData(this.quizOfWorkbook.Sheets['setting'])?.find((item: any) => item.key === article)?.name
+      const returnData = () => {
+        this.authService.getCurrentUser().subscribe((res: any) => {
+          const currentUser = res;
+          let response = <any>{}
+          if (ref.quizWorkbook.SheetNames?.length > 0) {
+            ref.quizWorkbook.SheetNames?.forEach((sheetName: any) => {
+              const objectKey = this.commonService.generatedSlug(sheetName)
+              const quiz = <any>{}
+              quiz.key = objectKey
+              quiz.name = sheetName
+              quiz.xp = 0
+              this.sheetService.decodeRawSheetData(ref.quizWorkbook.Sheets[sheetName])
+                .subscribe((res: any) => {
+                  const rawSetting = res?.filter((item: any) => item.base === 'global' && item?.option === 'setting')
+                  const settingData = <any>{}
+                  rawSetting?.forEach((setting: any) => {
+                    settingData[setting?.question] = setting?.answer
+                    if (setting?.question === 'references') {
+                      settingData[setting?.question] = JSON.parse(setting?.answer);
+                    }
+                  })
+                  const gateKeys = [... new Set(res.map((item: any) => item?.base))]?.filter((item: any) => item && item !== 'global' && !item?.includes('.'))
+                  const gateList = <any>[]
+                  gateKeys?.forEach((gateKey: any) => {
+                    const foundGate = res.filter((item: any) => item.base.includes(gateKey) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 1)
+                    const gateSetting = <any>{}
+                    const responseGate = <any>{}
+                    foundGate?.filter((item: any) => item?.option === 'setting')?.forEach((gs: any) => {
+                      gateSetting[gs?.question] = gs?.answer
+                    })
+                    const foundGateLesson = res.filter((item: any) => item.base.includes(gateKey) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 2)
+                    const foundGateLessonKeys = [...new Set(foundGateLesson?.map((fgl: any) => fgl.base))]
+                    foundGateLessonKeys?.forEach((fglk: any) => {
+                      const responeLesson = <any>{}
+                      const lessonSetting = <any>{}
+                      const foundLesson = res.filter((item: any) => item.base.includes(fglk) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 2)
+                      foundLesson?.filter((item: any) => item?.option === 'setting')?.forEach((ls: any) => {
+                        lessonSetting[ls?.question] = ls?.answer
+                      })
+                      responeLesson.key = fglk.split('.')[1]
+                      responeLesson.setting = lessonSetting
+                      const foundQuestion = res.filter((item: any) => item?.option !== 'setting' && item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
+                      const foundSetting = res.filter((item: any) => item?.option == 'setting' && item.base.includes(`${quiz.key}.${gateKey}.${responeLesson.key}`) && item.base.split('.')?.filter((sb: any) => !!sb)?.length == 3)
+                      foundQuestion?.forEach((fq: any) => {
+                        const responseQuestion = <any>{}
+                        responseQuestion.key = fq?.key
+                        responseQuestion.answer = fq?.answer
+                        responseQuestion.question = fq?.question
+                        responseQuestion.setting = <any>{}
+                        const foundQuestionSetting = foundSetting?.filter((fqs: any) => fqs.key === fq.key)
+                        if (foundQuestionSetting?.length > 0) {
+                          foundQuestionSetting?.forEach((fqs: any) => {
+                            responseQuestion.setting[fqs?.question] = fqs?.answer
+                          })
+                        }
+                        if (typeof fq?.option == 'string') {
+                          responseQuestion.option = JSON.parse(fq?.option)?.map((po: any) => { return { text: po } })
+                        }
+                        if (!responeLesson?.questions) {
+                          responeLesson.questions = <any>[]
+                        }
+                        responeLesson.questions.push(responseQuestion)
+                        quiz.xp++
+                      })
+                      if (!responseGate.lesson) {
+                        responseGate.lesson = <any>[]
+                      }
+                      responseGate.lesson?.push(responeLesson)
+                    })
+                    responseGate.key = gateKey
+                    responseGate.setting = gateSetting
+                    gateList.push(responseGate)
+                  })
+                  quiz.gates = gateList
+                  if (settingData?.permission?.includes(currentUser?.userName)) {
+                    settingData.allowToEdit = true
+                  }
+                  quiz.setting = settingData
+                })
+              ref.quiz.push(quiz)
+            })
+            response.status = 200
+            response.data = ref.quiz
+          } else {
+            response.status = 4000
           }
           observable.next(response)
           observable.complete()
-        }))
+        })
+      }
+      if (!ref.quizWorkbook) {
+        try {
+          this.sheetService.fetchSheet(this.sheetId)
+            .subscribe((res: any) => {
+              if (res.status == 200) {
+                if (res?.workbook) {
+                  ref.quizWorkbook = res?.workbook
+                  returnData()
+                }
+              }
+            })
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        returnData()
+      }
     })
   }
 }

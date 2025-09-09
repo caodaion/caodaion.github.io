@@ -3,9 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'cp-editor-form-control',
-  templateUrl: './cp-editor-form-control.component.html',
-  styleUrls: ['./cp-editor-form-control.component.scss'],
+    selector: 'cp-editor-form-control',
+    templateUrl: './cp-editor-form-control.component.html',
+    styleUrls: ['./cp-editor-form-control.component.scss'],
+    standalone: false
 })
 export class CpEditorFormControlComponent implements OnInit {
   @Input() renderDocument: any;

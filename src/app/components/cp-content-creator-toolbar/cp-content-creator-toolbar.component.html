@@ -9,12 +9,12 @@
       <mat-icon>save</mat-icon>Lưu
     </button>
     <button
-      *ngIf="!contentEditable"
-      (click)="onPrint()"
+      *ngIf="contentEditable"
+      (click)="reset.emit()"
       mat-stroked-button
-      [color]="'primary'"
+      color="primary"
     >
-      <mat-icon>print</mat-icon>In
+      <mat-icon>refresh</mat-icon>Tải lại
     </button>
   </div>
   <div class="toolbar-content">

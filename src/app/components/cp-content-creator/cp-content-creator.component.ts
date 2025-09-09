@@ -8,20 +8,23 @@ import { CpCreatorContentComponent } from '../cp-creator-content/cp-creator-cont
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
-  selector: 'cp-content-creator',
-  templateUrl: './cp-content-creator.component.html',
-  styleUrls: ['./cp-content-creator.component.scss']
+    selector: 'cp-content-creator',
+    templateUrl: './cp-content-creator.component.html',
+    styleUrls: ['./cp-content-creator.component.scss'],
+    standalone: false
 })
 export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   [x: string]: any;
   @Input() data: any;
+  @Input() topGuide?: any;
   @Input() rootContent: any;
   @Input() contentEditable: boolean = false;
   @Input() isShowFontSizeSelect: boolean = true;
+  @Input() isShowController: any = undefined;
   @Output() save = new EventEmitter();
+  @Output() reset = new EventEmitter();
   @Output() nextContent = new EventEmitter();
   @Output() nextFontSize = new EventEmitter();
-  isShowController: boolean = false;
   isAutoPlay: boolean = false;
   audioReadyToPlay: boolean = false;
   fromLocalStorage: boolean = true;
@@ -86,11 +89,14 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.breakpointObserver
-      .observe(['(max-width: 600px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isShowController = !state.matches && this.contentEditable;
-      });
+    if (typeof this.isShowController === 'undefined') {
+      this.isShowController = true
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          this.isShowController = !state.matches && this.contentEditable;
+        });
+    }
     this.audioTracking()
     this.getLocationSettings()
     console.log(this.rootContent);
@@ -142,8 +148,6 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
 
   getLocationSettings() {
     this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
   }
 
   getId(block: any) {
@@ -319,93 +323,71 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
+    if (this.commonService.provinces?.length === 0) {
+      this.commonService.fetchProvinceData()
         .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
+          if (res?.status == 200) {
+            this.provinces = res.provinces
+            this.districts = res.districts
+            this.wards = res.wards
           }
         })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-              this.filteredDistricts = res?.filter((item: any) => item.province_code === this.addedComboLocation?.province)
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.addedComboLocation.province)
-    }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-              this.filteredWards = res?.filter((item: any) => item.district_code === this.addedComboLocation?.district)
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.addedComboLocation.district)
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
     }
   }
 
   addComboLocation() {
-    const comboLocation = document.getElementById(this.addedComboLocation.key)
-    comboLocation?.setAttribute('value', JSON.stringify(this.addedComboLocation))
-    if (comboLocation) {
-      const country = this.addedComboLocation.country
-      const province = this.provinces.find((item: any) => item.code === parseInt(this.addedComboLocation.province))
-      const district = this.districts.find((item: any) => item.code === parseInt(this.addedComboLocation.district))
-      const ward = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))
-      const wardName = this.wards.find((item: any) => item.code === parseInt(this.addedComboLocation.ward))?.name?.replace('Phường', '')?.replace('Thị trấn', '')?.replace('Xã', '')
-      switch (this.addedComboLocation.mode) {
+    const comboLocation = document.getElementById(this.addedComboLocation.key);
+    if (!comboLocation) return;
+
+    const { country, province, district, ward, village, mode, title } = this.addedComboLocation;
+    const isShowCountry = this.isShowCountry;
+
+    const provinceData = this.provinces.find((item: any) => item.id === province);
+    const districtData = this.districts.find((item: any) => item.id === district);
+    const wardData = this.wards.find((item: any) => item.id === ward);
+
+    const formatName = (name: string, prefixes: string[]) => 
+      prefixes.reduce((acc, prefix) => acc.replace(prefix, '').trim(), name);
+
+    const formatWardName = (name: string) => {
+      const cleanName = formatName(name, ['Phường', 'Thị trấn', 'Xã']);
+      return parseInt(cleanName) ? `đệ ${this.commonService.convertNumberToText(cleanName)}` : cleanName;
+    };
+
+    const getLocationText = () => {
+      switch (mode) {
         case 'PpDdWwA':
-          this.addedComboLocation.text = `${country ? country + ' quốc,' : ''} ${province ? province?.name?.replace('Thành phố', '')?.replace('Tỉnh', '') + ' ' +
-            province?.division_type : ''
-            }${district ? ', ' + district?.name?.replace('Huyện', '')?.replace('Quận', '')?.replace('Thị xã', '')?.replace('Thành phố', '') + ' ' +
-              district?.division_type : ''
-            }${ward ? ', ' + (parseInt(wardName) ? 'đệ ' + this.commonService.convertNumberToText(wardName) : wardName) + ' ' +
-              ward?.division_type : ''
-            }${this.addedComboLocation.village ? ', ' + this.addedComboLocation.village : ''}`.trim()
-          break;
+          return [
+            isShowCountry ? `${country} quốc,` : '',
+            provinceData && `${formatName(provinceData.name, ['Thành phố', 'Tỉnh'])} ${provinceData.name.split(formatName(provinceData.name, ['Thành phố', 'Tỉnh']))[0].toLowerCase()}`,
+            districtData && `${formatName(districtData.name, ['Huyện', 'Quận', 'Thị xã', 'Thành phố'])} ${districtData.name.split(formatName(districtData.name, ['Huyện', 'Quận', 'Thị xã', 'Thành phố']))[0].toLowerCase()}`,
+            wardData && `${formatWardName(wardData.name)} ${wardData.level.toLowerCase()}`,
+            village
+          ].filter(Boolean).join(', ');
         case 'pPdDwWA':
-          this.addedComboLocation.text = this.addedComboLocation.title
-          break;
+          return title;
         default:
-          break;
+          return '';
       }
-      comboLocation.innerHTML = this.addedComboLocation.text
-      const data = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key)
-      if (data) {
-        data.value = this.addedComboLocation
-        this.onBlur()
-        this.saveData()
-      }
+    };
+
+    const locationText = getLocationText().trim();
+    comboLocation.setAttribute('value', JSON.stringify(this.addedComboLocation));
+    comboLocation.innerHTML = locationText;
+    this.addedComboLocation.text = locationText;
+
+    const formGroupData = this.data.formGroup?.find((item: any) => item.key === this.addedComboLocation.key);
+    if (formGroupData) {
+      formGroupData.value = this.addedComboLocation;
+      this.onBlur();
+      this.saveData();
     }
+
+    console.log(this.addedComboLocation);
   }
 
   onBlur() {
@@ -415,5 +397,56 @@ export class CpContentCreatorComponent implements OnChanges, AfterViewInit {
 
   updateFontSize() {
     this.nextFontSize.emit(this.contentFormat?.fontSize)
+  }
+
+
+  onPrint() {
+    let printTab = window.open(
+      '',
+      'PRINT',
+      `width=${window.innerWidth},height=${window.innerHeight}`
+    );
+    printTab?.document.write(
+      `<html><head>
+      <title>${document.title.toUpperCase()}PRINTER</title>
+      <style>
+      .tableContent td, th {
+        font-size: 22px;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 1px solid #000000;
+      }
+      .btn-share-item {
+        display: none;
+      }
+      .hide-print {
+        display: none;
+      }
+      </style>
+      `
+    );
+    printTab?.document.write('</head><body >');
+
+    const printContent = document.getElementById('contentCreatorWrapper');
+    const writeContent = document.createElement('DIV');
+    if (writeContent) {
+      writeContent.innerHTML = `${printContent?.outerHTML}`;
+      // @ts-ignore
+      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
+        // @ts-ignore
+        writeContent.childNodes[0].style.padding = 0;
+      }
+    }
+    printTab?.document.write(writeContent?.outerHTML);
+    printTab?.document.write('</body></html>');
+    printTab?.document.close(); // necessary for IE >= 10
+    printTab?.focus(); // necessary for IE >= 10*/
+    printTab?.print();
+  }
+
+  onPress(event: any) {
+    if (event?.keyCode == 32) {
+      event['target']['value'] = event['target']['value'] + ' '
+    }
   }
 }

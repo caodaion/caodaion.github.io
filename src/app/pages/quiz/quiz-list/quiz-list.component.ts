@@ -1,46 +1,45 @@
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { QuizService } from 'src/app/shared/services/quiz/quiz.service';
 
 @Component({
-  selector: 'app-quiz-list',
-  templateUrl: './quiz-list.component.html',
-  styleUrls: ['./quiz-list.component.scss']
+    selector: 'app-quiz-list',
+    templateUrl: './quiz-list.component.html',
+    styleUrls: ['./quiz-list.component.scss'],
+    standalone: false
 })
 export class QuizListComponent implements OnInit {
-
-  quizList: any;
-  cols = 0
-
-  constructor(private quizService: QuizService,
-    private breakpointObserver: BreakpointObserver) {
+  quiz = <any>[]
+  constructor(
+    private quizService: QuizService
+  ) {
 
   }
 
   ngOnInit(): void {
-    this.getQuizList()
-    this.breakpointObserver
-      .observe(['(max-width: 600px)'])
-      .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.cols = 1
-        } else {
-          this.cols = 4
-        }
-      });
+    this.fetchQuiz()
   }
 
-  getQuizList() {
-    try {
-      this.quizService.getQuizList()
-        .subscribe((res: any) => {
-          console.log(res);
-          if (res.code === 200) {
-            this.quizList = res.data
-          }
-        })
-    } catch (e) {
-      console.log(e);
+
+  fetchQuiz() {
+    if (this.quizService?.quiz?.length > 0) {
+      this.quiz = this.quizService?.quiz
+      console.log(this.quiz);
+    } else {
+      try {
+        this.quizService.fetchQuiz()
+          .subscribe((res: any) => {
+            if (res.status == 200) {
+              this.quiz = res.data
+              console.log(this.quiz);
+            }
+          })
+      } catch (e) {
+        console.error(e);
+      }
     }
+  }
+
+  updatedImage(section: any, field?: any) {
+    section.loaded = true
   }
 }

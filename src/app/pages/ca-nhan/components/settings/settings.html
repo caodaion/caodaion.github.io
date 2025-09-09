@@ -1,0 +1,18 @@
+<app-child-header [title]="'Thiết lập'"></app-child-header>
+<div class="container-fluid">
+    <div class="fixed-tasks">
+        <h3>Các nhiệm vụ cố định</h3>
+        <div class="form-group">
+            <mat-form-field [appearance]="'outline'" class="form-field">
+                <mat-label>Mục tiêu số đàn cúng mỗi ngày</mat-label>
+                <input matInput placeholder="Nhập mục tiêu" type="number" [(ngModel)]="settingsData.targetPrayer" />
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <mat-form-field [appearance]="'outline'" class="form-field">
+                <mat-label>Mục tiêu số đàn cúng mỗi ngày</mat-label>
+                <input matInput placeholder="Nhập mục tiêu" type="number" [(ngModel)]="settingsData.targetPrayer" />
+            </mat-form-field>
+        </div>
+    </div>
+</div>

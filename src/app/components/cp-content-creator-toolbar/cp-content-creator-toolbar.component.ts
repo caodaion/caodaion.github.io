@@ -5,15 +5,17 @@ import { LocationService } from 'src/app/shared/services/location/location.servi
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 @Component({
-  selector: 'cp-content-creator-toolbar',
-  templateUrl: './cp-content-creator-toolbar.component.html',
-  styleUrls: ['./cp-content-creator-toolbar.component.scss']
+    selector: 'cp-content-creator-toolbar',
+    templateUrl: './cp-content-creator-toolbar.component.html',
+    styleUrls: ['./cp-content-creator-toolbar.component.scss'],
+    standalone: false
 })
 export class CpContentCreatorToolbarComponent implements OnInit {
   @Input() data: any;
   @Input() focusedBlock: any;
   @Input() contentEditable: boolean = false;
   @Output() save = new EventEmitter();
+  @Output() reset = new EventEmitter();
 
 
   addedFormField = <any>{}
@@ -54,9 +56,9 @@ export class CpContentCreatorToolbarComponent implements OnInit {
         key: ''
       }
     }
-    this.getAllDivisions()
-    this.getDistricts()
-    this.getWards()
+    // this.getAllDivisions()
+    // this.getDistricts()
+    // this.getWards()
   }
 
   saveData() {
@@ -325,100 +327,20 @@ export class CpContentCreatorToolbarComponent implements OnInit {
   }
 
   getAllDivisions() {
-    this.provinces = this.locationService.provinces
-    try {
-      this.locationService.getAllDivisions()
-        .subscribe((res: any) => {
-          if (res?.length > 0) {
-            this.provinces = res
-            this.locationService.provinces = res
-          }
-        })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  getDistricts() {
-    this.districts = this.locationService.districts
-    if (!this.districts || this.districts?.length === 0) {
-      try {
-        this.locationService.getDistricts()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.districts = res
-              this.locationService.districts = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
+    if (this.commonService.provinces?.length === 0) {
+    this.commonService.fetchProvinceData()
+      .subscribe((res: any) => {
+        if (res?.status == 200) {
+          this.provinces = res.provinces
+          this.districts = res.districts
+          this.wards = res.wards
+        }
+      })
     } else {
-      this.filteredDistricts = this.districts?.filter((item: any) => item.province_code === this.calculatedTuanCuu?.details?.province)
+      this.provinces = this.commonService.provinces
+      this.districts = this.commonService.districts
+      this.wards = this.commonService.wards
     }
-  }
-
-  getWards() {
-    this.wards = this.locationService.wards
-    if (!this.wards || this.wards?.length === 0) {
-      try {
-        this.locationService.getWards()
-          .subscribe((res: any) => {
-            if (res?.length > 0) {
-              this.wards = res
-              this.locationService.wards = res
-            }
-          })
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this.filteredWards = this.wards?.filter((item: any) => item.district_code === this.calculatedTuanCuu?.details?.district)
-    }
-  }
-
-  onPrint() {
-    let printTab = window.open(
-      '',
-      'PRINT',
-      `width=${window.innerWidth},height=${window.innerHeight}`
-    );
-    printTab?.document.write(
-      `<html><head>
-      <title>${document.title.toUpperCase()}PRINTER</title>
-      <style>
-      .tableContent td, th {
-        font-size: 22px;
-        text-align: left;
-        padding: 1rem;
-        border-bottom: 1px solid #000000;
-      }
-      .btn-share-item {
-        display: none;
-      }
-      .hide-print {
-        display: none;
-      }
-      </style>
-      `
-    );
-    printTab?.document.write('</head><body >');
-
-    const printContent = document.getElementById('contentCreatorWrapper');
-    const writeContent = document.createElement('DIV');
-    if (writeContent) {
-      writeContent.innerHTML = `${printContent?.outerHTML}`;
-      // @ts-ignore
-      if (writeContent.childNodes[0] && writeContent.childNodes[0].style) {
-        // @ts-ignore
-        writeContent.childNodes[0].style.padding = 0;
-      }
-    }
-    printTab?.document.write(writeContent?.outerHTML);
-    printTab?.document.write('</body></html>');
-    printTab?.document.close(); // necessary for IE >= 10
-    printTab?.focus(); // necessary for IE >= 10*/
-    printTab?.print();
   }
 }
 

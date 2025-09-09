@@ -1,0 +1,78 @@
+.calendar-controller {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+}
+
+.controller-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.controller-right {
+  display: flex;
+  align-items: center;
+}
+
+.date-range {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.view-select {
+  width: 100px;
+  color: var(--text-color);
+}
+
+@media (max-width: 600px) {
+  .calendar-controller {
+    padding: 8px 0;
+  }
+
+  .date-range {
+    font-size: 1rem;
+  }
+
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 36px;
+    padding: 0;
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      line-height: 18px;
+    }
+  }
+
+  .view-select {
+    width: 80px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .calendar-controller {
+    padding: 6px 0;
+  }
+
+  .date-range {
+    font-size: 0.9rem;
+    margin-left: 4px;
+  }
+
+  .view-select {
+    width: 70px;
+  }
+}

@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <h1>Cài đặt thông báo</h1>
-  <p
-    >Hãy đảm bảo rằng bạn luôn mở ứng dụng để tính năng thông báo hoạt động được
-    tốt nhất</p
-  >
+  <p>
+    Hãy đảm bảo rằng bạn luôn mở ứng dụng để tính năng thông báo hoạt động được
+    tốt nhất
+  </p>
   <mat-accordion multi>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
@@ -13,8 +13,8 @@
         >
       </mat-expansion-panel-header>
       <div>
-        <mat-form-field [appearance]="'outline'">
-          <mat-label>Báo trước (phút)</mat-label>
+        <mat-form-field [appearance]="'outline'" class="w-full">
+          <mat-label>Báo trước khi mở ứng dụng (phút)</mat-label>
           <input
             type="number"
             matInput
@@ -40,7 +40,7 @@
     </mat-expansion-panel>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
-        <mat-panel-title>Tự học đạo</mat-panel-title>
+        <mat-panel-title>Tự học đạo mỗi ngày</mat-panel-title>
         <mat-panel-description
           >Thông báo thời gian thuận lợi để học hỏi thêm kiến thức
           mới</mat-panel-description
@@ -48,7 +48,7 @@
       </mat-expansion-panel-header>
       <div>
         <div class="d-flex flex-wrap">
-          <div class="form-group" style="margin: 22px 0;">
+          <div class="form-group" style="margin: 22px 0">
             <mat-slide-toggle
               [(ngModel)]="pushNotificationsSettings.study.active"
               (ngModelChange)="changeSetting()"
@@ -70,7 +70,7 @@
           </div>
           <div class="form-group">
             <mat-form-field [appearance]="'outline'">
-              <mat-label>Báo trước (phút)</mat-label>
+              <mat-label>Báo trước khi mở ứng dụng (phút)</mat-label>
               <input
                 type="number"
                 matInput
@@ -79,6 +79,16 @@
                 [disabled]="!pushNotificationsSettings.study.active"
               />
             </mat-form-field>
+          </div>
+          <div class="form-group">
+            <button
+              mat-flat-button
+              [color]="'primary'"
+              [disabled]="!pushNotificationsSettings.study.active"
+              (click)="onSyncToGoogleCalendar()"
+            >
+              <mat-icon>cloud_sync</mat-icon>Đồng bộ lịch lên Google Calendar
+            </button>
           </div>
         </div>
       </div>

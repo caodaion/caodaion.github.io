@@ -6,9 +6,10 @@ import { EventService } from 'src/app/shared/services/event/event.service';
 import { KinhService } from 'src/app/shared/services/kinh/kinh.service';
 
 @Component({
-  selector: 'app-event-details',
-  templateUrl: './event-details.component.html',
-  styleUrls: ['./event-details.component.scss']
+    selector: 'app-event-details',
+    templateUrl: './event-details.component.html',
+    styleUrls: ['./event-details.component.scss'],
+    standalone: false
 })
 export class EventDetailsComponent implements OnInit {
 

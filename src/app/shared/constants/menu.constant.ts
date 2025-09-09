@@ -1,7 +1,7 @@
 export const MENU = [
   {
     key: 'trang-chu',
-    url: 'trang-chu',
+    url: '',
     label: 'Trang chủ',
     icon: 'home',
     fullAssess: true,
@@ -15,14 +15,14 @@ export const MENU = [
         fullAssess: true,
         released: true,
       },
-      {
-        key: 'trang-chu.thanh-ngon-hiep-tuyen',
-        url: 'thanh-ngon-hiep-tuyen',
-        label: 'Thánh Ngôn Hiệp Tuyển',
-        icon: 'auto_stories',
-        fullAssess: true,
-        released: true
-      },
+      // {
+      //   key: 'trang-chu.thanh-ngon-hiep-tuyen',
+      //   url: 'thanh-ngon-hiep-tuyen',
+      //   label: 'Thánh Ngôn Hiệp Tuyển',
+      //   icon: 'auto_stories',
+      //   fullAssess: true,
+      //   released: true
+      // },
       {
         key: 'trang-chu.thu-vien',
         url: 'thu-vien',
@@ -32,20 +32,12 @@ export const MENU = [
         released: true,
       },
       {
-        key: 'trang-chu.hanh-trinh',
-        url: 'hanh-trinh',
-        label: 'Hành trình',
-        icon: 'trip_origin',
+        key: 'trang-chu.english',
+        url: 'english',
+        label: 'Tiếng Anh',
+        icon: 'translate',
         fullAssess: true,
         released: true,
-      },
-      {
-        key: 'trang-chu.thanh-that', //??
-        url: 'thanh-that',
-        label: 'Thánh Thất',
-        icon: 'location_city',
-        fullAssess: true,
-        released: false,
       }
     ]
   },
@@ -57,14 +49,14 @@ export const MENU = [
     fullAssess: true,
     released: true,
     children: [
-      {
-        key: 'lich.su-kien',
-        url: 'su-kien',
-        label: 'Sự kiện',
-        icon: 'bookmark_border',
-        fullAssess: true,
-        released: true,
-      },
+      // {
+      //   key: 'lich.su-kien',
+      //   url: 'su-kien',
+      //   label: 'Sự kiện',
+      //   icon: 'bookmark_border',
+      //   fullAssess: true,
+      //   released: true,
+      // },
       {
         key: 'lich.tinh-tuan-cuu',
         url: 'tinh-tuan-cuu',
@@ -72,7 +64,23 @@ export const MENU = [
         icon: 'calculate',
         fullAssess: true,
         released: true,
-      }
+      },
+      {
+        key: 'lich.cong-phu',
+        url: 'cong-phu',
+        label: '<self_improvement>',
+        icon: 'self_improvement',
+        fullAssess: true,
+        released: true,
+      },
+      // {
+      //   key: 'lich.dong-bo',
+      //   url: 'dong-bo',
+      //   label: 'Đăng ký thông báo',
+      //   icon: 'cloud_sync',
+      //   fullAssess: true,
+      //   released: true,
+      // }
     ]
   },
   {
@@ -101,19 +109,19 @@ export const MENU = [
         released: true,
       },
       {
+        key: 'tac-vu.hanh-le',
+        url: 'hanh-le',
+        label: 'Hành lễ',
+        icon: 'circle',
+        fullAssess: true,
+        released: true,
+      },
+      {
         key: 'tac-vu.phong-tho',
         url: 'phong-tho',
         label: 'Phòng Thơ',
         icon: 'circle',
         fullAssess: false,
-        released: true,
-      },
-      {
-        key: 'tac-vu.sync',
-        url: 'sync',
-        label: 'Đồng bộ dữ liệu',
-        icon: 'sync',
-        fullAssess: true,
         released: true,
       },
       {
@@ -127,12 +135,11 @@ export const MENU = [
     ]
   },
   {
-    key: 'game',
-    url: 'game',
-    label: 'Trò chơi',
-    icon: 'videogame_asset',
+    key: 'apps',
+    url: 'apps',
+    label: 'Ứng dụng',
+    icon: 'apps',
     fullAssess: true,
     released: true,
-    children: []
   },
 ]

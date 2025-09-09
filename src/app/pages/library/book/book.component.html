@@ -1,93 +1,111 @@
 <div class="wrapper-container book-content-container">
-  <app-header
-    class="header"
-    [prevPage]="{
+  <app-header class="header" [prevPage]="{
       navigate: {
-        link: getBackLink(),
-        queryParams: navigate.prev.queryParams
+        link: getBackLink()
       }
-    }"
-  >
+    }">
     <div class="book-header">
-      <app-header-title>{{ content?.name }}</app-header-title>
+      <app-header-title>{{ contentName }}</app-header-title>
+      <app-header-sub-title *ngIf="author">{{author}}</app-header-sub-title>
     </div>
   </app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
   <div class="book-container-wrapper" *ngIf="!isShowTableContent">
-    <div *ngIf="content" class="h-100">
-      <cp-content-creator
-        [data]="content"
-        [rootContent]="rootContent"
-        [contentEditable]="contentEditable"
-        (save)="onSaveContent()"
-        (nextContent)="onNextContent()"
-      ></cp-content-creator>
-    </div>
-  </div>
-  <div class="book-table-content-container-wrapper" *ngIf="isShowTableContent">
-    <div class="container-fluid">
-      <div class="reading-section" *ngIf="reading?.name">
-        <h2>Bạn đang đọc: <span style="font-weight: 400;">{{ reading?.name }}</span></h2>
-        <p *ngIf="reading?.stopAt">
-          <strong>Đoạn: </strong>{{ reading?.stopAt }}
-        </p>
-        <button
-          mat-flat-button
-          [color]="'primary'"
-          class="w-100"
-          (click)="continueReading()"
-        >
-          ĐỌC TIẾP
-        </button>
-        <button
-          mat-flat-button
-          [color]="'primary'"
-          class="w-100"
-          (click)="continueReading(true)"
-          *ngIf="reading?.currentTime"
-        >
-          ĐỌC TIẾP VÀ NGHE
-        </button>
-      </div>
-    </div>
-    <mat-accordion multi>
-      <mat-expansion-panel disabled hideToggle [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title><h3 class="content-name">{{ content?.name }}</h3></mat-panel-title>
-          <div class="d-flex align-items-center">
-            <button mat-stroked-button (click)="onReadNow()">Đọc</button>
-          </div>
-        </mat-expansion-panel-header>
-        <div>
-          <mat-accordion multi>
-            <mat-expansion-panel *ngFor="let q of content?.content" hideToggle [expanded]="false">
-              <mat-expansion-panel-header>
-                <mat-panel-title><h6 class="content-name">{{getContentName(q)}}</h6></mat-panel-title>
-                <div class="d-flex align-items-center">
-                  <button mat-stroked-button (click)="readContent(q)">Đọc</button>
-                </div>
-              </mat-expansion-panel-header>
-              <div>
-                <mat-list>
-                  <mat-list-item *ngFor="let p of q?.content">
-                    <div class="w-100 d-flex justify-content-between align-items-center">
-                      <div class="content-name">{{getContentName(p)}}</div>
-                      <div class="d-flex align-items-center">
-                        <button mat-stroked-button (click)="readContent(p)">Đọc</button>
-                      </div>
-                    </div>
-                  </mat-list-item>
-                </mat-list>
+    <mat-tab-group class="h-full" (selectedIndexChange)="selectedIndex = $event">
+      <mat-tab [label]="'Nội dung'">
+        <mat-drawer-container>
+          <mat-drawer-content>
+            <div class="flex flex-col overflow-hidden h-full">
+              <div *ngIf="content" class="h-100 flex-1 overflow-auto bg-white" [ngClass]="{'ps-4': !isPhone}">
+                <iframe [src]="
+                'https://docs.google.com/document/d/e/' +
+                  content +
+                  '/pub?embedded=true' | safe
+              " frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen class="w-full h-full"
+                  #googleDocContent></iframe>
               </div>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+            </div>
+            <div class="p-4 mt-4" *ngIf="(books | searchBookByKeyWord: {selectedChips: selectedChips})?.length > 1">
+              <div class="text-2xl">Bài viết cùng loại:</div>
+              <mat-chip-set aria-label="label selection">
+                <mat-chip *ngFor="let chip of selectedChips">{{chip}}</mat-chip>
+              </mat-chip-set>
+              <div class="flex flex-wrap my-4">
+                <div class="p-2 w-full" [ngClass]="{'!w-1/4': cols === 4}"
+                  *ngFor="let item of books | searchBookByKeyWord: {selectedChips: selectedChips}">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-icon mat-card-avatar *ngIf="!item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                        matTooltip="Đang viết" class="text-[#4758b8]">history_edu</mat-icon>
+                      <mat-icon mat-card-avatar *ngIf="item?.finished" [ngStyle]="{fontSize: '40px', height: '40px'}"
+                        matTooltip="Hoàn thành" class="text-[#01855d]">check_circle</mat-icon>
+                      <mat-card-title (click)="onItemFocus(item)"
+                        class="hover:underline cursor-pointer">{{item?.name}}</mat-card-title>
+                      <mat-card-subtitle class="hover:underline cursor-pointer">{{item?.author}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img loading="lazy" mat-card-image *ngIf="item?.cover" [src]="item?.cover" [alt]="item?.name"
+                      (click)="onItemFocus(item)" class="object-cover h-40 w-full cursor-pointer mt-3" />
+                    <img loading="lazy" mat-card-image *ngIf="!item?.cover" (click)="onItemFocus(item)"
+                      src="/assets/icons/assets/book-bookmark-minimalistic-svgrepo-com.svg"
+                      class="object-contain h-40 w-full cursor-pointer mt-3" [alt]="item?.name" />
+                    <mat-card-content>
+                      <div class="my-3">{{item?.description}}</div>
+                      <mat-chip-set aria-label="label selection">
+                        <mat-chip *ngFor="let chip of item?.labels">{{chip}}</mat-chip>
+                      </mat-chip-set>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button (click)="onItemFocus(item)"> <mat-icon>visibility</mat-icon> ĐỌC
+                        SÁCH</button>
+                    </mat-card-actions>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </mat-drawer-content>
+          <mat-drawer [mode]="'side'" [position]="'end'" #libradianDrawer>
+            <ng-container *ngFor="let item of tableContent">
+              <a [href]="'thu-vien/' + key + '#' + item?.key" class="block p-3" matRipple
+                (click)="isPhone ? libradianDrawer.toggle() : ''">
+                <span class="font-black" *ngIf="item?.tagName == 'H1'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-1" *ngIf="item?.tagName == 'H2'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-2" *ngIf="item?.tagName == 'H3'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-3" *ngIf="item?.tagName == 'H4'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-4" *ngIf="item?.tagName == 'H5'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-5" *ngIf="item?.tagName == 'H6'">
+                  {{ item.description }}
+                </span>
+                <span class="ps-6" *ngIf="!item?.tagName">{{
+                  item.description
+                  }}</span>
+              </a>
+              <mat-divider></mat-divider>
+            </ng-container>
+          </mat-drawer>
+        </mat-drawer-container>
+      </mat-tab>
+      <mat-tab [label]="'Tài liệu gốc'" *ngIf="origin">
+        <iframe *ngIf="selectedIndex === 1" [src]="
+            'https://drive.google.com/file/d/' + origin + '/preview' | safe
+          " class="w-full h-full" allow="autoplay"></iframe>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-  <app-bottom-navigator
-    *ngIf="content?.type == 'block'"
-    [prev]="{ text: 'Trước đó', navigate: { link: navigate.prev.link } }"
-    [next]="{ text: 'Tiếp theo', navigate: { link: navigate.next.link } }"
-  ></app-bottom-navigator>
+  <app-bottom-navigator *ngIf="isNavigation" [prev]="{
+      text: navigate?.prev?.text,
+      navigate: { link: navigate?.prev?.link }
+    }" [next]="{
+      text: navigate?.next?.text,
+      navigate: { link: navigate?.next?.link }
+    }"></app-bottom-navigator>
 </div>

@@ -1,0 +1,482 @@
+<div class="app-container" [class.dark-mode]="isDarkMode">
+  <div class="app-wrapper">
+    <!-- Navigation Rail (Desktop) -->
+    <nav class="nav-rail">
+      <!-- Sub-nav toggle button -->
+      <div class="nav-item subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()"
+        matTooltip="Mở menu phụ" matTooltipPosition="right">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+          fill="currentColor">
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+        </svg>
+        <svg class="nav-icon--active" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+          fill="currentColor">
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+        </svg>
+      </div>
+
+      <!-- Dark Mode Toggle (for desktop) -->
+      <div class="nav-item theme-toggle" (click)="toggleDarkMode()"
+        matTooltip="{{ isDarkMode ? 'Chế độ sáng' : 'Chế độ tối' }}" matTooltipPosition="right">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg *ngIf="isDarkMode" class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+          width="24" fill="currentColor">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+        </svg>
+        <!-- Dark mode icon (shown when in light mode) -->
+        <svg *ngIf="!isDarkMode" class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+          width="24" fill="currentColor">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+        </svg>
+        <span class="nav-label">{{ isDarkMode ? "Sáng" : "Tối" }}</span>
+      </div>
+
+      <div class="nav-item active" routerLink="./" [ngClass]="{ active: lastVisitedPage === '/' }"
+        matTooltip="Trang chủ" matTooltipPosition="right">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24.5846 26.6666C25.8082 26.6666 26.8658 25.8301 27.03 24.6175C27.1861 23.465 27.3333 21.8797 27.3333 20C27.3333 16 27.5578 13.5578 23.3333 9.33331C21.3848 7.38485 19.2086 5.89196 17.7366 4.98781C16.6638 4.32885 15.3361 4.32885 14.2633 4.98781C12.7913 5.89196 10.6151 7.38485 8.66662 9.33331C4.44209 13.5578 4.66662 16 4.66662 20C4.66662 21.8797 4.81385 23.465 4.96993 24.6175C5.13415 25.8301 6.19171 26.6666 7.41536 26.6666H24.5846Z"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <svg class="nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24.5846 26.6666C25.8082 26.6666 26.8658 25.8301 27.03 24.6175C27.1861 23.465 27.3333 21.8797 27.3333 20C27.3333 16 27.5578 13.5578 23.3333 9.33331C21.3848 7.38485 19.2086 5.89196 17.7366 4.98781C16.6638 4.32885 15.3361 4.32885 14.2633 4.98781C12.7913 5.89196 10.6151 7.38485 8.66662 9.33331C4.44209 13.5578 4.66662 16 4.66662 20C4.66662 21.8797 4.81385 23.465 4.96993 24.6175C5.13415 25.8301 6.19171 26.6666 7.41536 26.6666H24.5846Z"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="nav-label">Trang chủ</span>
+      </div>
+
+      <div class="nav-item" routerLink="./lich" matTooltip="Lịch" matTooltipPosition="right"
+        [ngClass]="{ active: lastVisitedPage === '/lich' }">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.0003 3.33331V8.66665M12.0003 3.33331V8.66665M27.3104 15.3333H4.6901M27.3104 15.3333C27.0327 7.72367 24.2057 5.33331 16.0003 5.33331C7.79493 5.33331 4.9678 7.72367 4.6901 15.3333M27.3104 15.3333C27.3261 15.7611 27.3337 16.2054 27.3337 16.6666C27.3337 25.3333 24.667 28 16.0003 28C7.33366 28 4.66699 25.3333 4.66699 16.6666C4.66699 16.2054 4.67449 15.7611 4.6901 15.3333"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <svg class="nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.0003 3.33331V8.66665M12.0003 3.33331V8.66665M27.3104 15.3333H4.6901M27.3104 15.3333C27.0327 7.72367 24.2057 5.33331 16.0003 5.33331C7.79493 5.33331 4.9678 7.72367 4.6901 15.3333M27.3104 15.3333C27.3261 15.7611 27.3337 16.2054 27.3337 16.6666C27.3337 25.3333 24.667 28 16.0003 28C7.33366 28 4.66699 25.3333 4.66699 16.6666C4.66699 16.2054 4.67449 15.7611 4.6901 15.3333"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="nav-label">Lịch</span>
+      </div>
+
+      <div class="nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh"
+        matTooltipPosition="right">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M16 4H18.175C20.0113 4 21.5 5.48865 21.5 7.325V19.675C21.5 21.5113 20.0113 23 18.175 23H8.66667V23H8.325C7.39992 23 6.65 23.7499 6.65 24.675V24.675C6.65 25.0219 6.75545 25.3442 6.93605 25.6115C7.23706 26.057 7.74683 26.35 8.325 26.35H23.675C24.3688 26.35 24.9641 25.9282 25.2184 25.327C25.3031 25.1266 25.35 24.9063 25.35 24.675V24.675V23.9689V7H25.3687C25.4489 6.62841 25.7795 6.34998 26.1751 6.34998C26.5707 6.34998 26.9013 6.62841 26.9815 7H27V7.16218L27.0001 7.17498L27 7.18778V23.1586V24.675V24.675C27 25.3125 26.8206 25.9081 26.5095 26.4141C25.9245 27.3655 24.8738 28 23.675 28H8.325C6.48865 28 5 26.5113 5 24.675V24.675V20V7.325C5 5.48865 6.48865 4 8.325 4H16ZM6.65 20V21.8021C7.14188 21.5147 7.71421 21.35 8.325 21.35H10V5.65H8.325C7.45774 5.65 6.74442 6.30911 6.65865 7.15374C6.65293 7.21005 6.65 7.26718 6.65 7.325V20ZM11.65 5.65V21.35H18.1842C19.1051 21.345 19.85 20.597 19.85 19.675V7.325C19.85 6.39992 19.1001 5.65 18.175 5.65H16H11.65Z"
+            fill="currentColor" />
+        </svg>
+        <svg class="nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M16 4H18.175C20.0113 4 21.5 5.48865 21.5 7.325V19.675C21.5 21.5113 20.0113 23 18.175 23H8.66667V23H8.325C7.39992 23 6.65 23.7499 6.65 24.675V24.675C6.65 25.0219 6.75545 25.3442 6.93605 25.6115C7.23706 26.057 7.74683 26.35 8.325 26.35H23.675C24.3688 26.35 24.9641 25.9282 25.2184 25.327C25.3031 25.1266 25.35 24.9063 25.35 24.675V24.675V23.9689V7H25.3687C25.4489 6.62841 25.7795 6.34998 26.1751 6.34998C26.5707 6.34998 26.9013 6.62841 26.9815 7H27V7.16218L27.0001 7.17498L27 7.18778V23.1586V24.675V24.675C27 25.3125 26.8206 25.9081 26.5095 26.4141C25.9245 27.3655 24.8738 28 23.675 28H8.325C6.48865 28 5 26.5113 5 24.675V24.675V20V7.325C5 5.48865 6.48865 4 8.325 4H16ZM6.65 20V21.8021C7.14188 21.5147 7.71421 21.35 8.325 21.35H10V5.65H8.325C7.45774 5.65 6.74442 6.30911 6.65865 7.15374C6.65293 7.21005 6.65 7.26718 6.65 7.325V20ZM11.65 5.65V21.35H18.1842C19.1051 21.345 19.85 20.597 19.85 19.675V7.325C19.85 6.39992 19.1001 5.65 18.175 5.65H16H11.65Z"
+            fill="currentColor" />
+        </svg>
+        <span class="nav-label">Kinh</span>
+      </div>
+
+      <!-- <div
+        class="nav-item"
+        routerLink="/tnht"
+        [ngClass]="{ active: lastVisitedPage === '/tnht' }"
+        matTooltip="TNHT"
+        matTooltipPosition="right"
+      >
+        <svg
+          class="nav-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path
+            d="M480-178q-11 0-21.5-3t-19.5-8q-41-25-86-38t-93-13q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-48 0-93 13t-86 38q-9 5-19.5 8t-21.5 3Zm113-212q-10 9-21.5 3.5T560-405v-327q0-4 1.5-7.5t4.5-6.5l160-160q10-10 22-5t12 19v343q0 5-2 8.5t-5 6.5L593-390Zm-193 95v-396q-33-14-68.5-21.5T260-720q-37 0-72 7t-68 21v397q35-13 69.5-19t70.5-6q36 0 70.5 6t69.5 19Zm0 0v-396 396Z"
+          />
+        </svg>
+        <svg
+          class="nav-icon--active"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path
+            d="M480-178q-11 0-21.5-3t-19.5-8q-41-25-86-38t-93-13q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-48 0-93 13t-86 38q-9 5-19.5 8t-21.5 3Zm113-212q-10 9-21.5 3.5T560-405v-327q0-4 1.5-7.5t4.5-6.5l160-160q10-10 22-5t12 19v343q0 5-2 8.5t-5 6.5L593-390Z"
+          />
+        </svg>
+        <span class="nav-label">TNHT</span>
+      </div> -->
+
+      <div class="nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng"
+        matTooltipPosition="right">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M7 6.65H13C13.1933 6.65 13.35 6.8067 13.35 7V13C13.35 13.1933 13.1933 13.35 13 13.35H7C6.8067 13.35 6.65 13.1933 6.65 13V7C6.65 6.8067 6.8067 6.65 7 6.65ZM5 7C5 5.89543 5.89543 5 7 5H13C14.1046 5 15 5.89543 15 7V13C15 14.1046 14.1046 15 13 15H7C5.89543 15 5 14.1046 5 13V7ZM7 18.65H13C13.1933 18.65 13.35 18.8067 13.35 19V25C13.35 25.1933 13.1933 25.35 13 25.35H7C6.8067 25.35 6.65 25.1933 6.65 25V19C6.65 18.8067 6.8067 18.65 7 18.65ZM5 19C5 17.8954 5.89543 17 7 17H13C14.1046 17 15 17.8954 15 19V25C15 26.1046 14.1046 27 13 27H7C5.89543 27 5 26.1046 5 25V19ZM25 6.65H19C18.8067 6.65 18.65 6.8067 18.65 7V13C18.65 13.1933 18.8067 13.35 19 13.35H25C25.1933 13.35 25.35 13.1933 25.35 13V7C25.35 6.8067 25.1933 6.65 25 6.65ZM19 5C17.8954 5 17 5.89543 17 7V13C17 14.1046 17.8954 15 19 15H25C26.1046 15 27 14.1046 27 13V7C27 5.89543 26.1046 5 25 5H19ZM22 25.35C20.1498 25.35 18.65 23.8502 18.65 22C18.65 20.1498 20.1498 18.65 22 18.65C23.8502 18.65 25.35 20.1498 25.35 22C25.35 23.8502 23.8502 25.35 22 25.35ZM17 22C17 19.2386 19.2386 17 22 17C24.7614 17 27 19.2386 27 22C27 24.7614 24.7614 27 22 27C19.2386 27 17 24.7614 17 22Z"
+            fill="currentColor" />
+        </svg>
+
+        <svg class="nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M7 6.65H13C13.1933 6.65 13.35 6.8067 13.35 7V13C13.35 13.1933 13.1933 13.35 13 13.35H7C6.8067 13.35 6.65 13.1933 6.65 13V7C6.65 6.8067 6.8067 6.65 7 6.65ZM5 7C5 5.89543 5.89543 5 7 5H13C14.1046 5 15 5.89543 15 7V13C15 14.1046 14.1046 15 13 15H7C5.89543 15 5 14.1046 5 13V7ZM7 18.65H13C13.1933 18.65 13.35 18.8067 13.35 19V25C13.35 25.1933 13.1933 25.35 13 25.35H7C6.8067 25.35 6.65 25.1933 6.65 25V19C6.65 18.8067 6.8067 18.65 7 18.65ZM5 19C5 17.8954 5.89543 17 7 17H13C14.1046 17 15 17.8954 15 19V25C15 26.1046 14.1046 27 13 27H7C5.89543 27 5 26.1046 5 25V19ZM25 6.65H19C18.8067 6.65 18.65 6.8067 18.65 7V13C18.65 13.1933 18.8067 13.35 19 13.35H25C25.1933 13.35 25.35 13.1933 25.35 13V7C25.35 6.8067 25.1933 6.65 25 6.65ZM19 5C17.8954 5 17 5.89543 17 7V13C17 14.1046 17.8954 15 19 15H25C26.1046 15 27 14.1046 27 13V7C27 5.89543 26.1046 5 25 5H19ZM22 25.35C20.1498 25.35 18.65 23.8502 18.65 22C18.65 20.1498 20.1498 18.65 22 18.65C23.8502 18.65 25.35 20.1498 25.35 22C25.35 23.8502 23.8502 25.35 22 25.35ZM17 22C17 19.2386 19.2386 17 22 17C24.7614 17 27 19.2386 27 22C27 24.7614 24.7614 27 22 27C19.2386 27 17 24.7614 17 22Z"
+            fill="currentColor" />
+        </svg>
+        <span class="nav-label">Ứng dụng</span>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <mat-toolbar *ngIf="showToolbar">
+        <!-- Sub-nav toggle button -->
+        <div class="subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()" matTooltip="Mở menu phụ">
+          @for (sign of eventSigns; track sign.key) {
+          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+          }
+          <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+            fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </div>
+        <div [routerLink]="'/'" class="logo-container">
+          @for (sign of eventSigns; track sign.key) {
+          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.logoSettings?.position?.top,
+          right: sign?.logoSettings?.position?.right,
+          bottom: sign?.logoSettings?.position?.bottom,
+          left: sign?.logoSettings?.position?.left,
+          height: sign?.logoSettings?.size,
+          width: sign?.logoSettings?.size,
+        }" />
+          }
+          <svg width="36px" height="36px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)"
+              fill="#4285F4" />
+            <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z" fill="#FBBC05" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z"
+              fill="#EA4335" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z"
+              fill="#FBBC05" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z"
+              fill="#4285F4" />
+            <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4" />
+            <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
+            <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
+            <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
+            <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
+            <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
+            <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335" />
+            <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
+          </svg>
+          <span class="app-name">CaoDaiON</span>
+        </div>
+        <div class="flex gap-3 items-center">
+          <div class="theme-toggle-mobile relative" (click)="openQRCodeScanner()" matTooltip="Quét mã QR">
+            @for (sign of eventSigns; track sign.key) {
+            <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.toolbarSettings?.position?.top,
+          right: sign?.toolbarSettings?.position?.right,
+          bottom: sign?.toolbarSettings?.position?.bottom,
+          left: sign?.toolbarSettings?.position?.left,
+          height: sign?.toolbarSettings?.size,
+          width: sign?.toolbarSettings?.size,
+        }" />
+            }
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+              fill="currentColor">
+              <path
+                d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z" />
+            </svg>
+          </div>
+          <!-- Add dark mode toggle to toolbar for mobile view -->
+          <div class="theme-toggle-mobile relative" (click)="toggleDarkMode()"
+            matTooltip="{{ isDarkMode ? 'Chế độ sáng' : 'Chế độ tối' }}">
+            @for (sign of eventSigns; track sign.key) {
+            <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.toolbarSettings?.position?.top,
+          right: sign?.toolbarSettings?.position?.right,
+          bottom: sign?.toolbarSettings?.position?.bottom,
+          left: sign?.toolbarSettings?.position?.left,
+          height: sign?.toolbarSettings?.size,
+          width: sign?.toolbarSettings?.size,
+        }" />
+            }
+            <!-- Light mode icon (shown when in dark mode) -->
+            <svg *ngIf="isDarkMode" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+              fill="currentColor">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+            </svg>
+            <!-- Dark mode icon (shown when in light mode) -->
+            <svg *ngIf="!isDarkMode" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+              fill="currentColor">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+            </svg>
+          </div>
+        </div>
+      </mat-toolbar>
+      <div class="main-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation (Mobile) -->
+  <nav class="bottom-nav" *ngIf="showBottomNav">
+    <div class="bottom-nav-container">
+      <div class="bottom-nav-item active" routerLink="/" [ngClass]="{ active: lastVisitedPage === '/' }">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="bottom-nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24.5846 26.6666C25.8082 26.6666 26.8658 25.8301 27.03 24.6175C27.1861 23.465 27.3333 21.8797 27.3333 20C27.3333 16 27.5578 13.5578 23.3333 9.33331C21.3848 7.38485 19.2086 5.89196 17.7366 4.98781C16.6638 4.32885 15.3361 4.32885 14.2633 4.98781C12.7913 5.89196 10.6151 7.38485 8.66662 9.33331C4.44209 13.5578 4.66662 16 4.66662 20C4.66662 21.8797 4.81385 23.465 4.96993 24.6175C5.13415 25.8301 6.19171 26.6666 7.41536 26.6666H24.5846Z"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <svg class="bottom-nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24.5846 26.6666C25.8082 26.6666 26.8658 25.8301 27.03 24.6175C27.1861 23.465 27.3333 21.8797 27.3333 20C27.3333 16 27.5578 13.5578 23.3333 9.33331C21.3848 7.38485 19.2086 5.89196 17.7366 4.98781C16.6638 4.32885 15.3361 4.32885 14.2633 4.98781C12.7913 5.89196 10.6151 7.38485 8.66662 9.33331C4.44209 13.5578 4.66662 16 4.66662 20C4.66662 21.8797 4.81385 23.465 4.96993 24.6175C5.13415 25.8301 6.19171 26.6666 7.41536 26.6666H24.5846Z"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="bottom-nav-label">Trang chủ</span>
+      </div>
+
+      <div class="bottom-nav-item" routerLink="/lich" [ngClass]="{ active: lastVisitedPage === '/lich' }">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="bottom-nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.0003 3.33331V8.66665M12.0003 3.33331V8.66665M27.3104 15.3333H4.6901M27.3104 15.3333C27.0327 7.72367 24.2057 5.33331 16.0003 5.33331C7.79493 5.33331 4.9678 7.72367 4.6901 15.3333M27.3104 15.3333C27.3261 15.7611 27.3337 16.2054 27.3337 16.6666C27.3337 25.3333 24.667 28 16.0003 28C7.33366 28 4.66699 25.3333 4.66699 16.6666C4.66699 16.2054 4.67449 15.7611 4.6901 15.3333"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <svg class="bottom-nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.0003 3.33331V8.66665M12.0003 3.33331V8.66665M27.3104 15.3333H4.6901M27.3104 15.3333C27.0327 7.72367 24.2057 5.33331 16.0003 5.33331C7.79493 5.33331 4.9678 7.72367 4.6901 15.3333M27.3104 15.3333C27.3261 15.7611 27.3337 16.2054 27.3337 16.6666C27.3337 25.3333 24.667 28 16.0003 28C7.33366 28 4.66699 25.3333 4.66699 16.6666C4.66699 16.2054 4.67449 15.7611 4.6901 15.3333"
+            stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="bottom-nav-label">Lịch</span>
+      </div>
+
+      <div class="bottom-nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+
+        <svg class="bottom-nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M16 4H18.175C20.0113 4 21.5 5.48865 21.5 7.325V19.675C21.5 21.5113 20.0113 23 18.175 23H8.66667V23H8.325C7.39992 23 6.65 23.7499 6.65 24.675V24.675C6.65 25.0219 6.75545 25.3442 6.93605 25.6115C7.23706 26.057 7.74683 26.35 8.325 26.35H23.675C24.3688 26.35 24.9641 25.9282 25.2184 25.327C25.3031 25.1266 25.35 24.9063 25.35 24.675V24.675V23.9689V7H25.3687C25.4489 6.62841 25.7795 6.34998 26.1751 6.34998C26.5707 6.34998 26.9013 6.62841 26.9815 7H27V7.16218L27.0001 7.17498L27 7.18778V23.1586V24.675V24.675C27 25.3125 26.8206 25.9081 26.5095 26.4141C25.9245 27.3655 24.8738 28 23.675 28H8.325C6.48865 28 5 26.5113 5 24.675V24.675V20V7.325C5 5.48865 6.48865 4 8.325 4H16ZM6.65 20V21.8021C7.14188 21.5147 7.71421 21.35 8.325 21.35H10V5.65H8.325C7.45774 5.65 6.74442 6.30911 6.65865 7.15374C6.65293 7.21005 6.65 7.26718 6.65 7.325V20ZM11.65 5.65V21.35H18.1842C19.1051 21.345 19.85 20.597 19.85 19.675V7.325C19.85 6.39992 19.1001 5.65 18.175 5.65H16H11.65Z"
+            fill="currentColor" />
+        </svg>
+        <svg class="bottom-nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M16 4H18.175C20.0113 4 21.5 5.48865 21.5 7.325V19.675C21.5 21.5113 20.0113 23 18.175 23H8.66667V23H8.325C7.39992 23 6.65 23.7499 6.65 24.675V24.675C6.65 25.0219 6.75545 25.3442 6.93605 25.6115C7.23706 26.057 7.74683 26.35 8.325 26.35H23.675C24.3688 26.35 24.9641 25.9282 25.2184 25.327C25.3031 25.1266 25.35 24.9063 25.35 24.675V24.675V23.9689V7H25.3687C25.4489 6.62841 25.7795 6.34998 26.1751 6.34998C26.5707 6.34998 26.9013 6.62841 26.9815 7H27V7.16218L27.0001 7.17498L27 7.18778V23.1586V24.675V24.675C27 25.3125 26.8206 25.9081 26.5095 26.4141C25.9245 27.3655 24.8738 28 23.675 28H8.325C6.48865 28 5 26.5113 5 24.675V24.675V20V7.325C5 5.48865 6.48865 4 8.325 4H16ZM6.65 20V21.8021C7.14188 21.5147 7.71421 21.35 8.325 21.35H10V5.65H8.325C7.45774 5.65 6.74442 6.30911 6.65865 7.15374C6.65293 7.21005 6.65 7.26718 6.65 7.325V20ZM11.65 5.65V21.35H18.1842C19.1051 21.345 19.85 20.597 19.85 19.675V7.325C19.85 6.39992 19.1001 5.65 18.175 5.65H16H11.65Z"
+            fill="currentColor" />
+        </svg>
+        <span class="bottom-nav-label">Kinh</span>
+      </div>
+
+      <!-- <div
+        class="bottom-nav-item"
+        routerLink="/tnht"
+        [ngClass]="{ active: lastVisitedPage === '/tnht' }"
+      >
+        <svg
+          class="bottom-nav-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path
+            d="M480-178q-11 0-21.5-3t-19.5-8q-41-25-86-38t-93-13q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-48 0-93 13t-86 38q-9 5-19.5 8t-21.5 3Zm113-212q-10 9-21.5 3.5T560-405v-327q0-4 1.5-7.5t4.5-6.5l160-160q10-10 22-5t12 19v343q0 5-2 8.5t-5 6.5L593-390Zm-193 95v-396q-33-14-68.5-21.5T260-720q-37 0-72 7t-68 21v397q35-13 69.5-19t70.5-6q36 0 70.5 6t69.5 19Zm0 0v-396 396Z"
+          />
+        </svg>
+        <svg
+          class="bottom-nav-icon--active"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path
+            d="M480-178q-11 0-21.5-3t-19.5-8q-41-25-86-38t-93-13q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-48 0-93 13t-86 38q-9 5-19.5 8t-21.5 3Zm113-212q-10 9-21.5 3.5T560-405v-327q0-4 1.5-7.5t4.5-6.5l160-160q10-10 22-5t12 19v343q0 5-2 8.5t-5 6.5L593-390Z"
+          />
+        </svg>
+        <span class="bottom-nav-label">TNHT</span>
+      </div> -->
+
+      <div class="bottom-nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }">
+        @for (sign of eventSigns; track sign.key) {
+        <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.navigationSettings?.position?.top,
+          right: sign?.navigationSettings?.position?.right,
+          bottom: sign?.navigationSettings?.position?.bottom,
+          left: sign?.navigationSettings?.position?.left,
+          height: sign?.navigationSettings?.size,
+          width: sign?.navigationSettings?.size,
+        }" />
+        }
+        <svg class="bottom-nav-icon" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M7 6.65H13C13.1933 6.65 13.35 6.8067 13.35 7V13C13.35 13.1933 13.1933 13.35 13 13.35H7C6.8067 13.35 6.65 13.1933 6.65 13V7C6.65 6.8067 6.8067 6.65 7 6.65ZM5 7C5 5.89543 5.89543 5 7 5H13C14.1046 5 15 5.89543 15 7V13C15 14.1046 14.1046 15 13 15H7C5.89543 15 5 14.1046 5 13V7ZM7 18.65H13C13.1933 18.65 13.35 18.8067 13.35 19V25C13.35 25.1933 13.1933 25.35 13 25.35H7C6.8067 25.35 6.65 25.1933 6.65 25V19C6.65 18.8067 6.8067 18.65 7 18.65ZM5 19C5 17.8954 5.89543 17 7 17H13C14.1046 17 15 17.8954 15 19V25C15 26.1046 14.1046 27 13 27H7C5.89543 27 5 26.1046 5 25V19ZM25 6.65H19C18.8067 6.65 18.65 6.8067 18.65 7V13C18.65 13.1933 18.8067 13.35 19 13.35H25C25.1933 13.35 25.35 13.1933 25.35 13V7C25.35 6.8067 25.1933 6.65 25 6.65ZM19 5C17.8954 5 17 5.89543 17 7V13C17 14.1046 17.8954 15 19 15H25C26.1046 15 27 14.1046 27 13V7C27 5.89543 26.1046 5 25 5H19ZM22 25.35C20.1498 25.35 18.65 23.8502 18.65 22C18.65 20.1498 20.1498 18.65 22 18.65C23.8502 18.65 25.35 20.1498 25.35 22C25.35 23.8502 23.8502 25.35 22 25.35ZM17 22C17 19.2386 19.2386 17 22 17C24.7614 17 27 19.2386 27 22C27 24.7614 24.7614 27 22 27C19.2386 27 17 24.7614 17 22Z"
+            fill="currentColor" />
+        </svg>
+        <svg class="bottom-nav-icon--active" width="24px" height="24px" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M7 6.65H13C13.1933 6.65 13.35 6.8067 13.35 7V13C13.35 13.1933 13.1933 13.35 13 13.35H7C6.8067 13.35 6.65 13.1933 6.65 13V7C6.65 6.8067 6.8067 6.65 7 6.65ZM5 7C5 5.89543 5.89543 5 7 5H13C14.1046 5 15 5.89543 15 7V13C15 14.1046 14.1046 15 13 15H7C5.89543 15 5 14.1046 5 13V7ZM7 18.65H13C13.1933 18.65 13.35 18.8067 13.35 19V25C13.35 25.1933 13.1933 25.35 13 25.35H7C6.8067 25.35 6.65 25.1933 6.65 25V19C6.65 18.8067 6.8067 18.65 7 18.65ZM5 19C5 17.8954 5.89543 17 7 17H13C14.1046 17 15 17.8954 15 19V25C15 26.1046 14.1046 27 13 27H7C5.89543 27 5 26.1046 5 25V19ZM25 6.65H19C18.8067 6.65 18.65 6.8067 18.65 7V13C18.65 13.1933 18.8067 13.35 19 13.35H25C25.1933 13.35 25.35 13.1933 25.35 13V7C25.35 6.8067 25.1933 6.65 25 6.65ZM19 5C17.8954 5 17 5.89543 17 7V13C17 14.1046 17.8954 15 19 15H25C26.1046 15 27 14.1046 27 13V7C27 5.89543 26.1046 5 25 5H19ZM22 25.35C20.1498 25.35 18.65 23.8502 18.65 22C18.65 20.1498 20.1498 18.65 22 18.65C23.8502 18.65 25.35 20.1498 25.35 22C25.35 23.8502 23.8502 25.35 22 25.35ZM17 22C17 19.2386 19.2386 17 22 17C24.7614 17 27 19.2386 27 22C27 24.7614 24.7614 27 22 27C19.2386 27 17 24.7614 17 22Z"
+            fill="currentColor" />
+        </svg>
+        <span class="bottom-nav-label">Ứng dụng</span>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<ng-template #qrCodeScannerDialog>
+  <h4 mat-dialog-title class="dialog-title">
+    Quét mã QR
+  </h4>
+  <mat-dialog-content>
+    <app-qr-scanner></app-qr-scanner>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div class="flex justify-end items-center gap-2 w-full">
+      <button mat-button mat-dialog-close color="primary">Đóng</button>
+    </div>
+  </mat-dialog-actions>
+</ng-template>

@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
-  selector: 'cp-input-form-field',
-  templateUrl: './cp-input-form-field.component.html',
-  styleUrls: ['./cp-input-form-field.component.scss'],
+    selector: 'cp-input-form-field',
+    templateUrl: './cp-input-form-field.component.html',
+    styleUrls: ['./cp-input-form-field.component.scss'],
+    standalone: false
 })
 export class CpFormFieldComponent implements OnInit {
   @Input() inputFormControl: any;
@@ -34,5 +35,16 @@ export class CpFormFieldComponent implements OnInit {
         : '';
     }
     return errorMessage;
+  }
+
+  get modelValue() {
+    if (this.modifierAt === 'prevText') return this.inputFormControl.prevText;
+    if (this.modifierAt === 'nextText') return this.inputFormControl.nextText;
+    return this.inputFormControl.value;
+  }
+  set modelValue(val: any) {
+    if (this.modifierAt === 'prevText') this.inputFormControl.prevText = val;
+    else if (this.modifierAt === 'nextText') this.inputFormControl.nextText = val;
+    else this.inputFormControl.value = val;
   }
 }

@@ -5,9 +5,10 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
 import {OfflineSnackbarComponent} from "../../layouts/offline-snackbar/offline-snackbar.component";
 
 @Component({
-  selector: 'cp-content-editor',
-  templateUrl: './cp-content-editor.component.html',
-  styleUrls: ['./cp-content-editor.component.scss'],
+    selector: 'cp-content-editor',
+    templateUrl: './cp-content-editor.component.html',
+    styleUrls: ['./cp-content-editor.component.scss'],
+    standalone: false
 })
 export class CaoDaiONPWAContentEditorComponent implements OnChanges, OnInit {
   @Input() renderDocument?: any;

@@ -25,6 +25,7 @@
         </mat-form-field>
       </div>
     </div>
+    <div style="text-align: right; " *ngIf="topGuide"><i><small>{{topGuide}}</small></i></div>
     <div
       class="cp-creator-block-group"
       [ngClass]="{ contentEditable: isShowController }"
@@ -44,6 +45,7 @@
           #creatorContent
           *ngIf="block?.type == 'contentBlock'"
           [data]="block"
+          [topGuide]="topGuide"
           [rootContent]="rootContent"
           [contentEditable]="contentEditable"
           [isShowFontSizeSelect]="isShowFontSizeSelect"
@@ -62,6 +64,7 @@
       [contentEditable]="contentEditable"
       [data]="data"
       (save)="saveData()"
+      (reset)="reset.emit()"
     ></cp-content-creator-toolbar>
   </mat-drawer>
 </mat-drawer-container>
@@ -74,42 +77,44 @@
         <mat-label>Quốc gia</mat-label>
         <input type="text" matInput [(ngModel)]="addedComboLocation.country" />
       </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tỉnh/Thành phố</mat-label>
-        <mat-select
-          [(ngModel)]="addedComboLocation.province"
-          (ngModelChange)="getDistricts()"
-        >
-          <mat-option *ngFor="let item of provinces" [value]="item.code">{{
-            item.name
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
-        <mat-label>Quận/Huyện</mat-label>
-        <mat-select
-          [(ngModel)]="addedComboLocation.district"
-          (ngModelChange)="getWards()"
-        >
+        <mat-select [(ngModel)]="addedComboLocation.province">
+          <input type="text" #provinceFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
           <mat-option
-            *ngFor="let item of filteredDistricts"
-            [value]="item.code"
-            >{{ item.name }}</mat-option
-          >
+            *ngFor="let item of provinces | divisionFilter: {level: 'province', searchText: provinceFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Quận/Huyện</mat-label>
+        <mat-select [(ngModel)]="addedComboLocation.district">
+          <input type="text" #districtFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
+          <mat-option
+            *ngFor="let item of districts | divisionFilter: {level: 'district', parent: addedComboLocation.province, searchText: districtFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Phường/Xã</mat-label>
         <mat-select [(ngModel)]="addedComboLocation.ward">
-          <mat-option *ngFor="let item of filteredWards" [value]="item.code">{{
-            item.name
-          }}</mat-option>
+          <input type="text" #wardFilter class="w-full p-2 sticky top-0 bg-white z-10" [placeholder]="'Tìm kiếm hoặc tạo mới'"
+            (keydown)="onPress($event)">
+          <mat-option
+            *ngFor="let item of wards | divisionFilter: {level: 'ward', parent: addedComboLocation.district, searchText: wardFilter['value']}"
+            [value]="item?.id">{{ item?.name }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field [appearance]="'outline'">
         <mat-label>Thôn/Lộ</mat-label>
         <input type="text" matInput [(ngModel)]="addedComboLocation.village" />
       </mat-form-field>
+      <!-- <mat-form-field [appearance]="'outline'" class="w-full">
+        <mat-label>Nhập tay</mat-label>
+        <textarea [cols]="100" matInput [(ngModel)]="addedComboLocation.text"></textarea>
+      </mat-form-field> -->
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -123,3 +128,13 @@
     </button>
   </mat-dialog-actions>
 </ng-template>
+
+<button
+  mat-fab
+  class="!fixed bottom-[80px] lg:bottom-8 right-8 z-[999999999999]"
+  *ngIf="!contentEditable"
+  [color]="'primary'"
+  (click)="onPrint()"
+>
+  <mat-icon>print</mat-icon>
+</button>

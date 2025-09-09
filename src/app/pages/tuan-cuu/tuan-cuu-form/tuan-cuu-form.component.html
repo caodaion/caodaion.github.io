@@ -1,0 +1,306 @@
+<app-child-header
+  [title]="isEditMode ? 'Cập nhật tuần cửu' : 'Tính tuần cửu'"
+></app-child-header>
+<div class="tuan-cuu-container">
+  <mat-expansion-panel [expanded]="expanded">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Tính Tuần Cửu </mat-panel-title>
+      <mat-panel-description>
+        Chỉnh sửa thông tin tuần cửu
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Form Content -->
+    <div class="form-container">
+      <!-- Calendar Type Selection -->
+      <div class="form-section">
+        <h3>Hệ thống ngày tháng</h3>
+        <mat-radio-group
+          [(ngModel)]="formData.calendarType"
+          (change)="onCalendarTypeChange()"
+        >
+          <mat-radio-button value="lunar">Âm lịch</mat-radio-button>
+          <mat-radio-button value="solar">Dương lịch</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Date Selection -->
+      <div class="form-section date-section">
+        <h3>Chọn ngày</h3>
+        <div class="date-controls">
+          <mat-form-field appearance="fill">
+            <mat-label>Ngày</mat-label>
+            <mat-select [(ngModel)]="formData.date" required>
+              <mat-option *ngFor="let day of days" [value]="day">{{
+                day
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Tháng</mat-label>
+            <mat-select [(ngModel)]="formData.month" required>
+              <mat-option *ngFor="let month of months" [value]="month">{{
+                month
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Năm</mat-label>
+            <mat-select [(ngModel)]="formData.year" required>
+              <mat-option *ngFor="let year of years" [value]="year?.value">
+                {{ year?.label }} ({{ year?.value }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Time Selection -->
+      <div class="form-section">
+        <h3>Chọn giờ</h3>
+        <mat-radio-group
+          [(ngModel)]="formData.calendarType"
+          (change)="onCalendarTypeChange()"
+        >
+          <mat-radio-button value="lunar">Giờ âm lịch</mat-radio-button>
+          <mat-radio-button value="solar">Giờ dương lịch</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="time-control">
+          <mat-form-field
+            appearance="fill"
+            *ngIf="formData.calendarType === 'lunar'"
+          >
+            <mat-label>Giờ âm lịch</mat-label>
+            <mat-select [(ngModel)]="formData.time" required>
+              <mat-option
+                *ngFor="let time of lunarTimeOptions"
+                [value]="time"
+                >{{ time }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="fill"
+            *ngIf="formData.calendarType === 'solar'"
+          >
+            <mat-label>Giờ dương lịch</mat-label>
+            <mat-select [(ngModel)]="formData.time" required>
+              <mat-option *ngFor="let hour of solarTimeOptions" [value]="hour"
+                >{{ hour }}:00</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Personal Details Section -->
+      <div class="form-section">
+        <h3>Thông tin người mất</h3>
+        <div class="personal-details">
+          <!-- Name field -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Họ tên</mat-label>
+            <input
+              (input)="getHolyName()"
+              matInput
+              [(ngModel)]="formData.name"
+              placeholder="Nhập họ tên"
+              required
+              [class.error-input]="formErrors['name']"
+            />
+            <mat-error *ngIf="formErrors['name']"
+              >Vui lòng nhập họ tên</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Age field -->
+          <mat-form-field appearance="fill">
+            <mat-label>Tuổi</mat-label>
+            <input
+              matInput
+              [(ngModel)]="formData.age"
+              type="number"
+              placeholder="Nhập tuổi"
+            />
+          </mat-form-field>
+
+          <!-- Gender selection -->
+          <div class="gender-selection">
+            <label>Giới tính:</label>
+            <mat-radio-group
+              (change)="getHolyName()"
+              [(ngModel)]="formData.gender"
+            >
+              <mat-radio-button value="male">Nam</mat-radio-button>
+              <mat-radio-button value="female">Nữ</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- Title selection -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Phẩm vị</mat-label>
+            <mat-select
+              [(ngModel)]="formData.title"
+              (selectionChange)="onTitleChange($event.value); getHolyName()"
+              [class.error-input]="formErrors['title']"
+              required
+            >
+              <mat-option
+                *ngFor="let title of caodaiTitles"
+                [value]="title.key"
+              >
+                {{ title.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formErrors['title']"
+              >Vui lòng chọn phẩm vị</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Sub Title selection for Chuc Viec -->
+          <mat-form-field
+            appearance="fill"
+            *ngIf="subTitles.length > 0"
+            class="full-width"
+          >
+            <mat-label>Chức vụ</mat-label>
+            <mat-select
+              [(ngModel)]="formData.subTitle"
+              (selectionChange)="getHolyName()"
+            >
+              <mat-option
+                *ngFor="let subTitle of subTitles"
+                [value]="subTitle.key"
+              >
+                {{ subTitle.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Color selection for male with holy name -->
+          <mat-form-field
+            appearance="fill"
+            *ngIf="shouldShowColorSelection()"
+            class="full-width"
+          >
+            <mat-label>Màu sắc</mat-label>
+            <mat-select
+              [(ngModel)]="formData.color"
+              (selectionChange)="getHolyName()"
+            >
+              <mat-option
+                *ngFor="let color of colorOptions"
+                [value]="color.value"
+              >
+                {{ color.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Holy Name field if required -->
+          <mat-form-field
+            appearance="fill"
+            *ngIf="isHolyNameRequired()"
+            class="full-width"
+          >
+            <mat-label>Thánh danh</mat-label>
+            <input
+              matInput
+              [(ngModel)]="formData.holyName"
+              placeholder="Nhập thánh danh"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Calculate Button -->
+      <div class="form-actions">
+        <button mat-raised-button color="primary" (click)="calculateEvents()">
+          <mat-icon>calculate</mat-icon>
+          Tính Tuần Cửu
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- Results Table -->
+  <div class="results-container" *ngIf="formData.events.length > 0">
+    <h2>Tuần Cửu</h2>
+    <p class="summary-text" *ngIf="formData.name">
+      {{ getTuanCuuSummary() }}
+    </p>
+    <table mat-table [dataSource]="formData.events" class="mat-elevation-z4">
+      <!-- Sequence Column -->
+      <ng-container matColumnDef="sequence">
+        <th mat-header-cell *matHeaderCellDef>Tuần</th>
+        <td mat-cell *matCellDef="let event">{{ event.sequence }}</td>
+      </ng-container>
+
+      <!-- Lunar Date Column -->
+      <ng-container matColumnDef="lunarDate">
+        <th mat-header-cell *matHeaderCellDef>Ngày (âm lịch)</th>
+        <td mat-cell *matCellDef="let event">
+          {{ formatLunarDate(event.lunarDate) }}
+        </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Ngày (dương lịch)</th>
+        <td mat-cell *matCellDef="let event">
+          {{ event.weekDay }} {{ formatDate(event.date) }}
+        </td>
+      </ng-container>
+
+      <!-- Event Time Column -->
+      <ng-container matColumnDef="eventTime">
+        <th mat-header-cell *matHeaderCellDef>Thời</th>
+        <td mat-cell *matCellDef="let event; let i = index">
+          <mat-select
+            [(ngModel)]="formData.events[i].eventTime"
+            class="time-select"
+            (selectionChange)="saveTuanCuu()"
+          >
+            <mat-option *ngFor="let time of lunarTimeOptions" [value]="time">
+              {{ time }}
+            </mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [class.next-event]="isNextEvent(row.date)"
+      ></tr>
+    </table>
+
+    <!-- Save Button -->
+    <div class="form-actions">
+      <button
+        *ngIf="expanded"
+        mat-raised-button
+        color="accent"
+        (click)="saveTuanCuu()"
+      >
+        <mat-icon>save</mat-icon>
+        {{ isEditMode ? "Cập nhật" : "Lưu" }} Tuần Cửu
+      </button>
+
+      <button mat-raised-button color="primary" (click)="printTuanCuu()">
+        <mat-icon>print</mat-icon>
+        In A4
+      </button>
+
+      <button mat-raised-button color="primary" (click)="shareAsLink()">
+        <mat-icon>share</mat-icon>
+        Chia sẻ
+      </button>
+    </div>
+  </div>
+</div>

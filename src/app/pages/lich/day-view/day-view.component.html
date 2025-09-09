@@ -1,0 +1,41 @@
+<div class="day-view-container">
+  <!-- Current day details -->
+  <div class="calendar-main">
+    <div class="day-info-panel" *ngIf="currentDayData">
+      <div class="day-header">
+        <h2>{{ formatDayTitle(currentDayData) }}</h2>
+      </div>
+      
+      <div class="info-section">
+        <h3>Thông tin ngày</h3>
+        <p>Ngày {{ currentDayData.lunar.day }} tháng {{ currentDayData.lunar.month }} năm {{ currentDayData.canChi.year }}</p>
+        <p>Ngày {{ currentDayData.canChi.day }} Tháng {{ currentDayData.canChi.month }}, Năm {{ currentDayData.canChi.year }}</p>
+      </div>
+      
+      <div class="info-section" *ngIf="currentDayData.events && currentDayData.events.length > 0">
+        <h3>Sự kiện</h3>
+        <div class="events-list">
+          <div class="event-item" 
+               *ngFor="let event of currentDayData.events" 
+               (click)="openEventImageDialog(event)"
+               [class.clickable]="true">
+            <div class="event-marker" [style.background-color]="getEventColor(event)"></div>
+            <div class="event-content">
+              <div class="event-title">{{ event.title }}</div>
+              <div class="event-subtitle" *ngIf="event.description">{{ event.description }}</div>
+              <!-- Display event time for Tuan Cuu events -->
+              <div class="event-time" *ngIf="event.type === 'tuan-cuu' && event.eventTime">
+                <span class="time-label">Thời:</span> {{ event.eventTime }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="info-section" *ngIf="!currentDayData.events || currentDayData.events.length === 0">
+        <h3>Sự kiện</h3>
+        <p class="empty-events">Không có sự kiện nào</p>
+      </div>
+    </div>
+  </div>
+</div>

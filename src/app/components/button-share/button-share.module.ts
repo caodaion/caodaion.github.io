@@ -7,7 +7,6 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { QRCodeModule } from 'angularx-qrcode';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -26,7 +25,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTooltipModule,
     MatIconModule,
     MatButtonModule,
-    QRCodeModule,
     MatDividerModule,
     MatListModule,
     MatSnackBarModule

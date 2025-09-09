@@ -1,0 +1,106 @@
+<div class="event-image-dialog">
+  <h2 mat-dialog-title>Chi tiết sự kiện</h2>
+
+  <mat-dialog-content class="!p-0 border-t">
+    <div class="pt-4 px-4 text-center">Ấn vào để chỉnh sửa ảnh</div>
+    <div class="event-card-container">
+      <div class="event-card" #eventCard>
+        <div class="event-content">
+          <div class="event-type-marker" [style.background-color]="event.color"></div>
+          <div class="event-details">
+            <h3 contenteditable="true" (blur)="onContentEdit('title', $event)" [innerHTML]="event.title"></h3>
+            <div class="lunar-solar-info" contenteditable="true">
+              <p class="date-info">
+                <ng-container *ngIf="event?.type === 'annual-solar'">
+                  {{ dateData?.solar?.day | number : "2.0-0" }}/{{
+                  dateData?.solar?.month | number : "2.0-0"
+                  }}/{{ dateData?.solar?.year }}
+                </ng-container>
+                <ng-container *ngIf="event?.type !== 'annual-solar'">
+                  {{ dateData?.lunar?.day | number : "2.0-0" }} tháng
+                  {{ dateData?.lunar?.month | number : "2.0-0" }} năm
+                  {{ dateData?.lunar?.year }}
+                  ({{ dateData?.solar?.day | number : "2.0-0" }}/{{
+                  dateData?.solar?.month | number : "2.0-0"
+                  }}/{{ dateData?.solar?.year }})
+                </ng-container>
+              </p>
+              <!-- Display event time for Tuan Cuu events -->
+              <p class="time-info" *ngIf="(event.type === 'tuan-cuu' && event.eventTime) || event.eventTime">
+                Thời {{ event.eventTime }}
+              </p>
+            </div>
+
+            <!-- App signature -->
+            <div class="app-signature">
+              <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)"
+                  fill="#4285F4" />
+                <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z" fill="#FBBC05" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z"
+                  fill="#EA4335" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z"
+                  fill="#FBBC05" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z"
+                  fill="#4285F4" />
+                <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4" />
+                <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
+                <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
+                <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
+                <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
+                <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
+                <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335" />
+                <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
+              </svg>
+              <span>www.caodaion.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image preview -->
+    <div class="preview-container" *ngIf="imagePreviewUrl">
+      <h3 class="px-4">Xem trước ảnh</h3>
+      <div class="preview-image">
+        <img #previewImage [src]="imagePreviewUrl" alt="Event preview" />
+      </div>
+    </div>
+
+    <div class="loading-indicator" *ngIf="isGenerating">
+      <p>Đang tạo ảnh...</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions [align]="'end'" class="dialog-actions">
+    <div class="dialog-actions">
+      @if (event.type === 'tuan-cuu') {
+      <button class="matButton" mat-button color="primary" (click)="openTuanCuu()" [disabled]="isGenerating"
+        matTooltip="Tải xuống ảnh" aria-label="Download image">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
+        </svg>
+        <span>Xem tuần cửu</span>
+      </button>
+      }
+      <button class="matButton" mat-button color="primary" (click)="generateImage()" [disabled]="isGenerating"
+        matTooltip="Tải xuống ảnh" aria-label="Download image">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+        </svg>
+        <span>Tải ảnh</span>
+      </button>
+      <button class="matButton" mat-button color="warn" (click)="closeDialog()" matTooltip="Đóng" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path
+            d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+        </svg>
+        <span>Đóng</span>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

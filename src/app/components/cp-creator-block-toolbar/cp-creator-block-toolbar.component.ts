@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'cp-creator-block-toolbar',
-  templateUrl: './cp-creator-block-toolbar.component.html',
-  styleUrls: ['./cp-creator-block-toolbar.component.scss']
+    selector: 'cp-creator-block-toolbar',
+    templateUrl: './cp-creator-block-toolbar.component.html',
+    styleUrls: ['./cp-creator-block-toolbar.component.scss'],
+    standalone: false
 })
 export class CpCreatorBlockToolbarComponent implements OnInit {
   @Input() data: any;

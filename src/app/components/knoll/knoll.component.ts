@@ -3,9 +3,10 @@ import { Component, HostListener, ElementRef, ViewChild, OnInit } from '@angular
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-knoll',
-  templateUrl: './knoll.component.html',
-  styleUrls: ['./knoll.component.scss']
+    selector: 'app-knoll',
+    templateUrl: './knoll.component.html',
+    styleUrls: ['./knoll.component.scss'],
+    standalone: false
 })
 export class KnollComponent implements OnInit {
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;

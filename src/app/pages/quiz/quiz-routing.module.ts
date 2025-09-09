@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QuizComponent } from './quiz.component';
 import { QuizListComponent } from './quiz-list/quiz-list.component';
-import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
+import { QuizSectionComponent } from './quiz-section/quiz-section.component';
+import { QuizLessonComponent } from './quiz-lesson/quiz-lesson.component';
 
 const routes: Routes = [
   {
@@ -14,12 +15,12 @@ const routes: Routes = [
         component: QuizListComponent
       },
       {
-        path: ':doc',
-        component: QuizDetailsComponent
+        path: ':sectionKey',
+        component: QuizSectionComponent
       },
       {
-        path: ':doc/:article',
-        component: QuizDetailsComponent
+        path: ':sectionKey/:gateKey/:lessonKey',
+        component: QuizLessonComponent
       }
     ]
   }

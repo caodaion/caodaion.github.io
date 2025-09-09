@@ -1,0 +1,31 @@
+.bai-thuong-yeu {
+  margin: 1rem 0;
+  .bai-thuong-yeu-container {
+    // background: #ffffff;
+    .wood-wrapper {
+      padding: 1rem 0;
+      // background: #432230;
+      .white-paper {
+        // background-color: #ffffff;
+        padding: 0.5rem 0;
+        .content {
+          // color: #1f2a35;
+          // background: #eaf1fb;
+          padding: 0.5rem 0.5rem 1rem 0.5rem;
+          user-select: text;
+          p {
+            text-align: justify;
+            padding: 0 1rem;
+            text-indent: 1rem;
+            // font-weight: bold;
+            line-height: 1.5;
+            font-size: larger;
+          }
+          .red-text {
+            // color: #951d23;
+          }
+        }
+      }
+    }
+  }
+}

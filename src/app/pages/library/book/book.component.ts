@@ -1,34 +1,42 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterViewChecked, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LibraryService } from 'src/app/shared/services/library/library.service';
+import * as CryptoJS from "crypto-js";
 
 @Component({
-  selector: 'app-book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.scss']
+    selector: 'app-book',
+    templateUrl: './book.component.html',
+    styleUrls: ['./book.component.scss'],
+    standalone: false
 })
-export class BookComponent implements OnInit {
+export class BookComponent implements OnInit, OnChanges {
   rootContent: any;
   content: any;
-  isLoading: boolean = false;
+  contentName: any;
+  author: any;
+  origin: any;
+  isLoading: boolean = true;
+  isNavigation: boolean = false;
   isShowTableContent: boolean = false;
   contentEditable: boolean = false;
+  isPhone: boolean = false;
   nowContent: any;
+  key: any;
   level: any;
-  navigate = {
-    prev: {
-      link: undefined,
-      queryParams: {}
-    },
-    next: {
-      link: undefined,
-      queryParams: {}
-    }
-  };
+  navigate = <any>{};
   reading: any;
+  library = <any>[];
+  tableContent = <any>[];
+  selectedIndex = 0
+  cols = 4
+  books = <any>[];
+  setting = <any>{};
+  labels = <any>[];
+  selectedChips = <any>[];
 
   constructor(
     private router: Router,
@@ -36,130 +44,126 @@ export class BookComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private libraryService: LibraryService,
     private titleService: Title,
-    private authService: AuthService
+    private authService: AuthService,
+    private changeDetector: ChangeDetectorRef
   ) {
 
   }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((query: any) => {
-      this.isShowTableContent = query.params['tableContent']
-    })
-    this.route.params.subscribe((query) => {
-      if (query['key'] && !query['level']) {
-        this.getContent(query['key'], query['level'])
-      }
-      if (query['key'] && query['level']) {
-        this.getContent(query['key'], query['level'])
-        this.level = query['level']
-        this.router.navigate(
-          ['.'],
-          { relativeTo: this.route, fragment: location.hash.replace('#', '') }
-        );
-      }
-    })
-    this.authService.getCurrentUser()
-    this.contentEditable = this.authService.contentEditable
+    this.isNavigation = false
+    this.getBooks()
+    this.updateLayout()
+
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.cols = 1
+        } else {
+          this.cols = 4
+        }
+      });
   }
 
-  getContent(key?: any, level?: any) {
-    this.isLoading = true
-    this.libraryService.getBookByKey(key).subscribe((res: any) => {
-      if (res.data) {
-        this.rootContent = res.data
-        if (this.rootContent?.content?.length === 0) {
-          this.rootContent?.content.push({
-            type: 'block',
-            key: key.replaceAll('-', ''),
-            content: [],
-            attrs: {
-              hash: '',
-              pathname: location.pathname
-            }
-          })
-        }
-        this.reading = JSON.parse(localStorage.getItem('reading') || '[]')?.find((item: any) => item.key == this.rootContent?.key)
-        this.breakpointObserver
-          .observe(['(max-width: 600px)'])
-          .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: true,
-                  isHideBottomNavBar: true,
-                })
-              );
-            } else {
-              localStorage.setItem(
-                'currentLayout',
-                JSON.stringify({
-                  isHideToolbar: false,
-                  isHideBottomNavBar: false,
-                })
-              );
-            }
-          });
-        if (!level) {
-          this.content = res.data
-          this.titleService.setTitle(`${this.content.name} | ${this.rootContent.name} | CaoDaiON`)
-          this.isLoading = false
-          this.getNavigateLink()
-        } else {
-          const find = (array: any, key: any) => {
-            let result: any;
-            array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
-            return result;
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateLayout()
+    this.changeDetector.detectChanges()
+  }
+
+  updateLayout() {
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 600px)'])
+        .subscribe((state: BreakpointState) => {
+          this.isPhone = state.matches
+          if (state.matches) {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: true,
+                isHideBottomNavBar: true,
+              })
+            );
+          } else {
+            localStorage.setItem(
+              'currentLayout',
+              JSON.stringify({
+                isHideToolbar: false,
+                isHideBottomNavBar: false,
+              })
+            );
           }
-          // @ts-ignore
-          this.content = find(res.data.content, location.pathname.slice(1, location.pathname.length).split('/').slice(1).join('-').replaceAll('-', ''))
-          this.titleService.setTitle(`${this.content?.name} | ${this.rootContent?.name} | CaoDaiON`)
-          this.isLoading = false
-          this.getNavigateLink()
-        }
-        if (location.hash) {
-          setTimeout(() => {
-            // @ts-ignore
-            const targetedContent = document.getElementById(`${location.hash.replace('#', '')}`)
-            const contentCreatorWrapper = document.getElementById('contentCreatorWrapper')
-            if (targetedContent) {
-              // @ts-ignore
-              targetedContent.style.color = '#4285f4';
-              if (contentCreatorWrapper && targetedContent) {
-                // @ts-ignore
-                contentCreatorWrapper.scroll({ top: targetedContent.offsetTop - (this.content.audio ? 60 : 0) })
+          this.changeDetector.detectChanges()
+        });
+    }, 0)
+  }
+
+
+
+  getBooks() {
+    this.updateLayout()
+    this.getStaticBooks()
+  }
+
+  getBook() {
+    this.route.params.subscribe((query) => {
+      this.key = query['key']
+    })
+  }
+
+  getStaticBooks() {
+    this.libraryService.getStaticBooks().subscribe((res: any) => {
+      if (res.data) {
+        this.library = this.library.concat(res.data)?.filter((item: any) => item.published)
+        this.getLibrary()
+        this.getReadingBooks()
+        this.route.queryParamMap.subscribe((query: any) => {
+          this.isShowTableContent = query.params['tableContent']
+        })
+        this.getBook()
+        this.authService.getCurrentUser().subscribe();
+        this.contentEditable = this.authService.contentEditable
+        this.changeDetector.detectChanges()
+      }
+    })
+  }
+
+  getLibrary() {
+    try {
+      this.libraryService.fetchLibrary()
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            this.books = res.data
+            this.setting = res.setting
+            this.labels = res.labels
+            const foundData = this.books?.find((item: any) => item?.key === this.key)
+            if (foundData) {
+              this.isLoading = true
+              this.contentName = foundData?.name;
+              this.author = foundData?.author;
+              this.selectedChips = foundData?.labels;
+              this.changeDetector.detectChanges();
+              this.content = `${foundData?.googleDocId}`
+              if (this.content) {
+                this.isLoading = false
               }
             }
-          }, 0)
-        } let studyStorage = JSON.parse(localStorage.getItem('reading') || '[]')
-        if (!studyStorage) {
-          studyStorage = []
-        }
-        let foundItem = studyStorage.find((item: any) => item.key == this.rootContent.key)
-        if (!foundItem) {
-          studyStorage.push({
-            name: this.rootContent.name,
-            content: this.content.key || this.rootContent.key,
-            key: this.rootContent.key,
-            location: location.href
-          })
-        } else {
-          if (foundItem.content !== this.content.key) {
-            foundItem.content = this.content.key
-            foundItem.name = this.content.name;
-            foundItem.location = location.href
           }
-        }
-        if (this.level) {
-          localStorage.setItem('reading', JSON.stringify(studyStorage))
-        }
-      }
-    })
+        })
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  onSaveContent() {
-    console.log(this.rootContent)
-    navigator.clipboard.writeText(JSON.stringify({ data: this.rootContent }));
+  getReadingBooks() {
+    const readingBooks = JSON.parse(localStorage.getItem('reading') || '[]')
+    this.library.forEach((item: any) => {
+      const foundReading = readingBooks.find((rb: any) => rb?.key === item?.key)
+      if (foundReading) {
+        item.reading = foundReading
+      }
+    })
   }
 
   onNextContent() {
@@ -186,35 +190,25 @@ export class BookComponent implements OnInit {
       array.some((o: any) => result = o.key === key ? o : find(o.content || [], key));
       return result;
     }
-    if (!this.isShowTableContent) {
-      this.navigate.prev.queryParams = {
-        tableContent: !this.isShowTableContent
+    if (!this.isShowTableContent && this.level) {
+      const foundContent = this.tableContent.find((item: any) => item.key === this.level)
+      const foundContentInex = this.tableContent.indexOf(foundContent)
+      this.navigate.prev = <any>{}
+      if (this.tableContent[foundContentInex - 1]) {
+        this.isNavigation = true
+        this.navigate.prev.text = `${this.tableContent[foundContentInex - 1].description}`
+        this.navigate.prev.link = `thu-vien/${this.key}/${this.tableContent[foundContentInex - 1].key}`
+      } else {
+        this.navigate.prev.link = `/`
       }
-      this.navigate.prev.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) - 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) - 1]?.attrs.hash) || '/'
-      this.navigate.next.link = (this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content?.key) + 1]?.attrs.pathname + this.rootContent.content[this.rootContent.content.findIndex((item: any) => item.key == this.content.key) + 1]?.attrs.hash) || '/'
-    } else {
-      this.navigate.prev.queryParams = {}
-    }
-  }
-
-  getContentName(item: any) {
-    if (!item?.name) {
-      let name = ''
-      item?.content[0]?.content.forEach((text: any) => {
-        if (text.type == 'text') {
-          name += text?.text
-        }
-      })
-      return name
-    }
-    return item?.name
-  }
-
-  readContent(item: any) {
-    if (item?.attrs?.hash?.includes('#')) {
-      this.router.navigate([item?.attrs?.pathname], { fragment: item?.attrs?.hash.replace('#', '') })
-    } else {
-      this.router.navigate([`${item?.attrs?.pathname}${item?.attrs?.hash || ''}`])
+      this.navigate.next = <any>{}
+      if (this.tableContent[foundContentInex + 1]) {
+        this.isNavigation = true
+        this.navigate.next.text = `${this.tableContent[foundContentInex + 1].description}`
+        this.navigate.next.link = `thu-vien/${this.key}/${this.tableContent[foundContentInex + 1].key}`
+      } else {
+        this.navigate.next.link = `/`
+      }
     }
   }
 
@@ -233,29 +227,42 @@ export class BookComponent implements OnInit {
   }
 
   getBackLink() {
-    if (!this.level && !this.isShowTableContent) {
-      this.navigate.prev.queryParams = {
-        tableContent: !this.isShowTableContent
-      }
-      return location.pathname
-    }
-    if (this.level && !this.isShowTableContent) {
-      this.navigate.prev.queryParams = {
-        tableContent: !this.isShowTableContent
-      }
-      return ''
-    }
-    this.navigate.prev.queryParams = {}
-    return ''
+    return 'thu-vien'
   }
 
   continueReading(isAutoPlay: boolean = false) {
     if (isAutoPlay) {
       this.router.navigateByUrl(`${this.reading.location.replace(location.origin, '')}`, {
-        state: {autoplay: true}
+        state: { autoplay: true }
       })
     } else {
       this.router.navigateByUrl(this.reading.location.replace(location.origin, ''))
     }
+  }
+
+  generaToken(data: any) {
+    const base64url = (source: any) => {
+      let encodedSource = CryptoJS.enc.Base64.stringify(source);
+      encodedSource = encodedSource.replace(/=+$/, '');
+      encodedSource = encodedSource.replace(/\+/g, '-');
+      encodedSource = encodedSource.replace(/\//g, '_');
+      return encodedSource;
+    }
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
+    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    const encodedHeader = base64url(stringifiedHeader);
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    const encodedData = base64url(stringifiedData);
+    const signature = CryptoJS.HmacSHA512("caodaiondata", "caodaionkey").toString();
+    const encodedSignature = btoa(signature);
+    const token = `${encodedHeader}.${encodedData}.${encodedSignature}`;
+    return token
+  }
+
+  onItemFocus(item: any) {
+    window.location.href = `${location.origin}/thu-vien/${item.key?.replace(location.origin, '')}`
   }
 }

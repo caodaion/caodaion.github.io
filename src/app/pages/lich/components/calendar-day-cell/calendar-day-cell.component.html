@@ -1,0 +1,53 @@
+<div
+  class="day-cell"
+  [class.today]="isToday"
+  [class.other-month]="!isCurrentMonth"
+  [class.selected]="isSelected"
+>
+  <div class="date-container">
+    <div
+      class="w-full flex items-center justify-between cursor-pointer"
+      (click)="onDayClick()"
+    >
+      <div class="solar-date">{{ calendarDate.solar.day }}</div>
+      <div class="text-center">
+        <div class="lunar-day">
+          {{ calendarDate.lunar.day }}/{{ calendarDate.lunar.month }}
+          {{ calendarDate.lunar.isLeapMonth ? "NH" : "" }}
+        </div>
+      </div>
+    </div>
+    <div class="lunar-date" [class.can-chi-visible]="showCanChi">
+      <div class="can-chi" *ngIf="showCanChi">
+        <span
+          [ngStyle]="{
+            color: 'var(--primary-color)'
+          }"
+          >{{ calendarDate.canChi.day }}</span
+        >
+        • {{ calendarDate.canChi.month }} • {{ calendarDate.canChi.year }}
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="events-container"
+    *ngIf="calendarDate.events && calendarDate.events.length > 0"
+  >
+    <div class="event-list">
+      <div
+        class="event-marker clickable"
+        *ngFor="let event of visibleEvents"
+        [style.background-color]="event?.color"
+        [matTooltip]="event.title"
+        [style.color]="event?.textColor"
+        (click)="onEventClick(event, $event)"
+      >
+        {{ event.title }}
+      </div>
+    </div>
+    <div class="more-indicator" *ngIf="calendarDate.events.length > maxEvents">
+      +{{ calendarDate.events.length - maxEvents }}
+    </div>
+  </div>
+</div>

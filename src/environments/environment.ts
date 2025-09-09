@@ -7,13 +7,13 @@ export const environment = {
   apiUrl: 'http://localhost:3000',
   administratorUrl: 'http://localhost:4200/auth?token=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5pc3RyYXRvciIsInJlZGlyZWN0VG8iOiIvdHJhbmctY2h1L2tpbmgifQ.OPixqUlQxMuCI9ciDOBDrQonCuyUshKvHNjC0-yIvY8',
   firebaseConfig: {
-    apiKey: "AIzaSyAnwlY1ftsfJLWfn-5PCbftOaQ1_4wRKxo",
-    authDomain: "caodaion-5167e.firebaseapp.com",
-    projectId: "caodaion-5167e",
-    storageBucket: "caodaion-5167e.appspot.com",
-    messagingSenderId: "671089239835",
-    appId: "1:671089239835:web:d2ec42f54b02f0fed115be",
-    measurementId: "G-8EMJZEB65T"
+    apiKey: "AIzaSyAih0n88m-1aTuERdujAxLb0vmyBcNl1Lc",
+    authDomain: "caodaion-f6f4b.firebaseapp.com",
+    projectId: "caodaion-f6f4b",
+    storageBucket: "caodaion-f6f4b.firebasestorage.app",
+    messagingSenderId: "203708247935",
+    appId: "1:203708247935:web:12f4899236ddafc99f344a",
+    measurementId: "G-69FS2V4424"
   }
 };
 
