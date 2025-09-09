@@ -1,9 +1,9 @@
 <div class="app-container" [class.dark-mode]="isDarkMode">
   <div class="app-wrapper">
     <!-- Navigation Rail (Desktop) -->
-    <nav class="nav-rail">
+    <nav class="nav-rail" tourAnchor="navigationRail">
       <!-- Sub-nav toggle button -->
-      <div class="nav-item subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()"
+      <div tourAnchor="navigationToggleSubNav" class="nav-item subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()"
         matTooltip="Mở menu phụ" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -29,7 +29,7 @@
       </div>
 
       <!-- Dark Mode Toggle (for desktop) -->
-      <div class="nav-item theme-toggle" (click)="toggleDarkMode()"
+      <div tourAnchor="navigationToggleDarkMode" class="nav-item theme-toggle" (click)="toggleDarkMode()"
         matTooltip="{{ isDarkMode ? 'Chế độ sáng' : 'Chế độ tối' }}" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -58,7 +58,7 @@
         <span class="nav-label">{{ isDarkMode ? "Sáng" : "Tối" }}</span>
       </div>
 
-      <div class="nav-item active" routerLink="./" [ngClass]="{ active: lastVisitedPage === '/' }"
+      <div tourAnchor="navigationHome" class="nav-item active" routerLink="./" [ngClass]="{ active: lastVisitedPage === '/' }"
         matTooltip="Trang chủ" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -86,7 +86,7 @@
         <span class="nav-label">Trang chủ</span>
       </div>
 
-      <div class="nav-item" routerLink="./lich" matTooltip="Lịch" matTooltipPosition="right"
+      <div tourAnchor="navigationLich" class="nav-item" routerLink="./lich" matTooltip="Lịch" matTooltipPosition="right"
         [ngClass]="{ active: lastVisitedPage === '/lich' }">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -114,7 +114,7 @@
         <span class="nav-label">Lịch</span>
       </div>
 
-      <div class="nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh"
+      <div tourAnchor="navigationKinh" class="nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh"
         matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -176,7 +176,7 @@
         <span class="nav-label">TNHT</span>
       </div> -->
 
-      <div class="nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng"
+      <div tourAnchor="navigationApps" class="nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng"
         matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -480,3 +480,5 @@
     </div>
   </mat-dialog-actions>
 </ng-template>
+
+<tour-step-template></tour-step-template>

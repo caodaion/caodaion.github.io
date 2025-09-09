@@ -59,6 +59,7 @@
     "ngx-mat-select-search": "^7.0.3",
     "ngx-mat-timepicker": "16.0.3",
     "ngx-scanner-qrcode": "1.6.4",
+    "ngx-ui-tour-md-menu": "^15.0.2",
     "path": "^0.12.7",
     "prismjs": "^1.29.0",
     "qrcode": "^1.5.3",
