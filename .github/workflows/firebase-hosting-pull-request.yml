@@ -13,9 +13,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci -f && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci -f
+        
+      - name: Build for production preview (PR to main)
+        if: github.event.pull_request.base.ref == 'main'
+        run: npm run build -- --configuration=production
+        
+      - name: Build for staging preview (PR to staging)
+        if: github.event.pull_request.base.ref == 'staging'
+        run: npm run build -- --configuration=staging
+        
+      - name: Build for development preview (PR to develop)
+        if: github.event.pull_request.base.ref == 'develop'
+        run: npm run build -- --configuration=development
+        
+      - name: Deploy to Firebase preview (PR to main - use production project)
+        if: github.event.pull_request.base.ref == 'main'
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAODAION_F6F4B }}
           projectId: caodaion-f6f4b
+          
+      - name: Deploy to Firebase preview (PR to staging)
+        if: github.event.pull_request.base.ref == 'staging'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAODAION_STAGING }}
+          projectId: caodaion-staging
+          
+      - name: Deploy to Firebase preview (PR to develop)
+        if: github.event.pull_request.base.ref == 'develop'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAODAION_DEVELOP }}
+          projectId: caodaion-develop
