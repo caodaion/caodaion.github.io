@@ -4,8 +4,6 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
-  administratorUrl: 'http://localhost:4200/auth?token=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5pc3RyYXRvciIsInJlZGlyZWN0VG8iOiIvdHJhbmctY2h1L2tpbmgifQ.OPixqUlQxMuCI9ciDOBDrQonCuyUshKvHNjC0-yIvY8',
   firebaseConfig: {
     apiKey: "AIzaSyAih0n88m-1aTuERdujAxLb0vmyBcNl1Lc",
     authDomain: "caodaion-f6f4b.firebaseapp.com",
