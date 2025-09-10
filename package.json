@@ -6,11 +6,16 @@
     "start-dev": "ng serve",
     "start": "node server.js",
     "build": "ng build",
+    "build:prod": "ng build --configuration=production",
+    "build:staging": "ng build --configuration=staging",
+    "build:dev": "ng build --configuration=development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start-pwa": "ng build && http-server -p 8080 -c-1 dist/pwa/browser",
     "gh-pages-build": "ng build",
-    "deploy:prod": "ng build && cd dist/pwa/browser && copy index.html 404.html && firebase deploy && cd .. && cd .. && cd .. && git add . && git commit -m deploy && git push"
+    "deploy:prod": "ng build --configuration=production && cd dist/pwa/browser && copy index.html 404.html && firebase use production && firebase deploy && cd .. && cd .. && cd ..",
+    "deploy:staging": "ng build --configuration=staging && cd dist/pwa/browser && copy index.html 404.html && firebase use staging && firebase deploy && cd .. && cd .. && cd ..",
+    "deploy:dev": "ng build --configuration=development && cd dist/pwa/browser && copy index.html 404.html && firebase use develop && firebase deploy && cd .. && cd .. && cd .."
   },
   "private": true,
   "dependencies": {

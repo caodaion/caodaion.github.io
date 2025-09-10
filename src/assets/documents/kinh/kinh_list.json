@@ -473,5 +473,10 @@
         "key": "loi-nguyen",
         "name": "Lời Nguyện",
         "group": "quan_hon_tang_te"
+    },
+    {
+        "key": "vong-thai-xuan-cung-thay",
+        "name": "Vọng Thài Xuân Cúng Thầy",
+        "group": "quan_hon_tang_te"
     }
 ]

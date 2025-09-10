@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "caodaion-f6f4b"
+    "default": "caodaion-f6f4b",
+    "production": "caodaion-f6f4b",
+    "staging": "caodaion-staging",
+    "develop": "caodaion-develop"
   }
 }
