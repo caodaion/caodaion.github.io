@@ -60,42 +60,63 @@ export class NavigationComponent implements OnInit, OnDestroy {
         content: 'Sử dụng menu bên trái để điều hướng',
         title: 'Menu điều hướng',
         enableBackdrop: true,
+        prevBtnTitle: 'Quay lại',
+        nextBtnTitle: 'Tiếp tục',
+        endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationToggleSubNav',
         content: 'Nhấn vào đây để mở menu phụ',
         title: 'Mở menu phụ',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationToggleDarkMode',
         content: 'Nhấn vào đây để chuyển đổi chế độ tối',
         title: 'Chuyển đổi chế độ tối',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationHome',
         content: 'Nhấn vào đây để về trang chủ',
         title: 'Về trang chủ',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationLich',
         content: 'Nhấn vào đây để xem lịch',
         title: 'Xem lịch',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationKinh',
         content: 'Nhấn vào đây để xem kinh',
         title: 'Xem kinh',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
       {
         anchorId: 'navigationApps',
         content: 'Nhấn vào đây để xem các ứng dụng',
         title: 'Xem ứng dụng',
         enableBackdrop: true,
+         prevBtnTitle: 'Quay lại',
+    nextBtnTitle: 'Tiếp tục',
+    endBtnTitle: 'Kết thúc'
       },
     ])
     this.tourService.start()
