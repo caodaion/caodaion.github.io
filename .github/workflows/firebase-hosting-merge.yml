@@ -33,7 +33,10 @@ jobs:
       - name: Build for development (develop branch)
         if: github.ref == 'refs/heads/develop'
         run: npm run build -- --configuration=development
-        
+
+      - name: List output directory
+  run: ls -alR dist/pwa
+  
       - name: Copy index.html to 404.html for SPA routing
         run: cp dist/pwa/index.html dist/pwa/404.html
         
