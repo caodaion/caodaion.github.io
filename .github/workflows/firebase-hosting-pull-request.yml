@@ -24,7 +24,7 @@ jobs:
         
       - name: Build for production preview (PR to main)
         if: github.event.pull_request.base.ref == 'main'
-        run: npm run build -- --configuration=production
+        run: npm run build -- --configuration=production && cp dist/pwa/browser/index.prod.html dist/pwa/browser/404.html
         
       - name: Build for staging preview (PR to staging)
         if: github.event.pull_request.base.ref == 'staging'
@@ -33,9 +33,6 @@ jobs:
       - name: Build for development preview (PR to develop)
         if: github.event.pull_request.base.ref == 'develop'
         run: npm run build -- --configuration=development
-        
-      - name: Copy index.html to 404.html for SPA routing
-        run: cp home/runner/work/caodaion.github.io/caodaion.github.io/dist/pwa/browser/index.html home/runner/work/caodaion.github.io/caodaion.github.io/dist/pwa/browser/404.html
         
       - name: Deploy to Firebase preview (PR to main - use production project)
         if: github.event.pull_request.base.ref == 'main'
