@@ -35,7 +35,7 @@ jobs:
         run: npm run build -- --configuration=development
         
       - name: Copy index.html to 404.html for SPA routing
-        run: cp dist/pwa/browser/index.html dist/pwa/browser/404.html
+        run: cp /home/runner/work/caodaion.github.io/caodaion.github.io/dist/pwa/browser/index.html /home/runner/work/caodaion.github.io/caodaion.github.io/dist/pwa/browser/404.html
         
       - name: Deploy to Firebase preview (PR to main - use production project)
         if: github.event.pull_request.base.ref == 'main'
