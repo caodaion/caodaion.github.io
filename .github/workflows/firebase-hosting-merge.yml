@@ -24,7 +24,7 @@ jobs:
         
       - name: Build for production (main branch)
         if: github.ref == 'refs/heads/main'
-        run: npm run build -- --configuration=production && cp dist/pwa/browser/index.html dist/pwa/browser/404.html
+        run: npm run build -- --configuration=production && cp dist/pwa/browser/index.prod.html dist/pwa/browser/404.html
         
       - name: Build for staging (staging branch)
         if: github.ref == 'refs/heads/staging'
