@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
 import { TourService } from 'ngx-ui-tour-md-menu';
+import { AppTour } from 'src/app/shared/services/app-tour/app-tour';
 
 @Component({
   selector: 'app-navigation',
@@ -32,7 +33,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private router: Router,
     private navigationService: NavigationService,
     private matDialog: MatDialog,
-    private eventSignService: EventSignService
+    private eventSignService: EventSignService,
+    private appTour: AppTour
   ) {
     this.subscriptions.push(
       this.themeService.darkMode$.subscribe((isDark: any) => {
@@ -54,72 +56,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.tourService.initialize([
-      {
-        anchorId: 'navigationRail',
-        content: 'Sử dụng menu bên trái để điều hướng',
-        title: 'Menu điều hướng',
-        enableBackdrop: true,
-        prevBtnTitle: 'Quay lại',
-        nextBtnTitle: 'Tiếp tục',
-        endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationToggleSubNav',
-        content: 'Nhấn vào đây để mở menu phụ',
-        title: 'Mở menu phụ',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationToggleDarkMode',
-        content: 'Nhấn vào đây để chuyển đổi chế độ tối',
-        title: 'Chuyển đổi chế độ tối',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationHome',
-        content: 'Nhấn vào đây để về trang chủ',
-        title: 'Về trang chủ',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationLich',
-        content: 'Nhấn vào đây để xem lịch',
-        title: 'Xem lịch',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationKinh',
-        content: 'Nhấn vào đây để xem kinh',
-        title: 'Xem kinh',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-      {
-        anchorId: 'navigationApps',
-        content: 'Nhấn vào đây để xem các ứng dụng',
-        title: 'Xem ứng dụng',
-        enableBackdrop: true,
-         prevBtnTitle: 'Quay lại',
-    nextBtnTitle: 'Tiếp tục',
-    endBtnTitle: 'Kết thúc'
-      },
-    ])
-    this.tourService.start()
+    const localStorageAppTours = localStorage.getItem('appTours');
+    const appTours = localStorageAppTours ? JSON.parse(localStorageAppTours) : null;
+    if (!appTours || (appTours && !appTours.navigation)) {
+      this.appTour.fetchNavigationTour();
+    }
+    if (appTours && appTours.navigation && !appTours.toolbar) {
+      this.appTour.fetchToolbarTour();
+    }
     this.eventSigns = this.eventSignService.getEventSigns();
     // Subscribe to router events to track navigation
     this.subscriptions.push(
