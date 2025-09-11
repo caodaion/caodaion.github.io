@@ -38,7 +38,7 @@ jobs:
         run: ls -alR dist/pwa
   
       - name: Copy index.html to 404.html for SPA routing
-        run: cp dist/pwa/index.html dist/pwa/404.html
+        run: cp dist/pwa/browser/index.html dist/pwa/browser/404.html
         
       - name: Deploy to Firebase (main branch - production)
         if: github.ref == 'refs/heads/main'
