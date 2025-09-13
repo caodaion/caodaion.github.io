@@ -19,7 +19,7 @@ export class KinhListComponent implements OnInit {
   kinhGroups$: Observable<{ [key: string]: Kinh[] }>;
   expandedGroups: { [key: string]: boolean } = {};
 
-  displayType: 'grid' | 'list' = 'grid';
+  displayType: 'grid' | 'list' = 'list';
 
   constructor(
     private kinhService: KinhService,
