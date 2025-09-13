@@ -14,10 +14,14 @@ import { CommonService } from '../../../../shared/services/common.service';
 })
 export class KinhListComponent implements OnInit {
   private searchTerm$ = new BehaviorSubject<string>('');
+  private selectedGroups$ = new BehaviorSubject<string[]>([]);
   private allGroups$: Observable<{ [key: string]: Kinh[] }>;
 
   kinhGroups$: Observable<{ [key: string]: Kinh[] }>;
+  availableGroups$: Observable<string[]>;
   expandedGroups: { [key: string]: boolean } = {};
+  selectedGroups: string[] = [];
+  showFilters: boolean = false;
 
   displayType: 'grid' | 'list' = 'list';
 
@@ -27,27 +31,47 @@ export class KinhListComponent implements OnInit {
     private commonService: CommonService
   ) {
     this.allGroups$ = this.kinhService.getKinhGroups();
-    this.kinhGroups$ = combineLatest([this.allGroups$, this.searchTerm$]).pipe(
-      map(([groups, searchTerm]) => {
-        if (!searchTerm.trim()) {
-          return groups;
+    
+    // Get available groups for the filter chips
+    this.availableGroups$ = this.allGroups$.pipe(
+      map(groups => Object.keys(groups))
+    );
+    
+    this.kinhGroups$ = combineLatest([this.allGroups$, this.searchTerm$, this.selectedGroups$]).pipe(
+      map(([groups, searchTerm, selectedGroups]) => {
+        let filteredGroups = groups;
+
+        // Filter by selected groups first
+        if (selectedGroups.length > 0) {
+          const groupsFilteredBySelection: { [key: string]: Kinh[] } = {};
+          selectedGroups.forEach(groupKey => {
+            if (groups[groupKey]) {
+              groupsFilteredBySelection[groupKey] = groups[groupKey];
+            }
+          });
+          filteredGroups = groupsFilteredBySelection;
         }
 
-        const filteredGroups: { [key: string]: Kinh[] } = {};
+        // Then apply search filter
+        if (!searchTerm.trim()) {
+          return filteredGroups;
+        }
+
+        const searchFilteredGroups: { [key: string]: Kinh[] } = {};
         const searchContent = this.commonService.generatedSlug(searchTerm);
 
-        Object.keys(groups).forEach((key) => {
-          const filteredKinhs = groups[key].filter((kinh) =>
+        Object.keys(filteredGroups).forEach((key) => {
+          const filteredKinhs = filteredGroups[key].filter((kinh) =>
             this.commonService.generatedSlug(kinh.name).includes(searchContent) ||
             this.commonService.generatedSlug(kinh.key).includes(searchContent)
           );
 
           if (filteredKinhs.length > 0) {
-            filteredGroups[key] = filteredKinhs;
+            searchFilteredGroups[key] = filteredKinhs;
           }
         });
 
-        return filteredGroups;
+        return searchFilteredGroups;
       })
     );
   }
@@ -88,6 +112,32 @@ export class KinhListComponent implements OnInit {
 
   search(term: string): void {
     this.searchTerm$.next(term);
+  }
+
+  toggleGroupFilter(groupKey: string): void {
+    if (this.selectedGroups.includes(groupKey)) {
+      this.selectedGroups = this.selectedGroups.filter(g => g !== groupKey);
+    } else {
+      this.selectedGroups = [...this.selectedGroups, groupKey];
+    }
+    this.selectedGroups$.next(this.selectedGroups);
+  }
+
+  clearGroupFilters(): void {
+    this.selectedGroups = [];
+    this.selectedGroups$.next(this.selectedGroups);
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+  }
+
+  isGroupSelected(groupKey: string): boolean {
+    return this.selectedGroups.includes(groupKey);
+  }
+
+  originalOrder = (a: any, b: any): number => {
+    return 0; // Keep original order, don't sort
   }
 
   isGrid(): boolean {
