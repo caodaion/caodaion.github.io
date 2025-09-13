@@ -17,14 +17,13 @@ import { Subscription, map, shareReplay } from 'rxjs';
 import { EventImageDialogComponent } from '../lich/components/event-image-dialog/event-image-dialog.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
-import { n } from '@angular/cdk/overlay-module.d-C2CxnwqT';
 import { MatDividerModule } from '@angular/material/divider';
 import { PwaInstallService } from '../../shared/services/pwa-install/pwa-install.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule, IconComponent, BaiThuongYeu, MatDividerModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule, MatDividerModule, IconComponent, BaiThuongYeu],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [LichService, CalendarService, DatePipe],
