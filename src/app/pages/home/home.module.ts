@@ -12,15 +12,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { BaiThuongYeuComponent } from './bai-thuong-yeu/bai-thuong-yeu.component';
 import { TimeComponent } from './time/time.component';
 import { MatButtonModule } from '@angular/material/button';
+import { AppComponent } from 'src/app/app.component';
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    WelcomeComponent,
-    ActionComponent,
-    BaiThuongYeuComponent,
-    TimeComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     HomeRoutingModule,
