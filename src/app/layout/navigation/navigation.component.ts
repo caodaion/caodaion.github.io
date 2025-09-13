@@ -25,6 +25,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   showBottomNav = true;
   eventSigns: any[] = [];
   tourService = inject(TourService)
+  hasSubmenu = false; // Track if current route has submenu
 
   private subscriptions: Subscription[] = [];
 
@@ -65,12 +66,20 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.appTour.fetchToolbarTour();
     }
     this.eventSigns = this.eventSignService.getEventSigns();
+    
+    // Initialize submenu visibility based on current route
+    this.updateSubmenuVisibility(this.router.url);
+    
     // Subscribe to router events to track navigation
     this.subscriptions.push(
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
           this.isSubNavOpen = false;
+          
+          // Check if current route has submenu functionality
+          this.updateSubmenuVisibility(event.urlAfterRedirects);
+          
           if (
             ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
               event.urlAfterRedirects.startsWith(path)
@@ -107,6 +116,16 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.navigationService.setCaNhanNavVisibility(!this.isSubNavOpen);
     }
     this.isSubNavOpen = !this.isSubNavOpen;
+  }
+
+  /**
+   * Check if current route has submenu functionality and update hasSubmenu property
+   * @param url Current route URL
+   */
+  private updateSubmenuVisibility(url: string): void {
+    // Define routes that have submenu functionality
+    const routesWithSubmenu = ['/lich', '/ca-nhan'];
+    this.hasSubmenu = routesWithSubmenu.some(route => url.includes(route));
   }
 
   closeSubNav(): void {

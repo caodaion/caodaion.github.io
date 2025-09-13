@@ -24,7 +24,7 @@ jobs:
         
       - name: Build for production preview (PR to main)
         if: github.event.pull_request.base.ref == 'main'
-        run: npm run build -- --configuration=production
+        run: npm run build -- --configuration=production && cp dist/pwa/browser/index.prod.html dist/pwa/browser/404.html
         
       - name: Build for staging preview (PR to staging)
         if: github.event.pull_request.base.ref == 'staging'

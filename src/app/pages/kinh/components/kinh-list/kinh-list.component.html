@@ -1,42 +1,113 @@
 <div class="kinh-container">
-  <h1 class="page-title">Kinh Cúng Tứ Thời và Quan Hôn Tang Tế</h1>
+  <!-- Header Section -->
+  <header class="page-header">
+    <h1 class="page-title">Kinh Cúng Tứ Thời và Quan Hôn Tang Tế</h1>
+    <p class="page-subtitle">Tuyển tập các bài kinh cúng tứ thời và quan hôn tang tế</p>
+  </header>
 
-  <div class="search-container">
-    <input type="text" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)" class="search-input">
-  </div>
-
-  <div class="display-toggle-container">
-    <button class="display-toggle-btn" [class.active]="isList()" (click)="setDisplayType('list')">
-      <span class="material-icons">view_list</span>
-    </button>
-    <button class="display-toggle-btn" [class.active]="isGrid()" (click)="setDisplayType('grid')">
-      <span class="material-icons">grid_view</span>
-    </button>
-  </div>
-
-  <div class="kinh-groups" *ngIf="(kinhGroups$ | async) as groups">
-    <div class="kinh-group" *ngFor="let groupEntry of groups | keyvalue">
-      <div class="group-header" (click)="toggleGroup(groupEntry.key)">
-        <h2 class="group-title">{{ getGroupName(groupEntry.key) }}</h2>
-        <span class="group-toggle">{{ expandedGroups[groupEntry.key] ? '▼' : '►' }}</span>
+  <!-- Toolbar Section -->
+  <div class="toolbar">
+    <!-- Search Bar -->
+    <div class="search-section">
+      <div class="search-container">
+        <span class="search-icon material-icons">search</span>
+        <input type="text" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)"
+          class="search-input">
       </div>
-      
-      <div class="group-content" [class.expanded]="expandedGroups[groupEntry.key]">
-        <ul *ngIf="isList()" class="kinh-list list-view">
-          <li *ngFor="let kinh of groupEntry.value" class="kinh-item">
-            <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
-              {{ kinh.name }}
-            </a>
-          </li>
-        </ul>
-        <div *ngIf="isGrid()" class="kinh-grid">
-          <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item">
-            <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
-              {{ kinh.name }}
-            </a>
+    </div>
+
+    <!-- Filter and View Controls -->
+    <div class="controls-section">
+      <!-- Filter Toggle Button -->
+      <div>
+        <div class="filter-toggle-section">
+          <button class="filter-toggle-btn" [class.active]="showFilters" (click)="toggleFilters()">
+            <span class="material-icons">tune</span>
+            <span class="filter-toggle-text">
+              {{ showFilters ? 'Ẩn bộ lọc' : 'Hiện bộ lọc' }}
+              <span class="filter-count" *ngIf="selectedGroups.length > 0">({{ selectedGroups.length }})</span>
+            </span>
+            <span class="material-icons expand-icon">{{ showFilters ? 'expand_less' : 'expand_more' }}</span>
+          </button>
+        </div>
+
+        <!-- Filter Chips (Collapsible) -->
+        <div class="filter-chips-container" [class.visible]="showFilters" *ngIf="(availableGroups$ | async) as groups">
+          <div class="filter-chips-header">
+            <span class="filter-label">
+              <span class="material-icons">filter_list</span>
+              Lọc theo nhóm
+            </span>
+            <button class="clear-filters-btn" *ngIf="selectedGroups.length > 0" (click)="clearGroupFilters()">
+              <span class="material-icons">clear</span>
+              Xóa bộ lọc
+            </button>
           </div>
+          <div class="filter-chips">
+            <button *ngFor="let groupKey of groups" class="filter-chip" [class.active]="isGroupSelected(groupKey)"
+              (click)="toggleGroupFilter(groupKey)">
+              {{ getGroupName(groupKey) }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- View Toggle -->
+      <div class="view-toggle-section">
+        <span class="view-label">Hiển thị:</span>
+        <div class="display-toggle-container">
+          <button class="display-toggle-btn" [class.active]="isList()" (click)="setDisplayType('list')"
+            title="Dạng danh sách">
+            <span class="material-icons">view_list</span>
+          </button>
+          <button class="display-toggle-btn" [class.active]="isGrid()" (click)="setDisplayType('grid')"
+            title="Dạng lưới">
+            <span class="material-icons">grid_view</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Content Section -->
+  <main class="content-section">
+    <div class="kinh-groups" *ngIf="(kinhGroups$ | async) as groups">
+      <div class="kinh-group" *ngFor="let groupEntry of groups | keyvalue: originalOrder">
+        <div class="group-header" (click)="toggleGroup(groupEntry.key)">
+          <div class="group-header-content">
+            <h2 class="group-title">{{ getGroupName(groupEntry.key) }}</h2>
+            <span class="group-count">{{ groupEntry.value.length }} bài kinh</span>
+          </div>
+          <span class="group-toggle material-icons">
+            {{ expandedGroups[groupEntry.key] ? 'expand_less' : 'expand_more' }}
+          </span>
+        </div>
+
+        <div class="group-content" [class.expanded]="expandedGroups[groupEntry.key]">
+          <ul *ngIf="isList()" class="kinh-list list-view">
+            <li *ngFor="let kinh of groupEntry.value" class="kinh-item">
+              <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+                <span class="kinh-name">{{ kinh.name }}</span>
+                <span class="material-icons kinh-arrow">chevron_right</span>
+              </a>
+            </li>
+          </ul>
+          <div *ngIf="isGrid()" class="kinh-grid">
+            <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item">
+              <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+                <span class="kinh-name">{{ kinh.name }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="(groups | keyvalue).length === 0">
+        <span class="material-icons empty-icon">search_off</span>
+        <h3>Không tìm thấy kết quả</h3>
+        <p>Hãy thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc</p>
+        <button class="clear-all-btn" (click)="clearGroupFilters(); search('')">Xóa tất cả bộ lọc</button>
+      </div>
+    </div>
+  </main>
 </div>

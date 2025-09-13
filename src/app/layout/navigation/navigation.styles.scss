@@ -142,6 +142,33 @@ mat-toolbar {
 .nav-item.subnav-toggle {
   margin-bottom: 1.5rem;
   position: relative;
+  
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+    
+    &:hover {
+      background-color: transparent;
+    }
+    
+    &::before {
+      opacity: 0 !important;
+    }
+    
+    &::after {
+      background-color: transparent !important;
+    }
+    
+    .nav-icon {
+      color: var(--text-secondary-color);
+      opacity: 0.4;
+    }
+    
+    .nav-label {
+      color: var(--text-secondary-color);
+      opacity: 0.4;
+    }
+  }
 }
 
 .nav-item.subnav-toggle::after {
@@ -249,6 +276,9 @@ mat-toolbar {
 /* Bottom Navigation for Mobile */
 .bottom-nav {
   display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 56px;
   min-height: 56px;
@@ -256,6 +286,15 @@ mat-toolbar {
   border-top: 1px solid var(--border-color);
   z-index: 1000;
   user-select: none;
+  box-sizing: border-box;
+  /* Ensure it stays on top and doesn't interfere with page scrolling */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Fix for iOS Safari */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Support for safe areas on newer devices */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bottom-nav-container {
@@ -274,6 +313,11 @@ mat-toolbar {
   cursor: pointer;
   color: var(--text-secondary-color);
   position: relative;
+  
+  &.invisible {
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .bottom-nav-icon {
@@ -380,8 +424,18 @@ mat-toolbar {
   }
 
   .main-content {
+    &.has-bottom-nav {
+      padding-bottom: calc(56px + env(safe-area-inset-bottom));
+    }
+    
     .subnav-toggle {
       display: block;
+    }
+    
+    .main-container {
+      /* Ensure proper scrolling behavior on mobile */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
     }
   }
 
@@ -389,6 +443,11 @@ mat-toolbar {
     left: 0;
     z-index: 1001;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Ensure the bottom navigation stays fixed even with dynamic content */
+  body {
+    overflow-x: hidden;
   }
 }
 
