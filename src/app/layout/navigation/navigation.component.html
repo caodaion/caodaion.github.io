@@ -3,8 +3,10 @@
     <!-- Navigation Rail (Desktop) -->
     <nav class="nav-rail" tourAnchor="navigationRail">
       <!-- Sub-nav toggle button -->
-      <div tourAnchor="navigationToggleSubNav" class="nav-item subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()"
-        matTooltip="Mở menu phụ" matTooltipPosition="right">
+      <div class="nav-item subnav-toggle" tourAnchor="navigationToggleSubNav"
+        [class.active]="isSubNavOpen && hasSubmenu" [class.disabled]="!hasSubmenu"
+        (click)="hasSubmenu && toggleSubNav()" [matTooltip]="hasSubmenu ? 'Mở menu phụ' : 'Không có menu phụ'"
+        matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -58,8 +60,8 @@
         <span class="nav-label">{{ isDarkMode ? "Sáng" : "Tối" }}</span>
       </div>
 
-      <div tourAnchor="navigationHome" class="nav-item active" routerLink="./" [ngClass]="{ active: lastVisitedPage === '/' }"
-        matTooltip="Trang chủ" matTooltipPosition="right">
+      <div tourAnchor="navigationHome" class="nav-item active" routerLink="./"
+        [ngClass]="{ active: lastVisitedPage === '/' }" matTooltip="Trang chủ" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -114,8 +116,8 @@
         <span class="nav-label">Lịch</span>
       </div>
 
-      <div tourAnchor="navigationKinh" class="nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh"
-        matTooltipPosition="right">
+      <div tourAnchor="navigationKinh" class="nav-item" routerLink="/kinh"
+        [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -176,8 +178,8 @@
         <span class="nav-label">TNHT</span>
       </div> -->
 
-      <div tourAnchor="navigationApps" class="nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng"
-        matTooltipPosition="right">
+      <div tourAnchor="navigationApps" class="nav-item" routerLink="/apps"
+        [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -207,10 +209,12 @@
     </nav>
 
     <!-- Main Content Area -->
-    <div class="main-content">
+    <div class="main-content" [class.has-bottom-nav]="showBottomNav">
       <mat-toolbar *ngIf="showToolbar">
         <!-- Sub-nav toggle button -->
-        <div class="subnav-toggle" [class.active]="isSubNavOpen" (click)="toggleSubNav()" matTooltip="Mở menu phụ">
+        <div class="subnav-toggle mobile-subnav-toggle" [class.active]="isSubNavOpen && hasSubmenu"
+          [class.invisible]="!hasSubmenu" (click)="hasSubmenu && toggleSubNav()"
+          [matTooltip]="hasSubmenu ? 'Mở menu phụ' : ''">
           @for (sign of eventSigns; track sign.key) {
           <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',

@@ -158,4 +158,47 @@ export class KinhDetailComponent implements OnInit {
   private saveFontSize(): void {
     localStorage.setItem('kinhFontSize', this.fontSize.toString());
   }
+
+  // Action methods for header controls
+  shareKinh(): void {
+    if (navigator.share) {
+      navigator.share({
+        title: `Kinh ${this.kinhKey}`,
+        url: window.location.href
+      }).catch(console.error);
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        // Could show a toast notification here
+        console.log('Link copied to clipboard');
+      }).catch(console.error);
+    }
+  }
+
+  bookmarkKinh(): void {
+    const bookmarks = JSON.parse(localStorage.getItem('kinhBookmarks') || '[]');
+    const isBookmarked = bookmarks.includes(this.kinhKey);
+    
+    if (isBookmarked) {
+      // Remove bookmark
+      const index = bookmarks.indexOf(this.kinhKey);
+      bookmarks.splice(index, 1);
+    } else {
+      // Add bookmark
+      bookmarks.push(this.kinhKey);
+    }
+    
+    localStorage.setItem('kinhBookmarks', JSON.stringify(bookmarks));
+    // Could show a toast notification here
+    console.log(isBookmarked ? 'Bookmark removed' : 'Bookmark added');
+  }
+
+  isBookmarked(): boolean {
+    const bookmarks = JSON.parse(localStorage.getItem('kinhBookmarks') || '[]');
+    return bookmarks.includes(this.kinhKey);
+  }
+
+  printKinh(): void {
+    window.print();
+  }
 }
