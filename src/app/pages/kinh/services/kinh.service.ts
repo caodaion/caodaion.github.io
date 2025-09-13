@@ -6,6 +6,7 @@ export interface Kinh {
   key: string;
   name: string;
   group: string;
+  sub_group: string;
 }
 
 @Injectable({
@@ -30,12 +31,48 @@ export class KinhService {
       map(kinhList => {
         const groups: {[key: string]: Kinh[]} = {};
         kinhList.forEach(kinh => {
-          if (!groups[kinh.group]) {
-            groups[kinh.group] = [];
+          const kinhGroup = kinh.sub_group || kinh.group;
+          if (!groups[kinhGroup]) {
+            groups[kinhGroup] = [];
           }
-          groups[kinh.group].push(kinh);
+          groups[kinhGroup].push(kinh);
         });
-        return groups;
+        
+        // Sort groups according to the order defined in getGroupName
+        const groupOrder = [
+          'cung_tu_thoi',
+          'quan_hon_tang_te',
+          'kinh_sanh',
+          'hon_nhon',
+          'kinh_lao',
+          'kinh_benh',
+          'kinh_tu',
+          'kinh_dieu',
+          'kinh_tong_chung',
+          'kinh_lam_tuan',
+          'kinh_ky_lap',
+          'kinh_cung_co_hon',
+          'kinh_cung_chien_si',
+          'kinh_khac'
+        ];
+        
+        const sortedGroups: {[key: string]: Kinh[]} = {};
+        
+        // Add groups in the specified order
+        groupOrder.forEach(groupKey => {
+          if (groups[groupKey]) {
+            sortedGroups[groupKey] = groups[groupKey];
+          }
+        });
+        
+        // Add any remaining groups that weren't in the predefined order
+        Object.keys(groups).forEach(groupKey => {
+          if (!groupOrder.includes(groupKey)) {
+            sortedGroups[groupKey] = groups[groupKey];
+          }
+        });
+        
+        return sortedGroups;
       })
     );
   }
@@ -44,8 +81,18 @@ export class KinhService {
     const groupNames: {[key: string]: string} = {
       'cung_tu_thoi': 'Kinh Cúng Tứ Thời',
       'quan_hon_tang_te': 'Kinh Quan Hôn Tang Tế',
-      'thuat_nguyen': 'Kinh Thuật Nguyện',
-      'di_lac': 'Kinh Đức Di Lạc'
+      'kinh_sanh': 'Kinh Sanh',
+      'hon_nhon': 'Hôn Nhơn',
+      'kinh_lao': 'Kinh Lão',
+      'kinh_benh': 'Kinh Bệnh',
+      'kinh_tu': 'Kinh Tử',
+      'kinh_dieu': 'Kinh Điếu',
+      'kinh_tong_chung': 'Kinh Tống Chung',
+      'kinh_lam_tuan': 'Kinh Làm Tuần',
+      'kinh_ky_lap': 'Kinh Kỵ Lạp',
+      'kinh_cung_co_hon': 'Kinh Cúng Cô Hồn',
+      'kinh_cung_chien_si': 'Kinh Cúng Chiến Sĩ',
+      'kinh_khac': 'Kinh Khác'
     };
     return groupNames[key] || key;
   }

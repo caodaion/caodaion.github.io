@@ -1,43 +1,87 @@
-<app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="'Đọc Kinh'">
-  <div class="font-size-controls">
-    <button-share>
-      <button mat-icon-button aria-label="Share">
-        <mat-icon>share</mat-icon>
-      </button>
-    </button-share>
-    <mat-form-field appearance="fill" class="font-size-form-field">
-      <mat-label for="fontSizeSelect">Cỡ chữ</mat-label>
-      <mat-select id="fontSizeSelect" [(ngModel)]="fontSize" (selectionChange)="onFontSizeChange($event.value)"
-        [panelClass]="'font-size-select-panel'">
-        <mat-option *ngFor="let size of fontSizeOptions" [value]="size">{{ size }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</app-child-header>
-<div class="kinh-detail-container">
-  <div class="kinh-content" *ngIf="kinhContent$ | async as content">
-    <div *ngIf="error" class="error-message">
-      {{ error }}
+<div class="kinh-detail-page">
+  <!-- Enhanced Header -->
+  <app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="kinhInfo.name">
+    <div class="header-controls">
+      <div class="font-controls">
+        <button class="font-control-btn" (click)="decreaseFontSize()" [disabled]="fontSize <= MIN_FONT_SIZE" 
+          title="Giảm cỡ chữ" aria-label="Decrease font size">
+          <span class="material-icons">text_decrease</span>
+        </button>
+        
+        <div class="font-size-display">
+          <span class="font-size-value">{{fontSize}}px</span>
+        </div>
+        
+        <button class="font-control-btn" (click)="increaseFontSize()" [disabled]="fontSize >= MAX_FONT_SIZE"
+          title="Tăng cỡ chữ" aria-label="Increase font size">
+          <span class="material-icons">text_increase</span>
+        </button>
+        
+        <button class="font-reset-btn" (click)="resetFontSize()" title="Đặt lại cỡ chữ mặc định">
+          <span class="material-icons">refresh</span>
+        </button>
+      </div>
+      
+      <div class="action-controls">
+        <button-share>
+          <button class="action-btn share-btn" aria-label="Share">
+            <span class="material-icons">share</span>
+          </button>
+        </button-share>
+      </div>
     </div>
+  </app-child-header>
 
-    <div *ngIf="!error" class="markdown-content">
-      <markdown [data]="content" [ngStyle]="{ 'font-size.px': fontSize }"></markdown>
-    </div>
-  </div>
+  <!-- Main Content Container -->
+  <div class="kinh-detail-container">
+    <!-- Content Area -->
+    <main class="content-section">
+      <article class="kinh-content-card" *ngIf="kinhContent$ | async as content">
+        <!-- Error State -->
+        <div *ngIf="error" class="error-state">
+          <span class="material-icons error-icon">error_outline</span>
+          <h3>Không thể tải nội dung</h3>
+          <p>{{ error }}</p>
+          <button class="retry-btn" (click)="ngOnInit()">
+            <span class="material-icons">refresh</span>
+            Thử lại
+          </button>
+        </div>
 
-  <!-- Navigation buttons -->
-  <div class="navigation-buttons">
-    <button class="nav-button prev-button" *ngIf="prevKinh" (click)="goToPreviousKinh()"
-      aria-label="Go to previous kinh">
-      <span class="nav-icon">&#8592;</span>
-      <span class="nav-text">{{ prevKinh.name }}</span>
-    </button>
+        <!-- Content -->
+        <div *ngIf="!error" class="markdown-content" [style.font-size.px]="fontSize">
+          <markdown [data]="content"></markdown>
+        </div>
+      </article>
+    </main>
 
-    <div class="spacer"></div>
+    <!-- Navigation Section -->
+    <nav class="navigation-section" *ngIf="prevKinh || nextKinh">
+      <div class="nav-container">
+        <button class="nav-button prev-button" *ngIf="prevKinh" (click)="goToPreviousKinh()"
+          [title]="'Bài trước: ' + prevKinh.name">
+          <div class="nav-button-content">
+            <span class="material-icons nav-icon">chevron_left</span>
+            <div class="nav-text-group">
+              <span class="nav-label">Bài trước</span>
+              <span class="nav-title">{{ prevKinh.name }}</span>
+            </div>
+          </div>
+        </button>
 
-    <button class="nav-button next-button" *ngIf="nextKinh" (click)="goToNextKinh()" aria-label="Go to next kinh">
-      <span class="nav-text">{{ nextKinh.name }}</span>
-      <span class="nav-icon">&#8594;</span>
-    </button>
+        <div class="nav-spacer"></div>
+
+        <button class="nav-button next-button" *ngIf="nextKinh" (click)="goToNextKinh()"
+          [title]="'Bài tiếp: ' + nextKinh.name">
+          <div class="nav-button-content">
+            <div class="nav-text-group">
+              <span class="nav-label">Bài tiếp</span>
+              <span class="nav-title">{{ nextKinh.name }}</span>
+            </div>
+            <span class="material-icons nav-icon">chevron_right</span>
+          </div>
+        </button>
+      </div>
+    </nav>
   </div>
 </div>
