@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
 import { TnhtService } from './shared/services/tnht/tnht.service';
 import { MessagingService } from './shared/services/messaging/messaging.service';
+import { ScrollManagerService } from './shared/services/scroll-manager/scroll-manager.service';
 
 @Component({
     selector: 'app-root',
@@ -33,8 +34,12 @@ export class AppComponent implements OnInit {
     private datePipe: DatePipe,
     private notificationsService: NotificationsService,
     private tnhtService: TnhtService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private scrollManagerService: ScrollManagerService
   ) {
+    // Initialize scroll management - this will automatically handle scroll position saving/restoring
+    this.scrollManagerService;
+    
     router.events.subscribe((val: any) => {
       localStorage.setItem(
         'currentLayout',
