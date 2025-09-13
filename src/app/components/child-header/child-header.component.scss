@@ -6,13 +6,58 @@
     .mat-toolbar {
       background-color: var(--surface-color);
       color: var(--text-color);
+      min-height: 56px;
+      padding: 0 16px;
+      
       @media (max-width: 600px) {
-        padding: 0;
+        padding: 0 8px;
+        min-height: 48px;
+      }
+      
+      // Ensure proper flex layout
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      // Title styling with overflow handling
+      > span:not(.spacer) {
+        flex: 1;
+        font-size: 1.1rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 200px); // Reserve space for back button and controls
+        
+        @media (max-width: 768px) {
+          max-width: calc(100% - 160px);
+          font-size: 1rem;
+        }
+        
+        @media (max-width: 480px) {
+          max-width: calc(100% - 120px);
+          font-size: 0.9rem;
+        }
+      }
+      
+      // Back button styling
+      button[mat-icon-button]:first-child {
+        margin-right: 4px;
+        flex-shrink: 0;
+      }
+      
+      // Controls area (ng-content)
+      .spacer + * {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
     }
   }
 }
 
 .spacer {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  width: 8px;
 }
