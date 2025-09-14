@@ -172,6 +172,7 @@
   border: 1px solid var(--border-light);
   overflow: hidden;
   transition: all 0.2s ease;
+  user-select: text;
   
   &:hover {
     box-shadow: var(--shadow-lg);
