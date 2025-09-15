@@ -1,40 +1,275 @@
 .content-container {
   user-select: text;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  // Light mode colors
+  --primary-bg: #fafafa;
+  --secondary-bg: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #566577;
+  --accent-color: #e74c3c;
+  --border-color: #e1e8ed;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+
+  // Dark mode colors
+  @media (prefers-color-scheme: dark) {
+    --primary-bg: #1a1a1a;
+    --secondary-bg: #2d2d2d;
+    --text-primary: #e8e8e8;
+    --text-secondary: #b0b0b0;
+    --accent-color: #ff6b6b;
+    --border-color: #404040;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+  }
+
+  // Global typography
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    margin: 1.5rem 0 1rem 0;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    color: var(--accent-color);
+  }
+
+  p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 1rem 0;
+    font-size: 1rem;
+  }
+
+  // Divider styling
+  mat-divider {
+    border-color: var(--border-color);
+    margin: 2rem 0;
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    margin: 2rem 0;
+  }
 
   .bai-thuong-yeu {
-    margin: 1rem 0;
+    margin: 2rem 0;
 
     .bai-thuong-yeu-container {
-
-      // background: #ffffff;
       .wood-wrapper {
-        padding: 1rem 0;
+        padding: 2rem 0;
+        background: var(--primary-bg);
+        border-radius: 12px;
 
-        // background: #432230;
         .white-paper {
-          // background-color: #ffffff;
-          padding: 0.5rem 0;
+          background: var(--secondary-bg);
+          margin: 0 1rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px var(--shadow-light);
+          border: 1px solid var(--border-color);
+          overflow: hidden;
 
           .content {
-            // color: #1f2a35;
-            // background: #eaf1fb;
-            padding: 0.5rem 0.5rem 1rem 0.5rem;
-            user-select: text;
+            padding: 2rem;
+            background: var(--secondary-bg);
+
+            .top-name {
+              margin-bottom: 2rem;
+              padding-bottom: 1.5rem;
+              border-bottom: 1px solid var(--border-color);
+
+              h4 {
+                color: var(--text-secondary);
+                font-size: 1rem;
+                font-weight: 500;
+                margin: 0 0 0.5rem 0;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+              }
+
+              h1 {
+                margin: 0;
+                font-size: 2.2rem;
+                border: none;
+                padding: 0;
+                display: block;
+
+                &.red-text {
+                  color: var(--accent-color);
+                  text-shadow: 0 2px 4px var(--shadow-light);
+                }
+              }
+            }
 
             p {
               text-align: justify;
-              padding: 0 1rem;
-              text-indent: 1rem;
-              // font-weight: bold;
-              line-height: 1.5;
-              font-size: larger;
-            }
+              padding: 0;
+              text-indent: 2rem;
+              margin: 1.5rem 0;
+              font-size: 1.1rem;
+              line-height: 1.8;
+              color: var(--text-primary);
 
-            .red-text {
-              // color: #951d23;
+              &:first-of-type {
+                margin-top: 0;
+              }
+
+              &:last-of-type {
+                margin-bottom: 0;
+              }
             }
           }
         }
+      }
+    }
+  }
+
+  // Subsequent sections styling
+  .container-fluid {
+    background: var(--secondary-bg);
+    margin: 2rem 0;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px var(--shadow-light);
+    border: 1px solid var(--border-color);
+
+    h1 {
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 2rem 0 1.5rem 0;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-right {
+      text-align: right;
+      font-style: italic;
+      color: var(--accent-color);
+      font-weight: 500;
+    }
+
+    .indent-2 {
+      padding-left: 2rem;
+      margin: 0.8rem 0;
+    }
+
+    // Lists styling
+    ul, ol {
+      margin: 1.5rem 0;
+      
+      li {
+        margin: 0.8rem 0;
+        line-height: 1.6;
+        color: var(--text-primary);
+
+        strong {
+          color: var(--accent-color);
+        }
+      }
+    }
+
+    // Special content sections
+    .select-text {
+      ul.list-decimal,
+      ol.list-decimal {
+        counter-reset: item;
+        padding-left: 0;
+
+        li {
+          display: block;
+          margin: 1rem 0;
+          padding-left: 2rem;
+          position: relative;
+
+          &::before {
+            content: counter(item) ".";
+            counter-increment: item;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    // Blockquote styling
+    blockquote {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--primary-bg);
+      border-left: 4px solid var(--accent-color);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+
+      p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+      }
+    }
+
+    // Highlighted text
+    .italic {
+      font-style: italic;
+      color: var(--accent-color);
+    }
+
+    // Text utilities
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    padding: 0 0.5rem;
+
+    .bai-thuong-yeu .bai-thuong-yeu-container .wood-wrapper .white-paper .content {
+      padding: 1.5rem;
+
+      .top-name h1 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+        text-indent: 1.5rem;
+      }
+    }
+
+    .container-fluid {
+      padding: 1.5rem;
+      margin: 1rem 0;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
       }
     }
   }
