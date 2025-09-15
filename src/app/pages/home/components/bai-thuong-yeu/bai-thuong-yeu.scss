@@ -5,7 +5,7 @@
   padding: 0 1rem;
 
   // Light mode colors
-  --primary-bg: #fafafa;
+  --primary-bg: #ffffff;
   --secondary-bg: #ffffff;
   --text-primary: #2c3e50;
   --text-secondary: #566577;
@@ -79,7 +79,6 @@
           background: var(--secondary-bg);
           margin: 0 1rem;
           border-radius: 8px;
-          box-shadow: 0 4px 20px var(--shadow-light);
           border: 1px solid var(--border-color);
           overflow: hidden;
 
@@ -244,32 +243,293 @@
   }
 
   // Responsive design
+  
+  // Large tablets and small desktops (768px - 1024px)
+  @media (max-width: 1024px) {
+    padding: 0 0.75rem;
+    
+    .bai-thuong-yeu .bai-thuong-yeu-container .wood-wrapper {
+      padding: 1.5rem 0;
+      
+      .white-paper {
+        margin: 0 0.5rem;
+        
+        .content {
+          padding: 1.75rem;
+          
+          .top-name h1 {
+            font-size: 2rem;
+          }
+          
+          p {
+            font-size: 1.05rem;
+            text-indent: 1.8rem;
+          }
+        }
+      }
+    }
+    
+    .container-fluid {
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+    }
+  }
+
+  // Tablets (481px - 768px)
   @media (max-width: 768px) {
     padding: 0 0.5rem;
+    
+    h1 {
+      font-size: 1.6rem;
+    }
+    
+    h2 {
+      font-size: 1.3rem;
+    }
 
-    .bai-thuong-yeu .bai-thuong-yeu-container .wood-wrapper .white-paper .content {
-      padding: 1.5rem;
+    .bai-thuong-yeu {
+      margin: 1.5rem 0;
+      
+      .bai-thuong-yeu-container .wood-wrapper {
+        padding: 1.25rem 0;
+        border-radius: 8px;
+        
+        .white-paper {
+          margin: 0 0.25rem;
+          border-radius: 6px;
+          
+          .content {
+            padding: 1.5rem;
 
-      .top-name h1 {
-        font-size: 1.8rem;
-      }
+            .top-name {
+              margin-bottom: 1.5rem;
+              padding-bottom: 1rem;
+              
+              h4 {
+                font-size: 0.9rem;
+              }
 
-      p {
-        font-size: 1rem;
-        text-indent: 1.5rem;
+              h1 {
+                font-size: 1.8rem;
+                
+                &.red-text {
+                  text-shadow: 0 1px 3px var(--shadow-light);
+                }
+              }
+            }
+
+            p {
+              font-size: 1rem;
+              text-indent: 1.5rem;
+              margin: 1.2rem 0;
+              line-height: 1.7;
+            }
+          }
+        }
       }
     }
 
     .container-fluid {
       padding: 1.5rem;
       margin: 1rem 0;
+      border-radius: 6px;
 
       h1 {
         font-size: 1.5rem;
+        margin-bottom: 1.2rem;
       }
 
       h2 {
         font-size: 1.2rem;
+        margin: 1.5rem 0 1.2rem 0;
+      }
+      
+      .indent-2 {
+        padding-left: 1.5rem;
+      }
+      
+      .select-text {
+        ul.list-decimal,
+        ol.list-decimal {
+          li {
+            padding-left: 1.5rem;
+            margin: 0.8rem 0;
+          }
+        }
+      }
+      
+      blockquote {
+        padding: 1.2rem;
+        margin: 1.5rem 0;
+        
+        p {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  // Mobile phones (320px - 480px)
+  @media (max-width: 480px) {
+    padding: 0 0.25rem;
+    
+    h1 {
+      font-size: 1.4rem;
+      border-bottom-width: 1px;
+    }
+    
+    h2 {
+      font-size: 1.1rem;
+    }
+    
+    p {
+      font-size: 0.95rem;
+    }
+
+    .bai-thuong-yeu {
+      margin: 1rem 0;
+      
+      .bai-thuong-yeu-container .wood-wrapper {
+        padding: 1rem 0;
+        border-radius: 6px;
+        
+        .white-paper {
+          margin: 0;
+          border-radius: 4px;
+          
+          .content {
+            padding: 1.2rem;
+
+            .top-name {
+              margin-bottom: 1.2rem;
+              padding-bottom: 0.8rem;
+              
+              h4 {
+                font-size: 0.85rem;
+                letter-spacing: 0.5px;
+              }
+
+              h1 {
+                font-size: 1.6rem;
+                line-height: 1.2;
+              }
+            }
+
+            p {
+              font-size: 0.95rem;
+              text-indent: 1.2rem;
+              margin: 1rem 0;
+              line-height: 1.65;
+              text-align: left; // Better for small screens
+            }
+          }
+        }
+      }
+    }
+
+    .container-fluid {
+      padding: 1.2rem;
+      margin: 0.8rem 0;
+      border-radius: 4px;
+
+      h1 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+        margin: 1.2rem 0 1rem 0;
+      }
+      
+      .indent-2 {
+        padding-left: 1rem;
+        font-size: 0.95rem;
+      }
+      
+      .select-text {
+        ul.list-decimal,
+        ol.list-decimal {
+          li {
+            padding-left: 1.2rem;
+            margin: 0.6rem 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+          }
+        }
+      }
+      
+      blockquote {
+        padding: 1rem;
+        margin: 1.2rem 0;
+        border-left-width: 3px;
+        
+        p {
+          font-size: 0.9rem;
+          margin: 0.4rem 0;
+        }
+      }
+      
+      // Better touch targets for mobile
+      ul, ol {
+        li {
+          margin: 0.6rem 0;
+          font-size: 0.95rem;
+        }
+      }
+    }
+    
+    // Improve spacing between sections on mobile
+    mat-divider {
+      margin: 1.5rem 0;
+    }
+    
+    hr {
+      margin: 1.5rem 0;
+    }
+  }
+
+  // Very small mobile phones (max-width: 360px)
+  @media (max-width: 360px) {
+    .bai-thuong-yeu .bai-thuong-yeu-container .wood-wrapper .white-paper .content {
+      padding: 1rem;
+      
+      .top-name {
+        h4 {
+          font-size: 0.8rem;
+        }
+        
+        h1 {
+          font-size: 1.4rem;
+        }
+      }
+      
+      p {
+        font-size: 0.9rem;
+        text-indent: 1rem;
+      }
+    }
+    
+    .container-fluid {
+      padding: 1rem;
+      
+      h1 {
+        font-size: 1.2rem;
+      }
+      
+      h2 {
+        font-size: 1rem;
+      }
+      
+      .select-text {
+        ul.list-decimal,
+        ol.list-decimal {
+          li {
+            font-size: 0.9rem;
+            padding-left: 1rem;
+          }
+        }
       }
     }
   }
