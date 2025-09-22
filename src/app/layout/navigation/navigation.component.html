@@ -1,12 +1,14 @@
 <div class="app-container" [class.dark-mode]="isDarkMode">
   <div class="app-wrapper">
     <!-- Navigation Rail (Desktop) -->
-    <nav class="nav-rail" tourAnchor="navigationRail">
+    <nav class="nav-rail">
       <!-- Sub-nav toggle button -->
-      <div class="nav-item subnav-toggle" tourAnchor="navigationToggleSubNav"
-        [class.active]="isSubNavOpen && hasSubmenu" [class.disabled]="!hasSubmenu"
-        (click)="hasSubmenu && toggleSubNav()" [matTooltip]="hasSubmenu ? 'Mở menu phụ' : 'Không có menu phụ'"
-        matTooltipPosition="right">
+      <div class="nav-item subnav-toggle" 
+           [class.active]="isSubNavOpen && hasSubmenu" 
+           [class.disabled]="!hasSubmenu"
+           (click)="hasSubmenu && toggleSubNav()"
+           [matTooltip]="hasSubmenu ? 'Mở menu phụ' : 'Không có menu phụ'" 
+           matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -31,7 +33,7 @@
       </div>
 
       <!-- Dark Mode Toggle (for desktop) -->
-      <div tourAnchor="navigationToggleDarkMode" class="nav-item theme-toggle" (click)="toggleDarkMode()"
+      <div class="nav-item theme-toggle" (click)="toggleDarkMode()"
         matTooltip="{{ isDarkMode ? 'Chế độ sáng' : 'Chế độ tối' }}" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -60,8 +62,8 @@
         <span class="nav-label">{{ isDarkMode ? "Sáng" : "Tối" }}</span>
       </div>
 
-      <div tourAnchor="navigationHome" class="nav-item active" routerLink="./"
-        [ngClass]="{ active: lastVisitedPage === '/' }" matTooltip="Trang chủ" matTooltipPosition="right">
+      <div class="nav-item active" routerLink="./" [ngClass]="{ active: lastVisitedPage === '/' }"
+        matTooltip="Trang chủ" matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -88,7 +90,7 @@
         <span class="nav-label">Trang chủ</span>
       </div>
 
-      <div tourAnchor="navigationLich" class="nav-item" routerLink="./lich" matTooltip="Lịch" matTooltipPosition="right"
+      <div class="nav-item" routerLink="./lich" matTooltip="Lịch" matTooltipPosition="right"
         [ngClass]="{ active: lastVisitedPage === '/lich' }">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -116,8 +118,8 @@
         <span class="nav-label">Lịch</span>
       </div>
 
-      <div tourAnchor="navigationKinh" class="nav-item" routerLink="/kinh"
-        [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh" matTooltipPosition="right">
+      <div class="nav-item" routerLink="/kinh" [ngClass]="{ active: lastVisitedPage === '/kinh' }" matTooltip="Kinh"
+        matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -178,8 +180,8 @@
         <span class="nav-label">TNHT</span>
       </div> -->
 
-      <div tourAnchor="navigationApps" class="nav-item" routerLink="/apps"
-        [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng" matTooltipPosition="right">
+      <div class="nav-item" routerLink="/apps" [ngClass]="{ active: lastVisitedPage === '/apps' }" matTooltip="Ứng dụng"
+        matTooltipPosition="right">
         @for (sign of eventSigns; track sign.key) {
         <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -212,9 +214,11 @@
     <div class="main-content" [class.has-bottom-nav]="showBottomNav">
       <mat-toolbar *ngIf="showToolbar">
         <!-- Sub-nav toggle button -->
-        <div class="subnav-toggle mobile-subnav-toggle" [class.active]="isSubNavOpen && hasSubmenu"
-          [class.invisible]="!hasSubmenu" (click)="hasSubmenu && toggleSubNav()"
-          [matTooltip]="hasSubmenu ? 'Mở menu phụ' : ''">
+        <div class="subnav-toggle mobile-subnav-toggle" 
+             [class.active]="isSubNavOpen && hasSubmenu" 
+             [class.invisible]="!hasSubmenu"
+             (click)="hasSubmenu && toggleSubNav()" 
+             [matTooltip]="hasSubmenu ? 'Mở menu phụ' : ''">
           @for (sign of eventSigns; track sign.key) {
           <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
@@ -484,5 +488,3 @@
     </div>
   </mat-dialog-actions>
 </ng-template>
-
-<tour-step-template></tour-step-template>

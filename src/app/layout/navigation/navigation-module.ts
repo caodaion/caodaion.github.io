@@ -10,7 +10,6 @@ import { CpQrScannerModule } from "src/app/components/cp-qr-scanner/cp-qr-scanne
 import { MatDialogModule } from "@angular/material/dialog";
 import { QrScannerModule } from "src/app/components/qr-scanner/qr-scanner.module";
 import { MatButtonModule } from '@angular/material/button';
-import { TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 
 @NgModule({
@@ -24,8 +23,7 @@ import { TourMatMenuModule } from "ngx-ui-tour-md-menu";
     CpQrScannerModule,
     MatDialogModule,
     QrScannerModule,
-    MatButtonModule,
-    TourMatMenuModule
+    MatButtonModule
 ],
   exports: [
     NavigationComponent
