@@ -27,8 +27,9 @@ export class KinhDetailComponent implements OnInit {
   readonly FONT_SIZE_STEP: number = 1;
   fontSizeOptions: number[] = [];
 
-  onFontSizeChange(newSize: number) {
-    this.fontSize = Number(newSize);
+  onFontSizeChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.fontSize = Number(value);
     this.saveFontSize();
   }
 
