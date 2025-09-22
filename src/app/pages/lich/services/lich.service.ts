@@ -32,6 +32,7 @@ export interface CalendarEvent {
   id: string;
   title: string;
   description?: string;
+  dateString?: string;
   subtitle?: string;
   type: 'annual-solar' | 'annual-lunar' | 'monthly-solar' | 'monthly-lunar' | 'daily' | 'user' | 'tuan-cuu' | 'thanhso';
   color: string;
