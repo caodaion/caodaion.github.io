@@ -472,7 +472,7 @@
   
   .next-button {
     .nav-button-content {
-      flex-direction: row-reverse;
+      flex-direction: row;
     }
     
     .nav-text-group {
@@ -564,7 +564,7 @@
     
     .nav-container {
       gap: var(--spacing-xs);
-      padding: var(--spacing-sm);
+      padding: 0;
     }
     
     .nav-button {

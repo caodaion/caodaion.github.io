@@ -4,14 +4,15 @@
     <div class="header-controls">
       <div class="font-controls">
         <label for="font-size-select" class="font-size-label">Cỡ chữ:</label>
-        <select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize" (change)="onFontSizeChange($event)">
+        <select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize"
+          (change)="onFontSizeChange($event)">
           <option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</option>
         </select>
         <button class="font-reset-btn" (click)="resetFontSize()" title="Đặt lại cỡ chữ mặc định">
           <span class="material-icons">refresh</span>
         </button>
       </div>
-      
+
       <div class="action-controls">
         <button-share>
           <button class="action-btn share-btn" aria-label="Share">
@@ -24,26 +25,36 @@
 
   <!-- Main Content Container -->
   <div class="kinh-detail-container">
-    <!-- Content Area -->
-    <main class="content-section">
-      <article class="kinh-content-card" *ngIf="kinhContent$ | async as content">
-        <!-- Error State -->
-        <div *ngIf="error" class="error-state">
-          <span class="material-icons error-icon">error_outline</span>
-          <h3>Không thể tải nội dung</h3>
-          <p>{{ error }}</p>
-          <button class="retry-btn" (click)="ngOnInit()">
-            <span class="material-icons">refresh</span>
-            Thử lại
-          </button>
-        </div>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="selectedTabIndex"
+    (selectedIndexChange)="onTabChange($event)">
+      <mat-tab label="Đọc kinh">
+        <!-- Content Area -->
+        <main class="content-section">
+          <article class="kinh-content-card" *ngIf="kinhContent$ | async as content">
+            <!-- Error State -->
+            <div *ngIf="error" class="error-state">
+              <span class="material-icons error-icon">error_outline</span>
+              <h3>Không thể tải nội dung</h3>
+              <p>{{ error }}</p>
+              <button class="retry-btn" (click)="ngOnInit()">
+                <span class="material-icons">refresh</span>
+                Thử lại
+              </button>
+            </div>
 
-        <!-- Content -->
-        <div *ngIf="!error" class="markdown-content" [style.font-size.px]="fontSize">
-          <markdown [data]="content"></markdown>
-        </div>
-      </article>
-    </main>
+            <!-- Content -->
+            <div *ngIf="!error" class="markdown-content" [style.font-size.px]="fontSize">
+              <markdown [data]="content"></markdown>
+            </div>
+          </article>
+        </main>
+      </mat-tab>
+      <mat-tab label="Thông tin">
+        <ng-container *ngIf="selectedTabIndex === 1">
+          <app-kinh-information [kinhKey]="kinhKey"></app-kinh-information>
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group>
 
     <!-- Navigation Section -->
     <nav class="navigation-section" *ngIf="prevKinh || nextKinh">
