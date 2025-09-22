@@ -29,7 +29,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MarkdownModule } from 'ngx-markdown';
 import { register } from 'swiper/element/bundle';
 import { DienThoPhatMauGuard } from './shared/guards/dien-tho-phat-mau.guard';
-
+import { TourMatMenuModule } from 'ngx-ui-tour-md-menu';
+import { RouterModule } from '@angular/router';
 
 register();
 
@@ -64,7 +65,9 @@ register();
     MatDatepickerModule,
     MatNativeDateModule,
     MatGridListModule,
-    MarkdownModule.forRoot({ sanitize: SecurityContext.NONE })
+    MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
+    TourMatMenuModule,
+    RouterModule 
   ],
   providers: [
     AuthGuard, ReleasedGuard, DatePipe, AsyncPipe, MessagingService, DecimalPipe, DienThoPhatMauGuard, CurrencyPipe,
