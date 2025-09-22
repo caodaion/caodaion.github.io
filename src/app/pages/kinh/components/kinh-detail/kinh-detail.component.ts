@@ -22,9 +22,9 @@ export class KinhDetailComponent implements OnInit {
 
   // Font size control properties
   fontSize: number = 16;
-  readonly MIN_FONT_SIZE: number = 12;
-  readonly MAX_FONT_SIZE: number = 24;
-  readonly FONT_SIZE_STEP: number = 2;
+  readonly MIN_FONT_SIZE: number = 1;
+  readonly MAX_FONT_SIZE: number = 72;
+  readonly FONT_SIZE_STEP: number = 1;
   fontSizeOptions: number[] = [];
 
   onFontSizeChange(newSize: number) {
