@@ -6,7 +6,7 @@
     Thông tin về kinh này hiện chưa có.
 </div>
 <ng-container *ngIf="!loading && readingVideos?.length">
-    <h3>Video đọc kinh</h3>
+    <h4>Video đọc kinh</h4>
     <div *ngFor="let video of readingVideos" class="mb-3">
         <iframe class="w-full aspect-video" [src]="'https://www.youtube.com/embed/' + video?.id | safe"
             title="YouTube video player" frameborder="0"
@@ -16,7 +16,7 @@
 </ng-container>
 <mat-divider *ngIf="!loading && readingVideos?.length && analysisVideos?.length" class="my-6"></mat-divider>
 <ng-container *ngIf="!loading && analysisVideos?.length">
-    <h3>Video phân tích</h3>
+    <h4>Video phân tích</h4>
     <div *ngFor="let video of analysisVideos" class="mb-3">
         <iframe class="w-full aspect-video" [src]="'https://www.youtube.com/embed/' + video?.id | safe"
             title="YouTube video player" frameborder="0"
