@@ -11,6 +11,7 @@ export interface ScrollPosition {
 export class ScrollPositionService {
   private scrollPositions = new Map<string, ScrollPosition>();
   private readonly STORAGE_KEY = 'scroll_positions';
+  allowedPages = ['/kinh']
 
   constructor() {
     this.loadScrollPositions();
@@ -22,6 +23,7 @@ export class ScrollPositionService {
    * @param position The scroll position
    */
   saveScrollPosition(routeUrl: string, position: ScrollPosition): void {
+    if (!this.allowedPages.some(page => routeUrl === page)) return;
     // If position is at the origin (0,0), remove any existing stored position
     if (position.x === 0 && position.y === 0) {
       if (this.scrollPositions.has(routeUrl)) {
@@ -33,7 +35,7 @@ export class ScrollPositionService {
       }
       return;
     }
-    
+
     console.log('Saving scroll position for route:', routeUrl, position);
     this.scrollPositions.set(routeUrl, position);
     this.persistScrollPositions();
@@ -56,11 +58,11 @@ export class ScrollPositionService {
     // Try multiple possible scrollable containers in order of priority
     const possibleContainers = [
       '.main-container',
-      '.kinh-container', 
+      '.kinh-container',
       '.page-container',
       '.content-container'
     ];
-    
+
     for (const selector of possibleContainers) {
       const container = document.querySelector(selector) as HTMLElement;
       if (container && (container.scrollTop > 0 || container.scrollLeft > 0)) {
@@ -70,7 +72,7 @@ export class ScrollPositionService {
         return { x, y };
       }
     }
-    
+
     // Check main-container even if scroll is 0 (it might be the right container)
     const mainContainer = document.querySelector('.main-container') as HTMLElement;
     if (mainContainer) {
@@ -79,13 +81,13 @@ export class ScrollPositionService {
       console.log('Current scroll position detected from .main-container (default):', { x, y });
       return { x, y };
     }
-    
+
     // Fallback to window scroll for backward compatibility
     const x = window.scrollX ?? window.pageXOffset ?? document.documentElement.scrollLeft ?? document.body.scrollLeft ?? 0;
     const y = window.scrollY ?? window.pageYOffset ?? document.documentElement.scrollTop ?? document.body.scrollTop ?? 0;
-    
+
     console.log('Current scroll position detected from window (fallback):', { x, y });
-    
+
     return { x, y };
   }
 
@@ -95,17 +97,17 @@ export class ScrollPositionService {
    */
   restoreScrollPosition(position: ScrollPosition): void {
     console.log('Restoring scroll position:', position);
-    
+
     // Use setTimeout to ensure DOM is ready
     setTimeout(() => {
       // Try multiple possible scrollable containers in order of priority
       const possibleContainers = [
         '.main-container',
-        '.kinh-container', 
+        '.kinh-container',
         '.page-container',
         '.content-container'
       ];
-      
+
       for (const selector of possibleContainers) {
         const container = document.querySelector(selector) as HTMLElement;
         if (container) {
@@ -114,30 +116,30 @@ export class ScrollPositionService {
             top: position.y,
             behavior: 'auto' // Instant scroll, no smooth animation
           });
-          
+
           // Fallback for older browsers
           if (container.scrollTop !== position.y || container.scrollLeft !== position.x) {
             container.scrollLeft = position.x;
             container.scrollTop = position.y;
           }
-          
+
           console.log(`Scroll position restored to ${selector}`);
           return;
         }
       }
-      
+
       // Fallback to window scroll
       window.scrollTo({
         left: position.x,
         top: position.y,
         behavior: 'auto'
       });
-      
+
       // Fallback for older browsers
       if (window.scrollY !== position.y || window.scrollX !== position.x) {
         window.scrollTo(position.x, position.y);
       }
-      
+
       console.log('Scroll position restored to window (fallback)');
     }, 100); // Longer delay for complex pages like kinh
   }
@@ -167,6 +169,15 @@ export class ScrollPositionService {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const positions = JSON.parse(stored);
+        const filteredPositions: Record<string, ScrollPosition> = {};
+        for (const [routeUrl, position] of Object.entries(positions)) {
+          if (this.allowedPages.some(page => routeUrl === page)) {
+            filteredPositions[routeUrl] = position as ScrollPosition;
+          }
+        }
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(filteredPositions));
+        this.scrollPositions = new Map(Object.entries(filteredPositions));
+        console.log('Removed scroll positions not in allowedPages');
         this.scrollPositions = new Map(Object.entries(positions));
       }
     } catch (error) {

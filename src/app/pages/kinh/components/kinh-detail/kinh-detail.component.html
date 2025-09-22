@@ -3,20 +3,10 @@
   <app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="kinhInfo.name">
     <div class="header-controls">
       <div class="font-controls">
-        <button class="font-control-btn" (click)="decreaseFontSize()" [disabled]="fontSize <= MIN_FONT_SIZE" 
-          title="Giảm cỡ chữ" aria-label="Decrease font size">
-          <span class="material-icons">text_decrease</span>
-        </button>
-        
-        <div class="font-size-display">
-          <span class="font-size-value">{{fontSize}}px</span>
-        </div>
-        
-        <button class="font-control-btn" (click)="increaseFontSize()" [disabled]="fontSize >= MAX_FONT_SIZE"
-          title="Tăng cỡ chữ" aria-label="Increase font size">
-          <span class="material-icons">text_increase</span>
-        </button>
-        
+        <label for="font-size-select" class="font-size-label">Cỡ chữ:</label>
+        <select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize" (change)="onFontSizeChange($event)">
+          <option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</option>
+        </select>
         <button class="font-reset-btn" (click)="resetFontSize()" title="Đặt lại cỡ chữ mặc định">
           <span class="material-icons">refresh</span>
         </button>

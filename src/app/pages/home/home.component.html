@@ -145,9 +145,6 @@
           </div>
         </div>
       </div>
-      <div class="no-events" *ngIf="!todayEvents || todayEvents.length === 0">
-        <p>Không có sự kiện nào hôm nay</p>
-      </div>
       <mat-divider></mat-divider>
       <h3 class="events-title py-3" *ngIf="tomorrowEvents && tomorrowEvents.length > 0">
         Sự kiện ngày mai
@@ -170,15 +167,13 @@
           </div>
         </div>
       </div>
-      <div class="no-events" *ngIf="!tomorrowEvents || tomorrowEvents.length === 0">
-        <p>Không có sự kiện nào ngày mai</p>
-      </div>
       <mat-divider></mat-divider>
       <h3 class="events-title py-3" *ngIf="weekEvents && weekEvents.length > 0">Sự kiện tuần này</h3>
       <div class="events-list" *ngIf="weekEvents && weekEvents.length > 0">
         <div class="event-item" *ngFor="let event of weekEvents" [style.border-left-color]="event.color"
           (click)="onEventClick(event)">
           <div class="event-content">
+            <div class="event-date">{{event?.dateString}}</div>
             <div class="event-title">{{ event.title }}</div>
             <div class="event-description" *ngIf="event.description">
               {{ event.description }}
@@ -189,9 +184,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="no-events" *ngIf="!weekEvents || weekEvents.length === 0">
-        <p>Không có sự kiện nào trong tuần này</p>
       </div>
       <div class="view-calendar">
         <a routerLink="/lich" class="calendar-link">
