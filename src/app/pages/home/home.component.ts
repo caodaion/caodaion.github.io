@@ -157,18 +157,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         );
       });
 
-    weekDates?.forEach((day: any) => {
-      day.events = day?.events?.map((de: any) => ({
-        ...de,
-        dateData: day,
-      }))
-      day.events?.forEach((event: any) => {
-        if (!this.weekEvents.some(e => e.id === event.id)) {
-          this.weekEvents.push(event);
-        }
-      })
-    })
-
     if (tomorrowDate) {
       const lunar = this.calendarService.getConvertedFullDate(
         new Date(new Date().setDate(new Date().getDate() + 1))
@@ -184,6 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       tomorrowDate.events = tomorrowDate.events.map((event: any) => ({
         ...event,
         dateData: tomorrowDate,
+        description: `${event?.title} ${event?.eventTime ? 'vào thời ' + event?.eventTime : ''} ngày ${tomorrowDate?.lunar?.day} tháng ${tomorrowDate?.lunar?.month} năm ${tomorrowDate?.lunar?.year} (${tomorrowDate.solar.day}/${tomorrowDate.solar.month}/${tomorrowDate.solar.year})`
       }));
       this.tomorrowEvents = tomorrowDate.events;
     }
@@ -218,6 +207,22 @@ export class HomeComponent implements OnInit, OnDestroy {
         isLeapMonth: lunar?.lunarLeap,
       };
     }
+
+    weekDates?.forEach((day: any) => {
+      day.events = day?.events?.map((de: any) => ({
+        ...de,
+        dateData: day,
+      }))
+      day.events?.forEach((event: any) => {
+        if (!this.todayEvents?.some(e => e.id === event.id) && !this.tomorrowEvents?.some(e => e.id === event.id) && !this.weekEvents.some(e => e.id === event.id)) {
+          event.dateString = `${event?.eventTime ? 'thời ' + event?.eventTime : ''} ngày ${event?.dateData?.lunar?.day} tháng ${event?.dateData?.lunar?.month} năm ${event?.dateData?.lunar?.year} (${day.solar.day}/${day.solar.month}/${day.solar.year})`;
+          if (event?.type === 'tuan-cuu') {
+            event.description = `${event?.title} vào ${event.dateString}`;
+          }
+          this.weekEvents.push(event);
+        }
+      })
+    })
   }
 
   /**
