@@ -2,7 +2,6 @@
   "name": "CaoDaiON",
   "short_name": "CaoDaiON",
   "description": "CaoDaiON - Đơn giản hóa công cụ để trực tiến nội tâm",
-  "orientation": "any",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "display": "standalone",
