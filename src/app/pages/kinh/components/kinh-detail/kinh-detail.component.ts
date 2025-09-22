@@ -19,7 +19,6 @@ export class KinhDetailComponent implements OnInit {
   nextKinh: Kinh | undefined;
   prevKinh: Kinh | undefined;
   allKinhList: Kinh[] = [];
-  selectedTabIndex: number = 0;
 
   // Font size control properties
   fontSize: number = 16;
@@ -126,14 +125,12 @@ export class KinhDetailComponent implements OnInit {
   }
 
   goToNextKinh(): void {
-    this.selectedTabIndex = 0;
     if (this.nextKinh) {
       this.router.navigate(['/kinh', this.nextKinh.key]);
     }
   }
 
   goToPreviousKinh(): void {
-    this.selectedTabIndex = 0;
     if (this.prevKinh) {
       this.router.navigate(['/kinh', this.prevKinh.key]);
     }
@@ -204,9 +201,5 @@ export class KinhDetailComponent implements OnInit {
 
   printKinh(): void {
     window.print();
-  }
-  
-  onTabChange(index: number): void {
-    this.selectedTabIndex = index;
   }
 }
