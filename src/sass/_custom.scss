@@ -211,6 +211,22 @@ body {
   background: #dadce0;
 }
 
+/* Dark theme scrollbar */
+.dark-theme {
+  ::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #5f6368;
+    border-radius: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #787c82;
+  }
+}
+
 .wrapper-container {
   height: 100%;
   display: flex !important;

@@ -729,3 +729,9 @@
     background: rgba(31, 31, 31, 0.95);
   }
 }
+
+::ng-deep {
+  .font-size-panel {
+    min-width: 120px;
+  }
+}

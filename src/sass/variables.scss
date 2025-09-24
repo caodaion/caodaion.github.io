@@ -204,7 +204,7 @@ $extra-small-0-360: (
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-:host.dark-mode {
+:host.dark-theme {
   --primary-color: #b69df8;
   --secondary-color: #b0a7c0;
   --accent-color: #d0bcff;

@@ -4,10 +4,11 @@
     <div class="header-controls">
       <div class="font-controls">
         <label for="font-size-select" class="font-size-label">Cỡ chữ:</label>
-        <select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize"
+        <mat-select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize"
+          panelClass="font-size-panel"
           (change)="onFontSizeChange($event)">
-          <option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</option>
-        </select>
+          <mat-option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</mat-option>
+        </mat-select>
         <button class="font-reset-btn" (click)="resetFontSize()" title="Đặt lại cỡ chữ mặc định">
           <span class="material-icons">refresh</span>
         </button>

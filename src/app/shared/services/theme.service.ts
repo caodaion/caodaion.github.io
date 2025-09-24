@@ -59,9 +59,11 @@ export class ThemeService {
   private applyTheme(isDark: boolean): void {
     if (isDark) {
       document.documentElement.classList.add('dark-theme');
+      document.body.classList.add('dark-theme');
       this.updateThemeColorMetaTag(this.darkThemeColor);
     } else {
       document.documentElement.classList.remove('dark-theme');
+      document.body.classList.remove('dark-theme');
       this.updateThemeColorMetaTag(this.lightThemeColor);
     }
   }
