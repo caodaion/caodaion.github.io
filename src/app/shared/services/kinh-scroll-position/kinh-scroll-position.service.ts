@@ -85,8 +85,6 @@ export class KinhScrollPositionService {
       console.log('No selected kinh key found for scrolling');
       return;
     }
-
-    console.log('Scrolling to selected kinh in list:', selectedKey);
     this.scrollToKinhElement(selectedKey, containerSelector || this.LIST_CONTAINER_SELECTOR);
   }
 
@@ -99,9 +97,15 @@ export class KinhScrollPositionService {
       console.log('No selected kinh key found for bottom sheet scrolling');
       return;
     }
-
-    console.log('Scrolling to selected kinh in bottom sheet:', selectedKey);
     this.scrollToKinhElement(selectedKey, this.BOTTOM_SHEET_CONTAINER_SELECTOR);
+  }
+
+  /**
+   * Scroll to top of the main container to ensure headers are visible
+   */
+  scrollToTop(): void {
+    const container = document.querySelector(this.LIST_CONTAINER_SELECTOR) || document.body;
+    container.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 
@@ -122,9 +126,7 @@ export class KinhScrollPositionService {
    * @param kinhKey The kinh key to scroll to
    * @param containerSelector The container selector
    */
-  private scrollToKinhElement(kinhKey: string, containerSelector: string): void {
-    console.log('Attempting to scroll to kinh:', kinhKey, 'in container:', containerSelector);
-    
+  private scrollToKinhElement(kinhKey: string, containerSelector: string): void {    
     // Try immediate scroll first
     this.performScroll(kinhKey, containerSelector);
     
@@ -143,15 +145,10 @@ export class KinhScrollPositionService {
 
     const kinhElement = container.querySelector(`[data-kinh-key="${kinhKey}"]`) as HTMLElement;
     if (!kinhElement) {
-      console.log('Kinh element not found with key:', kinhKey);
       // Try to find all available kinh keys for debugging
       const allKinhElements = container.querySelectorAll('[data-kinh-key]');
-      console.log('Available kinh keys:', Array.from(allKinhElements).map(el => el.getAttribute('data-kinh-key')));
       return;
-    }
-
-    console.log('Found kinh element, scrolling to it');
-    
+    }    
     // Remove previous selected indicators
     this.clearSelectedIndicators(container);
     

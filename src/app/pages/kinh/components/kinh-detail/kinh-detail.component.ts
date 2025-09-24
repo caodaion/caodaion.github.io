@@ -68,6 +68,9 @@ export class KinhDetailComponent implements OnInit {
           return of('');
         }
         return this.kinhService.getKinhByKey(key).pipe(
+          tap(() => {
+            this.scrollToTop();
+          }),
           catchError((error) => {
             this.error = `Unable to load kinh content: ${error.message}`;
             return of('');
@@ -118,6 +121,11 @@ export class KinhDetailComponent implements OnInit {
     this.location.back();
   }
 
+  private scrollToTop(): void {
+    // Use the scroll service to ensure consistency with other scroll behaviors
+    this.kinhScrollService.scrollToTop();
+  }
+
   updateNavigation(): void {
     if (!this.kinhKey || this.allKinhList.length === 0) {
       return;
@@ -142,14 +150,20 @@ export class KinhDetailComponent implements OnInit {
   goToNextKinh(): void {
     this.selectedTabIndex = 0;
     if (this.nextKinh) {
-      this.router.navigate(['/kinh', this.nextKinh.key]);
+      this.router.navigate(['/kinh', this.nextKinh.key]).then(() => {
+        // Scroll to top after navigation
+        this.scrollToTop();
+      });
     }
   }
 
   goToPreviousKinh(): void {
     this.selectedTabIndex = 0;
     if (this.prevKinh) {
-      this.router.navigate(['/kinh', this.prevKinh.key]);
+      this.router.navigate(['/kinh', this.prevKinh.key]).then(() => {
+        // Scroll to top after navigation
+        this.scrollToTop();
+      });
     }
   }
 
