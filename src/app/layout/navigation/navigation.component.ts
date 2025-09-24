@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ThemeService } from '../../shared/services/theme.service';
 import { NavigationService } from '../../shared/services/navigation.service';
@@ -31,23 +31,33 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private router: Router,
     private navigationService: NavigationService,
     private matDialog: MatDialog,
-    private eventSignService: EventSignService
+    private eventSignService: EventSignService,
+    private cdr: ChangeDetectorRef
   ) {
     this.subscriptions.push(
       this.themeService.darkMode$.subscribe((isDark: any) => {
-        this.isDarkMode = isDark;
+        Promise.resolve().then(() => {
+          this.isDarkMode = isDark;
+          this.cdr.detectChanges();
+        });
       })
     );
 
     this.subscriptions.push(
       this.navigationService.showToolbar$.subscribe((show: any) => {
-        this.showToolbar = show;
+        Promise.resolve().then(() => {
+          this.showToolbar = show;
+          this.cdr.detectChanges();
+        });
       })
     );
 
     this.subscriptions.push(
       this.navigationService.showBottomNav$.subscribe((show: any) => {
-        this.showBottomNav = show;
+        Promise.resolve().then(() => {
+          this.showBottomNav = show;
+          this.cdr.detectChanges();
+        });
       })
     );
   }
@@ -63,30 +73,34 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-          this.isSubNavOpen = false;
-          
-          // Check if current route has submenu functionality
-          this.updateSubmenuVisibility(event.urlAfterRedirects);
-          
-          if (
-            ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
-              event.urlAfterRedirects.startsWith(path)
-            )
-          ) {
-            localStorage.setItem(
-              'lastVisitedPage',
-              `/${event.urlAfterRedirects?.split('/')[1]}`
-            );
-            this.lastVisitedPage = `/${event.urlAfterRedirects?.split('/')[1]}`;
-          } else {
-            if (event.urlAfterRedirects === '/') {
-              localStorage.setItem('lastVisitedPage', event.urlAfterRedirects);
-              this.lastVisitedPage = event.urlAfterRedirects;
+          Promise.resolve().then(() => {
+            this.isSubNavOpen = false;
+            
+            // Check if current route has submenu functionality
+            this.updateSubmenuVisibility(event.urlAfterRedirects);
+            
+            if (
+              ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
+                event.urlAfterRedirects.startsWith(path)
+              )
+            ) {
+              localStorage.setItem(
+                'lastVisitedPage',
+                `/${event.urlAfterRedirects?.split('/')[1]}`
+              );
+              this.lastVisitedPage = `/${event.urlAfterRedirects?.split('/')[1]}`;
+            } else {
+              if (event.urlAfterRedirects === '/') {
+                localStorage.setItem('lastVisitedPage', event.urlAfterRedirects);
+                this.lastVisitedPage = event.urlAfterRedirects;
+              }
             }
-          }
-          if (this.router.url.includes('/lich')) {
-            this.isSubNavOpen = true;
-          }
+            if (this.router.url.includes('/lich')) {
+              this.isSubNavOpen = true;
+            }
+            
+            this.cdr.detectChanges();
+          });
         })
     );
   }
@@ -113,8 +127,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private updateSubmenuVisibility(url: string): void {
     // Define routes that have submenu functionality
     const routesWithSubmenu = ['/lich', '/ca-nhan'];
-    this.hasSubmenu = routesWithSubmenu.some(route => url.includes(route));
+    const newHasSubmenu = routesWithSubmenu.some(route => url.includes(route));
+    
+    // Only update if value has changed to avoid unnecessary change detection
+    if (this.hasSubmenu !== newHasSubmenu) {
+      this.hasSubmenu = newHasSubmenu;
+    }
   }
+
 
   closeSubNav(): void {
     this.isSubNavOpen = false;

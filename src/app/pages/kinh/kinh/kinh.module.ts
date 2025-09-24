@@ -14,10 +14,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
+import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { KinhInformation } from '../components/kinh-information/kinh-information';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 @NgModule({
@@ -44,7 +48,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     SharedModule,
     MatDividerModule,
-    MatProgressSpinnerModule
-]
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    DragDropModule,
+    MatTooltipModule,
+    MatBottomSheetModule
+  ]
 })
 export class KinhModule { }
