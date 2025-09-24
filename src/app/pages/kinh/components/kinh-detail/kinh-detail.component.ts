@@ -243,6 +243,7 @@ export class KinhDetailComponent implements OnInit {
     this.bottomSheet.open(KinhListComponent, {
       panelClass: 'kinh-list-bottom-sheet',
       hasBackdrop: true,
+      autoFocus: false,
     });
   }
 }
