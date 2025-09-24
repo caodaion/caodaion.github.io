@@ -11,7 +11,7 @@
     <div class="search-section">
       <div class="search-container">
         <span class="search-icon material-icons">search</span>
-        <input type="text" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)"
+        <input type="text" [autofocus]="false" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)"
           class="search-input">
       </div>
     </div>
