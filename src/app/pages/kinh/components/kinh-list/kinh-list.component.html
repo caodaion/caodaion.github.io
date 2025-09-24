@@ -84,16 +84,16 @@
 
         <div class="group-content" [class.expanded]="expandedGroups[groupEntry.key]">
           <ul *ngIf="isList()" class="kinh-list list-view">
-            <li *ngFor="let kinh of groupEntry.value" class="kinh-item">
-              <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+            <li *ngFor="let kinh of groupEntry.value" class="kinh-item" [attr.data-kinh-key]="kinh.key">
+              <a (click)="navigateToKinh(kinh.key)" class="kinh-link">
                 <span class="kinh-name">{{ kinh.name }}</span>
                 <span class="material-icons kinh-arrow">chevron_right</span>
               </a>
             </li>
           </ul>
           <div *ngIf="isGrid()" class="kinh-grid">
-            <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item">
-              <a [routerLink]="['/kinh', kinh.key]" class="kinh-link">
+            <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item" [attr.data-kinh-key]="kinh.key">
+              <a (click)="navigateToKinh(kinh.key)" class="kinh-link">
                 <span class="kinh-name">{{ kinh.name }}</span>
               </a>
             </div>
