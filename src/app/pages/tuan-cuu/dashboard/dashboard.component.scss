@@ -237,7 +237,7 @@
 }
 
 // Dark mode adjustments
-:host-context(.dark-mode) {
+:host-context(.dark-theme) {
   .tuancuu-card {
     background-color: var(--card-bg);
   }
