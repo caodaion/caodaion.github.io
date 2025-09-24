@@ -573,6 +573,7 @@
   text-decoration: none;
   transition: all 0.2s ease;
   border-radius: var(--radius-md);
+  cursor: pointer;
   
   .kinh-name {
     font-weight: 500;
@@ -627,6 +628,7 @@
     color: var(--text-primary);
     text-decoration: none;
     transition: all 0.2s ease;
+    cursor: pointer;
     
     .kinh-name {
       font-weight: 500;
@@ -807,5 +809,42 @@
   
   .kinh-link:hover {
     background: linear-gradient(135deg, rgba(66, 133, 244, 0.2) 0%, #2a2a2a 100%);
+  }
+}
+
+/* Selected kinh indicator styles */
+.kinh-selected {
+  .kinh-link {
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border: 2px dashed var(--primary-color);
+      border-radius: var(--radius-md);
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+}
+
+.kinh-grid-item.kinh-selected {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px dashed var(--primary-color);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    z-index: 1;
   }
 }

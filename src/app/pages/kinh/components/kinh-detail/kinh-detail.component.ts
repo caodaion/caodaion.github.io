@@ -4,6 +4,9 @@ import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { KinhService, Kinh } from '../../services/kinh.service';
 import { Location } from '@angular/common';
 import { SeoService } from '../../../../shared/services/seo.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { KinhListComponent } from '../kinh-list/kinh-list.component';
+import { KinhScrollPositionService } from '../../../../shared/services/kinh-scroll-position/kinh-scroll-position.service';
 
 @Component({
   selector: 'app-kinh-detail',
@@ -20,6 +23,7 @@ export class KinhDetailComponent implements OnInit {
   prevKinh: Kinh | undefined;
   allKinhList: Kinh[] = [];
   selectedTabIndex: number = 0;
+
 
   // Font size control properties
   fontSize: number = 16;
@@ -39,7 +43,9 @@ export class KinhDetailComponent implements OnInit {
     private router: Router,
     private kinhService: KinhService,
     private location: Location,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private bottomSheet: MatBottomSheet,
+    private kinhScrollService: KinhScrollPositionService
   ) {
     // Generate font size options for dropdown
     for (let size = this.MIN_FONT_SIZE; size <= this.MAX_FONT_SIZE; size += this.FONT_SIZE_STEP) {
@@ -98,7 +104,15 @@ export class KinhDetailComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Set the selected kinh key for scroll positioning
+    this.route.paramMap.subscribe(params => {
+      const key = params.get('key');
+      if (key) {
+        this.kinhScrollService.setSelectedKinhKey(key);
+      }
+    });
+  }
 
   goBack(): void {
     this.location.back();
@@ -182,7 +196,7 @@ export class KinhDetailComponent implements OnInit {
   bookmarkKinh(): void {
     const bookmarks = JSON.parse(localStorage.getItem('kinhBookmarks') || '[]');
     const isBookmarked = bookmarks.includes(this.kinhKey);
-    
+
     if (isBookmarked) {
       // Remove bookmark
       const index = bookmarks.indexOf(this.kinhKey);
@@ -191,7 +205,7 @@ export class KinhDetailComponent implements OnInit {
       // Add bookmark
       bookmarks.push(this.kinhKey);
     }
-    
+
     localStorage.setItem('kinhBookmarks', JSON.stringify(bookmarks));
     // Could show a toast notification here
     console.log(isBookmarked ? 'Bookmark removed' : 'Bookmark added');
@@ -205,8 +219,16 @@ export class KinhDetailComponent implements OnInit {
   printKinh(): void {
     window.print();
   }
-  
+
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
+  }
+
+  
+  openKinhList(): void {
+    this.bottomSheet.open(KinhListComponent, {
+      panelClass: 'kinh-list-bottom-sheet',
+      hasBackdrop: true,
+    });
   }
 }

@@ -4,8 +4,7 @@
     <div class="header-controls">
       <div class="font-controls">
         <label for="font-size-select" class="font-size-label">Cỡ chữ:</label>
-        <mat-select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize"
-          panelClass="font-size-panel"
+        <mat-select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize" panelClass="font-size-panel"
           (change)="onFontSizeChange($event)">
           <mat-option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</mat-option>
         </mat-select>
@@ -26,8 +25,7 @@
 
   <!-- Main Content Container -->
   <div class="kinh-detail-container">
-    <mat-tab-group class="tab-group" [(selectedIndex)]="selectedTabIndex"
-    (selectedIndexChange)="onTabChange($event)">
+    <mat-tab-group class="tab-group" [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
       <mat-tab label="Đọc kinh">
         <!-- Content Area -->
         <main class="content-section">
@@ -86,4 +84,9 @@
       </div>
     </nav>
   </div>
+  <!-- Floating Action Button (FAB) -->
+  <button class="fab" cdkDrag cdkDragBoundary=".kinh-detail-page" (click)="openKinhList()"
+    [matTooltip]="'Danh sách kinh'">
+    <span class="material-icons">list</span>
+  </button>
 </div>
