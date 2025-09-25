@@ -71,7 +71,7 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
                   <strong>Tuổi:</strong> {{ importData.age }}
                 </p>
                 <p *ngIf="importData.title">
-                  <strong>Phẩm vị:</strong> {{ getTitleDisplayName(importData.title) }}
+                  <strong>Phẩm đạo:</strong> {{ getTitleDisplayName(importData.title) }}
                 </p>
                 <p *ngIf="importData.subTitle">
                   <strong>Chức vụ:</strong> {{ getSubTitleDisplayName(importData.title, importData.subTitle) }}

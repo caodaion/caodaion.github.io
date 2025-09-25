@@ -1,0 +1,17 @@
+@use "../../../../../sass/variables.scss";
+@use "sass:map";
+
+.form-grid {
+    @apply flex flex-wrap;
+}
+
+.form-group {
+    @apply mb-4 px-2;
+    mat-form-field {
+        @apply w-full;
+    }
+}
+
+.bottom-controls {
+    @apply flex justify-end gap-3 mt-4 sticky bottom-0 bg-white py-3 border-t border-gray-200;
+}

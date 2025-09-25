@@ -142,7 +142,7 @@
 
           <!-- Title selection -->
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Phẩm vị</mat-label>
+            <mat-label>Phẩm đạo</mat-label>
             <mat-select
               [(ngModel)]="formData.title"
               (selectionChange)="onTitleChange($event.value); getHolyName()"
@@ -157,7 +157,7 @@
               </mat-option>
             </mat-select>
             <mat-error *ngIf="formErrors['title']"
-              >Vui lòng chọn phẩm vị</mat-error
+              >Vui lòng chọn phẩm đạo</mat-error
             >
           </mat-form-field>
 

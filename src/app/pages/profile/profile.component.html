@@ -84,7 +84,7 @@
       </div>
       <div class="form-group w-full lg:w-1/5">
         <mat-form-field class="w-full" [appearance]="'outline'">
-          <mat-label>Chức đạo</mat-label>
+          <mat-label>Phẩm đạo</mat-label>
           <mat-select [(ngModel)]="currentUser.title" (ngModelChange)="updateUserProfile()">
             <mat-option *ngFor="let item of caodaiTitle" [value]="item?.key">{{
               item?.name

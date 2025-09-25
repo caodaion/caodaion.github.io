@@ -117,6 +117,12 @@ export class NavigationComponent implements OnInit, OnDestroy {
     if (this.router.url.includes('/ca-nhan')) {
       this.navigationService.setCaNhanNavVisibility(!this.isSubNavOpen);
     }
+    if (this.router.url.includes('/nhan-su')) {
+      // Call the drawer toggle function if it exists
+      if (this.navigationService.toggleDrawer) {
+        this.navigationService.toggleDrawer();
+      }
+    }
     this.isSubNavOpen = !this.isSubNavOpen;
   }
 
@@ -126,7 +132,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
    */
   private updateSubmenuVisibility(url: string): void {
     // Define routes that have submenu functionality
-    const routesWithSubmenu = ['/lich', '/ca-nhan'];
+    const routesWithSubmenu = ['/lich', '/ca-nhan', '/nhan-su'];
     const newHasSubmenu = routesWithSubmenu.some(route => url.includes(route));
     
     // Only update if value has changed to avoid unnecessary change detection

@@ -1,0 +1,43 @@
+<div class="p-3" [formGroup]="saveForm">
+    <h2>{{ type === '4-hang-chuc-sac' ? 'Thông quy 4 hạng chức sắc' : 'Thông quy chức việc các ban phòng' }}</h2>
+    <div class="form-grid">
+        <div class="form-group w-full md:w-1/3">
+            <mat-form-field appearance="outline">
+                <mat-label>Họ và tên</mat-label>
+                <input type="text" matInput formControlName="name">
+            </mat-form-field>
+        </div>
+        <div class="form-group w-full md:w-1/3">
+            <div>
+                <mat-label>Giới tính</mat-label>
+            </div>
+            <mat-radio-group formControlName="gender">
+                <mat-radio-button value="male">Nam</mat-radio-button>
+                <mat-radio-button value="female">Nữ</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="form-group w-full md:w-1/3">
+            <mat-form-field appearance="outline">
+                <mat-label>Ngày sinh</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthDate">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="form-group w-full md:w-1/3">
+            <mat-form-field appearance="outline">
+                <mat-label>Phẩm Đạo</mat-label>
+                <input type="text" matInput formControlName="title" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTitle">
+                    @for (option of filteredChucSacTitles | async; track option) {
+                    <mat-option [value]="option.key">{{option.name}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="bottom-controls">
+        <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+        <button mat-button (click)="cancel()">Hủy</button>
+    </div>
+</div>

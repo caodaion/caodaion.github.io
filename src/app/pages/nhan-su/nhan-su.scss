@@ -1,0 +1,125 @@
+.nhan-su-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+
+    .password-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+        height: 100%;
+    }
+
+    .nhan-su-main-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .drawer-container {
+            height: 100%;
+            width: 100%;
+
+            .drawer {
+                width: 280px;
+                background-color: #fafafa;
+                border-right: 1px solid #e0e0e0;
+
+                mat-nav-list {
+                    padding-top: 0;
+
+                    h3[matSubheader] {
+                        color: #1976d2;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        margin: 1rem 0 0.5rem 0;
+                        padding: 0 16px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+
+                    a[mat-list-item] {
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        border-radius: 0 25px 25px 0;
+                        margin: 2px 0;
+                        ::ng-deep {
+                            .mdc-list-item__content {
+                                span {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 0.5rem;
+                                }
+                            }
+                        }
+
+
+                        &:hover {
+                            background-color: #e3f2fd;
+
+                            mat-icon {
+                                color: #1976d2;
+                            }
+                        }
+
+                        &.active {
+                            background-color: #1976d2;
+                            color: white;
+
+                            mat-icon {
+                                color: white;
+                            }
+
+                            span[matLine] {
+                                color: white;
+                                font-weight: 500;
+                            }
+
+                            &:hover {
+                                background-color: #1565c0;
+                            }
+                        }
+
+                        mat-icon {
+                            color: #757575;
+                            transition: color 0.2s ease;
+                        }
+
+                        span[matLine] {
+                            font-size: 0.95rem;
+                            line-height: 1.4;
+                        }
+                    }
+                }
+            }
+
+            .main-content {
+                background-color: white;
+                overflow-y: auto;
+                padding: 0;
+            }
+        }
+    }
+
+    // Responsive design for mobile
+    @media (max-width: 600px) {
+        .nhan-su-main-container {
+            .drawer-container {
+                .drawer {
+                    width: 280px;
+                    max-width: 280px;
+
+                    // When in 'over' mode, add backdrop styling
+                    &.mat-drawer-over {
+                        box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
+                    }
+                }
+            }
+        }
+    }
+}
