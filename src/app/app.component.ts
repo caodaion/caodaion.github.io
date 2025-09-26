@@ -88,6 +88,7 @@ export class AppComponent implements OnInit {
         // Reload the page to update to the latest version.
         document.location.reload();
       });
+
   }
 
   private addTag() {
