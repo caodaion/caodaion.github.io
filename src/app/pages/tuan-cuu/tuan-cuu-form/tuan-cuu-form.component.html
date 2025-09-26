@@ -220,8 +220,7 @@
       <!-- Calculate Button -->
       <div class="form-actions">
         <button mat-raised-button color="primary" (click)="calculateEvents()">
-          <mat-icon>calculate</mat-icon>
-          Tính Tuần Cửu
+          <app-icon name="calculate"></app-icon> Tính Tuần Cửu
         </button>
       </div>
     </div>
@@ -288,17 +287,17 @@
         color="accent"
         (click)="saveTuanCuu()"
       >
-        <mat-icon>save</mat-icon>
+        <app-icon name="save"></app-icon>
         {{ isEditMode ? "Cập nhật" : "Lưu" }} Tuần Cửu
       </button>
 
       <button mat-raised-button color="primary" (click)="printTuanCuu()">
-        <mat-icon>print</mat-icon>
+        <app-icon name="print"></app-icon>
         In A4
       </button>
 
       <button mat-raised-button color="primary" (click)="shareAsLink()">
-        <mat-icon>share</mat-icon>
+        <app-icon name="share"></app-icon>
         Chia sẻ
       </button>
     </div>

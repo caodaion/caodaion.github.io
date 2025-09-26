@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { IconComponent } from "../icon/icon.component";
 
 
 
@@ -23,8 +24,9 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatProgressSpinnerModule,
     MatButtonModule,
-    MatIconModule
-  ],
+    MatIconModule,
+    IconComponent
+],
   exports: [
     CpQrScannerComponent
   ]

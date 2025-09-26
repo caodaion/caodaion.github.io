@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatMenuModule} from '@angular/material/menu';
+import { IconComponent } from "../icon/icon.component";
 
 @NgModule({
   declarations: [CpToolbarEditorComponent],
@@ -17,8 +18,9 @@ import {MatMenuModule} from '@angular/material/menu';
     MatTooltipModule,
     MatButtonModule,
     MatMenuModule,
-    MatDividerModule
-  ],
+    MatDividerModule,
+    IconComponent
+],
   exports: [CpToolbarEditorComponent],
 })
 export class CpToolbarEditorModule {

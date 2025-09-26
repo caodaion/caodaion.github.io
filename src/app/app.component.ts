@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonService } from './shared/services/common/common.service';
@@ -10,33 +10,29 @@ import { DatePipe } from '@angular/common';
 import { NotificationsService } from './shared/services/notifications/notifications.service';
 import { TnhtService } from './shared/services/tnht/tnht.service';
 import { MessagingService } from './shared/services/messaging/messaging.service';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit {
   gettingCommonData: boolean = true
   eventList = <any>[]
+  swUpdate = inject(SwUpdate)
 
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private commonService: CommonService,
+    router: Router,
     private kinhService: KinhService,
     private eventService: EventService,
     private meta: Meta,
-    private route: ActivatedRoute,
-    private title: Title,
-    private datePipe: DatePipe,
     private notificationsService: NotificationsService,
-    private tnhtService: TnhtService,
     private messagingService: MessagingService,
   ) {
-    
-    router.events.subscribe((val: any) => {
+
+    router.events.subscribe(() => {
       localStorage.setItem(
         'currentLayout',
         JSON.stringify({
@@ -57,7 +53,7 @@ export class AppComponent implements OnInit {
           // fetch(`assets/audios/aud-7-chakra-5-bowl-39233.mp3`)
           this.kinhService.kinhList.forEach((item: any) => {
             this.kinhService.getKinhContent(item.key)
-            .subscribe()
+              .subscribe()
           })
           this.eventService.getEventList()
           this.gettingCommonData = false
@@ -75,8 +71,30 @@ export class AppComponent implements OnInit {
           this.checkPushNotification()
         }
       });
-      this.messagingService.requestPermission()
-      this.messagingService.receiveMessaging()
+    this.messagingService.requestPermission()
+    this.messagingService.receiveMessaging()
+  }
+
+  checkForUpdate() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Check if Service Worker is supported by the Browser
+        if (this.swUpdate.isEnabled) {
+          const isNewVersion = await this.swUpdate.checkForUpdate();
+          // Check if the new version is available
+          if (isNewVersion) {
+            const isNewVersionActivated = await this.swUpdate.activateUpdate();
+            // Check if the new version is activated and reload the app if it is
+            if (isNewVersionActivated) window.location.reload();
+            resolve(true);
+          }
+          resolve(true);
+        }
+        resolve(true);
+      } catch (error) {
+        window.location.reload();
+      }
+    });
   }
 
   private addTag() {

@@ -5,12 +5,12 @@
     aria-label="Back to previous page"
     (click)="onClickBackButton()"
   >
-    <mat-icon>arrow_back</mat-icon>
+    <app-icon name="arrow_back"></app-icon>
   </button>
   <ng-content></ng-content>
   <button-share [title]="current?.title">
     <button mat-icon-button [color]="'primary'" [matTooltip]="'Chia sẻ ngay'">
-      <mat-icon>share</mat-icon>
+      <app-icon name="share"></app-icon>
     </button>
   </button-share>
 </mat-toolbar>

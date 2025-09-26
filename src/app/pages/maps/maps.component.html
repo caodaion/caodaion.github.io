@@ -8,7 +8,7 @@
                     <mat-label>Tìm kiếm</mat-label>
                     <input type="text" matInput #searchBox>
                     <button matSuffix mat-icon-button (click)="infoDrawer?.close(); searchBox['value'] = ''">
-                        <mat-icon>close</mat-icon>
+                        <app-icon name="close"></app-icon>
                     </button>
                 </mat-form-field>
                 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
@@ -33,7 +33,7 @@
                                 class="flex flex-col w-min items-center text-[#4285f4] cursor-pointer"
                                 (click)="addDirection({pointB: item})" [matTooltip]="'Chỉ đường'">
                                 <button mat-icon-button>
-                                    <mat-icon>directions</mat-icon>
+                                    <app-icon name="directions"></app-icon>
                                 </button>
                                 <span class="text-center whitespace-nowrap text-sm">Chỉ đường</span>
                             </div>
@@ -47,8 +47,8 @@
                     <button mat-mini-fab [color]="'primary'" aria-label="Cập nhật bản đồ"
                         [matTooltip]="adding ? 'Đóng + làm mới' : 'Cập nhật bản đồ'" class="!z-10"
                         (click)="adding = !adding; adding ? clearAdding() : ''">
-                        <mat-icon *ngIf="!adding">add_location_alt</mat-icon>
-                        <mat-icon *ngIf="adding">close</mat-icon>
+                        <app-icon *ngIf="!adding" name="add_location_alt"></app-icon>
+                        <app-icon *ngIf="adding" name="close"></app-icon>
                     </button>
                 </div>
                 <div class="w-full transition-all overflow-hidden h-max" [ngClass]="{'!h-0': !adding}">
@@ -93,8 +93,8 @@
                         <input type="text" matInput [(ngModel)]="addingItem.phone" (input)="updateItem()" />
                     </mat-form-field>
                     <button class="w-full" mat-flat-button [color]="'primary'" (click)="onSave(!!googleFormsPath)">
-                        <mat-icon *ngIf="!googleFormsPath">save</mat-icon>
-                        <mat-icon *ngIf="googleFormsPath">close</mat-icon>
+                        <app-icon *ngIf="!googleFormsPath" name="save"></app-icon>
+                        <app-icon *ngIf="googleFormsPath" name="close"></app-icon>
                         {{googleFormsPath ? 'Đóng' : 'Lưu'}}
                     </button>
                     <iframe *ngIf="googleFormsPath" [src]="googleFormsPath | safe" class="w-full min-h-[300px]"
@@ -110,8 +110,8 @@
                         </mat-form-field>
                         <button class="w-full" mat-flat-button [color]="'primary'"
                             (click)="addEditNewMapToken(!!editGoogleFormsPath, editFormTokenEx);">
-                            <mat-icon *ngIf="!editGoogleFormsPath">add</mat-icon>
-                            <mat-icon *ngIf="editGoogleFormsPath">close</mat-icon>
+                            <app-icon *ngIf="!editGoogleFormsPath" name="add"></app-icon>
+                            <app-icon *ngIf="editGoogleFormsPath" name="close"></app-icon>
                             {{editGoogleFormsPath ? 'Đóng' : 'Bổ sung'}}
                         </button>
                         <iframe *ngIf="editGoogleFormsPath" [src]="editGoogleFormsPath | safe"
@@ -130,16 +130,16 @@
         <div class="cursor-pointer absolute top-1/2 z-[500] rounded-l rounded-b py-6 bg-white shadow-md flex items-center justify-center"
             [matTooltip]="infoDrawer?.opened ? 'Ẩn' : !infoDrawer?.opened && route == null ? 'Tìm kiếm' : 'Xem chỉ đường'"
             (click)="infoDrawer?.toggle()" matRipple>
-            <mat-icon *ngIf="!infoDrawer?.opened && route == null">search</mat-icon>
-            <mat-icon *ngIf="!infoDrawer?.opened && route != null">route</mat-icon>
-            <mat-icon *ngIf="infoDrawer?.opened">navigate_before</mat-icon>
+            <app-icon *ngIf="!infoDrawer?.opened && route == null" name="search"></app-icon>
+            <app-icon *ngIf="!infoDrawer?.opened && route != null" name="route"></app-icon>
+            <app-icon *ngIf="infoDrawer?.opened" name="navigate_before"></app-icon>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
 <ng-template #inforBottomSheet>
     <div class="w-full text-right">
         <button mat-icon-button (click)="inforBottomSheetRef?.dismiss(); selectItem()">
-            <mat-icon>close</mat-icon>
+            <app-icon name="close"></app-icon>
         </button>
     </div>
     <div class="text-xl mb-4">
@@ -147,18 +147,18 @@
                 alt="circle-logo" class="h-4 inline-block border rounded-full ml-2"></span>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.address">
-        <mat-icon class="text-[#4285f4]">location_on</mat-icon>
+        <app-icon class="text-[#4285f4]" name="location_on"></app-icon>
         <div class="w-full ps-3">{{selectedMap?.address}}</div>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.distance">
-        <span class="material-symbols-outlined text-[#4285f4]">distance</span>
+        <app-icon class="text-[#4285f4]" name="distance"></app-icon>
         <div class="w-full ps-3">khoản {{selectedMap?.distance/1000 | number: '0.0-0'}}km</div>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.phone">
-        <span class="material-symbols-outlined text-[#4285f4]">phone</span>
+        <app-icon class="text-[#4285f4]" name="phone"></app-icon>
         <div class="w-full ps-3">{{selectedMap?.phone}}</div>
         <a [href]="'tel:'+selectedMap?.phone" [matTooltip]="'Gọi điện thoại'">
-            <button mat-icon-button [color]="'primary'"><mat-icon>phone</mat-icon></button>
+            <button mat-icon-button [color]="'primary'"><app-icon name="phone"></app-icon></button>
         </a>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.organization">
@@ -172,7 +172,7 @@
             class="flex flex-col w-min items-center text-[#4285f4] cursor-pointer"
             (click)="addDirection({pointB: selectedMap})" [matTooltip]="'Chỉ đường'">
             <button mat-icon-button>
-                <mat-icon>directions</mat-icon>
+                <app-icon name="directions"></app-icon>
             </button>
             <span class="text-center whitespace-nowrap">Chỉ đường</span>
         </div>
@@ -226,8 +226,8 @@
                 </mat-form-field>
                 <button class="w-full" mat-flat-button [color]="'primary'"
                     (click)="onSaveEditting(!!editingGoogleFormsPath)">
-                    <mat-icon *ngIf="!editingGoogleFormsPath">save</mat-icon>
-                    <mat-icon *ngIf="editingGoogleFormsPath">close</mat-icon>
+                    <app-icon *ngIf="!editingGoogleFormsPath" name="save"></app-icon>
+                    <app-icon *ngIf="editingGoogleFormsPath" name="close"></app-icon>
                     {{editingGoogleFormsPath ? 'Đóng' : 'Lưu'}}
                 </button>
                 <iframe *ngIf="editingGoogleFormsPath" [src]="editingGoogleFormsPath | safe"

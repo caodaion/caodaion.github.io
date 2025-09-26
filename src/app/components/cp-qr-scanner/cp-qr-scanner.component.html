@@ -28,7 +28,7 @@
       class="flash-button"
       *ngIf="action.devices.value.length > 0"
     >
-      <mat-icon>{{ action.isTorch ? "flash_on" : "flash_off" }}</mat-icon>
+      <app-icon [name]="action.isTorch ? 'flash_on' : 'flash_off'"></app-icon>
     </button>
   </div>
 </div>
