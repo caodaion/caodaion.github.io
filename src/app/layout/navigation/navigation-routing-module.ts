@@ -28,10 +28,6 @@ const routes: Routes = [
         loadChildren: () => import('../../pages/tuan-cuu/tuan-cuu-routing.module').then(m => m.TuanCuuRoutingModule)
       },
       {
-        path: 'ca-nhan',
-        loadChildren: () => import('../../pages/ca-nhan/ca-nhan-module').then(m => m.CaNhanModule)
-      },
-      {
         path: 'nhan-su',
         loadComponent: () => import('../../pages/nhan-su/nhan-su').then(m => m.NhanSu)
       },

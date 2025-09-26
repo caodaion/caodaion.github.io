@@ -8,7 +8,7 @@
     <div>
       <button mat-button (click)="onStartSyncDatawithRemote()"
         [matTooltip]="'Dữ liệu sẽ được đồng bộ trên toàn bộ thiết bị với tài khoản của bạn'">
-        <mat-icon>cloud_sync</mat-icon>
+        <app-icon name="cloud_sync"></app-icon>
         {{currentUser.isCloudSynced ? 'Đồng bộ dữ liệu với máy chủ' : 'Đăng ký đồng bộ với máy chủ'}}
         <span *ngIf="!isInvalidSyncData"
           class="animate-ping absolute top-0 left-0 h-full w-full bg-[#ea4335] opacity-75"></span>
@@ -28,7 +28,7 @@
           <img loading="lazy" #parent [src]="qrUrl" class="w-[300px] h-[300px]">
           <div class="text-center">
             <button mat-raised-button color="primary" (click)="saveAsImage(parent)">
-              <mat-icon>download</mat-icon>
+              <app-icon name="download"></app-icon>
               Tải Mã QR
             </button>
           </div>
@@ -258,7 +258,7 @@
             <mat-form-field class="w-full" [appearance]="'outline'">
               <mat-label>Token</mat-label>
               <textarea matInput [(ngModel)]="selectedToken"></textarea>
-              <button matSuffix mat-icon-button (click)="copyToken()"><mat-icon>content_copy</mat-icon></button>
+              <button matSuffix mat-icon-button (click)="copyToken()"><app-icon name="content_copy"></app-icon></button>
             </mat-form-field>
           </div>
         </div>
@@ -301,8 +301,8 @@
           </td>
           <td class="text-center">
             <mat-button-toggle-group [(ngModel)]="item.load" *ngIf="item.load" class="!rounded-full">
-              <mat-button-toggle value="upload"><mat-icon>cloud_upload</mat-icon> Tải lên</mat-button-toggle>
-              <mat-button-toggle value="download"><mat-icon>cloud_download</mat-icon> Tải xuống</mat-button-toggle>
+              <mat-button-toggle value="upload"><app-icon name="cloud_upload"></app-icon> Tải lên</mat-button-toggle>
+              <mat-button-toggle value="download"><app-icon name="cloud_download"></app-icon> Tải xuống</mat-button-toggle>
             </mat-button-toggle-group>
           </td>
           <td class="px-3 rounded transition-all" [ngClass]="{'bg-[#34a853] text-white': item?.load === 'download'}">

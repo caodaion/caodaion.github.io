@@ -65,7 +65,7 @@
               [disabled]="!contentEditable"
               (click)="onChangeTrigerFormArray(formControl)"
             >
-              <mat-icon>sync_alt</mat-icon> Nhập
+               Nhập
             </button>
             <mat-divider></mat-divider>
           </div>
@@ -81,7 +81,7 @@
                     [disabled]="!contentEditable"
                     (click)="onDeleteItem(formControl, itemIndex)"
                   >
-                    <mat-icon>delete</mat-icon>
+                    <app-icon name="delete"></app-icon>
                   </button>
                 </div>
                 <ng-container *ngFor="let control of item?.control">
@@ -106,7 +106,7 @@
               (click)="onAddNewItem(formControl, errorMessageDialog)"
               [disabled]="!contentEditable"
             >
-              <mat-icon>add</mat-icon>Thêm
+              <app-icon name="add"></app-icon>Thêm
             </button>
           </div>
           <div
@@ -134,7 +134,7 @@
 </ng-container>
 <ng-template #errorMessageDialog>
   <div class="error-message-dialog">
-    <mat-icon color="warn">error_outline</mat-icon>
+    <app-icon name="error" color="warn"></app-icon>
     <p>{{ errorMessage }}</p>
   </div>
 </ng-template>

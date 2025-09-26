@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
+import { IconComponent } from "../icon/icon.component";
 
 
 
@@ -34,8 +35,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTooltipModule,
     MatSelectModule,
     MatDividerModule,
-    MatRadioModule
-  ],
+    MatRadioModule,
+    IconComponent
+],
   exports: [
     CpContentCreatorToolbarComponent
   ],

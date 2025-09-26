@@ -23,6 +23,7 @@ import { QrCodeDialogComponent } from './qr-code-dialog.component';
 import { v4 as uuidv4 } from 'uuid';
 import * as QRCode from 'qrcode';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 // Interface for form data
 interface TuanCuuFormData {
@@ -68,8 +69,9 @@ interface TuanCuuEvent {
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ChildHeaderComponent
-  ],
+    ChildHeaderComponent,
+    IconComponent
+],
   templateUrl: './tuan-cuu-form.component.html',
   styleUrl: './tuan-cuu-form.component.scss',
   providers: [

@@ -34,7 +34,7 @@
           [(ngModel)]="data.startTime"
         />
         <button matSuffix mat-icon-button (click)="startTimePicker.open()">
-          <mat-icon> watch_later </mat-icon>
+          <app-icon name="watch_later"></app-icon>
         </button>
       </mat-form-field>
       <ngx-mat-timepicker #startTimePicker></ngx-mat-timepicker>
@@ -51,7 +51,7 @@
           [(ngModel)]="data.endTime"
         />
         <button matSuffix mat-icon-button (click)="endTimePicker.open()">
-          <mat-icon> watch_later </mat-icon>
+          <app-icon name="watch_later"></app-icon>
         </button>
       </mat-form-field>
       <ngx-mat-timepicker #endTimePicker></ngx-mat-timepicker>
@@ -116,6 +116,6 @@
     [disabled]="disabledSave()"
     [matTooltip]="'Lưu và đồng bộ lên Google Calendar'"
   >
-    <mat-icon>save</mat-icon>Lưu
+    <app-icon name="save"></app-icon>Lưu
   </button>
 </mat-dialog-actions>

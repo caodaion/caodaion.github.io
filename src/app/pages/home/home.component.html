@@ -6,7 +6,7 @@
     <div class="pwa-install-card">
       <div class="pwa-install-content">
         <div class="pwa-install-icon">
-          <mat-icon>install_mobile</mat-icon>
+          <app-icon name="mobile_arrow_down"></app-icon>
         </div>
         <div class="pwa-install-text">
           <h3>Cài đặt CaoDaiON</h3>
@@ -16,13 +16,13 @@
         </div>
         <div class="pwa-install-action">
           <button mat-raised-button color="primary" (click)="installPwa()" *ngIf="canInstallPwa">
-            <mat-icon>download</mat-icon>
+            <app-icon name="download"></app-icon>
             Cài đặt
           </button>
           <div class="ios-install-steps" *ngIf="showIOSInstructions">
-            <mat-icon>ios_share</mat-icon>
+            <app-icon name="ios_share"></app-icon>
             <span>→</span>
-            <mat-icon>add_box</mat-icon>
+            <app-icon name="add_box"></app-icon>
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@
       </div>
       <div class="view-calendar">
         <a routerLink="/lich" class="calendar-link">
-          <mat-icon>calendar_today</mat-icon>
+          <app-icon name="calendar_today"></app-icon>
           <span>Xem lịch đầy đủ</span>
         </a>
       </div>
