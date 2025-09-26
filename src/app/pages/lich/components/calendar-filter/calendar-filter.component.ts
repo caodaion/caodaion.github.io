@@ -32,6 +32,11 @@ export class CalendarFilterComponent implements OnInit {
   };
 
   showCanChi: boolean = false;
+  showAnChay = <any>{
+    'luc-trai': true,
+    'thap-trai': false,
+    'thien-nguon': false
+  };
 
   thanhSoMembers: any[] = [];
   selectedThanhSoIds: Set<string> = new Set();
@@ -40,6 +45,10 @@ export class CalendarFilterComponent implements OnInit {
   constructor(private lichService: LichService, private eventService: EventService) { }
 
   ngOnInit(): void {
+    const savedAnChaySetting = localStorage.getItem('showAnChay');
+    if (savedAnChaySetting) {
+      this.showAnChay = JSON.parse(savedAnChaySetting);
+    }
     // Initialize showCanChi from localStorage if available
     const savedCanChiSetting = localStorage.getItem('showCanChi');
     if (savedCanChiSetting) {
@@ -151,6 +160,21 @@ export class CalendarFilterComponent implements OnInit {
       });
       window.dispatchEvent(event);
       console.log('Emitted Can Chi visibility change:', this.showCanChi);
+    }
+  }
+
+  /**
+   * Handle Can Chi visibility change
+   */
+  onAnChay(): void {
+    // Save to localStorage
+    localStorage.setItem('showAnChay', JSON.stringify(this.showAnChay));
+    if (typeof window !== 'undefined') {
+      const event = new CustomEvent('anChayVisibilityChange', {
+        detail: this.showAnChay,
+        bubbles: true
+      });
+      window.dispatchEvent(event);
     }
   }
 }

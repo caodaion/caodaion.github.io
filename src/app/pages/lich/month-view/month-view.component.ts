@@ -116,6 +116,21 @@ export class MonthViewComponent implements OnInit, OnDestroy {
       const year = this.currentDate.getFullYear();
       const month = this.currentDate.getMonth() + 1; // Convert 0-based to 1-based month
       this.calendarDays = this.lichService.getMonthCalendar(year, month);
+      this.calendarDays.forEach((day: any, index: any) => {
+        const nextDay = this.calendarDays[index + 1];
+        const nextTwoDay = this.calendarDays[index + 2];
+        const nextThreeDay = this.calendarDays[index + 3];
+        if (nextDay?.lunar.day === 1) {
+          // If the current day and next day are in different months, add a divider
+          day.isLastDateInMonth = true;
+        }
+        if (nextTwoDay?.lunar.day === 1) {
+          day.isLastSecondDateInMonth = true;
+        }
+        if (nextThreeDay?.lunar.day === 1) {
+          day.isLastThirdDateInMonth = true;
+        }
+      });
     }
   }
   
