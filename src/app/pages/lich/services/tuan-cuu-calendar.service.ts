@@ -61,6 +61,8 @@ export class TuanCuuCalendarService {
                 foundTitle?.howToAddress[tuanCuu.deceased?.gender] || '';
               break;
             case 'chuc-viec':
+            case 'bao-quan':
+            case 'thoi-quan':
               titleDisplay =
                 foundTitle?.subTitle?.find(
                   (st: any) => st?.key === tuanCuu.deceased?.subTitle

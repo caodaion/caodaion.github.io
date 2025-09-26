@@ -9,7 +9,7 @@
     <div
       class="w-100 d-flex justify-content-center align-items-center"
     >
-      <mat-icon class="me-2">arrow_back</mat-icon> <span class="text-center">{{prev?.text}}</span>
+      <app-icon class="me-2" name="chevron_left"></app-icon> <span class="text-center">{{prev?.text}}</span>
     </div>
   </a>
   <mat-divider vertical></mat-divider>
@@ -22,7 +22,7 @@
     <div
       class="w-100 d-flex justify-content-center align-items-center"
     >
-    <span class="text-center">{{next?.text}}</span> <mat-icon class="ms-2">arrow_forward</mat-icon>
+    <span class="text-center">{{next?.text}}</span> <app-icon class="ms-2" name="chevron_right"></app-icon>
     </div>
   </a>
 </mat-nav-list>

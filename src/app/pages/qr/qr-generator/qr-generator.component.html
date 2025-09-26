@@ -11,7 +11,7 @@
           <input type="text" matInput [(ngModel)]="qrData" disabled />
           <button mat-icon-button matSuffix [matTooltip]="'Sao chép liên kết'" *ngIf="qrData"
             (click)="copyLink(qrData)">
-            <mat-icon>link</mat-icon>
+            <app-icon name="link"></app-icon>
           </button>
         </mat-form-field>
         <mat-checkbox [(ngModel)]="caodaionAd" (change)="onChangeData()">CaoDaoON Ad</mat-checkbox>
@@ -20,7 +20,7 @@
           <mat-label>Nội dung tạo mã</mat-label>
           <input type="text" matInput [(ngModel)]="data" (change)="onChangeData()" />
           <button mat-icon-button matSuffix [matTooltip]="'Làm trống nội dung'" *ngIf="data" (click)="data = ''">
-            <mat-icon>close</mat-icon>
+            <app-icon name="close"></app-icon>
           </button>
         </mat-form-field>
         <p class="text-center" *ngIf="error">{{ error }}</p>
@@ -75,7 +75,7 @@
           </div>
           <div class="text-center">
             <button mat-raised-button color="primary" (click)="saveAsImage(parentQR)" [disabled]="downloading">
-              <mat-icon *ngIf="!downloading">download</mat-icon>
+              <app-icon *ngIf="!downloading" name="download"></app-icon>
               <div class="flex items-center">
                 <mat-spinner *ngIf="downloading" [diameter]="24"></mat-spinner>
                 Tải Mã QR

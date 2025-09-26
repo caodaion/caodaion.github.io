@@ -10,6 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 // import { ChildHeaderComponent } from '../../../components/child-header/child-header.component';
 import { TuanCuu, TuanCuuService, TuanCuuEvent } from '../services/tuan-cuu.service';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { IconComponent } from 'src/app/components/icon/icon.component';
 // import { SeoService } from '../../../shared/services/seo.service';
 
 @Component({
@@ -23,7 +24,8 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
     MatDividerModule,
     MatListModule,
     RouterModule,
-    ChildHeaderComponent
+    ChildHeaderComponent,
+    IconComponent
 ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

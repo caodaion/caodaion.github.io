@@ -19,59 +19,58 @@
     matTooltip="Đậm"
     (click)="onChangeStyle({ type: 'fontWeight' })"
   >
-    <mat-icon>format_bold</mat-icon>
+    <app-icon name="format_bold"></app-icon>
   </button>
   <button
     mat-icon-button
     matTooltip="Nghiêng"
     (click)="onChangeStyle({ type: 'fontStyle' })"
   >
-    <mat-icon>format_italic</mat-icon>
+    <app-icon name="format_italic"></app-icon>
   </button>
   <button
     mat-icon-button
     matTooltip="Gạch chân"
     (click)="onChangeStyle({ type: 'textDecoration' })"
   >
-    <mat-icon class="material-icons-outlined">format_underlined</mat-icon>
+    <app-icon name="format_underlined"></app-icon>
   </button>
   <button
     mat-icon-button
     matTooltip="Màu văn bản"
     [matMenuTriggerFor]="menuColor"
   >
-    <mat-icon class="material-icons-outlined">format_color_text</mat-icon>
+    <app-icon name="format_color_text"></app-icon>
   </button>
   <mat-menu #menuColor class="horizontal-menu color-menu">
     <button mat-icon-button *ngFor="let color of colors">
-      <mat-icon [ngStyle]="{ color: color?.value }" [matTooltip]="color?.name"
-        >circle</mat-icon
-      >
+      <app-icon [ngStyle]="{ color: color?.value }" [matTooltip]="color?.name"
+        name="circle"></app-icon>
     </button>
   </mat-menu>
   <button mat-icon-button matTooltip="Chèn đường liên kết">
-    <mat-icon class="material-icons-outlined">link</mat-icon>
+    <app-icon name="link"></app-icon>
   </button>
   <button
     mat-icon-button
     matTooltip="Căn chỉnh"
     [matMenuTriggerFor]="menuAlign"
   >
-    <mat-icon class="material-icons-outlined">format_align_left</mat-icon>
+    <app-icon name="format_align_left"></app-icon>
   </button>
   <mat-menu #menuAlign class="horizontal-menu">
-    <button mat-icon-button><mat-icon>format_align_left</mat-icon></button>
-    <button mat-icon-button><mat-icon>format_align_center</mat-icon></button>
-    <button mat-icon-button><mat-icon>format_align_right</mat-icon></button>
+    <button mat-icon-button><app-icon name="format_align_left"></app-icon></button>
+    <button mat-icon-button><app-icon name="format_align_center"></app-icon></button>
+    <button mat-icon-button><app-icon name="format_align_right"></app-icon></button>
   </mat-menu>
   <button mat-icon-button matTooltip="Danh sách đánh số đầu dòng">
-    <mat-icon class="material-icons-outlined">format_list_numbered</mat-icon>
+    <app-icon name="format_list_numbered"></app-icon>
   </button>
   <button mat-icon-button matTooltip="Danh sách có dấu đầu dòng">
-    <mat-icon class="material-icons-outlined">format_list_bulleted</mat-icon>
+    <app-icon name="format_list_bulleted"></app-icon>
   </button>
   <button mat-icon-button matTooltip="Thêm" [matMenuTriggerFor]="menuMore">
-    <mat-icon>more_horiz</mat-icon>
+    <app-icon name="more_horiz"></app-icon>
   </button>
   <mat-menu #menuMore>
     <button mat-menu-item>More 1</button>

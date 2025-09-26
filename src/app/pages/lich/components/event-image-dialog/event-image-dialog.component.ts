@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 @Component({
   selector: 'app-event-image-dialog',
@@ -22,8 +23,9 @@ import { Router } from '@angular/router';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
-  ],
+    MatTooltipModule,
+    IconComponent
+],
   templateUrl: './event-image-dialog.component.html',
   styleUrls: ['./event-image-dialog.component.scss']
 })
@@ -57,7 +59,7 @@ export class EventImageDialogComponent implements OnInit {
     }, 500);
   }
 
-  async generateImage(): Promise<void> {
+  async generateImage(isDownload: boolean = false): Promise<void> {
     if (!this.eventCard) return;
 
     this.isGenerating = true;
@@ -71,7 +73,10 @@ export class EventImageDialogComponent implements OnInit {
       });
 
       this.imagePreviewUrl = canvas.toDataURL('image/png');
-
+      if (!isDownload) {
+        this.isGenerating = false;
+        return;
+      }
       const link = document.createElement('a');
       const filename = `event-${this.event.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().getTime()}.png`;
 

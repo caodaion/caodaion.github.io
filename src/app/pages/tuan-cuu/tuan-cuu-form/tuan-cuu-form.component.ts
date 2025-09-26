@@ -23,6 +23,7 @@ import { QrCodeDialogComponent } from './qr-code-dialog.component';
 import { v4 as uuidv4 } from 'uuid';
 import * as QRCode from 'qrcode';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 // Interface for form data
 interface TuanCuuFormData {
@@ -46,7 +47,7 @@ interface TuanCuuFormData {
 interface TuanCuuEvent {
   date: Date;
   weekDay: any;
-  lunarDate?: { day: number; month: number; year: number };
+  lunarDate?: { day: number; month: number; year: number | string; leap: boolean };
   sequence: any;
   eventTime: string; // Time for the event ceremony, default is "Dậu"
 }
@@ -68,7 +69,8 @@ interface TuanCuuEvent {
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ChildHeaderComponent
+    ChildHeaderComponent,
+    IconComponent
 ],
   templateUrl: './tuan-cuu-form.component.html',
   styleUrl: './tuan-cuu-form.component.scss',
@@ -162,7 +164,7 @@ export class TuanCuuFormComponent implements OnInit {
     private tuanCuuService: TuanCuuService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.expanded = false;
@@ -196,7 +198,7 @@ export class TuanCuuFormComponent implements OnInit {
   // Load existing Tuan Cuu data for editing
   async loadExistingTuanCuu(id: string): Promise<void> {
     try {
-      const tuanCuu = await this.tuanCuuService.getTuanCuuById(id);      
+      const tuanCuu = await this.tuanCuuService.getTuanCuuById(id);
       if (tuanCuu) {
         // Populate form data from existing record
         this.formData.calendarType = 'lunar'; // Default to lunar
@@ -236,7 +238,7 @@ export class TuanCuuFormComponent implements OnInit {
           this.onTitleChange('chuc-viec');
         }
         console.log(this.formData);
-        
+
       } else {
         this.snackBar.open('Không tìm thấy dữ liệu Tuần Cửu!', 'Đóng', {
           duration: 3000,
@@ -286,7 +288,7 @@ export class TuanCuuFormComponent implements OnInit {
     // Check if this title is Chuc Viec which has subtitles
     if (
       selectedTitle &&
-      selectedTitle.key === 'chuc-viec' &&
+      (selectedTitle.key === 'chuc-viec' || selectedTitle.key === 'bao-quan' || selectedTitle.key === 'thoi-quan') &&
       selectedTitle.subTitle
     ) {
       this.subTitles = selectedTitle.subTitle;
@@ -341,44 +343,34 @@ export class TuanCuuFormComponent implements OnInit {
         this.formData.date
       );
     }
-    startDate = new Date(startDate.setDate(startDate.getDate() + 8));
 
-    // Generate events every 9 days from start date
-    for (let i = 0; i < 9; i++) {
-      const eventDate = new Date(startDate);
-      eventDate.setDate(startDate.getDate() + i * 9);
+    // Use getTuanCuuEvents from CalendarService
+    // Create a copy of startDate to avoid mutation in the service
+    this.calendarService.getTuanCuuEvents(new Date(startDate)).subscribe((events: any[]) => {
+      // Convert CalendarService events to TuanCuuEvent format
+      // Only take the first 9 events (the traditional Tuần Cửu events)
+      this.formData.events = events?.map((event: any, index: number) => {
+        const lunarDate = {
+          day: event.lunar?.lunarDay,
+          month: event.lunar?.lunarMonth,
+          year: event.lunar?.lunarYearName,
+          leap: event.lunar?.lunarLeap,
+        };
 
-      // Get lunar date for the event
-      const lunar =
-        this.calendarService.getConvertedFullDate(eventDate).convertSolar2Lunar;
-
-      const lunarDate = {
-        day: lunar?.lunarDay,
-        month: lunar?.lunarMonth, // Convert back to 1-based
-        year: lunar?.lunarYearName,
-      };
-
-      const sequence = this.commonService.convertNumberToText(i + 1);
-      // Add to events array
-      this.formData.events.push({
-        date: eventDate,
-        lunarDate: lunarDate,
-        sequence: `${
-          sequence === 'Nhứt'
-            ? 'Khai '
-            : sequence === 'Cửu'
-            ? 'Chung '
-            : sequence
-        } Cửu`,
-        weekDay: this.commonService.convertDay(
-          this.datePipe.transform(eventDate, 'EEE') || ''
-        ),
-        eventTime: 'Dậu', // Default event time
+        return {
+          date: new Date(event.solar),
+          lunarDate: lunarDate,
+          sequence: event.eventName,
+          weekDay: this.commonService.convertDay(
+            this.datePipe.transform(event.solar, 'EEE') || ''
+          ),
+          eventTime: 'Dậu', // Default event time
+        };
       });
-    }
 
-    // Expand the panel to show results
-    this.expanded = true;
+      // Expand the panel to show results
+      this.expanded = true;
+    });
   }
 
   // Format date for display
@@ -423,13 +415,13 @@ export class TuanCuuFormComponent implements OnInit {
     // Convert to JSON and encode
     const jsonData = JSON.stringify(minimalData);
     const encodedData = encodeURIComponent(jsonData);
-    
+
     // Create shareable URL with the data as a query parameter
     const baseUrl = window.location.origin + '/tuan-cuu/import';
     const shareableUrl = `${baseUrl}?d=${encodedData}`;
-    
+
     // Generate QR code for print
-    QRCode.toDataURL(shareableUrl, { 
+    QRCode.toDataURL(shareableUrl, {
       errorCorrectionLevel: 'L',
       margin: 1,
       scale: 3
@@ -567,6 +559,8 @@ export class TuanCuuFormComponent implements OnInit {
           <div class="footer">
             <div>
               <p>Mỗi Tuần Cửu cách nhau 9 ngày từ Khai Cửu cho đến Chung Cửu.</p>
+              <p>Tuần tiểu tường được tính kể từ ngày mất 12 tháng âm lịch.</p>
+              <p>Tuần đại tường được tính kể từ tiểu tường 12 tháng âm lịch.</p>
             </div>
             <div class="qr-code-container">
               <img src="${qrCodeDataUrl}" alt="QR Code" class="qr-code-image"/>
@@ -585,7 +579,7 @@ export class TuanCuuFormComponent implements OnInit {
       printWindow.document.open();
       printWindow.document.write(printContent);
       printWindow.document.close();
-      
+
       // After print window is loaded, trigger print
       printWindow.onload = () => {
         setTimeout(() => {
@@ -594,7 +588,7 @@ export class TuanCuuFormComponent implements OnInit {
       };
     }).catch(error => {
       console.error('Error generating QR code for print:', error);
-      
+
       // Still print without QR code if there was an error
       const printContent = `
         <!DOCTYPE html>
@@ -708,6 +702,8 @@ export class TuanCuuFormComponent implements OnInit {
 
           <div class="footer">
             <p>Mỗi Tuần Cửu cách nhau 9 ngày từ Khai Cửu cho đến Chung Cửu.</p>
+            <p>Tuần tiểu tường được tính kể từ ngày mất 12 tháng âm lịch.</p>
+            <p>Tuần đại tường được tính kể từ tiểu tường 12 tháng âm lịch.</p>
           </div>
 
           <div class="watermark">
@@ -721,7 +717,7 @@ export class TuanCuuFormComponent implements OnInit {
       printWindow.document.open();
       printWindow.document.write(printContent);
       printWindow.document.close();
-      
+
       // After print window is loaded, trigger print
       printWindow.onload = () => {
         setTimeout(() => {
@@ -766,14 +762,14 @@ export class TuanCuuFormComponent implements OnInit {
       // Find the most common time
       let mostCommonTime = 'Dậu';
       let maxCount = 0;
-      
+
       Object.entries(timeCounts).forEach(([time, count]) => {
         if (count > maxCount) {
           maxCount = count;
           mostCommonTime = time;
         }
       });
-      
+
       // If the most common time is not "Dậu" and appears in more than half the events,
       // use it as the default time to save space
       if (mostCommonTime !== 'Dậu' && timeCounts[mostCommonTime] >= 5) {
@@ -782,14 +778,14 @@ export class TuanCuuFormComponent implements OnInit {
         // Now only include events that differ from this default time
         const customTimeIndices: number[] = [];
         const customTimes: string[] = [];
-        
+
         this.formData.events.forEach((event, index) => {
           if (event.eventTime !== mostCommonTime) {
             customTimeIndices.push(index);
             customTimes.push(event.eventTime);
           }
         });
-        
+
         // Only add custom times if there are any
         if (customTimeIndices.length > 0) {
           minimalData['ei'] = customTimeIndices;
@@ -800,14 +796,14 @@ export class TuanCuuFormComponent implements OnInit {
         // or when there's no clear majority time
         const customTimeIndices: number[] = [];
         const customTimes: string[] = [];
-        
+
         this.formData.events.forEach((event, index) => {
           if (event.eventTime !== 'Dậu') {
             customTimeIndices.push(index);
             customTimes.push(event.eventTime);
           }
         });
-        
+
         // Only add to the shared data if there are custom times
         if (customTimeIndices.length > 0) {
           minimalData['ei'] = customTimeIndices; // Indices of events with custom times
@@ -817,17 +813,17 @@ export class TuanCuuFormComponent implements OnInit {
 
       // Convert to JSON and compress by removing unnecessary whitespace
       const jsonData = JSON.stringify(minimalData);
-      
+
       // Use LZString for compression if the data is still too large
       // Otherwise, use simple URL encoding
       const encodedData = encodeURIComponent(jsonData);
-      
+
       // Create a shareable URL with the data as a query parameter
       const baseUrl = window.location.origin + '/tuan-cuu/import';
       const shareableUrl = `${baseUrl}?d=${encodedData}`;
 
       // Generate QR code with a lower error correction level to allow more data
-      QRCode.toDataURL(shareableUrl, { 
+      QRCode.toDataURL(shareableUrl, {
         errorCorrectionLevel: 'L',  // Use 'L' (low) instead of 'H' (high) to allow more data
         margin: 1,                  // Reduce margins to fit more data
         scale: 4                    // Adjust scale for better scanning
@@ -835,32 +831,32 @@ export class TuanCuuFormComponent implements OnInit {
         .then((qrCodeDataUrl) => {
           // Open QR code dialog
           this.dialog.open(QrCodeDialogComponent, {
-            data: { 
-              qrCodeDataUrl, 
+            data: {
+              qrCodeDataUrl,
               shareUrl: shareableUrl,
-              name: this.formData.name 
+              name: this.formData.name
             },
           });
         })
         .catch((error) => {
           console.error('Error generating QR code:', error);
-          
+
           // If QR code generation fails, fall back to a simpler approach
           // Just generate a QR code for the base URL and pass the ID
           const fallbackId = this.tuanCuuId || uuidv4();
           const fallbackUrl = `${window.location.origin}/tuan-cuu/import?id=${fallbackId}`;
-          
+
           // Save the data to localStorage as a fallback
           try {
             localStorage.setItem(`tuancuu_share_${fallbackId}`, jsonData);
-            
-            QRCode.toDataURL(fallbackUrl, { 
+
+            QRCode.toDataURL(fallbackUrl, {
               errorCorrectionLevel: 'L',
               margin: 1
             }).then(qrCodeDataUrl => {
               this.dialog.open(QrCodeDialogComponent, {
-                data: { 
-                  qrCodeDataUrl, 
+                data: {
+                  qrCodeDataUrl,
                   shareUrl: fallbackUrl,
                   name: this.formData.name,
                   isLocalStorageFallback: true
@@ -900,15 +896,15 @@ export class TuanCuuFormComponent implements OnInit {
   formatLunarDate(lunarDate?: {
     day: number;
     month: number;
-    year: number;
+    year: number | string;
+    leap: boolean;
   }): string {
     return lunarDate
       ? `${this.decimalPipe.transform(
-          lunarDate.day,
-          '2.0-0'
-        )}/${this.decimalPipe.transform(lunarDate.month, '2.0-0')}/${
-          lunarDate.year
-        }`
+        lunarDate.day,
+        '2.0-0'
+      )}/${this.decimalPipe.transform(lunarDate.month, '2.0-0')}${lunarDate.leap ? ' (Nhuận)' : ''}/${lunarDate.year
+      }`
       : '';
   }
 
@@ -936,7 +932,7 @@ export class TuanCuuFormComponent implements OnInit {
         selectedTitle.howToAddress?.[this.formData.gender] || titleText;
     }
     // For 'chuc-viec', use the subtitle name instead of the title name
-    else if (selectedTitle?.key === 'chuc-viec' && this.formData.subTitle) {
+    else if ((selectedTitle?.key === 'chuc-viec' || selectedTitle?.key === 'bao-quan' || selectedTitle?.key === 'thoi-quan') && this.formData.subTitle) {
       const selectedSubTitle = selectedTitle.subTitle?.find(
         (sub) => sub.key === this.formData.subTitle
       );
@@ -949,12 +945,12 @@ export class TuanCuuFormComponent implements OnInit {
     const colorName =
       this.formData.gender === 'male' && this.formData.color
         ? this.colorOptions.find((c) => c.value === this.formData.color)?.name +
-          ' '
+        ' '
         : '';
-          
+
     // Get year label safely
     const yearLabel = this.years?.find((y) => y?.value === this.formData.year)?.label || '';
-    
+
     // Get solar date with validation
     let solarDateFormatted = '';
     try {
@@ -963,7 +959,7 @@ export class TuanCuuFormComponent implements OnInit {
         lunarMonth: this.formData.month,
         lunarYear: typeof this.formData.year === 'number' ? this.formData.year : parseInt(this.formData.year, 10),
       }).convertLunar2Solar;
-      
+
       if (solarDate && solarDate instanceof Date && !isNaN(solarDate.getTime())) {
         solarDateFormatted = this.datePipe.transform(solarDate, 'dd/MM/yyyy') || '';
       }
@@ -972,13 +968,10 @@ export class TuanCuuFormComponent implements OnInit {
     }
 
     // Build the summary string
-    return `${eventTitle} Cửu cho ${titleText} ${colorName}${
-      this.formData.holyName || this.formData.name
-    }, ${this.formData.age || ''} tuổi, mất thời ${this.formData.time || ''} ngày ${
-      this.formData.date
-    }/${this.decimalPipe.transform(this.formData.month, '2.0-0')}/${
-      yearLabel
-    }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.`;
+    return `${eventTitle} Cửu cho ${titleText} ${this.formData.holyName || this.formData.name
+      }, ${this.formData.age || ''} tuổi, mất thời ${this.formData.time || ''} ngày ${this.formData.date
+      }/${this.decimalPipe.transform(this.formData.month, '2.0-0')}/${yearLabel
+      }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.`;
   }
 
   getHolyName() {
@@ -990,13 +983,11 @@ export class TuanCuuFormComponent implements OnInit {
     );
 
     if (foundTitle && foundTitle.isHolyNameRequired) {
-      this.formData.holyName = `${
-        this.formData.gender === 'female' ? 'Hương ' : ''
-      }${this.formData.gender === 'male' ? selectedColor?.name + ' ' : ''}${
-        this.formData.name?.trim()?.split(' ')[
+      this.formData.holyName = `${this.formData.gender === 'female' ? 'Hương ' : ''
+        }${this.formData.gender === 'male' ? selectedColor?.name + (this.formData?.title !== 'bao-dan' ? ' ' : '') : ''}${this.formData?.title !== 'bao-dan' ? (this.formData.name?.trim()?.split(' ')[
           this.formData.name?.trim()?.split(' ')?.length - 1
-        ]
-      }${this.formData.gender === 'male' ? ' Thanh ' : ''}`;
+        ]) : (', ' + this.formData.name)
+        }${this.formData?.title !== 'bao-dan' && this.formData.gender === 'male' ? ' Thanh ' : ''}`;
     }
   }
 

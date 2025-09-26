@@ -15,14 +15,14 @@
         matTooltip="Nghe riêng bài này"
         (click)="toggleAudioPlayer(audioPlayer)"
       >
-        <mat-icon>{{ playerIcon }}</mat-icon>
+        <app-icon [name]="playerIcon"></app-icon>
       </button>
       <button
         mat-icon-button
         (click)="getLink(data, true)"
         matTooltip="Đọc riêng bài này"
       >
-        <mat-icon>local_library</mat-icon>
+        <app-icon name="local_library"></app-icon>
       </button>
     </div>
   </div>
@@ -32,7 +32,7 @@
     (click)="getLink(data)"
     matTooltip="Sao chép liên kết"
   >
-    <mat-icon>link</mat-icon>
+    <app-icon name="link"></app-icon>
   </button>
 </div>
 <ng-container

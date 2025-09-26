@@ -5,9 +5,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
+import { IconComponent } from "../icon/icon.component";
 @NgModule({
   declarations: [BottomNavigatorComponent],
-  imports: [CommonModule, MatListModule, MatDividerModule, MatIconModule, MatDividerModule, MatRippleModule],
+  imports: [CommonModule, MatListModule, MatDividerModule, MatIconModule, MatDividerModule, MatRippleModule, IconComponent],
   exports: [BottomNavigatorComponent],
 })
 export class BottomNavigatorModule {}
