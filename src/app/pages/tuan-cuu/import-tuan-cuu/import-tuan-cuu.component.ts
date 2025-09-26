@@ -12,6 +12,7 @@ import { TuanCuu, TuanCuuService } from '../services/tuan-cuu.service';
 import { CAODAI_TITLE } from '../../../shared/constants/master-data/caodai-title.constant';
 import { v4 as uuidv4 } from 'uuid';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 import { IconComponent } from "src/app/components/icon/icon.component";
 
@@ -243,7 +244,7 @@ import { IconComponent } from "src/app/components/icon/icon.component";
       }
     `,
   ],
-  providers: [DatePipe, DecimalPipe, TuanCuuService],
+  providers: [DatePipe, DecimalPipe, TuanCuuService, CommonService],
 })
 export class ImportTuanCuuComponent implements OnInit {
   importData: any = null;
@@ -264,8 +265,9 @@ export class ImportTuanCuuComponent implements OnInit {
     private datePipe: DatePipe,
     private decimalPipe: DecimalPipe,
     private tuanCuuService: TuanCuuService,
-    private calendarService: CalendarService
-  ) {}
+    private calendarService: CalendarService,
+    private commonService: CommonService
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -309,7 +311,7 @@ export class ImportTuanCuuComponent implements OnInit {
         try {
           // Try to load data from localStorage using the provided ID
           const storedData = localStorage.getItem(`tuancuu_share_${params['id']}`);
-          
+
           if (storedData) {
             // Parse the stored data
             const minimalData = JSON.parse(storedData);
@@ -363,7 +365,7 @@ export class ImportTuanCuuComponent implements OnInit {
               }
             );
           }
-          
+
           // Generate summary text
           this.generateTuanCuuSummary();
           this.isLoading = false;
@@ -404,19 +406,16 @@ export class ImportTuanCuuComponent implements OnInit {
       const colorName = this.importData.gender === 'male' && this.importData.color
         ? this.getColorDisplayName(this.importData.color) + ' '
         : '';
-      
+
       // Get solar date formatted
-      const solarDateFormatted = this.solarDeathDate ? 
+      const solarDateFormatted = this.solarDeathDate ?
         this.formatDate(this.solarDeathDate) : '';
 
       // Build the summary string
-      this.tuanCuuSummary = `${eventTitle} Cửu cho ${titleText} ${colorName}${
-        this.importData.holyName || this.importData.name
-      }, ${this.importData.age || ''} tuổi, mất thời ${this.importData.time || ''} ngày ${
-        this.importData.date
-      }/${this.decimalPipe.transform(this.importData.month, '2.0-0')}/${
-        this.importData.year
-      }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.`;
+      this.tuanCuuSummary = `${eventTitle} Cửu cho ${titleText} ${this.importData.holyName || this.importData.name
+        }, ${this.importData.age || ''} tuổi, mất thời ${this.importData.time || ''} ngày ${this.importData.date
+        }/${this.decimalPipe.transform(this.importData.month, '2.0-0')}/${this.importData.year
+        }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.`;
     } catch (error) {
       console.error('Error generating summary:', error);
     }
@@ -436,69 +435,53 @@ export class ImportTuanCuuComponent implements OnInit {
     // Save the solar death date
     this.solarDeathDate = new Date(startDate);
 
-    // Add 8 days to start date as per Tuan Cuu calculation
-    const calculationStartDate = new Date(startDate);
-    calculationStartDate.setDate(calculationStartDate.getDate() + 8);
+    // Use getTuanCuuEvents from CalendarService
+    this.calendarService.getTuanCuuEvents(new Date(startDate)).subscribe((events: any[]) => {
+      // Convert CalendarService events to the expected format
+      // Only take the first 9 events (the traditional Tuần Cửu events)
+      const convertedEvents = events?.map((event: any, index: number) => {
+        const lunarDate = {
+          day: event.lunar?.lunarDay,
+          month: event.lunar?.lunarMonth,
+          year: event.lunar?.lunarYearName,
+          leap: event.lunar?.lunarLeap,
+        };
 
-    // Generate events every 9 days from start date
-    const events = [];
-    for (let i = 0; i < 9; i++) {
-      const eventDate = new Date(calculationStartDate);
-      eventDate.setDate(calculationStartDate.getDate() + i * 9);
+        // Default event time is either the custom default time (dt) or 'Dậu' if not specified
+        let eventTime = this.importData.dt || 'Dậu';
 
-      // Get lunar date for the event
-      const lunar = this.calendarService.getConvertedFullDate(eventDate).convertSolar2Lunar;
-
-      const lunarDate = {
-        day: lunar?.lunarDay,
-        month: lunar?.lunarMonth,
-        year: lunar?.lunarYearName,
-      };
-
-      // Convert number to text for sequence
-      const sequence = this.convertNumberToText(i + 1);
-      
-      // Default event time is either the custom default time (dt) or 'Dậu' if not specified
-      let eventTime = this.importData.dt || 'Dậu';
-      
-      // Handle different formats of custom event times
-      // Format 1: Full array in 'et' (old format)
-      if (this.importData.et && Array.isArray(this.importData.et) && this.importData.et.length === 9) {
-        eventTime = this.importData.et[i] || eventTime;
-      } 
-      // Format 2: Optimized format with indices and values
-      else if (
-        this.importData.ei && 
-        Array.isArray(this.importData.ei) && 
-        this.importData.et && 
-        Array.isArray(this.importData.et)
-      ) {
-        // Find if this event index has a custom time
-        const customTimeIndex = this.importData.ei.indexOf(i);
-        if (customTimeIndex !== -1) {
-          eventTime = this.importData.et[customTimeIndex] || eventTime;
+        // Handle different formats of custom event times
+        // Format 1: Full array in 'et' (old format)
+        if (this.importData.et && Array.isArray(this.importData.et) && this.importData.et.length === 9) {
+          eventTime = this.importData.et[index] || eventTime;
         }
-      }
-      
-      // Add to events array
-      events.push({
-        date: eventDate,
-        lunarDate: lunarDate,
-        sequence: `${
-          sequence === 'Nhứt'
-            ? 'Khai '
-            : sequence === 'Cửu'
-            ? 'Chung '
-            : sequence
-        } Cửu`,
-        weekDay: this.convertDay(
-          this.datePipe.transform(eventDate, 'EEE') || ''
-        ),
-        eventTime: eventTime,
-      });
-    }
+        // Format 2: Optimized format with indices and values
+        else if (
+          this.importData.ei &&
+          Array.isArray(this.importData.ei) &&
+          this.importData.et &&
+          Array.isArray(this.importData.et)
+        ) {
+          // Find if this event index has a custom time
+          const customTimeIndex = this.importData.ei.indexOf(index);
+          if (customTimeIndex !== -1) {
+            eventTime = this.importData.et[customTimeIndex] || eventTime;
+          }
+        }
 
-    this.importData.events = events;
+        return {
+          date: new Date(event.solar),
+          lunarDate: lunarDate,
+          sequence: event.eventName,
+          weekDay: this.commonService.convertDay(
+            this.datePipe.transform(event.solar, 'EEE') || ''
+          ),
+          eventTime: eventTime,
+        };
+      });
+
+      this.importData.events = convertedEvents;
+    });
   }
 
   // Get display name for title
@@ -530,35 +513,6 @@ export class ImportTuanCuuComponent implements OnInit {
     return color ? color.name : colorValue;
   }
 
-  // Helper to convert number to text (for sequence names)
-  convertNumberToText(num: number): string {
-    const textMap: { [key: number]: string } = {
-      1: 'Nhứt',
-      2: 'Nhị',
-      3: 'Tam',
-      4: 'Tứ',
-      5: 'Ngũ',
-      6: 'Lục',
-      7: 'Thất',
-      8: 'Bát',
-      9: 'Cửu',
-    };
-    return textMap[num] || num.toString();
-  }
-
-  // Helper to convert day names
-  convertDay(day: string): string {
-    const dayMap: { [key: string]: string } = {
-      'Mon': 'Thứ Hai',
-      'Tue': 'Thứ Ba',
-      'Wed': 'Thứ Tư',
-      'Thu': 'Thứ Năm',
-      'Fri': 'Thứ Sáu',
-      'Sat': 'Thứ Bảy',
-      'Sun': 'Chủ Nhật',
-    };
-    return dayMap[day] || day;
-  }
 
   // Format date for display
   formatDate(date: string | Date): string {
@@ -576,23 +530,23 @@ export class ImportTuanCuuComponent implements OnInit {
     day: number;
     month: number;
     year: string | number;
+    leap: boolean;
   }): string {
     if (!lunarDate) return '';
-    
-    return `${this.decimalPipe.transform(lunarDate.day, '2.0-0')}/${
-      this.decimalPipe.transform(lunarDate.month, '2.0-0')
-    }/${lunarDate.year}`;
+
+    return `${this.decimalPipe.transform(lunarDate.day, '2.0-0')}/${this.decimalPipe.transform(lunarDate.month, '2.0-0')
+      }${lunarDate.leap ? ' (Nhuận)' : ''}/${lunarDate.year}`;
   }
 
   // Check if event is the next upcoming one
   isNextEvent(eventDate: Date): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set to start of day for fair comparison
-    
+
     if (!(eventDate instanceof Date)) {
       eventDate = new Date(eventDate);
     }
-    
+
     return (
       eventDate >= today &&
       !this.importData.events.some((e: any) => {
