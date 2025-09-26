@@ -49,14 +49,23 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Subscriptions
   private subscriptions: Subscription[] = [];
   isMobileView: boolean = false;
+  showAnChay = <any>{
+    'luc-trai': true,
+    'thap-trai': false,
+    'thien-nguon': false
+  };
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    const savedAnChaySetting = localStorage.getItem('showAnChay');
+    if (savedAnChaySetting) {
+      this.showAnChay = JSON.parse(savedAnChaySetting);
+    }
     // Monitor screen size changes
     this.subscriptions.push(
       this.breakpointObserver
@@ -82,6 +91,10 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
         this.eventTypeVisibilityHandler
       );
     }
+    window.addEventListener(
+      'anChayVisibilityChange',
+      this.anChayVisibilityHandler
+    );
   }
 
   ngOnDestroy(): void {
@@ -165,5 +178,42 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate()
     );
+  }
+
+
+  // Event visibility change handler
+  private anChayVisibilityHandler =
+    this.handleAnChayVisibilityChange.bind(this);
+  handleAnChayVisibilityChange(event: Event): void {
+    const customEvent = event as CustomEvent;
+    const localStorageValue = localStorage.getItem('showAnChay');
+    if (localStorageValue) {
+      try {
+        this.showAnChay = customEvent.detail;
+        console.log('Day cell updating for An Chay visibility change:', this.showAnChay);
+      } catch { }
+    }
+  }
+
+  isShowAnChay(type: string): boolean {
+    const lastDateInMonth = this.calendarDate?.isLastDateInMonth ? this.calendarDate?.lunar.day : -1;
+    const lastSecondDateInMonth = this.calendarDate?.isLastSecondDateInMonth ? this.calendarDate?.lunar.day : -1;
+    const lastThirdDateInMonth = this.calendarDate?.isLastThirdDateInMonth ? this.calendarDate?.lunar.day : -1;
+    const lucTrai = [1, 8, 14, 15, 23, lastDateInMonth];
+    const thapTrai = [1, 8, 14, 15, 18, 23, 24, lastSecondDateInMonth, lastDateInMonth];
+    const thienNguon = [1, 4, 6, 8, 9, 14, 15, 16, 18, 19, 23, 24, 25, lastThirdDateInMonth, lastSecondDateInMonth, lastDateInMonth];
+    if (!this.calendarDate || !this.calendarDate.lunar) return false;
+    if (!this.showAnChay[type]) return false;
+    const day = this.calendarDate.lunar.day;
+    switch (type) {
+      case 'luc-trai':
+        return lucTrai.includes(day);
+      case 'thap-trai':
+        return thapTrai.includes(day);
+      case 'thien-nguon':
+        return thienNguon.includes(day);
+      default:
+        return false;
+    }
   }
 }

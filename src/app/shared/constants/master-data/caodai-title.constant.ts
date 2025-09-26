@@ -142,6 +142,10 @@ export const CAODAI_TITLE = {
           name: 'Bảo Cô Quân'
         },
         {
+          key: 'bao-y-quan',
+          name: 'Bảo Y Quân'
+        },
+        {
           key: 'bao-phong-quan',
           name: 'Bảo Phong Quân'
         },
