@@ -44,7 +44,7 @@ register();
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 10 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:10000',
+      registrationStrategy: 'registerImmediately',
     }),
     BrowserAnimationsModule,
     MatIconModule,
