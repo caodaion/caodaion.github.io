@@ -27,10 +27,6 @@ const routes: Routes = [
         path: 'tuan-cuu',
         loadChildren: () => import('../../pages/tuan-cuu/tuan-cuu-routing.module').then(m => m.TuanCuuRoutingModule)
       },
-      {
-        path: 'ca-nhan',
-        loadChildren: () => import('../../pages/ca-nhan/ca-nhan-module').then(m => m.CaNhanModule)
-      },
     ]
   }
 ];

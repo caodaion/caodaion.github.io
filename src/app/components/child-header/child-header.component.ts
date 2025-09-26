@@ -8,10 +8,11 @@ import { NavigationService } from '../../shared/services/navigation.service';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, Subscription } from 'rxjs';
+import { IconComponent } from "../icon/icon.component";
 @Component({
   selector: 'app-child-header',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule, IconComponent],
   templateUrl: './child-header.component.html',
   styleUrls: ['./child-header.component.scss'],
 })

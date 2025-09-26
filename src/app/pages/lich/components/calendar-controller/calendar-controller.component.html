@@ -1,13 +1,13 @@
 <div class="calendar-controller">
   <div class="controller-left">
-    <button mat-icon-button (click)="goToToday()">
-      <mat-icon>today</mat-icon>
+    <button mat-icon-button (click)="goToToday()" [matTooltip]="'Hôm nay'">
+      <app-icon name="today"></app-icon>
     </button>
-    <button mat-icon-button (click)="goToPrevious()">
-      <mat-icon>chevron_left</mat-icon>
+    <button mat-icon-button (click)="goToPrevious()" [matTooltip]="'Trước đó'">
+      <app-icon name="chevron_left"></app-icon>
     </button>
-    <button mat-icon-button (click)="goToNext()">
-      <mat-icon>chevron_right</mat-icon>
+    <button mat-icon-button (click)="goToNext()" [matTooltip]="'Tiếp theo'">
+      <app-icon name="chevron_right"></app-icon>
     </button>
     <div class="date-range">{{ displayText }}</div>
   </div>

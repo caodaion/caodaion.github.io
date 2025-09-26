@@ -97,7 +97,7 @@
       [ngClass]="{'targetLink': content?.attrs?.hash && content?.attrs?.pathname}"
       (click)="clickTargetLink(content)"
     >
-      <button (click)="clickTargetLink(content, true)" mat-icon-button *ngIf="content?.attrs?.hash && content?.attrs?.pathname" class="targetLinkButton"><mat-icon>link</mat-icon></button>
+      <button (click)="clickTargetLink(content, true)" mat-icon-button *ngIf="content?.attrs?.hash && content?.attrs?.pathname" class="targetLinkButton"><app-icon name="link"></app-icon></button>
       <ng-container *ngFor="let insert of content.content">
         <ng-container *ngIf="insert?.type === 'text'"
           ><span

@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { IconComponent } from "../icon/icon.component";
 
 
 
@@ -27,8 +28,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatDividerModule,
     MatListModule,
-    MatSnackBarModule
-  ],
+    MatSnackBarModule,
+    IconComponent
+],
   exports: [
     ButtonShareComponent
   ]

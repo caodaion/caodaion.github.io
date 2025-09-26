@@ -8,14 +8,14 @@
       class="add-button"
       (click)="createNewTuanCuu()"
     >
-      <mat-icon>add</mat-icon>
+      <app-icon name="add"></app-icon>
       <span>Tính Tuần Cửu</span>
     </button>
   </div>
 
   <!-- Loading indicator -->
   <div class="loading-container" *ngIf="isLoading">
-    <mat-icon class="loading-spinner">refresh</mat-icon>
+    <app-icon class="loading-spinner" name="refresh"></app-icon>
     <p>Đang tải dữ liệu...</p>
   </div>
 
@@ -33,7 +33,7 @@
         >
           <mat-card-header>
             <div mat-card-avatar class="avatar-icon">
-              <mat-icon>event_repeat</mat-icon>
+              <app-icon name="event_repeat"></app-icon>
             </div>
             <mat-card-title
               [routerLink]="['/tuan-cuu', tuancuu.id]"
@@ -93,14 +93,14 @@
               color="primary"
               [routerLink]="['/tuan-cuu', tuancuu.id]"
             >
-              <mat-icon>visibility</mat-icon> Xem chi tiết
+              <app-icon name="visibility"></app-icon> Xem chi tiết
             </button>
             <button
               mat-button
               color="warn"
               (click)="deleteTuanCuu(tuancuu.id, $event)"
             >
-              <mat-icon>delete</mat-icon> Xóa
+              <app-icon name="delete"></app-icon> Xóa
             </button>
           </mat-card-actions>
         </mat-card>
@@ -120,7 +120,7 @@
         >
           <mat-card-header>
             <div mat-card-avatar class="avatar-icon">
-              <mat-icon>event_upcoming</mat-icon>
+              <app-icon name="event_upcoming"></app-icon>
             </div>
             <mat-card-title
               [routerLink]="['/tuan-cuu', tuancuu.id]"
@@ -180,14 +180,14 @@
               color="primary"
               [routerLink]="['/tuan-cuu', tuancuu.id]"
             >
-              <mat-icon>visibility</mat-icon> Xem chi tiết
+              <app-icon name="visibility"></app-icon> Xem chi tiết
             </button>
             <button
               mat-button
               color="warn"
               (click)="deleteTuanCuu(tuancuu.id, $event)"
             >
-              <mat-icon>delete</mat-icon> Xóa
+              <app-icon name="delete"></app-icon> Xóa
             </button>
           </mat-card-actions>
         </mat-card>
@@ -207,7 +207,7 @@
         >
           <mat-card-header>
             <div mat-card-avatar class="avatar-icon">
-              <mat-icon>event_available</mat-icon>
+              <app-icon name="event_available"></app-icon>
             </div>
             <mat-card-title
               [routerLink]="['/tuan-cuu', tuancuu.id]"
@@ -259,14 +259,14 @@
               color="primary"
               [routerLink]="['/tuan-cuu', tuancuu.id]"
             >
-              <mat-icon>visibility</mat-icon> Xem chi tiết
+              <app-icon name="visibility"></app-icon> Xem chi tiết
             </button>
             <button
               mat-button
               color="warn"
               (click)="deleteTuanCuu(tuancuu.id, $event)"
             >
-              <mat-icon>delete</mat-icon> Xóa
+              <app-icon name="delete"></app-icon> Xóa
             </button>
           </mat-card-actions>
         </mat-card>
@@ -275,11 +275,11 @@
 
     <!-- Empty state when no Tuần Cửu available -->
     <div class="empty-state" *ngIf="tuanCuuList.length === 0">
-      <mat-icon class="empty-icon">event_busy</mat-icon>
+      <app-icon name="event_busy" class="empty-icon"></app-icon>
       <h3>Chưa có Tuần Cửu nào</h3>
       <p>Nhấn vào nút "Tính Tuần Cửu" để tạo mới</p>
       <button mat-raised-button color="primary" (click)="createNewTuanCuu()">
-        <mat-icon>add</mat-icon>
+        <app-icon name="add"></app-icon>
         Tính Tuần Cửu
       </button>
     </div>

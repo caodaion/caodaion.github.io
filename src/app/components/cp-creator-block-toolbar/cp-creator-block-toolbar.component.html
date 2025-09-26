@@ -1,19 +1,13 @@
 <div class="d-flex">
   <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
     <button mat-icon-button (click)="formatContent({ fontWeight: 'bold' })">
-      <mat-icon>format_bold</mat-icon>
+      <app-icon name="format_bold"></app-icon>
     </button>
     <mat-divider [vertical]="true"></mat-divider>
   </div>
-  <!--  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" *ngIf="data.type == 'contentBlock'">-->
-  <!--    <mat-button-toggle value="left"><mat-icon>format_align_left</mat-icon></mat-button-toggle>-->
-  <!--    <mat-button-toggle value="center"><mat-icon>format_align_center</mat-icon></mat-button-toggle>-->
-  <!--    <mat-button-toggle value="right"><mat-icon>format_align_right</mat-icon></mat-button-toggle>-->
-  <!--    <mat-button-toggle value="justify"><mat-icon>format_align_justify</mat-icon></mat-button-toggle>-->
-  <!--  </mat-button-toggle-group>-->
   <div class="text-setting-group d-flex" *ngIf="data.type == 'contentBlock'">
     <button mat-icon-button [matMenuTriggerFor]="alignContentMenu">
-      <mat-icon>format_align_{{ textAlign }}</mat-icon>
+      <app-icon [name]="'format_align_' + textAlign"></app-icon>
     </button>
     <mat-menu #alignContentMenu="matMenu">
       <button
@@ -21,35 +15,35 @@
         mat-menu-item
         [disabled]="textAlign == 'left'"
       >
-        <mat-icon>format_align_left</mat-icon>
+        <app-icon name="format_align_left"></app-icon>
       </button>
       <button
         (click)="formatContent({ textAlign: 'center' })"
         mat-menu-item
         [disabled]="textAlign == 'center'"
       >
-        <mat-icon>format_align_center</mat-icon>
+        <app-icon name="format_align_center"></app-icon>
       </button>
       <button
         (click)="formatContent({ textAlign: 'right' })"
         mat-menu-item
         [disabled]="textAlign == 'right'"
       >
-        <mat-icon>format_align_right</mat-icon>
+        <app-icon name="format_align_right"></app-icon>
       </button>
       <button
         (click)="formatContent({ textAlign: 'justify' })"
         mat-menu-item
         [disabled]="textAlign == 'justify'"
       >
-        <mat-icon>format_align_justify</mat-icon>
+        <app-icon name="format_align_justify"></app-icon>
       </button>
     </mat-menu>
     <mat-divider [vertical]="true"></mat-divider>
   </div>
   <!--  <mat-divider [vertical]="true"></mat-divider>-->
   <button mat-icon-button (click)="isShowSetting = !isShowSetting">
-    <mat-icon>settings</mat-icon>
+    <app-icon name="settings"></app-icon>
   </button>
   <div class="d-flex" *ngIf="isShowSetting">
     <mat-divider [vertical]="true"></mat-divider>
@@ -121,7 +115,7 @@
   </div>
   <mat-divider [vertical]="true"></mat-divider>
   <button mat-icon-button (click)="showAudioTimeStamp()">
-    <mat-icon>music_note</mat-icon>
+    <app-icon name="music_note"></app-icon>
   </button>
   <div class="d-flex" *ngIf="isShowAudioTimeStamp">
     <mat-form-field appearance="fill" class="setting-form-field">
@@ -135,6 +129,6 @@
   </div>
   <mat-divider [vertical]="true"></mat-divider>
   <button mat-icon-button (click)="splitParagraph()">
-    <mat-icon>splitscreen_left</mat-icon>
+    <app-icon name="splitscreen_left"></app-icon>
   </button>
 </div>

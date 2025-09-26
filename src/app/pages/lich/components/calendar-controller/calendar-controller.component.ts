@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { IconComponent } from "src/app/components/icon/icon.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-calendar-controller',
@@ -11,8 +13,10 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
-  ],
+    MatSelectModule,
+    IconComponent,
+    MatTooltipModule
+],
   templateUrl: './calendar-controller.component.html',
   styleUrls: ['./calendar-controller.component.scss']
 })
