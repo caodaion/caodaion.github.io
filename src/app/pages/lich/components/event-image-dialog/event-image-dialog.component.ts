@@ -74,7 +74,6 @@ export class EventImageDialogComponent implements OnInit {
 
       this.imagePreviewUrl = canvas.toDataURL('image/png');
       if (!isDownload) {
-        this.previewImage.nativeElement.src = this.imagePreviewUrl;
         this.isGenerating = false;
         return;
       }
