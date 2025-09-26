@@ -14,8 +14,8 @@
         [routerLinkActive]="'active'"
         (click)="onToggleDrawer()"
       >
-        <mat-icon class="sub-sidenav-icon">{{item?.icon}}</mat-icon
-        ><span class="label-large">{{item?.label}}</span></a
+        <app-icon class="sub-sidenav-icon" [name]="item?.icon"></app-icon>
+        <span class="label-large">{{item?.label}}</span></a
       >
     </mat-nav-list>
   </mat-sidenav>

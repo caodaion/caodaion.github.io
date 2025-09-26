@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TuanCuuRoutingModule } from './tuan-cuu-routing.module';
+import { IconComponent } from 'src/app/components/icon/icon.component';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    TuanCuuRoutingModule
+    TuanCuuRoutingModule,
+    IconComponent
   ]
 })
 export class TuanCuuModule { }

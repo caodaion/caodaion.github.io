@@ -20,6 +20,7 @@ import { CpNumberFormFieldComponent } from './cp-number-form-field/cp-number-for
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
+import { IconComponent } from "../icon/icon.component";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatBottomSheetModule,
     MatDialogModule,
     RouterModule,
-  ],
+    IconComponent
+],
   exports: [CaodaionEditorComponent],
 })
 export class CaodaionEditorModule {}

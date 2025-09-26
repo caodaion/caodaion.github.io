@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { DivisionFilterPipe } from "../../shared/pipe/divisionFilter.pipe";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 
 @NgModule({
@@ -28,24 +29,25 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
     ],
     imports: [
-        CommonModule,
-        ProfileRoutingModule,
-        MatIconModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        FormsModule,
-        MatInputModule,
-        MatRadioModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatSelectModule,
-        MatDialogModule,
-        MatTooltipModule,
-        SharedModule,
-        MatListModule,
-        DivisionFilterPipe,
-        MatProgressBarModule,
-        MatButtonToggleModule
-    ]
+    CommonModule,
+    ProfileRoutingModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatTooltipModule,
+    SharedModule,
+    MatListModule,
+    DivisionFilterPipe,
+    MatProgressBarModule,
+    MatButtonToggleModule,
+    IconComponent
+]
 })
 export class ProfileModule { }

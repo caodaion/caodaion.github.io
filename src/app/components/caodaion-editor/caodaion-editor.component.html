@@ -21,7 +21,7 @@
     <div class="d-flex justify-content-between">
       <button mat-flat-button color="primary" (click)="onSave()">Lưu</button>
       <button mat-flat-button color="warn" (click)="onPrint()">
-        <mat-icon>print</mat-icon>
+        <app-icon name="print"></app-icon>
       </button>
       <button mat-stroked-button color="default" (click)="onBack()">Thoát</button>
     </div>
@@ -48,13 +48,13 @@
   class="edit-content-fab"
   (click)="openBottomSheet(editorControllerBottomSheet)"
 >
-  <mat-icon>edit</mat-icon>
+  <app-icon name="edit"></app-icon>
 </button>
 <ng-template #editorControllerBottomSheet>
   <div class="d-flex justify-content-between">
     <button mat-flat-button color="primary" (click)="onSave()">Lưu</button>
     <button mat-flat-button color="warn" (click)="onPrint()">
-      <mat-icon>print</mat-icon>
+      <app-icon name="print"></app-icon>
     </button>
     <button
       mat-stroked-button

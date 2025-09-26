@@ -88,17 +88,16 @@
       }
       <button class="matButton" mat-button color="primary" (click)="generateImage()" [disabled]="isGenerating"
         matTooltip="Tải xuống ảnh" aria-label="Download image">
-        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
-          <path
-            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-        </svg>
+        <app-icon name="draw"></app-icon>
+        <span>Tạo ảnh</span>
+      </button>
+      <button class="matButton" mat-button color="primary" (click)="generateImage(true)" [disabled]="isGenerating"
+        matTooltip="Tải xuống ảnh" aria-label="Download image">
+        <app-icon name="download"></app-icon>
         <span>Tải ảnh</span>
       </button>
       <button class="matButton" mat-button color="warn" (click)="closeDialog()" matTooltip="Đóng" aria-label="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
-          <path
-            d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-        </svg>
+        <app-icon name="close"></app-icon>
         <span>Đóng</span>
       </button>
     </div>

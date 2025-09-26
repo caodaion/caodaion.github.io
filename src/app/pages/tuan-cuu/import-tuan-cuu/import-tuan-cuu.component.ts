@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 @Component({
   selector: 'app-import-tuan-cuu',
@@ -27,8 +28,9 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
     MatListModule,
     MatTableModule,
     RouterModule,
-    ChildHeaderComponent
-  ],
+    ChildHeaderComponent,
+    IconComponent
+],
   template: `
     <app-child-header
       [title]="'Nhập dữ liệu Tuần Cửu'"
@@ -36,7 +38,7 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
     ></app-child-header>
     <div class="page-container" *ngIf="!isLoading">
       <div *ngIf="errorMessage" class="error-container">
-        <mat-icon class="error-icon">error</mat-icon>
+        <app-icon class="error-icon" name="error"></app-icon>
         <h2>{{ errorMessage }}</h2>
         <p>Liên kết chia sẻ không hợp lệ hoặc đã hết hạn.</p>
         <button mat-raised-button color="primary" [routerLink]="['/tuan-cuu']">
@@ -119,12 +121,12 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
             </div>
             
             <div class="import-note">
-              <p><mat-icon>info</mat-icon> Lưu ý: Thông tin này được chia sẻ bởi người dùng khác. Vui lòng kiểm tra lại trước khi lưu.</p>
+              <p><app-icon name="info"></app-icon> Lưu ý: Thông tin này được chia sẻ bởi người dùng khác. Vui lòng kiểm tra lại trước khi lưu.</p>
             </div>
           </mat-card-content>
           <mat-card-actions>
             <button mat-raised-button color="primary" (click)="saveTuanCuu()">
-              <mat-icon>save</mat-icon> Lưu vào thiết bị
+              <app-icon name="save"></app-icon> Lưu vào thiết bị
             </button>
             <button mat-button [routerLink]="['/tuan-cuu']">Hủy bỏ</button>
           </mat-card-actions>
@@ -132,7 +134,7 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
       </div>
     </div>
     <div *ngIf="isLoading" class="loading-container">
-      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <app-icon class="loading-icon" name="hourglass_empty"></app-icon>
       <p>Đang tải dữ liệu...</p>
     </div>
   `,

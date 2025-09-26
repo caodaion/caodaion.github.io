@@ -6,6 +6,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonShareModule } from '../button-share/button-share.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconComponent } from "../icon/icon.component";
 
 @NgModule({
   declarations: [
@@ -17,8 +18,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     DragDropModule,
     MatIconModule,
     ButtonShareModule,
-    MatTooltipModule
-  ],
+    MatTooltipModule,
+    IconComponent
+],
   exports: [
     KnollComponent
   ]
