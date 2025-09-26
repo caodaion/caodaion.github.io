@@ -9,11 +9,12 @@ import { MatButtonModule } from "@angular/material/button";
 import { HeaderDescriptionComponent } from './header-description/header-description.component';
 import { ButtonShareModule } from "../button-share/button-share.module";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconComponent } from "../icon/icon.component";
 
 
 @NgModule({
   declarations: [HeaderComponent, HeaderTitleComponent, HeaderSubTitleComponent, HeaderDescriptionComponent],
   exports: [HeaderComponent, HeaderTitleComponent, HeaderSubTitleComponent, HeaderDescriptionComponent],
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule, ButtonShareModule, MatTooltipModule]
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule, ButtonShareModule, MatTooltipModule, IconComponent]
 })
 export class HeaderModule { }

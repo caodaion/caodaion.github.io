@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconComponent } from "../../icon/icon.component";
 
 
 
@@ -29,8 +30,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatButtonModule,
     MatSelectModule,
-    MatTooltipModule
-  ],
+    MatTooltipModule,
+    IconComponent
+],
   exports: [
     CalendarAddNewComponent
   ]

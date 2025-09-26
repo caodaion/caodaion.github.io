@@ -5,6 +5,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {CpCreatorBlockToolbarModule} from "../cp-creator-block-toolbar/cp-creator-block-toolbar.module";
+import { IconComponent } from "../icon/icon.component";
 
 
 @NgModule({
@@ -16,8 +17,9 @@ import {CpCreatorBlockToolbarModule} from "../cp-creator-block-toolbar/cp-creato
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    CpCreatorBlockToolbarModule
-  ],
+    CpCreatorBlockToolbarModule,
+    IconComponent
+],
   exports: [
     CpCreatorContentComponent
   ]

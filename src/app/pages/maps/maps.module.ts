@@ -22,6 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RoutingInstructionsComponent } from './routing-instructions/routing-instructions.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { IconComponent } from "src/app/components/icon/icon.component";
 @NgModule({
     declarations: [
         MapsComponent,
@@ -31,24 +32,25 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         RoutingInstructionsComponent,
     ],
     imports: [
-        CommonModule,
-        MapsRoutingModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-        MatSidenavModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        MatListModule,
-        MatRippleModule,
-        MatProgressBarModule,
-        MatSelectModule,
-        SharedModule,
-        MatCheckboxModule,
-        MatExpansionModule,
-        MatAutocompleteModule,
-        ReactiveFormsModule
-    ]
+    CommonModule,
+    MapsRoutingModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatListModule,
+    MatRippleModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    SharedModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    IconComponent
+]
 })
 export class MapsModule { }

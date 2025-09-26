@@ -4,11 +4,12 @@ import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 @Component({
   selector: 'app-qr-code-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, IconComponent],
   template: `
     <h2 mat-dialog-title>Chia sẻ Tuần Cửu</h2>
     <mat-dialog-content>
@@ -19,17 +20,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
       <div class="share-info">
         <p>Tên: <strong>{{ data.name }}</strong></p>
         <p *ngIf="data.isLocalStorageFallback" class="fallback-note">
-          <mat-icon class="info-icon">info</mat-icon>
+          <app-icon class="info-icon" name="info"></app-icon>
           Lưu ý: Dữ liệu được lưu tạm thời. Liên kết sẽ hết hiệu lực khi xóa bộ nhớ trình duyệt.
         </p>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="copyLink()">
-        <mat-icon>content_copy</mat-icon> Sao chép liên kết
+        <app-icon name="content_copy"></app-icon> Sao chép liên kết
       </button>
       <button mat-button (click)="nativeShare()" *ngIf="canUseShare">
-        <mat-icon>share</mat-icon> Chia sẻ
+        <app-icon name="share"></app-icon> Chia sẻ
       </button>
       <button mat-button mat-dialog-close>Đóng</button>
     </mat-dialog-actions>

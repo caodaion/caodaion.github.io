@@ -13,7 +13,7 @@
         [routerLinkActive]="'active'"
         (click)="onToggleDrawer()"
       >
-        <mat-icon class="sub-sidenav-icon">account_circle</mat-icon>
+        <app-icon class="sub-sidenav-icon" name="account_circle"></app-icon>
         <span class="label-large">{{ currentUser?.name }}</span></a
       >
       <a
@@ -24,7 +24,7 @@
         [routerLinkActive]="'active'"
         (click)="onToggleDrawer()"
       >
-        <mat-icon class="sub-sidenav-icon">{{ item?.icon }}</mat-icon>
+        <app-icon class="sub-sidenav-icon" [name]="item?.icon"></app-icon>
         <span class="label-large">{{ item?.label }}</span></a
       >
     </mat-nav-list>

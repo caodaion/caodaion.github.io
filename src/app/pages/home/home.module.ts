@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { ActionComponent } from './action/action.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
@@ -13,6 +12,7 @@ import { BaiThuongYeuComponent } from './bai-thuong-yeu/bai-thuong-yeu.component
 import { TimeComponent } from './time/time.component';
 import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from 'src/app/app.component';
+import { IconComponent } from 'src/app/components/icon/icon.component';
 
 @NgModule({
   declarations: [],
@@ -24,7 +24,8 @@ import { AppComponent } from 'src/app/app.component';
     MatRippleModule,
     MatIconModule,
     MatDividerModule,
-    MatButtonModule
+    MatButtonModule,
+    IconComponent
   ]
 })
 export class HomeModule { }

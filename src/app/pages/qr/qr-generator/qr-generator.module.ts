@@ -13,6 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SharedModule } from "../../../shared/shared.module";
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 
 
@@ -21,19 +22,20 @@ import { SharedModule } from "../../../shared/shared.module";
         QrGeneratorComponent
     ],
     imports: [
-        CommonModule,
-        QRGeneratorRoutingModule,
-        MatFormFieldModule,
-        FormsModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
-        MatTooltipModule,
-        MatInputModule,
-        MatButtonModule,
-        MatTabsModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        SharedModule
-    ]
+    CommonModule,
+    QRGeneratorRoutingModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTabsModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    SharedModule,
+    IconComponent
+]
 })
 export class QrGeneratorModule { }
