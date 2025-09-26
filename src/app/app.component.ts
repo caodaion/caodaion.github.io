@@ -73,16 +73,21 @@ export class AppComponent implements OnInit {
       });
     this.messagingService.requestPermission()
     this.messagingService.receiveMessaging()
+    this.checkForUpdate().then().catch((error) => {
+      console.error('Error checking for updates:', error);
+    });
   }
 
   checkForUpdate() {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log('Checking for updates...');
         // Check if Service Worker is supported by the Browser
         if (this.swUpdate.isEnabled) {
           const isNewVersion = await this.swUpdate.checkForUpdate();
           // Check if the new version is available
           if (isNewVersion) {
+            console.log('New version available');
             const isNewVersionActivated = await this.swUpdate.activateUpdate();
             // Check if the new version is activated and reload the app if it is
             if (isNewVersionActivated) window.location.reload();
@@ -92,6 +97,8 @@ export class AppComponent implements OnInit {
         }
         resolve(true);
       } catch (error) {
+        reject(error);
+        console.log('Error when checking for update:', error);
         window.location.reload();
       }
     });
