@@ -11,6 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import { TuanCuu, TuanCuuService, TuanCuuEvent } from '../services/tuan-cuu.service';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 import { IconComponent } from 'src/app/components/icon/icon.component';
+import { LunarDatePipe } from "../../../shared/pipe/lunar-date-pipe";
 // import { SeoService } from '../../../shared/services/seo.service';
 
 @Component({
@@ -25,7 +26,8 @@ import { IconComponent } from 'src/app/components/icon/icon.component';
     MatListModule,
     RouterModule,
     ChildHeaderComponent,
-    IconComponent
+    IconComponent,
+    LunarDatePipe
 ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -163,17 +165,11 @@ export class DashboardComponent implements OnInit {
   getNextEvent(tuanCuu: TuanCuu): TuanCuuEvent | undefined {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set to start of day for fair comparison
-    
+
     // Find the next event from today
     return tuanCuu.events
       .filter((event: any) => new Date(event.date) >= today)
       .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
-  }
-  
-  // Format lunar date
-  formatLunarDate(lunarDate?: { day: number; month: number; year: number | string }): string {
-    if (!lunarDate) return '';
-    return `${lunarDate.day}/${lunarDate.month}/${lunarDate.year}`;
   }
 
   // Get status color for visual indication
