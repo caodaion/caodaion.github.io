@@ -2,7 +2,7 @@
   <h3>Bộ lọc lịch</h3>
   
   <div class="filter-options">
-    <div class="filter-section">
+    <div class="filter-section" tourAnchor="calendar.eventTypes">
       <h4>Loại sự kiện</h4>
       <div class="filter-option">
         <mat-checkbox 
@@ -83,7 +83,7 @@
       </div>
     </div>
     
-    <div class="filter-section">
+    <div class="filter-section" tourAnchor="calendar.displayOptions">
       <h4>Hiển thị</h4>
       <div class="filter-option">
         <mat-checkbox 
@@ -130,7 +130,7 @@
         </mat-checkbox>
       </div>
     </div>
-    <div class="filter-section">
+    <div class="filter-section" tourAnchor="calendar.thanhso-filter">
       <h4>Thánh Sở</h4>
       <div *ngIf="loadingThanhSoMembers">Đang tải danh sách Thánh Sở...</div>
       <div *ngIf="!loadingThanhSoMembers && thanhSoMembers.length === 0">Không có Thánh Sở nào.</div>
@@ -148,3 +148,4 @@
     </div>
   </div>
 </div>
+<tour-step-template></tour-step-template>
