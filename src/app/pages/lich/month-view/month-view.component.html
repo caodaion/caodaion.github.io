@@ -10,6 +10,7 @@
       <app-calendar-day-cell
         *ngFor="let day of calendarDays"
         [calendarDate]="day"
+        [calendarDays]="calendarDays"
         [isCurrentMonth]="day?.solar?.month === (currentDate ? currentDate.getMonth() + 1 : null)"
         [showCanChi]="showCanChi"
       >
