@@ -1,14 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { KinhService } from 'src/app/shared/services/kinh/kinh.service';
+import { SharedModule } from "../../../../shared/shared.module";
+import { MatButtonModule } from '@angular/material/button';
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 @Component({
   selector: 'app-an-chay',
-  imports: [MatExpansionModule, MatTooltipModule, CommonModule],
+  imports: [
+    MatExpansionModule,
+    MatTooltipModule,
+    CommonModule,
+    SharedModule,
+    MatDialogModule,
+    MatButtonModule,
+    IconComponent
+],
   templateUrl: './an-chay.html',
   styleUrl: './an-chay.scss'
 })
@@ -59,9 +70,6 @@ export class AnChay implements OnInit {
           if (this.anChayVideos.length > 0) {
             const randomIndex = Math.floor(Math.random() * this.anChayVideos.length);
             this.randomVideo = this.anChayVideos[randomIndex];
-            console.log('Random anChayVideo:', this.randomVideo);
-            if (this.randomVideo?.isTiktokLink)
-              this.fetchTiktokEmbedCode();
           }
         }
 
@@ -72,18 +80,5 @@ export class AnChay implements OnInit {
       complete: () => {
       },
     })
-  }
-
-  fetchTiktokEmbedCode() {
-    this.http.get(`https://www.tiktok.com/oembed?url=${this.randomVideo?.content}`, { responseType: 'text' }).subscribe({
-      next: (res) => {
-        this.randomVideo = { ...this.randomVideo, ...JSON.parse(res) };
-        console.log(this.randomVideo);
-
-      },
-      error: (err) => {
-        console.error('Error fetching TikTok embed code:', err);
-      }
-    });
   }
 }

@@ -215,7 +215,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
     this.dialog.open(AnChay, {
       width: this.isMobileView ? '100%' : '600px',
       maxWidth: this.isMobileView ? '100%' : '600px',
-      panelClass: '',
+      panelClass: 'an-chay-dialog-container',
       data: {
         showAnChay: this.showAnChay,
         date: this.calendarDate,

@@ -1,5 +1,5 @@
-<div class="p-3">
-    <h4 class="text-center">Ăn chay cùng CaoDaiON</h4>
+<h4 class="text-center" matDialogTitle>Ăn chay cùng CaoDaiON</h4>
+<mat-dialog-content>
     <div class="flex gap-1 justify-center mb-4">
         @if (data?.showAnChay['luc-trai']) {
         <div class="an-chay">lục trai</div>
@@ -11,19 +11,26 @@
         <div class="an-chay">thiên ngươn</div>
         }
     </div>
-    <h5 class="text-center">Hôm nay ăn gì?</h5>
-    @if (randomVideo) {
-    <div class="video-container mb-4">
-        @if (randomVideo.isTiktokLink) {
-        <div [innerHTML]="randomVideo?.html"></div>
+    <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Hôm nay là ngày ăn chay gì?
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        @if (randomVideo) {
+        <div class="video-container mb-4">
+            @if (randomVideo.isTiktokLink) {
+            <iframe class="w-full h-[500px] md:h-[600px]"
+                [src]="'https://www.tiktok.com/player/v1/' + randomVideo.id | safe" allow="fullscreen"></iframe>
+            } @else {
+            <iframe class="w-full h-[500px] md:h-[600px]" src="https://www.youtube.com/embed/{{ randomVideo.id }}"
+                frameborder="0" allowfullscreen></iframe>
+            }
+        </div>
         } @else {
-        <iframe class="w-full h-[500px] md:h-[600px]" src="https://www.youtube.com/embed/{{ randomVideo.id }}"
-            frameborder="0" allowfullscreen></iframe>
+        <p class="text-center">Chưa có video ăn chay nào được cập nhật.</p>
         }
-    </div>
-    } @else {
-    <p class="text-center">Chưa có video ăn chay nào được cập nhật.</p>
-    }
+    </mat-expansion-panel>
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
@@ -33,7 +40,8 @@
         <ul class="list-decimal ml-[1rem] text-lg text-justify">
             <li><strong>Lục trai:</strong> 6 ngày (1, 8, 14, Rằm, 23, 29/30) - Tín đồ</li>
             <li>
-                <strong>Thập trai:</strong> 10 ngày (1, 8, 14, Rằm, 18, 23, 24, 27/28(2 ngày trước cuối tháng), 29/30
+                <strong>Thập trai:</strong> 10 ngày (1, 8, 14, Rằm, 18, 23, 24, 27/28(2 ngày trước cuối tháng),
+                29/30
                 (ngày cuối tháng)) - Tín đồ, chức việc.
             </li>
             <li>
@@ -43,5 +51,9 @@
             <li><strong>Trường trai:</strong> - Phẩm Thượng thừa, hay tự nguyện.</li>
         </ul>
     </mat-expansion-panel>
-
-</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+        <app-icon name="close"></app-icon> Đóng
+    </button>
+</mat-dialog-actions>
