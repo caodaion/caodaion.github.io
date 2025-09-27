@@ -13,6 +13,7 @@ import { TimeComponent } from './time/time.component';
 import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from 'src/app/app.component';
 import { IconComponent } from 'src/app/components/icon/icon.component';
+import { TourStepTemplateComponent, TourMatMenuModule } from 'ngx-ui-tour-md-menu';
 
 @NgModule({
   declarations: [],
@@ -25,7 +26,9 @@ import { IconComponent } from 'src/app/components/icon/icon.component';
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
-    IconComponent
+    IconComponent,
+    TourStepTemplateComponent,
+    TourMatMenuModule
   ]
 })
 export class HomeModule { }

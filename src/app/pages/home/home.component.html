@@ -1,5 +1,5 @@
 <div class="page-container">
-  <h1 class="page-title">Trang chủ</h1>
+  <h1 class="page-title" tourAnchor="home.welcome">Trang chủ</h1>
 
   <!-- Install app button -->
   <div class="pwa-install-section" *ngIf="canInstallPwa || showIOSInstructions">
@@ -34,7 +34,7 @@
   <h3 class="section-title">Lối tắt</h3>
 
   <!-- Lanh shortcut card -->
-  <div class="shortcut-container mb-4">
+  <div class="shortcut-container mb-4" tourAnchor="home.shortcuts">
     <div class="app-card" routerLink="/kinh">
       @for (sign of eventSigns; track sign.key) {
       <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
@@ -100,7 +100,7 @@
   <mat-divider></mat-divider>
 
   <!-- Lunar Calendar Information Section -->
-  <div class="lunar-dashboard mt-4">
+  <div class="lunar-dashboard mt-4" tourAnchor="home.lunar">
     <div class="lunar-card" routerLink="/lich">
       <div class="lunar-date-section">
         <div class="lunar-today">
@@ -195,3 +195,5 @@
   </div>
   <app-bai-thuong-yeu></app-bai-thuong-yeu>
 </div>
+
+<tour-step-template></tour-step-template>

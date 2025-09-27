@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { IconComponent } from "src/app/components/icon/icon.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-calendar-controller',
@@ -15,7 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatSelectModule,
     IconComponent,
-    MatTooltipModule
+    MatTooltipModule,
+    TourMatMenuModule
 ],
   templateUrl: './calendar-controller.component.html',
   styleUrls: ['./calendar-controller.component.scss']
