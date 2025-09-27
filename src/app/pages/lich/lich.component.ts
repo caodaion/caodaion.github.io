@@ -28,6 +28,7 @@ import { LichService } from './services/lich.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SeoService } from '../../shared/services/seo.service';
+import { TourAnchorMatMenuDirective, TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-lich',
@@ -42,8 +43,10 @@ import { SeoService } from '../../shared/services/seo.service';
     MatIconModule,
     CalendarFilterComponent,
     CalendarControllerComponent,
-    IconComponent
-  ],
+    IconComponent,
+    TourAnchorMatMenuDirective,
+    TourMatMenuModule
+],
   templateUrl: './lich.component.html',
   styleUrls: ['./lich.component.scss'],
 })

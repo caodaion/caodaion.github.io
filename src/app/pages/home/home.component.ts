@@ -19,11 +19,13 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { PwaInstallService } from '../../shared/services/pwa-install/pwa-install.service';
+import { TourAnchorMatMenuDirective } from "ngx-ui-tour-md-menu";
+import { TourStepTemplateComponent } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule, MatDividerModule, IconComponent, BaiThuongYeu],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule, MatDividerModule, IconComponent, BaiThuongYeu, TourAnchorMatMenuDirective, TourStepTemplateComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [LichService, CalendarService, DatePipe],
