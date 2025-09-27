@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, inject, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ThemeService } from '../../shared/services/theme.service';
 import { NavigationService } from '../../shared/services/navigation.service';
@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
+import { AppTour } from 'src/app/shared/services/app-tour';
 
 @Component({
   selector: 'app-navigation',
@@ -14,7 +15,11 @@ import { EventSignService } from 'src/app/shared/services/event-sign.service';
   styleUrls: ['./navigation.styles.scss'],
   providers: [ThemeService],
 })
-export class NavigationComponent implements OnInit, OnDestroy {
+export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  private readonly appTourService = inject(AppTour);
+  private subscriptions: Subscription[] = [];
+
   isSubNavOpen = false;
   isDarkMode = false;
   lastVisitedPage: string | null =
@@ -23,8 +28,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   showBottomNav = true;
   eventSigns: any[] = [];
   hasSubmenu = false; // Track if current route has submenu
-
-  private subscriptions: Subscription[] = [];
+  navigationTourSteps = [];
 
   constructor(
     private themeService: ThemeService,
@@ -64,21 +68,22 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.eventSigns = this.eventSignService.getEventSigns();
-    
+
     // Initialize submenu visibility based on current route
     this.updateSubmenuVisibility(this.router.url);
-    
+
     // Subscribe to router events to track navigation
     this.subscriptions.push(
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
+          this.appTourService.startTour();
           Promise.resolve().then(() => {
             this.isSubNavOpen = false;
-            
+
             // Check if current route has submenu functionality
             this.updateSubmenuVisibility(event.urlAfterRedirects);
-            
+
             if (
               ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
                 event.urlAfterRedirects.startsWith(path)
@@ -98,11 +103,15 @@ export class NavigationComponent implements OnInit, OnDestroy {
             if (this.router.url.includes('/lich')) {
               this.isSubNavOpen = true;
             }
-            
+
             this.cdr.detectChanges();
           });
         })
     );
+  }
+
+  ngAfterViewInit(): void {
+    this.appTourService.startTour();
   }
 
   ngOnDestroy() {
@@ -128,7 +137,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     // Define routes that have submenu functionality
     const routesWithSubmenu = ['/lich', '/ca-nhan'];
     const newHasSubmenu = routesWithSubmenu.some(route => url.includes(route));
-    
+
     // Only update if value has changed to avoid unnecessary change detection
     if (this.hasSubmenu !== newHasSubmenu) {
       this.hasSubmenu = newHasSubmenu;

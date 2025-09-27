@@ -30,7 +30,6 @@ import { MarkdownModule } from 'ngx-markdown';
 import { register } from 'swiper/element/bundle';
 import { DienThoPhatMauGuard } from './shared/guards/dien-tho-phat-mau.guard';
 
-
 register();
 
 @NgModule({

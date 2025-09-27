@@ -2,7 +2,7 @@
   <!-- Enhanced Header -->
   <app-child-header *ngIf="kinhInfo$ | async as kinhInfo" [title]="kinhInfo.name">
     <div class="header-controls">
-      <div class="font-controls">
+      <div class="font-controls" tourAnchor="kinh.fontSize">
         <label for="font-size-select" class="font-size-label">Cỡ chữ:</label>
         <mat-select id="font-size-select" class="font-size-select" [(ngModel)]="fontSize" panelClass="font-size-panel"
           (change)="onFontSizeChange($event)">
@@ -14,7 +14,7 @@
       </div>
 
       <div class="action-controls">
-        <button-share>
+        <button-share tourAnchor="kinh.share">
           <button class="action-btn share-btn" aria-label="Share">
             <span class="material-icons">share</span>
           </button>
@@ -24,7 +24,7 @@
   </app-child-header>
 
   <!-- Main Content Container -->
-  <div class="kinh-detail-container">
+  <div class="kinh-detail-container" tourAnchor="kinh.readArea">
     <mat-tab-group class="tab-group" [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
       <mat-tab label="Đọc kinh">
         <!-- Content Area -->
@@ -57,7 +57,7 @@
 
     <!-- Navigation Section -->
     <nav class="navigation-section" *ngIf="prevKinh || nextKinh">
-      <div class="nav-container">
+      <div class="nav-container" tourAnchor="kinh.navigationBar">
         <button class="nav-button prev-button" *ngIf="prevKinh" (click)="goToPreviousKinh()"
           [title]="'Bài trước: ' + prevKinh.name">
           <div class="nav-button-content">
@@ -85,8 +85,9 @@
     </nav>
   </div>
   <!-- Floating Action Button (FAB) -->
-  <button class="fab" cdkDrag cdkDragBoundary=".kinh-detail-page" (click)="openKinhList()"
+  <button class="fab" cdkDrag cdkDragBoundary=".kinh-detail-page" (click)="openKinhList()" tourAnchor="kinh.listFab"
     [matTooltip]="'Danh sách kinh'">
     <span class="material-icons">list</span>
   </button>
 </div>
+<tour-step-template></tour-step-template>
