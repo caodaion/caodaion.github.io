@@ -58,14 +58,14 @@ export class KinhService {
     return this.http.put(url, req);
   }
 
-  fetchKinhInformation(key: string): Observable<any> {
+  fetchKinhInformation(key?: string): Observable<any> {
     const ref: Mutable<this> = this;
     return new Observable((observable) => {
       const returnData = () => {
         let response = <any>{}
         this.sheetService.decodeRawSheetData(ref.kinhInformationWorkbook.Sheets[this.kinhInformationSheet])
           .subscribe((res: any) => {
-            const informationData = res?.filter((item: any) => item?.key?.includes(key));
+            const informationData = !key ? res : res?.filter((item: any) => item?.key?.includes(key));
             response.data = informationData
             response.status = 200
             observable.next(response)

@@ -26,11 +26,32 @@ export class KinhInformation implements OnInit {
         next: (res) => {
           if (res?.status === 200) {
             this.kinhInformations = res.data?.map((item: any) => {
-              const videoIdMatch = item.content.match(/(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([^\s&]+)/);
+              const tiktokMatch = item.content.match(/tiktok\.com\/@([\w.-]+)\/video\/(\d+)/);
+              const youtubeMatch = item.content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtu(?:be\.com\/watch\?v=|\.be\/))([\w-]{11})/);
+
+              let id = null;
+              let channelId = null;
+              let isYoutubeLink = false;
+              let isTiktokLink = false;
+
+              if (tiktokMatch) {
+                channelId = tiktokMatch[1];
+                id = tiktokMatch[2];
+                isTiktokLink = true;
+                isYoutubeLink = false;
+              } else if (youtubeMatch) {
+                id = youtubeMatch[1];
+                isYoutubeLink = true;
+                isTiktokLink = false;
+              }
+
               return {
                 ...item,
                 type: item?.type ? (item.type.match(/\[(.*?)\]/)?.[1] ?? '') : '',
-                id: videoIdMatch ? videoIdMatch[1] : null
+                id,
+                channelId,
+                isYoutubeLink,
+                isTiktokLink,
               }
             });
             this.analysisVideos = this.kinhInformations?.filter((item: any) => item?.type === 'analysisVideo');

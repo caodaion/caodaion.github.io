@@ -96,6 +96,39 @@
           </span>
         </mat-checkbox>
       </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [(ngModel)]="showAnChay['luc-trai']"
+          (ngModelChange)="onAnChay()"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #34a853"></span>
+            Ăn chay lục trai (6)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [(ngModel)]="showAnChay['thap-trai']"
+          (ngModelChange)="onAnChay()"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #34a853"></span>
+            Ăn chay thập trai (10)
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="filter-option">
+        <mat-checkbox 
+          [(ngModel)]="showAnChay['thien-nguon']"
+          (ngModelChange)="onAnChay()"
+          color="primary">
+          <span class="filter-label">
+            <span class="color-dot" style="background-color: #34a853"></span>
+            Ăn chay thiên ngươn (16)
+          </span>
+        </mat-checkbox>
+      </div>
     </div>
     <div class="filter-section">
       <h4>Thánh Sở</h4>

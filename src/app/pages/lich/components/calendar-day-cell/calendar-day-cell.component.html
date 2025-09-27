@@ -1,14 +1,6 @@
-<div
-  class="day-cell"
-  [class.today]="isToday"
-  [class.other-month]="!isCurrentMonth"
-  [class.selected]="isSelected"
->
+<div class="day-cell" [class.today]="isToday" [class.other-month]="!isCurrentMonth" [class.selected]="isSelected">
   <div class="date-container">
-    <div
-      class="w-full flex items-center justify-between cursor-pointer"
-      (click)="onDayClick()"
-    >
+    <div class="w-full flex items-center justify-between cursor-pointer" (click)="onDayClick()">
       <div class="solar-date">{{ calendarDate.solar.day }}</div>
       <div class="text-center">
         <div class="lunar-day">
@@ -19,30 +11,24 @@
     </div>
     <div class="lunar-date" [class.can-chi-visible]="showCanChi">
       <div class="can-chi" *ngIf="showCanChi">
-        <span
-          [ngStyle]="{
+        <span [ngStyle]="{
             color: 'var(--primary-color)'
-          }"
-          >{{ calendarDate.canChi.day }}</span
-        >
+          }">{{ calendarDate.canChi.day }}</span>
         • {{ calendarDate.canChi.month }} • {{ calendarDate.canChi.year }}
       </div>
     </div>
   </div>
 
-  <div
-    class="events-container"
-    *ngIf="calendarDate.events && calendarDate.events.length > 0"
-  >
+  <div class="flex gap-1" (click)="onAnChayClick()">
+    <div class="an-chay" *ngIf="isShowAnChay('luc-trai')" [matTooltip]="'Ăn chay lục trai (6 ngày)'">6</div>
+    <div class="an-chay" *ngIf="isShowAnChay('thap-trai')" [matTooltip]="'Ăn chay thập trai (10 ngày)'">10</div>
+    <div class="an-chay" *ngIf="isShowAnChay('thien-nguon')" [matTooltip]="'Ăn chay thiên ngươn (16 ngày)'">16</div>
+  </div>
+
+  <div class="events-container" *ngIf="calendarDate.events && calendarDate.events.length > 0">
     <div class="event-list">
-      <div
-        class="event-marker clickable"
-        *ngFor="let event of visibleEvents"
-        [style.background-color]="event?.color"
-        [matTooltip]="event.title"
-        [style.color]="event?.textColor"
-        (click)="onEventClick(event, $event)"
-      >
+      <div class="event-marker clickable" *ngFor="let event of visibleEvents" [style.background-color]="event?.color"
+        [matTooltip]="event.title" [style.color]="event?.textColor" (click)="onEventClick(event, $event)">
         {{ event.title }}
       </div>
     </div>

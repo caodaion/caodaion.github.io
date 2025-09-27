@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EventImageDialogComponent } from '../event-image-dialog/event-image-dialog.component';
 import { Subscription, map, shareReplay } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { AnChay } from 'src/app/pages/lich/components/an-chay/an-chay';
 
 @Component({
   selector: 'app-calendar-day-cell',
@@ -25,6 +26,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Input data for the calendar day
   @Input() calendarDate!: CalendarDate;
+  @Input() calendarDays!: CalendarDate[];
   @Input() showCanChi: boolean = false;
   @Input() isCurrentMonth: boolean = false;
 
@@ -49,14 +51,23 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Subscriptions
   private subscriptions: Subscription[] = [];
   isMobileView: boolean = false;
+  showAnChay = <any>{
+    'luc-trai': true,
+    'thap-trai': false,
+    'thien-nguon': false
+  };
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    const savedAnChaySetting = localStorage.getItem('showAnChay');
+    if (savedAnChaySetting) {
+      this.showAnChay = JSON.parse(savedAnChaySetting);
+    }
     // Monitor screen size changes
     this.subscriptions.push(
       this.breakpointObserver
@@ -82,6 +93,10 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
         this.eventTypeVisibilityHandler
       );
     }
+    window.addEventListener(
+      'anChayVisibilityChange',
+      this.anChayVisibilityHandler
+    );
   }
 
   ngOnDestroy(): void {
@@ -165,5 +180,48 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate()
     );
+  }
+
+
+  // Event visibility change handler
+  private anChayVisibilityHandler =
+    this.handleAnChayVisibilityChange.bind(this);
+  handleAnChayVisibilityChange(event: Event): void {
+    const customEvent = event as CustomEvent;
+    const localStorageValue = localStorage.getItem('showAnChay');
+    if (localStorageValue) {
+      try {
+        this.showAnChay = customEvent.detail;
+      } catch { }
+    }
+  }
+
+  isShowAnChay(type: string): boolean {
+    if (!this.calendarDate || !this.calendarDate.lunar) return false;
+    if (!this.showAnChay[type]) return false;
+    switch (type) {
+      case 'luc-trai':
+        return this.calendarDate['6'] === true;
+      case 'thap-trai':
+        return this.calendarDate['10'] === true;
+      case 'thien-nguon':
+        return this.calendarDate['16'] === true;
+      default:
+        return false;
+    }
+  }
+
+  onAnChayClick(): void {
+    this.dialog.open(AnChay, {
+      width: this.isMobileView ? '100%' : '600px',
+      maxWidth: this.isMobileView ? '100%' : '600px',
+      panelClass: 'an-chay-dialog-container',
+      data: {
+        showAnChay: this.showAnChay,
+        date: this.calendarDate,
+        calendarDays: this.calendarDays,
+      },
+      autoFocus: false,
+    });
   }
 }
