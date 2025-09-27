@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EventImageDialogComponent } from '../event-image-dialog/event-image-dialog.component';
 import { Subscription, map, shareReplay } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { AnChay } from 'src/app/pages/lich/components/an-chay/an-chay';
 
 @Component({
   selector: 'app-calendar-day-cell',
@@ -25,6 +26,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Input data for the calendar day
   @Input() calendarDate!: CalendarDate;
+  @Input() calendarDays!: CalendarDate[];
   @Input() showCanChi: boolean = false;
   @Input() isCurrentMonth: boolean = false;
 
@@ -190,30 +192,36 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
     if (localStorageValue) {
       try {
         this.showAnChay = customEvent.detail;
-        console.log('Day cell updating for An Chay visibility change:', this.showAnChay);
       } catch { }
     }
   }
 
   isShowAnChay(type: string): boolean {
-    const lastDateInMonth = this.calendarDate?.isLastDateInMonth ? this.calendarDate?.lunar.day : -1;
-    const lastSecondDateInMonth = this.calendarDate?.isLastSecondDateInMonth ? this.calendarDate?.lunar.day : -1;
-    const lastThirdDateInMonth = this.calendarDate?.isLastThirdDateInMonth ? this.calendarDate?.lunar.day : -1;
-    const lucTrai = [1, 8, 14, 15, 23, lastDateInMonth];
-    const thapTrai = [1, 8, 14, 15, 18, 23, 24, lastSecondDateInMonth, lastDateInMonth];
-    const thienNguon = [1, 4, 6, 8, 9, 14, 15, 16, 18, 19, 23, 24, 25, lastThirdDateInMonth, lastSecondDateInMonth, lastDateInMonth];
     if (!this.calendarDate || !this.calendarDate.lunar) return false;
     if (!this.showAnChay[type]) return false;
-    const day = this.calendarDate.lunar.day;
     switch (type) {
       case 'luc-trai':
-        return lucTrai.includes(day);
+        return this.calendarDate['6'] === true;
       case 'thap-trai':
-        return thapTrai.includes(day);
+        return this.calendarDate['10'] === true;
       case 'thien-nguon':
-        return thienNguon.includes(day);
+        return this.calendarDate['16'] === true;
       default:
         return false;
     }
+  }
+
+  onAnChayClick(): void {
+    this.dialog.open(AnChay, {
+      width: this.isMobileView ? '100%' : '600px',
+      maxWidth: this.isMobileView ? '100%' : '600px',
+      panelClass: '',
+      data: {
+        showAnChay: this.showAnChay,
+        date: this.calendarDate,
+        calendarDays: this.calendarDays,
+      },
+      autoFocus: false,
+    });
   }
 }
