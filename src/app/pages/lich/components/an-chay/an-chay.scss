@@ -1,0 +1,18 @@
+.an-chay {
+    font-size: 0.6rem;
+    margin-top: 1px;
+    background-color: #34a853;
+    color: white;
+    border-radius: 2px;
+    padding: 1px;
+    width: 100%;
+    text-align: center;
+}
+
+::ng-deep {
+    .an-chay-dialog-container {
+        .mat-mdc-dialog-content {
+            min-height: 80vh;
+        }
+    }
+}

@@ -24,9 +24,9 @@ export interface CalendarDate {
     year: string;
   };
   isToday: boolean;
-  isLastDateInMonth?: boolean;
-  isLastSecondDateInMonth?: boolean;
-  isLastThirdDateInMonth?: boolean;
+  '6'?: boolean;
+  '10'?: boolean;
+  '16'?: boolean;
   isCurrentMonth: boolean;
   events: CalendarEvent[];
 }
