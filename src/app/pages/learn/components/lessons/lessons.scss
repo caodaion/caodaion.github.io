@@ -1,29 +1,60 @@
-@use "../../../../../sass/variables.scss";
-@use "sass:map";
+// Modern Design System Variables (from kinh detail)
+:host {
+  --primary-color: #4285f4;
+  --primary-hover: #3367d6;
+  --primary-light: #e8f0fe;
+  --surface-color: #ffffff;
+  --surface-elevated: #f8f9fa;
+  --surface-hover: #f1f3f4;
+  --border-color: #e1e4e8;
+  --border-light: #f1f3f4;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5f6368;
+  --text-tertiary: #9aa0a6;
+  --error-color: #ea4335;
+  --error-background: #fce8e6;
+  --success-color: #34a853;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+}
 
 .lesson-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--surface-elevated) 0%, var(--surface-color) 100%);
+    transition: background 0.3s ease;
 }
 
 .lesson-card {
-    background: var(--background-color);
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    padding: 1.5rem 2rem;
-    margin: 1rem 0;
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
     min-width: 320px;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: sticky;
     top: 0;
+    border: 1px solid var(--border-light);
 
     &:hover {
+        background: var(--primary-light);
         border-color: var(--primary-color);
-        background-color: var(--primary-light);
-        color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
     }
 }
 
@@ -31,31 +62,82 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
 }
 
 .lesson-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #222;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .lesson-subtitle {
     font-size: 1rem;
-    color: #888;
-    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+    transition: color 0.3s ease;
 }
 
 .topic {
-    margin: 0.5rem auto 0;
-    padding: 0.75rem 1rem;
-    background-color: var(--surface-color);
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    transition: background-color 0.2s ease;
+    margin: var(--spacing-sm) auto 0;
+    padding: var(--spacing-md);
+    background: var(--surface-elevated);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
     max-width: calc(100% - 2rem);
     cursor: pointer;
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
 
     &:hover {
-        background-color: var(--primary-light);
+        background: var(--primary-light);
+        border-color: var(--primary-color);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
     }
+}
+
+/* Dark Mode Support (from kinh detail) */
+:host-context(.dark-theme) {
+  --surface-color: #1f1f1f;
+  --surface-elevated: #2a2a2a;
+  --surface-hover: #3a3a3a;
+  --border-color: #333333;
+  --border-light: #2a2a2a;
+  --text-primary: #e8eaed;
+  --text-secondary: #9aa0a6;
+  --text-tertiary: #5f6368;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  .lesson-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
+  }
+  
+  .lesson-card {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-md);
+    
+    &:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+  
+  .topic {
+    background: var(--surface-elevated);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
+    
+    &:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow-md);
+    }
+  }
 }
