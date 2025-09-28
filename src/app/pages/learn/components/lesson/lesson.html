@@ -79,11 +79,11 @@
                         <div class="quiz-result-title">Hoàn thành bài học!</div>
                         <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{ lessonPost?.title }}"</div>
                         <div class="quiz-score-card">
-                            <div class="quiz-score-label">Điểm số của bạn</div>
+                            <div class="quiz-score-label text-center">Điểm số của bạn</div>
                             <div class="quiz-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
                             <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) | number:'1.0-0' }}%</div>
                         </div>
-                        <button mat-raised-button class="quiz-share-button" (click)="shareResult(shareResultDialog)">
+                        <button mat-raised-button class="quiz-share-button !h-auto !min-h-[48px]" (click)="shareResult(shareResultDialog)">
                             <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
                         </button>
                     </div>
@@ -116,29 +116,37 @@
         </div>
     </mat-tab>
 </mat-tab-group>
+
 <ng-template #shareResultDialog>
     <mat-dialog-content>
         <div class="text-center">Bạn cũng có thể thay đổi nội dung ảnh chia sẻ và nhập tên của bạn bên trong dấu "[" "]"
         </div>
-        <div #sharedResultContent contenteditable="true" class="quiz-result-share-card"
+        <div #sharedResultContent contenteditable="true"
+            class="quiz-result-share-card w-full max-w-xl bg-gradient-to-br from-blue-100 via-white to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 rounded-xl shadow-2xl p-2 sm:p-4 md:p-8 border border-gray-200 dark:border-gray-700 flex flex-col items-center"
             style="box-sizing: border-box; min-width: 0; word-break: break-word;">
-            <div class="quiz-share-content">
-                <div class="quiz-share-congrats">
+            <div class="flex flex-col items-center w-full">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-base md:text-xl lg:text-2xl xl:text-3xl">
                     Chúc mừng🎉
                 </div>
-                <div class="quiz-share-name">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-xl md:text-3l lg:text-4xl xl:text-4xl">
                     [  ]
                 </div>
-                <div class="quiz-share-completed">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-base md:text-lg lg:text-xl xl:text-2xl">
                     Đã hoàn thành bài học
                 </div>
-                <div class="quiz-share-title">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-2xl md:text-4xl lg:text-5xl xl:text-5xl">
                     {{ lessonPost?.title }}
                 </div>
-                <div class="quiz-share-score-card">
-                    <div class="quiz-share-score-label">Với điểm số</div>
-                    <div class="quiz-share-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
-                    <div class="quiz-share-score-percentage">{{ ((correctCount / quizzes.length) * 100) | number:'1.0-0' }}%</div>
+                <div
+                    class="score-card flex flex-col items-center justify-center bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-4 mb-4">
+                    <div class="font-bold text-blue-600 dark:text-blue-300 mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Với điểm số
+                    </div>
+                    <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-lg md:text-2xl lg:text-3xl xl:text-4xl">{{
+                        correctCount
+                        }} / {{ quizzes.length }}</div>
+                    <div class="text-gray-500 dark:text-gray-400 text-xs md:text-sm lg:text-base xl:text-lg">{{ ((correctCount /
+                        quizzes.length)
+                        * 100) | number:'1.0-0' }}%</div>
                 </div>
             </div>
 
