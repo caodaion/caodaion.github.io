@@ -43,61 +43,90 @@
         </div>
     </mat-tab>
     <mat-tab label="Trắc nghiệm" *ngIf="quizzes.length > 0">
-        <div class="quiz-section">
+        <div class="quiz-section p-3 pb-0 flex flex-col items-center gap-6 h-full">
             <ng-container *ngIf="!showResult">
-                <div class="quiz-progress-container">
-                    <div class="quiz-progress-bar">
-                        <div class="quiz-progress-fill"
-                            [style.width]="((currentQuizIndex + 1) / quizzes.length * 100) + '%'">
+                <div class="w-full max-w-xl mx-auto mb-6 sticky top-0 bg-white dark:bg-gray-900 pt-3"
+                    style="z-index: 10;">
+                    <div class="quiz-progress-bar w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full transition-all duration-300"
+                            [style.width]="((currentQuizIndex + 1) / quizzes.length * 100) + '%'"
+                            [style.background]="'var(--hoc-app-background)'">
                         </div>
                     </div>
-                    <div class="quiz-progress-text">
+                    <div class="flex justify-between text-sm mt-1">
                         <span>Câu {{ currentQuizIndex + 1 }} / {{ quizzes.length }}</span>
                         <span>{{ ((currentQuizIndex + 1) / quizzes.length * 100) | number:'1.0-0' }}%</span>
                     </div>
                 </div>
             </ng-container>
             <ng-container *ngIf="!showResult">
-                <div *ngIf="quizzes.length > 0" class="quiz-question-container">
-                    <div class="quiz-question-title">
-                        <span class="quiz-question-text">Câu {{ currentQuizIndex + 1 }}: {{ quizzes[currentQuizIndex].cau_hoi }}</span>
+                <div *ngIf="quizzes.length > 0"
+                    class="quiz-question rounded-lg bg-white dark:bg-gray-900 p-4 md:p-8 w-full max-w-xl flex flex-col items-center justify-around"
+                    [ngStyle]="{
+                        flex: '1'
+                    }">
+                    <div class="w-full flex flex-col items-center mb-6">
+                        <span class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">Câu {{
+                            currentQuizIndex +
+                            1 }}: {{ quizzes[currentQuizIndex].cau_hoi }}</span>
                     </div>
-                    <div class="quiz-choices">
+                    <div class="choices flex flex-wrap justify-center gap-3 mb-8">
                         <button mat-stroked-button *ngFor="let choice of quizzes[currentQuizIndex].lua_chon"
-                            class="quiz-choice-button"
-                            [class.selected]="quizzes[currentQuizIndex].selected == choice"
-                            (click)="selectChoice(currentQuizIndex, choice)">
+                            class="min-w-[100px] py-2 px-4 rounded text-base font-medium !h-auto min-h-[36px]"
+                            [ngClass]="{
+                                '!bg-blue-500 !text-white !border-blue-500': quizzes[currentQuizIndex].selected == choice
+                            }" (click)="selectChoice(currentQuizIndex, choice)">
                             {{ choice }}
                         </button>
                     </div>
                 </div>
+                <div class="w-full flex justify-between mt-8 border-t py-4 sticky bottom-0 bg-white dark:bg-gray-900">
+                    <button mat-stroked-button color="accent" (click)="goToNextQuiz(true)"
+                        *ngIf="!quizzes[currentQuizIndex]?.selected">Bỏ qua</button>
+                    <div *ngIf="quizzes[currentQuizIndex]?.selected"></div>
+                    <button mat-flat-button color="primary" [disabled]="!quizzes[currentQuizIndex]?.selected"
+                        (click)="goToNextQuiz()">
+                        {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Kiểm tra' }} </button>
+                </div>
             </ng-container>
             <ng-container *ngIf="showResult">
-                <div class="quiz-result-page">
-                    <div class="quiz-result-header">
-                        <div class="quiz-result-emoji">🎉</div>
-                        <div class="quiz-result-title">Hoàn thành bài học!</div>
-                        <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{ lessonPost?.title }}"</div>
-                        <div class="quiz-score-card">
-                            <div class="quiz-score-label">Điểm số của bạn</div>
-                            <div class="quiz-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
-                            <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) | number:'1.0-0' }}%</div>
+                <div
+                    class="quiz-result-page w-full max-w-2xl bg-gradient-to-br from-blue-100 via-white to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 rounded-xl shadow-2xl p-4 md:p-8 border border-gray-200 dark:border-gray-700 flex flex-col items-center">
+                    <div class="flex flex-col items-center w-full mb-8">
+                        <div class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-2 text-center">
+                            🎉
                         </div>
-                        <button mat-raised-button class="quiz-share-button" (click)="shareResult(shareResultDialog)">
+                        <div class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-2 text-center">
+                            Hoàn thành bài học!
+                        </div>
+                        <div class="text-lg text-center mb-2 text-gray-700 dark:text-gray-200">Chúc mừng bạn đã hoàn
+                            thành bài học với chủ đề "{{ lessonPost?.title }}"</div>
+                        <div
+                            class="score-card flex flex-col items-center justify-center bg-white dark:bg-gray-900 rounded-lg shadow-lg px-8 py-6 mb-4">
+                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-2">Điểm số của bạn</div>
+                            <div class="text-5xl font-extrabold text-green-700 dark:text-green-400 mb-2">{{ correctCount
+                                }} / {{ quizzes.length }}</div>
+                            <div class="text-base text-gray-500 dark:text-gray-400">{{ ((correctCount / quizzes.length)
+                                * 100) | number:'1.0-0' }}%</div>
+                        </div>
+                        <button mat-raised-button color="primary"
+                            class="mt-2 px-6 py-2 text-lg font-semibold rounded-full shadow-lg !h-auto !min-h-[36px]"
+                            (click)="shareResult(shareResultDialog)">
                             <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
                         </button>
                     </div>
-                    <div class="quiz-answers-list">
-                        <div *ngFor="let quiz of quizzes; let i = index" class="quiz-answer-item">
-                            <div class="quiz-answer-question">Câu {{ i + 1 }}: {{ quiz.cau_hoi }}</div>
-                            <div class="quiz-answer-details">
+                    <div class="quiz-answers-list flex flex-col gap-4 w-full">
+                        <div *ngFor="let quiz of quizzes; let i = index"
+                            class="answer-item p-4 rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex flex-col items-center justify-between">
+                            <div class="font-semibold mb-2 md:mb-0">Câu {{ i + 1 }}: {{ quiz.cau_hoi }}</div>
+                            <div class="flex flex-wrap gap-2 items-center">
                                 <span>Đáp án của bạn: <b>{{ quiz.selected || 'Chưa chọn' }}</b></span>
-                                <span *ngIf="quiz.selected === quiz.dap_an" class="quiz-answer-correct">
-                                    <app-icon name="check_circle"></app-icon> Đúng
-                                </span>
-                                <span *ngIf="quiz.selected && quiz.selected !== quiz.dap_an" class="quiz-answer-incorrect">
-                                    <app-icon name="cancel"></app-icon> Sai
-                                </span>
+                                <span *ngIf="quiz.selected === quiz.dap_an"
+                                    class="text-green-600 flex items-center ml-2"><app-icon
+                                        name="check_circle"></app-icon> Đúng</span>
+                                <span *ngIf="quiz.selected && quiz.selected !== quiz.dap_an"
+                                    class="text-red-600 flex items-center ml-2"><app-icon name="cancel"></app-icon>
+                                    Sai</span>
                                 <span class="ml-2">| Đáp án đúng: <b>{{ quiz.dap_an }}</b></span>
                             </div>
                         </div>
@@ -105,40 +134,38 @@
                 </div>
             </ng-container>
         </div>
-        <div class="quiz-navigation">
-            <button mat-stroked-button class="quiz-skip-button" (click)="goToNextQuiz(true)"
-                *ngIf="!quizzes[currentQuizIndex]?.selected">Bỏ qua</button>
-            <div *ngIf="quizzes[currentQuizIndex]?.selected"></div>
-            <button mat-flat-button class="quiz-next-button" [disabled]="!quizzes[currentQuizIndex]?.selected"
-                (click)="goToNextQuiz()">
-                {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Kiểm tra' }}
-            </button>
-        </div>
     </mat-tab>
 </mat-tab-group>
 <ng-template #shareResultDialog>
     <mat-dialog-content>
         <div class="text-center">Bạn cũng có thể thay đổi nội dung ảnh chia sẻ và nhập tên của bạn bên trong dấu "[" "]"
         </div>
-        <div #sharedResultContent contenteditable="true" class="quiz-result-share-card"
+        <div #sharedResultContent contenteditable="true"
+            class="quiz-result-share-card w-full max-w-xl bg-gradient-to-br from-blue-100 via-white to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-900 rounded-xl shadow-2xl p-2 sm:p-4 md:p-8 border border-gray-200 dark:border-gray-700 flex flex-col items-center"
             style="box-sizing: border-box; min-width: 0; word-break: break-word;">
-            <div class="quiz-share-content">
-                <div class="quiz-share-congrats">
+            <div class="flex flex-col items-center w-full">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-base md:text-xl lg:text-2xl xl:text-3xl">
                     Chúc mừng🎉
                 </div>
-                <div class="quiz-share-name">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-xl md:text-3l lg:text-4xl xl:text-4xl">
                     [  ]
                 </div>
-                <div class="quiz-share-completed">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-base md:text-lg lg:text-xl xl:text-2xl">
                     Đã hoàn thành bài học
                 </div>
-                <div class="quiz-share-title">
+                <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-center text-2xl md:text-4xl lg:text-5xl xl:text-5xl">
                     {{ lessonPost?.title }}
                 </div>
-                <div class="quiz-share-score-card">
-                    <div class="quiz-share-score-label">Với điểm số</div>
-                    <div class="quiz-share-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
-                    <div class="quiz-share-score-percentage">{{ ((correctCount / quizzes.length) * 100) | number:'1.0-0' }}%</div>
+                <div
+                    class="score-card flex flex-col items-center justify-center bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-4 mb-4">
+                    <div class="font-bold text-blue-600 dark:text-blue-300 mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Với điểm số
+                    </div>
+                    <div class="font-extrabold text-green-700 dark:text-green-400 mb-2 text-lg md:text-2xl lg:text-3xl xl:text-4xl">{{
+                        correctCount
+                        }} / {{ quizzes.length }}</div>
+                    <div class="text-gray-500 dark:text-gray-400 text-xs md:text-sm lg:text-base xl:text-lg">{{ ((correctCount /
+                        quizzes.length)
+                        * 100) | number:'1.0-0' }}%</div>
                 </div>
             </div>
 
