@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../components/icon/icon.component';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { AppTourMenu } from "src/app/components/app-tour-menu/app-tour-menu";
 
 interface App {
   id: string;
@@ -15,7 +17,7 @@ interface App {
 @Component({
   selector: 'app-apps',
   standalone: true,
-  imports: [CommonModule, RouterModule, IconComponent],
+  imports: [CommonModule, RouterModule, IconComponent, MatMenuModule, AppTourMenu],
   templateUrl: './apps.component.html',
   styleUrl: './apps.component.scss'
 })
