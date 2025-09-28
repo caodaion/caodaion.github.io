@@ -11,6 +11,8 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { QrScannerModule } from "src/app/components/qr-scanner/qr-scanner.module";
 import { MatButtonModule } from '@angular/material/button';
 import { TourMatMenuModule, TourStepTemplateComponent } from "ngx-ui-tour-md-menu";
+import { IconComponent } from "src/app/components/icon/icon.component";
+import { AppTourMenu } from "src/app/components/app-tour-menu/app-tour-menu";
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import { TourMatMenuModule, TourStepTemplateComponent } from "ngx-ui-tour-md-men
     QrScannerModule,
     MatButtonModule,
     TourStepTemplateComponent,
-    TourMatMenuModule
+    TourMatMenuModule,
+    IconComponent,
+    AppTourMenu
 ],
   exports: [
     NavigationComponent

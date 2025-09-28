@@ -37,7 +37,9 @@ export class AppTour {
       if (step?.step?.anchorId === lastStep?.anchorId) {
         switch (location.pathname.split('/')[1]) {
           case 'lich':
-            this.navigationService.setCalendarNavVisibility(false);
+            if (this.breakpointObserver.isMatched('(max-width: 600px)')) {
+              this.navigationService.setCalendarNavVisibility(false);
+            }
             break;
           default:
             break;
@@ -46,7 +48,26 @@ export class AppTour {
     });
   }
 
-  startTour() {
+  startTour(tourName?: string) {
+    if (tourName) {
+      switch (tourName) {
+        case 'navigationTour':
+          this.onStartNavigationTour();
+          return;
+        case 'homeTour':
+          this.onStartHomeTour();
+          return;
+        case 'calendarTour':
+          this.onStartCalendarTour();
+          return;
+        case 'kinhTour':
+          this.onStartKinhTour();
+          return;
+        case 'kinhDetailTour':
+          this.onStartKinhDetailTour();
+          return;
+      }
+    }
     switch (location.pathname.split('/')[1]) {
       case '':
         this.validatedTours('homeTour', () => { this.onStartHomeTour(); }, true);
@@ -164,16 +185,19 @@ export class AppTour {
         anchorId: 'home.welcome',
         content: 'Đây là trang chủ của CaoDaiON, nơi bạn có thể tìm thấy các tính năng chính của ứng dụng.',
         title: 'Trang chủ CaoDaiON',
+        route: '/'
       },
       {
         anchorId: 'home.shortcuts',
         content: 'Sử dụng các ô chức năng để truy cập nhanh các tính năng chính như Lịch, Kinh, Ứng dụng và nhiều hơn nữa.',
         title: 'Lối tắt nhanh',
+        route: '/'
       },
       {
         anchorId: 'home.lunar',
         content: 'Xem nhanh thông tin lịch âm, ngày lễ và các sự kiện quan trọng trong ngày.',
         title: 'Lịch âm',
+        route: '/'
       },
     ]
     this.tourService.initialize(steps, this.defaultStepSetting);
@@ -187,55 +211,65 @@ export class AppTour {
         anchorId: 'calendar.today-button',
         content: 'Nhấn vào nút này để quay lại ngày hiện tại trong lịch.',
         title: 'Nút Hôm nay',
+        route: '/lich'
       },
       {
         anchorId: 'calendar.previous-button',
         content: 'Nhấn vào nút này để mở tháng/ngày/tuần trước trong lịch.',
         title: 'Nút Trước đó',
+        route: '/lich'
       },
       {
         anchorId: 'calendar.next-button',
         content: 'Nhấn vào nút này để mở tháng/ngày/tuần tới trong lịch.',
         title: 'Nút Tiếp theo',
+        route: '/lich'
       },
       {
         anchorId: 'calendar.view-switch',
         content: 'Sử dụng các nút này để chuyển đổi giữa các chế độ xem khác nhau của lịch: ngày, tuần, tháng.',
         title: 'Chuyển đổi chế độ xem',
+        route: '/lich'
       },
     ]
     if (this.breakpointObserver.isMatched('(min-width: 601px)')) {
       steps.push({
-        anchorId: 'calendar.subnav-toggle',
+        anchorId: 'side.subnav-toggle',
         content: 'Nhấn vào đây để mở hoặc đóng mở bộ lọc sự kiện trong lịch, hiển thị các ngày ăn chay, hiển thị Can Chi, và sự kiện theo Thánh Sở.',
         title: 'Bộ lọc lịch',
+        route: '/lich'
       });
     } else {
       steps.push({
         anchorId: 'side.mobile-subnav-toggle',
         content: 'Nhấn vào đây để mở hoặc đóng mở bộ lọc sự kiện trong lịch, hiển thị các ngày ăn chay, hiển thị Can Chi, và sự kiện theo Thánh Sở.',
         title: 'Bộ lọc lịch',
+        route: '/lich'
       });
     }
     steps.push({
       anchorId: 'calendar.otherApps',
       content: 'Nhấn vào đây để truy cập nhanh ứng dụng các ứng dụng liên quan đến lịch',
       title: 'Ứng dụng liên quan',
+      route: '/lich'
     });
     steps.push({
       anchorId: 'calendar.eventTypes',
       content: 'Sử dụng bộ lọc này để hiển thị hoặc ẩn các loại sự kiện khác nhau trên lịch.',
       title: 'Lọc theo loại sự kiện',
+      route: '/lich'
     });
     steps.push({
       anchorId: 'calendar.displayOptions',
       content: 'Sử dụng bộ lọc này để hiển thị hoặc ẩn các tùy chọn hiển thị khác nhau trên lịch.',
       title: 'Tùy chọn hiển thị',
+      route: '/lich'
     });
     steps.push({
       anchorId: 'calendar.thanhso-filter',
       content: 'Sử dụng bộ lọc này để hiển thị hoặc ẩn các sự kiện từ Thánh Sở trên lịch.',
       title: 'Lọc theo Thánh Sở',
+      route: '/lich'
     });
     this.tourService.initialize(steps, this.defaultStepSetting);
     this.tourService.start();
@@ -248,21 +282,25 @@ export class AppTour {
         anchorId: 'kinh.search',
         content: 'Sử dụng thanh tìm kiếm để nhanh chóng tìm kiếm kinh theo tên',
         title: 'Thanh tìm kiếm',
+        route: '/kinh'
       },
       {
         anchorId: 'kinh.filters',
         content: 'Nhấn vào nút này để mở bộ lọc cho các bài kinh theo nhóm.',
         title: 'Bộ lọc kinh',
+        route: '/kinh'
       },
       {
         anchorId: 'kinh.view-mode',
         content: 'Nhấn vào nút này để chuyển đổi giữa các chế độ xem khác nhau của danh sách kinh: dạng danh sách và dạng lưới.',
         title: 'Chế độ xem',
+        route: '/kinh'
       },
       {
         anchorId: 'kinh.list',
         content: 'Tất cả các bài kinh sẽ được hiển thị ở đây. Nhấn vào một bài kinh để xem nội dung chi tiết.',
         title: 'Danh sách kinh',
+        route: '/kinh'
       },
     ]
     this.tourService.initialize(steps, this.defaultStepSetting);
