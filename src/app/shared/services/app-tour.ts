@@ -1,6 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { inject, Injectable } from '@angular/core';
 import { TourService } from 'ngx-ui-tour-md-menu';
+import { NavigationService } from './navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { TourService } from 'ngx-ui-tour-md-menu';
 export class AppTour {
   private readonly tourService = inject(TourService);
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly navigationService = inject(NavigationService);
   private readonly nextButtonLabel = this.breakpointObserver.isMatched('(max-width: 600px)') ? 'Tiếp' : 'Tiếp theo';
   private readonly prevButtonLabel = this.breakpointObserver.isMatched('(max-width: 600px)') ? 'Trước' : 'Trước đó';
   private readonly endButtonLabel = 'Kết thúc';
@@ -23,10 +25,7 @@ export class AppTour {
       if (step?.step?.anchorId === 'side.mobile-subnav-toggle') {
         switch (location.pathname.split('/')[1]) {
           case 'lich':
-            const mobileSubnavToggle = document.getElementById('mobileSubnavToggle');
-            if (mobileSubnavToggle) {
-              mobileSubnavToggle.click();
-            }
+            this.navigationService.setCalendarNavVisibility(true);
             break;
           default:
             break;
@@ -38,10 +37,7 @@ export class AppTour {
       if (step?.step?.anchorId === lastStep?.anchorId) {
         switch (location.pathname.split('/')[1]) {
           case 'lich':
-            const mobileSubnavToggle = document.getElementById('mobileSubnavToggle');
-            if (mobileSubnavToggle) {
-              mobileSubnavToggle.click();
-            }
+            this.navigationService.setCalendarNavVisibility(false);
             break;
           default:
             break;
@@ -134,7 +130,7 @@ export class AppTour {
         title: 'Tất cả tính năng',
       });
     }
-    this.tourService.initialize(steps);
+    this.tourService.initialize(steps, this.defaultStepSetting);
     this.tourService.start();
     this.validatedTours('navigationTour', () => { nextTour ? nextTour() : this.onStartHomeTour(); });
   }
@@ -180,7 +176,7 @@ export class AppTour {
         title: 'Lịch âm',
       },
     ]
-    this.tourService.initialize(steps);
+    this.tourService.initialize(steps, this.defaultStepSetting);
     this.tourService.start();
     this.validatedTours('homeTour');
   }
