@@ -1,0 +1,76 @@
+@use "../../../sass/variables.scss";
+@use "sass:map";
+
+.learn-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.learn-drawer-container {
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden; /* Ensure drawer container doesn't overflow */
+}
+
+.learn-drawer {
+  min-width: 280px;
+  max-width: 280px;
+  padding: 0;
+  border-right: 1px solid var(--border-color, rgba(0,0,0,0.1));
+}
+
+/* Styles for shortcuts */
+.shortcuts-container {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.shortcuts-container h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  text-decoration: none;
+  color: var(--text-color);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.shortcut-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.shortcut-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
+.shortcut-icon mat-icon {
+  color: white;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.shortcut-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+}

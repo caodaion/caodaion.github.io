@@ -84,7 +84,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
             this.updateSubmenuVisibility(event.urlAfterRedirects);
 
             if (
-              ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
+              ['/lich', '/hoc', '/apps', '/kinh', '/tnht'].some((path) =>
                 event.urlAfterRedirects.startsWith(path)
               )
             ) {
@@ -99,7 +99,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.lastVisitedPage = event.urlAfterRedirects;
               }
             }
-            if (this.router.url.includes('/lich')) {
+            if (this.router.url.includes('/lich') || this.router.url.includes('/hoc')) {
               this.isSubNavOpen = true;
             }
 
@@ -122,6 +122,9 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.router.url.includes('/lich')) {
       this.navigationService.setCalendarNavVisibility(!this.isSubNavOpen);
     }
+    if (this.router.url.includes('/hoc')) {
+      this.navigationService.setLearnNavVisibility(!this.isSubNavOpen);
+    }
     if (this.router.url.includes('/ca-nhan')) {
       this.navigationService.setCaNhanNavVisibility(!this.isSubNavOpen);
     }
@@ -134,7 +137,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   private updateSubmenuVisibility(url: string): void {
     // Define routes that have submenu functionality
-    const routesWithSubmenu = ['/lich', '/ca-nhan'];
+    const routesWithSubmenu = ['/lich', '/hoc', '/ca-nhan'];
     const newHasSubmenu = routesWithSubmenu.some(route => url.includes(route));
 
     // Only update if value has changed to avoid unnecessary change detection

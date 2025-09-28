@@ -1,0 +1,17 @@
+<div class="learn-container">
+    <mat-drawer-container class="learn-drawer-container">
+        <mat-drawer #drawer [mode]="isMobileView ? 'over' : 'side'" class="learn-drawer" [(opened)]="isDrawerOpen">
+            <div class="shortcuts-container">
+                <a class="shortcut-item" routerLink="/">
+                    <div class="shortcut-icon" style="background: var(--hoc-app-background); color: white">
+                        <app-icon name="school" size="21px"></app-icon>
+                    </div>
+                    <div class="shortcut-label">Học</div>
+                </a>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="learn-drawer-content">
+            <router-outlet></router-outlet>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

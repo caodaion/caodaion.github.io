@@ -8,11 +8,13 @@ export class NavigationService {
   private showToolbar = new BehaviorSubject<boolean>(true);
   private showBottomNav = new BehaviorSubject<boolean>(true);
   private showCalendarNav = new BehaviorSubject<boolean>(true);
+  private showLearnNav = new BehaviorSubject<boolean>(true);
   private showCaNhanNav = new BehaviorSubject<boolean>(true);
 
   public showToolbar$ = this.showToolbar.asObservable();
   public showBottomNav$ = this.showBottomNav.asObservable();
   public showCalendarNav$ = this.showCalendarNav.asObservable();
+  public showLearnNav$ = this.showLearnNav.asObservable();
   public showCaNhanNav$ = this.showCaNhanNav.asObservable();
   toggleDrawer: any;
 
@@ -40,6 +42,14 @@ export class NavigationService {
    */
   setCalendarNavVisibility(show: boolean): void {
     this.showCalendarNav.next(show);
+  }
+  
+  /**
+   * Set bottom navigation visibility
+   * @param show Boolean to determine visibility
+   */
+  setLearnNavVisibility(show: boolean): void {
+    this.showLearnNav.next(show);
   }
 
   /**
