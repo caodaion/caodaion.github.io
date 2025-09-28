@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       {
         path: 'hoc',
-        loadChildren: () => import('../../pages/learn/learn-routing-module').then(m => m.LearnRoutingModule)
+        loadComponent: () => import('../../pages/learn/learn').then(m => m.Learn)
       },
     ]
   }

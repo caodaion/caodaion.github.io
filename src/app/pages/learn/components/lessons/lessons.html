@@ -1,1 +1,15 @@
-<p>lessons works!</p>
+<div class="lesson-container">
+    @for(lessonGroup of allSessionGroups; track lessonGroup) {
+    <div class="lesson-card">
+        <div class="lesson-header">
+            <span class="lesson-title">{{ lessonGroup?.title }}</span>
+        </div>
+        <div class="lesson-subtitle">{{ lessonGroup?.posts?.length }} chủ đề</div>
+    </div>
+    <div class="group-topics">
+        @for(topic of lessonGroup?.posts; track topic) {
+        <div class="topic" (click)="openLesson.emit(topic)">{{topic?.title}}</div>
+        }
+    </div>
+    }
+</div>

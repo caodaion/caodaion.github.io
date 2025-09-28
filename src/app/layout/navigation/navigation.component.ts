@@ -84,7 +84,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
             this.updateSubmenuVisibility(event.urlAfterRedirects);
 
             if (
-              ['/lich', '/hoc', '/apps', '/kinh', '/tnht'].some((path) =>
+              ['/lich', '/apps', '/kinh', '/tnht'].some((path) =>
                 event.urlAfterRedirects.startsWith(path)
               )
             ) {
