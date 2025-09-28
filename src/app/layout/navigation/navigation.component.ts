@@ -22,8 +22,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isSubNavOpen = false;
   isDarkMode = false;
-  lastVisitedPage: string | null =
-    localStorage.getItem('lastVisitedPage') || '/';
+  lastVisitedPage: string | null = '/';
   showToolbar = true;
   showBottomNav = true;
   eventSigns: any[] = [];
