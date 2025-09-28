@@ -95,6 +95,26 @@
         <p class="app-description">Tính và quản lý Tuần Cửu</p>
       </div>
     </div>
+    <div class="app-card" routerLink="/hoc">
+      @for (sign of eventSigns; track sign.key) {
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+          position: 'absolute',
+          top: sign?.appsPageSettings?.position?.top,
+          right: sign?.appsPageSettings?.position?.right,
+          bottom: sign?.appsPageSettings?.position?.bottom,
+          left: sign?.appsPageSettings?.position?.left,
+          height: sign?.appsPageSettings?.size,
+          width: sign?.appsPageSettings?.size,
+        }" />
+      }
+      <div class="app-icon-container" style="background: var(--hoc-app-background); color: white">
+        <app-icon name="school"></app-icon>
+      </div>
+      <div class="app-info">
+        <h2 class="app-name">Học</h2>
+        <p class="app-description">Học tập về đạo Cao Đài qua các bài học tương tác</p>
+      </div>
+    </div>
   </div>
 
   <mat-divider></mat-divider>

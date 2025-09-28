@@ -51,6 +51,13 @@ export class AppsComponent {
       icon: 'book',
       route: '/kinh'
     },
+    {
+      id: 'hoc',
+      name: 'Học',
+      description: 'Học tập về đạo Cao Đài qua các bài học tương tác',
+      icon: 'school',
+      route: '/hoc'
+    },
     // {
     //   id: 'ca-nhan',
     //   name: 'Cá Nhân',
