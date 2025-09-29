@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ export class ChildHeaderComponent implements OnInit {
   @Input() title: string = '';
   @Input() path: string = '';
   @Input() hideNavigation: boolean = false;
+  @Output() goBack: EventEmitter<void> = new EventEmitter<void>();
   private subscriptions = new Subscription();
 
   constructor(
@@ -45,16 +46,17 @@ export class ChildHeaderComponent implements OnInit {
     this.navigationService.showNavigation();
   }
 
-  goBack() {
+  onGoBack() {
+    if (this.goBack.observers.length > 0) {
+      this.goBack.emit();
+      return;
+    }
     const urlParts = window.location.pathname.split('/').filter((part) => part);
     if (this.path) {
-      // If a specific path is provided, navigate to that path
       this.router.navigate([this.path]);
       return;
     }
-
     if (urlParts.length > 1) {
-      // Go up one level in the URL hierarchy
       urlParts.pop();
       this.router.navigate(['/' + urlParts.join('/')]);
     } else {
@@ -62,7 +64,6 @@ export class ChildHeaderComponent implements OnInit {
       if (lastVisitedPage) {
         this.router.navigate([lastVisitedPage]);
       } else {
-        // If no last visited page is found, navigate to a default route
         this.router.navigate(['/']);
       }
     }

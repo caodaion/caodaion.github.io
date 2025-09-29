@@ -1,0 +1,24 @@
+<div class="learn-container">
+    <mat-drawer-container class="learn-drawer-container">
+        <mat-drawer #drawer [mode]="isMobileView ? 'over' : 'side'" class="learn-drawer" [(opened)]="isDrawerOpen">
+            <div class="shortcuts-container">
+                <a class="shortcut-item" [class.active]="displayedView === 'lessons'"
+                    (click)="displayedView = 'lessons'">
+                    <div class="shortcut-icon" style="background: var(--hoc-app-background); color: white">
+                        <app-icon name="school" size="21px"></app-icon>
+                    </div>
+                    <div class="shortcut-label">Học</div>
+                </a>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="learn-drawer-content">
+            @if (hocPosts && hocPosts.length > 0 && displayedView === 'lessons') {
+            <app-lessons [hocPosts]="hocPosts" (openLesson)="openLesson($event)"></app-lessons>
+            }
+            @if (displayedView === 'lesson' && lessonPost) {
+            <app-child-header [title]="currentTitle" (goBack)="onGoBack()"></app-child-header>
+            <app-lesson [lessonPost]="lessonPost"></app-lesson>
+            }
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

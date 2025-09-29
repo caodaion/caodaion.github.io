@@ -41,7 +41,7 @@
 }
 
 /* Dark Theme Variables */
-:host-context(.dark-theme) {
+.dark-theme {
   /* Dark theme colors */
   --background-color: #121212;
   --surface-color: #1e1e1e;
@@ -120,6 +120,18 @@ mat-toolbar {
 
 /* Navigation Rail Styles */
 .nav-rail {
+  width: 72px;
+  height: 100%;
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: width 0.3s ease;
+  user-select: none;
+}
+
+.nav-rail-wrapper {
   width: 72px;
   height: 100%;
   background-color: var(--surface-color);
@@ -462,7 +474,7 @@ mat-toolbar {
     }
   }
   .mat-drawer {
-    background-color: var(--surface-color) !important;
+    background-color: var(--surface-color);
   }
   .mat-icon {
     color: var(--text-secondary-color);

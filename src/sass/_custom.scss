@@ -301,3 +301,6 @@ input:-webkit-autofill:active {
   align-items: center;
   gap: 0.5rem;
 }
+.ngx-ui-tour_backdrop {
+  z-index: 1000000000 !important;
+}

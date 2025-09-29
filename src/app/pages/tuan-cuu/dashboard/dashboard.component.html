@@ -43,11 +43,9 @@
               <div class="info-item border p-3 rounded-md border-[var(--primary-color)]">
                 <div class="info-label" style="color: var(--primary-color)"><strong>SỰ KIỆN TIẾP THEO:</strong></div>
                 <div class="info-value" *ngIf="getNextEvent(tuancuu)">
-                  {{ getNextEvent(tuancuu)?.sequence }} ({{
-                  getNextEvent(tuancuu)?.lunarDate?.day | number : "2.0-0"
-                  }}/{{
-                  getNextEvent(tuancuu)?.lunarDate?.month | number : "2.0-0"
-                  }}/{{ getNextEvent(tuancuu)?.lunarDate?.year }})
+                  {{ getNextEvent(tuancuu)?.sequence }} thời {{getNextEvent(tuancuu)?.eventTime}} {{
+                  getNextEvent(tuancuu)?.lunarDate | lunarDate : 'full'}} ({{getNextEvent(tuancuu)?.date | date :
+                  'dd/MM/yyyy'}})
                 </div>
               </div>
               <div class="info-item">
@@ -67,7 +65,7 @@
               <div class="info-item">
                 <div class="info-label">Ngày mất</div>
                 <div class="info-value">
-                  {{ formatLunarDate(tuancuu.deceased.deathLunarDate) }} ({{
+                  {{ tuancuu.deceased.deathLunarDate | lunarDate : 'full'}} ({{
                   formatDate(tuancuu.deceased.deathDate)
                   }})
                 </div>
@@ -116,10 +114,8 @@
                 <div class="info-label" style="color: #FFA000"><strong>SỰ KIỆN ĐẦU TIÊN:</strong></div>
                 <div class="info-value" *ngIf="getNextEvent(tuancuu)">
                   {{ getNextEvent(tuancuu)?.sequence }} ({{
-                  getNextEvent(tuancuu)?.lunarDate?.day | number : "2.0-0"
-                  }}/{{
-                  getNextEvent(tuancuu)?.lunarDate?.month | number : "2.0-0"
-                  }}/{{ getNextEvent(tuancuu)?.lunarDate?.year }})
+                  getNextEvent(tuancuu)?.lunarDate |lunarDate : 'full'}} - {{getNextEvent(tuancuu)?.date | date :
+                  'dd/MM/yyyy'}})
                 </div>
               </div>
               <div class="info-item">
@@ -139,7 +135,7 @@
               <div class="info-item">
                 <div class="info-label">Ngày mất</div>
                 <div class="info-value">
-                  {{ formatLunarDate(tuancuu.deceased.deathLunarDate) }} ({{
+                  {{ tuancuu.deceased.deathLunarDate | lunarDate : 'full'}} ({{
                   formatDate(tuancuu.deceased.deathDate)
                   }})
                 </div>
@@ -201,7 +197,7 @@
               <div class="info-item">
                 <div class="info-label">Ngày mất</div>
                 <div class="info-value">
-                  {{ formatLunarDate(tuancuu.deceased.deathLunarDate) }} ({{
+                  {{ tuancuu.deceased.deathLunarDate | lunarDate : 'full'}} ({{
                   formatDate(tuancuu.deceased.deathDate)
                   }})
                 </div>
