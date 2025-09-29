@@ -17,6 +17,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'tinh/:newDate',
+    loadComponent: () =>
+      import('./tuan-cuu-form/tuan-cuu-form.component').then(
+        (m) => m.TuanCuuFormComponent
+      ),
+  },
+  {
     path: 'import',
     loadComponent: () =>
       import('./import-tuan-cuu/import-tuan-cuu.component').then(

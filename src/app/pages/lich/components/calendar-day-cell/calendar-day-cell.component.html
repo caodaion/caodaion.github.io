@@ -1,6 +1,6 @@
 <div class="day-cell" [class.today]="isToday" [class.other-month]="!isCurrentMonth" [class.selected]="isSelected">
   <div class="date-container">
-    <div class="w-full flex items-center justify-between cursor-pointer" (click)="onDayClick()">
+    <div class="w-full flex items-center justify-between cursor-pointer" [matMenuTriggerFor]="dayCellMenu">
       <div class="solar-date">{{ calendarDate.solar.day }}</div>
       <div class="text-center">
         <div class="lunar-day">
@@ -9,6 +9,17 @@
         </div>
       </div>
     </div>
+    <mat-menu #dayCellMenu="matMenu">
+      <button mat-menu-item (click)="onDayClick()">
+        Xem ngày
+      </button>
+      <button mat-menu-item (click)="onAddEventClick()">
+        <app-icon name="add"></app-icon> Thêm sự kiện
+      </button>
+      <button mat-menu-item (click)="onAddTuanCuu()">
+        <app-icon name="date_range"></app-icon> Thêm tuần cửu
+      </button>
+    </mat-menu>
     <div class="lunar-date" [class.can-chi-visible]="showCanChi">
       <div class="can-chi" *ngIf="showCanChi">
         <span [ngStyle]="{

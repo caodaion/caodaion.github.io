@@ -6,7 +6,7 @@ import {
   inject,
   PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDate, CalendarEvent } from '../../services/lich.service';
@@ -15,13 +15,16 @@ import { EventImageDialogComponent } from '../event-image-dialog/event-image-dia
 import { Subscription, map, shareReplay } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AnChay } from 'src/app/pages/lich/components/an-chay/an-chay';
+import { MatMenuModule } from "@angular/material/menu";
+import { IconComponent } from "src/app/components/icon/icon.component";
 
 @Component({
   selector: 'app-calendar-day-cell',
   standalone: true,
-  imports: [CommonModule, MatTooltipModule, MatDialogModule],
+  imports: [CommonModule, MatTooltipModule, MatDialogModule, MatMenuModule, IconComponent],
   templateUrl: './calendar-day-cell.component.html',
   styleUrls: ['./calendar-day-cell.component.scss'],
+  providers: [DatePipe],
 })
 export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Input data for the calendar day
@@ -37,6 +40,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
 
   // Platform ID for browser environment checks
   private platformId = inject(PLATFORM_ID);
+  private datePipe = inject(DatePipe)
 
   // Maximum number of events to show in the cell
   maxEvents: number = 3;
@@ -223,5 +227,12 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       },
       autoFocus: false,
     });
+  }
+
+  onAddEventClick(): void {
+  }
+
+  onAddTuanCuu(): void {
+    this.router.navigate([`/tuan-cuu/tinh/${this.datePipe.transform(this.calendarDate.solar.date, 'yyyy-MM-dd')}`]);
   }
 }

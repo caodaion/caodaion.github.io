@@ -71,7 +71,7 @@ interface TuanCuuEvent {
     MatNativeDateModule,
     ChildHeaderComponent,
     IconComponent
-],
+  ],
   templateUrl: './tuan-cuu-form.component.html',
   styleUrl: './tuan-cuu-form.component.scss',
   providers: [
@@ -168,17 +168,6 @@ export class TuanCuuFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.expanded = false;
-    // Check if we're in create or edit mode
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (id && id !== 'tinh') {
-        this.isEditMode = true;
-        this.tuanCuuId = id;
-        this.loadExistingTuanCuu(id);
-      } else if (this.router.url.includes('/tinh')) {
-        this.expanded = true;
-      }
-    });
     this.years = Array.from({ length: 100 }, (_, i) => {
       const iDate = new Date(
         new Date().setFullYear(new Date().getFullYear() - 50 + i)
@@ -190,9 +179,26 @@ export class TuanCuuFormComponent implements OnInit {
             ?.lunarYearName,
       };
     });
-
-    // Initialize with today's date
-    this.setDefaultDates();
+    // Check if we're in create or edit mode
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id && id !== 'tinh') {
+        this.isEditMode = true;
+        this.tuanCuuId = id;
+        this.loadExistingTuanCuu(id);
+      } else if (this.router.url.includes('/tinh')) {
+        this.expanded = true;
+        const newDate = params.get('newDate');
+        if (newDate) {
+          const convertedLunar = this.calendarService.getConvertedFullDate(new Date(newDate)).convertSolar2Lunar;
+          this.formData.date = convertedLunar.lunarDay;
+          this.formData.month = convertedLunar.lunarMonth;
+          this.formData.year = convertedLunar.lunarYear;
+        } else {
+          this.setDefaultDates();
+        }
+      }
+    });
   }
 
   // Load existing Tuan Cuu data for editing
