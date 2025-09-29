@@ -185,6 +185,7 @@ $extra-small-0-360: (
   --background-color: #ffffff;
   --surface-color: #ffffff;
   --text-color: var(--gray-900);
+  --text-primary-color: black;
   --text-secondary-color: var(--gray-700);
   --border-color: rgba(0, 0, 0, 0.12);
   --hover-color: rgba(0, 0, 0, 0.04);
@@ -204,13 +205,14 @@ $extra-small-0-360: (
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-:host.dark-theme {
+.dark-theme {
   --primary-color: #b69df8;
   --secondary-color: #b0a7c0;
   --accent-color: #d0bcff;
   --background-color: #1c1b1f;
   --surface-color: #313033;
   --text-color: #e6e1e5;
+  --text-primary-color: white;
   --text-secondary-color: #aeaaae;
   --border-color: rgba(255, 255, 255, 0.12);
   --hover-color: rgba(255, 255, 255, 0.04);
@@ -226,6 +228,7 @@ $extra-small-0-360: (
   --tnht-app-background: linear-gradient(135deg, #9575cd, #7e57c2);
   --tuan-cuu-app-background: linear-gradient(135deg, #9c27b0, #ff9800);
   --docs-app-background: linear-gradient(135deg, #0097a7, #00bcd4);
+  --hoc-app-background: linear-gradient(135deg, #34a853, #43ea7b);
   /* Define theme colors */
   --custom-activity-background: linear-gradient(135deg, #9575cd, #7e57c2);
   --think-activity-background: linear-gradient(135deg, #4285f4, #34a853);
