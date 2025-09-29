@@ -25,6 +25,13 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ngày sự kiện</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" readonly>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Mô tả</mat-label>
         <textarea matInput formControlName="description" 
                 placeholder="Nhập mô tả sự kiện (tùy chọn)" 
@@ -52,9 +59,17 @@
     </div>
 
       <div class="actions">
-        <button mat-button type="button" (click)="onCancel()" class="cancel-button">
-          Hủy
-        </button>
+        <div class="left-actions">
+          <button mat-button type="button" (click)="onCancel()" class="cancel-button">
+            Hủy
+          </button>
+          @if (isEditMode) {
+          <button mat-button type="button" (click)="onDelete()" class="delete-button" color="warn">
+            <mat-icon>delete</mat-icon>
+            Xóa
+          </button>
+          }
+        </div>
         <button mat-raised-button type="submit" 
                 [disabled]="!eventForm.valid" 
                 color="primary" 

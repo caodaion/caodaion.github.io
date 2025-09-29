@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { CalendarDate, CalendarEvent } from '../../services/lich.service';
 import { EventService } from '../../services/event.service';
@@ -27,7 +29,9 @@ export interface AddEventData {
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './add-event-bottom-sheet.component.html',
   styleUrls: ['./add-event-bottom-sheet.component.scss']
@@ -137,5 +141,19 @@ export class AddEventBottomSheetComponent implements OnInit {
 
   onCancel(): void {
     this.bottomSheetRef.dismiss();
+  }
+
+  onDelete(): void {
+    if (this.isEditMode && this.existingEvent?.id) {
+      // Confirm deletion
+      if (confirm('Bạn có chắc chắn muốn xóa sự kiện này?')) {
+        this.eventService.deleteEvent(parseInt(this.existingEvent.id)).then(() => {
+          this.bottomSheetRef.dismiss({ action: 'deleted', event: this.existingEvent });
+        }).catch(error => {
+          console.error('Lỗi khi xóa sự kiện:', error);
+          alert('Không thể xóa sự kiện. Vui lòng thử lại.');
+        });
+      }
+    }
   }
 }

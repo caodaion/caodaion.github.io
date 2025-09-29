@@ -14,6 +14,7 @@ import { IconComponent } from "src/app/components/icon/icon.component";
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { AddEventBottomSheetComponent } from '../add-event-bottom-sheet/add-event-bottom-sheet.component';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import * as QRCode from 'qrcode';
 
 @Component({
   selector: 'app-event-image-dialog',
@@ -41,6 +42,8 @@ export class EventImageDialogComponent implements OnInit {
   dateData: any;
   imagePreviewUrl: string | null = null;
   isGenerating = false;
+  isGeneratingQR: boolean = false;
+  qrCodeDataUrl: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<EventImageDialogComponent>,
@@ -185,5 +188,95 @@ export class EventImageDialogComponent implements OnInit {
     const endTime = this.event.endTime ? `${this.event.endTime}:00` : '17:00:00';
     
     return [startTime, endTime];
+  }
+
+  generateQRCode(): void {
+    this.isGeneratingQR = true;
+    
+    // Create event data for QR code
+    const eventData = {
+      type: 'caodaion-event',
+      title: this.event.title,
+      description: this.event.description || '',
+      date: this.event.dateString || '',
+      startTime: this.event.startTime || '',
+      endTime: this.event.endTime || '',
+      solar: this.event.solar,
+      lunar: this.event.lunar,
+      timestamp: new Date().toISOString()
+    };
+
+    // Convert to JSON string and encode as URI component
+    const jsonData = JSON.stringify(eventData);
+    const encodedData = encodeURIComponent(jsonData);
+    
+    // Create shareable URL
+    const baseUrl = window.location.origin;
+    const shareUrl = `${baseUrl}/lich/share?data=${encodedData}`;
+
+    // Generate QR code with the shareable URL
+    QRCode.toDataURL(shareUrl, {
+      errorCorrectionLevel: 'M',
+      margin: 2,
+      scale: 4,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    })
+    .then((dataUrl) => {
+      this.qrCodeDataUrl = dataUrl;
+      this.isGeneratingQR = false;
+    })
+    .catch((error) => {
+      console.error('Error generating QR code:', error);
+      this.isGeneratingQR = false;
+    });
+  }
+
+  downloadQRCode(): void {
+    if (this.qrCodeDataUrl) {
+      const link = document.createElement('a');
+      link.download = `caodaion-event-${this.event.title.replace(/[^a-zA-Z0-9]/g, '-')}.png`;
+      link.href = this.qrCodeDataUrl;
+      link.click();
+    }
+  }
+
+  copyShareUrl(): void {
+    // Create event data for QR code
+    const eventData = {
+      type: 'caodaion-event',
+      title: this.event.title,
+      description: this.event.description || '',
+      date: this.event.dateString || '',
+      startTime: this.event.startTime || '',
+      endTime: this.event.endTime || '',
+      solar: this.event.solar,
+      lunar: this.event.lunar,
+      timestamp: new Date().toISOString()
+    };
+
+    // Convert to JSON string and encode as URI component
+    const jsonData = JSON.stringify(eventData);
+    const encodedData = encodeURIComponent(jsonData);
+    
+    // Create shareable URL
+    const baseUrl = window.location.origin;
+    const shareUrl = `${baseUrl}/lich/share?data=${encodedData}`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Đã sao chép link chia sẻ vào clipboard!');
+    }).catch(() => {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('Đã sao chép link chia sẻ vào clipboard!');
+    });
   }
 }

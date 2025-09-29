@@ -1,0 +1,115 @@
+<div class="event-share-page">
+  <!-- Enhanced Header -->
+  <app-child-header [title]="eventData?.title || 'Sự kiện CaoDaiON'">
+    <div class="header-controls">
+      <div class="action-controls">
+        <button class="action-btn share-btn" (click)="shareEvent()" aria-label="Chia sẻ">
+          <app-icon name="share"></app-icon>
+        </button>
+      </div>
+    </div>
+  </app-child-header>
+
+  <!-- Main Content Container -->
+  <div class="event-share-container">
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="loading-spinner">
+        <app-icon name="refresh"></app-icon>
+        <h3>Đang tải sự kiện...</h3>
+        <p>Vui lòng chờ trong giây lát</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error">
+      <app-icon name="error" class="error-icon"></app-icon>
+      <h3>Không thể tải sự kiện</h3>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="goBack()">
+        <app-icon name="arrow_back"></app-icon>
+        Quay lại
+      </button>
+    </div>
+
+    <!-- Event Content -->
+    <div class="content-section" *ngIf="eventData && !isLoading">
+      <article class="event-content-card">
+        <!-- Event Header -->
+        <div class="event-header">
+          <div class="event-icon">
+            <app-icon name="event"></app-icon>
+          </div>
+          <div class="event-title-group">
+            <h1 class="event-title">{{ eventData.title }}</h1>
+            <p class="event-date">{{ formattedDate }}</p>
+          </div>
+        </div>
+
+        <!-- Event Details -->
+        <div class="event-details">
+          <div class="detail-section" *ngIf="eventData.description">
+            <div class="detail-label">
+              <app-icon name="description"></app-icon>
+              <span>Mô tả</span>
+            </div>
+            <div class="detail-content">{{ eventData.description }}</div>
+          </div>
+
+          <div class="detail-section" *ngIf="formattedTime">
+            <div class="detail-label">
+              <app-icon name="schedule"></app-icon>
+              <span>Thời gian</span>
+            </div>
+            <div class="detail-content">{{ formattedTime }}</div>
+          </div>
+
+          <div class="detail-section" *ngIf="lunarDate">
+            <div class="detail-label">
+              <app-icon name="calendar_month"></app-icon>
+              <span>Âm lịch</span>
+            </div>
+            <div class="detail-content">{{ lunarDate }}</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+          <button class="primary-action-btn" (click)="addToMyCalendar()" 
+                  [disabled]="isAddingToCalendar || addToCalendarSuccess">
+            <app-icon [name]="addToCalendarSuccess ? 'check' : 'add'"></app-icon>
+            <span>{{ addToCalendarSuccess ? 'Đã thêm vào lịch' : (isAddingToCalendar ? 'Đang thêm...' : 'Thêm vào lịch') }}</span>
+          </button>
+          
+          <div class="secondary-actions">
+            <button class="secondary-action-btn" (click)="addToGoogleCalendar()">
+              <app-icon name="event"></app-icon>
+              <span>Google Calendar</span>
+            </button>
+            
+            <button class="secondary-action-btn" (click)="shareEvent()">
+              <app-icon name="share"></app-icon>
+              <span>Chia sẻ</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- App Info Card -->
+      <div class="app-info-card">
+        <div class="app-info">
+          <div class="app-logo">
+            <app-icon name="apps"></app-icon>
+          </div>
+          <div class="app-details">
+            <h3>CaoDaiON</h3>
+            <p>Ứng dụng lịch và sự kiện Cao Đài</p>
+            <p class="app-description">
+              Tải ứng dụng CaoDaiON để quản lý lịch, sự kiện và các hoạt động tôn giáo một cách tiện lợi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
