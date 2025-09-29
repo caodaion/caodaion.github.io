@@ -76,6 +76,13 @@
   </mat-dialog-content>
   <mat-dialog-actions [align]="'end'" class="dialog-actions">
     <div class="dialog-actions">
+      @if (event.type === 'user') {
+      <button class="matButton" mat-button color="accent" (click)="openEditPersonalEvent()" [disabled]="isGenerating"
+        matTooltip="Chỉnh sửa sự kiện cá nhân" aria-label="Edit personal event">
+        <app-icon name="edit"></app-icon>
+        <span>Chỉnh sửa</span>
+      </button>
+      }
       @if (event.type === 'tuan-cuu') {
       <button class="matButton" mat-button color="primary" (click)="openTuanCuu()" [disabled]="isGenerating"
         matTooltip="Tải xuống ảnh" aria-label="Download image">
@@ -86,6 +93,11 @@
         <span>Xem tuần cửu</span>
       </button>
       }
+      <button class="matButton" mat-button color="primary" (click)="addToGoogleCalendar()" [disabled]="isGenerating"
+        matTooltip="Thêm vào Google Calendar" aria-label="Add to Google Calendar">
+        <app-icon name="event"></app-icon>
+        <span>Google Calendar</span>
+      </button>
       <button class="matButton" mat-button color="primary" (click)="generateImage()" [disabled]="isGenerating"
         matTooltip="Tải xuống ảnh" aria-label="Download image">
         <app-icon name="draw"></app-icon>

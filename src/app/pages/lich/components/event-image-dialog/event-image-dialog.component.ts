@@ -11,6 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { IconComponent } from "src/app/components/icon/icon.component";
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { AddEventBottomSheetComponent } from '../add-event-bottom-sheet/add-event-bottom-sheet.component';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 @Component({
   selector: 'app-event-image-dialog',
@@ -24,7 +27,8 @@ import { IconComponent } from "src/app/components/icon/icon.component";
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-    IconComponent
+    IconComponent,
+    MatBottomSheetModule
 ],
   templateUrl: './event-image-dialog.component.html',
   styleUrls: ['./event-image-dialog.component.scss']
@@ -44,7 +48,9 @@ export class EventImageDialogComponent implements OnInit {
       event: CalendarEvent,
       dateData: any,
     },
-    private router: Router
+    private router: Router,
+    private bottomSheet: MatBottomSheet,
+    private calendarService: CalendarService
   ) {
     this.event = data.event;
     this.dateData = data.dateData
@@ -119,5 +125,65 @@ export class EventImageDialogComponent implements OnInit {
   openTuanCuu() {
     this.closeDialog()
     this.router.navigate([`/tuan-cuu/${this.event.tuanCuuId}`]);
+  }
+
+  openEditPersonalEvent(): void {
+    // Close current dialog first
+    this.dialogRef.close();
+    
+    // Open add event bottom sheet with existing event data
+    const bottomSheetRef = this.bottomSheet.open(AddEventBottomSheetComponent, {
+      data: { 
+        selectedDate: this.dateData,
+        existingEvent: this.event
+      }
+    });
+
+    bottomSheetRef.afterDismissed().subscribe(result => {
+      if (result) {
+        console.log('Add event bottom sheet result:', result);
+        // The calendar will automatically refresh when the dialog closes
+      }
+    });
+  }
+
+  addToGoogleCalendar(): void {
+    // Create event data for Google Calendar
+    const eventData = {
+      text: this.event.title,
+      subTitle: this.event.description || '',
+      dates: this.getEventDates(),
+      location: 'CaoDaiON',
+      details: this.event.description || ''
+    };
+    console.log(eventData);
+    
+
+    // Generate Google Calendar URL
+    const googleCalendarUrl = this.calendarService.getGoogleCalendarEventEditUrl(eventData);
+    
+    // Open in new tab
+    window.open(googleCalendarUrl, '_blank');
+  }
+
+  private getEventDates(): string[] {
+    let eventDate: Date;
+    
+    if (this.event.solar) {
+      // For solar events, create a full day event
+      eventDate = new Date(this.event.solar.year!, this.event.solar.month! - 1, this.event.solar.day!);
+    } else if (this.event.dateString) {
+      // For events with dateString
+      eventDate = new Date(this.event.dateString);
+    } else {
+      // Default to today
+      eventDate = new Date();
+    }
+
+    // Use actual start and end times from the event, or defaults
+    const startTime = this.event.startTime ? `${this.event.startTime}:00` : '09:00:00';
+    const endTime = this.event.endTime ? `${this.event.endTime}:00` : '17:00:00';
+    
+    return [startTime, endTime];
   }
 }
