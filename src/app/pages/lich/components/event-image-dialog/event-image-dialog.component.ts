@@ -158,9 +158,7 @@ export class EventImageDialogComponent implements OnInit {
       dates: this.getEventDates(),
       location: 'CaoDaiON',
       details: this.event.description || ''
-    };
-    console.log(eventData);
-    
+    };    
 
     // Generate Google Calendar URL
     const googleCalendarUrl = this.calendarService.getGoogleCalendarEventEditUrl(eventData);
@@ -169,7 +167,7 @@ export class EventImageDialogComponent implements OnInit {
     window.open(googleCalendarUrl, '_blank');
   }
 
-  private getEventDates(): string[] {
+  private getEventDates(): Date[] {
     let eventDate: Date;
     
     if (this.event.solar) {
@@ -182,12 +180,28 @@ export class EventImageDialogComponent implements OnInit {
       // Default to today
       eventDate = new Date();
     }
-
-    // Use actual start and end times from the event, or defaults
-    const startTime = this.event.startTime ? `${this.event.startTime}:00` : '09:00:00';
-    const endTime = this.event.endTime ? `${this.event.endTime}:00` : '17:00:00';
     
-    return [startTime, endTime];
+    // Create start and end Date objects with the event date and times
+    const startDateTime = new Date(eventDate);
+    const endDateTime = new Date(eventDate);
+    
+    // Parse start time
+    if (this.event.startTime) {
+      const [hours, minutes] = this.event.startTime.split(':');
+      startDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    } else {
+      startDateTime.setHours(9, 0, 0, 0); // Default to 9:00 AM
+    }
+    
+    // Parse end time
+    if (this.event.endTime) {
+      const [hours, minutes] = this.event.endTime.split(':');
+      endDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    } else {
+      endDateTime.setHours(17, 0, 0, 0); // Default to 5:00 PM
+    }
+    
+    return [startDateTime, endDateTime];
   }
 
   generateQRCode(): void {
