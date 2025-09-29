@@ -6,7 +6,7 @@ import {
   inject,
   PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDate, CalendarEvent } from '../../services/lich.service';
@@ -15,13 +15,20 @@ import { EventImageDialogComponent } from '../event-image-dialog/event-image-dia
 import { Subscription, map, shareReplay } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AnChay } from 'src/app/pages/lich/components/an-chay/an-chay';
+import { MatMenuModule } from "@angular/material/menu";
+import { IconComponent } from "src/app/components/icon/icon.component";
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { AddEventBottomSheetComponent } from '../add-event-bottom-sheet/add-event-bottom-sheet.component';
+import { EventService } from '../../services/event.service';
+import { LichService } from '../../services/lich.service';
 
 @Component({
   selector: 'app-calendar-day-cell',
   standalone: true,
-  imports: [CommonModule, MatTooltipModule, MatDialogModule],
+  imports: [CommonModule, MatTooltipModule, MatDialogModule, MatMenuModule, IconComponent, MatBottomSheetModule],
   templateUrl: './calendar-day-cell.component.html',
   styleUrls: ['./calendar-day-cell.component.scss'],
+  providers: [DatePipe],
 })
 export class CalendarDayCellComponent implements OnInit, OnDestroy {
   // Input data for the calendar day
@@ -37,6 +44,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
 
   // Platform ID for browser environment checks
   private platformId = inject(PLATFORM_ID);
+  private datePipe = inject(DatePipe)
 
   // Maximum number of events to show in the cell
   maxEvents: number = 3;
@@ -60,7 +68,10 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private bottomSheet: MatBottomSheet,
+    private eventService: EventService,
+    private lichService: LichService
   ) { }
 
   ngOnInit(): void {
@@ -84,6 +95,10 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       // Check if the date is today
       const today = new Date();
       this.isToday = this.isSameDay(this.calendarDate.solar.date, today);
+      
+      // Load personal events from IndexedDB
+      this.loadPersonalEventsForDate();
+      
       // Update events visibility
       this.updateEvents();
 
@@ -127,12 +142,18 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update visible events based on maximum events setting
+   * Update visible events based on maximum events setting and filter visibility
    */
   updateEvents(): void {
     if (this.calendarDate && this.calendarDate.events) {
-      this.hasEvents = this.calendarDate.events.length > 0;
-      this.visibleEvents = this.calendarDate.events.slice(0, this.maxEvents);
+      // Filter events based on eventTypeVisibility from LichService
+      const filteredEvents = this.calendarDate.events.filter(event => {
+        // Check if this event type is visible
+        return this.lichService.isEventTypeVisible(event.type);
+      });
+      
+      this.hasEvents = filteredEvents.length > 0;
+      this.visibleEvents = filteredEvents.slice(0, this.maxEvents);
     } else {
       this.hasEvents = false;
       this.visibleEvents = [];
@@ -158,7 +179,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
     // Prevent event bubbling to avoid navigating to day view
     $event.stopPropagation();
 
-    // Open the dialog
+    // Always open the original dialog for all event types
     this.dialog.open(EventImageDialogComponent, {
       width: this.isMobileView ? '100%' : '600px',
       maxWidth: this.isMobileView ? '100%' : '600px',
@@ -223,5 +244,151 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       },
       autoFocus: false,
     });
+  }
+
+  onAddEventClick(): void {
+    const bottomSheetRef = this.bottomSheet.open(AddEventBottomSheetComponent, {
+      data: { selectedDate: this.calendarDate }
+    });
+
+    bottomSheetRef.afterDismissed().subscribe(result => {
+      if (result) {
+        console.log('Sự kiện đã được thêm:', result);
+        // Có thể thêm logic để refresh calendar hoặc hiển thị thông báo thành công
+        this.refreshEventsForDate();
+      }
+    });
+  }
+
+  private refreshEventsForDate(): void {
+    // Lấy lại events cho ngày hiện tại từ IndexedDB
+    this.eventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
+      // Cập nhật calendarDate.events với dữ liệu từ IndexedDB
+      if (!this.calendarDate.events) {
+        this.calendarDate.events = [];
+      }
+      
+      // Merge events từ IndexedDB với events hiện có
+      const indexedDBEvents = events.map(event => ({
+        id: event.id?.toString() || '',
+        title: event.title,
+        description: event.description,
+        dateString: event.date.toISOString(),
+        type: 'user' as const,
+        color: '#2196F3',
+        textColor: '#FFFFFF',
+        allDay: true,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        solar: {
+          year: event.date.getFullYear(),
+          month: event.date.getMonth() + 1,
+          day: event.date.getDate()
+        }
+      }));
+      
+      // Thêm events mới từ IndexedDB vào calendarDate.events
+      indexedDBEvents.forEach(newEvent => {
+        if (!this.calendarDate.events.some(existingEvent => 
+          existingEvent.title === newEvent.title && 
+          existingEvent.dateString === newEvent.dateString
+        )) {
+          this.calendarDate.events.push(newEvent);
+        }
+      });
+      
+      // Thêm events vào LichService để có thể được filter
+      indexedDBEvents.forEach(newEvent => {
+        if (!this.lichService.events.some(existingEvent => 
+          existingEvent.id === newEvent.id
+        )) {
+          this.lichService.events.push(newEvent);
+        }
+      });
+      
+      // Trigger update để refresh calendar
+      this.lichService['updateEvents']?.();
+      this.updateEvents();
+    }).catch(error => {
+      console.error('Lỗi khi lấy events từ IndexedDB:', error);
+    });
+  }
+
+  private loadPersonalEventsForDate(): void {
+    // Load personal events from IndexedDB for this specific date
+    this.eventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
+      if (events.length > 0) {
+        // Convert IndexedDB events to CalendarEvent format
+        const personalEvents = events.map(event => ({
+          id: event.id?.toString() || '',
+          title: event.title,
+          description: event.description,
+          dateString: event.date.toISOString(),
+          type: 'user' as const,
+          color: '#2196F3',
+          textColor: '#FFFFFF',
+          allDay: true,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          solar: {
+            year: event.date.getFullYear(),
+            month: event.date.getMonth() + 1,
+            day: event.date.getDate()
+          }
+        }));
+
+        // Add to calendarDate.events if not already present
+        if (!this.calendarDate.events) {
+          this.calendarDate.events = [];
+        }
+        
+        personalEvents.forEach(newEvent => {
+          if (!this.calendarDate.events.some(existingEvent => 
+            existingEvent.id === newEvent.id
+          )) {
+            this.calendarDate.events.push(newEvent);
+          }
+        });
+
+        // Add to LichService.events if not already present
+        personalEvents.forEach(newEvent => {
+          if (!this.lichService.events.some(existingEvent => 
+            existingEvent.id === newEvent.id
+          )) {
+            this.lichService.events.push(newEvent);
+          }
+        });
+
+        this.updateEvents();
+      }
+    }).catch(error => {
+      console.error('Lỗi khi load personal events:', error);
+    });
+  }
+
+  private handlePersonalEventDialogResult(result: any): void {
+    if (result.action === 'deleted') {
+      // Remove event from calendarDate.events
+      if (this.calendarDate.events) {
+        this.calendarDate.events = this.calendarDate.events.filter(e => e.id !== result.event.id);
+      }
+      
+      // Remove event from LichService.events
+      this.lichService.events = this.lichService.events.filter(e => e.id !== result.event.id);
+      
+      // Trigger update
+      this.lichService['updateEvents']?.();
+      this.updateEvents();
+      
+      console.log('Sự kiện đã được xóa');
+    } else if (result.action === 'updated' || result.action === 'created') {
+      // Refresh events for this date
+      this.refreshEventsForDate();
+      console.log('Sự kiện đã được cập nhật/tạo');
+    }
+  }
+
+  onAddTuanCuu(): void {
+    this.router.navigate([`/tuan-cuu/tinh/${this.datePipe.transform(this.calendarDate.solar.date, 'yyyy-MM-dd')}`]);
   }
 }

@@ -7,6 +7,7 @@
 .dialog-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .full-width {
@@ -20,11 +21,30 @@
 .event-card {
   width: 100%;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #ffffff !important;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: 'Roboto', sans-serif;
+  color: #333333 !important;
+
+  // Override any theme variables (moved before nested rules)
+  --text-color: #333333 !important;
+  --background-color: #ffffff !important;
+  --surface-color: #ffffff !important;
+
+  // Force light mode for all child elements
+  * {
+    color: inherit !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #333333 !important;
+  }
+
+  p, span, div {
+    color: #333333 !important;
+  }
 }
 
 .event-content {
@@ -48,7 +68,7 @@
   margin: 0 0 16px 0;
   font-size: 22px;
   font-weight: 500;
-  color: var(--text-color, #333);
+  color: #333333 !important;
   padding: 4px;
   border-radius: 4px;
   transition: background-color 0.2s;
@@ -63,20 +83,21 @@
 .lunar-solar-info {
   margin: 16px 0;
   padding: 12px;
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: rgba(0, 0, 0, 0.02) !important;
   border-radius: 8px;
-  border-left: 3px solid var(--primary-color, #1976d2);
+  border-left: 3px solid #1976d2 !important;
+  color: #333333 !important;
 }
 
 .date-info {
   font-weight: 500;
-  color: var(--text-color, #333);
+  color: #333333 !important;
   margin: 0;
 }
 
 .event-details p {
   margin: 0;
-  color: var(--text-color, #333);
+  color: #333333 !important;
   font-size: 20px;
   line-height: 1.5;
   padding: 4px;
@@ -107,6 +128,38 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+.qr-preview-container {
+  margin-top: 16px;
+  padding: 16px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.qr-image {
+  text-align: center;
+  padding: 16px;
+}
+
+.qr-image img {
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.qr-description {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin: 8px 0 0 0;
+}
+
+.qr-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .loading-indicator {

@@ -1,0 +1,141 @@
+.add-event-bottom-sheet {
+  padding: 16px;
+  max-width: 100%;
+  background-color: var(--surface-color);
+  color: var(--text-primary-color);
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--divider-color);
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--text-primary-color);
+    }
+
+    .close-button {
+      color: var(--text-secondary-color);
+      
+      &:hover {
+        color: var(--text-primary-color);
+      }
+    }
+  }
+
+  .content {
+    .date-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background-color: var(--background-color);
+      border-radius: 8px;
+      border: 1px solid var(--divider-color);
+
+      mat-icon {
+        color: var(--primary-color);
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      span {
+        font-weight: 500;
+        color: var(--text-primary-color);
+      }
+    }
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .time-fields {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+
+      .time-field {
+        flex: 1;
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--divider-color);
+
+      .left-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .cancel-button {
+        color: var(--text-secondary-color);
+        
+        &:hover {
+          color: var(--text-primary-color);
+        }
+      }
+
+      .delete-button {
+        color: var(--warn-color);
+        
+        &:hover {
+          background-color: rgba(var(--warn-color-rgb), 0.1);
+        }
+      }
+
+      .save-button {
+        min-width: 120px;
+        
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 600px) {
+  .add-event-bottom-sheet {
+    padding: 12px;
+
+    .header h3 {
+      font-size: 1.1rem;
+    }
+
+    .content {
+      .date-display {
+        padding: 8px;
+        margin-bottom: 16px;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 8px;
+
+        .left-actions {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .save-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
