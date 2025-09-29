@@ -9,10 +9,10 @@
   <div class="toolbar">
     <!-- Search Bar -->
     <div class="search-section">
-      <div class="search-container">
+      <div class="search-container" tourAnchor="kinh.search">
         <span class="search-icon material-icons">search</span>
-        <input type="text" [autofocus]="false" placeholder="Tìm kiếm kinh..." #searchInput (input)="search(searchInput.value)"
-          class="search-input">
+        <input type="text" [autofocus]="false" placeholder="Tìm kiếm kinh..." #searchInput
+          (input)="search(searchInput.value)" class="search-input">
       </div>
     </div>
 
@@ -20,7 +20,7 @@
     <div class="controls-section">
       <!-- Filter Toggle Button -->
       <div>
-        <div class="filter-toggle-section">
+        <div class="filter-toggle-section" tourAnchor="kinh.filters">
           <button class="filter-toggle-btn" [class.active]="showFilters" (click)="toggleFilters()">
             <span class="material-icons">tune</span>
             <span class="filter-toggle-text">
@@ -52,7 +52,7 @@
         </div>
       </div>
       <!-- View Toggle -->
-      <div class="view-toggle-section">
+      <div class="view-toggle-section" tourAnchor="kinh.view-mode">
         <span class="view-label">Hiển thị:</span>
         <div class="display-toggle-container">
           <button class="display-toggle-btn" [class.active]="isList()" (click)="setDisplayType('list')"
@@ -69,7 +69,7 @@
   </div>
 
   <!-- Content Section -->
-  <main class="content-section">
+  <main class="content-section" tourAnchor="kinh.list">
     <div class="kinh-groups" *ngIf="(kinhGroups$ | async) as groups">
       <div class="kinh-group" *ngFor="let groupEntry of groups | keyvalue: originalOrder">
         <div class="group-header" (click)="toggleGroup(groupEntry.key)">
@@ -111,3 +111,4 @@
     </div>
   </main>
 </div>
+<tour-step-template></tour-step-template>

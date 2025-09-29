@@ -27,6 +27,10 @@ const routes: Routes = [
         path: 'tuan-cuu',
         loadChildren: () => import('../../pages/tuan-cuu/tuan-cuu-routing.module').then(m => m.TuanCuuRoutingModule)
       },
+      {
+        path: 'hoc',
+        loadComponent: () => import('../../pages/learn/learn').then(m => m.Learn)
+      },
     ]
   }
 ];

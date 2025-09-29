@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { LichService } from '../../services/lich.service';
+import { TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-calendar-filter',
@@ -13,8 +14,9 @@ import { LichService } from '../../services/lich.service';
     CommonModule,
     MatCardModule,
     MatCheckboxModule,
-    FormsModule
-  ],
+    FormsModule,
+    TourMatMenuModule
+],
   templateUrl: './calendar-filter.component.html',
   styleUrls: ['./calendar-filter.component.scss']
 })
