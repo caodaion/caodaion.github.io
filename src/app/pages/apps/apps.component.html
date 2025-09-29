@@ -3,7 +3,7 @@
   <div class="app-grid">
     <div class="app-card" *ngFor="let app of apps" [routerLink]="app.route">
       @for (sign of eventSigns; track sign.key) {
-          <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
+      <img [src]="sign?.image" [alt]="sign?.description" [ngStyle]="{
           position: 'absolute',
           top: sign?.navigationSettings?.position?.top,
           right: sign?.navigationSettings?.position?.right,
@@ -12,12 +12,9 @@
           height: sign?.navigationSettings?.size,
           width: sign?.navigationSettings?.size,
         }" />
-          }
-      <div
-        class="app-icon-container"
-        [style.background]="'var(--' + app?.id + '-app-background)'"
-        [style.color]="'white'"
-      >
+      }
+      <div class="app-icon-container" [style.background]="'var(--' + app?.id + '-app-background)'"
+        [style.color]="'white'">
         <app-icon [name]="app.icon"></app-icon>
       </div>
       <div class="app-info">
@@ -25,5 +22,16 @@
         <p class="app-description">{{ app.description }}</p>
       </div>
     </div>
+    <app-app-tour-menu>
+      <div class="app-card">
+        <div class="app-icon-container" style="background: var(--secondary); color: var(--primary);">
+          <app-icon name="tour"></app-icon>
+        </div>
+        <div class="app-info">
+          <h2 class="app-name">Hướng dẫn</h2>
+          <p class="app-description">Xem hướng dẫn sử dụng ứng dụng</p>
+        </div>
+      </div>
+    </app-app-tour-menu>
   </div>
 </div>

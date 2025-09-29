@@ -22,7 +22,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-
+import { TourMatMenuModule, TourStepTemplateComponent } from "ngx-ui-tour-md-menu";
+import { MatTabHeader } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,10 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatDialogModule,
     DragDropModule,
     MatTooltipModule,
-    MatBottomSheetModule
-  ]
+    MatBottomSheetModule,
+    TourMatMenuModule,
+    TourStepTemplateComponent,
+    MatTabHeader
+]
 })
 export class KinhModule { }

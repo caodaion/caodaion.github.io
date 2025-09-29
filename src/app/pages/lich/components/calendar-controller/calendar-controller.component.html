@@ -1,25 +1,22 @@
 <div class="calendar-controller">
   <div class="controller-left">
-    <button mat-icon-button (click)="goToToday()" [matTooltip]="'Hôm nay'">
+    <button mat-icon-button (click)="goToToday()" [matTooltip]="'Hôm nay'" tourAnchor="calendar.today-button">
       <app-icon name="today"></app-icon>
     </button>
-    <button mat-icon-button (click)="goToPrevious()" [matTooltip]="'Trước đó'">
+    <button mat-icon-button (click)="goToPrevious()" [matTooltip]="'Trước đó'" tourAnchor="calendar.previous-button">
       <app-icon name="chevron_left"></app-icon>
     </button>
-    <button mat-icon-button (click)="goToNext()" [matTooltip]="'Tiếp theo'">
+    <button mat-icon-button (click)="goToNext()" [matTooltip]="'Tiếp theo'" tourAnchor="calendar.next-button">
       <app-icon name="chevron_right"></app-icon>
     </button>
     <div class="date-range">{{ displayText }}</div>
   </div>
-  <div class="controller-right">
-    <mat-select 
-      [value]="view" 
-      (valueChange)="onViewChange($event)" 
-      class="view-select"
-      aria-label="Chọn chế độ xem">
+  <div class="controller-right" tourAnchor="calendar.view-switch">
+    <mat-select [value]="view" (valueChange)="onViewChange($event)" class="view-select" aria-label="Chọn chế độ xem">
       <mat-option value="month">Tháng</mat-option>
       <mat-option value="week">Tuần</mat-option>
       <mat-option value="day">Ngày</mat-option>
     </mat-select>
   </div>
 </div>
+<tour-step-template></tour-step-template>

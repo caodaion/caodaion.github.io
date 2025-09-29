@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../components/icon/icon.component';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { AppTourMenu } from "src/app/components/app-tour-menu/app-tour-menu";
 
 interface App {
   id: string;
@@ -15,7 +17,7 @@ interface App {
 @Component({
   selector: 'app-apps',
   standalone: true,
-  imports: [CommonModule, RouterModule, IconComponent],
+  imports: [CommonModule, RouterModule, IconComponent, MatMenuModule, AppTourMenu],
   templateUrl: './apps.component.html',
   styleUrl: './apps.component.scss'
 })
@@ -48,6 +50,13 @@ export class AppsComponent {
       description: 'Đọc và tra cứu kinh cúng tứ thời và quan hôn tang tế',
       icon: 'book',
       route: '/kinh'
+    },
+    {
+      id: 'hoc',
+      name: 'Học',
+      description: 'Học tập về đạo Cao Đài qua các bài học tương tác',
+      icon: 'school',
+      route: '/hoc'
     },
     // {
     //   id: 'ca-nhan',
