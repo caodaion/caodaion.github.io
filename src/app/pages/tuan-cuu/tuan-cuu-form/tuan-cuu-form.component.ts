@@ -199,6 +199,30 @@ export class TuanCuuFormComponent implements OnInit {
         }
       }
     });
+
+    // Check if we should scroll to action buttons (from event image dialog)
+    this.route.queryParams.subscribe(params => {
+      if (params['scrollToActions'] === 'true') {
+        setTimeout(() => {
+          this.scrollToActionButtons();
+        }, 1000); // Wait for page to load
+      }
+    });
+  }
+
+  private scrollToActionButtons(): void {
+    const actionButtons = document.querySelector('.form-actions');
+    if (actionButtons) {
+      actionButtons.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+      
+      // Show a helpful message
+      this.snackBar.open('Cuộn đến nút "Gửi đến Google Calendar" để gửi tất cả sự kiện tuần cửu!', 'Đóng', {
+        duration: 5000,
+      });
+    }
   }
 
   // Load existing Tuan Cuu data for editing
@@ -1103,5 +1127,135 @@ export class TuanCuuFormComponent implements OnInit {
   // Check if there are custom event times
   hasCustomEventTimes(): boolean {
     return this.formData.events.some(event => event.eventTime !== 'Dậu');
+  }
+
+  // Send all Tuan Cuu events to Google Calendar step by step
+  sendAllEventsToGoogleCalendar(): void {
+    if (!this.validateForm()) {
+      this.snackBar.open('Vui lòng điền đầy đủ thông tin bắt buộc!', 'Đóng', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (this.formData.events.length === 0) {
+      this.snackBar.open('Vui lòng tính toán các sự kiện tuần cửu trước!', 'Đóng', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Show confirmation dialog
+    const confirmMessage = `Bạn có muốn gửi tất cả ${this.formData.events.length} sự kiện tuần cửu đến Google Calendar?\n\nCác sự kiện sẽ được mở từng cái một để bạn có thể chỉnh sửa và lưu từng sự kiện. Sau đó hãy quay lại CaoDaiON để tiếp tục bạn nhé!`;
+    
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    this.sendEventsStepByStep(0);
+  }
+
+  private sendEventsStepByStep(currentIndex: number): void {
+    if (currentIndex >= this.formData.events.length) {
+      this.snackBar.open(`Hoàn thành! Đã gửi tất cả ${this.formData.events.length} sự kiện tuần cửu.`, 'Đóng', {
+        duration: 5000,
+      });
+      return;
+    }
+
+    const event = this.formData.events[currentIndex];
+    const eventData = this.createEventDataForGoogleCalendar(event, currentIndex);
+    const googleCalendarUrl = this.calendarService.getGoogleCalendarEventEditUrl(eventData);
+    
+    // Open current event
+    window.open(googleCalendarUrl, '_blank');
+    
+    // Show progress message
+    this.snackBar.open(`Sự kiện ${currentIndex + 1}/${this.formData.events.length}: ${event.sequence}`, 'Đóng', {
+      duration: 2000,
+    });
+
+    // Ask if user wants to continue to next event
+    const continueMessage = `Đã mở sự kiện "${event.sequence}".\n\nBạn có muốn tiếp tục với sự kiện tiếp theo?`;
+    
+    setTimeout(() => {
+      if (confirm(continueMessage)) {
+        this.sendEventsStepByStep(currentIndex + 1);
+      } else {
+        this.snackBar.open(`Đã dừng tại sự kiện ${currentIndex + 1}/${this.formData.events.length}.`, 'Đóng', {
+          duration: 3000,
+        });
+      }
+    }, 1000); // Wait 1 second before asking
+  }
+
+  private createEventDataForGoogleCalendar(event: any, index: number): any {
+    // Find title information for event naming
+    const selectedTitle = this.caodaiTitles.find(
+      (title: any) => title.key === this.formData.title
+    );
+    const eventTitle = selectedTitle?.eventTitle || 'Cầu Siêu';
+
+    // Get title display text
+    let titleText = selectedTitle?.name || '';
+    if (selectedTitle && (selectedTitle.key === 'chua-co-dao' || selectedTitle.key === 'dao-huu')) {
+      titleText = selectedTitle.howToAddress?.[this.formData.gender] || titleText;
+    } else if ((selectedTitle?.key === 'chuc-viec' || selectedTitle?.key === 'bao-quan' || selectedTitle?.key === 'thoi-quan') && this.formData.subTitle) {
+      const selectedSubTitle = selectedTitle.subTitle?.find(
+        (sub) => sub.key === this.formData.subTitle
+      );
+      if (selectedSubTitle) {
+        titleText = selectedSubTitle.name;
+      }
+    }
+
+    // Create event name template with new format: "Cầu Siêu <sequence> cho <title> <holyname>, <name> | thời <eventTime> - <lunar date>"
+    const fullName = this.formData.holyName || this.formData.name;
+    let displayName = fullName;
+    
+    // If there's a holy name, format it properly
+    if (this.formData.holyName && this.formData.holyName !== this.formData.name) {
+      displayName = `${this.formData.holyName}, ${this.formData.name}`;
+    }
+    
+    const eventNameTemplate = `Cầu Siêu ${event.sequence} cho ${titleText} ${displayName} | thời ${event.eventTime} - ${this.formatLunarDate(event.lunarDate)}`;
+
+    // Convert lunar time to solar time for Google Calendar (2-hour duration)
+    const lunarToSolarTimeMap: { [key: string]: { start: string, end: string } } = {
+      'Tý': { start: '23:00:00', end: '01:00:00' },
+      'Sửu': { start: '01:00:00', end: '03:00:00' }, 
+      'Dần': { start: '03:00:00', end: '05:00:00' },
+      'Mão': { start: '05:00:00', end: '07:00:00' },
+      'Thìn': { start: '07:00:00', end: '09:00:00' },
+      'Tị': { start: '09:00:00', end: '11:00:00' },
+      'Ngọ': { start: '11:00:00', end: '13:00:00' },
+      'Mùi': { start: '13:00:00', end: '15:00:00' },
+      'Thân': { start: '15:00:00', end: '17:00:00' },
+      'Dậu': { start: '17:00:00', end: '19:00:00' },
+      'Tuất': { start: '19:00:00', end: '21:00:00' },
+      'Hợi': { start: '21:00:00', end: '23:00:00' }
+    };
+
+    const timeRange = lunarToSolarTimeMap[event.eventTime] || { start: '17:00:00', end: '19:00:00' };
+    const startTime = new Date(event.date);
+    const [startHours, startMinutes, startSeconds] = timeRange.start.split(':').map(Number);
+    startTime.setHours(startHours, startMinutes, startSeconds);
+    
+    const endTime = new Date(event.date);
+    const [endHours, endMinutes, endSeconds] = timeRange.end.split(':').map(Number);
+    
+    // Handle next day for times like Tý (23:00-01:00)
+    if (endHours < startHours) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+    endTime.setHours(endHours, endMinutes, endSeconds);
+
+    return {
+      text: eventNameTemplate,
+      subTitle: `Tuần ${event.sequence} | ${this.formatLunarDate(event.lunarDate)}`,
+      dates: [startTime, endTime],
+      location: 'CaoDaiON',
+      details: `Sự kiện ${event.sequence} trong chuỗi Tuần Cửu cho ${titleText} ${this.formData.holyName || this.formData.name}.\n\nThời gian: ${event.eventTime} (${timeRange.start} - ${timeRange.end})\nNgày âm lịch: ${this.formatLunarDate(event.lunarDate)}\nNgày dương lịch: ${this.formatDate(event.date)}\n\nTự động tạo bởi ứng dụng CaoDaiON.\n\nLưu ý: Đây là sự kiện ${index + 1}/${this.formData.events.length} trong chuỗi Tuần Cửu.`
+    };
   }
 }

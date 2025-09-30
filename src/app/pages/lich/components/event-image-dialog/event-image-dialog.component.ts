@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { IconComponent } from "src/app/components/icon/icon.component";
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -28,6 +29,7 @@ import * as QRCode from 'qrcode';
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    MatMenuModule,
     IconComponent,
     MatBottomSheetModule
 ],
@@ -151,6 +153,10 @@ export class EventImageDialogComponent implements OnInit {
   }
 
   addToGoogleCalendar(): void {
+    this.sendCurrentEventToGoogleCalendar();
+  }
+
+  sendCurrentEventToGoogleCalendar(): void {
     // Create event data for Google Calendar
     const eventData = {
       text: this.event.title,
@@ -165,6 +171,17 @@ export class EventImageDialogComponent implements OnInit {
     
     // Open in new tab
     window.open(googleCalendarUrl, '_blank');
+  }
+
+  sendAllTuanCuuEventsToGoogleCalendar(): void {
+    // Navigate to Tuan Cuu form with scroll parameter
+    this.closeDialog();
+    this.router.navigate([`/tuan-cuu/${this.event.tuanCuuId}`], {
+      queryParams: { scrollToActions: 'true' }
+    });
+    
+    // Note: The user will need to click the "Gửi đến Google Calendar" button 
+    // in the Tuan Cuu form to send all events step by step
   }
 
   private getEventDates(): Date[] {
@@ -185,20 +202,54 @@ export class EventImageDialogComponent implements OnInit {
     const startDateTime = new Date(eventDate);
     const endDateTime = new Date(eventDate);
     
-    // Parse start time
-    if (this.event.startTime) {
-      const [hours, minutes] = this.event.startTime.split(':');
-      startDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    // For Tuan Cuu events, use 2-hour duration based on lunar time
+    if (this.event.type === 'tuan-cuu' && this.event.eventTime) {
+      const lunarToSolarTimeMap: { [key: string]: { start: string, end: string } } = {
+        'Tý': { start: '23:00:00', end: '01:00:00' },
+        'Sửu': { start: '01:00:00', end: '03:00:00' }, 
+        'Dần': { start: '03:00:00', end: '05:00:00' },
+        'Mão': { start: '05:00:00', end: '07:00:00' },
+        'Thìn': { start: '07:00:00', end: '09:00:00' },
+        'Tị': { start: '09:00:00', end: '11:00:00' },
+        'Ngọ': { start: '11:00:00', end: '13:00:00' },
+        'Mùi': { start: '13:00:00', end: '15:00:00' },
+        'Thân': { start: '15:00:00', end: '17:00:00' },
+        'Dậu': { start: '17:00:00', end: '19:00:00' },
+        'Tuất': { start: '19:00:00', end: '21:00:00' },
+        'Hợi': { start: '21:00:00', end: '23:00:00' }
+      };
+
+      const timeRange = lunarToSolarTimeMap[this.event.eventTime] || { start: '17:00:00', end: '19:00:00' };
+      
+      // Set start time
+      const [startHours, startMinutes, startSeconds] = timeRange.start.split(':').map(Number);
+      startDateTime.setHours(startHours, startMinutes, startSeconds);
+      
+      // Set end time
+      const [endHours, endMinutes, endSeconds] = timeRange.end.split(':').map(Number);
+      
+      // Handle next day for times like Tý (23:00-01:00)
+      if (endHours < startHours) {
+        endDateTime.setDate(endDateTime.getDate() + 1);
+      }
+      endDateTime.setHours(endHours, endMinutes, endSeconds);
     } else {
-      startDateTime.setHours(9, 0, 0, 0); // Default to 9:00 AM
-    }
-    
-    // Parse end time
-    if (this.event.endTime) {
-      const [hours, minutes] = this.event.endTime.split(':');
-      endDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-    } else {
-      endDateTime.setHours(17, 0, 0, 0); // Default to 5:00 PM
+      // For other events, use existing logic
+      // Parse start time
+      if (this.event.startTime) {
+        const [hours, minutes] = this.event.startTime.split(':');
+        startDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      } else {
+        startDateTime.setHours(9, 0, 0, 0); // Default to 9:00 AM
+      }
+      
+      // Parse end time
+      if (this.event.endTime) {
+        const [hours, minutes] = this.event.endTime.split(':');
+        endDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      } else {
+        endDateTime.setHours(17, 0, 0, 0); // Default to 5:00 PM
+      }
     }
     
     return [startDateTime, endDateTime];

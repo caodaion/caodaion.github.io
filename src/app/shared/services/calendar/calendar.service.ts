@@ -737,12 +737,12 @@ export class CalendarService {
           break;
         }
         case 11: {
-          // Calculate Tiểu Tường: same lunar date but 12 months later
+          // Calculate Đại Tường: same lunar date but 24 months later (12 months from Tiểu Tường)
           // Use solar date iteration to properly handle leap months
           let currentSolarDate = originalSolarDate
           let monthsCount = 0          
-          // Iterate through solar months until we find 12 lunar months
-          while (monthsCount < 12) {
+          // Iterate through solar months until we find 24 lunar months
+          while (monthsCount < 24) {
             // Move to next solar month
             currentSolarDate.setDate(currentSolarDate.getDate() + 1)
             

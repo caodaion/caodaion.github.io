@@ -102,11 +102,29 @@
         <span>Xem tuần cửu</span>
       </button>
       }
-    <button class="matButton" mat-button color="primary" (click)="addToGoogleCalendar()" [disabled]="isGenerating"
-      matTooltip="Thêm vào Google Calendar" aria-label="Add to Google Calendar">
+    <!-- Google Calendar button with menu for Tuan Cuu events -->
+    <button class="matButton" mat-button color="primary" 
+            [matMenuTriggerFor]="event.type === 'tuan-cuu' ? googleCalendarMenu : null"
+            (click)="event.type !== 'tuan-cuu' ? addToGoogleCalendar() : null"
+            [disabled]="isGenerating"
+            matTooltip="Thêm vào Google Calendar" 
+            aria-label="Add to Google Calendar">
       <app-icon name="event"></app-icon>
       <span>Google Calendar</span>
+      <mat-icon *ngIf="event.type === 'tuan-cuu'" class="menu-icon">arrow_drop_down</mat-icon>
     </button>
+
+    <!-- Menu for Tuan Cuu events -->
+    <mat-menu #googleCalendarMenu="matMenu">
+      <button mat-menu-item (click)="sendCurrentEventToGoogleCalendar()">
+        <mat-icon>event</mat-icon>
+        <span>Sự kiện hiện tại</span>
+      </button>
+      <button mat-menu-item (click)="sendAllTuanCuuEventsToGoogleCalendar()">
+        <mat-icon>event_note</mat-icon>
+        <span>Tất cả sự kiện tuần cửu</span>
+      </button>
+    </mat-menu>
 
     @if (!qrCodeDataUrl) {
     <button class="matButton" mat-button color="primary" (click)="generateQRCode()" [disabled]="isGeneratingQR"
