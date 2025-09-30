@@ -29,7 +29,7 @@ export class CalendarFilterComponent implements OnInit {
     'monthly-solar': true,
     'monthly-lunar': true,
     'daily': true,
-    // 'user': true,
+    'user': true,
     'tuan-cuu': true
   };
 

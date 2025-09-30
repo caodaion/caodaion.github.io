@@ -43,6 +43,8 @@ export interface CalendarEvent {
   allDay: boolean;
   isHoliday?: boolean;
   eventTime?: string; // Time for the event ceremony, default is "Dậu" for Tuan Cuu events
+  startTime?: string; // Start time for personal events (HH:mm format)
+  endTime?: string; // End time for personal events (HH:mm format)
   tuanCuuId?: string;
   solar?: {
     year?: number;
@@ -387,7 +389,7 @@ export class LichService {
       currentDate.setDate(startDate.getDate() + i);
       const isCurrentMonth = currentDate.getMonth() === month - 1 && currentDate.getFullYear() === year;
       const isToday = currentDate.getTime() === today.getTime();
-      const lunarDate = this.getLunarDate(currentDate);
+      const lunarDate = this.getLunarDateInternal(currentDate);
       const events = this.getEventsForDate(currentDate, lunarDate);
       const calendarDate: CalendarDate = {
         solar: {
@@ -408,7 +410,7 @@ export class LichService {
     return calendarDays;
   }
 
-  private getLunarDate(date: Date): { year: any; month: number; day: number; isLeapMonth: boolean, canChi: any } {
+  private getLunarDateInternal(date: Date): { year: any; month: number; day: number; isLeapMonth: boolean, canChi: any } {
     const lunar = this.calendarService.getConvertedFullDate(date)?.convertSolar2Lunar;
 
     return {
@@ -531,6 +533,14 @@ export class LichService {
     }
   }
 
+  isEventTypeVisible(type: string): boolean {
+    return this.eventTypeVisibility[type] !== false;
+  }
+
+  getLunarDate(date: Date): { year: any; month: number; day: number; isLeapMonth: boolean, canChi: any } {
+    return this.getLunarDateInternal(date);
+  }
+
   private updateEvents(): void {
     this.eventsSubject.next([...this.events]);
   }
@@ -576,7 +586,7 @@ export class LichService {
     const isCurrentMonth = date.getMonth() === currentMonth.getMonth() &&
       date.getFullYear() === currentMonth.getFullYear();
 
-    const lunarDate = this.getLunarDate(date);
+    const lunarDate = this.getLunarDateInternal(date);
     const canChi = lunarDate?.canChi;
     const events = this.getEventsForDate(date, lunarDate);
 

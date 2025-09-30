@@ -4,6 +4,10 @@ import { LichComponent } from './lich.component';
 
 const routes: Routes = [
   {
+    path: 'share',
+    loadComponent: () => import('./components/event-share-page/event-share-page.component').then(m => m.EventSharePageComponent)
+  },
+  {
     path: '',
     component: LichComponent,
     children: [
