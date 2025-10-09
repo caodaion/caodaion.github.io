@@ -1,0 +1,188 @@
+<div class="learn-sync-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>sync</mat-icon>
+    Đồng bộ dữ liệu học tập
+  </h2>
+
+  <mat-dialog-content>
+    <mat-tab-group>
+      <!-- Export Tab -->
+      <mat-tab label="Tạo link đồng bộ">
+        <div class="tab-content">
+          <!-- Current Statistics -->
+          <mat-card class="stats-card" *ngIf="currentStats">
+            <mat-card-header>
+              <mat-card-title>Dữ liệu hiện tại</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value">{{ currentStats.totalAttempts }}</div>
+                  <div class="stat-label">Lần làm bài</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ currentStats.totalLessons }}</div>
+                  <div class="stat-label">Bài học</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ currentStats.averageScore }}%</div>
+                  <div class="stat-label">Điểm trung bình</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ currentStats.bestScore }}%</div>
+                  <div class="stat-label">Điểm cao nhất</div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Generate Actions -->
+          <div class="action-section">
+            <p>Tạo link để đồng bộ dữ liệu học tập của bạn sang thiết bị khác:</p>
+            
+            <div class="button-row">
+              <button mat-raised-button color="primary" 
+                      (click)="generateSyncUrl()" 
+                      [disabled]="isGenerating">
+                <mat-icon>link</mat-icon>
+                <span *ngIf="!isGenerating">Tạo link đồng bộ</span>
+                <span *ngIf="isGenerating">Đang tạo...</span>
+              </button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-section" *ngIf="isGenerating">
+              <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+            </div>
+
+            <!-- Sync URL Result -->
+            <mat-card class="result-card" *ngIf="syncUrl">
+              <mat-card-header>
+                <mat-card-title>Link đồng bộ</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="url-display">
+                  <mat-form-field appearance="outline" class="url-field">
+                    <mat-label>URL</mat-label>
+                    <input matInput [value]="syncUrl" readonly>
+                  </mat-form-field>
+                  <button mat-icon-button (click)="copySyncUrl()" matTooltip="Sao chép">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </div>
+                
+                <div class="action-buttons">
+                  <button mat-button color="primary" (click)="copySyncUrl()">
+                    <mat-icon>content_copy</mat-icon>
+                    Sao chép
+                  </button>
+                  <button mat-button color="accent" (click)="shareSyncUrl()">
+                    <mat-icon>share</mat-icon>
+                    Chia sẻ
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Import Tab -->
+      <mat-tab label="Nhập dữ liệu">
+        <div class="tab-content">
+          <!-- Import URL Input -->
+          <div class="import-section">
+            <p>Nhập link đồng bộ để tải dữ liệu học tập:</p>
+            
+            <mat-form-field appearance="outline" class="import-url-field">
+              <mat-label>Link đồng bộ</mat-label>
+              <input matInput [(ngModel)]="importUrl" 
+                     placeholder="Dán link đồng bộ vào đây...">
+              <button mat-icon-button matSuffix (click)="parseImportUrl()" 
+                      [disabled]="!importUrl.trim()">
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" 
+                    (click)="parseImportUrl()" 
+                    [disabled]="!importUrl.trim()">
+              <mat-icon>analytics</mat-icon>
+              Phân tích link
+            </button>
+          </div>
+
+          <!-- Import Data Preview -->
+          <mat-card class="import-preview" *ngIf="importDataInfo">
+            <mat-card-header>
+              <mat-card-title>Thông tin dữ liệu</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <strong>Tổng số kết quả:</strong> {{ importDataInfo.totalResults }}
+                </div>
+                <div class="info-item">
+                  <strong>Số bài học:</strong> {{ importDataInfo.uniqueLessons }}
+                </div>
+                <div class="info-item">
+                  <strong>Xuất lúc:</strong> {{ importDataInfo.exportedAt | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+                <div class="info-item">
+                  <strong>Phiên bản:</strong> {{ importDataInfo.version }}
+                </div>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <!-- Import Strategy -->
+              <div class="import-strategy">
+                <h4>Chế độ nhập dữ liệu:</h4>
+                <mat-radio-group [(ngModel)]="mergeStrategy">
+                  <mat-radio-button value="merge">
+                    <strong>Hợp nhất</strong> - Giữ lại dữ liệu hiện tại, chỉ thêm dữ liệu mới
+                  </mat-radio-button>
+                  <mat-radio-button value="replace">
+                    <strong>Thay thế</strong> - Xóa tất cả dữ liệu hiện tại và thay thế bằng dữ liệu mới
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <!-- Import Actions -->
+              <div class="import-actions">
+                <button mat-raised-button color="warn" 
+                        (click)="importData()" 
+                        [disabled]="isImporting">
+                  <mat-icon>download</mat-icon>
+                  <span *ngIf="!isImporting">{{ mergeStrategy === 'merge' ? 'Hợp nhất dữ liệu' : 'Thay thế dữ liệu' }}</span>
+                  <span *ngIf="isImporting">Đang nhập...</span>
+                </button>
+              </div>
+
+              <!-- Loading -->
+              <div class="loading-section" *ngIf="isImporting">
+                <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Warning -->
+          <mat-card class="warning-card" *ngIf="mergeStrategy === 'replace' && importDataInfo">
+            <mat-card-content>
+              <div class="warning-content">
+                <mat-icon color="warn">warning</mat-icon>
+                <div>
+                  <strong>Cảnh báo:</strong> Thao tác này sẽ xóa tất cả dữ liệu học tập hiện tại của bạn và thay thế bằng dữ liệu từ link. Hành động này không thể hoàn tác.
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Đóng</button>
+  </mat-dialog-actions>
+</div>
