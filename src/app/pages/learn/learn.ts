@@ -1,24 +1,22 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { map, shareReplay, Subscription } from 'rxjs';
 import { IconComponent } from "src/app/components/icon/icon.component";
 import { NavigationService } from 'src/app/shared/services/navigation.service';
 import { SeoService } from 'src/app/shared/services/seo.service';
-import { Lessons } from "./components/lessons/lessons";
 import { Blogger } from 'src/app/shared/services/blogger';
-import { Lesson } from "./components/lesson/lesson";
-import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { LearnDataService } from './services/learn-data.service';
 
 @Component({
   selector: 'app-learn',
   imports: [
     MatSidenavModule,
     IconComponent,
-    Lessons,
-    Lesson,
-    ChildHeaderComponent
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive
 ],
   templateUrl: './learn.html',
   styleUrl: './learn.scss'
@@ -26,7 +24,6 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
 export class Learn {
   // Reference to the drawer element
   @ViewChild('drawer') drawer!: MatDrawer;
-  displayedView: string = 'lessons';
   hocPosts: any[] = [];
   // Track drawer state
   isDrawerOpen: boolean = true;
@@ -41,12 +38,12 @@ export class Learn {
     private router: Router,
     private route: ActivatedRoute,
     private breakpointObserver: BreakpointObserver,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private learnDataService: LearnDataService
   ) { }
 
   bloggerService = inject(Blogger);
   allSessionGroups: any[] = [];
-  lessonPost: any = null;
 
   ngOnInit(): void {
     this.fetchHocPosts();
@@ -113,21 +110,9 @@ export class Learn {
 
   fetchHocPosts() {
     this.bloggerService.fetchHocPosts().subscribe((posts: any) => {
-      console.log(posts);
-
       this.hocPosts = posts?.items || [];
+      // Share the data with child components via service
+      this.learnDataService.setHocPosts(this.hocPosts);
     });
-  }
-
-  openLesson(lesson: any): void {
-    this.lessonPost = lesson;
-    this.displayedView = 'lesson';
-  }
-
-  onGoBack() {
-    if (this.displayedView === 'lesson') {
-      this.displayedView = 'lessons';
-      return;
-    }
   }
 }

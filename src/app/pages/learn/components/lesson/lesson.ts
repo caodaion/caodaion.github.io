@@ -1,15 +1,19 @@
 
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IconComponent } from "src/app/components/icon/icon.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ChildHeaderComponent } from 'src/app/components/child-header/child-header.component';
+import { LearnDataService } from '../../services/learn-data.service';
+import { LearnResultsService, LearnResult, QuizAnswer } from '../../services/learn-results.service';
 import html2canvas from 'html2canvas-pro';
 
 @Component({
   selector: 'app-lesson',
-  imports: [CommonModule, IconComponent, MatButtonModule, MatTabsModule, MatDialogModule],
+  imports: [CommonModule, IconComponent, MatButtonModule, MatTabsModule, MatDialogModule, ChildHeaderComponent],
   templateUrl: './lesson.html',
   styleUrl: './lesson.scss'
 })
@@ -18,41 +22,28 @@ export class Lesson implements OnInit {
   showResult = false;
   correctCount = 0;
 
-  dialog = inject(MatDialog)
-
-  goToNextQuiz(skip: boolean = false) {
-    if (skip && !this.quizzes[this.currentQuizIndex].selected) {
-      this.quizzes[this.currentQuizIndex].selected = null;
-    }
-    if (this.currentQuizIndex < this.quizzes.length - 1) {
-      this.currentQuizIndex++;
-    } else {
-      this.calculateResult();
-      this.showResult = true;
-    }
-  }
-
-  calculateResult() {
-    this.correctCount = this.quizzes.filter(q => q.selected === q.dap_an).length;
-  }
-
-  // Optionally reset quiz for replay
-  resetQuiz() {
-    this.currentQuizIndex = 0;
-    this.showResult = false;
-    this.correctCount = 0;
-    this.quizzes.forEach(q => delete q.selected);
-  }
-
-  selectChoice(quizIndex: number, choice: string) {
-    this.quizzes[quizIndex].selected = choice;
-  }
-  @Input() lessonPost: any;
+  dialog = inject(MatDialog);
+  
+  lessonPost: any;
   flashcards: [string, string][] = [];
   flipped: boolean[] = [];
   currentCardIndex = 0;
   noAnim = false;
   quizzes: any[] = [];
+  currentTitle: string = '';
+  lessonSlug: string = '';
+  quizStartTime: Date | null = null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private learnDataService: LearnDataService,
+    private learnResultsService: LearnResultsService
+  ) {}
+
+  onGoBack() {
+    this.router.navigate(['..'], { relativeTo: this.route });
+  }
 
   setupKeyboardEvents() {
     window.addEventListener('keydown', this.handleKeydown);
@@ -76,13 +67,127 @@ export class Lesson implements OnInit {
     }
   }
 
+  goToNextQuiz(skip: boolean = false) {
+    if (skip && !this.quizzes[this.currentQuizIndex].selected) {
+      this.quizzes[this.currentQuizIndex].selected = null;
+    }
+    if (this.currentQuizIndex < this.quizzes.length - 1) {
+      this.currentQuizIndex++;
+    } else {
+      this.calculateResult();
+      this.showResult = true;
+    }
+  }
+
+  calculateResult() {
+    this.correctCount = this.quizzes.filter(q => q.selected === q.dap_an).length;
+    
+    // Save result to IndexedDB
+    this.saveLearnResult();
+  }
+
+  // Optionally reset quiz for replay
+  resetQuiz() {
+    this.currentQuizIndex = 0;
+    this.showResult = false;
+    this.correctCount = 0;
+    this.quizStartTime = new Date(); // Reset timer for new attempt
+    this.quizzes.forEach(q => delete q.selected);
+  }
+
+  selectChoice(quizIndex: number, choice: string) {
+    this.quizzes[quizIndex].selected = choice;
+  }
   ngOnDestroy() {
     this.removeKeyboardEvents();
   }
 
   ngOnInit() {
+    // Get lesson data from router state or route params
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state?.['lessonData']) {
+      this.lessonPost = navigation.extras.state['lessonData'];
+      this.currentTitle = this.lessonPost.title || 'Bài học';
+      this.extractLessonSlug();
+      this.initializeLessonContent();
+    } else {
+      // Fallback: get lesson slug from route params and find data
+      this.route.params.subscribe(params => {
+        const slug = params['slug'];
+        if (slug) {
+          this.lessonSlug = slug;
+          console.log('Lesson slug:', slug);
+          this.lessonPost = this.learnDataService.findLessonBySlug(slug);
+          if (this.lessonPost) {
+            this.currentTitle = this.lessonPost.title || 'Bài học';
+            this.initializeLessonContent();
+          } else {
+            // If lesson not found in service, wait for data to load
+            this.learnDataService.hocPosts$.subscribe(posts => {
+              if (posts.length > 0) {
+                this.lessonPost = this.learnDataService.findLessonBySlug(slug);
+                if (this.lessonPost) {
+                  this.currentTitle = this.lessonPost.title || 'Bài học';
+                  this.initializeLessonContent();
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+  private initializeLessonContent() {
     this.getPostFlashcard();
     this.getPostQuiz();
+  }
+
+  private extractLessonSlug() {
+    if (this.lessonPost?.url) {
+      const urlMatch = this.lessonPost.url.match(/\/(\d{4})\/(\d{2})\/([^/]+)\.html$/);
+      if (urlMatch && urlMatch[3]) {
+        this.lessonSlug = urlMatch[3];
+      }
+    }
+  }
+
+  private async saveLearnResult() {
+    if (!this.lessonPost || !this.lessonSlug) {
+      console.warn('Cannot save result: missing lesson data or slug');
+      return;
+    }
+
+    const answers: QuizAnswer[] = this.quizzes.map((quiz, index) => ({
+      questionIndex: index,
+      question: quiz.cau_hoi,
+      selectedAnswer: quiz.selected || null,
+      correctAnswer: quiz.dap_an,
+      isCorrect: quiz.selected === quiz.dap_an
+    }));
+
+    const timeSpent = this.quizStartTime 
+      ? Math.round((new Date().getTime() - this.quizStartTime.getTime()) / 1000)
+      : undefined;
+
+    const result: Omit<LearnResult, 'id'> = {
+      lessonSlug: this.lessonSlug,
+      lessonTitle: this.lessonPost.title || 'Bài học',
+      lessonUrl: this.lessonPost.url || '',
+      totalQuestions: this.quizzes.length,
+      correctAnswers: this.correctCount,
+      percentage: Math.round((this.correctCount / this.quizzes.length) * 100),
+      answers,
+      completedAt: new Date(),
+      timeSpent
+    };
+
+    try {
+      const savedId = await this.learnResultsService.saveLearnResult(result);
+      console.log('Learn result saved with ID:', savedId);
+    } catch (error) {
+      console.error('Error saving learn result:', error);
+    }
   }
 
   onTabChange(event: any) {
@@ -121,11 +226,15 @@ export class Lesson implements OnInit {
     try {
       const arrayText = match[1].trim();
       this.quizzes = JSON.parse(arrayText);
+      
+      // Start timer when quiz is loaded and available
+      if (this.quizzes.length > 0 && !this.quizStartTime) {
+        this.quizStartTime = new Date();
+      }
     } catch {
       this.quizzes = [];
     }
     console.log(this.quizzes);
-
   }
 
   toggleFlip(i: number) {

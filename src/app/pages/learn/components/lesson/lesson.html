@@ -1,3 +1,4 @@
+<app-child-header [title]="currentTitle" (goBack)="onGoBack()"></app-child-header>
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Bài đọc">
         <div class="lesson-info-section p-3 select-text">
