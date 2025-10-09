@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 0 16px;
   background-color: var(--surface-color);
   border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
 }
@@ -21,7 +21,7 @@
 }
 
 .date-range {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--text-color);
   margin-left: 8px;
@@ -38,7 +38,7 @@
 
 @media (max-width: 600px) {
   .calendar-controller {
-    padding: 8px 0;
+    padding: 0;
   }
 
   .date-range {
@@ -64,7 +64,7 @@
 
 @media (max-width: 400px) {
   .calendar-controller {
-    padding: 6px 0;
+    padding: 0;
   }
 
   .date-range {

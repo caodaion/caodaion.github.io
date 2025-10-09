@@ -4,7 +4,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 4px;
+  padding: 1px;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -52,14 +52,14 @@
 }
 
 .solar-date {
-  font-size: 1.2rem;
+  font-size: 0.75rem;
   font-weight: 500;
   padding: 0 5px;
   color: var(--text-secondary-color);
 }
 
 .lunar-date {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--text-secondary-color);
   padding: 0 5px;
   display: flex;
@@ -73,10 +73,11 @@
 
 .lunar-day {
   font-size: 0.75rem;
+  padding: 0 5px;
 }
 
 .can-chi {
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   color: var(--text-tertiary-color);
   margin-top: 1px;
 }
@@ -93,12 +94,13 @@
 }
 
 .events-container {
+  margin-top: 1px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
-  gap: 2px;
+  gap: 1px;
   z-index: 2;
   /* Hide scrollbars */
   scrollbar-width: none;
@@ -115,7 +117,7 @@
 .event-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .event-marker {
@@ -145,7 +147,7 @@
 }
 
 .more-indicator {
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   color: var(--text-tertiary-color);
   text-align: right;
   padding-right: 4px;
@@ -157,48 +159,15 @@
   .day-cell {
     min-height: 80px;
   }
-
-  .solar-date {
-    font-size: 1rem;
-  }
-
-  .lunar-date,
-  .lunar-day {
-    font-size: 0.7rem;
-  }
-
-  .can-chi {
-    font-size: 0.65rem;
-  }
 }
 
 @media (max-width: 600px) {
   .day-cell {
     min-height: 70px;
-    padding: 2px;
-  }
-
-  .date-container {
-    margin-bottom: 4px;
-  }
-
-  .solar-date {
-    font-size: 0.9rem;
-    padding: 1px 2px;
-  }
-
-  .lunar-date,
-  .lunar-day {
-    font-size: 0.65rem;
-    padding: 0 2px;
-  }
-
-  .can-chi {
-    font-size: 0.6rem;
   }
 
   .event-marker {
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
     padding: 1px 2px;
   }
 
@@ -215,20 +184,6 @@
 @media (max-width: 400px) {
   .day-cell {
     min-height: 60px;
-    padding: 1px;
-  }
-
-  .solar-date {
-    font-size: 0.85rem;
-  }
-
-  .lunar-date,
-  .lunar-day {
-    font-size: 0.6rem;
-  }
-
-  .can-chi {
-    font-size: 0.55rem;
   }
 
   .today .solar-date {
