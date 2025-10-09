@@ -3,12 +3,40 @@
     <div class="lesson-card">
         <div class="lesson-header">
             <span class="lesson-title">{{ lessonGroup?.title }}</span>
+            @if (getGroupCompletionStats(lessonGroup).total > 0) {
+            <div class="group-progress">
+                <div class="progress-stats">
+                    <span class="progress-text">
+                        {{getGroupCompletionStats(lessonGroup).completed}}/{{getGroupCompletionStats(lessonGroup).total}}
+                    </span>
+                    @if (getGroupCompletionStats(lessonGroup).percentage === 100) {
+                    <app-icon name="check_circle" size="20px" class="completion-icon"></app-icon>
+                    }
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" 
+                         [style.width.%]="getGroupCompletionStats(lessonGroup).percentage"></div>
+                </div>
+            </div>
+            }
         </div>
         <div class="lesson-subtitle">{{ lessonGroup?.posts?.length }} chủ đề</div>
     </div>
     <div class="group-topics">
         @for(topic of lessonGroup?.posts; track topic) {
-        <div class="topic" (click)="openLesson.emit(topic)">{{topic?.title}}</div>
+        <div class="topic" 
+             [class.completed]="isLessonCompleted(topic)"
+             (click)="onClickLesson(topic)">
+            <div class="topic-content">
+                <span class="topic-title">{{topic?.title}}</span>
+                @if (isLessonCompleted(topic)) {
+                <div class="completion-indicator">
+                    <app-icon name="check_circle" size="18px"></app-icon>
+                    <span class="completion-text">Đã hoàn thành</span>
+                </div>
+                }
+            </div>
+        </div>
         }
     </div>
     }

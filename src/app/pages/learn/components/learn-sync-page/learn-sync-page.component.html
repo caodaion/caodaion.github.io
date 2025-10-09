@@ -1,0 +1,205 @@
+<div class="learn-sync-page">
+  <app-child-header 
+    title="Đồng bộ dữ liệu học tập"
+    (backClick)="goBack()">
+  </app-child-header>
+
+  <div class="content" *ngIf="!isLoading">
+    <!-- Error State -->
+    <mat-card class="error-card" *ngIf="error">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">error</mat-icon>
+          <div>
+            <h3>Có lỗi xảy ra</h3>
+            <p>{{ error }}</p>
+          </div>
+        </div>
+        <div class="error-actions">
+          <button mat-raised-button color="primary" (click)="goToLearn()">
+            <mat-icon>school</mat-icon>
+            Về trang học tập
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Success Import State -->
+    <mat-card class="success-card" *ngIf="importComplete && importResult">
+      <mat-card-content>
+        <div class="success-content">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div>
+            <h3>Đồng bộ thành công!</h3>
+            <p>Dữ liệu học tập đã được nhập thành công vào thiết bị này.</p>
+          </div>
+        </div>
+
+        <!-- Import Results -->
+        <div class="import-summary">
+          <div class="summary-item">
+            <strong>{{ importResult.imported }}</strong> kết quả đã nhập
+          </div>
+          <div class="summary-item" *ngIf="importResult.skipped > 0">
+            <strong>{{ importResult.skipped }}</strong> kết quả bị bỏ qua (trùng lặp)
+          </div>
+          <div class="summary-item" *ngIf="importResult.errors > 0">
+            <strong>{{ importResult.errors }}</strong> lỗi xảy ra
+          </div>
+        </div>
+
+        <!-- Updated Stats -->
+        <div class="updated-stats" *ngIf="currentStats">
+          <h4>Dữ liệu hiện tại:</h4>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.totalAttempts }}</div>
+              <div class="stat-label">Lần làm bài</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.totalLessons }}</div>
+              <div class="stat-label">Bài học</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.averageScore }}%</div>
+              <div class="stat-label">Điểm trung bình</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.bestScore }}%</div>
+              <div class="stat-label">Điểm cao nhất</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="success-actions">
+          <button mat-raised-button color="primary" (click)="goToLearn()">
+            <mat-icon>school</mat-icon>
+            Tiếp tục học tập
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Sync Data Preview -->
+    <div class="sync-preview" *ngIf="syncData && !importComplete && !error">
+      <!-- Data Info -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>cloud_download</mat-icon>
+            Dữ liệu đồng bộ
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid" *ngIf="syncDataInfo">
+            <div class="info-item">
+              <strong>Tổng số kết quả:</strong> {{ syncDataInfo.totalResults }}
+            </div>
+            <div class="info-item">
+              <strong>Số bài học:</strong> {{ syncDataInfo.uniqueLessons }}
+            </div>
+            <div class="info-item">
+              <strong>Xuất lúc:</strong> {{ syncDataInfo.exportedAt | date:'dd/MM/yyyy HH:mm' }}
+            </div>
+            <div class="info-item">
+              <strong>Phiên bản:</strong> {{ syncDataInfo.version }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Current Data -->
+      <mat-card class="current-data" *ngIf="currentStats">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>storage</mat-icon>
+            Dữ liệu hiện tại
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.totalAttempts }}</div>
+              <div class="stat-label">Lần làm bài</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.totalLessons }}</div>
+              <div class="stat-label">Bài học</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.averageScore }}%</div>
+              <div class="stat-label">Điểm trung bình</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ currentStats.bestScore }}%</div>
+              <div class="stat-label">Điểm cao nhất</div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Import Strategy -->
+      <mat-card class="strategy-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>settings</mat-icon>
+            Chế độ đồng bộ
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-radio-group [(ngModel)]="mergeStrategy">
+            <mat-radio-button value="merge">
+              <div class="radio-content">
+                <strong>Hợp nhất dữ liệu</strong>
+                <p>Giữ lại dữ liệu hiện tại và thêm dữ liệu mới từ link đồng bộ. Nếu có kết quả trùng lặp, sẽ giữ kết quả có điểm cao hơn.</p>
+              </div>
+            </mat-radio-button>
+            <mat-radio-button value="replace">
+              <div class="radio-content">
+                <strong>Thay thế dữ liệu</strong>
+                <p>Xóa tất cả dữ liệu hiện tại và thay thế bằng dữ liệu từ link đồng bộ.</p>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <!-- Warning for replace mode -->
+          <div class="warning-box" *ngIf="mergeStrategy === 'replace'">
+            <mat-icon color="warn">warning</mat-icon>
+            <div>
+              <strong>Cảnh báo:</strong> Thao tác này sẽ xóa tất cả dữ liệu học tập hiện tại của bạn. Hành động này không thể hoàn tác.
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Import Actions -->
+      <div class="import-actions">
+        <button mat-raised-button color="primary" 
+                (click)="importData()" 
+                [disabled]="isImporting"
+                class="import-button">
+          <mat-icon>download</mat-icon>
+          <span *ngIf="!isImporting">{{ mergeStrategy === 'merge' ? 'Hợp nhất dữ liệu' : 'Thay thế dữ liệu' }}</span>
+          <span *ngIf="isImporting">Đang nhập dữ liệu...</span>
+        </button>
+
+        <button mat-button (click)="goBack()" [disabled]="isImporting">
+          <mat-icon>cancel</mat-icon>
+          Hủy bỏ
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-section" *ngIf="isImporting">
+        <mat-progress-spinner diameter="50" mode="indeterminate"></mat-progress-spinner>
+        <p>Đang nhập dữ liệu, vui lòng đợi...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-progress-spinner diameter="50" mode="indeterminate"></mat-progress-spinner>
+    <p>Đang tải dữ liệu đồng bộ...</p>
+  </div>
+</div>
