@@ -1,11 +1,29 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { INSTRUCTIONS_VI } from './instruction.vi';
+import { IconComponent } from "src/app/components/icon/icon.component";
+import { MatSelectModule } from "@angular/material/select";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
     selector: 'app-routing-instructions',
     templateUrl: './routing-instructions.component.html',
     styleUrls: ['./routing-instructions.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [
+      IconComponent, 
+      MatSelectModule,
+      MatFormFieldModule,
+      MatInputModule,
+      FormsModule,
+      CommonModule,
+      MatButtonModule,
+      MatListModule
+    ]
 })
 export class RoutingInstructionsComponent implements AfterViewChecked {
   @Input('route') route: any = <any>{};
@@ -86,6 +104,7 @@ export class RoutingInstructionsComponent implements AfterViewChecked {
         this.cd.detectChanges()
       }
     })
+    console.log(this.route?.instructions)
   }
 
   onRemoveWayRouting() {

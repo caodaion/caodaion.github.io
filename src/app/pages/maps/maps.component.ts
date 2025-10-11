@@ -9,12 +9,57 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MapsService } from 'src/app/shared/services/maps/maps.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconComponent } from 'src/app/components/icon/icon.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { SearchThanhSoPipe } from "./pipe/search-thanh-so.pipe";
+import { SearchOrganizationPipe } from "./pipe/search-organization.pipe";
+import { RoutingInstructionsComponent } from "./routing-instructions/routing-instructions.component";
 
 @Component({
-    selector: 'app-maps',
-    templateUrl: './maps.component.html',
-    styleUrls: ['./maps.component.scss'],
-    standalone: false
+  selector: 'app-maps',
+  templateUrl: './maps.component.html',
+  styleUrls: ['./maps.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatListModule,
+    MatRippleModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    SharedModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    IconComponent,
+    MatAutocompleteModule,
+    ChildHeaderComponent,
+    SearchThanhSoPipe,
+    SearchOrganizationPipe,
+    RoutingInstructionsComponent
+]
 })
 export class MapsComponent implements OnInit, AfterViewInit {
   map: any;
@@ -118,7 +163,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
         center: [this.latitude, this.longitude],
         zoom: 18
       });
-      const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
       });
       tiles.addTo(this.map);
