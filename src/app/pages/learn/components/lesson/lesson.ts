@@ -1,4 +1,5 @@
 
+
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,6 +35,10 @@ import { Observable } from 'rxjs';
 export class Lesson implements OnInit {
   currentQuizIndex = 0;
   showResult = false;
+  checkAnswer(quizIndex: number) {
+    if (!this.quizzes[quizIndex].selected) return;
+    this.quizzes[quizIndex].showImmediateFeedback = true;
+  }
   correctCount = 0;
 
   dialog = inject(MatDialog);
@@ -111,7 +116,9 @@ export class Lesson implements OnInit {
   }
 
   selectChoice(quizIndex: number, choice: string) {
+    if (this.quizzes[quizIndex].selected) return; // Không cho chọn lại
     this.quizzes[quizIndex].selected = choice;
+    this.quizzes[quizIndex].showImmediateFeedback = true;
   }
   ngOnDestroy() {
     this.removeKeyboardEvents();

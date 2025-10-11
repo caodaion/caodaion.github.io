@@ -81,6 +81,7 @@
                     <div class="quiz-choices">
                         <button mat-stroked-button *ngFor="let choice of quizzes[currentQuizIndex].lua_chon"
                             class="quiz-choice-button" [class.selected]="quizzes[currentQuizIndex].selected == choice"
+                            [disabled]="quizzes[currentQuizIndex].selected"
                             (click)="selectChoice(currentQuizIndex, choice)">
                             {{ choice }}
                         </button>
@@ -105,7 +106,7 @@
                             <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
                         </button>
                     </div>
-                    <div class="quiz-answers-list">
+                    <!-- <div class="quiz-answers-list">
                         <div *ngFor="let quiz of quizzes; let i = index" class="quiz-answer-item">
                             <div class="quiz-answer-question">Câu {{ i + 1 }}: {{ quiz.cau_hoi }}</div>
                             <div class="quiz-answer-details">
@@ -120,17 +121,32 @@
                                 <span class="ml-2">| Đáp án đúng: <b>{{ quiz.dap_an }}</b></span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </ng-container>
         </div>
-        <div class="quiz-navigation">
+        <div class="quiz-navigation" style="display: flex; align-items: flex-end; gap: 12px; margin-top: 16px;">
             <button mat-stroked-button class="quiz-skip-button" (click)="goToNextQuiz(true)"
                 *ngIf="!quizzes[currentQuizIndex]?.selected">Bỏ qua</button>
-            <div *ngIf="quizzes[currentQuizIndex]?.selected"></div>
-            <button mat-flat-button class="quiz-next-button" [disabled]="!quizzes[currentQuizIndex]?.selected"
-                (click)="goToNextQuiz()">
-                {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Kiểm tra' }} </button>
+            <div style="flex: 1;"></div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; min-width: 180px;">
+                <ng-container *ngIf="quizzes[currentQuizIndex].selected">
+                    <div *ngIf="!quizzes[currentQuizIndex].showImmediateFeedback">
+                        <button mat-flat-button color="primary" (click)="checkAnswer(currentQuizIndex)">Kiểm tra</button>
+                    </div>
+                    <div *ngIf="quizzes[currentQuizIndex].showImmediateFeedback">
+                        <div *ngIf="quizzes[currentQuizIndex].selected === quizzes[currentQuizIndex].dap_an" class="quiz-feedback-correct" style="margin-bottom: 8px;">
+                            <app-icon name="check_circle"></app-icon> Đúng rồi!
+                        </div>
+                        <div *ngIf="quizzes[currentQuizIndex].selected && quizzes[currentQuizIndex].selected !== quizzes[currentQuizIndex].dap_an" class="quiz-feedback-incorrect" style="margin-bottom: 8px;">
+                            <app-icon name="cancel"></app-icon> Sai, đáp án đúng là: <b>{{ quizzes[currentQuizIndex].dap_an }}</b>
+                        </div>
+                        <button mat-flat-button class="quiz-next-button" (click)="goToNextQuiz()">
+                            {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Hoàn thành' }}
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
         </div>
     </mat-tab>
 </mat-tab-group>
