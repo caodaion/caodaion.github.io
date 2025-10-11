@@ -13,6 +13,8 @@ import html2canvas from 'html2canvas-pro';
 import { SeoService } from 'src/app/shared/services/seo.service';
 import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import * as QRCode from 'qrcode'
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-lesson',
@@ -265,7 +267,7 @@ export class Lesson implements OnInit {
       q.questionType = typeof q.cau_hoi;
       if (q?.questionType === 'object') {
         console.log(q?.cau_hoi);
-        
+
         q?.cau_hoi?.forEach((part: any, index: any) => {
           const partObject = <any>{}
           const typeMatchers: { type: string, match: (part: any) => boolean }[] = [
@@ -280,7 +282,6 @@ export class Lesson implements OnInit {
         });
       }
     });
-    console.log(this.quizzes);
   }
 
   toggleFlip(i: number) {
@@ -302,11 +303,17 @@ export class Lesson implements OnInit {
       setTimeout(() => this.noAnim = false, 0);
     }
   }
+
   dialogRef: any;
+  qrUrl: any;
   shareResult(shareResultDialog: any) {
-    this.dialogRef = this.dialog.open(shareResultDialog, {
-      panelClass: 'custom-dialog-container',
-    });
+    this.qrUrl = this.generateQRCodeDataUrl(window.location.href)
+      .subscribe(url => {
+        this.qrUrl = url;
+        this.dialogRef = this.dialog.open(shareResultDialog, {
+          panelClass: 'custom-dialog-container',
+        });
+      });
   }
 
   @ViewChild('sharedResultContent') sharedResultContent!: ElementRef;
@@ -352,6 +359,18 @@ export class Lesson implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+  generateQRCodeDataUrl(input: any): Observable<any> {
+    return new Observable((observable: any) => {
+      QRCode.toDataURL(input)
+        .then(url => {
+          observable.next(url)
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    })
   }
 }
 
