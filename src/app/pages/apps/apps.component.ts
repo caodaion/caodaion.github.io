@@ -58,6 +58,13 @@ export class AppsComponent {
       icon: 'school',
       route: '/hoc'
     },
+    {
+      id: 'maps',
+      name: 'Bản đồ',
+      description: 'Tìm kiếm và định vị các thánh thất, điểm tâm linh Cao Đài',
+      icon: 'globe_location_pin',
+      route: '/maps'
+    },
     // {
     //   id: 'ca-nhan',
     //   name: 'Cá Nhân',
