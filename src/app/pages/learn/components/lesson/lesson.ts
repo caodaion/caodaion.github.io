@@ -116,7 +116,6 @@ export class Lesson implements OnInit {
   }
 
   selectChoice(quizIndex: number, choice: string) {
-    if (this.quizzes[quizIndex].selected) return; // Không cho chọn lại
     this.quizzes[quizIndex].selected = choice;
     this.quizzes[quizIndex].showImmediateFeedback = false;
   }

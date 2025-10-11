@@ -81,7 +81,7 @@
                     <div class="quiz-choices">
                         <button mat-stroked-button *ngFor="let choice of quizzes[currentQuizIndex].lua_chon"
                             class="quiz-choice-button" [class.selected]="quizzes[currentQuizIndex].selected == choice"
-                            [disabled]="quizzes[currentQuizIndex].selected"
+                            [disabled]="quizzes[currentQuizIndex]?.showImmediateFeedback"
                             (click)="selectChoice(currentQuizIndex, choice)">
                             {{ choice }}
                         </button>
