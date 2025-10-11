@@ -13,6 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TourMatMenuModule, TourStepTemplateComponent } from "ngx-ui-tour-md-menu";
 import { IconComponent } from "src/app/components/icon/icon.component";
 import { AppTourMenu } from "src/app/components/app-tour-menu/app-tour-menu";
+import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
+import { MatTabsModule } from "@angular/material/tabs";
+import { QrGeneratorComponent } from "src/app/components/qr-generator/qr-generator.component";
 
 
 @NgModule({
@@ -33,7 +36,10 @@ import { AppTourMenu } from "src/app/components/app-tour-menu/app-tour-menu";
     TourStepTemplateComponent,
     TourMatMenuModule,
     IconComponent,
-    AppTourMenu
+    AppTourMenu,
+    ButtonShareModule,
+    MatTabsModule,
+    QrGeneratorComponent
 ],
   exports: [
     NavigationComponent

@@ -98,6 +98,19 @@ export class AppTour {
       content: 'Nhấn vào logo để trở về trang chủ bất cứ lúc nào.',
       title: 'Logo CaoDaiON',
     });
+    if (this.breakpointObserver.isMatched('(min-width: 601px)')) {
+    steps.push({
+      anchorId: 'quick-share',
+      content: 'Sử dụng tính năng chia sẻ nhanh để chia sẻ trang hiện tại với bạn bè và người thân.',
+      title: 'Chia sẻ nhanh',
+    });
+    } else {
+      steps.push({
+        anchorId: 'mobile-quick-share',
+        content: 'Sử dụng tính năng chia sẻ nhanh để chia sẻ trang hiện tại với bạn bè và người thân.',
+        title: 'Chia sẻ nhanh',
+      });
+    }
     steps.push({
       anchorId: 'toolbar.qr-scan',
       content: 'Sử dụng tính năng quét mã QR để truy cập nhanh các nội dung và sự kiện.',
