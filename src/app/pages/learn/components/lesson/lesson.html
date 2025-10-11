@@ -18,7 +18,7 @@
             </div>
             <div class="flashcard-stack vertical-stack card-nav-absolute">
                 <div class="nav-btn nav-btn-left-abs" (click)="showPrevCard()">
-                    <button mat-icon-button [disabled]="currentCardIndex === 0">
+                    <button mat-icon-button [disabled]="currentCardIndex === 0" class="nav-prev">
                         <app-icon name="chevron_left"></app-icon>
                     </button>
                 </div>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="nav-btn nav-btn-right-abs" (click)="showNextCard()">
-                    <button mat-icon-button [disabled]="currentCardIndex === flashcards.length - 1">
+                    <button mat-icon-button [disabled]="currentCardIndex === flashcards.length - 1" class="nav-next">
                         <app-icon name="chevron_right"></app-icon>
                     </button>
                 </div>

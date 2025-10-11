@@ -74,6 +74,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.nav-prev, .nav-next {
+  display: flex;
+}
+
 .nav-btn-left-abs, .nav-btn-right-abs {
   position: absolute;
   top: 50%;
