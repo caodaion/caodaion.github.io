@@ -10,10 +10,22 @@ import { ChildHeaderComponent } from 'src/app/components/child-header/child-head
 import { LearnDataService } from '../../services/learn-data.service';
 import { LearnResultsService, LearnResult, QuizAnswer } from '../../services/learn-results.service';
 import html2canvas from 'html2canvas-pro';
+import { SeoService } from 'src/app/shared/services/seo.service';
+import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-lesson',
-  imports: [CommonModule, IconComponent, MatButtonModule, MatTabsModule, MatDialogModule, ChildHeaderComponent],
+  imports: [
+    CommonModule,
+    IconComponent,
+    MatButtonModule,
+    MatTabsModule,
+    MatDialogModule,
+    ChildHeaderComponent,
+    ButtonShareModule,
+    MatTooltipModule
+  ],
   templateUrl: './lesson.html',
   styleUrl: './lesson.scss'
 })
@@ -23,7 +35,7 @@ export class Lesson implements OnInit {
   correctCount = 0;
 
   dialog = inject(MatDialog);
-  
+
   lessonPost: any;
   flashcards: [string, string][] = [];
   flipped: boolean[] = [];
@@ -38,8 +50,9 @@ export class Lesson implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private learnDataService: LearnDataService,
-    private learnResultsService: LearnResultsService
-  ) {}
+    private learnResultsService: LearnResultsService,
+    private seoService: SeoService
+  ) { }
 
   onGoBack() {
     this.router.navigate(['..'], { relativeTo: this.route });
@@ -81,7 +94,7 @@ export class Lesson implements OnInit {
 
   calculateResult() {
     this.correctCount = this.quizzes.filter(q => q.selected === q.dap_an).length;
-    
+
     // Save result to IndexedDB
     this.saveLearnResult();
   }
@@ -138,7 +151,20 @@ export class Lesson implements OnInit {
     }
   }
 
+  /**
+   * Set SEO metadata for the calendar page
+   */
+  private setSeoMetadata(): void {
+    this.seoService.updateMetadata({
+      title: `Học ${this.currentTitle || ''}`,
+      description: `Bài học về đạo Cao Đài: ${this.currentTitle || ''}`,
+      url: 'hoc',
+      keywords: 'Học, đạo Cao Đài, bài học, giáo lý, tín đồ Cao Đài, tôn giáo, triết lý, tâm linh, CaoDaiON',
+    });
+  }
+
   private initializeLessonContent() {
+    this.setSeoMetadata();
     this.getPostFlashcard();
     this.getPostQuiz();
   }
@@ -166,7 +192,7 @@ export class Lesson implements OnInit {
       isCorrect: quiz.selected === quiz.dap_an
     }));
 
-    const timeSpent = this.quizStartTime 
+    const timeSpent = this.quizStartTime
       ? Math.round((new Date().getTime() - this.quizStartTime.getTime()) / 1000)
       : undefined;
 
@@ -226,7 +252,7 @@ export class Lesson implements OnInit {
     try {
       const arrayText = match[1].trim();
       this.quizzes = JSON.parse(arrayText);
-      
+
       // Start timer when quiz is loaded and available
       if (this.quizzes.length > 0 && !this.quizStartTime) {
         this.quizStartTime = new Date();

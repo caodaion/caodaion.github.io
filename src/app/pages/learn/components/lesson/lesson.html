@@ -1,4 +1,10 @@
-<app-child-header [title]="currentTitle" (goBack)="onGoBack()"></app-child-header>
+<app-child-header [title]="currentTitle" (goBack)="onGoBack()">
+    <button-share>
+        <button mat-icon-button [matTooltip]="'Chia sẻ bài học'">
+            <app-icon name="share"></app-icon>
+        </button>
+    </button-share>
+</app-child-header>
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Bài đọc">
         <div class="lesson-info-section p-3 select-text">
