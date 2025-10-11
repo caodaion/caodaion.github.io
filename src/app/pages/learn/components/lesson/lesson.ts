@@ -253,6 +253,7 @@ export class Lesson implements OnInit {
       const arrayText = match[1].trim();
       this.quizzes = JSON.parse(arrayText);
 
+
       // Start timer when quiz is loaded and available
       if (this.quizzes.length > 0 && !this.quizStartTime) {
         this.quizStartTime = new Date();
@@ -260,6 +261,25 @@ export class Lesson implements OnInit {
     } catch {
       this.quizzes = [];
     }
+    this.quizzes.forEach(q => {
+      q.questionType = typeof q.cau_hoi;
+      if (q?.questionType === 'object') {
+        console.log(q?.cau_hoi);
+        
+        q?.cau_hoi?.forEach((part: any, index: any) => {
+          const partObject = <any>{}
+          const typeMatchers: { type: string, match: (part: any) => boolean }[] = [
+            { type: 'image', match: (p) => typeof p === 'string' && p.includes('img') },
+            { type: 'text', match: (p) => typeof p === 'string' }
+            // Add more types here as needed
+          ];
+          const matched = typeMatchers.find(m => m.match(part));
+          partObject.type = matched ? matched.type : 'unknown';
+          partObject.content = part;
+          q.cau_hoi[index] = partObject;
+        });
+      }
+    });
     console.log(this.quizzes);
   }
 
