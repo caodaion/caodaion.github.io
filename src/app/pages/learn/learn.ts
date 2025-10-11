@@ -67,7 +67,6 @@ export class Learn {
 
     this.subscriptions.push(
       this.navigationService.showLearnNav$.subscribe((show: any) => {
-        console.log(show);
         this.isDrawerOpen = show;
       })
     );
@@ -78,10 +77,10 @@ export class Learn {
    */
   private setSeoMetadata(): void {
     this.seoService.updateMetadata({
-      title: 'Lịch',
-      description: 'Lịch âm dương, lịch vạn niên, các sự kiện và ngày lễ quan trọng - CaoDaiON',
-      url: 'lich',
-      keywords: 'Lịch, lịch âm, lịch dương, lịch vạn niên, sự kiện, ngày lễ, Cao Đài'
+      title: 'Học',
+      description: 'Học về đạo Cao Đài qua các bài học tương tác',
+      url: 'hoc',
+      keywords: 'Học, đạo Cao Đài, bài học, giáo lý, tín đồ Cao Đài, tôn giáo, triết lý, tâm linh, CaoDaiON',
     });
   }
 

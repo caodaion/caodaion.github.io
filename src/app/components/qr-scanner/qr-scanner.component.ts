@@ -56,12 +56,36 @@ export class QrScannerComponent {
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
-    const device = JSON.parse(localStorage.getItem('lastDevice') || '')
-    if (device && device?.scanner) {
-      this.currentDevice = device?.scanner
+    
+    // Try to get the last used device from localStorage
+    try {
+      const lastDeviceData = localStorage.getItem('lastDevice');
+      if (lastDeviceData) {
+        const device = JSON.parse(lastDeviceData);
+        if (device && device?.scanner) {
+          // Check if the stored device still exists in available devices
+          const foundDevice = devices.find(d => d.deviceId === device.scanner.deviceId);
+          if (foundDevice) {
+            this.currentDevice = foundDevice;
+          } else {
+            // If stored device not found, use the last available device
+            this.currentDevice = devices[devices.length - 1];
+          }
+        } else {
+          // If no valid stored device, use the last available device
+          this.currentDevice = devices[devices.length - 1];
+        }
+      } else {
+        // If no stored device, use the last available device
+        this.currentDevice = devices[devices.length - 1];
+      }
+    } catch (error) {
+      console.warn('Error parsing stored device data:', error);
+      // Fallback to last available device
+      this.currentDevice = devices[devices.length - 1];
     }
-    console.log(this.currentDevice);
-
+    
+    console.log('Selected device:', this.currentDevice);
   }
 
   scanComplete(resultString: string) {
@@ -70,10 +94,13 @@ export class QrScannerComponent {
   }
 
   onDeviceSelectChange() {
-    let device = {
-      scanner: this.currentDevice
+    if (this.currentDevice) {
+      let device = {
+        scanner: this.currentDevice
+      }
+      localStorage.setItem('lastDevice', JSON.stringify(device))
+      console.log('Device saved to localStorage:', device);
     }
-    localStorage.setItem('lastDevice', JSON.stringify(device))
   }
 
   onHasPermission(has: boolean) {

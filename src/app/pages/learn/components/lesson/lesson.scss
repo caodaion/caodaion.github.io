@@ -292,6 +292,16 @@
   line-height: 1.4;
 }
 
+.quiz-question-image {
+  width: 100%;
+  height: auto;
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
 .quiz-choices {
   display: flex;
   flex-wrap: wrap;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonService } from "../../../shared/services/common/common.service";
+import { CommonService } from "../../shared/services/common/common.service";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 import * as CryptoJS from 'crypto-js';
 import { CHECKINTYPES } from 'src/app/shared/constants/master-data/check-in.constant';
@@ -8,13 +8,37 @@ import { TinyUrlService } from 'src/app/shared/services/tiny-url/tiny-url.servic
 import { Observable, tap } from 'rxjs';
 import * as QRCode from 'qrcode'
 import html2canvas from 'html2canvas-pro';
+import { IconComponent } from "src/app/components/icon/icon.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from "../../shared/shared.module";
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
     selector: 'app-qr-generator',
     templateUrl: './qr-generator.component.html',
     styleUrls: ['./qr-generator.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [
+    IconComponent,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    FormsModule,
+    SharedModule,
+    MatButtonModule,
+    MatTooltipModule,
+    CommonModule,
+    MatInputModule
+]
 })
 export class QrGeneratorComponent implements OnInit {
   qrData = location.href

@@ -1,4 +1,10 @@
-<app-child-header [title]="currentTitle" (goBack)="onGoBack()"></app-child-header>
+<app-child-header [title]="currentTitle" (goBack)="onGoBack()">
+    <button-share>
+        <button mat-icon-button [matTooltip]="'Chia sẻ bài học'">
+            <app-icon name="share"></app-icon>
+        </button>
+    </button-share>
+</app-child-header>
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Bài đọc">
         <div class="lesson-info-section p-3 select-text">
@@ -61,12 +67,20 @@
             <ng-container *ngIf="!showResult">
                 <div *ngIf="quizzes.length > 0" class="quiz-question-container">
                     <div class="quiz-question-title">
-                        <span class="quiz-question-text">Câu {{ currentQuizIndex + 1 }}: {{ quizzes[currentQuizIndex].cau_hoi }}</span>
+                        <span class="quiz-question-text" *ngIf="quizzes[currentQuizIndex].questionType === 'string'">{{
+                            quizzes[currentQuizIndex].cau_hoi }}</span>
+                        <ng-container *ngIf="quizzes[currentQuizIndex].questionType === 'object'">
+                            <ng-container *ngFor="let part of quizzes[currentQuizIndex].cau_hoi">
+                                <div class="quiz-question-text" *ngIf="part.type === 'text'">{{ part.content }}</div>
+                                <div class="quiz-question-image" *ngIf="part.type === 'image'">
+                                    <img [src]="part.content" alt="Quiz Image" />
+                                </div>
+                            </ng-container>
+                        </ng-container>
                     </div>
                     <div class="quiz-choices">
                         <button mat-stroked-button *ngFor="let choice of quizzes[currentQuizIndex].lua_chon"
-                            class="quiz-choice-button"
-                            [class.selected]="quizzes[currentQuizIndex].selected == choice"
+                            class="quiz-choice-button" [class.selected]="quizzes[currentQuizIndex].selected == choice"
                             (click)="selectChoice(currentQuizIndex, choice)">
                             {{ choice }}
                         </button>
@@ -78,13 +92,16 @@
                     <div class="quiz-result-header">
                         <div class="quiz-result-emoji">🎉</div>
                         <div class="quiz-result-title">Hoàn thành bài học!</div>
-                        <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{ lessonPost?.title }}"</div>
+                        <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{
+                            lessonPost?.title }}"</div>
                         <div class="quiz-score-card">
                             <div class="quiz-score-label text-center">Điểm số của bạn</div>
                             <div class="quiz-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
-                            <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) | number:'1.0-0' }}%</div>
+                            <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) |
+                                number:'1.0-0' }}%</div>
                         </div>
-                        <button mat-raised-button class="quiz-share-button !h-auto !min-h-[48px]" (click)="shareResult(shareResultDialog)">
+                        <button mat-raised-button class="quiz-share-button !h-auto !min-h-[48px]"
+                            (click)="shareResult(shareResultDialog)">
                             <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
                         </button>
                     </div>
@@ -96,7 +113,8 @@
                                 <span *ngIf="quiz.selected === quiz.dap_an" class="quiz-answer-correct">
                                     <app-icon name="check_circle"></app-icon> Đúng
                                 </span>
-                                <span *ngIf="quiz.selected && quiz.selected !== quiz.dap_an" class="quiz-answer-incorrect">
+                                <span *ngIf="quiz.selected && quiz.selected !== quiz.dap_an"
+                                    class="quiz-answer-incorrect">
                                     <app-icon name="cancel"></app-icon> Sai
                                 </span>
                                 <span class="ml-2">| Đáp án đúng: <b>{{ quiz.dap_an }}</b></span>
@@ -112,8 +130,7 @@
             <div *ngIf="quizzes[currentQuizIndex]?.selected"></div>
             <button mat-flat-button class="quiz-next-button" [disabled]="!quizzes[currentQuizIndex]?.selected"
                 (click)="goToNextQuiz()">
-                {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Kiểm tra' }}
-            </button>
+                {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Kiểm tra' }} </button>
         </div>
     </mat-tab>
 </mat-tab-group>
@@ -126,56 +143,65 @@
             class="quiz-result-share-card w-full max-w-xl bg-gradient-to-br from-blue-100 via-white to-green-100 rounded-xl shadow-2xl p-2 sm:p-4 md:p-8 border border-gray-200 flex flex-col items-center"
             style="box-sizing: border-box; min-width: 0; word-break: break-word;">
             <div class="flex flex-col items-center w-full">
-                <div class="font-extrabold text-green-700 mb-2 text-center text-base md:text-xl lg:text-2xl xl:text-3xl">
+                <div
+                    class="font-extrabold text-green-700 mb-2 text-center text-base md:text-xl lg:text-2xl xl:text-3xl">
                     Chúc mừng🎉
                 </div>
                 <div class="font-extrabold text-green-700 mb-2 text-center text-xl md:text-3l lg:text-4xl xl:text-4xl">
-                    [  ]
+                    [ ]
                 </div>
                 <div class="font-extrabold text-green-700 mb-2 text-center text-base md:text-lg lg:text-xl xl:text-2xl">
                     Đã hoàn thành bài học
                 </div>
-                <div class="font-extrabold text-green-700 mb-2 text-center text-2xl md:text-4xl lg:text-5xl xl:text-5xl">
+                <div
+                    class="font-extrabold text-green-700 mb-2 text-center text-2xl md:text-4xl lg:text-5xl xl:text-5xl">
                     {{ lessonPost?.title }}
                 </div>
-                <div
-                    class="score-card flex flex-col items-center justify-center bg-white rounded-lg shadow-lg px-4 py-4 mb-4">
-                    <div class="font-bold text-blue-600 mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Với điểm số
+                <div class="flex mb-4 w-full justify-evenly gap-4">
+                    <div
+                        class="score-card flex flex-col items-center justify-center bg-white rounded-lg shadow-lg px-4 py-4 w-full">
+                        <div class="font-bold text-blue-600 mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Với điểm số
+                        </div>
+                        <div class="font-extrabold text-green-700 mb-2 text-lg md:text-2xl lg:text-3xl xl:text-4xl">{{
+                            correctCount
+                            }} / {{ quizzes.length }}</div>
+                        <div class="text-gray-500 text-xs md:text-sm lg:text-base xl:text-lg">{{ ((correctCount /
+                            quizzes.length)
+                            * 100) | number:'1.0-0' }}%</div>
                     </div>
-                    <div class="font-extrabold text-green-700 mb-2 text-lg md:text-2xl lg:text-3xl xl:text-4xl">{{
-                        correctCount
-                        }} / {{ quizzes.length }}</div>
-                    <div class="text-gray-500 text-xs md:text-sm lg:text-base xl:text-lg">{{ ((correctCount /
-                        quizzes.length)
-                        * 100) | number:'1.0-0' }}%</div>
+                    <img [src]="qrUrl" [alt]="lessonPost?.title" class="w-full">
                 </div>
+
             </div>
 
             <!-- App signature -->
             <div class="app-signature">
-              <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)"
-                  fill="#4285F4" />
-                <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z" fill="#FBBC05" />
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z"
-                  fill="#EA4335" />
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z"
-                  fill="#FBBC05" />
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z"
-                  fill="#4285F4" />
-                <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4" />
-                <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
-                <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
-                <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
-                <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
-                <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
-                <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)" fill="#EA4335" />
-                <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)" fill="#4285F4" />
-              </svg>
-              <span class="text-gray-500">www.caodaion.com</span>
+                <svg width="24px" height="24px" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1685.33" y="1280" width="213.333" height="725.332" transform="rotate(90 1685.33 1280)"
+                        fill="#4285F4" />
+                    <path d="M601.607 853.332V1066.67L98.1416 1066.67L98.1416 853.332L601.607 853.332Z"
+                        fill="#FBBC05" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M1327.38 73.0755C1210.9 24.8311 1086.07 0 960.001 0L960.001 213.333C960.001 213.333 960.001 213.333 960.001 213.333C1372.37 213.333 1706.67 547.626 1706.67 959.998C1706.67 1372.37 1372.37 1706.66 960.001 1706.66C960.001 1706.66 960.001 1706.66 960 1706.66L960 1920C1086.07 1920 1210.9 1895.17 1327.38 1846.92C1443.85 1798.68 1549.68 1727.96 1638.82 1638.82C1727.97 1549.68 1798.68 1443.85 1846.92 1327.37C1895.17 1210.9 1920 1086.07 1920 959.999C1920 833.93 1895.17 709.096 1846.92 592.623C1798.68 476.151 1727.97 370.321 1638.82 281.177C1549.68 192.033 1443.85 121.32 1327.38 73.0755Z"
+                        fill="#EA4335" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M2.4076e-05 959.997C2.29393e-05 1128.51 44.3579 1294.06 128.615 1440L313.368 1333.33C247.834 1219.82 213.334 1091.06 213.334 959.997C213.334 828.93 247.835 700.172 313.368 586.664L959.998 959.997L959.999 959.997L313.368 586.664L128.615 479.998C44.3579 625.936 2.52127e-05 791.482 2.4076e-05 959.997Z"
+                        fill="#FBBC05" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M960.003 1493.33C854.519 1493.33 751.405 1462.05 663.699 1403.45C575.993 1344.84 507.634 1261.55 467.268 1164.1C426.901 1066.64 416.339 959.406 436.918 855.95C457.497 752.494 508.292 657.463 582.88 582.875C657.468 508.287 752.498 457.492 855.955 436.913C959.411 416.335 1066.65 426.897 1164.1 467.263C1261.55 507.63 1344.85 575.988 1403.45 663.695C1462.06 751.401 1493.33 854.515 1493.33 959.998L1280 959.998C1280 783.267 1136.73 639.998 960.003 639.998C783.272 639.998 640.004 783.267 640.004 959.998C640.004 1136.73 783.272 1280 960.003 1280V1493.33Z"
+                        fill="#4285F4" />
+                    <rect x="853.335" y="959.998" width="213.333" height="426.666" fill="#4285F4" />
+                    <circle cx="960.002" cy="959.999" r="106.666" fill="#FBBC05" />
+                    <circle cx="960.004" cy="1813.33" r="106.666" fill="#FBBC05" />
+                    <circle cx="960.002" cy="1386.66" r="106.666" fill="#4285F4" />
+                    <circle cx="1386.67" cy="959.999" r="106.666" fill="#EA4335" />
+                    <circle cx="960.002" cy="106.666" r="106.666" fill="#4285F4" />
+                    <circle cx="220.993" cy="1386.66" r="106.666" transform="rotate(60 220.993 1386.66)"
+                        fill="#EA4335" />
+                    <circle cx="220.433" cy="533.014" r="106.666" transform="rotate(30 220.433 533.014)"
+                        fill="#4285F4" />
+                </svg>
+                <span class="text-gray-500">www.caodaion.com</span>
             </div>
         </div>
 

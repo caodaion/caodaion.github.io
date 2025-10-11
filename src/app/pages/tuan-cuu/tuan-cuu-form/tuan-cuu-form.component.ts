@@ -24,6 +24,10 @@ import { v4 as uuidv4 } from 'uuid';
 import * as QRCode from 'qrcode';
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 import { IconComponent } from "src/app/components/icon/icon.component";
+import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { EventImageDialogComponent } from '../../lich/components/event-image-dialog/event-image-dialog.component';
+import { SeoService } from 'src/app/shared/services/seo.service';
 
 // Interface for form data
 interface TuanCuuFormData {
@@ -70,7 +74,9 @@ interface TuanCuuEvent {
     MatDatepickerModule,
     MatNativeDateModule,
     ChildHeaderComponent,
-    IconComponent
+    IconComponent,
+    ButtonShareModule,
+    MatTooltipModule
   ],
   templateUrl: './tuan-cuu-form.component.html',
   styleUrl: './tuan-cuu-form.component.scss',
@@ -83,6 +89,8 @@ interface TuanCuuEvent {
   ],
 })
 export class TuanCuuFormComponent implements OnInit {
+  // Responsive: detect mobile viewport
+  isMobileViewport: boolean = false;
   // Form data model
   formData: TuanCuuFormData = {
     calendarType: 'lunar', // Default to lunar
@@ -150,7 +158,7 @@ export class TuanCuuFormComponent implements OnInit {
   solarTimeOptions = Array.from({ length: 24 }, (_, i) => i);
 
   // Table columns
-  displayedColumns: string[] = ['sequence', 'lunarDate', 'date', 'eventTime'];
+  displayedColumns: string[] = ['sequence', 'lunarDate', 'date', 'eventTime', 'share'];
 
   private subscriptions: Subscription[] = [];
 
@@ -163,15 +171,16 @@ export class TuanCuuFormComponent implements OnInit {
     private commonService: CommonService,
     private tuanCuuService: TuanCuuService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private seoService: SeoService
   ) { }
 
   ngOnInit(): void {
+    this.checkMobileViewport();
+    window.addEventListener('resize', this.checkMobileViewport.bind(this));
     this.expanded = false;
     this.years = Array.from({ length: 100 }, (_, i) => {
-      const iDate = new Date(
-        new Date().setFullYear(new Date().getFullYear() - 50 + i)
-      );
+      const iDate = new Date(new Date().setFullYear(new Date().getFullYear() - 50 + i));
       return {
         value: iDate.getFullYear(),
         label:
@@ -179,7 +188,7 @@ export class TuanCuuFormComponent implements OnInit {
             ?.lunarYearName,
       };
     });
-    // Check if we're in create or edit mode
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id && id !== 'tinh') {
@@ -210,14 +219,35 @@ export class TuanCuuFormComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.checkMobileViewport.bind(this));
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /**
+   * Set SEO metadata for the calendar page
+   */
+  private setSeoMetadata(): void {
+    this.seoService.updateMetadata({
+      title: 'Thông tin Tuần Cửu',
+      description: this.getTuanCuuSummary(),
+      url: 'tuan-cuu',
+      keywords: 'Tuần Cửu, tuần cửu, tuần cửu online, tuần cửu trực tuyến, tuần cửu cao đài, tuần cửu caodai, tuần cửu caodaiON, tuan cuu, tuan cuu online, tuan cuu mien phi, tuan cuu truc tuyen, tuan cuu cao dai, tuan cuu caodai, tuan cuu caodaiON'
+    });
+  }
+
+  checkMobileViewport() {
+    this.isMobileViewport = window.innerWidth <= 768;
+  }
+
   private scrollToActionButtons(): void {
     const actionButtons = document.querySelector('.form-actions');
     if (actionButtons) {
-      actionButtons.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
+      actionButtons.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
       });
-      
+
       // Show a helpful message
       this.snackBar.open('Cuộn đến nút "Gửi đến Google Calendar" để gửi tất cả sự kiện tuần cửu!', 'Đóng', {
         duration: 5000,
@@ -268,6 +298,7 @@ export class TuanCuuFormComponent implements OnInit {
           this.onTitleChange('chuc-viec');
         }
         console.log(this.formData);
+        this.setSeoMetadata();
 
       } else {
         this.snackBar.open('Không tìm thấy dữ liệu Tuần Cửu!', 'Đóng', {
@@ -939,7 +970,7 @@ export class TuanCuuFormComponent implements OnInit {
   }
 
   // Generate a concise summary of the Tuần Cửu
-  getTuanCuuSummary(): string {
+  getTuanCuuSummary(event?: any): string {
     if (!this.formData.name || this.formData.events.length === 0) {
       return '';
     }
@@ -998,10 +1029,10 @@ export class TuanCuuFormComponent implements OnInit {
     }
 
     // Build the summary string
-    return `${eventTitle} Cửu cho ${titleText} ${this.formData.holyName || this.formData.name
-      }, ${this.formData.age || ''} tuổi, mất thời ${this.formData.time || ''} ngày ${this.formData.date
-      }/${this.decimalPipe.transform(this.formData.month, '2.0-0')}/${yearLabel
-      }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.`;
+    return `${eventTitle} ${event?.sequence || 'Cửu'} cho ${titleText} ${this.formData.holyName || this.formData.name
+      }` + (!event ? `, ${this.formData.age || ''} tuổi, mất thời ${this.formData.time || ''} ngày ${this.formData.date
+        }/${this.decimalPipe.transform(this.formData.month, '2.0-0')}/${yearLabel
+        }${solarDateFormatted ? ` (${solarDateFormatted})` : ''}.` : '');
   }
 
   getHolyName() {
@@ -1147,7 +1178,7 @@ export class TuanCuuFormComponent implements OnInit {
 
     // Show confirmation dialog
     const confirmMessage = `Bạn có muốn gửi tất cả ${this.formData.events.length} sự kiện tuần cửu đến Google Calendar?\n\nCác sự kiện sẽ được mở từng cái một để bạn có thể chỉnh sửa và lưu từng sự kiện. Sau đó hãy quay lại CaoDaiON để tiếp tục bạn nhé!`;
-    
+
     if (!confirm(confirmMessage)) {
       return;
     }
@@ -1166,10 +1197,10 @@ export class TuanCuuFormComponent implements OnInit {
     const event = this.formData.events[currentIndex];
     const eventData = this.createEventDataForGoogleCalendar(event, currentIndex);
     const googleCalendarUrl = this.calendarService.getGoogleCalendarEventEditUrl(eventData);
-    
+
     // Open current event
     window.open(googleCalendarUrl, '_blank');
-    
+
     // Show progress message
     this.snackBar.open(`Sự kiện ${currentIndex + 1}/${this.formData.events.length}: ${event.sequence}`, 'Đóng', {
       duration: 2000,
@@ -1177,7 +1208,7 @@ export class TuanCuuFormComponent implements OnInit {
 
     // Ask if user wants to continue to next event
     const continueMessage = `Đã mở sự kiện "${event.sequence}".\n\nBạn có muốn tiếp tục với sự kiện tiếp theo?`;
-    
+
     setTimeout(() => {
       if (confirm(continueMessage)) {
         this.sendEventsStepByStep(currentIndex + 1);
@@ -1212,18 +1243,18 @@ export class TuanCuuFormComponent implements OnInit {
     // Create event name template with new format: "Cầu Siêu <sequence> cho <title> <holyname>, <name> | thời <eventTime> - <lunar date>"
     const fullName = this.formData.holyName || this.formData.name;
     let displayName = fullName;
-    
+
     // If there's a holy name, format it properly
     if (this.formData.holyName && this.formData.holyName !== this.formData.name) {
       displayName = `${this.formData.holyName}, ${this.formData.name}`;
     }
-    
+
     const eventNameTemplate = `Cầu Siêu ${event.sequence} cho ${titleText} ${displayName} | thời ${event.eventTime} - ${this.formatLunarDate(event.lunarDate)}`;
 
     // Convert lunar time to solar time for Google Calendar (2-hour duration)
     const lunarToSolarTimeMap: { [key: string]: { start: string, end: string } } = {
       'Tý': { start: '23:00:00', end: '01:00:00' },
-      'Sửu': { start: '01:00:00', end: '03:00:00' }, 
+      'Sửu': { start: '01:00:00', end: '03:00:00' },
       'Dần': { start: '03:00:00', end: '05:00:00' },
       'Mão': { start: '05:00:00', end: '07:00:00' },
       'Thìn': { start: '07:00:00', end: '09:00:00' },
@@ -1240,10 +1271,10 @@ export class TuanCuuFormComponent implements OnInit {
     const startTime = new Date(event.date);
     const [startHours, startMinutes, startSeconds] = timeRange.start.split(':').map(Number);
     startTime.setHours(startHours, startMinutes, startSeconds);
-    
+
     const endTime = new Date(event.date);
     const [endHours, endMinutes, endSeconds] = timeRange.end.split(':').map(Number);
-    
+
     // Handle next day for times like Tý (23:00-01:00)
     if (endHours < startHours) {
       endTime.setDate(endTime.getDate() + 1);
@@ -1257,5 +1288,32 @@ export class TuanCuuFormComponent implements OnInit {
       location: 'CaoDaiON',
       details: `Sự kiện ${event.sequence} trong chuỗi Tuần Cửu cho ${titleText} ${this.formData.holyName || this.formData.name}.\n\nThời gian: ${event.eventTime} (${timeRange.start} - ${timeRange.end})\nNgày âm lịch: ${this.formatLunarDate(event.lunarDate)}\nNgày dương lịch: ${this.formatDate(event.date)}\n\nTự động tạo bởi ứng dụng CaoDaiON.\n\nLưu ý: Đây là sự kiện ${index + 1}/${this.formData.events.length} trong chuỗi Tuần Cửu.`
     };
+  }
+
+  shareTuanCuu(event: any) {
+    console.log(event);
+    const eventData = {
+      ...event,
+      title: this.getTuanCuuSummary(event),
+      color: '#9c27b0'
+    }
+    const dateData = {
+      lunar: event.lunarDate,
+      solar: {
+        day: event.date.getDate(),
+        month: event.date.getMonth() + 1,
+        year: event.date.getFullYear()
+      }
+    };
+    this.dialog.open(EventImageDialogComponent, {
+      width: this.isMobileViewport ? '100%' : '600px',
+      maxWidth: this.isMobileViewport ? '100%' : '600px',
+      panelClass: 'event-image-dialog-container',
+      data: {
+        event: eventData,
+        dateData: dateData,
+      },
+      autoFocus: false,
+    });
   }
 }

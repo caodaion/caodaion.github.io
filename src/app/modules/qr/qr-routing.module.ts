@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QrComponent } from './qr.component';
 import { QrScannerComponent } from 'src/app/pages/qr/qr-scanner/qr-scanner.component';
-import {QrGeneratorComponent} from "../../pages/qr/qr-generator/qr-generator.component";
+import {QrGeneratorComponent} from "../../components/qr-generator/qr-generator.component";
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
       },
       {
         path: 'tao-ma',
-        loadChildren: () => import('../../pages/qr/qr-generator/qr-generator.module').then((m) => m.QrGeneratorModule),
+        loadChildren: () => import('../../components/qr-generator/qr-generator.module').then((m) => m.QrGeneratorModule),
       },
       {
         path: '',
