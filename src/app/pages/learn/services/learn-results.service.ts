@@ -26,6 +26,22 @@ export interface QuizAnswer {
   providedIn: 'root'
 })
 export class LearnResultsService {
+  /**
+   * Get paginated recent activity for mat-paginator
+   */
+  async getRecentActivityPage(pageIndex: number, pageSize: number): Promise<{results: LearnResult[], total: number}> {
+    try {
+      const allResults = await this.getAllResults();
+      const sorted = allResults.sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+      const total = sorted.length;
+      const start = pageIndex * pageSize;
+      const results = sorted.slice(start, start + pageSize);
+      return { results, total };
+    } catch (error) {
+      console.error('Error getting paginated recent activity:', error);
+      return { results: [], total: 0 };
+    }
+  }
 
   constructor(private db: BaseDbService) {}
 

@@ -312,6 +312,7 @@ export class Lesson implements OnInit {
         this.qrUrl = url;
         this.dialogRef = this.dialog.open(shareResultDialog, {
           panelClass: 'custom-dialog-container',
+          height: '90vh',
         });
       });
   }
@@ -334,6 +335,17 @@ export class Lesson implements OnInit {
       });
 
       this.imagePreviewUrl = canvas.toDataURL('image/png');
+      setTimeout(() => {
+        // Scroll mat-dialog-content to preview image
+        const dialogContent = document.querySelector('mat-dialog-content');
+        const imgEl = this.previewImage?.nativeElement;
+        if (dialogContent && imgEl) {
+          const imgRect = imgEl.getBoundingClientRect();
+          const dialogRect = dialogContent.getBoundingClientRect();
+          dialogContent.scrollTop += (imgRect.top - dialogRect.top) - 24;
+        }
+      }, 100);
+
       if (!isDownload) {
         this.isGenerating = false;
         return;
