@@ -426,11 +426,35 @@ export class LichService {
     };
   }
 
+  /**
+   * Check if the current lunar date is the last day of the lunar month
+   * @param date Solar date
+   * @param lunarDate Current lunar date info
+   * @returns true if this is the last day of the lunar month
+   */
+  private isLastDayOfLunarMonth(date: Date, lunarDate: { year: number; month: number; day: number; isLeapMonth: boolean }): boolean {
+    // Check if tomorrow would be the first day of next lunar month
+    const tomorrow = new Date(date);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const tomorrowLunar = this.getLunarDateInternal(tomorrow);
+    
+    // If tomorrow is day 1 and different month/year, then today is the last day
+    return tomorrowLunar.day === 1 && 
+           (tomorrowLunar.month !== lunarDate.month || tomorrowLunar.year !== lunarDate.year);
+  }
+
   private getEventsForDate(date: Date, lunarDate: { year: number; month: number; day: number; isLeapMonth: boolean }): CalendarEvent[] {
     return this.events.filter((event: any) => {
       // Always show 'thanhso' events for the correct date, regardless of eventTypeVisibility
       if (event.type === 'thanhso') {
         if (event.data) {
+          // Handle the case where thanhso event is on 30th but month only has 29 days
+          if (event.data.eventDate === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
+            // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
+            console.log(`Adjusting thanhso event "${event.title}" from day 30 to day 29 for lunar month ${lunarDate.month}/${lunarDate.year}`);
+            return event.data.eventMonth === lunarDate.month;
+          }
           if (event.data.eventMonth === lunarDate.month &&
             event.data.eventDate === lunarDate.day) {
             return true;
@@ -446,12 +470,25 @@ export class LichService {
         case 'annual-solar':
           return event.solar?.month === date.getMonth() + 1 && event.solar?.day === date.getDate();
         case 'annual-lunar':
+          // Handle the case where event is on 30th but month only has 29 days
+          if (event.lunar?.day === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
+            // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
+            console.log(`Adjusting annual lunar event "${event.title}" from day 30 to day 29 for lunar month ${lunarDate.month}/${lunarDate.year}`);
+            return event.lunar?.month === lunarDate.month &&
+              (event.lunar?.isLeapMonth === undefined || event.lunar.isLeapMonth === lunarDate.isLeapMonth);
+          }
           return event.lunar?.month === lunarDate.month &&
             event.lunar?.day === lunarDate.day &&
             (event.lunar?.isLeapMonth === undefined || event.lunar.isLeapMonth === lunarDate.isLeapMonth);
         case 'monthly-solar':
           return event.solar?.day === date.getDate();
         case 'monthly-lunar':
+          // Handle the case where event is on 30th but month only has 29 days
+          if (event.lunar?.day === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
+            // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
+            console.log(`Adjusting monthly lunar event "${event.title}" from day 30 to day 29 for lunar month ${lunarDate.month}/${lunarDate.year}`);
+            return true;
+          }
           return event.lunar?.day === lunarDate.day;
         case 'daily':
           return true;
@@ -462,6 +499,13 @@ export class LichService {
               event.solar.day === date.getDate();
           }
           if (event.lunar) {
+            // Handle the case where event is on 30th but month only has 29 days
+            if (event.lunar?.day === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
+              // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
+              return event.lunar.year === lunarDate.year &&
+                event.lunar.month === lunarDate.month &&
+                (event.lunar.isLeapMonth === undefined || event.lunar.isLeapMonth === lunarDate.isLeapMonth);
+            }
             return event.lunar.year === lunarDate.year &&
               event.lunar.month === lunarDate.month &&
               event.lunar.day === lunarDate.day &&
@@ -476,6 +520,12 @@ export class LichService {
               event.solar.day === date.getDate();
           }
           if (event.lunar) {
+            // Handle the case where event is on 30th but month only has 29 days
+            if (event.lunar?.day === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
+              // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
+              return event.lunar.year === lunarDate.year &&
+                event.lunar.month === lunarDate.month;
+            }
             return event.lunar.year === lunarDate.year &&
               event.lunar.month === lunarDate.month &&
               event.lunar.day === lunarDate.day;

@@ -1,0 +1,69 @@
+﻿<div class="progress-container">
+  <div class="statistics-card">
+    <h2>Thống kê học tập</h2>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">{{statistics?.totalAttempts || 0}}</div>
+        <div class="stat-label">Lần thử</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{statistics?.totalLessons || 0}}</div>
+        <div class="stat-label">Bài học</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{statistics?.averageScore || 0}}%</div>
+        <div class="stat-label">Điểm TB</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{statistics?.bestScore || 0}}%</div>
+        <div class="stat-label">Điểm cao nhất</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recent-activity">
+    <h3>Hoạt động gần đây</h3>
+    <div *ngIf="statistics?.recentActivity?.length === 0" class="no-results">
+      Chưa có kết quả học tập nào
+    </div>
+    <div *ngFor="let result of statistics?.recentActivity" class="result-item">
+      <div class="result-header">
+        <h4>{{result.lessonTitle}}</h4>
+        <div class="result-score" [class.excellent]="result.percentage >= 80" 
+             [class.good]="result.percentage >= 60 && result.percentage < 80"
+             [class.needs-improvement]="result.percentage < 60">
+          {{result.percentage}}%
+          @if (result.percentage === 100) {
+          <app-icon name="star" size="14px" class="perfect-score-icon"></app-icon>
+          }
+        </div>
+      </div>
+      <div class="result-details">
+        <span>{{result.correctAnswers}}/{{result.totalQuestions}} đúng</span>
+        <span>{{result.completedAt | date:'dd/MM/yyyy HH:mm'}}</span>
+        <span *ngIf="result.timeSpent">{{formatTime(result.timeSpent)}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-section">
+    <div class="actions-container">
+      <button mat-raised-button 
+              color="primary" 
+              class="action-button sync-button"
+              (click)="openSyncDialog()">
+        <app-icon name="sync" class="button-icon"></app-icon>
+        <span class="button-text">Đồng bộ dữ liệu</span>
+      </button>
+      
+      <button mat-raised-button 
+              color="warn" 
+              class="action-button clear-button"
+              (click)="clearAllResults()" 
+              [disabled]="!statistics?.totalAttempts">
+        <app-icon name="delete" class="button-icon"></app-icon>
+        <span class="button-text">Xóa tất cả kết quả</span>
+      </button>
+    </div>
+  </div>
+</div>
