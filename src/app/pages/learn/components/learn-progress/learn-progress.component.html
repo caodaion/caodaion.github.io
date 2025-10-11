@@ -23,27 +23,34 @@
 
   <div class="recent-activity">
     <h3>Hoạt động gần đây</h3>
-    <div *ngIf="statistics?.recentActivity?.length === 0" class="no-results">
+    <div *ngIf="recentActivity.length === 0" class="no-results">
       Chưa có kết quả học tập nào
     </div>
-    <div *ngFor="let result of statistics?.recentActivity" class="result-item">
+    <div *ngFor="let result of recentActivity" class="result-item">
       <div class="result-header">
         <h4>{{result.lessonTitle}}</h4>
         <div class="result-score" [class.excellent]="result.percentage >= 80" 
              [class.good]="result.percentage >= 60 && result.percentage < 80"
              [class.needs-improvement]="result.percentage < 60">
           {{result.percentage}}%
-          @if (result.percentage === 100) {
-          <app-icon name="star" size="14px" class="perfect-score-icon"></app-icon>
-          }
+          <ng-container *ngIf="result.percentage === 100">
+            <app-icon name="star" size="14px" class="perfect-score-icon"></app-icon>
+          </ng-container>
         </div>
       </div>
       <div class="result-details">
         <span>{{result.correctAnswers}}/{{result.totalQuestions}} đúng</span>
-        <span>{{result.completedAt | date:'dd/MM/yyyy HH:mm'}}</span>
+        <span>{{result.completedAt | date:'dd/MM/yyyy HH:mm'}} </span>
         <span *ngIf="result.timeSpent">{{formatTime(result.timeSpent)}}</span>
       </div>
     </div>
+    <mat-paginator
+      [length]="recentActivityTotal"
+      [pageSize]="recentActivityPageSize"
+      [pageIndex]="recentActivityPageIndex"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="onRecentActivityPage($event)">
+    </mat-paginator>
   </div>
 
   <div class="actions-section">
