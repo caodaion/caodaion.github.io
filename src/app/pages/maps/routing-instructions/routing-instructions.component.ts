@@ -104,7 +104,6 @@ export class RoutingInstructionsComponent implements AfterViewChecked {
         this.cd.detectChanges()
       }
     })
-    console.log(this.route?.instructions)
   }
 
   onRemoveWayRouting() {

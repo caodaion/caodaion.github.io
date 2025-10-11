@@ -131,7 +131,7 @@
             <div style="flex: 1;"></div>
             <div style="display: flex; flex-direction: column; align-items: flex-end; min-width: 180px;">
                 <ng-container *ngIf="quizzes[currentQuizIndex].selected">
-                    <div *ngIf="!quizzes[currentQuizIndex].showImmediateFeedback">
+                    <div *ngIf="!quizzes[currentQuizIndex]?.showImmediateFeedback">
                         <button mat-flat-button color="primary" (click)="checkAnswer(currentQuizIndex)">Kiểm tra</button>
                     </div>
                     <div *ngIf="quizzes[currentQuizIndex].showImmediateFeedback">
