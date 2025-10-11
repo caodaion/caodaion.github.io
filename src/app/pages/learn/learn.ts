@@ -8,6 +8,7 @@ import { NavigationService } from 'src/app/shared/services/navigation.service';
 import { SeoService } from 'src/app/shared/services/seo.service';
 import { Blogger } from 'src/app/shared/services/blogger';
 import { LearnDataService } from './services/learn-data.service';
+import { LearnActionContribute } from "./components/learn-action-contribute/learn-action-contribute";
 
 @Component({
   selector: 'app-learn',
@@ -16,7 +17,8 @@ import { LearnDataService } from './services/learn-data.service';
     IconComponent,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    LearnActionContribute
 ],
   templateUrl: './learn.html',
   styleUrl: './learn.scss'
