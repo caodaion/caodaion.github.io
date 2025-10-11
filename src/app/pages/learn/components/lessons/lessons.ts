@@ -90,7 +90,6 @@ export class Lessons implements OnInit, OnDestroy {
         ) === idx
       )
       .sort((a: any, b: any) => a.order - b.order);
-    console.log(this.allSessionGroups);
   }
 
   onClickLesson(lesson: any): void {

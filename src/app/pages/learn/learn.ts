@@ -67,7 +67,6 @@ export class Learn {
 
     this.subscriptions.push(
       this.navigationService.showLearnNav$.subscribe((show: any) => {
-        console.log(show);
         this.isDrawerOpen = show;
       })
     );
