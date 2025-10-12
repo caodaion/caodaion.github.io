@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   todayEvents: CalendarEvent[] = [];
   tomorrowEvents: CalendarEvent[] = [];
   weekEvents: CalendarEvent[] = [];
+  nextWeekEvents: CalendarEvent[] = [];
   eventSigns: any[] = [];
 
   // Event type names lookup
@@ -145,6 +146,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
 
     const endOfWeekDate = moment().endOf('week')?.toDate();
+    const endOfNextWeekDate = moment().add(1, 'weeks').endOf('week')?.toDate();
+    console.log(endOfNextWeekDate);
+
     const weekDates = this.lichService
       .getMonthCalendar(
         this.currentDate.getFullYear(),
@@ -156,6 +160,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           day.solar.day <= endOfWeekDate.getDate() &&
           day.solar.month === endOfWeekDate.getMonth() + 1 &&
           day.solar.year === endOfWeekDate.getFullYear()
+        );
+      });
+
+    const nextWeekDates = this.lichService
+      .getMonthCalendar(
+        endOfNextWeekDate.getFullYear(),
+        endOfNextWeekDate.getMonth() + 1
+      )?.filter((day: any) => {
+        return (
+          day?.events?.length > 0 &&
+          day.solar.day >= new Date(new Date().setDate(new Date().getDate() + 1)).getDate() &&
+          day.solar.day <= endOfNextWeekDate.getDate() &&
+          day.solar.month <= endOfNextWeekDate.getMonth() + 1 &&
+          day.solar.year === endOfNextWeekDate.getFullYear()
         );
       });
 
@@ -222,6 +240,21 @@ export class HomeComponent implements OnInit, OnDestroy {
             event.description = `${event?.title} vào ${event.dateString}`;
           }
           this.weekEvents.push(event);
+        }
+      })
+    })
+    nextWeekDates?.forEach((day: any) => {
+      day.events = day?.events?.map((de: any) => ({
+        ...de,
+        dateData: day,
+      }))
+      day.events?.forEach((event: any) => {
+        if (!this.nextWeekEvents.some(e => e.id === event.id)) {
+          event.dateString = `${event?.eventTime ? 'thời ' + event?.eventTime : ''} ngày ${event?.dateData?.lunar?.day} tháng ${event?.dateData?.lunar?.month} năm ${event?.dateData?.lunar?.year} (${day.solar.day}/${day.solar.month}/${day.solar.year})`;
+          if (event?.type === 'tuan-cuu') {
+            event.description = `${event?.title} vào ${event.dateString}`;
+          }
+          this.nextWeekEvents.push(event);
         }
       })
     })

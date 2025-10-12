@@ -205,6 +205,23 @@
           </div>
         </div>
       </div>
+      <h3 class="events-title py-3" *ngIf="nextWeekEvents && nextWeekEvents.length > 0">Sự kiện tuần tới</h3>
+      <div class="events-list" *ngIf="nextWeekEvents && nextWeekEvents.length > 0">
+        <div class="event-item" *ngFor="let event of nextWeekEvents" [style.border-left-color]="event.color"
+          (click)="onEventClick(event)">
+          <div class="event-content">
+            <div class="event-date">{{event?.dateString}}</div>
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-description" *ngIf="event.description">
+              {{ event.description }}
+            </div>
+            <div class="event-type">
+              <span class="event-badge" [style.background-color]="event.color">{{ getEventTypeName(event.type) }}</span>
+              <span class="event-holiday" *ngIf="event.isHoliday">Ngày lễ</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="view-calendar">
         <a routerLink="/lich" class="calendar-link">
           <app-icon name="calendar_today"></app-icon>
