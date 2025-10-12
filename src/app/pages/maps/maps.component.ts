@@ -198,10 +198,15 @@ export class MapsComponent implements OnInit, AfterViewInit {
 
   calculateDistance(item?: any) {
     let currentLocation = L.latLng(this.latitude, this.longitude)
-    if (item?.latLng[0] && item?.latLng[1]) {
-      currentLocation = L.latLng(item?.latLng[0], item?.latLng[1])
+    if (item?.latLng && item.latLng.length >= 2 && item.latLng[0] != null && item.latLng[1] != null) {
+      currentLocation = L.latLng(item.latLng[0], item.latLng[1])
     }
     this.thanhSoList?.forEach((tanhSo: any) => {
+      // Guard: skip if latLng is missing or invalid
+      if (!tanhSo?.latLng || tanhSo.latLng.length < 2 || tanhSo.latLng[0] == null || tanhSo.latLng[1] == null) {
+        console.warn('Skipping invalid thanhSo for distance calculation:', tanhSo);
+        return;
+      }
       const thanhSoLatLng = L.latLng(tanhSo.latLng[0], tanhSo.latLng[1])
       tanhSo.distance = currentLocation.distanceTo(thanhSoLatLng)
     })
@@ -213,6 +218,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
     caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`);
     this.markerCluster.addLayer(caodaiONMarker);
     this.thanhSoList?.forEach((item: any, index: any) => {
+      // Guard: skip if latLng is missing or invalid
+      if (!item?.latLng || item.latLng.length < 2 || item.latLng[0] == null || item.latLng[1] == null) {
+        console.warn('Skipping invalid marker:', item);
+        return;
+      }
       this.loadThanhSoMarker(item, index);
     });
     this.map.addLayer(this.markerCluster);
@@ -256,6 +266,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   loadThanhSoMarker(item: any, index: any) {
+    // Guard: skip if latLng is missing or invalid
+    if (!item?.latLng || item.latLng.length < 2 || item.latLng[0] == null || item.latLng[1] == null) {
+      console.warn('Skipping invalid marker in loadThanhSoMarker:', item);
+      return;
+    }
     const thanhSoMarker = L.marker(item.latLng, { icon: this.getThanhSoIcon(item) });
 
     // Set up popup content
@@ -281,10 +296,15 @@ export class MapsComponent implements OnInit, AfterViewInit {
       if (this.drawerMode == 'over') {
         this.infoDrawer.close();
       }
-      this.map.flyTo(item?.latLng, 15, {
-        duration: 1,
-        easeLinearity: 0.5
-      })
+      // Guard: skip flyTo if latLng is missing or invalid
+      if (item?.latLng && item.latLng.length >= 2 && item.latLng[0] != null && item.latLng[1] != null) {
+        this.map.flyTo(item.latLng, 15, {
+          duration: 1,
+          easeLinearity: 0.5
+        })
+      } else {
+        console.warn('Skipping flyTo due to invalid latLng:', item);
+      }
       this.inforBottomSheetRef = this.matBottomSheet.open(this.inforBottomSheet)
       if (this.user?.editable) {
         this.edittingItem = item
