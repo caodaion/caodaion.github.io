@@ -14,7 +14,7 @@ export interface CalendarEventData {
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
+export class LichEventService {
   private dbName = 'CaoDaiONDB';
   private dbVersion = 1;
   private storeName = 'events';

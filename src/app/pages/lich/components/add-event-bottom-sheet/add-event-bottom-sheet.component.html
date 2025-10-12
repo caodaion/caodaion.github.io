@@ -1,83 +1,90 @@
 <div class="add-event-bottom-sheet">
   <div class="header">
     <h3>{{ isEditMode ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện mới' }}</h3>
-    <button mat-icon-button (click)="onCancel()" class="close-button">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-
-  <div class="content">
-    <div class="date-display">
-      <mat-icon>event</mat-icon>
-      <span>{{ formattedDate }}</span>
-    </div>
-
-    <form [formGroup]="eventForm" (ngSubmit)="onSave()">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Tiêu đề sự kiện</mat-label>
-        <input matInput formControlName="title" placeholder="Nhập tiêu đề sự kiện" required>
-        <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
-          Tiêu đề là bắt buộc
-        </mat-error>
-        <mat-error *ngIf="eventForm.get('title')?.hasError('minlength')">
-          Tiêu đề phải có ít nhất 1 ký tự
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ngày sự kiện</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" readonly>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mô tả</mat-label>
-        <textarea matInput formControlName="description" 
-                placeholder="Nhập mô tả sự kiện (tùy chọn)" 
-                rows="3"></textarea>
-      </mat-form-field>
-
-    <div class="time-fields">
-      <mat-form-field appearance="outline" class="time-field">
-        <mat-label>Thời gian bắt đầu</mat-label>
-        <mat-select formControlName="startTime">
-          <mat-option *ngFor="let time of timeOptions" [value]="time">
-            {{ time }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="time-field">
-        <mat-label>Thời gian kết thúc</mat-label>
-        <mat-select formControlName="endTime">
-          <mat-option *ngFor="let time of timeOptions" [value]="time">
-            {{ time }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-      <div class="actions">
-        <div class="left-actions">
-          <button mat-button type="button" (click)="onCancel()" class="cancel-button">
-            Hủy
-          </button>
-          @if (isEditMode) {
-          <button mat-button type="button" (click)="onDelete()" class="delete-button" color="warn">
-            <mat-icon>delete</mat-icon>
-            Xóa
-          </button>
-          }
-        </div>
-        <button mat-raised-button type="submit" 
-                [disabled]="!eventForm.valid" 
-                color="primary" 
-                class="save-button">
-          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
-          {{ isEditMode ? 'Cập nhật' : 'Tạo sự kiện' }}
+    <div class="actions">
+      <div class="left-actions">
+        <button mat-button type="button" (click)="onCancel()" class="cancel-button">
+          Hủy
         </button>
+        @if (isEditMode) {
+        <button mat-button type="button" (click)="onDelete()" class="delete-button" color="warn">
+          <mat-icon>delete</mat-icon>
+          Xóa
+        </button>
+        }
       </div>
-    </form>
+      <button mat-raised-button type="submit" [disabled]="!eventForm.valid" color="primary" class="save-button">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ isEditMode ? 'Cập nhật' : 'Tạo sự kiện' }}
+      </button>
+    </div>
   </div>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = $event">
+    <ng-template #addEventTemplate>
+      <div class="content">
+        <form [formGroup]="eventForm" (ngSubmit)="onSave()">
+          @if (selectedTabIndex === 1) {
+          <div class="mb-4">
+            <h4>Chọn Thánh Sở</h4>
+            <mat-radio-group formControlName="thanhSo">
+              <mat-radio-button *ngFor="let member of thanhSoMembers" [value]="member?.thanhSoSheet">
+                {{ member?.thanhSo }}
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-divider></mat-divider>
+          </div>
+          }
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tiêu đề sự kiện</mat-label>
+            <input matInput formControlName="title" placeholder="Nhập tiêu đề sự kiện" required>
+            <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+              Tiêu đề là bắt buộc
+            </mat-error>
+            <mat-error *ngIf="eventForm.get('title')?.hasError('minlength')">
+              Tiêu đề phải có ít nhất 1 ký tự
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ngày sự kiện</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Mô tả</mat-label>
+            <textarea matInput formControlName="description" placeholder="Nhập mô tả sự kiện (tùy chọn)"
+              rows="3"></textarea>
+          </mat-form-field>
+
+          <div class="time-fields">
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-label>Thời gian bắt đầu</mat-label>
+              <mat-select formControlName="startTime">
+                <mat-option *ngFor="let time of timeOptions" [value]="time">
+                  {{ time }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-label>Thời gian kết thúc</mat-label>
+              <mat-select formControlName="endTime">
+                <mat-option *ngFor="let time of timeOptions" [value]="time">
+                  {{ time }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+    <mat-tab label="Sự kiện cá nhân">
+      <ng-container *ngTemplateOutlet="addEventTemplate"></ng-container>
+    </mat-tab>
+    <mat-tab label="Sự kiện Thánh Sở">
+      <ng-container *ngTemplateOutlet="addEventTemplate"></ng-container>
+    </mat-tab>
+  </mat-tab-group>
 </div>

@@ -11,11 +11,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { CalendarDate, CalendarEvent } from '../../services/lich.service';
-import { EventService } from '../../services/event.service';
+import { LichEventService } from '../../services/event.service';
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatRadioModule } from "@angular/material/radio";
+import { EventService } from 'src/app/shared/services/event/event.service';
+import { MatDividerModule } from "@angular/material/divider";
 
 export interface AddEventData {
   selectedDate: CalendarDate;
   existingEvent?: CalendarEvent;
+  isAddThanhSoEvent?: boolean;
 }
 
 @Component({
@@ -31,20 +36,25 @@ export interface AddEventData {
     MatIconModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
-  ],
+    MatNativeDateModule,
+    MatTabsModule,
+    MatRadioModule,
+    MatDividerModule
+],
   templateUrl: './add-event-bottom-sheet.component.html',
   styleUrls: ['./add-event-bottom-sheet.component.scss']
 })
 export class AddEventBottomSheetComponent implements OnInit {
+  private lichEventService = inject(LichEventService);
+  private eventService = inject(EventService);
   eventForm: FormGroup;
   selectedDate: CalendarDate;
   existingEvent?: CalendarEvent;
   isEditMode: boolean = false;
-  private eventService = inject(EventService);
-
-  // Time options for select dropdowns
+  selectedTabIndex: number = 0;
   timeOptions: string[] = [];
+  thanhSoMembers = <any>[]
+  selectedThanhSo: any;
 
   constructor(
     private bottomSheetRef: MatBottomSheetRef<AddEventBottomSheetComponent>,
@@ -55,16 +65,26 @@ export class AddEventBottomSheetComponent implements OnInit {
     this.selectedDate = data.selectedDate;
     this.existingEvent = data.existingEvent;
     this.isEditMode = !!this.existingEvent;
+    this.selectedTabIndex = data?.isAddThanhSoEvent ? 1 : 0;
 
     // Initialize form with existing event data if editing
     const title = this.existingEvent?.title || '';
     const description = this.existingEvent?.description || '';
-    const date = this.existingEvent?.solar ? 
-      new Date(this.existingEvent.solar.year!, this.existingEvent.solar.month! - 1, this.existingEvent.solar.day!) : 
+    const date = this.existingEvent?.solar ?
+      new Date(this.existingEvent.solar.year!, this.existingEvent.solar.month! - 1, this.existingEvent.solar.day!) :
       this.selectedDate.solar.date;
     const startTime = this.existingEvent?.startTime || '09:00';
     const endTime = this.existingEvent?.endTime || '17:00';
-
+    if (data?.isAddThanhSoEvent) {
+      this.eventForm = this.fb.group({
+        thanhSo: [this.selectedThanhSo, [Validators.required]],
+        title: [title, [Validators.required, Validators.minLength(1)]],
+        description: [description],
+        date: [date],
+        startTime: [startTime],
+        endTime: [endTime]
+      });
+    } else {
       this.eventForm = this.fb.group({
         title: [title, [Validators.required, Validators.minLength(1)]],
         description: [description],
@@ -72,13 +92,25 @@ export class AddEventBottomSheetComponent implements OnInit {
         startTime: [startTime],
         endTime: [endTime]
       });
-
-      // Generate time options (00:00 to 23:30 in 30-minute intervals)
-      this.generateTimeOptions();
     }
+    // Generate time options (00:00 to 23:30 in 30-minute intervals)
+    this.generateTimeOptions();
+  }
 
   ngOnInit(): void {
-    // Form đã được khởi tạo trong constructor
+    this.loadThanhSoMembers();
+  }
+
+  loadThanhSoMembers(): void {
+    this.eventService.fetchRegisteredMember().subscribe({
+      next: (res) => {
+        if (res?.status === 200) {
+          this.thanhSoMembers = res.data?.filter((item: any) => item?.thanhSoSheet);
+          console.log(this.thanhSoMembers);
+          
+        }
+      },
+    });
   }
 
   private generateTimeOptions(): void {
@@ -99,15 +131,15 @@ export class AddEventBottomSheetComponent implements OnInit {
   onSave(): void {
     if (this.eventForm.valid) {
       const formData = this.eventForm.value;
-      
+
       // Combine date and time
       const eventDate = new Date(formData.date);
       const [startHour, startMinute] = formData.startTime.split(':');
       const [endHour, endMinute] = formData.endTime.split(':');
-      
+
       const startDateTime = new Date(eventDate);
       startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0, 0);
-      
+
       const endDateTime = new Date(eventDate);
       endDateTime.setHours(parseInt(endHour), parseInt(endMinute), 0, 0);
 
@@ -123,14 +155,14 @@ export class AddEventBottomSheetComponent implements OnInit {
 
       if (this.isEditMode && this.existingEvent?.id) {
         // Update existing event
-        this.eventService.updateEvent(parseInt(this.existingEvent.id), eventData).then(() => {
+        this.lichEventService.updateEvent(parseInt(this.existingEvent.id), eventData).then(() => {
           this.bottomSheetRef.dismiss({ action: 'updated', event: eventData });
         }).catch(error => {
           console.error('Lỗi khi cập nhật sự kiện:', error);
         });
       } else {
         // Create new event
-        this.eventService.addEvent(eventData).then(() => {
+        this.lichEventService.addEvent(eventData).then(() => {
           this.bottomSheetRef.dismiss({ action: 'created', event: eventData });
         }).catch(error => {
           console.error('Lỗi khi tạo sự kiện:', error);
@@ -147,7 +179,7 @@ export class AddEventBottomSheetComponent implements OnInit {
     if (this.isEditMode && this.existingEvent?.id) {
       // Confirm deletion
       if (confirm('Bạn có chắc chắn muốn xóa sự kiện này?')) {
-        this.eventService.deleteEvent(parseInt(this.existingEvent.id)).then(() => {
+        this.lichEventService.deleteEvent(parseInt(this.existingEvent.id)).then(() => {
           this.bottomSheetRef.dismiss({ action: 'deleted', event: this.existingEvent });
         }).catch(error => {
           console.error('Lỗi khi xóa sự kiện:', error);
