@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EventSignService } from 'src/app/shared/services/event-sign.service';
 import { AppTour } from 'src/app/shared/services/app-tour';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-navigation',
@@ -25,6 +26,7 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
   lastVisitedPage: string | null = '/';
   showToolbar = true;
   showBottomNav = true;
+  isMobileViewport = true;
   eventSigns: any[] = [];
   hasSubmenu = false; // Track if current route has submenu
   navigationTourSteps = [];
@@ -35,7 +37,8 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
     private navigationService: NavigationService,
     private matDialog: MatDialog,
     private eventSignService: EventSignService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.subscriptions.push(
       this.themeService.darkMode$.subscribe((isDark: any) => {
@@ -66,6 +69,11 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.breakpointObserver
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobileViewport = state.matches;
+      });
     this.eventSigns = this.eventSignService.getEventSigns();
 
     // Initialize submenu visibility based on current route
@@ -100,7 +108,9 @@ export class NavigationComponent implements OnInit, OnDestroy, AfterViewInit {
               }
             }
             if (this.router.url.includes('/lich') || this.router.url.includes('/hoc')) {
-              this.isSubNavOpen = true;
+              if (!this.isMobileViewport) {
+                this.isSubNavOpen = true;
+              }
             }
 
             this.cdr.detectChanges();

@@ -1,0 +1,25 @@
+<div [matMenuTriggerFor]="dayCellMenu" [className]="class">
+    <ng-content></ng-content>
+</div>
+<mat-menu #dayCellMenu="matMenu">
+    @if (features.includes('view-day')) {
+        <button mat-menu-item (click)="onDayClick()">
+            <app-icon name="event"></app-icon> Xem ngày
+        </button>
+    }
+    @if (features.includes('add-event')) {
+        <button mat-menu-item (click)="onAddPersonalEventClick()">
+            <app-icon name="add"></app-icon> Thêm sự kiện cá nhân
+        </button>
+    }
+    @if (features.includes('add-tuan-cuu')) {
+        <button mat-menu-item (click)="onAddTuanCuu()">
+            <app-icon name="date_range"></app-icon> Tính tuần cửu
+        </button>
+    }
+    @if (features.includes('add-event')) {
+        <button mat-menu-item (click)="onAddEventClick()">
+            <app-icon name="add"></app-icon> Thêm sự kiện Thánh Sở
+        </button>
+    }
+</mat-menu>

@@ -99,22 +99,18 @@ export class EventService {
             }
           })
       }
-      if (!ref.selectedThanhSoWorkbook) {
-        try {
-          this.sheetService.fetchSheet(id)
-            .subscribe((res: any) => {
-              if (res.status == 200) {
-                if (res?.workbook) {
-                  ref.selectedThanhSoWorkbook = res?.workbook
-                  returnData()
-                }
+      try {
+        this.sheetService.fetchSheet(id)
+          .subscribe((res: any) => {
+            if (res.status == 200) {
+              if (res?.workbook) {
+                ref.selectedThanhSoWorkbook = res?.workbook
+                returnData()
               }
-            })
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        returnData()
+            }
+          })
+      } catch (e) {
+        console.error(e);
       }
     })
   }

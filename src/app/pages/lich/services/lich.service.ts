@@ -452,7 +452,6 @@ export class LichService {
           // Handle the case where thanhso event is on 30th but month only has 29 days
           if (event.data.eventDate === 30 && this.isLastDayOfLunarMonth(date, lunarDate) && lunarDate.day === 29) {
             // Event scheduled for 30th but month only has 29 days, show on 29th (last day)
-            console.log(`Adjusting thanhso event "${event.title}" from day 30 to day 29 for lunar month ${lunarDate.month}/${lunarDate.year}`);
             return event.data.eventMonth === lunarDate.month;
           }
           if (event.data.eventMonth === lunarDate.month &&

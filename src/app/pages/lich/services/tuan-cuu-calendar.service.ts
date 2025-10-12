@@ -63,10 +63,10 @@ export class TuanCuuCalendarService {
             case 'chuc-viec':
             case 'bao-quan':
             case 'thoi-quan':
-              titleDisplay =
+              titleDisplay = (tuanCuu.deceased?.subTitle ?
                 foundTitle?.subTitle?.find(
                   (st: any) => st?.key === tuanCuu.deceased?.subTitle
-                )?.name || '';
+                )?.name : foundTitle?.name) || '';
               break;
             default:
               titleDisplay = foundTitle?.name;

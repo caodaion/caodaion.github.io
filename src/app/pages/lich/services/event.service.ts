@@ -14,7 +14,7 @@ export interface CalendarEventData {
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
+export class LichEventService {
   private dbName = 'CaoDaiONDB';
   private dbVersion = 1;
   private storeName = 'events';
@@ -44,7 +44,6 @@ export class EventService {
 
         request.onsuccess = () => {
           this.db = request.result;
-          console.log(`IndexedDB đã được khởi tạo thành công với version ${currentVersion}`);
           resolve();
         };
 
@@ -61,8 +60,6 @@ export class EventService {
             // Tạo index cho date để tìm kiếm theo ngày
             store.createIndex('date', 'date', { unique: false });
             store.createIndex('title', 'title', { unique: false });
-            
-            console.log('Object store "events" đã được tạo trong initDB');
           }
         };
       };
@@ -78,7 +75,6 @@ export class EventService {
 
         request.onsuccess = () => {
           this.db = request.result;
-          console.log('IndexedDB mới đã được tạo thành công');
           resolve();
         };
 
@@ -94,8 +90,6 @@ export class EventService {
           // Tạo index cho date để tìm kiếm theo ngày
           store.createIndex('date', 'date', { unique: false });
           store.createIndex('title', 'title', { unique: false });
-          
-          console.log('Object store "events" đã được tạo trong database mới');
         };
       };
     });
