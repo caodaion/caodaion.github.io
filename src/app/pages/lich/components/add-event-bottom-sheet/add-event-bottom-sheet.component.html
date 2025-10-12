@@ -81,8 +81,9 @@
         <form [formGroup]="eventForm" (ngSubmit)="onSave()">
           @if(eventForm.get('thanhSo')) {
           <div class="mb-4">
+            <p><strong>LƯU Ý:</strong> Hiện tại chỉ có thể cập nhật các sự kiện kỷ niệm hằng năm</p>
             <h4>Chọn Thánh Sở</h4>
-            <mat-radio-group formControlName="thanhSo">
+            <mat-radio-group formControlName="thanhSo" (ngModelChange)="getThanhSoEvents()">
               <mat-radio-button *ngFor="let member of thanhSoMembers" [value]="member?.thanhSoSheet">
                 {{ member?.thanhSo }}
               </mat-radio-button>
@@ -123,7 +124,7 @@
 
               <mat-form-field appearance="outline" class="w-full md:w-1/3">
                 <mat-label>Giờ âm lịch</mat-label>
-                <mat-select formControlName="time">
+                <mat-select formControlName="eventTime">
                   <mat-option *ngFor="let time of lunarTimeOptions" [value]="time">{{ time }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -199,8 +200,32 @@
           </div>
           }
         </form>
+        <div class="w-full flex justify-center" *ngIf="googleFormsPath">
+          <button class="w-full" mat-button (click)="googleFormsPath = ''; onCancel()">ĐÓNG</button>
+        </div>
+        <p class="p-3 font-bold text-center">
+          Hãy cuốn xuống cuối cùng của biểu mẫu được mở ra, sau đó chọn nút <span
+            class="text-red-500">Gửi(Submit)</span>.
+          Sau khi gửi xong, hãy ấn nút <span class="text-red-500">ĐÓNG</span> bên trên để quay lại trang này.
+        </p>
+        <iframe #formIframe *ngIf="googleFormsPath" [src]="
+              googleFormsPath | safe
+            " class="w-full" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
       </div>
     </mat-tab>
   </mat-tab-group>
   }
 </div>
+<ng-template #enterUserName>
+  <h4 mat-dialog-title>Nhập tên đăng nhập</h4>
+  <mat-dialog-content class="min-w-[5rem]">
+    <div class="w-full p-4 flex flex-col gap-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Tên đăng nhập</mat-label>
+        <input matInput [(ngModel)]="userName" placeholder="Nhập tên đăng nhập" required />
+      </mat-form-field>
+      <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
+      <button class="w-full" [color]="'primary'" mat-flat-button (click)="onSave(true)">Xác nhận</button>
+    </div>
+  </mat-dialog-content>
+</ng-template>

@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +19,10 @@ import { MatDividerModule } from "@angular/material/divider";
 import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
 import { time } from 'console';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
+import { SharedModule } from "../../../../shared/shared.module";
+import { CommonService } from 'src/app/shared/services/common/common.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CdkDragPlaceholder } from "@angular/cdk/drag-drop";
 
 export interface AddEventData {
   selectedDate: CalendarDate;
@@ -42,7 +46,10 @@ export interface AddEventData {
     MatNativeDateModule,
     MatTabsModule,
     MatRadioModule,
-    MatDividerModule
+    MatDividerModule,
+    SharedModule,
+    FormsModule,
+    MatDialogModule
   ],
   templateUrl: './add-event-bottom-sheet.component.html',
   styleUrls: ['./add-event-bottom-sheet.component.scss']
@@ -51,6 +58,8 @@ export class AddEventBottomSheetComponent implements OnInit {
   private lichEventService = inject(LichEventService);
   private eventService = inject(EventService);
   private decimalPipe = inject(DecimalPipe);
+  private commonService = inject(CommonService);
+  private matDialog = inject(MatDialog);
   eventForm!: FormGroup;
   selectedDate: CalendarDate;
   existingEvent?: CalendarEvent;
@@ -123,6 +132,24 @@ export class AddEventBottomSheetComponent implements OnInit {
     });
   }
 
+  getThanhSoEvents(): void {
+    this.eventService.fetchThanhSoEvent(this.eventForm.value?.thanhSo).subscribe({
+      next: (res) => {
+        if (res?.status === 200) {
+          this.selectedThanhSo = res;
+          const selectedThanhSoData = this.thanhSoMembers.find((item: any) => item?.thanhSoSheet === this.eventForm.value?.thanhSo);
+          this.selectedThanhSo.setting = {
+            ...this.selectedThanhSo.setting,
+            ...selectedThanhSoData
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching events for Thanh So:', err);
+      }
+    });
+  }
+
   private generateTimeOptions(): void {
     const options: string[] = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -138,8 +165,58 @@ export class AddEventBottomSheetComponent implements OnInit {
     return this.datePipe.transform(this.selectedDate.solar.date, 'dd/MM/yyyy') || '';
   }
 
-  onSave(): void {
-    console.log(this.eventForm);
+  userName: any = '';
+
+  duplicateFound: any;
+  dialogRef: any;
+  errorMessage: any;
+  @ViewChild('enterUserName') enterUserName: any;
+  @ViewChild('formIframe') formIframe: any;
+  onSave(isGenerate: boolean = false): void {
+    if (this.selectedTabIndex === 1) {
+      if (this.eventForm.valid) {
+        if (!isGenerate) {
+          this.dialogRef = this.matDialog.open(this.enterUserName);
+          return;
+        }
+        if (this.userName !== this.selectedThanhSo?.setting?.userName) {
+          this.errorMessage = `Tên người dùng cập nhật sự kiện cho Thánh Sở ${this.selectedThanhSo?.setting?.thanhSo} không khớp`;
+          return;
+        }
+        this.dialogRef?.close();
+        const formData = this.eventForm.value;
+        if (this.selectedThanhSo?.setting?.googleFormsId) {
+          const foundData = this.selectedThanhSo?.data?.find((item: any) => item?.key == this.eventKey)
+          this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.selectedThanhSo?.setting?.googleFormsId}/viewform`
+          this.googleFormsPath += `?${this.selectedThanhSo?.setting?.key}=${encodeURIComponent(this.eventKey)}`
+          this.googleFormsPath += `&${this.selectedThanhSo?.setting?.eventName}=${encodeURIComponent(formData?.eventTitle)}`
+          this.googleFormsPath += `&${this.selectedThanhSo?.setting?.eventType}=${encodeURIComponent(this.eventType)}`
+          this.googleFormsPath += `&${this.selectedThanhSo?.setting?.data}=${encodeURIComponent(JSON.stringify({
+            eventDate: formData?.date,
+            eventTime: formData?.eventTime,
+            eventMonth: formData?.month,
+            sex: formData?.gender,
+            age: formData?.age,
+            title: formData?.title,
+            subTitle: formData?.subTitle,
+            color: formData?.color,
+            name: formData?.name,
+            holyName: formData?.holyName
+          }))}`
+          setTimeout(() => {
+            // Scroll mat-bottom-sheet-container to preview image
+            const dialogContent = document.querySelector('mat-bottom-sheet-container');
+            const imgEl = this.formIframe?.nativeElement;
+            if (dialogContent && imgEl) {
+              const imgRect = imgEl.getBoundingClientRect();
+              const dialogRect = dialogContent.getBoundingClientRect();
+              dialogContent.scrollTop += (imgRect.top - dialogRect.top) - 24;
+            }
+          }, 100);
+        }
+        return;
+      }
+    }
 
     if (this.eventForm.valid) {
       const formData = this.eventForm.value;
@@ -209,6 +286,7 @@ export class AddEventBottomSheetComponent implements OnInit {
     this.initForm();
   }
 
+  googleFormsPath: any;
   initForm(): void {
     // Initialize form with existing event data if editing
     const title = this.existingEvent?.title || '';
@@ -231,7 +309,7 @@ export class AddEventBottomSheetComponent implements OnInit {
         color: [''],
         date: [convertedLunar.lunarDay],
         month: [convertedLunar.lunarMonth],
-        time: [''],
+        eventTime: [''],
         age: ['']
       });
     } else {
@@ -256,7 +334,7 @@ export class AddEventBottomSheetComponent implements OnInit {
       this.getSummary();
     });
   }
-  
+
   getHolyName() {
     const foundTitle = this.caodaiTitles.find(
       (title: any) => title.key === this.eventForm.get('title')?.value
@@ -312,8 +390,10 @@ export class AddEventBottomSheetComponent implements OnInit {
     return this.eventForm.get('gender')?.value === 'male' && this.isHolyNameRequired();
   }
 
+  eventType: any;
+  eventKey: any;
   // Generate a concise summary of the Tuần Cửu
-  getSummary() {    
+  getSummary() {
     // Find the selected title
     const selectedTitle = this.caodaiTitles.find(
       (title: any) => title.key === this.eventForm.get('title')?.value
@@ -362,12 +442,13 @@ export class AddEventBottomSheetComponent implements OnInit {
     // Log all invalid fields
     if (this.eventForm.invalid) {
       const invalidFields = Object.keys(this.eventForm.controls).filter(key => this.eventForm.get(key)?.invalid);
-      console.log('Invalid fields:', invalidFields);
     }
-    
-    // Build the summary string
+
+    let keyData = `${this.eventForm.get('eventTitle')?.value}`
+    this.eventType = `${this.commonService.generatedSlug(eventTitle)}-ky-niem`
+    this.eventKey = this.commonService.generatedSlug(keyData)
     this.eventForm.controls['eventTitle'].setValue(
-      `${eventTitle} cho${titleText ? ' ' + titleText : ''} ${this.eventForm.get('holyName')?.value || this.eventForm.get('name')?.value
+      `${eventTitle} kỷ niệm cho${titleText ? ' ' + titleText : ''} ${this.eventForm.get('holyName')?.value || this.eventForm.get('name')?.value
       }`,
       { emitEvent: false }
     );

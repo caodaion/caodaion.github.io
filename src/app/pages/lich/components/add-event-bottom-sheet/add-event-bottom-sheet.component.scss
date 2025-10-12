@@ -5,7 +5,7 @@
 }
 
 .add-event-bottom-sheet {
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   max-width: 100%;
   background-color: var(--surface-color);
   color: var(--text-primary-color);
@@ -15,11 +15,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    padding-bottom: 12px;
     border-bottom: 1px solid var(--divider-color);
     position: sticky;
     top: 0;
     background: white;
+    padding: 16px 0;
     z-index: 10;
 
     @media (max-width: 600px) {
