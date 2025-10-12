@@ -43,7 +43,7 @@
         <mat-list>
             <mat-list-item *ngFor="let instruction of route?.instructions" class="!h-max !cursor-pointer"
                 (click)="onViewInstruction(instruction)">
-                <app-icon matListItemIcon name="{{instruction?.icon}}"></app-icon>
+                <app-icon matListItemIcon [name]="instruction?.icon"></app-icon>
                 <div matListItemTitle class="!whitespace-normal !overflow-visible">{{ instruction?.translatedText}}
                 </div>
                 <div matListItemLine class="!whitespace-normal !overflow-visible">{{instruction?.text}}</div>

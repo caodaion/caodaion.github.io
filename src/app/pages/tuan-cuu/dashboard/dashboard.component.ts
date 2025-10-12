@@ -12,6 +12,9 @@ import { TuanCuu, TuanCuuService, TuanCuuEvent } from '../services/tuan-cuu.serv
 import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
 import { IconComponent } from 'src/app/components/icon/icon.component';
 import { LunarDatePipe } from "../../../shared/pipe/lunar-date-pipe";
+import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { SeoService } from 'src/app/shared/services/seo.service';
 // import { SeoService } from '../../../shared/services/seo.service';
 
 @Component({
@@ -27,7 +30,9 @@ import { LunarDatePipe } from "../../../shared/pipe/lunar-date-pipe";
     RouterModule,
     ChildHeaderComponent,
     IconComponent,
-    LunarDatePipe
+    LunarDatePipe,
+    ButtonShareModule,
+    MatTooltipModule
 ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -55,7 +60,7 @@ export class DashboardComponent implements OnInit {
     private datePipe: DatePipe,
     private tuanCuuService: TuanCuuService,
     private snackBar: MatSnackBar,
-    // private seoService: SeoService
+    private seoService: SeoService
   ) {}
 
   ngOnInit(): void {
@@ -69,13 +74,13 @@ export class DashboardComponent implements OnInit {
    * Set SEO metadata for the Tuan Cuu dashboard
    */
   private setSeoMetadata(): void {
-    // this.seoService.updateMetadata({
-    //   title: 'Tuần Cửu',
-    //   description: 'Công cụ tính Tuần Cửu, cúng thất để thực hiện nghi lễ cầu siêu cho người quá cố theo truyền thống Cao Đài',
-    //   url: 'tuan-cuu',
-    //   keywords: 'tuần cửu, cúng thất, cầu siêu, nghi lễ, Cao Đài, cửu huyền, thất tổ',
-    //   type: 'website'
-    // });
+    this.seoService.updateMetadata({
+      title: 'Tuần Cửu',
+      description: 'Công cụ tính Tuần Cửu, cúng thất để thực hiện nghi lễ cầu siêu cho người quá cố theo truyền thống Cao Đài',
+      url: 'tuan-cuu',
+      keywords: 'tuần cửu, cúng thất, cầu siêu, nghi lễ, Cao Đài, cửu huyền, thất tổ',
+      type: 'website'
+    });
   }
 
   // Load Tuan Cuu data from IndexedDB

@@ -4,6 +4,12 @@
 
 export const environment = {
   production: false,
+  blogger: {
+    blogId: "4095902482828699776",
+    apiKey: "AIzaSyDMjZ7ej2nGwPe5qikDX7BYbtBuslresTA",
+    // blogId: "8350268936432539254", // caodaion blog
+    // apiKey: "AIzaSyDm26lTCJj3P4VCm7Qx6CUcYAFGybuDqho", // caodaion blog
+  },
   firebaseConfig: {
     apiKey: "AIzaSyAih0n88m-1aTuERdujAxLb0vmyBcNl1Lc",
     authDomain: "caodaion-f6f4b.firebaseapp.com",

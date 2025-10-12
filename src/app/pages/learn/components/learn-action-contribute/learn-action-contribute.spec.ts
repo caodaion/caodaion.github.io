@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QrScannerComponent } from './qr-scanner.component';
+import { LearnActionContribute } from './learn-action-contribute';
 
-describe('QrScannerComponent', () => {
-  let component: QrScannerComponent;
-  let fixture: ComponentFixture<QrScannerComponent>;
+describe('LearnActionContribute', () => {
+  let component: LearnActionContribute;
+  let fixture: ComponentFixture<LearnActionContribute>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QrScannerComponent ]
+      imports: [LearnActionContribute]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(QrScannerComponent);
+    fixture = TestBed.createComponent(LearnActionContribute);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

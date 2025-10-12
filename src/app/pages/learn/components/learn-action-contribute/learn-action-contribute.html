@@ -1,0 +1,26 @@
+<div class="contribute-container p-4">
+	<mat-card class="contribute-card">
+		<mat-card-header>
+			<div mat-card-avatar class="contribute-icon">
+				<app-icon name="emoji_objects" size="24px"></app-icon>
+			</div>
+			<mat-card-title>Đóng góp cho cộng đồng</mat-card-title>
+		</mat-card-header>
+		<mat-card-content class="text-justify">
+			<p>Bạn có thể đóng góp tài liệu, báo lỗi, hoặc đề xuất tính năng mới để giúp ứng dụng ngày càng hoàn thiện hơn.</p>
+		</mat-card-content>
+		<mat-card-actions class="mat-btn-contribute">
+			<button mat-raised-button color="primary" class="btn-contribute" (click)="openBottomSheet(learnActionContributeBottomSheet)">
+				Đóng góp ngay
+			</button>
+		</mat-card-actions>
+	</mat-card>
+</div>
+<ng-template #learnActionContributeBottomSheet>
+    <div class="bottomSheet-content flex flex-col items-center gap-4 pb-6">
+        <img class="max-w-xs" src="https://blogger.googleusercontent.com/img/a/AVvXsEiC8lTp6KZS2iAwR31VrulUsic2BgG41kSIP1vy4Zw62SUo21nXlPS7yZiyTT7Z_q7oWK9ft9clPPiun0hkg_t15bS9mx3i1gLCrrs-ejbVMo_QEUf6tdKiSmjW02C_xhzTRs_DYsAZNfdLBY402fhOt3_PKiRPVTrWaZzjPR-wUEaT9uEicr1tV82nAhqS"/>
+        <a mat-raised-button color="primary" href="https://zalo.me/g/bndgwq756" target="_blank" rel="noopener">
+            <button name="group"></button> Tham gia nhóm Zalo
+        </a>
+    </div>
+</ng-template>

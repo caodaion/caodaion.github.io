@@ -50,6 +50,14 @@
   border-right: 1px solid var(--border-light);
   background-color: var(--surface-color);
   transition: all 0.3s ease;
+
+  ::ng-deep {
+    .mat-drawer-inner-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
 }
 
 .learn-drawer-content {
@@ -139,7 +147,7 @@
     background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
   }
 
-  .learn-drawer {
+  .learn-drawer  {
     background-color: var(--surface-color);
     border-right-color: var(--border-color);
   }

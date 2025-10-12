@@ -193,8 +193,17 @@
     }
 }
 
+app-learn-action-contribute {
+    display: none; 
+}
+
 // Mobile responsive design
 @media (max-width: 768px) {
+
+    app-learn-action-contribute {
+        display: block;
+    }
+
     .lesson-container {
         padding: var(--spacing-md);
     }

@@ -3,4 +3,22 @@
         display: none;
         visibility: hidden;
     }
+
+    app-maps {
+        height: 100%;
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+
+        .maps-container-mat-drawer {
+            height: 100%;
+            width: 100%;
+            flex: 1;
+            mat-drawer-content {
+                height: 100%;
+                max-height: 100%;
+                overflow: hidden;
+            }
+        }
+    }
 }
