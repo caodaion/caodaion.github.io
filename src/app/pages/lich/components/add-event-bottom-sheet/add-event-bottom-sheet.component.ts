@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +16,9 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
 import { EventService } from 'src/app/shared/services/event/event.service';
 import { MatDividerModule } from "@angular/material/divider";
+import { CAODAI_TITLE } from 'src/app/shared/constants/master-data/caodai-title.constant';
+import { time } from 'console';
+import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
 
 export interface AddEventData {
   selectedDate: CalendarDate;
@@ -40,14 +43,15 @@ export interface AddEventData {
     MatTabsModule,
     MatRadioModule,
     MatDividerModule
-],
+  ],
   templateUrl: './add-event-bottom-sheet.component.html',
   styleUrls: ['./add-event-bottom-sheet.component.scss']
 })
 export class AddEventBottomSheetComponent implements OnInit {
   private lichEventService = inject(LichEventService);
   private eventService = inject(EventService);
-  eventForm: FormGroup;
+  private decimalPipe = inject(DecimalPipe);
+  eventForm!: FormGroup;
   selectedDate: CalendarDate;
   existingEvent?: CalendarEvent;
   isEditMode: boolean = false;
@@ -55,50 +59,58 @@ export class AddEventBottomSheetComponent implements OnInit {
   timeOptions: string[] = [];
   thanhSoMembers = <any>[]
   selectedThanhSo: any;
+  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
+  months: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
+  years: any[] = [];
+  caodaiTitles = CAODAI_TITLE.data;
+  subTitles: any[] = [];
+  colorOptions = [
+    { value: 'yellow', name: 'Thái' },
+    { value: 'blue', name: 'Thượng' },
+    { value: 'red', name: 'Ngọc' },
+  ];
+  lunarTimeOptions = [
+    'Tý',
+    'Sửu',
+    'Dần',
+    'Mão',
+    'Thìn',
+    'Tị',
+    'Ngọ',
+    'Mùi',
+    'Thân',
+    'Dậu',
+    'Tuất',
+    'Hợi',
+  ];
+  solarTimeOptions = Array.from({ length: 24 }, (_, i) => i);
 
   constructor(
     private bottomSheetRef: MatBottomSheetRef<AddEventBottomSheetComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: AddEventData,
     private fb: FormBuilder,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private calendarService: CalendarService
   ) {
     this.selectedDate = data.selectedDate;
     this.existingEvent = data.existingEvent;
     this.isEditMode = !!this.existingEvent;
     this.selectedTabIndex = data?.isAddThanhSoEvent ? 1 : 0;
-
-    // Initialize form with existing event data if editing
-    const title = this.existingEvent?.title || '';
-    const description = this.existingEvent?.description || '';
-    const date = this.existingEvent?.solar ?
-      new Date(this.existingEvent.solar.year!, this.existingEvent.solar.month! - 1, this.existingEvent.solar.day!) :
-      this.selectedDate.solar.date;
-    const startTime = this.existingEvent?.startTime || '09:00';
-    const endTime = this.existingEvent?.endTime || '17:00';
-    if (data?.isAddThanhSoEvent) {
-      this.eventForm = this.fb.group({
-        thanhSo: [this.selectedThanhSo, [Validators.required]],
-        title: [title, [Validators.required, Validators.minLength(1)]],
-        description: [description],
-        date: [date],
-        startTime: [startTime],
-        endTime: [endTime]
-      });
-    } else {
-      this.eventForm = this.fb.group({
-        title: [title, [Validators.required, Validators.minLength(1)]],
-        description: [description],
-        date: [date],
-        startTime: [startTime],
-        endTime: [endTime]
-      });
-    }
     // Generate time options (00:00 to 23:30 in 30-minute intervals)
     this.generateTimeOptions();
+    this.onChangeSelectedTabIndex(this.selectedTabIndex);
   }
 
   ngOnInit(): void {
-    this.loadThanhSoMembers();
+    this.years = Array.from({ length: 100 }, (_, i) => {
+      const iDate = new Date(new Date().setFullYear(new Date().getFullYear() - 50 + i));
+      return {
+        value: iDate.getFullYear(),
+        label:
+          this.calendarService.getConvertedFullDate(iDate).convertSolar2Lunar
+            ?.lunarYearName,
+      };
+    });
   }
 
   loadThanhSoMembers(): void {
@@ -106,8 +118,6 @@ export class AddEventBottomSheetComponent implements OnInit {
       next: (res) => {
         if (res?.status === 200) {
           this.thanhSoMembers = res.data?.filter((item: any) => item?.thanhSoSheet);
-          console.log(this.thanhSoMembers);
-          
         }
       },
     });
@@ -129,6 +139,8 @@ export class AddEventBottomSheetComponent implements OnInit {
   }
 
   onSave(): void {
+    console.log(this.eventForm);
+
     if (this.eventForm.valid) {
       const formData = this.eventForm.value;
 
@@ -187,5 +199,178 @@ export class AddEventBottomSheetComponent implements OnInit {
         });
       }
     }
+  }
+
+  onChangeSelectedTabIndex(index: number): void {
+    this.selectedTabIndex = Number(index);
+    if (this.selectedTabIndex === 1) {
+      this.loadThanhSoMembers();
+    }
+    this.initForm();
+  }
+
+  initForm(): void {
+    // Initialize form with existing event data if editing
+    const title = this.existingEvent?.title || '';
+    const description = this.existingEvent?.description || '';
+    const date = this.existingEvent?.solar ?
+      new Date(this.existingEvent.solar.year!, this.existingEvent.solar.month! - 1, this.existingEvent.solar.day!) :
+      this.selectedDate.solar.date;
+    const startTime = this.existingEvent?.startTime || '09:00';
+    const endTime = this.existingEvent?.endTime || '17:00';
+    const convertedLunar = this.calendarService.getConvertedFullDate(new Date(date)).convertSolar2Lunar;
+    if (this.selectedTabIndex === 1) {
+      this.eventForm = this.fb.group({
+        thanhSo: [this.selectedThanhSo, [Validators.required]],
+        eventTitle: [title, [Validators.required, Validators.minLength(1)]],
+        title: ['', [Validators.required, Validators.minLength(1)]],
+        holyName: [''],
+        gender: [''],
+        name: [''],
+        subTitle: [''],
+        color: [''],
+        date: [convertedLunar.lunarDay],
+        month: [convertedLunar.lunarMonth],
+        time: [''],
+        age: ['']
+      });
+    } else {
+      this.eventForm = this.fb.group({
+        eventTitle: [title, [Validators.required, Validators.minLength(1)]],
+        description: [description],
+        date: [date],
+        startTime: [startTime],
+        endTime: [endTime]
+      });
+    }
+    this.subscribeToFormChanges()
+
+  }
+
+  eventFormSubscription: any;
+  subscribeToFormChanges(): void {
+    if (this.eventFormSubscription) {
+      this.eventFormSubscription.unsubscribe();
+    }
+    this.eventFormSubscription = this.eventForm.valueChanges.subscribe(value => {
+      this.getSummary();
+    });
+  }
+  
+  getHolyName() {
+    const foundTitle = this.caodaiTitles.find(
+      (title: any) => title.key === this.eventForm.get('title')?.value
+    );
+    const selectedColor = this.colorOptions.find(
+      (color) => color.value === this.eventForm.get('color')?.value
+    );
+
+    if (foundTitle && foundTitle.isHolyNameRequired) {
+      this.eventForm.controls['holyName'].setValue(`${this.eventForm.get('gender')?.value === 'female' ? 'Hương ' : ''
+        }${this.eventForm.get('gender')?.value === 'male' ? selectedColor?.name + (this.eventForm.get('title')?.value !== 'bao-dan' ? ' ' : '') : ''}${this.eventForm.get('title')?.value !== 'bao-dan' ? (this.eventForm?.get('name')?.value?.trim()?.split(' ')[
+          this.eventForm?.get('name')?.value?.trim()?.split(' ')?.length - 1
+        ]) : (', ' + this.eventForm?.get('name')?.value)
+        }${this.eventForm?.get('title')?.value !== 'bao-dan' && this.eventForm.get('gender')?.value === 'male' ? ' Thanh ' : ''}`);
+    }
+  }
+
+  // Handle title selection
+  onTitleChange(titleKey: string): void {
+    // Find the selected title
+    const selectedTitle = this.caodaiTitles.find(
+      (title: any) => title.key === titleKey
+    );
+
+    // Check if this title is Chuc Viec which has subtitles
+    if (
+      selectedTitle &&
+      (selectedTitle.key === 'chuc-viec' || selectedTitle.key === 'bao-quan' || selectedTitle.key === 'thoi-quan') &&
+      selectedTitle.subTitle
+    ) {
+      this.subTitles = selectedTitle.subTitle;
+    } else {
+      this.subTitles = [];
+    }
+
+    // Clear holy name and color if not required
+    if (selectedTitle && !selectedTitle.isHolyNameRequired) {
+      this.eventForm.controls['holyName'].setValue('');
+      this.eventForm.controls['color'].setValue('');
+    }
+  }
+
+  // Check if holy name is required
+  isHolyNameRequired(): boolean {
+    const selectedTitle = this.caodaiTitles.find(
+      (title: any) => title.key === this.eventForm.get('title')?.value
+    );
+    return selectedTitle ? !!selectedTitle.isHolyNameRequired : false;
+  }
+
+  // Check if color selection should be shown (for male with holy name required)
+  shouldShowColorSelection(): boolean {
+    return this.eventForm.get('gender')?.value === 'male' && this.isHolyNameRequired();
+  }
+
+  // Generate a concise summary of the Tuần Cửu
+  getSummary() {    
+    // Find the selected title
+    const selectedTitle = this.caodaiTitles.find(
+      (title: any) => title.key === this.eventForm.get('title')?.value
+    );
+    const eventTitle = selectedTitle?.eventTitle || 'Cầu Siêu';
+
+    // Get title display text
+    let titleText = selectedTitle?.name || '';
+
+    // For 'chua-co-dao' or 'dao-huu', use the howToAddress field instead of the title name
+    if (
+      selectedTitle &&
+      (selectedTitle.key === 'chua-co-dao' || selectedTitle.key === 'dao-huu')
+    ) {
+      const genderValue = this.eventForm.get('gender')?.value as 'male' | 'female';
+      titleText =
+        selectedTitle.howToAddress?.[genderValue] || titleText;
+    }
+    // For 'chuc-viec', use the subtitle name instead of the title name
+    else if ((selectedTitle?.key === 'chuc-viec' || selectedTitle?.key === 'bao-quan' || selectedTitle?.key === 'thoi-quan') && this.eventForm.get('subTitle')?.value) {
+      const selectedSubTitle = selectedTitle.subTitle?.find(
+        (sub) => sub.key === this.eventForm.get('subTitle')?.value
+      );
+      if (selectedSubTitle) {
+        titleText = selectedSubTitle.name;
+      }
+    }
+
+
+    // Get solar date with validation
+    let solarDateFormatted = '';
+    try {
+      const solarDate = this.calendarService.getConvertedFullDate({
+        lunarDay: this.eventForm.get('date')?.value,
+        lunarMonth: this.eventForm.get('month')?.value,
+        lunarYear: typeof this.eventForm.get('year')?.value === 'number' ? this.eventForm.get('year')?.value : parseInt(this.eventForm.get('year')?.value, 10),
+      }).convertLunar2Solar;
+
+      if (solarDate && solarDate instanceof Date && !isNaN(solarDate.getTime())) {
+        solarDateFormatted = this.datePipe.transform(solarDate, 'dd/MM/yyyy') || '';
+      }
+    } catch (error) {
+      console.error('Error converting lunar to solar date:', error);
+    }
+
+    // Log all invalid fields
+    if (this.eventForm.invalid) {
+      const invalidFields = Object.keys(this.eventForm.controls).filter(key => this.eventForm.get(key)?.invalid);
+      console.log('Invalid fields:', invalidFields);
+    }
+    
+    // Build the summary string
+    this.eventForm.controls['eventTitle'].setValue(
+      `${eventTitle} cho${titleText ? ' ' + titleText : ''} ${this.eventForm.get('holyName')?.value || this.eventForm.get('name')?.value
+      }`,
+      { emitEvent: false }
+    );
+    this.eventForm.controls['eventTitle'].updateValueAndValidity({ emitEvent: false });
   }
 }

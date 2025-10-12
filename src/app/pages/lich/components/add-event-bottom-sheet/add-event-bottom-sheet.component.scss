@@ -1,8 +1,6 @@
 ::ng-deep {
-  .add-event-bottom-sheet-container {
-    mat-bottom-sheet-container {
-      padding: 0;
-    }
+  mat-bottom-sheet-container {
+    padding: 0 !important;
   }
 }
 

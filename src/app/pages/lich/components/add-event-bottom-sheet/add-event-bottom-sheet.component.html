@@ -1,4 +1,5 @@
 <div class="add-event-bottom-sheet">
+  @if(eventForm) {
   <div class="header">
     <h3>{{ isEditMode ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện mới' }}</h3>
     <div class="actions">
@@ -13,51 +14,45 @@
         </button>
         }
       </div>
-      <button mat-raised-button type="submit" [disabled]="!eventForm.valid" color="primary" class="save-button">
+      <button mat-raised-button type="submit" [disabled]="!eventForm.valid" color="primary" class="save-button"
+        (click)="onSave()">
         <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
         {{ isEditMode ? 'Cập nhật' : 'Tạo sự kiện' }}
       </button>
     </div>
   </div>
-  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = $event">
-    <ng-template #addEventTemplate>
-      <div class="content">
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onChangeSelectedTabIndex($event)">
+    <mat-tab label="Sự kiện cá nhân">
+      <div class="content pt-3">
         <form [formGroup]="eventForm" (ngSubmit)="onSave()">
-          @if (selectedTabIndex === 1) {
-          <div class="mb-4">
-            <h4>Chọn Thánh Sở</h4>
-            <mat-radio-group formControlName="thanhSo">
-              <mat-radio-button *ngFor="let member of thanhSoMembers" [value]="member?.thanhSoSheet">
-                {{ member?.thanhSo }}
-              </mat-radio-button>
-            </mat-radio-group>
-            <mat-divider></mat-divider>
-          </div>
-          }
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Tiêu đề sự kiện</mat-label>
-            <input matInput formControlName="title" placeholder="Nhập tiêu đề sự kiện" required>
-            <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+            <input matInput formControlName="eventTitle" placeholder="Nhập tiêu đề sự kiện" required>
+            <mat-error *ngIf="eventForm.get('eventTitle')?.hasError('required')">
               Tiêu đề là bắt buộc
             </mat-error>
-            <mat-error *ngIf="eventForm.get('title')?.hasError('minlength')">
+            <mat-error *ngIf="eventForm.get('eventTitle')?.hasError('minlength')">
               Tiêu đề phải có ít nhất 1 ký tự
             </mat-error>
           </mat-form-field>
-
+          @if (eventForm.get('date') && selectedTabIndex === 0) {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Ngày sự kiện</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="date" readonly>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+          }
 
+          @if (eventForm.get('description')) {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Mô tả</mat-label>
             <textarea matInput formControlName="description" placeholder="Nhập mô tả sự kiện (tùy chọn)"
               rows="3"></textarea>
           </mat-form-field>
+          }
 
+          @if (eventForm.get('startTime') && eventForm.get('endTime')) {
           <div class="time-fields">
             <mat-form-field appearance="outline" class="time-field">
               <mat-label>Thời gian bắt đầu</mat-label>
@@ -77,14 +72,135 @@
               </mat-select>
             </mat-form-field>
           </div>
+          }
         </form>
       </div>
-    </ng-template>
-    <mat-tab label="Sự kiện cá nhân">
-      <ng-container *ngTemplateOutlet="addEventTemplate"></ng-container>
     </mat-tab>
     <mat-tab label="Sự kiện Thánh Sở">
-      <ng-container *ngTemplateOutlet="addEventTemplate"></ng-container>
+      <div class="content">
+        <form [formGroup]="eventForm" (ngSubmit)="onSave()">
+          @if(eventForm.get('thanhSo')) {
+          <div class="mb-4">
+            <h4>Chọn Thánh Sở</h4>
+            <mat-radio-group formControlName="thanhSo">
+              <mat-radio-button *ngFor="let member of thanhSoMembers" [value]="member?.thanhSoSheet">
+                {{ member?.thanhSo }}
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-divider></mat-divider>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tiêu đề sự kiện</mat-label>
+            <input matInput formControlName="eventTitle" placeholder="Nhập tiêu đề sự kiện" required>
+            <mat-error *ngIf="eventForm.get('eventTitle')?.hasError('required')">
+              Tiêu đề là bắt buộc
+            </mat-error>
+            <mat-error *ngIf="eventForm.get('eventTitle')?.hasError('minlength')">
+              Tiêu đề phải có ít nhất 1 ký tự
+            </mat-error>
+          </mat-form-field>
+          <div class="form-section date-section">
+            <h3>Chọn thời gian</h3>
+            <div class="date-controls">
+              <mat-form-field appearance="outline" class="w-full md:w-1/3">
+                <mat-label>Ngày</mat-label>
+                <mat-select formControlName="date">
+                  <mat-option *ngFor="let day of days" [value]="day">{{
+                    day
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full md:w-1/3">
+                <mat-label>Tháng</mat-label>
+                <mat-select formControlName="month">
+                  <mat-option *ngFor="let month of months" [value]="month">{{
+                    month
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full md:w-1/3">
+                <mat-label>Giờ âm lịch</mat-label>
+                <mat-select formControlName="time">
+                  <mat-option *ngFor="let time of lunarTimeOptions" [value]="time">{{ time }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Personal Details Section -->
+          <div class="form-section">
+            <h3>Thông tin người mất</h3>
+            <div class="personal-details">
+              <!-- Name field -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Họ tên</mat-label>
+                <input (input)="getHolyName()" matInput formControlName="name" placeholder="Nhập họ tên" required
+                  [class.error-input]="eventForm.get('name')?.invalid && (eventForm.get('name')?.touched || eventForm.get('name')?.dirty)" />
+                <mat-error *ngIf="eventForm.get('name')?.hasError('required')">Vui lòng nhập họ tên</mat-error>
+              </mat-form-field>
+
+              <!-- Gender selection -->
+              <div class="gender-selection">
+                <label>Giới tính:</label>
+                <mat-radio-group (change)="getHolyName()" formControlName="gender">
+                  <mat-radio-button value="male">Nam</mat-radio-button>
+                  <mat-radio-button value="female">Nữ</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <!-- Title selection -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phẩm vị</mat-label>
+                <mat-select formControlName="title" (selectionChange)="onTitleChange($event.value); getHolyName()"
+                  [class.error-input]="eventForm.get('title')?.invalid && (eventForm.get('title')?.touched || eventForm.get('title')?.dirty)"
+                  required>
+                  <mat-option *ngFor="let title of caodaiTitles" [value]="title.key">
+                    {{ title.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="eventForm.get('title')?.hasError('required')">Vui lòng chọn phẩm vị</mat-error>
+              </mat-form-field>
+
+              <!-- Color selection for male with holy name -->
+              <mat-form-field appearance="outline" *ngIf="shouldShowColorSelection()" class="full-width">
+                <mat-label>Màu sắc</mat-label>
+                <mat-select formControlName="color" (selectionChange)="getHolyName()">
+                  <mat-option *ngFor="let color of colorOptions" [value]="color.value">
+                    {{ color.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Holy Name field if required -->
+              <mat-form-field appearance="outline" *ngIf="isHolyNameRequired()" class="full-width">
+                <mat-label>Thánh danh</mat-label>
+                <input matInput formControlName="holyName" placeholder="Nhập thánh danh" />
+              </mat-form-field>
+
+              <!-- Age field -->
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tuổi</mat-label>
+                <input matInput formControlName="age" type="number" placeholder="Nhập tuổi" />
+              </mat-form-field>
+
+              <!-- Sub Title selection for Chuc Viec -->
+              <mat-form-field appearance="outline" *ngIf="subTitles.length > 0" class="full-width">
+                <mat-label>Chức vụ</mat-label>
+                <mat-select formControlName="subTitle" (selectionChange)="getHolyName()">
+                  <mat-option *ngFor="let subTitle of subTitles" [value]="subTitle.key">
+                    {{ subTitle.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          }
+        </form>
+      </div>
     </mat-tab>
   </mat-tab-group>
+  }
 </div>
