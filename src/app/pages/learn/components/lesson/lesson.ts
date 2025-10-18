@@ -15,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import * as QRCode from 'qrcode';
 import { Observable } from 'rxjs';
 import { ConfettiAnimation } from 'src/app/components/confetti-animation/confetti-animation';
-import { ConfettiService } from 'src/app/services/confetti.service';
+import { ConfettiService } from 'src/app/shared/services/confetti.service';
 
 @Component({
   selector: 'app-lesson',
@@ -63,7 +63,7 @@ export class Lesson implements OnInit {
     const index = Math.floor(Math.random() * this.negativeFeedbackMessages.length);
     return this.negativeFeedbackMessages[index];
   }
-  
+
   correctCount = 0;
 
   dialog = inject(MatDialog);

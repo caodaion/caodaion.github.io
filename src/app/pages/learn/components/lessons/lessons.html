@@ -1,5 +1,5 @@
-<div class="lesson-container">
-    <app-learn-action-contribute></app-learn-action-contribute>
+<div class="lesson-container" tourAnchor="hoc.group">
+    <app-learn-action-contribute tourAnchor="hoc.group.contribute"></app-learn-action-contribute>
     @for(lessonGroup of allSessionGroups; track lessonGroup) {
     <div class="lesson-card">
         <div class="lesson-header">
@@ -42,3 +42,5 @@
     </div>
     }
 </div>
+
+<tour-step-template></tour-step-template>

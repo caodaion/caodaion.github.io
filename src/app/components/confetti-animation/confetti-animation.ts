@@ -1,5 +1,5 @@
 import { Component, ElementRef, AfterViewInit, ViewEncapsulation, Input } from '@angular/core';
-import { ConfettiService } from '../../services/confetti.service';
+import { ConfettiService } from '../../shared/services/confetti.service';
 
 @Component({
   selector: 'app-confetti-animation',

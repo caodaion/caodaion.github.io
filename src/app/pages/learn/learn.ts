@@ -9,6 +9,7 @@ import { SeoService } from 'src/app/shared/services/seo.service';
 import { Blogger } from 'src/app/shared/services/blogger';
 import { LearnDataService } from './services/learn-data.service';
 import { LearnActionContribute } from "./components/learn-action-contribute/learn-action-contribute";
+import { TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-learn',
@@ -19,7 +20,8 @@ import { LearnActionContribute } from "./components/learn-action-contribute/lear
     RouterLink,
     RouterLinkActive,
     LearnActionContribute,
-  ],
+    TourMatMenuModule
+],
   templateUrl: './learn.html',
   styleUrl: './learn.scss'
 })
