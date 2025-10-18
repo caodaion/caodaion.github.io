@@ -45,14 +45,25 @@ export class Lesson implements OnInit {
 
     // Play audio if the answer is correct
     if (this.quizzes[quizIndex].selected === this.quizzes[quizIndex].dap_an) {
+      this.randomMessage = this.getRandomPositiveFeedback();
       const audio = new Audio('assets/audios/sound-effect/correct-156911.mp3');
       audio.play();
     }
     if (this.quizzes[quizIndex].selected !== this.quizzes[quizIndex].dap_an) {
+      this.randomMessage = this.getRandomNegativeFeedback();
       const audio = new Audio('assets/audios/sound-effect/error-011-352286.mp3');
       audio.play();
     }
   }
+  private getRandomPositiveFeedback(): string {
+    const index = Math.floor(Math.random() * this.positiveFeedbackMessages.length);
+    return this.positiveFeedbackMessages[index];
+  }
+  private getRandomNegativeFeedback(): string {
+    const index = Math.floor(Math.random() * this.negativeFeedbackMessages.length);
+    return this.negativeFeedbackMessages[index];
+  }
+  
   correctCount = 0;
 
   dialog = inject(MatDialog);
@@ -66,6 +77,17 @@ export class Lesson implements OnInit {
   currentTitle: string = '';
   lessonSlug: string = '';
   quizStartTime: Date | null = null;
+  randomMessage: string = '';
+
+  private positiveFeedbackMessages: string[] = [
+    "Tuyệt vời!", "Xuất sắc!", "Rất tốt!", "Bạn làm rất tốt!", "Tiếp tục phát huy!",
+    "Bạn thật thông minh!", "Cố lên, bạn đang tiến bộ!", "Chúc mừng bạn!", "Bạn đã nắm vững kiến thức này!"
+  ];
+  private negativeFeedbackMessages: string[] = [
+    "Cố gắng hơn nhé!", "Đừng nản lòng!", "Hãy thử lại!", "Bạn sẽ làm tốt hơn lần sau!",
+    "Đừng bỏ cuộc!", "Mỗi sai lầm là một bài học!", "Hãy kiên nhẫn và tiếp tục học!",
+    "Bạn có thể làm được!", "Hãy tin vào bản thân mình!"
+  ];
 
   constructor(
     private route: ActivatedRoute,

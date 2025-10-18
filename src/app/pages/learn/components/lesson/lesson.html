@@ -88,66 +88,71 @@
                     </div>
                 </div>
             </ng-container>
-            <ng-container *ngIf="showResult">
-                <div class="quiz-result-page">
-                    <div class="quiz-result-header">
-                        <div class="quiz-result-emoji">🎉</div>
-                        <div class="quiz-result-title">Hoàn thành bài học!</div>
-                        <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{
-                            lessonPost?.title }}"</div>
-                        <div class="quiz-score-card">
-                            <div class="quiz-score-label text-center">Điểm số của bạn</div>
-                            <div class="quiz-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
-                            <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) |
-                                number:'1.0-0' }}%</div>
-                        </div>
-                        <button mat-raised-button class="quiz-share-button !h-auto !min-h-[48px]"
-                            (click)="shareResult(shareResultDialog)">
-                            <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
-                        </button>
+            @if (showResult) {
+            <div class="quiz-result-page">
+                <div class="quiz-result-header">
+                    <div class="quiz-result-emoji">🎉</div>
+                    <div class="quiz-result-title">Hoàn thành bài học!</div>
+                    <div class="quiz-result-subtitle">Chúc mừng bạn đã hoàn thành bài học với chủ đề "{{
+                        lessonPost?.title }}"</div>
+                    <div class="quiz-score-card">
+                        <div class="quiz-score-label text-center">Điểm số của bạn</div>
+                        <div class="quiz-score-value">{{ correctCount }} / {{ quizzes.length }}</div>
+                        <div class="quiz-score-percentage">{{ ((correctCount / quizzes.length) * 100) |
+                            number:'1.0-0' }}%</div>
                     </div>
-                    <!-- <div class="quiz-answers-list">
-                        <div *ngFor="let quiz of quizzes; let i = index" class="quiz-answer-item">
-                            <div class="quiz-answer-question">Câu {{ i + 1 }}: {{ quiz.cau_hoi }}</div>
-                            <div class="quiz-answer-details">
-                                <span>Đáp án của bạn: <b>{{ quiz.selected || 'Chưa chọn' }}</b></span>
-                                <span *ngIf="quiz.selected === quiz.dap_an" class="quiz-answer-correct">
-                                    <app-icon name="check_circle"></app-icon> Đúng
-                                </span>
-                                <span *ngIf="quiz.selected && quiz.selected !== quiz.dap_an"
-                                    class="quiz-answer-incorrect">
-                                    <app-icon name="cancel"></app-icon> Sai
-                                </span>
-                                <span class="ml-2">| Đáp án đúng: <b>{{ quiz.dap_an }}</b></span>
-                            </div>
-                        </div>
-                    </div> -->
+                    <button mat-raised-button class="quiz-share-button !h-auto !min-h-[48px]"
+                        (click)="shareResult(shareResultDialog)">
+                        <app-icon name="share"></app-icon> Tải ảnh chia sẻ kết quả
+                    </button>
                 </div>
-            </ng-container>
+            </div>
+            }
         </div>
-        <div class="quiz-navigation" style="display: flex; align-items: flex-end; gap: 12px;">
+
+        @if (!showResult) {
+        <div class="quiz-navigation" [ngClass]="{
+            'correctAnswer': quizzes[currentQuizIndex].showImmediateFeedback && quizzes[currentQuizIndex].selected === quizzes[currentQuizIndex].dap_an,
+            'incorrectAnswer': quizzes[currentQuizIndex].showImmediateFeedback && quizzes[currentQuizIndex].selected && quizzes[currentQuizIndex].selected !== quizzes[currentQuizIndex].dap_an
+        }">
             <button mat-stroked-button class="quiz-skip-button" (click)="goToNextQuiz(true)"
                 *ngIf="!quizzes[currentQuizIndex]?.selected">Bỏ qua</button>
+
+            <div *ngIf="quizzes[currentQuizIndex].showImmediateFeedback" class="answer-response">
+                <div *ngIf="quizzes[currentQuizIndex].selected === quizzes[currentQuizIndex].dap_an"
+                    class="quiz-feedback-correct" style="margin-bottom: 8px;">
+                    <app-icon name="check_circle_fill" [size]="'72px'"></app-icon>
+                    <div class="answer-message">{{randomMessage}}</div>
+                </div>
+                <div *ngIf="quizzes[currentQuizIndex].selected && quizzes[currentQuizIndex].selected !== quizzes[currentQuizIndex].dap_an"
+                    class="quiz-feedback-incorrect" style="margin-bottom: 8px;">
+                    <app-icon name="x_circle" [size]="'72px'"></app-icon>
+                    <div>
+                        <div class="answer-message">{{randomMessage}}</div>
+                        <div><b>Đáp án đúng là:</b> {{ quizzes[currentQuizIndex].dap_an }}</div>
+                        @if (quizzes[currentQuizIndex].giai_thich) {
+                        <div><b>Giải thích:</b>
+                            <div [innerHTML]="quizzes[currentQuizIndex].giai_thich"></div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
             <div style="flex: 1;"></div>
-            <div style="display: flex; flex-direction: column; align-items: flex-end; min-width: 180px;">
+            <div class="quiz-navigation-next-button">
                 <ng-container *ngIf="quizzes[currentQuizIndex].selected">
                     <div *ngIf="!quizzes[currentQuizIndex]?.showImmediateFeedback">
-                        <button mat-flat-button color="primary" (click)="checkAnswer(currentQuizIndex)">Kiểm tra</button>
+                        <button mat-flat-button color="primary" (click)="checkAnswer(currentQuizIndex)">Kiểm
+                            tra</button>
                     </div>
                     <div *ngIf="quizzes[currentQuizIndex].showImmediateFeedback">
-                        <div *ngIf="quizzes[currentQuizIndex].selected === quizzes[currentQuizIndex].dap_an" class="quiz-feedback-correct" style="margin-bottom: 8px;">
-                            <app-icon name="check_circle"></app-icon> Đúng rồi!
-                        </div>
-                        <div *ngIf="quizzes[currentQuizIndex].selected && quizzes[currentQuizIndex].selected !== quizzes[currentQuizIndex].dap_an" class="quiz-feedback-incorrect" style="margin-bottom: 8px;">
-                            <app-icon name="cancel"></app-icon> Sai, đáp án đúng là: <b>{{ quizzes[currentQuizIndex].dap_an }}</b>
-                        </div>
                         <button mat-flat-button class="quiz-next-button" (click)="goToNextQuiz()">
-                            {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Hoàn thành' }}
-                        </button>
+                            {{ currentQuizIndex < quizzes.length - 1 ? 'Câu tiếp theo' : 'Hoàn thành' }} </button>
                     </div>
                 </ng-container>
             </div>
         </div>
+        }
     </mat-tab>
 </mat-tab-group>
 
@@ -174,7 +179,7 @@
                     {{ lessonPost?.title }}
                 </div>
                 <div class="flex mb-4 w-full flex-col items-center gap-4">
-                    <div
+                    <div [contentEditable]="false"
                         class="score-card flex flex-col items-center justify-center bg-white rounded-lg shadow-lg px-4 py-4">
                         <div class="font-bold text-blue-600 mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Với điểm số
                         </div>

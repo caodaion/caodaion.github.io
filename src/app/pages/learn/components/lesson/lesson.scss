@@ -14,6 +14,7 @@
   --error-color: #ea4335;
   --error-background: #fce8e6;
   --success-color: #34a853;
+  --success-background: #e8f5e9;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -371,11 +372,59 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: var(--spacing-lg);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-light);
   background: var(--surface-color);
   z-index: 10;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    padding: var(--spacing-md);
+  }
+
+  .answer-response {
+    .answer-message {
+      font-size: 1.5rem;
+      font-weight: 600;
+      @media (max-width: 600px) {
+        font-size: 1.2rem;
+      }
+    }
+
+    .quiz-feedback-correct {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--success-color);
+      gap: var(--spacing-sm);
+    }
+
+    .quiz-feedback-incorrect {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--error-color);
+      gap: var(--spacing-sm);
+    }
+  }
+
+  &.correctAnswer {
+    background: linear-gradient(135deg, var(--success-background) 0%, var(--surface-color) 50%, var(--success-background) 100%);
+  }
+
+  &.incorrectAnswer {
+    background: linear-gradient(135deg, var(--error-background) 0%, var(--surface-color) 50%, var(--error-background) 100%);
+  }
+  .quiz-navigation-next-button {
+    @media (max-width: 600px) {
+      width: 100%;
+      button {
+        margin-top: var(--spacing-sm);
+        width: 100%;
+      }
+    }
+  }
 }
 
 .quiz-skip-button {
@@ -403,6 +452,26 @@
   &:disabled {
     background: var(--text-tertiary);
     cursor: not-allowed;
+  }
+}
+
+.correctAnswer {
+  .quiz-next-button {
+    background: var(--success-color);
+
+    &:hover:not(:disabled) {
+      background: #2c8c46;
+    }
+  }
+}
+
+.incorrectAnswer {
+  .quiz-next-button {
+    background: var(--error-color);
+
+    &:hover:not(:disabled) {
+      background: #c23328;
+    }
   }
 }
 
