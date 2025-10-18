@@ -30,6 +30,7 @@ import { ChildHeaderComponent } from "src/app/components/child-header/child-head
 import { SearchThanhSoPipe } from "./pipe/search-thanh-so.pipe";
 import { SearchOrganizationPipe } from "./pipe/search-organization.pipe";
 import { RoutingInstructionsComponent } from "./routing-instructions/routing-instructions.component";
+import { HighlightPipe } from "../../shared/pipe/highlight-pipe";
 
 @Component({
   selector: 'app-maps',
@@ -58,7 +59,8 @@ import { RoutingInstructionsComponent } from "./routing-instructions/routing-ins
     ChildHeaderComponent,
     SearchThanhSoPipe,
     SearchOrganizationPipe,
-    RoutingInstructionsComponent
+    RoutingInstructionsComponent,
+    HighlightPipe
 ]
 })
 export class MapsComponent implements OnInit, AfterViewInit {

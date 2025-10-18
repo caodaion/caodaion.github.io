@@ -82,6 +82,13 @@ export class AppTour {
           this.validatedTours('kinhTour', () => { this.onStartKinhTour(); }, true);
         }
         break;
+      case 'hoc':
+        if (location.pathname.split('/')[2]) {
+          // this.validatedTours('hocDetailTour', () => { this.onStartHocDetailTour(); }, true);
+        } else {
+          this.validatedTours('hocTour', () => { this.onStartHocTour(); }, true);
+        }
+        break;
       // Add more cases for other routes as needed
     }
   }
@@ -99,11 +106,11 @@ export class AppTour {
       title: 'Logo CaoDaiON',
     });
     if (this.breakpointObserver.isMatched('(min-width: 601px)')) {
-    steps.push({
-      anchorId: 'quick-share',
-      content: 'Sử dụng tính năng chia sẻ nhanh để chia sẻ trang hiện tại với bạn bè và người thân.',
-      title: 'Chia sẻ nhanh',
-    });
+      steps.push({
+        anchorId: 'quick-share',
+        content: 'Sử dụng tính năng chia sẻ nhanh để chia sẻ trang hiện tại với bạn bè và người thân.',
+        title: 'Chia sẻ nhanh',
+      });
     } else {
       steps.push({
         anchorId: 'mobile-quick-share',
@@ -338,11 +345,13 @@ export class AppTour {
         content: 'Nhấn vào nút này để chia sẻ bài kinh với người khác.',
         title: 'Chia sẻ bài kinh',
       },
-      { anchorId: 'kinh.listFab',
+      {
+        anchorId: 'kinh.listFab',
         content: 'Nhấn vào nút này để mở danh sách các bài kinh.',
         title: 'Danh sách bài kinh',
       },
-      { anchorId: 'kinh.navigationBar',
+      {
+        anchorId: 'kinh.navigationBar',
         content: 'Sử dụng thanh điều hướng này để mở bài kinh trước đó hoặc tiếp theo trong danh sách.',
         title: 'Thanh điều hướng',
       },
@@ -350,5 +359,54 @@ export class AppTour {
     this.tourService.initialize(steps, this.defaultStepSetting);
     this.tourService.start();
     this.validatedTours('kinhDetailTour');
+  }
+
+  onStartHocTour() {
+    const steps = [
+      {
+        anchorId: 'hoc.group',
+        content: 'Các bài học sẽ được lọc theo nhóm để bạn dễ dàng tìm kiếm và truy cập.',
+        title: 'Nhóm bài học',
+      },
+    ]
+    if (this.breakpointObserver.isMatched('(min-width: 601px)')) {
+      steps.push({
+        anchorId: 'menu.hoc',
+        content: 'Sử dụng menu điều hướng để truy cập các phần khác của ứng dụng học tập.',
+        title: 'Menu điều hướng',
+      });
+      steps.push({
+        anchorId: 'menu.tien-do',
+        content: 'Nhấn vào đây để xem tiến độ học tập của bạn.',
+        title: 'Tiến độ học tập',
+      });
+      steps.push({
+        anchorId: 'menu.hoc.contribute',
+        content: 'Nhấn vào đây để đóng góp bài học hoặc tài liệu học tập cho cộng đồng.',
+        title: 'Đóng góp bài học',
+      });
+    } else {
+      steps.push({
+        anchorId: 'hoc.group.contribute',
+        content: 'Nhấn vào đây để đóng góp bài học hoặc tài liệu học tập cho cộng đồng.',
+        title: 'Đóng góp bài học',
+      });
+    }
+    this.tourService.initialize(steps, this.defaultStepSetting);
+    this.tourService.start();
+    this.validatedTours('hocTour');
+  }
+
+  onStartHocDetailTour() {
+    const steps = [
+      {
+        anchorId: 'hoc.readArea',
+        content: 'Đây là khu vực chính để đọc nội dung bài học. Bạn có thể cuộn để xem toàn bộ nội dung.',
+        title: 'Khu vực đọc bài học',
+      },
+    ]
+    this.tourService.initialize(steps, this.defaultStepSetting);
+    this.tourService.start();
+    this.validatedTours('hocDetailTour');
   }
 }
