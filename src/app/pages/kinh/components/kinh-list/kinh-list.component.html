@@ -86,7 +86,7 @@
           <ul *ngIf="isList()" class="kinh-list list-view">
             <li *ngFor="let kinh of groupEntry.value" class="kinh-item" [attr.data-kinh-key]="kinh.key">
               <a (click)="navigateToKinh(kinh.key)" class="kinh-link">
-                <span class="kinh-name"[innerHTML]="kinh.name | highlight:searchText"></span>
+                <span class="kinh-name" [innerHTML]="kinh.name | highlight: searchText"></span>
                 <span class="material-icons kinh-arrow">chevron_right</span>
               </a>
             </li>
@@ -94,7 +94,7 @@
           <div *ngIf="isGrid()" class="kinh-grid">
             <div *ngFor="let kinh of groupEntry.value" class="kinh-grid-item" [attr.data-kinh-key]="kinh.key">
               <a (click)="navigateToKinh(kinh.key)" class="kinh-link">
-                <span class="kinh-name" [innerHTML]="kinh.name | highlight:searchText"></span>
+                <span class="kinh-name" [innerHTML]="kinh.name | highlight: searchText"></span>
               </a>
             </div>
           </div>
