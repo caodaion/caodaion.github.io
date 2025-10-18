@@ -18,8 +18,8 @@ import { LearnActionContribute } from "./components/learn-action-contribute/lear
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    LearnActionContribute
-],
+    LearnActionContribute,
+  ],
   templateUrl: './learn.html',
   styleUrl: './learn.scss'
 })

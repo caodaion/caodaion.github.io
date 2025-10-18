@@ -1,5 +1,3 @@
-
-
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,8 +12,10 @@ import html2canvas from 'html2canvas-pro';
 import { SeoService } from 'src/app/shared/services/seo.service';
 import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import * as QRCode from 'qrcode'
+import * as QRCode from 'qrcode';
 import { Observable } from 'rxjs';
+import { ConfettiAnimation } from 'src/app/components/confetti-animation/confetti-animation';
+import { ConfettiService } from 'src/app/services/confetti.service';
 
 @Component({
   selector: 'app-lesson',
@@ -27,7 +27,8 @@ import { Observable } from 'rxjs';
     MatDialogModule,
     ChildHeaderComponent,
     ButtonShareModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ConfettiAnimation
   ],
   templateUrl: './lesson.html',
   styleUrl: './lesson.scss'
@@ -35,9 +36,22 @@ import { Observable } from 'rxjs';
 export class Lesson implements OnInit {
   currentQuizIndex = 0;
   showResult = false;
+  showConfetti = false;
+  confettiInput?: number | string; // Will be set based on performance percentage
+
   checkAnswer(quizIndex: number) {
     if (!this.quizzes[quizIndex].selected) return;
     this.quizzes[quizIndex].showImmediateFeedback = true;
+
+    // Play audio if the answer is correct
+    if (this.quizzes[quizIndex].selected === this.quizzes[quizIndex].dap_an) {
+      const audio = new Audio('assets/audios/sound-effect/correct-156911.mp3');
+      audio.play();
+    }
+    if (this.quizzes[quizIndex].selected !== this.quizzes[quizIndex].dap_an) {
+      const audio = new Audio('assets/audios/sound-effect/error-011-352286.mp3');
+      audio.play();
+    }
   }
   correctCount = 0;
 
@@ -58,7 +72,8 @@ export class Lesson implements OnInit {
     private router: Router,
     private learnDataService: LearnDataService,
     private learnResultsService: LearnResultsService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private confettiService: ConfettiService
   ) { }
 
   onGoBack() {
@@ -96,20 +111,52 @@ export class Lesson implements OnInit {
     } else {
       this.calculateResult();
       this.showResult = true;
+      // Trigger confetti animation when lesson is completed
+      this.showConfetti = true;
+      // Hide confetti after calculated duration
+      const confettiDuration = this.confettiService.getCalculatedDuration(this.confettiInput);
+      setTimeout(() => {
+        this.showConfetti = false;
+      }, confettiDuration);
     }
   }
 
   calculateResult() {
     this.correctCount = this.quizzes.filter(q => q.selected === q.dap_an).length;
 
+    // Dynamically set confetti duration based on performance
+    this.setConfettiDurationBasedOnPerformance();
+
+    // Play audio if the result is over 50%
+    const percentage = (this.correctCount / this.quizzes.length) * 100;
+    if (percentage > 50) {
+      const audio = new Audio('assets/audios/sound-effect/spin-complete-295086.mp3');
+      audio.play();
+    } else {
+      const audio = new Audio('assets/audios/sound-effect/marimba-lose-250960.mp3');
+      audio.play();
+    }
+
     // Save result to IndexedDB
     this.saveLearnResult();
+  }
+
+  /**
+   * Set confetti input based on lesson performance
+   * Better performance = longer celebration!
+   */
+  private setConfettiDurationBasedOnPerformance(): void {
+    const percentage = (this.correctCount / this.quizzes.length) * 100;
+    // Pass the percentage to the service which will handle duration and intensity
+    this.confettiInput = percentage;
   }
 
   // Optionally reset quiz for replay
   resetQuiz() {
     this.currentQuizIndex = 0;
     this.showResult = false;
+    this.showConfetti = false;
+    this.confettiInput = undefined;
     this.correctCount = 0;
     this.quizStartTime = new Date(); // Reset timer for new attempt
     this.quizzes.forEach(q => delete q.selected);
@@ -319,6 +366,7 @@ export class Lesson implements OnInit {
         this.dialogRef = this.dialog.open(shareResultDialog, {
           panelClass: 'custom-dialog-container',
           height: '90vh',
+          maxWidth: '740px',
         });
       });
   }

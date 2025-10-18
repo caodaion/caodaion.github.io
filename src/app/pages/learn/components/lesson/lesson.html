@@ -49,7 +49,7 @@
             </div>
         </div>
     </mat-tab>
-    <mat-tab label="Trắc nghiệm" *ngIf="quizzes.length > 0">
+    <mat-tab label="Trắc nghiệm" *ngIf="quizzes.length > 0" [bodyClass]="'quiz-tab'">
         <div class="quiz-section">
             <ng-container *ngIf="!showResult">
                 <div class="quiz-progress-container">
@@ -125,7 +125,7 @@
                 </div>
             </ng-container>
         </div>
-        <div class="quiz-navigation" style="display: flex; align-items: flex-end; gap: 12px; margin-top: 16px;">
+        <div class="quiz-navigation" style="display: flex; align-items: flex-end; gap: 12px;">
             <button mat-stroked-button class="quiz-skip-button" (click)="goToNextQuiz(true)"
                 *ngIf="!quizzes[currentQuizIndex]?.selected">Bỏ qua</button>
             <div style="flex: 1;"></div>
@@ -156,7 +156,7 @@
         <div class="text-center">Bạn cũng có thể thay đổi nội dung ảnh chia sẻ và nhập tên của bạn bên trong dấu "[" "]"
         </div>
         <div #sharedResultContent contenteditable="true"
-            class="quiz-result-share-card w-full max-w-xl bg-gradient-to-br from-blue-100 via-white to-green-100 rounded-xl shadow-2xl p-2 sm:p-4 md:p-8 border border-gray-200 flex flex-col items-center"
+            class="quiz-result-share-card w-full bg-gradient-to-br from-blue-100 via-white to-green-100 rounded-xl shadow-2xl p-2 sm:p-4 md:p-8 border border-gray-200 flex flex-col items-center"
             style="box-sizing: border-box; min-width: 0; word-break: break-word;">
             <div class="flex flex-col items-center w-full">
                 <div
@@ -255,3 +255,6 @@
         </div>
     </mat-dialog-actions>
 </ng-template>
+
+<!-- Confetti animation when lesson is completed -->
+<app-confetti-animation *ngIf="showConfetti" [input]="confettiInput"></app-confetti-animation>
