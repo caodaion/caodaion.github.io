@@ -742,7 +742,7 @@ export class CalendarService {
           let currentSolarDate = originalSolarDate
           let monthsCount = 0          
           // Iterate through solar months until we find 24 lunar months
-          while (monthsCount < 24) {
+          while (monthsCount < 12) {
             // Move to next solar month
             currentSolarDate.setDate(currentSolarDate.getDate() + 1)
             
