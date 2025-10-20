@@ -31,6 +31,10 @@ const routes: Routes = [
         path: 'hoc',
         loadChildren: () => import('../../pages/learn/learn.module').then(m => m.LearnModule)
       },
+      {
+        path: 'maps',
+        loadComponent: () => import('../../pages/maps/maps.component').then(m => m.MapsComponent)
+      },
     ]
   }
 ];

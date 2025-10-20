@@ -38,11 +38,18 @@
     color: inherit !important;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: #333333 !important;
   }
 
-  p, span, div {
+  p,
+  span,
+  div {
     color: #333333 !important;
   }
 }
@@ -74,7 +81,7 @@
   transition: background-color 0.2s;
 }
 
-.event-details h3:focus, 
+.event-details h3:focus,
 .event-details p:focus {
   background-color: rgba(0, 0, 0, 0.05);
   outline: none;
@@ -200,11 +207,23 @@
 }
 
 ::ng-deep {
+  .event-image-dialog {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    overflow: hidden;
+    mat-dialog-content {
+      max-height: 100%;
+      overflow: auto;
+    }
+  }
+
   .matButton {
     .mdc-button__label {
       display: flex;
       align-items: center;
       gap: 4px;
+
       svg {
         height: 18px !important;
         width: 18px !important;

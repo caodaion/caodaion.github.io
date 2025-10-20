@@ -9,12 +9,59 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MapsService } from 'src/app/shared/services/maps/maps.service';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconComponent } from 'src/app/components/icon/icon.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { ChildHeaderComponent } from "src/app/components/child-header/child-header.component";
+import { SearchThanhSoPipe } from "./pipe/search-thanh-so.pipe";
+import { SearchOrganizationPipe } from "./pipe/search-organization.pipe";
+import { RoutingInstructionsComponent } from "./routing-instructions/routing-instructions.component";
+import { HighlightPipe } from "../../shared/pipe/highlight-pipe";
 
 @Component({
-    selector: 'app-maps',
-    templateUrl: './maps.component.html',
-    styleUrls: ['./maps.component.scss'],
-    standalone: false
+  selector: 'app-maps',
+  templateUrl: './maps.component.html',
+  styleUrls: ['./maps.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatListModule,
+    MatRippleModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    SharedModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    IconComponent,
+    MatAutocompleteModule,
+    ChildHeaderComponent,
+    SearchThanhSoPipe,
+    SearchOrganizationPipe,
+    RoutingInstructionsComponent,
+    HighlightPipe
+]
 })
 export class MapsComponent implements OnInit, AfterViewInit {
   map: any;
@@ -118,7 +165,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
         center: [this.latitude, this.longitude],
         zoom: 18
       });
-      const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
       });
       tiles.addTo(this.map);
@@ -153,10 +200,15 @@ export class MapsComponent implements OnInit, AfterViewInit {
 
   calculateDistance(item?: any) {
     let currentLocation = L.latLng(this.latitude, this.longitude)
-    if (item?.latLng[0] && item?.latLng[1]) {
-      currentLocation = L.latLng(item?.latLng[0], item?.latLng[1])
+    if (item?.latLng && item.latLng.length >= 2 && item.latLng[0] != null && item.latLng[1] != null) {
+      currentLocation = L.latLng(item.latLng[0], item.latLng[1])
     }
     this.thanhSoList?.forEach((tanhSo: any) => {
+      // Guard: skip if latLng is missing or invalid
+      if (!tanhSo?.latLng || tanhSo.latLng.length < 2 || tanhSo.latLng[0] == null || tanhSo.latLng[1] == null) {
+        console.warn('Skipping invalid thanhSo for distance calculation:', tanhSo);
+        return;
+      }
       const thanhSoLatLng = L.latLng(tanhSo.latLng[0], tanhSo.latLng[1])
       tanhSo.distance = currentLocation.distanceTo(thanhSoLatLng)
     })
@@ -168,6 +220,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
     caodaiONMarker.bindPopup(`<a href="${location.origin}">${location.origin}</a>`);
     this.markerCluster.addLayer(caodaiONMarker);
     this.thanhSoList?.forEach((item: any, index: any) => {
+      // Guard: skip if latLng is missing or invalid
+      if (!item?.latLng || item.latLng.length < 2 || item.latLng[0] == null || item.latLng[1] == null) {
+        console.warn('Skipping invalid marker:', item);
+        return;
+      }
       this.loadThanhSoMarker(item, index);
     });
     this.map.addLayer(this.markerCluster);
@@ -211,6 +268,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
 
   loadThanhSoMarker(item: any, index: any) {
+    // Guard: skip if latLng is missing or invalid
+    if (!item?.latLng || item.latLng.length < 2 || item.latLng[0] == null || item.latLng[1] == null) {
+      console.warn('Skipping invalid marker in loadThanhSoMarker:', item);
+      return;
+    }
     const thanhSoMarker = L.marker(item.latLng, { icon: this.getThanhSoIcon(item) });
 
     // Set up popup content
@@ -236,10 +298,15 @@ export class MapsComponent implements OnInit, AfterViewInit {
       if (this.drawerMode == 'over') {
         this.infoDrawer.close();
       }
-      this.map.flyTo(item?.latLng, 15, {
-        duration: 1,
-        easeLinearity: 0.5
-      })
+      // Guard: skip flyTo if latLng is missing or invalid
+      if (item?.latLng && item.latLng.length >= 2 && item.latLng[0] != null && item.latLng[1] != null) {
+        this.map.flyTo(item.latLng, 15, {
+          duration: 1,
+          easeLinearity: 0.5
+        })
+      } else {
+        console.warn('Skipping flyTo due to invalid latLng:', item);
+      }
       this.inforBottomSheetRef = this.matBottomSheet.open(this.inforBottomSheet)
       if (this.user?.editable) {
         this.edittingItem = item

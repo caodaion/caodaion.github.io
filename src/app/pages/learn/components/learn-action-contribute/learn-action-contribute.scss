@@ -1,0 +1,70 @@
+
+.contribute-container {
+	display: flex;
+	justify-content: center;
+	align-items: end;
+}
+
+.contribute-card {
+	max-width: 420px;
+	width: 100%;
+	margin: 0 auto;
+	border-radius: 16px;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+	padding: 24px 0;
+    background: linear-gradient(135deg,var(--primary-light) 0%,var(--surface-color) 50%,rgba(52,168,83,.1) 100%)
+}
+
+.contribute-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	font-size: 24px;
+    background: #FFC107;
+    color: #555;
+}
+
+.contribute-list {
+	margin: 16px 0 0 0;
+	padding-left: 20px;
+	color: #555;
+	font-size: 15px;
+}
+
+.button-icon {
+	margin-right: 6px;
+	vertical-align: middle;
+
+}
+
+.btn-contribute {
+	background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%) !important;
+	color: #fff !important;
+	font-size: 1.15rem;
+	font-weight: 500;
+	padding: 14px 36px;
+    margin-top: 8px;
+	border-radius: 10px !important;
+	box-shadow: 0 4px 18px 0 rgba(33,150,243,0.18), 0 1.5px 4px 0 rgba(33,150,243,0.10);
+	letter-spacing: 0.5px;
+	transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+	border: none;
+}
+
+.btn-contribute:hover, .btn-contribute:focus {
+	background: linear-gradient(to right, #fbbc05, #4285f4, #ea4335) !important;
+	box-shadow: 0 8px 28px 0 rgba(33,150,243,0.22), 0 2px 8px 0 rgba(33,150,243,0.13);
+	transform: translateY(-2px) scale(1.03);
+}
+
+.btn-contribute {
+    text-align: center;
+}
+
+.mat-btn-contribute {
+    display: flex;
+    justify-content: center;
+}

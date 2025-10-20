@@ -1,4 +1,9 @@
-<mat-drawer-container>
+<app-child-header [title]="'Bản đồ'">
+    <button mat-icon-button (click)="infoDrawer?.toggle()" matTooltip="Tìm kiếm">
+        <app-icon name="search"></app-icon>
+    </button>
+</app-child-header>
+<mat-drawer-container class="maps-container-mat-drawer">
     <mat-drawer #infoDrawer [opened]="drawerMode === 'side'" [mode]="drawerMode"
         class="lg:min-w-[400px] max-w-full lg:max-w-[400px] border-0">
         <div *ngIf="route === null"
@@ -23,9 +28,10 @@
                         class="w-full cursor-pointer">
                         <div class="flex items-center">
                             <div class="flex flex-wrap p-3 flex-1" (click)="selectItem(item)">
-                                <div class="w-full text-lg font-medium">{{item?.name}}</div>
-                                <div class="w-full text-[#6e73a2]">{{item?.address}}</div>
-                                <div class="w-full text-[#6e73a2]">{{item?.organization}}</div>
+                                <div class="w-full text-lg font-medium"
+                                    [innerHTML]="item?.name | highlight: searchBox['value']"></div>
+                                <div class="w-full text-[#6e73a2]" [innerHTML]="item?.address | highlight: searchBox['value']"></div>
+                                <div class="w-full text-[#6e73a2]" [innerHTML]="item?.organization | highlight: searchBox['value']"></div>
                                 <div class="w-full text-[#6e73a2]">khoản {{item?.distance/1000 | number: '0.0-0'}}km
                                 </div>
                             </div>
@@ -132,7 +138,7 @@
             (click)="infoDrawer?.toggle()" matRipple>
             <app-icon *ngIf="!infoDrawer?.opened && route == null" name="search"></app-icon>
             <app-icon *ngIf="!infoDrawer?.opened && route != null" name="route"></app-icon>
-            <app-icon *ngIf="infoDrawer?.opened" name="navigate_before"></app-icon>
+            <app-icon *ngIf="infoDrawer?.opened" name="chevron_left"></app-icon>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
@@ -143,8 +149,9 @@
         </button>
     </div>
     <div class="text-xl mb-4">
-        <span>{{selectedMap?.name}}<img loading="lazy" *ngIf="selectedMap?.caodaion" src="/assets/icons/assets/circle-logo.svg"
-                alt="circle-logo" class="h-4 inline-block border rounded-full ml-2"></span>
+        <span>{{selectedMap?.name}}<img loading="lazy" *ngIf="selectedMap?.caodaion"
+                src="/assets/icons/assets/circle-logo.svg" alt="circle-logo"
+                class="h-4 inline-block border rounded-full ml-2"></span>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.address">
         <app-icon class="text-[#4285f4]" name="location_on"></app-icon>
@@ -155,16 +162,14 @@
         <div class="w-full ps-3">khoản {{selectedMap?.distance/1000 | number: '0.0-0'}}km</div>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.phone">
-        <app-icon class="text-[#4285f4]" name="phone"></app-icon>
+        <app-icon class="text-[#4285f4]" name="call"></app-icon>
         <div class="w-full ps-3">{{selectedMap?.phone}}</div>
         <a [href]="'tel:'+selectedMap?.phone" [matTooltip]="'Gọi điện thoại'">
-            <button mat-icon-button [color]="'primary'"><app-icon name="phone"></app-icon></button>
+            <button mat-icon-button [color]="'primary'"><app-icon name="call"></app-icon></button>
         </a>
     </div>
     <div class="w-full flex items-center pb-4" *ngIf="!!selectedMap?.organization">
-        <span class="material-symbols-outlined text-[#4285f4]">
-            diversity_2
-        </span>
+        <app-icon class="text-[#4285f4]" name="diversity_2"></app-icon>
         <div class="w-full ps-3">{{selectedMap?.organization}}</div>
     </div>
     <div class="w-full flex items-center pb-4 justify-center">

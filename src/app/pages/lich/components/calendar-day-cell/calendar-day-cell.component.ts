@@ -16,16 +16,22 @@ import { Subscription, map, shareReplay } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AnChay } from 'src/app/pages/lich/components/an-chay/an-chay';
 import { MatMenuModule } from "@angular/material/menu";
-import { IconComponent } from "src/app/components/icon/icon.component";
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { AddEventBottomSheetComponent } from '../add-event-bottom-sheet/add-event-bottom-sheet.component';
-import { EventService } from '../../services/event.service';
+import { LichEventService } from '../../services/event.service';
 import { LichService } from '../../services/lich.service';
+import { AddEventMenu } from "../add-event-menu/add-event-menu";
 
 @Component({
   selector: 'app-calendar-day-cell',
   standalone: true,
-  imports: [CommonModule, MatTooltipModule, MatDialogModule, MatMenuModule, IconComponent, MatBottomSheetModule],
+  imports: [
+    CommonModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatBottomSheetModule, 
+    AddEventMenu
+  ],
   templateUrl: './calendar-day-cell.component.html',
   styleUrls: ['./calendar-day-cell.component.scss'],
   providers: [DatePipe],
@@ -70,7 +76,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
     private bottomSheet: MatBottomSheet,
-    private eventService: EventService,
+    private lichEventService: LichEventService,
     private lichService: LichService
   ) { }
 
@@ -95,10 +101,10 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       // Check if the date is today
       const today = new Date();
       this.isToday = this.isSameDay(this.calendarDate.solar.date, today);
-      
+
       // Load personal events from IndexedDB
       this.loadPersonalEventsForDate();
-      
+
       // Update events visibility
       this.updateEvents();
 
@@ -151,25 +157,13 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
         // Check if this event type is visible
         return this.lichService.isEventTypeVisible(event.type);
       });
-      
+
       this.hasEvents = filteredEvents.length > 0;
       this.visibleEvents = filteredEvents.slice(0, this.maxEvents);
     } else {
       this.hasEvents = false;
       this.visibleEvents = [];
     }
-  }
-
-  /**
-   * Handle click on the day cell
-   */
-  onDayClick(): void {
-    const year = this.calendarDate.solar.year;
-    const month = this.calendarDate.solar.month;
-    const day = this.calendarDate.solar.day;
-
-    // Navigate to the day view with the selected date
-    this.router.navigate(['/lich/d', year, month, day]);
   }
 
   /**
@@ -246,28 +240,14 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddEventClick(): void {
-    const bottomSheetRef = this.bottomSheet.open(AddEventBottomSheetComponent, {
-      data: { selectedDate: this.calendarDate }
-    });
-
-    bottomSheetRef.afterDismissed().subscribe(result => {
-      if (result) {
-        console.log('Sự kiện đã được thêm:', result);
-        // Có thể thêm logic để refresh calendar hoặc hiển thị thông báo thành công
-        this.refreshEventsForDate();
-      }
-    });
-  }
-
   private refreshEventsForDate(): void {
     // Lấy lại events cho ngày hiện tại từ IndexedDB
-    this.eventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
+    this.lichEventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
       // Cập nhật calendarDate.events với dữ liệu từ IndexedDB
       if (!this.calendarDate.events) {
         this.calendarDate.events = [];
       }
-      
+
       // Merge events từ IndexedDB với events hiện có
       const indexedDBEvents = events.map(event => ({
         id: event.id?.toString() || '',
@@ -286,26 +266,26 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
           day: event.date.getDate()
         }
       }));
-      
+
       // Thêm events mới từ IndexedDB vào calendarDate.events
       indexedDBEvents.forEach(newEvent => {
-        if (!this.calendarDate.events.some(existingEvent => 
-          existingEvent.title === newEvent.title && 
+        if (!this.calendarDate.events.some(existingEvent =>
+          existingEvent.title === newEvent.title &&
           existingEvent.dateString === newEvent.dateString
         )) {
           this.calendarDate.events.push(newEvent);
         }
       });
-      
+
       // Thêm events vào LichService để có thể được filter
       indexedDBEvents.forEach(newEvent => {
-        if (!this.lichService.events.some(existingEvent => 
+        if (!this.lichService.events.some(existingEvent =>
           existingEvent.id === newEvent.id
         )) {
           this.lichService.events.push(newEvent);
         }
       });
-      
+
       // Trigger update để refresh calendar
       this.lichService['updateEvents']?.();
       this.updateEvents();
@@ -316,7 +296,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
 
   private loadPersonalEventsForDate(): void {
     // Load personal events from IndexedDB for this specific date
-    this.eventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
+    this.lichEventService.getEventsByDate(this.calendarDate.solar.date).then(events => {
       if (events.length > 0) {
         // Convert IndexedDB events to CalendarEvent format
         const personalEvents = events.map(event => ({
@@ -341,9 +321,9 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
         if (!this.calendarDate.events) {
           this.calendarDate.events = [];
         }
-        
+
         personalEvents.forEach(newEvent => {
-          if (!this.calendarDate.events.some(existingEvent => 
+          if (!this.calendarDate.events.some(existingEvent =>
             existingEvent.id === newEvent.id
           )) {
             this.calendarDate.events.push(newEvent);
@@ -352,7 +332,7 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
 
         // Add to LichService.events if not already present
         personalEvents.forEach(newEvent => {
-          if (!this.lichService.events.some(existingEvent => 
+          if (!this.lichService.events.some(existingEvent =>
             existingEvent.id === newEvent.id
           )) {
             this.lichService.events.push(newEvent);
@@ -372,23 +352,19 @@ export class CalendarDayCellComponent implements OnInit, OnDestroy {
       if (this.calendarDate.events) {
         this.calendarDate.events = this.calendarDate.events.filter(e => e.id !== result.event.id);
       }
-      
+
       // Remove event from LichService.events
       this.lichService.events = this.lichService.events.filter(e => e.id !== result.event.id);
-      
+
       // Trigger update
       this.lichService['updateEvents']?.();
       this.updateEvents();
-      
+
       console.log('Sự kiện đã được xóa');
     } else if (result.action === 'updated' || result.action === 'created') {
       // Refresh events for this date
       this.refreshEventsForDate();
       console.log('Sự kiện đã được cập nhật/tạo');
     }
-  }
-
-  onAddTuanCuu(): void {
-    this.router.navigate([`/tuan-cuu/tinh/${this.datePipe.transform(this.calendarDate.solar.date, 'yyyy-MM-dd')}`]);
   }
 }

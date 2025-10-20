@@ -3,7 +3,7 @@ import { CommonService } from 'src/app/shared/services/common/common.service';
 
 @Pipe({
     name: 'searchThanhSo',
-    standalone: false
+    standalone: true
 })
 export class SearchThanhSoPipe implements PipeTransform {
 

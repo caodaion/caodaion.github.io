@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,20 +9,65 @@ import { ChildHeaderComponent } from 'src/app/components/child-header/child-head
 import { LearnDataService } from '../../services/learn-data.service';
 import { LearnResultsService, LearnResult, QuizAnswer } from '../../services/learn-results.service';
 import html2canvas from 'html2canvas-pro';
+import { SeoService } from 'src/app/shared/services/seo.service';
+import { ButtonShareModule } from "src/app/components/button-share/button-share.module";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import * as QRCode from 'qrcode';
+import { Observable } from 'rxjs';
+import { ConfettiAnimation } from 'src/app/components/confetti-animation/confetti-animation';
+import { ConfettiService } from 'src/app/shared/services/confetti.service';
 
 @Component({
   selector: 'app-lesson',
-  imports: [CommonModule, IconComponent, MatButtonModule, MatTabsModule, MatDialogModule, ChildHeaderComponent],
+  imports: [
+    CommonModule,
+    IconComponent,
+    MatButtonModule,
+    MatTabsModule,
+    MatDialogModule,
+    ChildHeaderComponent,
+    ButtonShareModule,
+    MatTooltipModule,
+    ConfettiAnimation
+  ],
   templateUrl: './lesson.html',
   styleUrl: './lesson.scss'
 })
 export class Lesson implements OnInit {
   currentQuizIndex = 0;
   showResult = false;
+  showConfetti = false;
+  confettiInput?: number | string; // Will be set based on performance percentage
+
+  checkAnswer(quizIndex: number) {
+    if (!this.quizzes[quizIndex].selected) return;
+    this.quizzes[quizIndex].showImmediateFeedback = true;
+
+    // Play audio if the answer is correct
+    if (this.quizzes[quizIndex].selected === this.quizzes[quizIndex].dap_an) {
+      this.randomMessage = this.getRandomPositiveFeedback();
+      const audio = new Audio('assets/audios/sound-effect/correct-156911.mp3');
+      audio.play();
+    }
+    if (this.quizzes[quizIndex].selected !== this.quizzes[quizIndex].dap_an) {
+      this.randomMessage = this.getRandomNegativeFeedback();
+      const audio = new Audio('assets/audios/sound-effect/error-011-352286.mp3');
+      audio.play();
+    }
+  }
+  private getRandomPositiveFeedback(): string {
+    const index = Math.floor(Math.random() * this.positiveFeedbackMessages.length);
+    return this.positiveFeedbackMessages[index];
+  }
+  private getRandomNegativeFeedback(): string {
+    const index = Math.floor(Math.random() * this.negativeFeedbackMessages.length);
+    return this.negativeFeedbackMessages[index];
+  }
+
   correctCount = 0;
 
   dialog = inject(MatDialog);
-  
+
   lessonPost: any;
   flashcards: [string, string][] = [];
   flipped: boolean[] = [];
@@ -33,13 +77,26 @@ export class Lesson implements OnInit {
   currentTitle: string = '';
   lessonSlug: string = '';
   quizStartTime: Date | null = null;
+  randomMessage: string = '';
+
+  private positiveFeedbackMessages: string[] = [
+    "Tuyệt vời!", "Xuất sắc!", "Rất tốt!", "Bạn làm rất tốt!", "Tiếp tục phát huy!",
+    "Bạn thật thông minh!", "Cố lên, bạn đang tiến bộ!", "Chúc mừng bạn!", "Bạn đã nắm vững kiến thức này!"
+  ];
+  private negativeFeedbackMessages: string[] = [
+    "Cố gắng hơn nhé!", "Đừng nản lòng!", "Hãy thử lại!", "Bạn sẽ làm tốt hơn lần sau!",
+    "Đừng bỏ cuộc!", "Mỗi sai lầm là một bài học!", "Hãy kiên nhẫn và tiếp tục học!",
+    "Bạn có thể làm được!", "Hãy tin vào bản thân mình!"
+  ];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private learnDataService: LearnDataService,
-    private learnResultsService: LearnResultsService
-  ) {}
+    private learnResultsService: LearnResultsService,
+    private seoService: SeoService,
+    private confettiService: ConfettiService
+  ) { }
 
   onGoBack() {
     this.router.navigate(['..'], { relativeTo: this.route });
@@ -76,20 +133,52 @@ export class Lesson implements OnInit {
     } else {
       this.calculateResult();
       this.showResult = true;
+      // Trigger confetti animation when lesson is completed
+      this.showConfetti = true;
+      // Hide confetti after calculated duration
+      const confettiDuration = this.confettiService.getCalculatedDuration(this.confettiInput);
+      setTimeout(() => {
+        this.showConfetti = false;
+      }, confettiDuration);
     }
   }
 
   calculateResult() {
     this.correctCount = this.quizzes.filter(q => q.selected === q.dap_an).length;
-    
+
+    // Dynamically set confetti duration based on performance
+    this.setConfettiDurationBasedOnPerformance();
+
+    // Play audio if the result is over 50%
+    const percentage = (this.correctCount / this.quizzes.length) * 100;
+    if (percentage > 50) {
+      const audio = new Audio('assets/audios/sound-effect/spin-complete-295086.mp3');
+      audio.play();
+    } else {
+      const audio = new Audio('assets/audios/sound-effect/marimba-lose-250960.mp3');
+      audio.play();
+    }
+
     // Save result to IndexedDB
     this.saveLearnResult();
+  }
+
+  /**
+   * Set confetti input based on lesson performance
+   * Better performance = longer celebration!
+   */
+  private setConfettiDurationBasedOnPerformance(): void {
+    const percentage = (this.correctCount / this.quizzes.length) * 100;
+    // Pass the percentage to the service which will handle duration and intensity
+    this.confettiInput = percentage;
   }
 
   // Optionally reset quiz for replay
   resetQuiz() {
     this.currentQuizIndex = 0;
     this.showResult = false;
+    this.showConfetti = false;
+    this.confettiInput = undefined;
     this.correctCount = 0;
     this.quizStartTime = new Date(); // Reset timer for new attempt
     this.quizzes.forEach(q => delete q.selected);
@@ -97,6 +186,7 @@ export class Lesson implements OnInit {
 
   selectChoice(quizIndex: number, choice: string) {
     this.quizzes[quizIndex].selected = choice;
+    this.quizzes[quizIndex].showImmediateFeedback = false;
   }
   ngOnDestroy() {
     this.removeKeyboardEvents();
@@ -138,7 +228,20 @@ export class Lesson implements OnInit {
     }
   }
 
+  /**
+   * Set SEO metadata for the calendar page
+   */
+  private setSeoMetadata(): void {
+    this.seoService.updateMetadata({
+      title: `Học ${this.currentTitle || ''}`,
+      description: `Bài học về đạo Cao Đài: ${this.currentTitle || ''}`,
+      url: 'hoc',
+      keywords: 'Học, đạo Cao Đài, bài học, giáo lý, tín đồ Cao Đài, tôn giáo, triết lý, tâm linh, CaoDaiON',
+    });
+  }
+
   private initializeLessonContent() {
+    this.setSeoMetadata();
     this.getPostFlashcard();
     this.getPostQuiz();
   }
@@ -166,7 +269,7 @@ export class Lesson implements OnInit {
       isCorrect: quiz.selected === quiz.dap_an
     }));
 
-    const timeSpent = this.quizStartTime 
+    const timeSpent = this.quizStartTime
       ? Math.round((new Date().getTime() - this.quizStartTime.getTime()) / 1000)
       : undefined;
 
@@ -226,7 +329,8 @@ export class Lesson implements OnInit {
     try {
       const arrayText = match[1].trim();
       this.quizzes = JSON.parse(arrayText);
-      
+
+
       // Start timer when quiz is loaded and available
       if (this.quizzes.length > 0 && !this.quizStartTime) {
         this.quizStartTime = new Date();
@@ -234,7 +338,25 @@ export class Lesson implements OnInit {
     } catch {
       this.quizzes = [];
     }
-    console.log(this.quizzes);
+    this.quizzes.forEach(q => {
+      q.questionType = typeof q.cau_hoi;
+      if (q?.questionType === 'object') {
+        console.log(q?.cau_hoi);
+
+        q?.cau_hoi?.forEach((part: any, index: any) => {
+          const partObject = <any>{}
+          const typeMatchers: { type: string, match: (part: any) => boolean }[] = [
+            { type: 'image', match: (p) => typeof p === 'string' && p.includes('img') },
+            { type: 'text', match: (p) => typeof p === 'string' }
+            // Add more types here as needed
+          ];
+          const matched = typeMatchers.find(m => m.match(part));
+          partObject.type = matched ? matched.type : 'unknown';
+          partObject.content = part;
+          q.cau_hoi[index] = partObject;
+        });
+      }
+    });
   }
 
   toggleFlip(i: number) {
@@ -256,11 +378,19 @@ export class Lesson implements OnInit {
       setTimeout(() => this.noAnim = false, 0);
     }
   }
+
   dialogRef: any;
+  qrUrl: any;
   shareResult(shareResultDialog: any) {
-    this.dialogRef = this.dialog.open(shareResultDialog, {
-      panelClass: 'custom-dialog-container',
-    });
+    this.qrUrl = this.generateQRCodeDataUrl(window.location.href)
+      .subscribe(url => {
+        this.qrUrl = url;
+        this.dialogRef = this.dialog.open(shareResultDialog, {
+          panelClass: 'custom-dialog-container',
+          height: '90vh',
+          maxWidth: '740px',
+        });
+      });
   }
 
   @ViewChild('sharedResultContent') sharedResultContent!: ElementRef;
@@ -281,6 +411,17 @@ export class Lesson implements OnInit {
       });
 
       this.imagePreviewUrl = canvas.toDataURL('image/png');
+      setTimeout(() => {
+        // Scroll mat-dialog-content to preview image
+        const dialogContent = document.querySelector('mat-dialog-content');
+        const imgEl = this.previewImage?.nativeElement;
+        if (dialogContent && imgEl) {
+          const imgRect = imgEl.getBoundingClientRect();
+          const dialogRect = dialogContent.getBoundingClientRect();
+          dialogContent.scrollTop += (imgRect.top - dialogRect.top) - 24;
+        }
+      }, 100);
+
       if (!isDownload) {
         this.isGenerating = false;
         return;
@@ -306,6 +447,18 @@ export class Lesson implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+  generateQRCodeDataUrl(input: any): Observable<any> {
+    return new Observable((observable: any) => {
+      QRCode.toDataURL(input)
+        .then(url => {
+          observable.next(url)
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    })
   }
 }
 

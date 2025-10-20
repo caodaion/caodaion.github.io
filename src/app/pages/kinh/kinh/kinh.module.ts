@@ -24,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { TourMatMenuModule, TourStepTemplateComponent } from "ngx-ui-tour-md-menu";
 import { MatTabHeader } from '@angular/material/tabs';
+import { HighlightPipe } from "../../../shared/pipe/highlight-pipe";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { MatTabHeader } from '@angular/material/tabs';
     MatBottomSheetModule,
     TourMatMenuModule,
     TourStepTemplateComponent,
-    MatTabHeader
+    MatTabHeader,
+    HighlightPipe
 ]
 })
 export class KinhModule { }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QrScannerComponent } from './qr-scanner.component';
+import { ConfettiAnimation } from './confetti-animation';
 
-describe('QrScannerComponent', () => {
-  let component: QrScannerComponent;
-  let fixture: ComponentFixture<QrScannerComponent>;
+describe('ConfettiAnimation', () => {
+  let component: ConfettiAnimation;
+  let fixture: ComponentFixture<ConfettiAnimation>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QrScannerComponent ]
+      imports: [ConfettiAnimation]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(QrScannerComponent);
+    fixture = TestBed.createComponent(ConfettiAnimation);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

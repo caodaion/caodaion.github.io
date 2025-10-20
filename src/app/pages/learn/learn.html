@@ -2,22 +2,24 @@
     <mat-drawer-container class="learn-drawer-container">
         <mat-drawer #drawer [mode]="isMobileView ? 'over' : 'side'" class="learn-drawer" [(opened)]="isDrawerOpen">
             <div class="shortcuts-container">
-                <a class="shortcut-item" routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="shortcut-item" routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" tourAnchor="menu.hoc">
                     <div class="shortcut-icon" style="background: var(--hoc-app-background); color: white">
                         <app-icon name="school" size="21px"></app-icon>
                     </div>
                     <div class="shortcut-label">Học</div>
                 </a>
-                <a class="shortcut-item" routerLink="tien-do" routerLinkActive="active">
+                <a class="shortcut-item" routerLink="tien-do" routerLinkActive="active" tourAnchor="menu.tien-do">
                     <div class="shortcut-icon" style="background: var(--hoc-app-background); color: white">
                         <app-icon name="monitoring" size="21px"></app-icon>
                     </div>
                     <div class="shortcut-label">Tiến độ</div>
                 </a>
             </div>
+            <app-learn-action-contribute tourAnchor="menu.hoc.contribute"></app-learn-action-contribute>
         </mat-drawer>
         <mat-drawer-content class="learn-drawer-content">
             <router-outlet></router-outlet>
         </mat-drawer-content>
     </mat-drawer-container>
 </div>
+<tour-step-template></tour-step-template>

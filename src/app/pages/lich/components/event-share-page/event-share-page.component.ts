@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CalendarService } from 'src/app/shared/services/calendar/calendar.service';
-import { EventService } from '../../services/event.service';
+import { LichEventService } from '../../services/event.service';
 import { ChildHeaderComponent } from 'src/app/components/child-header/child-header.component';
 import { IconComponent } from "src/app/components/icon/icon.component";
 
@@ -58,7 +58,7 @@ export class EventSharePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private calendarService: CalendarService,
-    private eventService: EventService
+    private lichEventService: LichEventService
   ) {}
 
   ngOnInit(): void {
@@ -172,7 +172,7 @@ export class EventSharePageComponent implements OnInit {
     };
 
     // Check if event already exists (by title and date)
-    this.eventService.getEventsByDate(eventDate).then(existingEvents => {
+    this.lichEventService.getEventsByDate(eventDate).then(existingEvents => {
       const duplicateEvent = existingEvents.find(event => 
         event.title === this.eventData!.title && 
         event.date.toDateString() === eventDate.toDateString()
@@ -180,7 +180,7 @@ export class EventSharePageComponent implements OnInit {
 
       if (duplicateEvent) {
         // Update existing event
-        this.eventService.updateEvent(duplicateEvent.id!, eventDataForDB).then(() => {
+        this.lichEventService.updateEvent(duplicateEvent.id!, eventDataForDB).then(() => {
           this.isAddingToCalendar = false;
           this.addToCalendarSuccess = true;
           setTimeout(() => {
@@ -193,7 +193,7 @@ export class EventSharePageComponent implements OnInit {
         });
       } else {
         // Add new event
-        this.eventService.addEvent(eventDataForDB).then(() => {
+        this.lichEventService.addEvent(eventDataForDB).then(() => {
           this.isAddingToCalendar = false;
           this.addToCalendarSuccess = true;
           setTimeout(() => {

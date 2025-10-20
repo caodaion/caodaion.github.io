@@ -29,6 +29,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SeoService } from '../../shared/services/seo.service';
 import { TourAnchorMatMenuDirective, TourMatMenuModule } from "ngx-ui-tour-md-menu";
+import { AddEventMenu } from "./components/add-event-menu/add-event-menu";
 
 @Component({
   selector: 'app-lich',
@@ -45,7 +46,8 @@ import { TourAnchorMatMenuDirective, TourMatMenuModule } from "ngx-ui-tour-md-me
     CalendarControllerComponent,
     IconComponent,
     TourAnchorMatMenuDirective,
-    TourMatMenuModule
+    TourMatMenuModule,
+    AddEventMenu
 ],
   templateUrl: './lich.component.html',
   styleUrls: ['./lich.component.scss'],
@@ -240,6 +242,10 @@ export class LichComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       window.dispatchEvent(event);
     }
+  }
+
+  getCurrentDateData() {
+    return this.lichService.generateDayData(this.currentDate);
   }
 
   // Calendar controller handlers

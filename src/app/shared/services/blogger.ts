@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +8,8 @@ import { inject, Injectable } from '@angular/core';
 export class Blogger {
 
   private readonly http = inject(HttpClient);
-  private readonly blogId = '4095902482828699776';
-  private readonly apiKey = 'AIzaSyDMjZ7ej2nGwPe5qikDX7BYbtBuslresTA';
+  private readonly blogId = environment?.blogger?.blogId;
+  private readonly apiKey = environment?.blogger?.apiKey;
 
   constructor() { }
 

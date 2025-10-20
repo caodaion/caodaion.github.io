@@ -150,7 +150,9 @@ export class KinhListComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.kinhService.getGroupName(key);
   }
 
+  searchText = '';
   search(term: string): void {
+    this.searchText = term;
     this.searchTerm$.next(term);
   }
 

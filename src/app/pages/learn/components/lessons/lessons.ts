@@ -6,14 +6,20 @@ import { LearnDataService } from '../../services/learn-data.service';
 import { LearnResultsService } from '../../services/learn-results.service';
 import { IconComponent } from 'src/app/components/icon/icon.component';
 import { filter, Subscription } from 'rxjs';
+import { LearnActionContribute } from "../learn-action-contribute/learn-action-contribute";
+import { TourAnchorMatMenuDirective, TourMatMenuModule } from "ngx-ui-tour-md-menu";
 
 @Component({
   selector: 'app-lessons',
   imports: [
     RouterModule,
     CommonModule,
-    IconComponent
-  ],
+    IconComponent,
+    LearnActionContribute,
+    TourMatMenuModule,
+    TourAnchorMatMenuDirective,
+    TourMatMenuModule,
+],
   templateUrl: './lessons.html',
   styleUrl: './lessons.scss'
 })
@@ -90,7 +96,6 @@ export class Lessons implements OnInit, OnDestroy {
         ) === idx
       )
       .sort((a: any, b: any) => a.order - b.order);
-    console.log(this.allSessionGroups);
   }
 
   onClickLesson(lesson: any): void {
