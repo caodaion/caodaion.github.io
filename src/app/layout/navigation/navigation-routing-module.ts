@@ -35,6 +35,10 @@ const routes: Routes = [
         path: 'maps',
         loadComponent: () => import('../../pages/maps/maps.component').then(m => m.MapsComponent)
       },
+      {
+        path: 'weather',
+        loadComponent: () => import('../../pages/weather/weather.component').then(m => m.WeatherComponent)
+      },
     ]
   }
 ];
