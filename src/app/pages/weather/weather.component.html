@@ -1,0 +1,251 @@
+<app-child-header [title]="'Thời tiết'">
+  <button mat-icon-button (click)="toggleAddLocation($event)" [matTooltip]="isAddingLocation ? 'Đóng tìm kiếm' : 'Thêm địa điểm'">
+    <app-icon [name]="isAddingLocation ? 'close' : 'add'"></app-icon>
+  </button>
+  <button mat-icon-button (click)="refreshAllWeather()" [matTooltip]="'Làm mới tất cả'">
+    <app-icon name="refresh"></app-icon>
+  </button>
+</app-child-header>
+
+<div class="weather-container">
+  <!-- Add Location Search -->
+  <div class="add-location-section" *ngIf="isAddingLocation">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Tìm kiếm địa điểm</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput()"
+        [matAutocomplete]="auto"
+        placeholder="Nhập tên thành phố...">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <mat-autocomplete 
+        #auto="matAutocomplete" 
+        (optionSelected)="selectLocationFromSearch($event.option.value)">
+        <mat-option *ngFor="let result of searchResults" [value]="result">
+          <div class="location-option">
+            <span class="material-symbols-outlined">location_on</span>
+            <div class="location-info">
+              <span class="location-name">{{ result.name }}</span>
+              <span class="location-details">{{ result.admin1 }}{{ result.country ? ', ' + result.country : '' }}</span>
+            </div>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="locations.length === 0" class="empty-state">
+    <span class="material-symbols-outlined empty-icon">wb_cloudy</span>
+    <h3>Chưa có địa điểm nào</h3>
+    <p>Nhấn nút "Thêm địa điểm" để bắt đầu theo dõi thời tiết</p>
+  </div>
+
+  <!-- Locations Grid -->
+  <div *ngIf="locations.length > 0" class="locations-grid">
+    <mat-card 
+      *ngFor="let location of locations" 
+      class="location-card"
+      [class.selected]="selectedLocationId === location.id"
+      (click)="selectLocation(location.id)">
+      
+      <!-- Card Header -->
+      <div class="card-header">
+        <div class="location-info-header">
+          <span class="material-symbols-outlined location-icon">location_on</span>
+          <div class="location-text">
+            <h3 class="location-name">{{ location.name }}</h3>
+            <p class="location-meta" *ngIf="location.admin1 || location.country">
+              {{ location.admin1 }}{{ location.admin1 && location.country ? ', ' : '' }}{{ location.country }}
+            </p>
+            <span *ngIf="location.isCurrentLocation" class="current-badge">
+              <span class="material-symbols-outlined">my_location</span>
+              <span>Vị trí hiện tại</span>
+            </span>
+          </div>
+        </div>
+        
+        <button 
+          mat-icon-button 
+          [matMenuTriggerFor]="locationMenu"
+          (click)="$event.stopPropagation()"
+          class="menu-button">
+          <span class="material-symbols-outlined">more_vert</span>
+        </button>
+        <mat-menu #locationMenu="matMenu">
+          <button mat-menu-item (click)="refreshLocation(location.id)">
+            <span class="material-symbols-outlined">refresh</span>
+            <span>Làm mới</span>
+          </button>
+          <button mat-menu-item (click)="removeLocation(location.id)">
+            <span class="material-symbols-outlined">delete</span>
+            <span>Xóa</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="location.loading" class="loading-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="location.error && !location.loading" class="error-state">
+        <span class="material-symbols-outlined">error_outline</span>
+        <span>{{ location.error }}</span>
+        <button mat-button (click)="refreshLocation(location.id, $event)">Thử lại</button>
+      </div>
+
+      <!-- Weather Content -->
+      <div *ngIf="!location.loading && !location.error && location.weather && location.weather.current" class="weather-content">
+        <!-- Current Weather -->
+        <div class="current-weather-section">
+          <div class="temperature-display">
+            <div class="main-temperature">
+              {{ getTemperature(location.weather.current.temperature_2m) }}
+            </div>
+            <div class="weather-icon-small">
+              <span class="material-symbols-outlined" [class]="getWeatherIconClass(location.weather.current.weather_code)">
+                {{ getWeatherIcon(location.weather.current.weather_code, location.weather.current.time) }}
+              </span>
+            </div>
+          </div>
+          <div class="weather-description">
+            {{ getWeatherDescription(location.weather.current.weather_code) }}
+          </div>
+          <div class="weather-time">
+            <span class="material-symbols-outlined">schedule</span>
+            <span>{{ formatTime(location.weather.current.time) }}</span>
+          </div>
+          
+          <!-- Additional Weather Details -->
+          <div class="weather-details-grid" *ngIf="location.weather.current">
+            <div class="detail-item-small" *ngIf="location.weather.current.relative_humidity_2m !== undefined">
+              <span class="material-symbols-outlined">water_drop</span>
+              <div class="detail-content">
+                <span class="detail-label">Độ ẩm</span>
+                <span class="detail-value">{{ getHumidity(location.weather.current.relative_humidity_2m) }}</span>
+              </div>
+            </div>
+            <div class="detail-item-small" *ngIf="location.weather.current.wind_speed_10m !== undefined">
+              <span class="material-symbols-outlined">air</span>
+              <div class="detail-content">
+                <span class="detail-label">Gió</span>
+                <span class="detail-value">{{ getWindSpeed(location.weather.current.wind_speed_10m) }}</span>
+              </div>
+            </div>
+            <div class="detail-item-small" *ngIf="location.weather.current.precipitation !== undefined && location.weather.current.precipitation > 0">
+              <span class="material-symbols-outlined">opacity</span>
+              <div class="detail-content">
+                <span class="detail-label">Mưa</span>
+                <span class="detail-value">{{ getPrecipitation(location.weather.current.precipitation) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Forecast Preview (First 3 days) -->
+        <div *ngIf="location.weather.daily" class="forecast-preview">
+          <div 
+            *ngFor="let day of getDailyForecastArray(location).slice(0, 3); let i = index" 
+            class="forecast-day-preview">
+            <div class="day-name-short">{{ formatDate(day.time).split(',')[0] }}</div>
+            <span class="material-symbols-outlined day-icon-small">{{ getWeatherIcon(day.weatherCode, day.time) }}</span>
+            <div class="day-status-short">{{ getWeatherDescription(day.weatherCode) }}</div>
+            <div class="day-temps">
+              <span class="temp-high-small">{{ getTemperature(day.maxTemp) }}</span>
+              <span class="temp-low-small">{{ getTemperature(day.minTemp) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Detailed View for Selected Location -->
+  <div *ngIf="getSelectedLocation() && getSelectedLocation()?.weather && !getSelectedLocation()?.loading" class="detailed-view">
+    <div class="view-header">
+      <div class="location-header-info">
+        <h3 class="section-title">
+          {{ viewMode === 'daily' ? 'Dự báo 7 ngày' : 'Dự báo 24 giờ' }}
+        </h3>
+        <p class="location-address" *ngIf="getSelectedLocation()">
+          <span class="material-symbols-outlined">location_on</span>
+          <span>{{ getSimpleAddress(getSelectedLocation()!) }}</span>
+        </p>
+      </div>
+      <div class="view-toggle-buttons">
+        <button mat-stroked-button 
+                [class.active]="viewMode === 'daily'"
+                (click)="viewMode = 'daily'">
+          <span class="material-symbols-outlined">calendar_view_week</span>
+          <span>Theo ngày</span>
+        </button>
+        <button mat-stroked-button 
+                [class.active]="viewMode === 'hourly'"
+                (click)="viewMode = 'hourly'">
+          <span class="material-symbols-outlined">schedule</span>
+          <span>Theo giờ</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Daily Forecast -->
+    <div *ngIf="viewMode === 'daily'" class="daily-forecast-container">
+    <mat-card *ngFor="let day of getDailyForecastArray(getSelectedLocation()!); let i = index" 
+              class="forecast-card-detailed"
+              [class.today-card]="isToday(day.time)">
+      <div class="forecast-day-detailed">
+        <div class="day-info-detailed">
+          <span class="day-name-detailed">{{ formatDate(day.time) }}</span>
+          <span class="day-description-detailed">{{ getWeatherDescription(day.weatherCode) }}</span>
+        </div>
+        <div class="day-temperatures-detailed">
+          <div class="temp-high-detailed">
+            <span class="material-symbols-outlined temp-icon-detailed">keyboard_arrow_up</span>
+            <span>{{ getTemperature(day.maxTemp) }}</span>
+          </div>
+          <div class="temp-low-detailed">
+            <span class="material-symbols-outlined temp-icon-detailed">keyboard_arrow_down</span>
+            <span>{{ getTemperature(day.minTemp) }}</span>
+          </div>
+        </div>
+        <div class="day-icon-detailed">
+          <span class="material-symbols-outlined" [class]="getWeatherIconClass(day.weatherCode)">
+            {{ getWeatherIcon(day.weatherCode, day.time) }}
+          </span>
+        </div>
+      </div>
+    </mat-card>
+    </div>
+
+    <!-- Hourly Forecast -->
+    <div *ngIf="viewMode === 'hourly'" class="hourly-forecast-container">
+      <div class="hourly-scroll">
+        <mat-card *ngFor="let hour of getHourlyForecastArray(getSelectedLocation()!); let i = index" 
+                  class="hourly-card"
+                  [class.current-hour]="formatHour(hour.time) === 'Bây giờ'">
+          <div class="hourly-content">
+            <div class="hour-time">{{ formatHour(hour.time) }}</div>
+            <div class="hour-icon-wrapper">
+              <span class="material-symbols-outlined hour-icon">{{ getWeatherIcon(hour.weatherCode, hour.time) }}</span>
+            </div>
+            <div class="hour-status">{{ getWeatherDescription(hour.weatherCode) }}</div>
+            <div class="hour-temp">{{ getTemperature(hour.temperature) }}</div>
+            <div class="hour-details" *ngIf="hour.precipitation && hour.precipitation > 0 || hour.windSpeed">
+              <div class="hour-precip" *ngIf="hour.precipitation && hour.precipitation > 0">
+                <span class="material-symbols-outlined">opacity</span>
+                <span>{{ getPrecipitation(hour.precipitation) }}</span>
+              </div>
+              <div class="hour-wind" *ngIf="hour.windSpeed">
+                <span class="material-symbols-outlined">air</span>
+                <span>{{ Math.round(hour.windSpeed || 0) }} km/h</span>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

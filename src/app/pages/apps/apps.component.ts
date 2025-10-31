@@ -65,6 +65,13 @@ export class AppsComponent {
       icon: 'globe_location_pin',
       route: '/maps'
     },
+    {
+      id: 'weather',
+      name: 'Thời tiết',
+      description: 'Xem dự báo thời tiết hiện tại và 7 ngày tới',
+      icon: 'partly_cloudy_day',
+      route: '/weather'
+    },
     // {
     //   id: 'ca-nhan',
     //   name: 'Cá Nhân',
