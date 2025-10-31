@@ -9,14 +9,18 @@
           <mat-option *ngFor="let size of fontSizeOptions" [value]="size">{{size}} px</mat-option>
         </mat-select>
         <button class="font-reset-btn" (click)="resetFontSize()" title="Đặt lại cỡ chữ mặc định">
-          <span class="material-icons">refresh</span>
+          <span class="material-icons">
+            <app-icon name="refresh"></app-icon>
+          </span>
         </button>
       </div>
 
       <div class="action-controls">
         <button-share tourAnchor="kinh.share">
           <button class="action-btn share-btn" aria-label="Share">
-            <span class="material-icons">share</span>
+            <span class="material-icons">
+              <app-icon name="share"></app-icon>
+            </span>
           </button>
         </button-share>
       </div>
@@ -32,11 +36,15 @@
           <article class="kinh-content-card" *ngIf="kinhContent$ | async as content">
             <!-- Error State -->
             <div *ngIf="error" class="error-state">
-              <span class="material-icons error-icon">error_outline</span>
+              <span class="material-icons error-icon">
+                <app-icon name="error_outline"></app-icon>
+              </span>
               <h3>Không thể tải nội dung</h3>
               <p>{{ error }}</p>
               <button class="retry-btn" (click)="ngOnInit()">
-                <span class="material-icons">refresh</span>
+                <span class="material-icons">
+                  <app-icon name="refresh"></app-icon>
+                </span>
                 Thử lại
               </button>
             </div>
@@ -61,7 +69,9 @@
         <button class="nav-button prev-button" *ngIf="prevKinh" (click)="goToPreviousKinh()"
           [title]="'Bài trước: ' + prevKinh.name">
           <div class="nav-button-content">
-            <span class="material-icons nav-icon">chevron_left</span>
+            <span class="material-icons nav-icon">
+              <app-icon name="chevron_left"></app-icon>
+            </span>
             <div class="nav-text-group">
               <span class="nav-label">Bài trước</span>
               <span class="nav-title">{{ prevKinh.name }}</span>
@@ -78,7 +88,9 @@
               <span class="nav-label">Bài tiếp</span>
               <span class="nav-title">{{ nextKinh.name }}</span>
             </div>
-            <span class="material-icons nav-icon">chevron_right</span>
+            <span class="material-icons nav-icon">
+              <app-icon name="chevron_right"></app-icon>
+            </span>
           </div>
         </button>
       </div>
@@ -87,7 +99,9 @@
   <!-- Floating Action Button (FAB) -->
   <button class="fab" cdkDrag cdkDragBoundary=".kinh-detail-page" (click)="openKinhList()" tourAnchor="kinh.listFab"
     [matTooltip]="'Danh sách kinh'">
-    <span class="material-icons">list</span>
+    <span class="material-icons">
+      <app-icon name="list"></app-icon>
+    </span>
   </button>
 </div>
 <tour-step-template></tour-step-template>
