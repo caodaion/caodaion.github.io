@@ -10,7 +10,9 @@
     <!-- Search Bar -->
     <div class="search-section">
       <div class="search-container" tourAnchor="kinh.search">
-        <span class="search-icon material-icons">search</span>
+        <span class="search-icon">
+          <app-icon name="search"></app-icon>
+        </span>
         <input type="text" [autofocus]="false" placeholder="Tìm kiếm kinh..." #searchInput
           (input)="search(searchInput.value)" class="search-input">
       </div>
@@ -22,12 +24,16 @@
       <div>
         <div class="filter-toggle-section" tourAnchor="kinh.filters">
           <button class="filter-toggle-btn" [class.active]="showFilters" (click)="toggleFilters()">
-            <span class="material-icons">tune</span>
+            <span class="material-icons">
+              <app-icon name="tune"></app-icon>
+            </span>
             <span class="filter-toggle-text">
               {{ showFilters ? 'Ẩn bộ lọc' : 'Hiện bộ lọc' }}
               <span class="filter-count" *ngIf="selectedGroups.length > 0">({{ selectedGroups.length }})</span>
             </span>
-            <span class="material-icons expand-icon">{{ showFilters ? 'expand_less' : 'expand_more' }}</span>
+            <span class="material-icons expand-icon">
+              <app-icon [name]="showFilters ? 'unfold_less' : 'unfold_more'"></app-icon>
+            </span>
           </button>
         </div>
 
@@ -35,11 +41,15 @@
         <div class="filter-chips-container" [class.visible]="showFilters" *ngIf="(availableGroups$ | async) as groups">
           <div class="filter-chips-header">
             <span class="filter-label">
-              <span class="material-icons">filter_list</span>
+              <span class="material-icons">
+                <app-icon name="filter_list"></app-icon>
+              </span>
               Lọc theo nhóm
             </span>
             <button class="clear-filters-btn" *ngIf="selectedGroups.length > 0" (click)="clearGroupFilters()">
-              <span class="material-icons">clear</span>
+              <span class="material-icons">
+                <app-icon name="backspace"></app-icon>
+              </span>
               Xóa bộ lọc
             </button>
           </div>
@@ -57,11 +67,15 @@
         <div class="display-toggle-container">
           <button class="display-toggle-btn" [class.active]="isList()" (click)="setDisplayType('list')"
             title="Dạng danh sách">
-            <span class="material-icons">view_list</span>
+            <span class="material-icons">
+              <app-icon name="view_list"></app-icon>
+            </span>
           </button>
           <button class="display-toggle-btn" [class.active]="isGrid()" (click)="setDisplayType('grid')"
             title="Dạng lưới">
-            <span class="material-icons">grid_view</span>
+            <span class="material-icons">
+              <app-icon name="grid_view"></app-icon>
+            </span>
           </button>
         </div>
       </div>
@@ -78,7 +92,7 @@
             <span class="group-count">{{ groupEntry.value.length }} bài kinh</span>
           </div>
           <span class="group-toggle material-icons">
-            {{ expandedGroups[groupEntry.key] ? 'expand_less' : 'expand_more' }}
+            <app-icon [name]="expandedGroups[groupEntry.key] ? 'unfold_less' : 'unfold_more'"></app-icon>
           </span>
         </div>
 
@@ -87,7 +101,9 @@
             <li *ngFor="let kinh of groupEntry.value" class="kinh-item" [attr.data-kinh-key]="kinh.key">
               <a (click)="navigateToKinh(kinh.key)" class="kinh-link">
                 <span class="kinh-name" [innerHTML]="kinh.name | highlight: searchText"></span>
-                <span class="material-icons kinh-arrow">chevron_right</span>
+                <span class="material-icons kinh-arrow">
+                  <app-icon name="chevron_right"></app-icon>
+                </span>
               </a>
             </li>
           </ul>
