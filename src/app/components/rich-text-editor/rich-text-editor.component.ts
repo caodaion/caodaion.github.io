@@ -145,14 +145,12 @@ export class RichTextEditorComponent
         [{ align: [] }],
         ['clean'],
         ['link', 'image', 'video'],
-        ['block-input', 'inline-input', 'audio-link', 'block-merge', 'merge-source'],
+        ['block-input', 'inline-input', 'audio-link'],
       ],
       handlers: {
         'block-input': () => this.insertBlockInput(),
         'inline-input': () => this.insertInlineInput(),
         'audio-link': () => this.showAudioLinkDialog(),
-        'block-merge': () => this.insertBlockMerge(),
-        'merge-source': () => this.selectMergeSource(),
       },
     },
   };
@@ -192,7 +190,6 @@ export class RichTextEditorComponent
       this.blotsRegistered = true;
 
       // Double check that blots are registered - important for avoiding ParchmentError
-      console.log('Custom blots registration status:', this.blotsRegistered);
     }
 
     if (this.isReadOnly) {
@@ -329,7 +326,7 @@ export class RichTextEditorComponent
           // Only play audio if in read-only mode
           if (this.isReadOnly) {
             this.audioPlayerRef.nativeElement.play().catch((err) => {
-              console.error('Error playing audio:', err);
+              // Error playing audio
             });
           }
         }
@@ -422,7 +419,7 @@ export class RichTextEditorComponent
           const contentWithValues = this.getContentWithValues();
           this.deltaJson = JSON.stringify(contentWithValues.delta, null, 2);
         } catch (e) {
-          console.error('Error updating deltaJson:', e);
+          // Error updating deltaJson
         } finally {
           this.isUpdatingDeltaJson = false;
           this.deltaJsonUpdateTimeout = null;
@@ -440,7 +437,6 @@ export class RichTextEditorComponent
     // Avoid duplicate merges - only skip if we're already processing the exact same deltaJson
     // But allow it if merge is complete (mergeInProgress = false)
     if (this.lastLoadedDeltaJson === this.deltaJson && this.mergeInProgress) {
-      console.log('Skipping duplicate merge - merge already in progress for this deltaJson');
       return;
     }
 
@@ -491,8 +487,7 @@ export class RichTextEditorComponent
           }
           this.mergeInProgress = false;
         }).catch((error) => {
-          console.error('Error performing merge:', error);
-          // Fall back to setting delta without merge
+          // Error performing merge, fall back to setting delta without merge
           if (this.quillEditorRef) {
             this.quillEditorRef.setContents(delta);
           }
@@ -508,7 +503,7 @@ export class RichTextEditorComponent
         }
       }
     } catch (e) {
-      console.error('Error parsing Delta JSON:', e);
+      // Error parsing Delta JSON
       this.mergeInProgress = false;
     }
   }
@@ -920,13 +915,13 @@ export class RichTextEditorComponent
         }
 
         // Block merge button
-        if (!document.querySelector('.ql-block-merge')) {
+        if (!document.querySelector('.ql-merge-target')) {
           const blockMergeButton = document.createElement('button');
-          blockMergeButton.className = 'ql-block-merge';
+          blockMergeButton.className = 'ql-merge-target';
           blockMergeButton.title = 'Insert merge target block';
 
           // Add a data attribute for CSS to add the icon via background image
-          blockMergeButton.setAttribute('data-icon', 'block-merge');
+          blockMergeButton.setAttribute('data-icon', 'merge-target');
 
           customButtonsContainer.appendChild(blockMergeButton);
 
@@ -1202,7 +1197,6 @@ export class RichTextEditorComponent
       // Note: Fields array already contains current values from the editor
     } else if (this.originalMergeSource) {
       // Fallback: use original mergedContentOps if we don't have template info
-      console.warn('No template info available, using original mergedContentOps');
       
       // Create data object with original data
       const savedData: any = {};
@@ -1245,7 +1239,7 @@ export class RichTextEditorComponent
           this.audioSrc = delta.audioSrc;
         }
       } catch (e) {
-        console.error('Error parsing Delta JSON when extracting data:', e);
+        // Error parsing Delta JSON when extracting data
       }
     }
   }
@@ -1253,7 +1247,6 @@ export class RichTextEditorComponent
   // Perform merge: load template document and merge current document content into blockMerge
   private async performMerge(currentDelta: any): Promise<any> {
     if (!currentDelta.data?.mergeSource) {
-      console.log('No mergeSource found in delta.data');
       return currentDelta;
     }
 
@@ -1270,7 +1263,6 @@ export class RichTextEditorComponent
       const templateData: any = await firstValueFrom(this.docsService.getDocsContent(templatePath));
       
       if (!templateData || !templateData.ops) {
-        console.error('Template document not found or invalid');
         return currentDelta;
       }
 
@@ -1292,8 +1284,6 @@ export class RichTextEditorComponent
       if (blockMergeIndex === -1) {
         return currentDelta;
       }
-
-      console.log(currentDelta);
 
       // Store template info for extracting merged content later
       this.templatePrefixOpsCount = blockMergeIndex;
@@ -1331,7 +1321,7 @@ export class RichTextEditorComponent
       };
       return mergedDelta;
     } catch (e) {
-      console.error('Error performing merge:', e);
+      // Error performing merge
       return currentDelta;
     }
   }// Update print mode functionality
@@ -1521,7 +1511,7 @@ export class RichTextEditorComponent
       const contentWithValues = this.getContentWithValues();
       this.deltaJson = JSON.stringify(contentWithValues.delta, null, 2);
     } catch (e) {
-      console.error('Error updating deltaJson in onSaveClick:', e);
+      // Error updating deltaJson in onSaveClick
     } finally {
       this.isUpdatingDeltaJson = false;
     }
@@ -1801,19 +1791,14 @@ export class RichTextEditorComponent
                         // Get the parent element that determines the width constraints
                         const parentElement =
                           node.parentElement || document.querySelector('.print-content-editor');
-                        console.log('Parent element:', parentElement);
                         if (parentElement) {
                           // Get parent's width information
                           const parentRect = parentElement.getBoundingClientRect();
                           const parentWidth = parentRect.width;
-                          console.log(parentWidth);
-                          
 
                           // Get the node's current position
                           const nodeRect = node.getBoundingClientRect();
                           const nodeLeft = nodeRect.left - parentRect.left;
-                          console.log('Node left:', node);
-                          console.log('Node left:', nodeLeft);
                           node.style.width = parentWidth - nodeLeft + 'px';
                           node.style.minWidth = parentWidth - nodeLeft + 'px';
                           node.style.maxWidth = parentWidth - nodeLeft + 'px';
@@ -1827,7 +1812,7 @@ export class RichTextEditorComponent
                       }
                       return '';
                     } catch (e) {
-                      console.error('Error calculating dots width:', e);
+                      // Error calculating dots width
                     }
                     return '';
                   });
@@ -1880,7 +1865,7 @@ export class RichTextEditorComponent
                   window.close();
                 })
                 .catch(error => {
-                  console.error('Error during print process:', error);
+                  // Error during print process
                 });
             };
           </script>
