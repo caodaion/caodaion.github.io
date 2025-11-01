@@ -1,0 +1,151 @@
+/* Block merge target styling */
+.ql-block-merge-blot {
+  margin: 1rem 0;
+  background-color: #f0f7ff;
+  border-left: 3px solid #2196f3;
+  border-radius: 0 4px 4px 0;
+  overflow: hidden;
+
+  .merge-target-container {
+    padding: 0.75rem;
+  }
+
+  .merge-target-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .merge-key-badge {
+    background-color: #2196f3;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .merge-target-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .merge-target-description {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 0.25rem 0;
+    border-top: 1px solid rgba(33, 150, 243, 0.2);
+  }
+}
+
+/* Merge source styling */
+.ql-merge-source-blot {
+  background-color: rgba(33, 150, 243, 0.05);
+  border-bottom: 1px dashed #2196f3;
+  padding: 0 0.25rem;
+  cursor: pointer;
+}
+
+/* Styles for merged content */
+/* Source document elements */
+[data-source-id] {
+  position: relative;
+  border-left: 3px solid #ffe082;
+  margin-left: -3px;
+  padding-left: 3px;
+  box-shadow: 0 0 2px rgba(255, 210, 0, 0.1);
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFC107' d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+/* Target document elements */
+[data-target-id] {
+  position: relative;
+  border-left: 3px solid #b2dfdb;
+  margin-left: -3px;
+  padding-left: 3px;
+  background-color: rgba(178, 223, 219, 0.1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2300897B' d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+/* When merge source content is hidden */
+.hide-merge-source [data-source-id]:not([data-target-id]) {
+  display: none !important;
+}
+
+.merge-key-reference {
+  font-size: 0.7rem;
+  background-color: #2196f3;
+  color: white;
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  margin-right: 0.25rem;
+  vertical-align: text-top;
+
+  &:hover {
+    background-color: rgba(33, 150, 243, 0.1);
+  }
+}
+
+/* Print mode styling for merge elements */
+.rich-text-editor-container.print-mode {
+  ::ng-deep {
+    .ql-block-merge-blot {
+      margin: 1rem 0;
+      padding-left: 0.5rem;
+      border-left: 2px solid #2196f3;
+      page-break-inside: avoid;
+    }
+
+    .ql-merge-source-blot {
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      text-decoration-color: #2196f3;
+
+      .merge-key-reference {
+        font-size: 0.7rem;
+        background-color: #e3f2fd;
+        color: #2196f3;
+        border: 1px solid #2196f3;
+      }
+    }
+  }
+}
+
+@media print {
+  .ql-block-merge-blot {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

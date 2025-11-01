@@ -1,0 +1,40 @@
+{
+    "ops": [
+        {
+            "insert": "\tKim vì "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "socVong",
+                    "type": "inline",
+                    "label": "Sóc/Vọng",
+                    "placeholder": "Sóc/Vọng",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 20,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " lương thần."
+        },
+        {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        }
+    ],
+    "data": {
+        "mergeSource": {
+            "documentId": "tsv__long-so-tam-giao",
+            "mergeTargetKey": "noiDung"
+        },
+        "title": "Sớ Sóc Vọng Thời Tý",
+        "key": "so-soc-vong-thoi-ty"
+    }
+}

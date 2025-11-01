@@ -1,0 +1,118 @@
+<!-- Main editor container -->
+<div class="rich-text-editor-container" [ngClass]="{ 'read-only': isReadOnly, 'print-mode': printMode }">
+  <!-- Print mode toggle button -->
+  <div class="editor-actions items-center">
+    <div class="flex items-center gap-2 w-full" *ngIf="showTitleInput || showSaveButton">
+      <mat-form-field *ngIf="showTitleInput" appearance="fill" class="title-field w-full">
+        <mat-label>Tiêu đề</mat-label>
+        <input type="text" matInput [(ngModel)]="title" (ngModelChange)="onTitleChange($event)"
+          placeholder="Nhập tiêu đề" />
+      </mat-form-field>
+    </div>
+    <button *ngIf="showSaveButton" mat-icon-button [color]="'primary'" (click)="onSaveClick()" [matTooltip]="'Lưu'"
+      [disabled]="saveButtonDisabled" class="save-button">
+      <app-icon name="save"></app-icon>
+    </button>
+    <button mat-icon-button [color]="'primary'" (click)="printContent()" [matTooltip]="'In'">
+      <app-icon name="print"></app-icon>
+    </button>
+    <!-- Merge source toggle button - only show when merge source exists -->
+    <button *ngIf="hasMergeSource" mat-icon-button [color]="showMergeSourceContent ? 'accent' : 'basic'"
+      (click)="toggleMergeSourceContent()"
+      [matTooltip]="showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn'">
+      <app-icon name="{{ showMergeSourceContent ? 'visibility' : 'visibility_off' }}"></app-icon>
+    </button>
+  </div>
+
+  <quill-editor [formControl]="editorForm" [placeholder]="placeholder" [modules]="editorModules"
+    [styles]="{ 'min-height': minHeight }" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
+
+  <!-- Audio Player Controls - Show when audioSrc is available, regardless of read-only mode -->
+  <div *ngIf="audioSrc" class="audio-controls-container">
+    <audio #audioPlayer [src]="audioSrc" (timeupdate)="onAudioTimeUpdate($event)" (pause)="onAudioPause($event)"
+      controls></audio>
+
+    <!-- Only show timestamp controls for editing when not in read-only mode -->
+    <div *ngIf="!isReadOnly" class="audio-timestamps">
+      <div class="timestamp-display">
+        <span>Current Time: {{ currentAudioTime | number : "1.2-2" }}s</span>
+        <div class="timestamp-actions">
+          <button type="button" (click)="setAudioStartTime()" [disabled]="!audioPlayer.duration">
+            Set Start
+          </button>
+          <button type="button" (click)="setAudioEndTime()" [disabled]="!audioPlayer.duration">
+            Set End
+          </button>
+        </div>
+      </div>
+      <div class="timestamp-inputs">
+        <div class="timestamp-input">
+          <label>Start:</label>
+          <input type="number" [(ngModel)]="currentAudioStart" step="0.1" min="0"
+            [max]="audioPlayer.duration || 1000" />
+        </div>
+        <div class="timestamp-input">
+          <label>End:</label>
+          <input type="number" [(ngModel)]="currentAudioEnd" step="0.1" min="0" [max]="audioPlayer.duration || 1000" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #mergeTargetDialog>
+  <h2 mat-dialog-title>Tạo khối hợp nhất</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Key</mat-label>
+      <input matInput [(ngModel)]="addedMergeTarget.key" placeholder="Nhập key khối hợp nhất" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Tiêu đề</mat-label>
+      <input matInput [(ngModel)]="addedMergeTarget.title" placeholder="Nhập tiêu đề khối hợp nhất" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Mô tả</mat-label>
+      <textarea matInput [(ngModel)]="addedMergeTarget.description" placeholder="Nhập mô tả khối hợp nhất"
+        rows="3"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Hủy</button>
+    <button mat-button color="primary" (click)="onAddMergeTarget()" [mat-dialog-close]="true"
+      [disabled]="!addedMergeTarget.key || !addedMergeTarget.title">
+      Thêm
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #mergeSourceDialog>
+  <h2 mat-dialog-title>Cập nhật hợp nhất nội dung</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Văn bản hợp nhất</mat-label>
+      <mat-select placeholder="Chọn văn bản hợp nhất" [(ngModel)]="selectedMergedSource.documentId"
+        (selectionChange)="onMergedSourceChange()">
+        <mat-option *ngFor="let document of mergeTargetDocuments" [value]="document?.id">
+          {{ document?.title }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Khối hợp nhất</mat-label>
+      <mat-select placeholder="Chọn khối hợp nhất" [(ngModel)]="selectedMergedSource.mergeTargetKey">
+        <mat-option *ngFor="let block of mergeTargetBlocks" [value]="block?.key">
+          {{ block?.title }} ({{ block?.description }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Hủy</button>
+    <button mat-button color="primary" (click)="onSaveMergeSource()" [mat-dialog-close]="true" [disabled]="
+        !selectedMergedSource.documentId || !selectedMergedSource.mergeTargetKey
+      ">
+      Lưu
+    </button>
+  </mat-dialog-actions>
+</ng-template>

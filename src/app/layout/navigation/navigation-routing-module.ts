@@ -43,6 +43,10 @@ const routes: Routes = [
         path: 'blog',
         loadComponent: () => import('../../pages/blogger/blogger.component').then(m => m.BloggerComponent)
       },
+      {
+        path: 'docs',
+        loadChildren: () => import('../../pages/docs/docs-routing.module').then(m => m.DocsRoutingModule)
+      }
     ]
   }
 ];

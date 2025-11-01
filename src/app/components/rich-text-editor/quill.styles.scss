@@ -1,0 +1,131 @@
+/* Import Quill core CSS */
+@import 'quill/dist/quill.core.css';
+ 
+/* Import Quill snow theme CSS (for the default toolbar styling) */
+@import 'quill/dist/quill.snow.css';
+ 
+/* Optional: Import Quill bubble theme CSS for bubble mode */
+/* @import 'quill/dist/quill.bubble.css'; */
+
+/* Dark mode styles for Rich Text Editor */
+.dark-theme {
+  .rich-text-editor-container {
+    .ql-container {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    
+    .ql-toolbar {
+      border-color: rgba(255, 255, 255, 0.12);
+      background-color: #2a2a2a;
+
+      .ql-stroke {
+        stroke: rgba(255, 255, 255, 0.7);
+      }
+      
+      .ql-fill {
+        fill: rgba(255, 255, 255, 0.7);
+      }
+      
+      .ql-picker {
+        color: rgba(255, 255, 255, 0.87);
+      }
+      
+      .ql-picker-options {
+        background-color: #2a2a2a;
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+    }
+    
+    .ql-editor {
+      background-color: #1e1e1e;
+      color: rgba(255, 255, 255, 0.87);
+      
+      &.ql-blank::before {
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+    
+    /* Custom blots dark mode styling */
+    .ql-audio-link-blot {
+      background-color: transparent;
+      color: inherit;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+      /* Icon color adjustment */
+      &::after {
+        filter: brightness(0.8);
+      }
+      
+      /* Style when active or playing */
+      &.ql-active-audio-segment {
+        background-color: rgba(255, 213, 79, 0.15); 
+        border-color: rgba(255, 160, 0, 0.5);
+      }
+    }
+    
+    .ql-block-input-container {
+      background-color: #2d2d2d;
+      border-color: rgba(255, 255, 255, 0.12);
+      
+      input {
+        background-color: #3a3a3a;
+        color: rgba(255, 255, 255, 0.87);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      
+      label {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+    
+    .ql-inline-input-field {
+      background-color: rgba(66, 133, 244, 0.15) !important;
+      color: #90caf9 !important;
+      border-color: rgba(66, 133, 244, 0.3) !important;
+      
+      &:focus {
+        background-color: #3a3a3a !important;
+        border-color: #4285f4 !important;
+      }
+    }
+  }
+
+  /* Audio controls styling */
+  .audio-controls-container {
+    background-color: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.12);
+    
+    audio {
+      background-color: #333333;
+    }
+    
+    button {
+      background-color: #4285f4;
+      color: white;
+      
+      &:hover {
+        background-color: #1a73e8;
+      }
+      
+      &:disabled {
+        background-color: #2d2d2d;
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+    
+    .timestamp-inputs {
+      input {
+        background-color: #333333;
+        color: rgba(255, 255, 255, 0.87);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      
+      label {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+}

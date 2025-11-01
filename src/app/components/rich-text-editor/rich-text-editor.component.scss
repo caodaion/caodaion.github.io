@@ -1,0 +1,1153 @@
+@import "./merge-styles.scss";
+
+/* Main container styles */
+.rich-text-editor-container {
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: var(--font-family, "Roboto", sans-serif);
+
+  /* Read-only specific styles */
+  &.read-only {
+    position: relative;
+    padding-bottom: 80px;
+    /* Add space for fixed audio controls */
+
+    ::ng-deep {
+      .ql-container {
+        border: 1px solid #eee;
+        background-color: #fafafa;
+      }
+
+      .ql-editor {
+        background-color: #fafafa;
+        cursor: default;
+
+        &.ql-blank::before {
+          color: #ccc;
+        }
+
+        /* Make sure input fields in read-only mode look disabled */
+        .ql-block-input-blot,
+        .ql-inline-input-blot {
+          opacity: 0.85;
+
+          input {
+            background-color: #f0f0f0 !important;
+            cursor: default !important;
+          }
+        }
+
+        /* Make audio links still look clickable in read-only mode */
+        .ql-audio-link-blot {
+          cursor: pointer !important;
+          opacity: 1 !important;
+        }
+      }
+    }
+
+    /* Specific styles for read-only mode audio player - make it sticky */
+    .audio-controls-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: #f5f5f5;
+      border-color: #eaeaea;
+      border-top: 1px solid #e0e0e0;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      padding: 10px 16px;
+      margin-top: 0;
+
+      audio {
+        margin-bottom: 0; // No margin needed when timestamp controls aren't shown
+        opacity: 0.9;
+        width: 100%;
+      }
+    }
+  }
+
+  /* Audio controls container */
+  .audio-controls-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    audio {
+      width: 100%;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      outline: none;
+
+      &:focus-visible {
+        box-shadow: 0 0 0 2px rgba(255, 213, 79, 0.3);
+      }
+    }
+
+    .audio-timestamps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .timestamp-display {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: #555;
+        }
+
+        .timestamp-actions {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color, #4285f4);
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+
+            &:disabled {
+              background-color: #cccccc;
+              cursor: not-allowed;
+            }
+
+            &:hover:not(:disabled) {
+              background-color: darken(#4285f4, 10%);
+            }
+          }
+        }
+      }
+
+      .timestamp-inputs {
+        display: flex;
+        gap: 1rem;
+
+        .timestamp-input {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+
+          label {
+            font-size: 0.9rem;
+            color: #555;
+          }
+
+          input {
+            padding: 0.4rem 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+
+            &:focus {
+              outline: none;
+              border-color: var(--primary-color, #4285f4);
+              box-shadow: 0 0 0 2px rgba(255, 213, 79, 0.2);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  ::ng-deep {
+
+    /* Editor container styling */
+    .ql-container {
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      background-color: #fff;
+    }
+
+    /* Toolbar styling */
+    .ql-toolbar {
+      border: 1px solid #ccc;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      background-color: #f8f8f8;
+      padding: 8px;
+
+      .ql-formats {
+        margin-right: 10px;
+      }
+
+      /* Custom buttons styling */
+      .ql-block-input,
+      .ql-inline-input,
+      .ql-merge-target,
+      .ql-merge-source,
+      .ql-audio-link {
+        background-color: #e3e3e3;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        color: #333;
+        padding: 4px;
+        cursor: pointer;
+        margin: 0 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 24px;
+        position: relative;
+
+        &:hover {
+          background-color: #d1d1d1;
+        }
+
+        /* Icons for custom buttons */
+        &::before {
+          content: "";
+          display: block;
+          width: 16px;
+          height: 16px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
+      }
+
+      /* Block input button icon */
+      .ql-block-input::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23444' d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM11 7h6v2h-6zm0 4h6v2h-6zm0 4h6v2h-6zM7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7z'/%3E%3C/svg%3E");
+      }
+
+      /* Inline input button icon */
+      .ql-inline-input::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23444' d='M21 5H3c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 12H3V7h18v10zM8 15h8v-2H8v2zm-3-5h14v-2H5v2z'/%3E%3C/svg%3E");
+      }
+
+      /* Audio link button icon */
+      .ql-audio-link::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23444' d='M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z'/%3E%3C/svg%3E");
+      }
+
+      /* Merge Target button icon */
+      .ql-merge-target::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23444'%3E%3Cpath d='m296-160-56-56 200-200v-269L337-582l-57-57 200-200 201 201-57 57-104-104v301L296-160Zm368 1L536-286l57-57 127 128-56 56Z'/%3E%3C/svg%3E");
+      }
+
+      /* Merge Target button icon */
+      .ql-merge-source::before {
+        background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20height%3D%2224px%22%20viewBox%3D%220%20-960%20960%20960%22%20width%3D%2224px%22%20fill%3D%22%23333%22%3E%3Cpath%20d%3D%22M480-120%20320-280l56-56%2064%2063v-167q0-33-23.5-56.5T360-520H120q-33%200-56.5-23.5T40-600v-240h80v240h240q36%200%2067%2014.5t53%2039.5q22-25%2053-39.5t67-14.5h240v-240h80v240q0%2033-23.5%2056.5T840-520H600q-33%200-56.5%2023.5T520-440v167l63-63%2057%2056-160%20160Z%22/%3E%3C/svg%3E");
+      }
+    }
+
+    /* Block input field styling */
+    .ql-block-input-blot {
+      margin: 1rem 0;
+      background-color: #f5f5f5;
+      border-left: 3px solid var(--primary-color, #4285f4);
+      padding: 0.75rem;
+      border-radius: 0 4px 4px 0;
+
+      .ql-block-input-container {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          color: #555;
+          font-size: 0.9em;
+        }
+
+        .ql-block-input {
+          padding: 8px 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+          width: 100%;
+          transition: border-color 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: var(--primary-color, #4285f4);
+            box-shadow: 0 0 0 2px rgba(255, 213, 79, 0.2);
+          }
+
+          &::placeholder {
+            color: #aaa;
+          }
+        }
+      }
+    }
+
+    /* Styles for block merge target */
+    .ql-block-merge-blot {
+      margin: 1rem 0;
+      background-color: #f0f7ff;
+      border-left: 3px solid #2196f3;
+      border-radius: 0 4px 4px 0;
+      overflow: hidden;
+
+      .merge-target-container {
+        padding: 0.75rem;
+      }
+
+      .merge-target-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .merge-key-badge {
+        background-color: #2196f3;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .merge-target-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .merge-target-description {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
+        padding: 0.25rem 0;
+        border-top: 1px solid rgba(33, 150, 243, 0.2);
+      }
+    }
+
+    // Style for merge source
+    .ql-merge-source-blot {
+      background-color: rgba(33, 150, 243, 0.05);
+      border-bottom: 1px dashed #2196f3;
+      padding: 0 0.25rem;
+      cursor: pointer;
+
+      .merge-key-reference {
+        font-size: 0.7rem;
+        background-color: #2196f3;
+        color: white;
+        padding: 0.1rem 0.25rem;
+        border-radius: 3px;
+        margin-right: 0.25rem;
+        vertical-align: text-top;
+      }
+
+      &:hover {
+        background-color: rgba(33, 150, 243, 0.1);
+      }
+    }
+
+    /* Inline input field styling */
+    .ql-inline-input-blot {
+      display: inline;
+      vertical-align: middle;
+      line-height: inherit;
+      white-space: nowrap;
+
+      &.ql-inline-dots {
+        &::after {
+          content: "________________________________________________________________________________________________________________________________________________________________________________________________________________";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          overflow: hidden;
+          font-weight: bold;
+        }
+      }
+
+      /* Ensure proper inline display */
+      &::before,
+      &::after {
+        white-space: normal;
+      }
+
+      /* Style for inline input field */
+      .ql-inline-input-field {
+        display: inline !important;
+        vertical-align: baseline;
+        position: relative;
+        /* Additional styling is handled through inline styles in the JS */
+      }
+    }
+
+    /* Audio link styling */
+    .ql-audio-link-blot {
+      cursor: pointer;
+      display: inline;
+      position: relative;
+
+      /* Remove default styling and only apply when active or hover */
+      &.ql-active,
+      &:active,
+      &:focus {
+        background-color: rgba(255, 213, 79, 0.1);
+        border: 1px dotted #ffa000;
+        border-radius: 2px;
+        padding: 0;
+      }
+
+      /* Style for currently playing audio segment */
+      &.ql-active-audio-segment {
+        background-color: rgba(255, 213, 79, 0.4);
+        /* Yellow highlight */
+        border: 1px solid #ffa000;
+        border-radius: 2px;
+        box-shadow: 0 0 4px rgba(255, 160, 0, 0.4);
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      &:hover {
+        background-color: rgba(255, 213, 79, 0.2);
+      }
+
+      /* Add a small music icon indicator - keep this always visible */
+      &::after {
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffa000' d='M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z'/%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin-left: 3px;
+        vertical-align: super;
+        font-size: 0.7em;
+      }
+    }
+
+    /* Styles for merge source */
+    .ql-merge-source-blot {
+      background-color: rgba(76, 175, 80, 0.15);
+      padding: 0 2px;
+      border-radius: 2px;
+      border-bottom: 1px dashed #4caf50;
+      position: relative;
+
+      &::after {
+        content: "↗";
+        display: inline-block;
+        font-size: 0.8em;
+        color: #4caf50;
+        vertical-align: super;
+        margin-left: 2px;
+      }
+
+      &:hover {
+        background-color: rgba(76, 175, 80, 0.3);
+        cursor: pointer;
+      }
+    }
+
+    /* Focus styling */
+    .ql-editor:focus {
+      outline: none;
+    }
+
+    /* Set minimum editor height */
+    .ql-editor {
+      min-height: 200px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      /* This preserves tabs and multiple spaces */
+    }
+
+    /* Style for placeholders */
+    .ql-editor.ql-blank::before {
+      font-style: italic;
+      color: #aaa;
+    }
+  }
+}
+
+/* Print mode specific styles */
+.rich-text-editor-container.print-mode {
+  ::ng-deep {
+    .ql-inline-input-blot {
+
+      /* Hide the input field in print mode */
+      input.ql-inline-input-field {
+        display: none !important;
+      }
+    }
+
+    .ql-block-merge-blot {
+      margin: 1rem 0;
+      padding-left: 0.5rem;
+      border-left: 2px solid #2196f3;
+      page-break-inside: avoid;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .ql-merge-source-blot {
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      text-decoration-color: #2196f3;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+
+      .merge-key-reference {
+        font-size: 0.7rem;
+        background-color: #e3f2fd;
+        color: #2196f3;
+        border: 1px solid #2196f3;
+      }
+    }
+  }
+}
+
+/* Title and Save container */
+.title-save-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+
+  .title-field {
+    flex: 1;
+    margin: 0;
+
+    ::ng-deep .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+
+  .save-button {
+    flex-shrink: 0;
+  }
+}
+
+/* Editor actions container */
+::ng-deep {
+  .editor-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 10px;
+
+    mat-form-field {
+      .mat-mdc-form-field-bottom-align {
+        display: none;
+      }
+    }
+  }
+}
+
+/* Print button styles */
+.print-button {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #e8e8e8;
+    border-color: #ccc;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  .print-icon {
+    margin-right: 6px;
+    font-size: 16px;
+  }
+}
+
+/* Print now button - visually distinct */
+.print-now-button {
+  background-color: #4285f4;
+  border-color: #3367d6;
+  color: white;
+
+  &:hover {
+    background-color: #3367d6;
+    border-color: #2350bb;
+  }
+}
+
+/* Dark mode styles */
+:host-context(.dark-theme) {
+  .rich-text-editor-container {
+
+    /* Read-only dark mode styles */
+    &.read-only {
+      ::ng-deep {
+        .ql-container {
+          border-color: rgba(255, 255, 255, 0.12);
+          background-color: transparent;
+        }
+
+        .ql-editor {
+          background-color: transparent;
+          color: #ffffff;
+
+          &.ql-blank::before {
+            color: rgba(255, 255, 255, 0.4);
+          }
+
+          .ql-block-input-blot,
+          .ql-inline-input-blot {
+            input {
+              background-color: rgba(45, 45, 45, 0.6) !important;
+              color: #ffffff !important;
+            }
+          }
+        }
+      }
+
+      .audio-controls-container {
+        background-color: #2a2a2a;
+        border-color: rgba(255, 255, 255, 0.12);
+        border-top-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    /* Dark mode for audio controls */
+    .audio-controls-container {
+      background-color: #2a2a2a;
+      border-color: rgba(255, 255, 255, 0.12);
+
+      .timestamp-display span {
+        color: #ffffff;
+      }
+
+      .timestamp-actions button {
+        &:disabled {
+          background-color: #3a3a3a;
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .timestamp-input {
+        label {
+          color: #ffffff;
+        }
+
+        input {
+          background-color: #333333;
+          color: #ffffff;
+          border-color: rgba(255, 255, 255, 0.12);
+
+          &:focus {
+            border-color: var(--primary-color, #4285f4);
+          }
+        }
+      }
+    }
+
+    ::ng-deep {
+
+      /* Dark mode editor container */
+      .ql-container {
+        border-color: rgba(255, 255, 255, 0.12);
+        background-color: transparent;
+      }
+
+      /* Dark mode toolbar */
+      .ql-toolbar {
+        border-color: rgba(255, 255, 255, 0.12);
+        background-color: #2a2a2a;
+
+        .ql-stroke {
+          stroke: #ffffff;
+        }
+
+        .ql-fill {
+          fill: #ffffff;
+        }
+
+        .ql-picker {
+          color: #ffffff;
+        }
+
+        /* Dark mode custom buttons */
+        .ql-block-input,
+        .ql-inline-input,
+        .ql-audio-link {
+          background-color: #3a3a3a;
+          border-color: rgba(255, 255, 255, 0.12);
+          color: #ffffff;
+
+          &:hover {
+            background-color: #4a4a4a;
+          }
+
+          &::before {
+            filter: brightness(0) invert(1);
+          }
+        }
+      }
+
+      /* Dark mode block input */
+      .ql-block-input-blot {
+        background-color: rgba(45, 45, 45, 0.6);
+        border-left-color: var(--primary-color, #4285f4);
+
+        .ql-block-input-container {
+          label {
+            color: #ffffff;
+          }
+
+          .ql-block-input {
+            background-color: rgba(51, 51, 51, 0.6);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+
+            &:focus {
+              border-color: var(--primary-color, #4285f4);
+            }
+
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.4);
+            }
+          }
+        }
+      }
+
+      /* Dark mode block merge */
+      .ql-block-merge-blot {
+        background-color: rgba(35, 45, 60, 0.6);
+        border-color: rgba(255, 255, 255, 0.12);
+        border-left-color: var(--primary-color, #4285f4);
+
+        &::before {
+          color: #ffffff;
+        }
+
+        &::after {
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        &:hover {
+          background-color: rgba(40, 50, 65, 0.8);
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      /* Dark mode audio link */
+      .ql-audio-link-blot {
+        /* Reset background to be transparent by default */
+        background-color: transparent;
+        color: inherit;
+        border: none;
+
+        &.ql-active,
+        &:active,
+        &:focus {
+          background-color: rgba(255, 255, 255, 0.05);
+          border: 1px dotted rgba(255, 213, 79, 0.3);
+        }
+
+        &.ql-active-audio-segment {
+          background-color: rgba(255, 213, 79, 0.15);
+          border: 1px solid rgba(255, 160, 0, 0.3);
+          box-shadow: 0 0 4px rgba(255, 160, 0, 0.2);
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Adjust the audio icon for dark mode */
+        &::after {
+          filter: brightness(0.8) opacity(0.7);
+        }
+      }
+
+      /* Dark mode editor content */
+      .ql-editor {
+        color: #ffffff;
+
+        &.ql-blank::before {
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+    }
+  }
+
+  .print-button {
+    background-color: #333;
+    border-color: #555;
+    color: #fff;
+
+    &:hover {
+      background-color: #444;
+      border-color: #666;
+    }
+  }
+
+  .title-save-container {
+    background-color: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.12);
+
+    .title-field {
+      ::ng-deep {
+        .mat-form-field-label {
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mat-input-element {
+          color: rgba(255, 255, 255, 0.87);
+        }
+
+        .mat-form-field-underline::before {
+          background-color: rgba(255, 255, 255, 0.12);
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .rich-text-editor-container {
+    ::ng-deep {
+      .ql-toolbar {
+        flex-wrap: wrap;
+
+        .ql-formats {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.editor-container {
+  position: relative;
+
+  .ql-disabled {
+    .ql-editor {
+      background-color: #f9f9f9;
+    }
+  }
+
+  .ql-toolbar {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  .ql-container {
+    font-family: inherit;
+    font-size: 1rem;
+    min-height: 120px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .ql-editor {
+    min-height: 120px;
+    line-height: 1.6;
+    padding: 12px 15px;
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 1.5em;
+      margin-bottom: 0.75em;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.5em;
+    }
+
+    blockquote {
+      border-left: 4px solid #ccc;
+      padding-left: 1em;
+      color: #555;
+    }
+  }
+
+  /* Styles for block input fields */
+  .ql-block-input-blot {
+    display: block;
+    margin: 1em 0;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    &.field-invalid {
+      border-color: #f44336;
+      background-color: rgba(244, 67, 54, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    .ql-block-input {
+      display: block;
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: white;
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color, #1976d2);
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+      }
+    }
+
+    .ql-block-input-container {
+      width: 100%;
+    }
+
+    /* Styles for block checkbox fields */
+    .ql-checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      label {
+        margin-bottom: 0;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .ql-block-checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+    }
+
+    /* Styles for block select fields */
+    .ql-block-select {
+      display: block;
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: white;
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color, #1976d2);
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+      }
+    }
+  }
+
+  /* Styles for inline input fields */
+  .ql-inline-input-blot {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 2px;
+
+    &.field-required {
+      &::after {
+        content: "*";
+        color: #f44336;
+        margin-left: 2px;
+      }
+    }
+
+    /* Inline checkbox styles */
+    .ql-inline-checkbox-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #e8f0fe;
+      padding: 2px 5px;
+      border-radius: 3px;
+      border: 1px dashed #4285f4;
+
+      .ql-inline-checkbox {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+
+      .ql-inline-checkbox-label {
+        color: #1a73e8;
+        font-size: 0.9em;
+        user-select: none;
+      }
+    }
+
+    /* Inline select styles */
+    .ql-inline-select-container {
+      display: inline-flex;
+      align-items: center;
+      background-color: #e8f0fe;
+      padding: 2px 5px;
+      border-radius: 3px;
+      border: 1px dashed #4285f4;
+
+      .ql-inline-select-label {
+        color: #1a73e8;
+        font-size: 0.9em;
+        margin-right: 4px;
+      }
+
+      .ql-inline-select {
+        border: none;
+        background-color: transparent;
+        color: #1a73e8;
+        font-size: 0.9em;
+        outline: none;
+        padding: 0;
+        margin: 0;
+        min-width: 80px;
+
+        option {
+          background-color: white;
+          color: black;
+        }
+      }
+    }
+
+    /* Inline input text field styles */
+    .ql-inline-input-container {
+      display: inline-flex;
+      align-items: center;
+
+      .ql-inline-input-label {
+        color: #1a73e8;
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  /* Styles for audio links */
+  .ql-audio-link-blot {
+    background-color: rgba(255, 235, 59, 0.3);
+    padding: 0 2px;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255, 235, 59, 0.5);
+    }
+
+    &.active {
+      background-color: rgba(255, 152, 0, 0.3);
+    }
+  }
+
+  /* Styles for merge source */
+  .ql-merge-source-blot {
+    background-color: rgba(76, 175, 80, 0.15);
+    padding: 0 2px;
+    border-radius: 2px;
+    border-bottom: 1px dashed #4caf50;
+    position: relative;
+
+    &::after {
+      content: "↗";
+      display: inline-block;
+      font-size: 0.8em;
+      color: #4caf50;
+      vertical-align: super;
+      margin-left: 2px;
+    }
+
+    &:hover {
+      background-color: rgba(76, 175, 80, 0.3);
+      cursor: pointer;
+    }
+  }
+}
+
+/* For print mode */
+@media print {
+  .ql-block-input-blot {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0.5em 0 !important;
+  }
+
+  .ql-inline-input-blot,
+  .ql-inline-checkbox-container,
+  .ql-inline-select-container {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  .ql-audio-link-blot {
+    background-color: transparent !important;
+    text-decoration: none !important;
+  }
+
+  /* Fix for print scaling */
+  html,
+  body {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  .ql-editor {
+    padding: 10mm !important;
+    width: 190mm !important;
+    zoom: 90% !important;
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Ensure margins are correct */
+  @page {
+    size: A4;
+    margin: 0mm;
+  }
+}

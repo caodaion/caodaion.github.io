@@ -79,6 +79,13 @@ export class AppsComponent {
       icon: 'article',
       route: '/blog'
     },
+    {
+      id: 'editor',
+      name: 'Soạn thảo',
+      description: 'Soạn thảo và quản lý văn bản với trình soạn thảo nâng cao',
+      icon: 'edit_note',
+      route: '/docs'
+    },
     // {
     //   id: 'ca-nhan',
     //   name: 'Cá Nhân',

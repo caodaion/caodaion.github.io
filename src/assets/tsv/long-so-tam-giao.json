@@ -1,0 +1,474 @@
+{
+    "ops": [
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "ĐẠI ĐẠO TAM KỲ PHỔ ĐỘ"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Đệ "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "namDao",
+                    "type": "inline",
+                    "label": "Năm Đạo",
+                    "placeholder": "Nhập năm Đạo",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 16,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " niên"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Tam Giáo Quy Nguyên Ngũ Chi Hiệp Nhứt"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "THỜI DUY"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "\tThiên vận "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "nien",
+                    "type": "inline",
+                    "label": "",
+                    "placeholder": "Nhập Năm (ÂL)",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 16,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " niên, "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "ngoat",
+                    "type": "inline",
+                    "label": "",
+                    "placeholder": "Tháng (ÂL)",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 16,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " ngoạt, "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "nhut",
+                    "type": "inline",
+                    "label": "",
+                    "placeholder": "Ngày (ÂL)",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 16,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " nhựt, "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "thoi",
+                    "type": "inline",
+                    "label": "",
+                    "placeholder": "Nhập Thời",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 6,
+                        "autoFill": false
+                    }
+                }
+            }
+        },
+        {
+            "insert": " thời. Hiện tại "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "diaChi",
+                    "type": "inline",
+                    "label": "Địa chỉ",
+                    "placeholder": "Nhập địa chỉ",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 6,
+                        "autoFill": true
+                    }
+                }
+            }
+        },
+        {
+            "insert": " cư trụ "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "diaDiem",
+                    "type": "inline",
+                    "label": "Địa điểm",
+                    "placeholder": "Nhập địa điểm",
+                    "value": "Thánh Thất",
+                    "fieldType": "text"
+                }
+            }
+        },
+        {
+            "insert": " chi trung."
+        },
+        {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "\tKim hữu "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "isThienPhong",
+                    "type": "inline",
+                    "label": "Thiên Phong",
+                    "placeholder": "Enter value",
+                    "value": "true",
+                    "fieldType": "checkbox",
+                    "labelPosition": "after",
+                    "checked": true
+                }
+            }
+        },
+        {
+            "insert": " đệ tử thọ Thiên Ân "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "chungDan",
+                    "type": "inline",
+                    "label": "Chứng đàn",
+                    "placeholder": "Nhập thánh danh vị chứng đàn",
+                    "value": "",
+                    "fieldType": "text",
+                    "placeholderDots": {
+                        "length": 20,
+                        "autoFill": true
+                    }
+                }
+            }
+        },
+        {
+            "insert": " công đồng chư Chức Sắc hiệp giữ Thiện Nam Tín Nữ đẳng quỳ tại "
+        },
+        {
+            "insert": {
+                "inlineInput": {
+                    "id": "dienTho",
+                    "type": "inline",
+                    "label": "Điện thờ",
+                    "placeholder": "Nhập tên gọi điện thờ",
+                    "value": "Điện tiền",
+                    "fieldType": "text"
+                }
+            }
+        },
+        {
+            "insert": " thành tâm trình tấu."
+        },
+        {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "HUỲNH KIM KHUYẾT NỘI:"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Huyền Khung Cao Thượng Đế Ngọc Hoàng Đại Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Viết:\tCao Đài Tiên Ông Đại Bồ Tát Ma Ha Tát."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Diêu Trì Kim Mẫu Vô Cực Đại Từ Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "TAM TÔNG CHƠN GIÁO:"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Tây Phương Giáo Chủ Thích Ca Mâu Ni Thế Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Thái Thượng Đạo Tổ Tam Thanh Ứng Hóa Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Khổng Thánh Tiên Sư Hưng Nho Thạnh Thế Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "TAM KỲ PHỔ ĐỘ TAM TRẤN OAI NGHI:"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Thường Cư Nam Hải Quan Âm Như Lai."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Lý Đại Tiên Trưởng Thái Bạch Kim Tinh."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Hiệp Thiên Đại Đế Quan Thánh Đế Quân."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Gia Tô Giáo Chủ Cứu Thế Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Thái Công Tướng Phụ Quản Pháp Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Đại Đạo Tam Kỳ Phổ Độ Lý Giáo Tông Từ Bi Cứu Thế Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Tam Châu Bác Bộ Hộ Pháp Thiên Tôn."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "Chư Phật, Tiên, Thánh, Thần liên đài chị hạ."
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "mergeTarget": {
+                    "key": "noiDung",
+                    "title": "Nội dung",
+                    "description": "Nội dung sớ dùng Lòng Sớ Tam Giáo"
+                }
+            },
+            "insert": {
+                "blockMerge": {
+                    "key": "noiDung",
+                    "title": "Nội dung",
+                    "description": "Nội dung sớ dùng Lòng Sớ Tam Giáo"
+                }
+            }
+        },
+        {
+            "insert": "\tThiên Phong giữ thiện tín đẳng"
+        },
+        {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "THIỆT TRIÊM"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n"
+        },
+        {
+            "insert": "\tThiên ân bất thăng khẩn khất chi chí cẩn biểu khấu bái"
+        },
+        {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        },
+        {
+            "attributes": {
+                "bold": true
+            },
+            "insert": "THƯỢNG TẤU\t-\tDĨ VĂN"
+        },
+        {
+            "attributes": {
+                "align": "center"
+            },
+            "insert": "\n\n"
+        }
+    ],
+    "data": {
+        "title": "Lòng Sớ Tam Giáo",
+        "key": "long-so-tam-giao"
+    }
+}

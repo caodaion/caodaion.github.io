@@ -1,0 +1,115 @@
+<app-child-header [title]="'Docs'">
+  <button mat-icon-button (click)="isDrawerOpen = !isDrawerOpen">
+    <app-icon name="menu" *ngIf="!isDrawerOpen"></app-icon>
+    <app-icon name="close" *ngIf="isDrawerOpen"></app-icon>
+  </button>
+</app-child-header>
+<div class="dashboard-container">
+  <mat-drawer-container class="docs-drawer-container">
+    <mat-drawer
+      #drawer
+      class="docs-drawer"
+      [mode]="drawerMode"
+      [opened]="isDrawerOpen"
+    >
+      <div class="flex justify-center my-4">
+        <button mat-raised-button [routerLink]="['/docs/new']">
+          <app-icon name="add"></app-icon>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content class="docs-content">
+      <div class="docs-content-container">
+        <!-- Search bar -->
+        <div class="search-container">
+          <mat-form-field class="search-field" appearance="outline">
+            <app-icon name="search" matPrefix></app-icon>
+            <input 
+              matInput 
+              placeholder="Tìm kiếm" 
+              [(ngModel)]="searchQuery"
+              (input)="searchDocuments()"
+            />
+            <button 
+              *ngIf="searchQuery" 
+              matSuffix 
+              mat-icon-button 
+              aria-label="Clear" 
+              (click)="searchQuery=''; searchDocuments()">
+              <app-icon name="close"></app-icon>
+            </button>
+          </mat-form-field>
+          <button 
+            mat-icon-button 
+            class="view-toggle" 
+            (click)="toggleViewMode()" 
+            [matTooltip]="isGridView ? 'Chuyển sang chế độ danh sách' : 'Chuyển sang chế độ lưới'">
+            <app-icon name="{{isGridView ? 'view_list' : 'view_module'}}"></app-icon>
+          </button>
+        </div>
+
+        <!-- Quick access section -->
+        <section
+          class="quick-access-section"
+          *ngIf="filteredTnhtDocs && filteredTnhtDocs.length > 0"
+        >
+          <h2 class="section-title">Thánh Ngôn Hiệp Tuyển</h2>
+          <div [class]="isGridView ? 'docs-grid' : 'docs-list'">
+            <div
+              [class]="isGridView ? 'doc-card' : 'doc-list-item'"
+              *ngFor="let doc of filteredTnhtDocs"
+              (click)="openDocument(doc)"
+            >
+              <div class="doc-thumbnail">
+                <app-icon name="description"></app-icon>
+              </div>
+              <div class="doc-info">
+                <h3 class="doc-title">
+                  {{ doc.title || "Untitled Document" }}
+                </h3>
+                <p class="doc-meta">Last opened recently</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="quick-access-section"
+          *ngIf="filteredTsvDocs && filteredTsvDocs.length > 0"
+        >
+          <h2 class="section-title">Tập Sớ Văn</h2>
+          <div [class]="isGridView ? 'docs-grid' : 'docs-list'">
+            <div
+              [class]="isGridView ? 'doc-card' : 'doc-list-item'"
+              *ngFor="let doc of filteredTsvDocs"
+              (click)="openDocument(doc)"
+            >
+              <div class="doc-thumbnail">
+                <app-icon name="description"></app-icon>
+              </div>
+              <div class="doc-info">
+                <h3 class="doc-title">
+                  {{ doc.title || "Untitled Document" }}
+                </h3>
+                <p class="doc-meta">Last opened recently</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Empty state -->
+        <div class="no-content" *ngIf="(filteredTnhtDocs.length === 0 && filteredTsvDocs.length === 0) && searchQuery">
+          <mat-icon class="no-content-icon">search</mat-icon>
+          <h2>No results found</h2>
+          <p>Try a different search term</p>
+        </div>
+
+        <div class="no-content" *ngIf="(!tnhtDocs || tnhtDocs.length === 0) && (!tsvDocs || tsvDocs.length === 0) && !searchQuery">
+          <mat-icon class="no-content-icon">folder_open</mat-icon>
+          <h2>No documents found</h2>
+          <p>Your documents will appear here</p>
+        </div>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

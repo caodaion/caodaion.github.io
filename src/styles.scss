@@ -4,6 +4,8 @@
 @use "./sass/custom";
 @use "./sass/variables" as vars;
 // Plus imports for other components in your app.
+// Import Quill styles
+@import './app/components/rich-text-editor/quill.styles.scss';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
