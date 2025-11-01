@@ -19,13 +19,6 @@ import { CommonService } from '../../../shared/services/common/common.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TnhtSheetService } from '../../../shared/services/tnht-sheet/tnht-sheet.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarModule,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
 import { SharedModule } from "../../../shared/shared.module";
 import { IconComponent } from "src/app/components/icon/icon.component";
 
@@ -42,8 +35,6 @@ import { IconComponent } from "src/app/components/icon/icon.component";
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule,
-    MatSnackBarModule,
     SharedModule
 ],
   templateUrl: './editor.component.html',
@@ -63,8 +54,6 @@ export class EditorComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private commonService: CommonService,
     private tnhtSheetService: TnhtSheetService,
-    private matDialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -220,10 +209,34 @@ export class EditorComponent implements AfterViewInit {
         ops: combinedOps
       };
 
-      // Store sourceDocId if available
+      // Store sourceDocId and original ops for filtering during save
       if (sourceDocId) {
         if (!updatedDelta.data) updatedDelta.data = {};
         updatedDelta.data.mergeSourceId = sourceDocId;
+        
+        // Store the original document ops (before merge) for filtering when saving
+        // Create a signature/hash of each original op for comparison
+        if (currentDelta.ops && Array.isArray(currentDelta.ops)) {
+          updatedDelta.data.originalOps = currentDelta.ops.map((op: any) => {
+            // Create a simple signature based on insert content and basic attributes (excluding merge-source attributes)
+            const signature: any = {
+              insert: op.insert,
+            };
+            // Only include non-merge-related attributes in signature
+            if (op.attributes) {
+              const cleanAttributes: any = {};
+              Object.keys(op.attributes).forEach(key => {
+                if (key !== 'merge-source' && key !== 'source-id' && key !== 'target-id') {
+                  cleanAttributes[key] = op.attributes[key];
+                }
+              });
+              if (Object.keys(cleanAttributes).length > 0) {
+                signature.attributes = cleanAttributes;
+              }
+            }
+            return signature;
+          });
+        }
       }
       
       console.log('Updated delta with merged content:', updatedDelta);
@@ -450,34 +463,102 @@ export class EditorComponent implements AfterViewInit {
             currentDelta.data.mergeSource;
         }
         
-        // Preserve merge-source attributes in operations
+        // Preserve ALL attributes for merge-source and target operations
         if (currentDelta.ops && completeContent.delta.ops) {
-          // Create lookup map for ops with merge-source attribute in current delta
-          const mergeSourceMap = new Map();
-          currentDelta.ops.forEach((op: any, index: number) => {
-            if (op.attributes && op.attributes['merge-source'] === true) {
-              // Use the insert value as key since position might change
-              const key = op.insert ? JSON.stringify(op.insert) : `index-${index}`;
-              mergeSourceMap.set(key, {
-                'source-id': op.attributes['source-id'],
-                'merge-source': true
-              });
+          // Create lookup maps for both merge-source ops and target ops
+          const mergeSourceMap = new Map(); // For ops with source-id
+          const targetOpsMap = new Map(); // For ops with target-id
+          
+          currentDelta.ops.forEach((op: any) => {
+            const insertKey = op.insert ? JSON.stringify(op.insert) : '';
+            
+            if (op.attributes) {
+              // Store merge-source ops
+              if (op.attributes['merge-source'] === true && op.attributes['source-id']) {
+                const sourceId = op.attributes['source-id'];
+                const key = `${insertKey}::source::${sourceId}`;
+                mergeSourceMap.set(key, {
+                  ...op.attributes // Preserve all attributes including source-id and merge-source
+                });
+              }
+              
+              // Store target ops (current document ops)
+              if (op.attributes['target-id']) {
+                const targetId = op.attributes['target-id'];
+                const key = `${insertKey}::target::${targetId}`;
+                targetOpsMap.set(key, {
+                  ...op.attributes // Preserve all attributes including target-id
+                });
+              }
+              
+              // Also create a fallback map using just insert content for better matching
+              if (op.attributes['source-id'] || op.attributes['target-id']) {
+                mergeSourceMap.set(`${insertKey}::any`, {
+                  ...op.attributes
+                });
+              }
             }
           });
           
-          // Apply merge-source attributes to matching ops in the new delta
+          // Preserve attributes for ops in the new delta
           completeContent.delta.ops.forEach((op: any) => {
-            const key = op.insert ? JSON.stringify(op.insert) : '';
-            const mergeAttrs = mergeSourceMap.get(key);
+            const insertKey = op.insert ? JSON.stringify(op.insert) : '';
             
-            if (mergeAttrs) {
-              // Ensure attributes object exists
-              if (!op.attributes) op.attributes = {};
-              
-              // Apply the merge-source attributes
-              op.attributes['merge-source'] = mergeAttrs['merge-source'];
-              if (mergeAttrs['source-id']) {
-                op.attributes['source-id'] = mergeAttrs['source-id'];
+            if (!op.attributes) {
+              op.attributes = {};
+            }
+            
+            // Try to match with merge-source ops
+            let matched = false;
+            if (op.attributes['source-id']) {
+              const sourceId = op.attributes['source-id'];
+              const key = `${insertKey}::source::${sourceId}`;
+              const mergeAttrs = mergeSourceMap.get(key);
+              if (mergeAttrs) {
+                op.attributes = {
+                  ...mergeAttrs,
+                  ...op.attributes
+                };
+                matched = true;
+              }
+            }
+            
+            // Try to match with target ops
+            if (!matched && op.attributes['target-id']) {
+              const targetId = op.attributes['target-id'];
+              const key = `${insertKey}::target::${targetId}`;
+              const targetAttrs = targetOpsMap.get(key);
+              if (targetAttrs) {
+                op.attributes = {
+                  ...targetAttrs,
+                  ...op.attributes
+                };
+                matched = true;
+              }
+            }
+            
+            // Fallback: if content matches and we have attributes stored, restore them
+            // ONLY if the op doesn't have any custom attributes (source-id, target-id, merge-source)
+            // This prevents new ops (like new breaklines) from getting merge-source attributes
+            if (!matched) {
+              const fallbackAttrs = mergeSourceMap.get(`${insertKey}::any`);
+              if (fallbackAttrs) {
+                // Check if current op has any custom attributes
+                const hasCustomAttrs = op.attributes && (
+                  op.attributes['source-id'] ||
+                  op.attributes['target-id'] ||
+                  op.attributes['merge-source']
+                );
+                
+                // Only restore if:
+                // 1. Op doesn't have custom attributes (likely same op that lost attributes)
+                // 2. Fallback has source-id or target-id (likely merge-source or target op)
+                if (!hasCustomAttrs && (fallbackAttrs['source-id'] || fallbackAttrs['target-id'])) {
+                  op.attributes = {
+                    ...fallbackAttrs,
+                    ...op.attributes
+                  };
+                }
               }
             }
           });
@@ -533,60 +614,11 @@ export class EditorComponent implements AfterViewInit {
     });
   }
 
-  googleFormsPath: any;
   data: any;
   setting = <any>{};
-  @ViewChild('saveContent') saveContent!: any;
+  
   onSave() {
-    try {
-      // Try to parse the current delta JSON to check if we need to generate a key
-      const parsedDelta = JSON.parse(this.deltaJson);
-
-      // Auto-generate a key if one doesn't exist
-      if (!parsedDelta.data.key && this.title) {
-        // Generate a unique key based on the title
-        parsedDelta.data.key = `${this.commonService.generatedSlug(
-          this.title
-        )}`;
-        console.log(
-          'Auto-generated key for new document:',
-          parsedDelta.data.key
-        );
-
-        // Update the deltaJson with the new key
-        this.deltaJson = JSON.stringify(parsedDelta, null, 2);
-      }
-    } catch (e) {
-      console.error('Error processing delta JSON before save:', e);
-    }
-
-    // Continue with the normal save process
-    this.googleFormsPath = `https://docs.google.com/forms/d/e/${this.setting?.googleFormsId}/viewform`;
-    this.googleFormsPath += `?${this.setting?.key}=${encodeURIComponent(
-      `tnht__quyen1__${this.commonService.generatedSlug(this.title)}`
-    )}`;
-    this.googleFormsPath += `&${this.setting?.title}=${encodeURIComponent(
-      this.title
-    )}`;
-    const dialogRef = this.matDialog.open(this.saveContent, {
-      panelClass: 'custom-dialog-container',
-      autoFocus: false,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.googleFormsPath = '';
-    });
-  }
-
-  shareBottomSheetRef: any;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-  durationInSeconds = 3;
-  copyToClipboard(deltaJson: any) {
-    navigator.clipboard.writeText(deltaJson);
-    this._snackBar.open('Đã sao chép', 'Đóng', {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
+    // Save is now handled entirely in rich-text-editor component
+    // This method can be kept for backward compatibility or removed if not needed
   }
 }

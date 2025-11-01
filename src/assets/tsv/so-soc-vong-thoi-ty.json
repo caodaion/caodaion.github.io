@@ -1,40 +1,33 @@
 {
-    "ops": [
-        {
-            "insert": "\tKim vì "
-        },
-        {
-            "insert": {
-                "inlineInput": {
-                    "id": "socVong",
-                    "type": "inline",
-                    "label": "Sóc/Vọng",
-                    "placeholder": "Sóc/Vọng",
-                    "value": "",
-                    "fieldType": "text",
-                    "placeholderDots": {
-                        "length": 20,
-                        "autoFill": false
-                    }
-                }
-            }
-        },
-        {
-            "insert": " lương thần."
-        },
-        {
-            "attributes": {
-                "align": "justify"
-            },
-            "insert": "\n"
+  "ops": [
+    {
+      "insert": "\tKim vì "
+    },
+    {
+      "insert": {
+        "inlineInput": {
+          "id": "socVong",
+          "type": "inline",
+          "label": "Sóc/Vọng",
+          "placeholder": "Sóc/Vọng",
+          "value": "",
+          "fieldType": "text",
+          "placeholderDots": {
+            "length": 20,
+            "autoFill": false
+          }
         }
-    ],
-    "data": {
-        "mergeSource": {
-            "documentId": "tsv__long-so-tam-giao",
-            "mergeTargetKey": "noiDung"
-        },
-        "title": "Sớ Sóc Vọng Thời Tý",
-        "key": "so-soc-vong-thoi-ty"
+      }
+    },
+    {
+      "insert": " lương thần, Chư Thiên-Phong Chức-Sắc hiệp giữ Thiện-Nam Tín-Nữ đẳng, nghiêm thiết Đàn tràng hương, đăng, hoa, trà, quả thanh chước vi nghi chí tâm triều lễ."
     }
+  ],
+  "data": {
+    "mergeSource": {
+      "documentId": "tsv__long-so-tam-giao",
+      "mergeTargetKey": "noiDung"
+    },
+    "title": "Sớ Sóc Vọng Thời Tý"
+  }
 }

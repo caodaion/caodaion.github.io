@@ -140,3 +140,23 @@
     </button>
   </mat-dialog-actions>
 </ng-template>
+
+<ng-template #saveContent>
+  <mat-dialog-content>
+    <div>
+      <p class="text-xl text-black mb-2">
+        Vui lòng giúp <strong>Sao Chép</strong> Nội dung Delta JSON này và điền
+        vào trường delta trong form dưới đây
+      </p>
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Delta JSON</mat-label>
+        <input matInput [value]="deltaJson" placeholder="Nhập delta json" disabled />
+
+        <button mat-icon-button matSuffix type="button" (click)="copyToClipboard(deltaJson)"
+          matTooltip="Copy to clipboard">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+</ng-template>

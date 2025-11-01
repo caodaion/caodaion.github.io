@@ -47,6 +47,7 @@ import { Router } from '@angular/router';
 import { map, shareReplay } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatMenuModule } from "@angular/material/menu";
+import { MatSnackBar, MatSnackBarModule, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -64,7 +65,8 @@ import { MatMenuModule } from "@angular/material/menu";
     MatSelectModule,
     IconComponent,
     MatTooltip,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
 ],
   templateUrl: './rich-text-editor.component.html',
   styleUrls: ['./rich-text-editor.component.scss'],
@@ -104,6 +106,7 @@ export class RichTextEditorComponent
   @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
   @ViewChild('mergeTargetDialog') mergeTargetDialog!: any;
   @ViewChild('mergeSourceDialog') mergeSourceDialog!: any;
+  @ViewChild('saveContent') saveContent!: any;
 
   editorForm = new FormControl('');
   quillEditorRef: any;
@@ -157,11 +160,17 @@ export class RichTextEditorComponent
     },
   };
 
+  // Snackbar properties for copy notification
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  durationInSeconds = 3;
+
   constructor(
     private matDialog: MatDialog,
     private docsService: DocsService,
     private location: Location,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private _snackBar: MatSnackBar
   ) {
     // Register custom blots as early as possible
     if (typeof window !== 'undefined') {
@@ -981,31 +990,104 @@ export class RichTextEditorComponent
         delta.data.mergeSource = currentDelta.data.mergeSource;
       }
 
-      // Additionally, preserve merge-source attributes on individual operations
+      // Additionally, preserve ALL attributes for merge-source and target operations
       if (currentDelta.ops && delta.ops) {
-        // Find operations with merge-source attribute in the current delta
-        const mergeSourceOps = currentDelta.ops.filter((op: any) => op.attributes && op.attributes['merge-source'] === true
-        );
+        // Create lookup maps for both merge-source ops and target ops
+        // Key: insert content + source-id/target-id (to uniquely identify ops)
+        const mergeSourceMap = new Map(); // For ops with source-id
+        const targetOpsMap = new Map(); // For ops with target-id
+        
+        currentDelta.ops.forEach((op: any, index: number) => {
+          const insertKey = op.insert ? JSON.stringify(op.insert) : '';
+          
+          if (op.attributes) {
+            // Store merge-source ops
+            if (op.attributes['merge-source'] === true && op.attributes['source-id']) {
+              const sourceId = op.attributes['source-id'];
+              const key = `${insertKey}::source::${sourceId}`;
+              mergeSourceMap.set(key, {
+                ...op.attributes // Preserve all attributes including source-id and merge-source
+              });
+            }
+            
+            // Store target ops (current document ops)
+            if (op.attributes['target-id']) {
+              const targetId = op.attributes['target-id'];
+              const key = `${insertKey}::target::${targetId}`;
+              targetOpsMap.set(key, {
+                ...op.attributes // Preserve all attributes including target-id
+              });
+            }
+            
+            // Also create a fallback map using just insert content for better matching
+            // This helps when Quill removes attributes but content remains the same
+            if (op.attributes['source-id'] || op.attributes['target-id']) {
+              mergeSourceMap.set(`${insertKey}::any`, {
+                ...op.attributes
+              });
+            }
+          }
+        });
 
-        if (mergeSourceOps.length > 0) {
-          // For each operation in the new delta, check if it needs merge-source attribute
-          for (let i = 0; i < delta.ops.length; i++) {
-            const op = delta.ops[i];
-
-            // Look for a matching operation with merge-source in currentDelta
-            const matchingOp = mergeSourceOps.find((sourceOp: any) => JSON.stringify(sourceOp.insert) === JSON.stringify(op.insert)
-            );
-
-            if (matchingOp) {
-              // Ensure attributes exist
-              if (!op.attributes) op.attributes = {};
-
-              // Preserve merge-source attribute
-              op.attributes['merge-source'] = true;
-
-              // Also preserve source-id if it exists
-              if (matchingOp.attributes['source-id']) {
-                op.attributes['source-id'] = matchingOp.attributes['source-id'];
+        // Preserve attributes for ops in the new delta
+        for (let i = 0; i < delta.ops.length; i++) {
+          const op = delta.ops[i];
+          const insertKey = op.insert ? JSON.stringify(op.insert) : '';
+          
+          if (!op.attributes) {
+            op.attributes = {};
+          }
+          
+          // Try to match with merge-source ops
+          let matched = false;
+          if (op.attributes['source-id']) {
+            const sourceId = op.attributes['source-id'];
+            const key = `${insertKey}::source::${sourceId}`;
+            const mergeAttrs = mergeSourceMap.get(key);
+            if (mergeAttrs) {
+              op.attributes = {
+                ...mergeAttrs,
+                ...op.attributes // Allow new attributes to override if needed
+              };
+              matched = true;
+            }
+          }
+          
+          // Try to match with target ops
+          if (!matched && op.attributes['target-id']) {
+            const targetId = op.attributes['target-id'];
+            const key = `${insertKey}::target::${targetId}`;
+            const targetAttrs = targetOpsMap.get(key);
+            if (targetAttrs) {
+              op.attributes = {
+                ...targetAttrs,
+                ...op.attributes
+              };
+              matched = true;
+            }
+          }
+          
+          // Fallback: if content matches and we have attributes stored, restore them
+          // ONLY if the op doesn't have any custom attributes (source-id, target-id, merge-source)
+          // This prevents new ops (like new breaklines) from getting merge-source attributes
+          if (!matched) {
+            const fallbackAttrs = mergeSourceMap.get(`${insertKey}::any`);
+            if (fallbackAttrs) {
+              // Check if current op has any custom attributes
+              const hasCustomAttrs = op.attributes && (
+                op.attributes['source-id'] ||
+                op.attributes['target-id'] ||
+                op.attributes['merge-source']
+              );
+              
+              // Only restore if:
+              // 1. Op doesn't have custom attributes (likely same op that lost attributes)
+              // 2. Fallback has source-id or target-id (likely merge-source or target op)
+              if (!hasCustomAttrs && (fallbackAttrs['source-id'] || fallbackAttrs['target-id'])) {
+                op.attributes = {
+                  ...fallbackAttrs,
+                  ...op.attributes
+                };
               }
             }
           }
@@ -1367,7 +1449,159 @@ export class RichTextEditorComponent
 
   // Handle save button click
   onSaveClick(): void {
+    // Get filtered delta JSON (removes merge-source content)
+    const filteredDeltaJson = this.getFilteredDeltaJsonForSave(this.title);
+    console.log(filteredDeltaJson);
+    
+    
+    // Store original deltaJson before showing dialog
+    const originalDeltaJson = this.deltaJson;
+    
+    // Temporarily set deltaJson to filtered version for dialog
+    this.deltaJson = filteredDeltaJson;
+    
+    const dialogRef = this.matDialog.open(this.saveContent, {
+      panelClass: 'custom-dialog-container',
+      autoFocus: false,
+    });
+    
+    dialogRef.afterClosed().subscribe((result) => {
+      // Restore original deltaJson after dialog closes so user can continue editing
+      this.deltaJson = originalDeltaJson;
+    });
+    
+    // Still emit the event in case parent component needs to know
     this.saveRequested.emit();
+  }
+
+  // Copy delta JSON to clipboard
+  copyToClipboard(deltaJson: any): void {
+    navigator.clipboard.writeText(deltaJson);
+    this._snackBar.open('Đã sao chép', 'Đóng', {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+
+  /**
+   * Get filtered delta JSON for saving (removes merge-source content)
+   * This ensures that only the original document content is saved,
+   * while preserving mergeSource metadata for future merging
+   */
+  getFilteredDeltaJsonForSave(title?: string, generatedSlug?: (title: string) => string): string {
+    try {
+      // Get current content with all values
+      const completeContent = this.getContentWithValues();
+      const delta = completeContent.delta;
+
+      // Ensure data object exists
+      if (!delta.data) {
+        delta.data = {};
+      }
+
+      // Add title if provided
+      if (title) {
+        delta.data.title = title;
+      }
+
+      // Generate key if provided and doesn't exist
+      if (generatedSlug && title && !delta.data.key) {
+        delta.data.key = generatedSlug(title);
+      }
+
+      // Filter out merge-source content before saving
+      // Use originalOps stored during merge to identify which ops belong to current document
+      if (delta.ops && Array.isArray(delta.ops)) {
+        // Create a deep copy to avoid modifying the original
+        const filteredDelta = JSON.parse(JSON.stringify(delta));
+        
+        // Get original ops signatures if available (stored during merge)
+        const originalOps = (delta.data as any)?.originalOps;
+        const mergeSourceId = (delta.data as any)?.mergeSource?.documentId;
+        
+        if (originalOps && Array.isArray(originalOps)) {
+          // Create a function to generate signature for an op (for comparison)
+          const getOpSignature = (op: any) => {
+            const signature: any = {
+              insert: op.insert,
+            };
+            if (op.attributes) {
+              const cleanAttributes: any = {};
+              Object.keys(op.attributes).forEach(key => {
+                if (key !== 'merge-source' && key !== 'source-id' && key !== 'target-id') {
+                  cleanAttributes[key] = op.attributes[key];
+                }
+              });
+              if (Object.keys(cleanAttributes).length > 0) {
+                signature.attributes = cleanAttributes;
+              }
+            }
+            return JSON.stringify(signature);
+          };
+          
+          // Create a set of original op signatures for quick lookup
+          const originalSignatures = new Set(originalOps.map((op: any) => JSON.stringify(op)));
+          
+          // Filter: keep ops that match original signatures OR have target-id
+          filteredDelta.ops = filteredDelta.ops.filter((op: any) => {
+            // Keep if it matches an original op signature
+            const opSignature = getOpSignature(op);
+            if (originalSignatures.has(opSignature)) {
+              return true;
+            }
+            
+            // Keep if it has target-id (current document content, possibly modified)
+            if (op.attributes && op.attributes['target-id']) {
+              return true;
+            }
+            
+            // Remove if it has source-id matching merge source
+            if (op.attributes && op.attributes['source-id']) {
+              if (mergeSourceId) {
+                const sourceId = op.attributes['source-id'];
+                if (sourceId === mergeSourceId || sourceId.includes(mergeSourceId) || mergeSourceId.includes(sourceId)) {
+                  return false; // Remove this op
+                }
+              } else {
+                return false; // Remove any op with source-id
+              }
+            }
+            
+            // If no source-id and doesn't match original, keep it (might be user-added content)
+            return true;
+          });
+        } else {
+          // Fallback: use source-id filtering if originalOps not available
+          filteredDelta.ops = filteredDelta.ops.filter((op: any) => {
+            // If op has source-id, it's from merge-source - remove it
+            if (op.attributes && op.attributes['source-id']) {
+              if (mergeSourceId) {
+                const sourceId = op.attributes['source-id'];
+                if (sourceId === mergeSourceId || sourceId.includes(mergeSourceId) || mergeSourceId.includes(sourceId)) {
+                  return false;
+                }
+              } else {
+                return false;
+              }
+            }
+            // Keep ops that have target-id or no source-id
+            return true;
+          });
+        }
+
+        // Return filtered delta as JSON string
+        // Note: mergeSource metadata in data is preserved for future merging
+        return JSON.stringify(filteredDelta, null, 2);
+      }
+
+      // If no ops to filter, just return the delta as is
+      return JSON.stringify(delta, null, 2);
+    } catch (e) {
+      console.error('Error filtering delta JSON for save:', e);
+      // Fallback to current deltaJson if filtering fails
+      return this.deltaJson || '{}';
+    }
   }
 
   // Update visibility of all merge source elements based on showMergeSourceContent flag

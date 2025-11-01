@@ -425,6 +425,12 @@
             }
         },
         {
+            "attributes": {
+                "align": "justify"
+            },
+            "insert": "\n"
+        },
+        {
             "insert": "\tThiên Phong giữ thiện tín đẳng"
         },
         {
