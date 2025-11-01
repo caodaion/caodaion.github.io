@@ -313,7 +313,7 @@ export class WeatherComponent implements OnInit {
   }
 
   getWeatherIcon(code: number | undefined, timeString?: string): string {
-    if (code === undefined) return 'help_outline';
+    if (code === undefined) return 'help';
     
     const isNight = this.isNightTime(timeString);
     

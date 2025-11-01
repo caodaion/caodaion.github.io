@@ -18,13 +18,13 @@
         (input)="onSearchInput()"
         [matAutocomplete]="auto"
         placeholder="Nhập tên thành phố...">
-      <span class="material-symbols-outlined search-icon">search</span>
+      <app-icon name="search" class="search-icon"></app-icon>
       <mat-autocomplete 
         #auto="matAutocomplete" 
         (optionSelected)="selectLocationFromSearch($event.option.value)">
         <mat-option *ngFor="let result of searchResults" [value]="result">
           <div class="location-option">
-            <span class="material-symbols-outlined">location_on</span>
+            <app-icon name="location_on"></app-icon>
             <div class="location-info">
               <span class="location-name">{{ result.name }}</span>
               <span class="location-details">{{ result.admin1 }}{{ result.country ? ', ' + result.country : '' }}</span>
@@ -37,7 +37,6 @@
 
   <!-- Empty State -->
   <div *ngIf="locations.length === 0" class="empty-state">
-    <span class="material-symbols-outlined empty-icon">wb_cloudy</span>
     <h3>Chưa có địa điểm nào</h3>
     <p>Nhấn nút "Thêm địa điểm" để bắt đầu theo dõi thời tiết</p>
   </div>
@@ -53,14 +52,14 @@
       <!-- Card Header -->
       <div class="card-header">
         <div class="location-info-header">
-          <span class="material-symbols-outlined location-icon">location_on</span>
+          <app-icon name="location_on" class="location-icon"></app-icon>
           <div class="location-text">
             <h3 class="location-name">{{ location.name }}</h3>
             <p class="location-meta" *ngIf="location.admin1 || location.country">
               {{ location.admin1 }}{{ location.admin1 && location.country ? ', ' : '' }}{{ location.country }}
             </p>
             <span *ngIf="location.isCurrentLocation" class="current-badge">
-              <span class="material-symbols-outlined">my_location</span>
+              <app-icon name="my_location"></app-icon>
               <span>Vị trí hiện tại</span>
             </span>
           </div>
@@ -71,15 +70,15 @@
           [matMenuTriggerFor]="locationMenu"
           (click)="$event.stopPropagation()"
           class="menu-button">
-          <span class="material-symbols-outlined">more_vert</span>
+          <app-icon name="more_vert"></app-icon>
         </button>
         <mat-menu #locationMenu="matMenu">
           <button mat-menu-item (click)="refreshLocation(location.id)">
-            <span class="material-symbols-outlined">refresh</span>
+            <app-icon name="refresh"></app-icon>
             <span>Làm mới</span>
           </button>
           <button mat-menu-item (click)="removeLocation(location.id)">
-            <span class="material-symbols-outlined">delete</span>
+            <app-icon name="delete"></app-icon>
             <span>Xóa</span>
           </button>
         </mat-menu>
@@ -92,7 +91,7 @@
 
       <!-- Error State -->
       <div *ngIf="location.error && !location.loading" class="error-state">
-        <span class="material-symbols-outlined">error_outline</span>
+        <app-icon name="error"></app-icon>
         <span>{{ location.error }}</span>
         <button mat-button (click)="refreshLocation(location.id, $event)">Thử lại</button>
       </div>
@@ -106,37 +105,35 @@
               {{ getTemperature(location.weather.current.temperature_2m) }}
             </div>
             <div class="weather-icon-small">
-              <span class="material-symbols-outlined" [class]="getWeatherIconClass(location.weather.current.weather_code)">
-                {{ getWeatherIcon(location.weather.current.weather_code, location.weather.current.time) }}
-              </span>
+              <app-icon [name]="getWeatherIcon(location.weather.current.weather_code, location.weather.current.time)" [class]="getWeatherIconClass(location.weather.current.weather_code)"></app-icon>
             </div>
           </div>
           <div class="weather-description">
             {{ getWeatherDescription(location.weather.current.weather_code) }}
           </div>
           <div class="weather-time">
-            <span class="material-symbols-outlined">schedule</span>
+            <app-icon name="schedule"></app-icon>
             <span>{{ formatTime(location.weather.current.time) }}</span>
           </div>
           
           <!-- Additional Weather Details -->
           <div class="weather-details-grid" *ngIf="location.weather.current">
             <div class="detail-item-small" *ngIf="location.weather.current.relative_humidity_2m !== undefined">
-              <span class="material-symbols-outlined">water_drop</span>
+              <app-icon name="water_drop"></app-icon>
               <div class="detail-content">
                 <span class="detail-label">Độ ẩm</span>
                 <span class="detail-value">{{ getHumidity(location.weather.current.relative_humidity_2m) }}</span>
               </div>
             </div>
             <div class="detail-item-small" *ngIf="location.weather.current.wind_speed_10m !== undefined">
-              <span class="material-symbols-outlined">air</span>
+              <app-icon name="air"></app-icon>
               <div class="detail-content">
                 <span class="detail-label">Gió</span>
                 <span class="detail-value">{{ getWindSpeed(location.weather.current.wind_speed_10m) }}</span>
               </div>
             </div>
             <div class="detail-item-small" *ngIf="location.weather.current.precipitation !== undefined && location.weather.current.precipitation > 0">
-              <span class="material-symbols-outlined">opacity</span>
+              <app-icon name="opacity"></app-icon>
               <div class="detail-content">
                 <span class="detail-label">Mưa</span>
                 <span class="detail-value">{{ getPrecipitation(location.weather.current.precipitation) }}</span>
@@ -151,7 +148,7 @@
             *ngFor="let day of getDailyForecastArray(location).slice(0, 3); let i = index" 
             class="forecast-day-preview">
             <div class="day-name-short">{{ formatDate(day.time).split(',')[0] }}</div>
-            <span class="material-symbols-outlined day-icon-small">{{ getWeatherIcon(day.weatherCode, day.time) }}</span>
+            <app-icon [name]="getWeatherIcon(day.weatherCode, day.time)" [class]="getWeatherIconClass(day.weatherCode)"></app-icon>
             <div class="day-status-short">{{ getWeatherDescription(day.weatherCode) }}</div>
             <div class="day-temps">
               <span class="temp-high-small">{{ getTemperature(day.maxTemp) }}</span>
@@ -171,7 +168,7 @@
           {{ viewMode === 'daily' ? 'Dự báo 7 ngày' : 'Dự báo 24 giờ' }}
         </h3>
         <p class="location-address" *ngIf="getSelectedLocation()">
-          <span class="material-symbols-outlined">location_on</span>
+          <app-icon name="location_on"></app-icon>
           <span>{{ getSimpleAddress(getSelectedLocation()!) }}</span>
         </p>
       </div>
@@ -179,13 +176,13 @@
         <button mat-stroked-button 
                 [class.active]="viewMode === 'daily'"
                 (click)="viewMode = 'daily'">
-          <span class="material-symbols-outlined">calendar_view_week</span>
+          <app-icon name="calendar_view_week"></app-icon>
           <span>Theo ngày</span>
         </button>
         <button mat-stroked-button 
                 [class.active]="viewMode === 'hourly'"
                 (click)="viewMode = 'hourly'">
-          <span class="material-symbols-outlined">schedule</span>
+          <app-icon name="schedule"></app-icon>
           <span>Theo giờ</span>
         </button>
       </div>
@@ -203,18 +200,16 @@
         </div>
         <div class="day-temperatures-detailed">
           <div class="temp-high-detailed">
-            <span class="material-symbols-outlined temp-icon-detailed">keyboard_arrow_up</span>
+            <app-icon name="keyboard_arrow_up" class="temp-icon-detailed"></app-icon>
             <span>{{ getTemperature(day.maxTemp) }}</span>
           </div>
           <div class="temp-low-detailed">
-            <span class="material-symbols-outlined temp-icon-detailed">keyboard_arrow_down</span>
+            <app-icon name="keyboard_arrow_down" class="temp-icon-detailed"></app-icon>
             <span>{{ getTemperature(day.minTemp) }}</span>
           </div>
         </div>
         <div class="day-icon-detailed">
-          <span class="material-symbols-outlined" [class]="getWeatherIconClass(day.weatherCode)">
-            {{ getWeatherIcon(day.weatherCode, day.time) }}
-          </span>
+          <app-icon [name]="getWeatherIcon(day.weatherCode, day.time)" [class]="getWeatherIconClass(day.weatherCode)"></app-icon>
         </div>
       </div>
     </mat-card>
@@ -229,17 +224,17 @@
           <div class="hourly-content">
             <div class="hour-time">{{ formatHour(hour.time) }}</div>
             <div class="hour-icon-wrapper">
-              <span class="material-symbols-outlined hour-icon">{{ getWeatherIcon(hour.weatherCode, hour.time) }}</span>
+              <app-icon [name]="getWeatherIcon(hour.weatherCode, hour.time)" [class]="getWeatherIconClass(hour.weatherCode)" class="hour-icon"></app-icon>
             </div>
             <div class="hour-status">{{ getWeatherDescription(hour.weatherCode) }}</div>
             <div class="hour-temp">{{ getTemperature(hour.temperature) }}</div>
             <div class="hour-details" *ngIf="hour.precipitation && hour.precipitation > 0 || hour.windSpeed">
               <div class="hour-precip" *ngIf="hour.precipitation && hour.precipitation > 0">
-                <span class="material-symbols-outlined">opacity</span>
+                <app-icon name="opacity"></app-icon>
                 <span>{{ getPrecipitation(hour.precipitation) }}</span>
               </div>
               <div class="hour-wind" *ngIf="hour.windSpeed">
-                <span class="material-symbols-outlined">air</span>
+                <app-icon name="air"></app-icon>
                 <span>{{ Math.round(hour.windSpeed || 0) }} km/h</span>
               </div>
             </div>
