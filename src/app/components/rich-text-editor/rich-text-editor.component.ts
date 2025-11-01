@@ -13,7 +13,7 @@ import {
   inject,
   TemplateRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   NG_VALUE_ACCESSOR,
@@ -43,6 +43,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { DocsService } from '../../shared/services/docs.service';
 import { IconComponent } from "../icon/icon.component";
 import { MatTooltip } from "@angular/material/tooltip";
+import { Router } from '@angular/router';
+import { map, shareReplay } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatMenuModule } from "@angular/material/menu";
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -59,7 +63,8 @@ import { MatTooltip } from "@angular/material/tooltip";
     MatInputModule,
     MatSelectModule,
     IconComponent,
-    MatTooltip
+    MatTooltip,
+    MatMenuModule
 ],
   templateUrl: './rich-text-editor.component.html',
   styleUrls: ['./rich-text-editor.component.scss'],
@@ -72,11 +77,11 @@ import { MatTooltip } from "@angular/material/tooltip";
   ],
 })
 export class RichTextEditorComponent
-  implements OnInit, AfterViewInit, OnChanges, ControlValueAccessor
-{
+  implements OnInit, AfterViewInit, OnChanges, ControlValueAccessor {
   @Input() placeholder: string = 'Enter text here...';
   @Input() minHeight: string = '200px';
   @Input() isReadOnly: boolean = false;
+  @Input() isShowBackButton: boolean = false;
   @Input() content: string = '';
   @Input() deltaJson: string = '';
   @Input() showToolbar: boolean = true;
@@ -104,6 +109,7 @@ export class RichTextEditorComponent
   quillEditorRef: any;
   isDisabled: boolean = false;
   blotsRegistered = false;
+  isMobile = false;
   // Audio state
   currentAudioStart: number = 0;
   currentAudioEnd: number = 5;
@@ -111,7 +117,7 @@ export class RichTextEditorComponent
   showAudioLinkModal: boolean = false;
   tempSelectedRange: any = null;
   activeAudioLinks: HTMLElement[] = [];
-    // Merge source visibility toggle
+  // Merge source visibility toggle
   showMergeSourceContent: boolean = true;
   hasMergeSource: boolean = false;// Track currently active audio segments
   selectedMergedSource = <any>{
@@ -151,14 +157,29 @@ export class RichTextEditorComponent
     },
   };
 
-  constructor(private matDialog: MatDialog, private docsService: DocsService) {
+  constructor(
+    private matDialog: MatDialog,
+    private docsService: DocsService,
+    private location: Location,
+    private breakpointObserver: BreakpointObserver
+  ) {
     // Register custom blots as early as possible
     if (typeof window !== 'undefined') {
       registerCustomBlots();
       this.blotsRegistered = true;
     }
   }
+
   ngOnInit(): void {
+    this.breakpointObserver
+      .observe('(max-width: 768px)')
+      .pipe(
+        map((result) => result.matches),
+        shareReplay()
+      )
+      .subscribe((isMobile) => {
+        this.isMobile = isMobile;
+      });
     // Make sure custom blots are registered
     if (!this.blotsRegistered && typeof window !== 'undefined') {
       registerCustomBlots();
@@ -311,8 +332,8 @@ export class RichTextEditorComponent
   }
 
   // ControlValueAccessor methods
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   writeValue(content: any): void {
     this.editorForm.setValue(content || '', { emitEvent: false });
@@ -949,39 +970,39 @@ export class RichTextEditorComponent
     if (this.audioSrc) {
       delta.audioSrc = this.audioSrc;
     }
-    
+
     // Try to preserve mergeSource if it exists in the current delta
     try {
       const currentDelta = JSON.parse(this.deltaJson || '{}');
-      
+
       // Preserve root level mergeSource in data
       if (currentDelta.data?.mergeSource) {
         if (!delta.data) delta.data = {};
         delta.data.mergeSource = currentDelta.data.mergeSource;
       }
-      
+
       // Additionally, preserve merge-source attributes on individual operations
       if (currentDelta.ops && delta.ops) {
         // Find operations with merge-source attribute in the current delta
         const mergeSourceOps = currentDelta.ops.filter((op: any) => op.attributes && op.attributes['merge-source'] === true
         );
-        
+
         if (mergeSourceOps.length > 0) {
           // For each operation in the new delta, check if it needs merge-source attribute
           for (let i = 0; i < delta.ops.length; i++) {
             const op = delta.ops[i];
-            
+
             // Look for a matching operation with merge-source in currentDelta
             const matchingOp = mergeSourceOps.find((sourceOp: any) => JSON.stringify(sourceOp.insert) === JSON.stringify(op.insert)
             );
-            
+
             if (matchingOp) {
               // Ensure attributes exist
               if (!op.attributes) op.attributes = {};
-              
+
               // Preserve merge-source attribute
               op.attributes['merge-source'] = true;
-              
+
               // Also preserve source-id if it exists
               if (matchingOp.attributes['source-id']) {
                 op.attributes['source-id'] = matchingOp.attributes['source-id'];
@@ -1153,7 +1174,7 @@ export class RichTextEditorComponent
         if (delta.audioSrc) {
           this.audioSrc = delta.audioSrc;
         }
-        
+
         // Check if there is a merge source in the delta
         if (delta.data?.mergeSource) {
           this.hasMergeSource = true;
@@ -1330,7 +1351,7 @@ export class RichTextEditorComponent
     this.printMode = !this.printMode;
     this.updatePrintMode();
   }
-  
+
   // Toggle visibility of merge source content
   toggleMergeSourceContent(): void {
     this.showMergeSourceContent = !this.showMergeSourceContent;
@@ -1348,15 +1369,15 @@ export class RichTextEditorComponent
   onSaveClick(): void {
     this.saveRequested.emit();
   }
-  
+
   // Update visibility of all merge source elements based on showMergeSourceContent flag
   updateMergeSourceVisibility(): void {
     if (!this.quillEditorRef) return;
-    
+
     // Find the Quill editor container
     const editorContainer = document.querySelector('.rich-text-editor-container');
     if (!editorContainer) return;
-    
+
     if (this.showMergeSourceContent) {
       // Show merge source content by removing the hide class
       editorContainer.classList.remove('hide-merge-source');
@@ -1364,7 +1385,7 @@ export class RichTextEditorComponent
       // Hide merge source content by adding the hide class
       editorContainer.classList.add('hide-merge-source');
     }
-    
+
     console.log('Merge source visibility updated:', this.showMergeSourceContent);
   }
 
@@ -1712,5 +1733,9 @@ export class RichTextEditorComponent
 
       printWindow.document.close();
     }, 300);
+  }
+
+  onBackClick(): void {
+    this.location.back();
   }
 }

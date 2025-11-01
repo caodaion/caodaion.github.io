@@ -2,6 +2,11 @@
 <div class="rich-text-editor-container" [ngClass]="{ 'read-only': isReadOnly, 'print-mode': printMode }">
   <!-- Print mode toggle button -->
   <div class="editor-actions items-center">
+    @if (isShowBackButton) {
+    <button mat-icon-button [color]="'primary'" (click)="onBackClick()" [matTooltip]="'Quay lại'">
+      <app-icon name="arrow_back"></app-icon>
+    </button>
+    }
     <div class="flex items-center gap-2 w-full" *ngIf="showTitleInput || showSaveButton">
       <mat-form-field *ngIf="showTitleInput" appearance="fill" class="title-field w-full">
         <mat-label>Tiêu đề</mat-label>
@@ -9,6 +14,7 @@
           placeholder="Nhập tiêu đề" />
       </mat-form-field>
     </div>
+    @if(!isMobile) {
     <button *ngIf="showSaveButton" mat-icon-button [color]="'primary'" (click)="onSaveClick()" [matTooltip]="'Lưu'"
       [disabled]="saveButtonDisabled" class="save-button">
       <app-icon name="save"></app-icon>
@@ -16,12 +22,30 @@
     <button mat-icon-button [color]="'primary'" (click)="printContent()" [matTooltip]="'In'">
       <app-icon name="print"></app-icon>
     </button>
-    <!-- Merge source toggle button - only show when merge source exists -->
     <button *ngIf="hasMergeSource" mat-icon-button [color]="showMergeSourceContent ? 'accent' : 'basic'"
       (click)="toggleMergeSourceContent()"
       [matTooltip]="showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn'">
       <app-icon name="{{ showMergeSourceContent ? 'visibility' : 'visibility_off' }}"></app-icon>
     </button>
+    } @else {
+    <button mat-icon-button [matMenuTriggerFor]="menu" [matTooltip]="'Các hành động'">
+      <app-icon name="more_vert"></app-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="showSaveButton" (click)="onSaveClick()" [matTooltip]="'Lưu'"
+        [disabled]="saveButtonDisabled">
+        <app-icon name="save"></app-icon>
+        Lưu
+      </button>
+      <button mat-menu-item (click)="printContent()" [matTooltip]="'In'"> <app-icon name="print"></app-icon> In
+      </button>
+      <button mat-menu-item *ngIf="hasMergeSource" (click)="toggleMergeSourceContent()"
+        [matTooltip]="showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn'">
+        <app-icon name="{{ showMergeSourceContent ? 'visibility' : 'visibility_off' }}"></app-icon>
+        {{ showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn' }}
+      </button>
+    </mat-menu>
+    }
   </div>
 
   <quill-editor [formControl]="editorForm" [placeholder]="placeholder" [modules]="editorModules"

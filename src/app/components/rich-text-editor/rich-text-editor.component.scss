@@ -1,10 +1,26 @@
 @import "./merge-styles.scss";
 
+::ng-deep {
+  app-rich-text-editor {
+    height: 100%;
+  }
+}
+
 /* Main container styles */
 .rich-text-editor-container {
+  height: 100%;
   border-radius: 4px;
   overflow: hidden;
   font-family: var(--font-family, "Roboto", sans-serif);
+  display: flex;
+  flex-direction: column;
+
+  quill-editor {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 
   /* Read-only specific styles */
   &.read-only {
@@ -541,8 +557,6 @@
   .editor-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 12px;
-    gap: 10px;
 
     mat-form-field {
       .mat-mdc-form-field-bottom-align {

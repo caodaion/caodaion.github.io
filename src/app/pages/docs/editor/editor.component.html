@@ -1,5 +1,5 @@
 <div class="editor-container">
-  <app-child-header [title]="'Docs'"></app-child-header>
+  <app-child-header [title]="'Docs'" class="hidden"></app-child-header>
   <mat-drawer-container class="docs-drawer-container">
     <mat-drawer #drawer class="docs-drawer" mode="side" [opened]="false" position="end">
       <mat-nav-list>
@@ -7,7 +7,7 @@
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content class="docs-content">
-      <app-rich-text-editor #editorComponent [deltaJson]="deltaJson" [placeholder]="'Nhập nội dung tại đây...'"
+      <app-rich-text-editor [isShowBackButton]="true" #editorComponent [deltaJson]="deltaJson" [placeholder]="'Nhập nội dung tại đây...'"
         [minHeight]="'250px'" [title]="title" [showTitleInput]="true" [showSaveButton]="true"
         [saveButtonDisabled]="!setting?.googleFormsId" (contentChanged)="onContentChanged($event, editorComponent)"
         (titleChanged)="onTitleChanged($event)" (saveRequested)="onSave()">
