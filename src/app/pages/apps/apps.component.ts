@@ -72,6 +72,13 @@ export class AppsComponent {
       icon: 'partly_cloudy_day',
       route: '/weather'
     },
+    {
+      id: 'blogger',
+      name: 'Blog',
+      description: 'Đọc các bài viết về đạo Cao Đài từ CaoDaiON Blog',
+      icon: 'article',
+      route: '/blog'
+    },
     // {
     //   id: 'ca-nhan',
     //   name: 'Cá Nhân',

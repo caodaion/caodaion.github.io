@@ -1,0 +1,77 @@
+<app-child-header [title]="'Blog Cao Đài'"></app-child-header>
+
+<div class="page-container">
+  <!-- Filter by labels -->
+  <div class="filter-section" *ngIf="availableLabels.length > 1">
+    <div class="filter-buttons">
+      <button 
+        *ngFor="let label of availableLabels" 
+        class="filter-btn"
+        [class.active]="selectedLabel === label"
+        (click)="onLabelChange(label)">
+        {{ label === 'all' ? 'Tất cả' : label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="loading-container" *ngIf="loading">
+    <app-icon name="refresh" size="32px"></app-icon>
+    <p>Đang tải bài viết...</p>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-container" *ngIf="error && !loading">
+    <app-icon name="error" size="48px"></app-icon>
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="fetchAllPosts()">Thử lại</button>
+  </div>
+
+  <!-- Posts grid -->
+  <div class="posts-grid" *ngIf="!loading && !error">
+    <div class="post-card" *ngFor="let post of posts" (click)="openPost(post)">
+      <div class="post-header">
+        <h2 class="post-title">{{ post.title }}</h2>
+        <div class="post-meta">
+          <span class="post-date">
+            <app-icon name="calendar_today" size="16px"></app-icon>
+            {{ formatDate(post.published) }}
+          </span>
+          <span class="post-author" *ngIf="post.author">
+            <app-icon name="person" size="16px"></app-icon>
+            {{ post.author.displayName }}
+          </span>
+        </div>
+      </div>
+      
+      <div class="post-content" [innerHTML]="getSanitizedContent(post.content)"></div>
+      
+      <div class="post-footer">
+        <div class="post-labels" *ngIf="post.labels && post.labels.length > 0">
+          <span class="post-label" *ngFor="let label of post.labels">
+            <app-icon name="label" size="14px"></app-icon>
+            {{ label }}
+          </span>
+        </div>
+        <div class="read-more">
+          Đọc thêm
+          <app-icon name="arrow_forward" size="16px"></app-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="posts.length === 0 && !loading">
+      <app-icon name="article" size="64px"></app-icon>
+      <p>Chưa có bài viết nào.</p>
+    </div>
+  </div>
+
+  <!-- Load more button -->
+  <div class="load-more-container" *ngIf="!loading && !error && nextPageToken">
+    <button class="load-more-btn" (click)="loadMorePosts()" [disabled]="loadingMore">
+      <app-icon name="refresh" size="20px" [class]="loadingMore ? 'spinning' : ''"></app-icon>
+      <span>{{ loadingMore ? 'Đang tải...' : 'Tải thêm' }}</span>
+    </button>
+  </div>
+</div>
+
