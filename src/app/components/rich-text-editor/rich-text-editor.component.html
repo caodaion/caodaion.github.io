@@ -83,11 +83,11 @@
       </p>
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Delta JSON</mat-label>
-        <input matInput [value]="deltaJson" placeholder="Nhập delta json" disabled />
+        <textarea matInput [value]="deltaJson" placeholder="Nhập delta json" disabled rows="10"></textarea>
 
         <button mat-icon-button matSuffix type="button" (click)="copyToClipboard(deltaJson)"
           matTooltip="Copy to clipboard">
-          <mat-icon>content_copy</mat-icon>
+          <app-icon name="content_copy"></app-icon>
         </button>
       </mat-form-field>
     </div>
