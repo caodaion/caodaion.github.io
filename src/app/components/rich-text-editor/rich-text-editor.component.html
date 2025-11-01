@@ -22,11 +22,6 @@
     <button mat-icon-button [color]="'primary'" (click)="printContent()" [matTooltip]="'In'">
       <app-icon name="print"></app-icon>
     </button>
-    <button *ngIf="hasMergeSource" mat-icon-button [color]="showMergeSourceContent ? 'accent' : 'basic'"
-      (click)="toggleMergeSourceContent()"
-      [matTooltip]="showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn'">
-      <app-icon name="{{ showMergeSourceContent ? 'visibility' : 'visibility_off' }}"></app-icon>
-    </button>
     } @else {
     <button mat-icon-button [matMenuTriggerFor]="menu" [matTooltip]="'Các hành động'">
       <app-icon name="more_vert"></app-icon>
@@ -38,11 +33,6 @@
         Lưu
       </button>
       <button mat-menu-item (click)="printContent()" [matTooltip]="'In'"> <app-icon name="print"></app-icon> In
-      </button>
-      <button mat-menu-item *ngIf="hasMergeSource" (click)="toggleMergeSourceContent()"
-        [matTooltip]="showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn'">
-        <app-icon name="{{ showMergeSourceContent ? 'visibility' : 'visibility_off' }}"></app-icon>
-        {{ showMergeSourceContent ? 'Ẩn nội dung nguồn' : 'Hiện nội dung nguồn' }}
       </button>
     </mat-menu>
     }
@@ -83,63 +73,6 @@
     </div>
   </div>
 </div>
-
-<ng-template #mergeTargetDialog>
-  <h2 mat-dialog-title>Tạo khối hợp nhất</h2>
-  <mat-dialog-content>
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Key</mat-label>
-      <input matInput [(ngModel)]="addedMergeTarget.key" placeholder="Nhập key khối hợp nhất" />
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Tiêu đề</mat-label>
-      <input matInput [(ngModel)]="addedMergeTarget.title" placeholder="Nhập tiêu đề khối hợp nhất" />
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Mô tả</mat-label>
-      <textarea matInput [(ngModel)]="addedMergeTarget.description" placeholder="Nhập mô tả khối hợp nhất"
-        rows="3"></textarea>
-    </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true">Hủy</button>
-    <button mat-button color="primary" (click)="onAddMergeTarget()" [mat-dialog-close]="true"
-      [disabled]="!addedMergeTarget.key || !addedMergeTarget.title">
-      Thêm
-    </button>
-  </mat-dialog-actions>
-</ng-template>
-
-<ng-template #mergeSourceDialog>
-  <h2 mat-dialog-title>Cập nhật hợp nhất nội dung</h2>
-  <mat-dialog-content>
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Văn bản hợp nhất</mat-label>
-      <mat-select placeholder="Chọn văn bản hợp nhất" [(ngModel)]="selectedMergedSource.documentId"
-        (selectionChange)="onMergedSourceChange()">
-        <mat-option *ngFor="let document of mergeTargetDocuments" [value]="document?.id">
-          {{ document?.title }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Khối hợp nhất</mat-label>
-      <mat-select placeholder="Chọn khối hợp nhất" [(ngModel)]="selectedMergedSource.mergeTargetKey">
-        <mat-option *ngFor="let block of mergeTargetBlocks" [value]="block?.key">
-          {{ block?.title }} ({{ block?.description }})
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true">Hủy</button>
-    <button mat-button color="primary" (click)="onSaveMergeSource()" [mat-dialog-close]="true" [disabled]="
-        !selectedMergedSource.documentId || !selectedMergedSource.mergeTargetKey
-      ">
-      Lưu
-    </button>
-  </mat-dialog-actions>
-</ng-template>
 
 <ng-template #saveContent>
   <mat-dialog-content>

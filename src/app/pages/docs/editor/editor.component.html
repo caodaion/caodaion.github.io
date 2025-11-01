@@ -9,7 +9,6 @@
     <mat-drawer-content class="docs-content">
       <app-rich-text-editor [isShowBackButton]="true" #editorComponent [deltaJson]="deltaJson" [placeholder]="'Nhập nội dung tại đây...'"
         [minHeight]="'250px'" [title]="title" [showTitleInput]="true" [showSaveButton]="true"
-        (contentChanged)="onContentChanged($event, editorComponent)"
         (titleChanged)="onTitleChanged($event)">
       </app-rich-text-editor>
   </mat-drawer-content>

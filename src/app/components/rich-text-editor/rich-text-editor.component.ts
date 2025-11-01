@@ -30,8 +30,6 @@ import {
   AudioRange,
   FormField,
   DeltaOperation,
-  MergeTarget,
-  MergeSource,
 } from './models/delta.model';
 import { CustomFieldDialogService } from '../../shared/services/custom-field-dialog/custom-field-dialog.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -104,8 +102,6 @@ export class RichTextEditorComponent
   }>(); // Event for audio link clicks
 
   @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
-  @ViewChild('mergeTargetDialog') mergeTargetDialog!: any;
-  @ViewChild('mergeSourceDialog') mergeSourceDialog!: any;
   @ViewChild('saveContent') saveContent!: any;
 
   editorForm = new FormControl('');
@@ -119,16 +115,7 @@ export class RichTextEditorComponent
   currentAudioTime: number = 0;
   showAudioLinkModal: boolean = false;
   tempSelectedRange: any = null;
-  activeAudioLinks: HTMLElement[] = [];
-  // Merge source visibility toggle
-  showMergeSourceContent: boolean = true;
-  hasMergeSource: boolean = false;// Track currently active audio segments
-  selectedMergedSource = <any>{
-    documentId: '',
-    mergeTargetKey: '',
-  };
-  mergeTargetDocuments: any;
-  mergeTargetBlocks: any;
+  activeAudioLinks: HTMLElement[] = []; // Track currently active audio segments
 
   editorModules = {
     toolbar: {
@@ -148,14 +135,11 @@ export class RichTextEditorComponent
         ['clean'],
         ['link', 'image', 'video'],
         ['block-input', 'inline-input', 'audio-link'],
-        ['merge-target', 'merge-source'],
       ],
       handlers: {
         'block-input': () => this.insertBlockInput(),
         'inline-input': () => this.insertInlineInput(),
         'audio-link': () => this.showAudioLinkDialog(),
-        'merge-target': () => this.showMergeTargetDialog(),
-        'merge-source': () => this.showMergeSourceDialog(),
       },
     },
   };
@@ -814,150 +798,6 @@ export class RichTextEditorComponent
     }, 0);
   }
 
-  addedMergeTarget = <any>{
-    key: '',
-    title: '',
-    description: '',
-  };
-
-  showMergeTargetDialog() {
-    if (!this.quillEditorRef || this.isReadOnly) return;
-
-    const range = this.quillEditorRef.getSelection(true);
-    this.tempSelectedRange = range;
-
-    const defaultId = this.generateUniqueId();
-    this.addedMergeTarget.key = defaultId;
-    this.matDialog.open(this.mergeTargetDialog);
-  }
-
-  onAddMergeTarget() {
-    if (!this.quillEditorRef || this.isReadOnly) return;
-
-    // Make sure we have a valid selection range
-    if (!this.tempSelectedRange) {
-      console.error('No selection range available');
-      return;
-    }
-
-    try {
-      // Store the selection range temporarily
-      this.quillEditorRef.insertEmbed(
-        this.tempSelectedRange.index,
-        'blockMerge',
-        {
-          key: this.addedMergeTarget?.key,
-          title: this.addedMergeTarget?.title,
-          description: this.addedMergeTarget?.description,
-        },
-        Quill.sources.USER
-      );
-
-      // Insert a line break after block merge for better formatting
-      this.quillEditorRef.insertText(
-        this.tempSelectedRange.index + 1,
-        '\n',
-        Quill.sources.USER
-      );
-
-      // Move cursor after inserted content
-      this.quillEditorRef.setSelection(
-        this.tempSelectedRange.index + 2,
-        0,
-        Quill.sources.SILENT
-      );
-
-      // Clear the temporary selection range
-      this.tempSelectedRange = null;
-    } catch (error) {
-      console.error('Error inserting merge target:', error);
-    }
-  }
-
-  // Add merge source functionality - prompts user to enter a key to reference a merge target
-  showMergeSourceDialog() {
-    if (!this.quillEditorRef || this.isReadOnly) return;
-    this.mergeTargetDocuments = [];
-    this.getTSVContents();
-    this.matDialog.open(this.mergeSourceDialog);
-  }
-
-  getTSVContents() {
-    this.docsService.getStaticLibrary('/assets/tsv/tap-so-van.json').subscribe({
-      next: (res: any) => {
-        this.mergeTargetDocuments = [
-          ...this.mergeTargetDocuments,
-          ...res?.data?.filter((item: any) => item?.isMergeTarget),
-        ];
-      },
-      error: (err) => {
-        console.error('Error fetching TNHT contents:', err);
-      },
-    });
-  }
-
-  onMergedSourceChange() {
-    this.docsService
-      .getDocsContent(
-        `/assets/${this.selectedMergedSource.documentId?.replace(
-          /__/g,
-          '/'
-        )}.json`
-      )
-      .subscribe({
-        next: (res: any) => {
-          this.mergeTargetBlocks = res?.ops
-            ?.filter((item: any) => item?.attributes?.mergeTarget)
-            ?.map((item: any) => item?.attributes?.mergeTarget);
-        },
-        error: (err) => {
-          console.error('Error fetching merged source:', err);
-        },
-      });
-  }
-
-  onSaveMergeSource() {
-    if (!this.quillEditorRef || this.isReadOnly) return;
-
-    // Check if required merge source data is available
-    if (
-      !this.selectedMergedSource.documentId ||
-      !this.selectedMergedSource.mergeTargetKey
-    ) {
-      console.error('Missing required merge source data');
-      return;
-    }
-
-    try {
-      // Get the current delta content as ExtendedDelta
-      const delta: any = JSON.parse(this.deltaJson || '{}');
-
-      // Initialize data object if it doesn't exist
-      if (!delta.data) {
-        delta.data = {};
-      }
-
-      // Add merge source reference to the data object (not as a block)
-      delta.data.mergeSource = {
-        documentId: this.selectedMergedSource.documentId,
-        mergeTargetKey: this.selectedMergedSource.mergeTargetKey,
-      };
-      // Update the deltaJson variable
-      this.deltaJson = JSON.stringify(delta, null, 2);
-
-      // Update the delta content
-      this.quillEditorRef.setContents(delta);
-
-      // Emit contentChanged event with current value
-      this.contentChanged.emit(this.editorForm.value || '');
-
-      // Close the dialog
-      this.matDialog.closeAll();
-    } catch (err) {
-      console.error('Error saving merge source reference:', err);
-    }
-  }
-
   // Helper method to generate unique IDs for fields
   private generateUniqueId(): string {
     return 'field-' + Math.random().toString(36).substring(2, 11);
@@ -978,123 +818,6 @@ export class RichTextEditorComponent
     // Add the audio source to the delta object at root level
     if (this.audioSrc) {
       delta.audioSrc = this.audioSrc;
-    }
-
-    // Try to preserve mergeSource if it exists in the current delta
-    try {
-      const currentDelta = JSON.parse(this.deltaJson || '{}');
-
-      // Preserve root level mergeSource in data
-      if (currentDelta.data?.mergeSource) {
-        if (!delta.data) delta.data = {};
-        delta.data.mergeSource = currentDelta.data.mergeSource;
-      }
-
-      // Additionally, preserve ALL attributes for merge-source and target operations
-      if (currentDelta.ops && delta.ops) {
-        // Create lookup maps for both merge-source ops and target ops
-        // Key: insert content + source-id/target-id (to uniquely identify ops)
-        const mergeSourceMap = new Map(); // For ops with source-id
-        const targetOpsMap = new Map(); // For ops with target-id
-        
-        currentDelta.ops.forEach((op: any, index: number) => {
-          const insertKey = op.insert ? JSON.stringify(op.insert) : '';
-          
-          if (op.attributes) {
-            // Store merge-source ops
-            if (op.attributes['merge-source'] === true && op.attributes['source-id']) {
-              const sourceId = op.attributes['source-id'];
-              const key = `${insertKey}::source::${sourceId}`;
-              mergeSourceMap.set(key, {
-                ...op.attributes // Preserve all attributes including source-id and merge-source
-              });
-            }
-            
-            // Store target ops (current document ops)
-            if (op.attributes['target-id']) {
-              const targetId = op.attributes['target-id'];
-              const key = `${insertKey}::target::${targetId}`;
-              targetOpsMap.set(key, {
-                ...op.attributes // Preserve all attributes including target-id
-              });
-            }
-            
-            // Also create a fallback map using just insert content for better matching
-            // This helps when Quill removes attributes but content remains the same
-            if (op.attributes['source-id'] || op.attributes['target-id']) {
-              mergeSourceMap.set(`${insertKey}::any`, {
-                ...op.attributes
-              });
-            }
-          }
-        });
-
-        // Preserve attributes for ops in the new delta
-        for (let i = 0; i < delta.ops.length; i++) {
-          const op = delta.ops[i];
-          const insertKey = op.insert ? JSON.stringify(op.insert) : '';
-          
-          if (!op.attributes) {
-            op.attributes = {};
-          }
-          
-          // Try to match with merge-source ops
-          let matched = false;
-          if (op.attributes['source-id']) {
-            const sourceId = op.attributes['source-id'];
-            const key = `${insertKey}::source::${sourceId}`;
-            const mergeAttrs = mergeSourceMap.get(key);
-            if (mergeAttrs) {
-              op.attributes = {
-                ...mergeAttrs,
-                ...op.attributes // Allow new attributes to override if needed
-              };
-              matched = true;
-            }
-          }
-          
-          // Try to match with target ops
-          if (!matched && op.attributes['target-id']) {
-            const targetId = op.attributes['target-id'];
-            const key = `${insertKey}::target::${targetId}`;
-            const targetAttrs = targetOpsMap.get(key);
-            if (targetAttrs) {
-              op.attributes = {
-                ...targetAttrs,
-                ...op.attributes
-              };
-              matched = true;
-            }
-          }
-          
-          // Fallback: if content matches and we have attributes stored, restore them
-          // ONLY if the op doesn't have any custom attributes (source-id, target-id, merge-source)
-          // This prevents new ops (like new breaklines) from getting merge-source attributes
-          if (!matched) {
-            const fallbackAttrs = mergeSourceMap.get(`${insertKey}::any`);
-            if (fallbackAttrs) {
-              // Check if current op has any custom attributes
-              const hasCustomAttrs = op.attributes && (
-                op.attributes['source-id'] ||
-                op.attributes['target-id'] ||
-                op.attributes['merge-source']
-              );
-              
-              // Only restore if:
-              // 1. Op doesn't have custom attributes (likely same op that lost attributes)
-              // 2. Fallback has source-id or target-id (likely merge-source or target op)
-              if (!hasCustomAttrs && (fallbackAttrs['source-id'] || fallbackAttrs['target-id'])) {
-                op.attributes = {
-                  ...fallbackAttrs,
-                  ...op.attributes
-                };
-              }
-            }
-          }
-        }
-      }
-    } catch (e) {
-      console.error('Error preserving mergeSource:', e);
     }
 
     const content = this.editorForm.value;
@@ -1228,19 +951,6 @@ export class RichTextEditorComponent
       });
     });
 
-    // Extract merge targets
-    const mergeTargets: MergeTarget[] = [];
-    const mergeTargetElements = document.querySelectorAll(
-      '.ql-block-merge-blot'
-    );
-    mergeTargetElements.forEach((element: Element) => {
-      mergeTargets.push({
-        key: element.getAttribute('data-merge-key') || '',
-        title: element.getAttribute('data-merge-title') || '',
-        description: element.getAttribute('data-merge-description') || '',
-      });
-    });
-
     return {
       delta, // Return the complete delta with audioSrc at root level
       content,
@@ -1248,20 +958,13 @@ export class RichTextEditorComponent
       audioLinks,
     };
   }
-  // Helper method to extract audioSrc and mergeSource from deltaJson
+  // Helper method to extract audioSrc from deltaJson
   private extractAudioSrcFromDelta(): void {
     if (this.deltaJson) {
       try {
         const delta = JSON.parse(this.deltaJson);
         if (delta.audioSrc) {
           this.audioSrc = delta.audioSrc;
-        }
-
-        // Check if there is a merge source in the delta
-        if (delta.data?.mergeSource) {
-          this.hasMergeSource = true;
-        } else {
-          this.hasMergeSource = false;
         }
       } catch (e) {
         console.error('Error parsing Delta JSON when extracting data:', e);
@@ -1434,13 +1137,6 @@ export class RichTextEditorComponent
     this.updatePrintMode();
   }
 
-  // Toggle visibility of merge source content
-  toggleMergeSourceContent(): void {
-    this.showMergeSourceContent = !this.showMergeSourceContent;
-    // Update the visibility of merge source elements
-    this.updateMergeSourceVisibility();
-  }
-
   // Handle title change
   onTitleChange(newTitle: string): void {
     this.title = newTitle;
@@ -1449,28 +1145,12 @@ export class RichTextEditorComponent
 
   // Handle save button click
   onSaveClick(): void {
-    // Get filtered delta JSON (removes merge-source content)
-    const filteredDeltaJson = this.getFilteredDeltaJsonForSave(this.title);
-    console.log(filteredDeltaJson);
-    
-    
-    // Store original deltaJson before showing dialog
-    const originalDeltaJson = this.deltaJson;
-    
-    // Temporarily set deltaJson to filtered version for dialog
-    this.deltaJson = filteredDeltaJson;
-    
     const dialogRef = this.matDialog.open(this.saveContent, {
       panelClass: 'custom-dialog-container',
       autoFocus: false,
     });
     
-    dialogRef.afterClosed().subscribe((result) => {
-      // Restore original deltaJson after dialog closes so user can continue editing
-      this.deltaJson = originalDeltaJson;
-    });
-    
-    // Still emit the event in case parent component needs to know
+    // Emit the event in case parent component needs to know
     this.saveRequested.emit();
   }
 
@@ -1484,144 +1164,6 @@ export class RichTextEditorComponent
     });
   }
 
-  /**
-   * Get filtered delta JSON for saving (removes merge-source content)
-   * This ensures that only the original document content is saved,
-   * while preserving mergeSource metadata for future merging
-   */
-  getFilteredDeltaJsonForSave(title?: string, generatedSlug?: (title: string) => string): string {
-    try {
-      // Get current content with all values
-      const completeContent = this.getContentWithValues();
-      const delta = completeContent.delta;
-
-      // Ensure data object exists
-      if (!delta.data) {
-        delta.data = {};
-      }
-
-      // Add title if provided
-      if (title) {
-        delta.data.title = title;
-      }
-
-      // Generate key if provided and doesn't exist
-      if (generatedSlug && title && !delta.data.key) {
-        delta.data.key = generatedSlug(title);
-      }
-
-      // Filter out merge-source content before saving
-      // Use originalOps stored during merge to identify which ops belong to current document
-      if (delta.ops && Array.isArray(delta.ops)) {
-        // Create a deep copy to avoid modifying the original
-        const filteredDelta = JSON.parse(JSON.stringify(delta));
-        
-        // Get original ops signatures if available (stored during merge)
-        const originalOps = (delta.data as any)?.originalOps;
-        const mergeSourceId = (delta.data as any)?.mergeSource?.documentId;
-        
-        if (originalOps && Array.isArray(originalOps)) {
-          // Create a function to generate signature for an op (for comparison)
-          const getOpSignature = (op: any) => {
-            const signature: any = {
-              insert: op.insert,
-            };
-            if (op.attributes) {
-              const cleanAttributes: any = {};
-              Object.keys(op.attributes).forEach(key => {
-                if (key !== 'merge-source' && key !== 'source-id' && key !== 'target-id') {
-                  cleanAttributes[key] = op.attributes[key];
-                }
-              });
-              if (Object.keys(cleanAttributes).length > 0) {
-                signature.attributes = cleanAttributes;
-              }
-            }
-            return JSON.stringify(signature);
-          };
-          
-          // Create a set of original op signatures for quick lookup
-          const originalSignatures = new Set(originalOps.map((op: any) => JSON.stringify(op)));
-          
-          // Filter: keep ops that match original signatures OR have target-id
-          filteredDelta.ops = filteredDelta.ops.filter((op: any) => {
-            // Keep if it matches an original op signature
-            const opSignature = getOpSignature(op);
-            if (originalSignatures.has(opSignature)) {
-              return true;
-            }
-            
-            // Keep if it has target-id (current document content, possibly modified)
-            if (op.attributes && op.attributes['target-id']) {
-              return true;
-            }
-            
-            // Remove if it has source-id matching merge source
-            if (op.attributes && op.attributes['source-id']) {
-              if (mergeSourceId) {
-                const sourceId = op.attributes['source-id'];
-                if (sourceId === mergeSourceId || sourceId.includes(mergeSourceId) || mergeSourceId.includes(sourceId)) {
-                  return false; // Remove this op
-                }
-              } else {
-                return false; // Remove any op with source-id
-              }
-            }
-            
-            // If no source-id and doesn't match original, keep it (might be user-added content)
-            return true;
-          });
-        } else {
-          // Fallback: use source-id filtering if originalOps not available
-          filteredDelta.ops = filteredDelta.ops.filter((op: any) => {
-            // If op has source-id, it's from merge-source - remove it
-            if (op.attributes && op.attributes['source-id']) {
-              if (mergeSourceId) {
-                const sourceId = op.attributes['source-id'];
-                if (sourceId === mergeSourceId || sourceId.includes(mergeSourceId) || mergeSourceId.includes(sourceId)) {
-                  return false;
-                }
-              } else {
-                return false;
-              }
-            }
-            // Keep ops that have target-id or no source-id
-            return true;
-          });
-        }
-
-        // Return filtered delta as JSON string
-        // Note: mergeSource metadata in data is preserved for future merging
-        return JSON.stringify(filteredDelta, null, 2);
-      }
-
-      // If no ops to filter, just return the delta as is
-      return JSON.stringify(delta, null, 2);
-    } catch (e) {
-      console.error('Error filtering delta JSON for save:', e);
-      // Fallback to current deltaJson if filtering fails
-      return this.deltaJson || '{}';
-    }
-  }
-
-  // Update visibility of all merge source elements based on showMergeSourceContent flag
-  updateMergeSourceVisibility(): void {
-    if (!this.quillEditorRef) return;
-
-    // Find the Quill editor container
-    const editorContainer = document.querySelector('.rich-text-editor-container');
-    if (!editorContainer) return;
-
-    if (this.showMergeSourceContent) {
-      // Show merge source content by removing the hide class
-      editorContainer.classList.remove('hide-merge-source');
-    } else {
-      // Hide merge source content by adding the hide class
-      editorContainer.classList.add('hide-merge-source');
-    }
-
-    console.log('Merge source visibility updated:', this.showMergeSourceContent);
-  }
 
   // Print content with print mode enabled
   printContent(): void {
