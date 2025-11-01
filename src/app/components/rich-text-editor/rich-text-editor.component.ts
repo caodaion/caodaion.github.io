@@ -43,6 +43,7 @@ import { IconComponent } from "../icon/icon.component";
 import { MatTooltip } from "@angular/material/tooltip";
 import { Router } from '@angular/router';
 import { map, shareReplay } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBar, MatSnackBarModule, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -116,6 +117,16 @@ export class RichTextEditorComponent
   showAudioLinkModal: boolean = false;
   tempSelectedRange: any = null;
   activeAudioLinks: HTMLElement[] = []; // Track currently active audio segments
+  originalMergeSource: any = null; // Store original mergeSource for saving
+  mergedContentOps: any[] = []; // Store the original ops from current document before merge
+  private mergeInProgress: boolean = false; // Track if merge is currently in progress
+  private lastLoadedDeltaJson: string = ''; // Track last loaded deltaJson to avoid duplicate merges
+  private templatePrefixOpsCount: number = 0; // Number of ops from template before merged content
+  private templateSuffixOpsCount: number = 0; // Number of ops from template after merged content
+  private blockMergeIndex: number = -1; // Index where blockMerge was in template
+  private isUpdatingDeltaJson: boolean = false; // Flag to prevent infinite loop when updating deltaJson
+  private deltaJsonUpdateTimeout: any = null; // Timeout for debouncing deltaJson updates
+  private originalDeltaData: any = null; // Store original delta data (title, etc.) for saving
 
   editorModules = {
     toolbar: {
@@ -134,12 +145,14 @@ export class RichTextEditorComponent
         [{ align: [] }],
         ['clean'],
         ['link', 'image', 'video'],
-        ['block-input', 'inline-input', 'audio-link'],
+        ['block-input', 'inline-input', 'audio-link', 'block-merge', 'merge-source'],
       ],
       handlers: {
         'block-input': () => this.insertBlockInput(),
         'inline-input': () => this.insertInlineInput(),
         'audio-link': () => this.showAudioLinkDialog(),
+        'block-merge': () => this.insertBlockMerge(),
+        'merge-source': () => this.selectMergeSource(),
       },
     },
   };
@@ -196,6 +209,11 @@ export class RichTextEditorComponent
       if (!this.isReadOnly) {
         this.onChange(content);
         this.contentChanged.emit(content);
+        
+        // Update deltaJson when content changes (debounced to avoid excessive updates)
+        if (this.quillEditorRef && !this.isUpdatingDeltaJson) {
+          this.updateDeltaJsonFromEditor();
+        }
       }
     });
   }
@@ -203,18 +221,16 @@ export class RichTextEditorComponent
   ngOnChanges(changes: SimpleChanges): void {
     // When deltaJson changes, check for audioSrc
     if (changes['deltaJson']) {
+      // Skip if we're updating deltaJson internally to prevent infinite loop
+      if (this.isUpdatingDeltaJson) {
+        return;
+      }
+
       this.extractAudioSrcFromDelta();
 
-      // If in read-only mode and quill editor is ready, set the contents
-      if (this.deltaJson && this.isReadOnly && this.quillEditorRef) {
-        try {
-          const delta = JSON.parse(this.deltaJson);
-          this.quillEditorRef.setContents(delta);
-          return; // Skip other content updates if delta was applied
-        } catch (e) {
-          console.error('Error parsing Delta JSON in ngOnChanges:', e);
-        }
-      }
+      // Use the helper method to load content with merge
+      // This ensures merge is performed when both deltaJson and quillEditorRef are available
+      this.loadContentWithMerge();
     }
 
     // Fall back to HTML content if Delta JSON isn't available or failed
@@ -247,6 +263,12 @@ export class RichTextEditorComponent
     if (this.content && this.isReadOnly && this.quillEditorRef) {
       this.quillEditorRef.clipboard.dangerouslyPasteHTML(this.content);
     }
+
+    // Try to load content with merge again in case deltaJson was set after onEditorCreated
+    // This is a safeguard to ensure merge happens even if timing is off
+    setTimeout(() => {
+      this.loadContentWithMerge();
+    }, 100);
 
     // Add event listener for audio links after a short delay to ensure the DOM is ready
     setTimeout(() => this.setupAudioLinkClickHandlers(), 100);
@@ -356,36 +378,138 @@ export class RichTextEditorComponent
     // Apply read-only state if needed
     if (this.isReadOnly && this.quillEditorRef) {
       this.quillEditorRef.enable(false);
+    }
 
-      // If Delta JSON is provided, use it (priority over HTML content)
-      if (this.deltaJson) {
+    // Listen to text-change events to update deltaJson when content changes
+    if (!this.isReadOnly && this.quillEditorRef) {
+      this.quillEditorRef.on('text-change', () => {
+        if (!this.isUpdatingDeltaJson) {
+          this.updateDeltaJsonFromEditor();
+        }
+      });
+    }
+
+    // Try to load content with merge if applicable
+    this.loadContentWithMerge();
+
+    // Fall back to HTML content if Delta JSON isn't available (only in read-only mode)
+    if (!this.deltaJson && this.content && this.isReadOnly) {
+      this.quillEditorRef.clipboard.dangerouslyPasteHTML(this.content);
+
+      // Apply audio source to all audio links after a short delay
+      if (this.audioSrc) {
+        setTimeout(() => this.applyAudioSourceToLinks(this.audioSrc), 100);
+      }
+    }
+  }
+
+  // Update deltaJson from current editor content
+  private updateDeltaJsonFromEditor(): void {
+    if (!this.quillEditorRef || this.isUpdatingDeltaJson) {
+      return;
+    }
+
+    // Clear previous timeout if exists
+    if (this.deltaJsonUpdateTimeout) {
+      clearTimeout(this.deltaJsonUpdateTimeout);
+    }
+
+    // Use setTimeout to debounce updates
+    this.deltaJsonUpdateTimeout = setTimeout(() => {
+      if (!this.isUpdatingDeltaJson) {
+        this.isUpdatingDeltaJson = true;
         try {
-          const delta = JSON.parse(this.deltaJson);
-
-          // Extract audio source from delta root level
-          if (delta.audioSrc) {
-            this.audioSrc = delta.audioSrc;
-          }
-
-          this.quillEditorRef.setContents(delta);
-
-          // Apply audio source to all audio links after a short delay
-          if (this.audioSrc) {
-            setTimeout(() => this.applyAudioSourceToLinks(this.audioSrc), 100);
-          }
+          const contentWithValues = this.getContentWithValues();
+          this.deltaJson = JSON.stringify(contentWithValues.delta, null, 2);
         } catch (e) {
-          console.error('Error parsing Delta JSON:', e);
+          console.error('Error updating deltaJson:', e);
+        } finally {
+          this.isUpdatingDeltaJson = false;
+          this.deltaJsonUpdateTimeout = null;
         }
       }
-      // Fall back to HTML content if Delta JSON isn't available
-      else if (this.content) {
-        this.quillEditorRef.clipboard.dangerouslyPasteHTML(this.content);
+    }, 300); // Debounce 300ms
+  }
+
+  // Helper method to load content and perform merge if needed
+  private loadContentWithMerge(): void {
+    if (!this.quillEditorRef || !this.deltaJson) {
+      return;
+    }
+
+    // Avoid duplicate merges - only skip if we're already processing the exact same deltaJson
+    // But allow it if merge is complete (mergeInProgress = false)
+    if (this.lastLoadedDeltaJson === this.deltaJson && this.mergeInProgress) {
+      console.log('Skipping duplicate merge - merge already in progress for this deltaJson');
+      return;
+    }
+
+    try {
+      const delta = JSON.parse(this.deltaJson);
+
+      // Reset merge state when loading new document
+      // This ensures we don't use stale merge data from previous document
+      const hasMergeSource = !!delta.data?.mergeSource;
+      if (!hasMergeSource) {
+        this.originalMergeSource = null;
+        this.mergedContentOps = [];
+        this.templatePrefixOpsCount = 0;
+        this.templateSuffixOpsCount = 0;
+        this.blockMergeIndex = -1;
+        this.originalDeltaData = null;
+      } else {
+        // Store original delta data (including title) for saving
+        this.originalDeltaData = { ...delta.data };
+      }
+
+      // Extract audio source from delta root level
+      if (delta.audioSrc) {
+        this.audioSrc = delta.audioSrc;
+      }
+
+      // Check for mergeSource and merge if needed (works in both read-only and edit modes)
+      if (hasMergeSource) {
+        this.mergeInProgress = true;
+        this.lastLoadedDeltaJson = this.deltaJson;
+        
+        this.performMerge(delta).then((mergedDelta) => {
+          if (this.quillEditorRef && this.lastLoadedDeltaJson === this.deltaJson) {
+            // Set contents and ensure it sticks
+            this.quillEditorRef.setContents(mergedDelta, 'silent');
+            
+            // Force update after a short delay to ensure content is rendered
+            setTimeout(() => {
+              if (this.quillEditorRef) {
+                const currentContents = this.quillEditorRef.getContents();
+              }
+              
+              // Apply audio source to all audio links after a short delay
+              if (this.audioSrc) {
+                this.applyAudioSourceToLinks(this.audioSrc);
+              }
+            }, 200);
+          }
+          this.mergeInProgress = false;
+        }).catch((error) => {
+          console.error('Error performing merge:', error);
+          // Fall back to setting delta without merge
+          if (this.quillEditorRef) {
+            this.quillEditorRef.setContents(delta);
+          }
+          this.mergeInProgress = false;
+        });
+      } else {
+        this.lastLoadedDeltaJson = this.deltaJson;
+        this.quillEditorRef.setContents(delta);
 
         // Apply audio source to all audio links after a short delay
         if (this.audioSrc) {
           setTimeout(() => this.applyAudioSourceToLinks(this.audioSrc), 100);
         }
       }
+    } catch (e) {
+      console.error('Error parsing Delta JSON:', e);
+      this.mergeInProgress = false;
     }
   }
 
@@ -794,6 +918,40 @@ export class RichTextEditorComponent
             this.showAudioLinkDialog();
           });
         }
+
+        // Block merge button
+        if (!document.querySelector('.ql-block-merge')) {
+          const blockMergeButton = document.createElement('button');
+          blockMergeButton.className = 'ql-block-merge';
+          blockMergeButton.title = 'Insert merge target block';
+
+          // Add a data attribute for CSS to add the icon via background image
+          blockMergeButton.setAttribute('data-icon', 'block-merge');
+
+          customButtonsContainer.appendChild(blockMergeButton);
+
+          // Add click event listener
+          blockMergeButton.addEventListener('click', () => {
+            this.insertBlockMerge();
+          });
+        }
+
+        // Merge source button
+        if (!document.querySelector('.ql-merge-source')) {
+          const mergeSourceButton = document.createElement('button');
+          mergeSourceButton.className = 'ql-merge-source';
+          mergeSourceButton.title = 'Set merge source';
+
+          // Add a data attribute for CSS to add the icon via background image
+          mergeSourceButton.setAttribute('data-icon', 'merge-source');
+
+          customButtonsContainer.appendChild(mergeSourceButton);
+
+          // Add click event listener
+          mergeSourceButton.addEventListener('click', () => {
+            this.selectMergeSource();
+          });
+        }
       }
     }, 0);
   }
@@ -801,6 +959,63 @@ export class RichTextEditorComponent
   // Helper method to generate unique IDs for fields
   private generateUniqueId(): string {
     return 'field-' + Math.random().toString(36).substring(2, 11);
+  }
+
+  // Insert a block merge target
+  async insertBlockMerge(): Promise<void> {
+    if (!this.quillEditorRef || this.isReadOnly) return;
+
+    const range = this.quillEditorRef.getSelection(true);
+    
+    // Prompt for merge target configuration
+    const key = prompt('Nhập key cho merge target:', 'noiDung') || 'noiDung';
+    const title = prompt('Nhập title cho merge target:', 'Nội dung') || 'Nội dung';
+    const description = prompt('Nhập description cho merge target (tùy chọn):', '') || '';
+
+    // Insert the block merge
+    this.quillEditorRef.insertEmbed(
+      range.index,
+      'blockMerge',
+      {
+        key: key,
+        title: title,
+        description: description,
+      },
+      Quill.sources.USER
+    );
+
+    // Insert a line break after block merge for better formatting
+    this.quillEditorRef.insertText(range.index + 1, '\n', Quill.sources.USER);
+    this.quillEditorRef.setSelection(range.index + 2, 0, Quill.sources.SILENT);
+  }
+
+  // Select merge source (set mergeSource in data)
+  async selectMergeSource(): Promise<void> {
+    if (!this.quillEditorRef || this.isReadOnly) return;
+
+    const documentId = prompt('Nhập documentId của template (ví dụ: tsv__long-so-tam-giao):', '') || '';
+    if (!documentId) return;
+
+    const mergeTargetKey = prompt('Nhập mergeTargetKey (key của blockMerge trong template):', '') || '';
+    if (!mergeTargetKey) return;
+
+    // Get current delta
+    const currentDelta = this.quillEditorRef.getContents();
+
+    // Set mergeSource in data
+    if (!currentDelta.data) {
+      currentDelta.data = {};
+    }
+
+    currentDelta.data.mergeSource = {
+      documentId: documentId,
+      mergeTargetKey: mergeTargetKey
+    };
+
+    // Update the delta
+    this.quillEditorRef.setContents(currentDelta);
+
+    alert('Đã thiết lập mergeSource. Khi mở lại document này, nội dung sẽ được merge vào blockMerge trong template.');
   }
   // Extract content with input field and audio link values
   getContentWithValues(): RichTextContent {
@@ -951,8 +1166,71 @@ export class RichTextEditorComponent
       });
     });
 
+    // If we have a mergeSource, only return the merged content (extracted from current editor)
+    let finalDelta = delta;
+    if (this.originalMergeSource && this.blockMergeIndex >= 0) {
+      // Get current editor contents
+      const currentEditorDelta = this.quillEditorRef.getContents();
+      const currentOps = currentEditorDelta.ops || [];
+      
+      // Extract only the merged portion (ops between template prefix and suffix)
+      // The merged content starts after templatePrefixOpsCount and ends before templateSuffixOpsCount
+      const mergedOpsStart = this.templatePrefixOpsCount;
+      const mergedOpsEnd = currentOps.length - this.templateSuffixOpsCount;
+      const mergedOps = currentOps.slice(mergedOpsStart, mergedOpsEnd);      
+      
+      // Create data object with original data (title, etc.) and restore mergeSource
+      const savedData: any = {};
+      if (this.originalDeltaData) {
+        // Preserve all original data properties (including title)
+        Object.assign(savedData, this.originalDeltaData);
+      }
+      // Restore mergeSource in saved data
+      savedData.mergeSource = this.originalMergeSource;
+      // Update title from component if it exists and is different
+      if (this.title && this.title.trim()) {
+        savedData.title = this.title;
+      }
+      
+      // Create delta with only the merged content ops
+      finalDelta = {
+        ops: mergedOps,
+        data: savedData,
+        audioSrc: delta.audioSrc
+      };
+      
+      // Note: Fields array already contains current values from the editor
+    } else if (this.originalMergeSource) {
+      // Fallback: use original mergedContentOps if we don't have template info
+      console.warn('No template info available, using original mergedContentOps');
+      
+      // Create data object with original data
+      const savedData: any = {};
+      if (this.originalDeltaData) {
+        Object.assign(savedData, this.originalDeltaData);
+      }
+      savedData.mergeSource = this.originalMergeSource;
+      if (this.title && this.title.trim()) {
+        savedData.title = this.title;
+      }
+      
+      finalDelta = {
+        ops: [...this.mergedContentOps],
+        data: savedData,
+        audioSrc: delta.audioSrc
+      };
+    } else {
+      // No mergeSource, but ensure title is preserved
+      if (!finalDelta.data) {
+        finalDelta.data = {};
+      }
+      if (this.title && this.title.trim()) {
+        finalDelta.data.title = this.title;
+      }
+    }
+
     return {
-      delta, // Return the complete delta with audioSrc at root level
+      delta: finalDelta, // Return delta with only current document's content if merged
       content,
       fields,
       audioLinks,
@@ -969,6 +1247,92 @@ export class RichTextEditorComponent
       } catch (e) {
         console.error('Error parsing Delta JSON when extracting data:', e);
       }
+    }
+  }
+
+  // Perform merge: load template document and merge current document content into blockMerge
+  private async performMerge(currentDelta: any): Promise<any> {
+    if (!currentDelta.data?.mergeSource) {
+      console.log('No mergeSource found in delta.data');
+      return currentDelta;
+    }
+
+    // Store original mergeSource and ops for saving
+    this.originalMergeSource = currentDelta.data.mergeSource;
+    this.mergedContentOps = [...(currentDelta.ops || [])];
+
+    const mergeSource = currentDelta.data.mergeSource;
+    
+    const templatePath = `/assets/${mergeSource.documentId.replace(/__/g, '/')}.json`;
+
+    try {
+      // Load template document
+      const templateData: any = await firstValueFrom(this.docsService.getDocsContent(templatePath));
+      
+      if (!templateData || !templateData.ops) {
+        console.error('Template document not found or invalid');
+        return currentDelta;
+      }
+
+      // Find the blockMerge with matching key in template
+      const mergeTargetKey = mergeSource.mergeTargetKey;
+      let blockMergeIndex = -1;
+      let blockMergeOp: any = null;
+      for (let i = 0; i < templateData.ops.length; i++) {
+        const op = templateData.ops[i];
+        if (op.insert && typeof op.insert === 'object' && op.insert.blockMerge) {
+          if (op.insert.blockMerge.key === mergeTargetKey) {
+            blockMergeIndex = i;
+            blockMergeOp = op;
+            break;
+          }
+        }
+      }
+
+      if (blockMergeIndex === -1) {
+        return currentDelta;
+      }
+
+      console.log(currentDelta);
+
+      // Store template info for extracting merged content later
+      this.templatePrefixOpsCount = blockMergeIndex;
+      this.templateSuffixOpsCount = templateData.ops.length - blockMergeIndex - 1;
+      this.blockMergeIndex = blockMergeIndex;
+
+      // Create merged delta: replace blockMerge with current document's ops
+      const mergedOps: any[] = [];
+      
+      // Add all ops before blockMerge
+      for (let i = 0; i < blockMergeIndex; i++) {
+        mergedOps.push(templateData.ops[i]);
+      }
+
+      // Add current document's ops (excluding data.mergeSource)
+      const currentOps = currentDelta.ops || [];
+      mergedOps.push(...currentOps);
+
+      // Add all ops after blockMerge
+      for (let i = blockMergeIndex + 1; i < templateData.ops.length; i++) {
+        mergedOps.push(templateData.ops[i]);
+      }
+
+      // Create merged delta
+      const mergedDelta = {
+        ...templateData,
+        ops: mergedOps,
+        // Keep current document's data (title, etc.) but remove mergeSource
+        data: {
+          ...currentDelta.data,
+          mergeSource: undefined
+        },
+        // Keep current document's audioSrc if exists
+        audioSrc: currentDelta.audioSrc || templateData.audioSrc
+      };
+      return mergedDelta;
+    } catch (e) {
+      console.error('Error performing merge:', e);
+      return currentDelta;
     }
   }// Update print mode functionality
   private updatePrintMode(): void {
@@ -1145,6 +1509,23 @@ export class RichTextEditorComponent
 
   // Handle save button click
   onSaveClick(): void {
+    // Clear any pending update
+    if (this.deltaJsonUpdateTimeout) {
+      clearTimeout(this.deltaJsonUpdateTimeout);
+      this.deltaJsonUpdateTimeout = null;
+    }
+
+    // Get latest content with values and update deltaJson immediately
+    this.isUpdatingDeltaJson = true;
+    try {
+      const contentWithValues = this.getContentWithValues();
+      this.deltaJson = JSON.stringify(contentWithValues.delta, null, 2);
+    } catch (e) {
+      console.error('Error updating deltaJson in onSaveClick:', e);
+    } finally {
+      this.isUpdatingDeltaJson = false;
+    }
+    
     const dialogRef = this.matDialog.open(this.saveContent, {
       panelClass: 'custom-dialog-container',
       autoFocus: false,

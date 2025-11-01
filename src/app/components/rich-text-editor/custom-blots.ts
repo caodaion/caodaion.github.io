@@ -22,7 +22,7 @@ export function registerCustomBlots(): void {
   const Inline: any = Quill.import('blots/inline');
   const Embed: any = Quill.import('blots/embed');
   class MergeBlot extends BlockEmbed {
-    static create(value: { key: string; title: string, description: string }) {
+    static create(value: { key: string; title: string, description: string, mergedContent?: any }) {
       const node = super.create();
       
       // Set data attributes for serialization
@@ -67,6 +67,22 @@ export function registerCustomBlots(): void {
         description.className = 'merge-target-description';
         description.textContent = value.description;
         container.appendChild(description);
+      }
+      
+      // Add merged content container if mergedContent is provided
+      if (value.mergedContent) {
+        const mergedContentContainer = document.createElement('div');
+        mergedContentContainer.className = 'merge-content-container';
+        mergedContentContainer.setAttribute('contenteditable', 'true');
+        
+        // Store merged content as data attribute
+        node.setAttribute('data-merged-content', JSON.stringify(value.mergedContent));
+        
+        container.appendChild(mergedContentContainer);
+        node.appendChild(container);
+        
+        // Return early, merged content will be rendered separately
+        return node;
       }
       
       node.appendChild(container);

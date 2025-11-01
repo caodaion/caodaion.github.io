@@ -81,29 +81,19 @@ export class EditorComponent implements AfterViewInit {
       if (foundContent) {
         this.deltaJson = foundContent?.delta;
 
-        // Initialize the editor with the delta data directly
-        setTimeout(() => {
-          if (this.editorComponent?.quillEditorRef) {
-            try {
-              if (typeof JSON.parse(foundContent?.delta) !== 'string') {
-                const parsedDelta = JSON.parse(foundContent?.delta);
-
-                // Extract title from data if it exists
-                if (parsedDelta?.data?.title) {
-                  this.title = parsedDelta.data.title;
-                }
-
-                this.editorComponent.quillEditorRef.setContents(parsedDelta);
-                console.log('Online data', parsedDelta);
-              } else {
-                console.log('Fetching offline data');
-                this.getDocsContent(this.path);
-              }
-            } catch (e) {
-              console.error('Error setting editor contents:', e);
-            }
+        // Let rich-text-editor handle the merge via deltaJson input binding
+        // Don't call setContents directly as it bypasses merge logic
+        try {
+          const parsedDelta = JSON.parse(foundContent?.delta);
+          
+          // Extract title from data if it exists
+          if (parsedDelta?.data?.title) {
+            this.title = parsedDelta.data.title;
           }
-        }, 100);
+        } catch (e) {
+          console.log('Fetching offline data');
+          this.getDocsContent(this.path);
+        }
       } else {
         this.getDocsContent(this.path);
       }
@@ -116,15 +106,9 @@ export class EditorComponent implements AfterViewInit {
           this.title = res.data.title;
         }
 
-        setTimeout(() => {
-          if (this.editorComponent?.quillEditorRef) {
-            try {
-              this.editorComponent.quillEditorRef.setContents(res);
-            } catch (e) {
-              console.error('Error setting editor contents:', e);
-            }
-          }
-        }, 100);
+        // Let rich-text-editor handle the merge via deltaJson input binding
+        // Don't call setContents directly as it bypasses merge logic
+        console.log('Document loaded, rich-text-editor will handle merge:', res);
       });
     }
   }
@@ -138,18 +122,6 @@ export class EditorComponent implements AfterViewInit {
         if (res?.data?.title) {
           this.title = res.data.title;
         }
-
-        // Initialize the editor with the delta data directly
-        setTimeout(() => {
-          if (this.editorComponent?.quillEditorRef) {
-            try {
-              this.editorComponent.quillEditorRef.setContents(res);
-              console.log('Offline data', res);
-            } catch (e) {
-              console.error('Error setting editor contents:', e);
-            }
-          }
-        }, 100);
       },
       error: (err: any) => {
         console.error('Error fetching document content:', err);
